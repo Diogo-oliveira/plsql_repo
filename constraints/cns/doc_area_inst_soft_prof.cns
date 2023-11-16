@@ -1,0 +1,22 @@
+
+ALTER TABLE doc_area_inst_soft_prof
+	ADD CONSTRAINT doc_area_inst_soft_prof_pk
+	PRIMARY KEY(id_doc_area_inst_soft_prof);
+
+ALTER TABLE doc_area_inst_soft_prof
+	ADD CONSTRAINT doc_area_ins_sft_prf_f_mod_chk
+	CHECK (flg_mode IN ('D','N'));
+
+ALTER TABLE doc_area_inst_soft_prof
+	ADD CONSTRAINT doc_area_ins_sft_prf_i_ins_chk
+	CHECK (id_institution<>0);
+
+ALTER TABLE doc_area_inst_soft_prof
+	ADD CONSTRAINT doc_area_ins_sft_prf_4fk_uni
+	UNIQUE(id_doc_area,id_institution,id_professional,id_software);
+	
+--João Eiras, 2008-01-29, Revisão de constraints
+--usar indices
+ALTER TABLE doc_area_inst_soft_prof
+	DROP CONSTRAINT doc_area_ins_sft_prf_4fk_uni;
+	

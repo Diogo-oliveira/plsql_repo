@@ -1,0 +1,26 @@
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 28/10/2009 19:28
+-- CHANGE REASON: [ALERT-52603] Taking responsibility over episode by multiple professionals
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE handoff_permission_inst drop CONSTRAINT HOP_PT_REQ_FK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE handoff_permission_inst drop CONSTRAINT HOP_PT_DEST_FK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE handoff_permission_inst drop CONSTRAINT HOP_INST_FK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+ALTER TABLE handoff_permission_inst ADD CONSTRAINT HOP_PT_REQ_FK FOREIGN KEY (id_profile_template_req) REFERENCES profile_template (id_profile_template) ENABLE;
+ALTER TABLE handoff_permission_inst ADD CONSTRAINT HOP_PT_DEST_FK FOREIGN KEY (id_profile_template_dest) REFERENCES profile_template (id_profile_template) ENABLE;
+ALTER TABLE handoff_permission_inst ADD CONSTRAINT HOP_INST_FK FOREIGN KEY (id_institution) REFERENCES institution ENABLE;
+-- CHANGE END: José Brito

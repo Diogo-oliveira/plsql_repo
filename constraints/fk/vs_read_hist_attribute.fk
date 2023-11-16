@@ -1,0 +1,30 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 02/12/2013 09:32
+-- CHANGE REASON: [ALERT-270040] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE VS_READ_HIST_ATTRIBUTE
+  ADD CONSTRAINT vsrha_vsa_fk FOREIGN KEY (
+    id_VS_ATTRIBUTE
+  ) REFERENCES VS_ATTRIBUTE (id_VS_ATTRIBUTE)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE VS_READ_HIST_ATTRIBUTE
+  ADD CONSTRAINT vsrha_vsr_fk FOREIGN KEY (
+    id_vital_sign_read_hist
+  ) REFERENCES vital_sign_read_hist (id_vital_sign_read_hist)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

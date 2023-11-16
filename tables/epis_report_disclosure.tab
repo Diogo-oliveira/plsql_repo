@@ -1,0 +1,72 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 08/04/2011 20:25
+-- CHANGE REASON: [ALERT-172090] Define reports as the formal health record for disclosure purposes (ALERT_60289)
+DECLARE
+  e_name_already_exists EXCEPTION;
+  
+  PRAGMA EXCEPTION_INIT(e_name_already_exists, -955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE EPIS_REPORT_DISCLOSURE
+                       (
+                           ID_EPIS_REPORT           NUMBER(24) NOT NULL,
+                           DT_REGISTER              TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
+                           ID_PROF_DISCLOSURE       NUMBER(24) NOT NULL,
+                           DT_REQUEST               TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
+                           DT_DISCLOSURE            TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
+                           DISCLOSURE_RECIPIENT     VARCHAR2(1000 CHAR),
+                           RECIPIENT_ADDRESS        VARCHAR2(1000 CHAR),
+                           ID_SAMPLE_TEXT           NUMBER(12),
+                           FREE_TEXT_PURP_DISC      VARCHAR2(1000 CHAR),
+                           NOTES                    VARCHAR2(1000 CHAR),
+                           CREATE_USER              VARCHAR2(24 CHAR),
+                           CREATE_TIME              TIMESTAMP WITH LOCAL TIME ZONE,
+                           CREATE_INSTITUTION       NUMBER(24),
+                           UPDATE_USER              VARCHAR2(24 CHAR),
+                           UPDATE_TIME              TIMESTAMP WITH LOCAL TIME ZONE,
+                           UPDATE_INSTITUTION       NUMBER(24)
+                       )';
+    EXCEPTION 
+    WHEN e_name_already_exists THEN
+         dbms_output.put_line('EPIS_REPORT_DISCLOSURE already exists.');
+END;
+/
+
+ALTER TABLE EPIS_REPORT_DISCLOSURE MOVE TABLESPACE TABLE_M;
+
+COMMENT ON TABLE EPIS_REPORT_DISCLOSURE IS 'Report disclosure data';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.ID_EPIS_REPORT IS 'Episode Report ID';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.DT_REGISTER IS 'Register time';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.ID_PROF_DISCLOSURE IS 'Professional ID of the person making the disclosure';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.DT_REQUEST IS 'Date of request';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.DT_DISCLOSURE IS 'Date of disclosure';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.DISCLOSURE_RECIPIENT IS 'Disclosure recipient';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.RECIPIENT_ADDRESS IS 'Recipient address';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.ID_SAMPLE_TEXT IS 'Sample text id';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.FREE_TEXT_PURP_DISC IS 'Purpose for disclosure free text';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.NOTES IS 'Notes regarding information disclosed';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.CREATE_USER is 'Professional ID which created the record';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.CREATE_TIME is 'Date of record creation';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.CREATE_INSTITUTION is 'Institution ID where record was created';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.UPDATE_USER is 'Professional ID who last updated the record';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.UPDATE_TIME is 'Date when record was last updated';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.UPDATE_INSTITUTION is 'Institution ID where record was last updated';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 19/04/2011 16:57
+-- CHANGE REASON: [ALERT-172090] Define reports as the formal health record for disclosure purposes
+DECLARE
+  e_column_already_exists EXCEPTION;
+  
+  PRAGMA EXCEPTION_INIT(e_column_already_exists, -1430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT_DISCLOSURE ADD FLG_DISC_RECIPIENT VARCHAR2(1 CHAR)';
+EXCEPTION 
+WHEN e_column_already_exists THEN
+     dbms_output.put_line('EPIS_REPORT_DISCLOSURE.FLG_DISC_RECIPIENT already exists.');
+END;
+/
+
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.DISCLOSURE_RECIPIENT IS 'This is the DISCLOSURE TO field. It wasn''t renamed because of NZD restrictions.';
+COMMENT ON COLUMN EPIS_REPORT_DISCLOSURE.FLG_DISC_RECIPIENT IS 'Disclosure recipient type. ''C'' - Courts; ''A'' - Attorneys; ''P'' - Patients; ''M'' - Medical Facilities; ''O'' - Other';
+-- CHANGE END: Alexandre Santos

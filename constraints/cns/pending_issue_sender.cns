@@ -1,0 +1,31 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 22/10/2014 19:48
+-- CHANGE REASON: [ALERT-297786] messaging support table
+DECLARE
+    i_sql VARCHAR2(1000 CHAR);
+BEGIN
+    i_sql := 'alter table pending_issue_sender add constraint PISDR_PK primary key (id_pending_issue_message, id_pending_issue) using index tablespace alert_idx';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'alter table pending_issue_sender add constraint PISDR_SENDER_CHK check (flg_sender IN (''P'',''F''))';
+    pk_versioning.run(i_sql => i_sql);
+        i_sql := 'alter table pending_issue_sender add constraint PISDR_STATUSS_CHK check (flg_status_sender IN (''S'',''R'',''X''))';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'alter table pending_issue_sender add constraint PISDR_STATUSR_CHK check (flg_status_receiver IN (''U'',''C'', ''R'', ''X''))';
+    pk_versioning.run(i_sql => i_sql);
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 29/10/2014 14:56
+-- CHANGE REASON: [ALERT-299659] new text field and state control
+DECLARE
+    i_sql VARCHAR2(1000 CHAR);
+BEGIN
+    i_sql := 'alter table pending_issue_sender add constraint PISDR_STATUSHS_CHK check (flg_last_status_s IN (''S'',''R'',''X'', null))';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'alter table pending_issue_sender add constraint PISDR_STATUSHR_CHK check (flg_last_status_r IN (''U'',''C'', ''R'', ''X'', null))';
+    pk_versioning.run(i_sql => i_sql);
+END;
+/
+-- CHANGE END:  Rui Gomes

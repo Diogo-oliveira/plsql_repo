@@ -1,0 +1,44 @@
+
+
+  ALTER TABLE ICNP_AXIS ADD CONSTRAINT IAS_PK PRIMARY KEY (ID_AXIS) ENABLE;
+
+  ALTER TABLE ICNP_AXIS MODIFY (ID_AXIS NOT NULL ENABLE);
+
+  ALTER TABLE ICNP_AXIS MODIFY (CODE_AXIS NOT NULL ENABLE);
+
+  ALTER TABLE ICNP_AXIS MODIFY (ID_CLASSIFICATION NOT NULL ENABLE);
+
+  ALTER TABLE ICNP_AXIS MODIFY (FLG_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE ICNP_AXIS MODIFY (RANK NOT NULL ENABLE);
+
+
+  ALTER TABLE ICNP_AXIS MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+-- CHANGED BY: Pedro Lopes
+-- CHANGE DATE: 2009-JUN-30
+-- CHANGE REASON: ALERT-913
+
+ALTER TABLE ICNP_AXIS
+ ADD (CONSTRAINT IAS_FLG_AXIS_CHK CHECK (FLG_AXIS in ('F','J','M','A','T','L','C')))
+/
+
+--CHANGE END
+
+
+
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/10/2010 16:20
+-- CHANGE REASON: [ALERT-129405] ICNP Choice Version
+alter table icnp_axis add constraint ia_flg_type_chk check (flg_type in ('D','I'));
+alter table icnp_axis drop constraint IAS_FLG_AXIS_CHK;
+alter table icnp_axis add constraint IAS_FLG_AXIS_CHK check (FLG_AXIS in ('F','J','M','A','T','L','C','D','E','G','H','B'));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 21/10/2010 15:08
+-- CHANGE REASON: [ALERT-129405] 
+alter table icnp_axis drop constraint IAS_FLG_AXIS_CHK;
+alter table icnp_axis add constraint IAS_UK unique (FLG_AXIS, ID_ICNP_VERSION, FLG_TYPE);
+-- CHANGE END: João Martins

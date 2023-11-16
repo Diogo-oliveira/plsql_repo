@@ -1,0 +1,49 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+declare
+   e_table_already_there EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_table_already_there, -00955); -- table already there
+begin
+    BEGIN
+        EXECUTE IMMEDIATE 'create table view_option_config_inst
+(
+  id_view_option      number(24) not null,
+  id_profile_template number(24) not null,
+  id_institution      number(24) not null,
+  create_user         varchar2(24 char),
+  create_time         timestamp with local time zone,
+  create_institution  number(24),
+  update_user         varchar2(24 char),
+  update_time         timestamp with local time zone,
+  update_institution  number(24)
+)';
+    EXCEPTION
+        WHEN e_table_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+
+comment on table view_option_config_inst
+  is 'Default view options configured per institution. Use to set which view should be shown first.';
+
+comment on column view_option_config_inst.id_view_option
+  is 'View option identifier.';
+comment on column view_option_config_inst.id_profile_template
+  is 'Profile template identifier.';
+comment on column view_option_config_inst.id_institution
+  is 'Institution identifier.';
+comment on column view_option_config_inst.create_user
+  is 'Create User';
+comment on column view_option_config_inst.create_time
+  is 'Create Time';
+comment on column view_option_config_inst.create_institution
+  is 'Create Institution';
+comment on column view_option_config_inst.update_user
+  is 'Update User';
+comment on column view_option_config_inst.update_time
+  is 'Update Time';
+comment on column view_option_config_inst.update_institution
+  is 'Update institution';
+-- CHANGE END: Sérgio Santos

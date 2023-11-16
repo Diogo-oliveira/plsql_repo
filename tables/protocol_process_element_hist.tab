@@ -1,0 +1,82 @@
+
+CREATE TABLE PROTOCOL_PROCESS_ELEMENT_HIST
+ (ID_PROTOCOL_PROCESS_ELEM_HIST NUMBER(24) NOT NULL
+ ,ID_PROTOCOL_PROCESS_ELEM NUMBER(24) NOT NULL
+ ,FLG_STATUS_OLD VARCHAR2(1)
+ ,FLG_STATUS_NEW VARCHAR2(1)
+ ,ID_REQUEST_OLD NUMBER(24)
+ ,ID_REQUEST_NEW NUMBER(24)
+ ,DT_REQUEST_OLD TIMESTAMP WITH LOCAL TIME ZONE
+ ,DT_REQUEST_NEW TIMESTAMP WITH LOCAL TIME ZONE
+ ,FLG_ACTIVE_OLD VARCHAR2(1)
+ ,FLG_ACTIVE_NEW VARCHAR2(1)
+ ,DT_STATUS_CHANGE TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_PROFESSIONAL NUMBER(24) NOT NULL
+ );
+
+COMMENT ON COLUMN PROTOCOL_PROCESS_ELEMENT_HIST.ID_PROTOCOL_PROCESS_ELEM_HIST IS 'ID status hist of protocol';
+COMMENT ON COLUMN PROTOCOL_PROCESS_ELEMENT_HIST.ID_PROTOCOL_PROCESS_ELEM IS 'ID of process task of protocol';
+COMMENT ON COLUMN PROTOCOL_PROCESS_ELEMENT_HIST.FLG_STATUS_OLD IS 'Status of task when status changed';
+COMMENT ON COLUMN PROTOCOL_PROCESS_ELEMENT_HIST.FLG_STATUS_NEW IS 'New status of flag after change';
+COMMENT ON COLUMN PROTOCOL_PROCESS_ELEMENT_HIST.ID_REQUEST_OLD IS 'ID of request returned for this task when status changed';
+COMMENT ON COLUMN PROTOCOL_PROCESS_ELEMENT_HIST.DT_REQUEST_OLD IS 'Date of request when status changed';
+COMMENT ON COLUMN PROTOCOL_PROCESS_ELEMENT_HIST.DT_STATUS_CHANGE IS 'date of status change';
+COMMENT ON COLUMN PROTOCOL_PROCESS_ELEMENT_HIST.ID_PROFESSIONAL IS 'ID of professional responsible for changing state of protocol';
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 15/04/2011 11:24
+-- CHANGE REASON: [ALERT-173333] Cancel reason for Guidelines, Protocols, Order Sets and CPOE
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); --  column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PROTOCOL_PROCESS_ELEMENT_HIST add ID_CANCEL_REASON number(24)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        NULL;
+END;
+/
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); --  column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PROTOCOL_PROCESS_ELEMENT_HIST add CANCEL_NOTES varchar2(1000 char)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        NULL;
+END;
+/
+comment on column PROTOCOL_PROCESS_ELEMENT_HIST.ID_CANCEL_REASON is 'Cancel reason ID';
+comment on column PROTOCOL_PROCESS_ELEMENT_HIST.CANCEL_NOTES is 'Cancel notes';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 17:03
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON COLUMN PROTOCOL_PROCESS_ELEMENT_HIST.ID_REQUEST_NEW IS 'New ID of request returned for this task';
+COMMENT ON COLUMN PROTOCOL_PROCESS_ELEMENT_HIST.DT_REQUEST_NEW IS 'Professional ID';
+COMMENT ON COLUMN PROTOCOL_PROCESS_ELEMENT_HIST.FLG_ACTIVE_OLD IS 'Protocol process task status:
+C - cancelled
+E - in progress
+F - finished
+H - scheduled
+O - closed
+P - pending
+R - recommended
+S - interrupted';
+COMMENT ON COLUMN PROTOCOL_PROCESS_ELEMENT_HIST.FLG_ACTIVE_NEW IS 'New protocol process task status:
+C - cancelled
+E - in progress
+F - finished
+H - scheduled
+O - closed
+P - pending
+R - recommended
+S - interrupted';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 10:33
+-- CHANGE REASON: [ALERT-317912] 
+comment on table PROTOCOL_PROCESS_ELEMENT_HIST is 'Protocols process element history';
+-- CHANGE END: Ana Matos

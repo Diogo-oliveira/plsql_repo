@@ -1,0 +1,44 @@
+ALTER TABLE DATA_GOV_EVENT ADD CONSTRAINT DGEV_PK PRIMARY KEY (ID_DATA_GOV_EVENT) USING INDEX;
+ALTER TABLE DATA_GOV_EVENT ADD CONSTRAINT DGE_FLGENABLED_CK CHECK (FLG_ENABLED IN ('Y','N'));
+ALTER TABLE DATA_GOV_EVENT ADD CONSTRAINT DGE_FLGBACKGROUND_CK CHECK (FLG_BACKGROUND IN ('Y','N'));
+
+-- cmf 28-01-2013
+declare
+pl		varchar2(0010 char ) := '''';
+l_sql	varchar2(4000);
+begin
+l_sql := 'alter table DATA_GOV_EVENT   add constraint       DGE_DG_OWNER_CK   check (DG_OWNER     IS NOT NULL ) NOVALIDATE';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+pl		varchar2(0010 char ) := '''';
+l_sql	varchar2(4000);
+begin
+l_sql := 'alter table DATA_GOV_EVENT   add constraint       DGE_SRC_OWNER_CK  check (SOURCE_OWNER IS NOT NULL ) NOVALIDATE';
+pk_versioning.run( l_sql );
+end;
+/
+
+
+
+-- cmf 18-02-2013
+declare
+l_sql       varchar2(4000);
+begin
+l_sql := 'alter table DATA_GOV_EVENT drop constraint DGE_IUD_CK';
+pk_versioning.run(l_Sql);
+end;
+/
+
+declare
+l_sql       varchar2(4000);
+lpl         varchar2(0010 char) := '''';
+begin
+l_sql := 'alter table DATA_GOV_EVENT add constraint DGE_IUD_CK  check (( flg_IUD IN (#I#,#U#,#D#,#IU#,#ID#,#UD#,#IUD#) ) or flg_iud = #V#)';
+
+l_sql := replace( l_sql, '#', lpl) ;
+pk_versioning.run(l_Sql);
+end;
+/

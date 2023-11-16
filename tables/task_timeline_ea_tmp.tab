@@ -1,0 +1,920 @@
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 01/07/2009 14:23
+-- CHANGE REASON: [ALERT-31811] Added table task_timeline_ea_tmp
+CREATE GLOBAL TEMPORARY TABLE "ALERT"."TASK_TIMELINE_EA_TMP"(  
+    "ID_TASK_REFID" NUMBER(24,0) NOT NULL,
+"ID_TL_TASK" NUMBER(24,0) NOT NULL,
+"ID_PATIENT" NUMBER(24,0) NOT NULL,
+"ID_EPISODE" NUMBER(24,0) NOT NULL,
+"ID_VISIT" NUMBER(24,0) NOT NULL,
+"ID_INSTITUTION" NUMBER(24,0),
+--
+"DT_REQ" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"ID_PROF_REQ" NUMBER(24,0),
+--
+"DT_BEGIN" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"DT_END" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"FLG_STATUS_REQ" VARCHAR2(3) NOT NULL,
+"TABLE_NAME" VARCHAR2(200) NOT NULL,
+"FLG_SHOW_METHOD" VARCHAR2(1) NOT NULL,
+"FLG_TYPE_VIEWER" VARCHAR2(2),
+"STATUS_STR" VARCHAR2(4000),
+"STATUS_MSG" VARCHAR2(4000),
+"STATUS_ICON" VARCHAR2(4000),
+"STATUS_FLG" VARCHAR2(4000),
+"CODE_DESCRIPTION" VARCHAR2(200) NOT NULL,
+"UNIVERSAL_DESCRIPTION" VARCHAR2(4000),
+"DT_DG_LAST_UPDATE" TIMESTAMP(6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+--
+"CREATE_USER"VARCHAR2(24),
+"CREATE_TIME"TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"CREATE_INSTITUTION"NUMBER(24),
+"UPDATE_USER"VARCHAR2(24),
+"UPDATE_TIME"TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"UPDATE_INSTITUTION"NUMBER(24)
+);
+
+-- Table Comment
+COMMENT ON TABLE TASK_TIMELINE_EA_TMP IS 'This is the temporary easy access table created to develop Task Timeline functionality';
+
+-- Collumns Comments
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_TASK_REFID" IS 'Task Reference ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_TL_TASK" IS 'Timeline Task ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_PATIENT" IS 'Patient ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_EPISODE" IS 'Episode ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_VISIT" IS 'Visit ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_INSTITUTION" IS 'Institution ID';
+--
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."DT_REQ" IS 'Date in which this task was created (requested)';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_PROF_REQ" IS 'Professional that created (requested) this task';
+--
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."DT_BEGIN" IS 'Date in which this task should start';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."DT_END" IS 'Date in which this task should finish';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."FLG_STATUS_REQ" IS 'Value of FLG_STATUS associated with this task';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."TABLE_NAME" IS 'Name of table where this task is stored (not easy access table)';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."FLG_SHOW_METHOD" IS 'Is this task oriented to VISIT, EPISODE or PATIENT: (''V''- VISIT oriented; ''E''- EPISODE oriented; ''P''- PATIENT oriented).';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."FLG_TYPE_VIEWER" IS 'FLG_TYPE of this task in viewer logic. This field is necessary to call task detail function.';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."STATUS_STR" IS 'Request''s status (in a specific format)';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."STATUS_MSG" IS 'Request''s status message code';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."STATUS_ICON" IS 'Request''s status icon';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."STATUS_FLG" IS 'Request''s status flag (used to return the icon)';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."CODE_DESCRIPTION" IS 'Code description of this task';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA"."UNIVERSAL_DESCRIPTION" IS 'Description of this task (independent from language)';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."DT_DG_LAST_UPDATE" IS 'Date of the last update';
+--
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."CREATE_USER" IS 'ID do profissional que criou o registo';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."CREATE_TIME" IS 'Data de criação do registo';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."CREATE_INSTITUTION" IS 'ID da instituição onde foi criado o registo';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."UPDATE_USER" IS 'ID do profissional que aplicou a última alteração';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."UPDATE_TIME" IS 'Data da última alteração';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."UPDATE_INSTITUTION" IS 'ID da instituição onde foi aplicado a última alteração';
+-- CHANGE END: Luís Maia
+
+
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2009-JUL-20
+-- CHANGE REASON: ALERT-34592
+
+DROP TABLE TASK_TIMELINE_EA_TMP;
+
+CREATE GLOBAL TEMPORARY TABLE "ALERT"."TASK_TIMELINE_EA_TMP"(  
+    "ID_TASK_REFID" NUMBER(24,0) NOT NULL,
+"ID_TL_TASK" NUMBER(24,0) NOT NULL,
+"ID_PATIENT" NUMBER(24,0) NOT NULL,
+"ID_EPISODE" NUMBER(24,0) NOT NULL,
+"ID_VISIT" NUMBER(24,0) NOT NULL,
+"ID_INSTITUTION" NUMBER(24,0),
+--
+"DT_REQ" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"ID_PROF_REQ" NUMBER(24,0),
+--
+"DT_BEGIN" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"DT_END" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"FLG_STATUS_REQ" VARCHAR2(3) NOT NULL,
+"TABLE_NAME" VARCHAR2(200) NOT NULL,
+"FLG_SHOW_METHOD" VARCHAR2(1) NOT NULL,
+"FLG_TYPE_VIEWER" VARCHAR2(2),
+"STATUS_STR" VARCHAR2(4000),
+"STATUS_MSG" VARCHAR2(4000),
+"STATUS_ICON" VARCHAR2(4000),
+"STATUS_FLG" VARCHAR2(4000),
+"CODE_DESCRIPTION" VARCHAR2(200) NOT NULL,
+"UNIVERSAL_DESCRIPTION" VARCHAR2(4000),
+"MEDICATION_SUBJECT" VARCHAR2(30),
+"DT_DG_LAST_UPDATE" TIMESTAMP(6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+--
+"CREATE_USER"VARCHAR2(24),
+"CREATE_TIME"TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"CREATE_INSTITUTION"NUMBER(24),
+"UPDATE_USER"VARCHAR2(24),
+"UPDATE_TIME"TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"UPDATE_INSTITUTION"NUMBER(24)
+);
+
+-- Table Comment
+COMMENT ON TABLE TASK_TIMELINE_EA_TMP IS 'This is the temporary easy access table created to develop Task Timeline functionality';
+
+-- Collumns Comments
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_TASK_REFID" IS 'Task Reference ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_TL_TASK" IS 'Timeline Task ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_PATIENT" IS 'Patient ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_EPISODE" IS 'Episode ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_VISIT" IS 'Visit ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_INSTITUTION" IS 'Institution ID';
+--
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."DT_REQ" IS 'Date in which this task was created (requested)';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_PROF_REQ" IS 'Professional that created (requested) this task';
+--
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."DT_BEGIN" IS 'Date in which this task should start';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."DT_END" IS 'Date in which this task should finish';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."FLG_STATUS_REQ" IS 'Value of FLG_STATUS associated with this task';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."TABLE_NAME" IS 'Name of table where this task is stored (not easy access table)';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."FLG_SHOW_METHOD" IS 'Is this task oriented to VISIT, EPISODE or PATIENT: (''V''- VISIT oriented; ''E''- EPISODE oriented; ''P''- PATIENT oriented).';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."FLG_TYPE_VIEWER" IS 'FLG_TYPE of this task in viewer logic. This field is necessary to call task detail function.';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."STATUS_STR" IS 'Request''s status (in a specific format)';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."STATUS_MSG" IS 'Request''s status message code';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."STATUS_ICON" IS 'Request''s status icon';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."STATUS_FLG" IS 'Request''s status flag (used to return the icon)';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."CODE_DESCRIPTION" IS 'Code description of this task';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA"."UNIVERSAL_DESCRIPTION" IS 'Description of this task (independent from language)';
+COMMENT ON COLUMN TASK_TIMELINE_EA_TMP.MEDICATION_SUBJECT IS 'Medication subject for status string purpose';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."DT_DG_LAST_UPDATE" IS 'Date of the last update';
+--
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."CREATE_USER" IS 'ID do profissional que criou o registo';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."CREATE_TIME" IS 'Data de criação do registo';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."CREATE_INSTITUTION" IS 'ID da instituição onde foi criado o registo';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."UPDATE_USER" IS 'ID do profissional que aplicou a última alteração';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."UPDATE_TIME" IS 'Data da última alteração';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."UPDATE_INSTITUTION" IS 'ID da instituição onde foi aplicado a última alteração';
+-- CHANGE END: João Ribeiro
+
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2009-JUL-21
+-- CHANGE REASON: ALERT-34592
+
+DROP TABLE TASK_TIMELINE_EA_TMP;
+
+CREATE GLOBAL TEMPORARY TABLE "ALERT"."TASK_TIMELINE_EA_TMP"(  
+    "ID_TASK_REFID" NUMBER(24,0) NOT NULL,
+"ID_TL_TASK" NUMBER(24,0) NOT NULL,
+"ID_PATIENT" NUMBER(24,0) NOT NULL,
+"ID_EPISODE" NUMBER(24,0) NOT NULL,
+"ID_VISIT" NUMBER(24,0) NOT NULL,
+"ID_INSTITUTION" NUMBER(24,0),
+--
+"DT_REQ" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"ID_PROF_REQ" NUMBER(24,0),
+--
+"DT_BEGIN" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"DT_END" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"FLG_STATUS_REQ" VARCHAR2(3) NOT NULL,
+"TABLE_NAME" VARCHAR2(200) NOT NULL,
+"FLG_SHOW_METHOD" VARCHAR2(1) NOT NULL,
+"FLG_TYPE_VIEWER" VARCHAR2(2),
+"STATUS_STR" VARCHAR2(4000),
+"STATUS_MSG" VARCHAR2(4000),
+"STATUS_ICON" VARCHAR2(4000),
+"STATUS_FLG" VARCHAR2(4000),
+"CODE_DESCRIPTION" VARCHAR2(200) NOT NULL,
+"UNIVERSAL_DESCRIPTION" VARCHAR2(4000),
+"MEDICATION_SUBJECT" VARCHAR2(30),
+"DT_DG_LAST_UPDATE" TIMESTAMP(6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+--
+"CREATE_USER"VARCHAR2(24),
+"CREATE_TIME"TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"CREATE_INSTITUTION"NUMBER(24),
+"UPDATE_USER"VARCHAR2(24),
+"UPDATE_TIME"TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"UPDATE_INSTITUTION"NUMBER(24)
+)
+ON COMMIT PRESERVE ROWS;
+
+-- Table Comment
+COMMENT ON TABLE TASK_TIMELINE_EA_TMP IS 'This is the temporary easy access table created to develop Task Timeline functionality';
+
+-- Collumns Comments
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_TASK_REFID" IS 'Task Reference ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_TL_TASK" IS 'Timeline Task ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_PATIENT" IS 'Patient ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_EPISODE" IS 'Episode ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_VISIT" IS 'Visit ID';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_INSTITUTION" IS 'Institution ID';
+--
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."DT_REQ" IS 'Date in which this task was created (requested)';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."ID_PROF_REQ" IS 'Professional that created (requested) this task';
+--
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."DT_BEGIN" IS 'Date in which this task should start';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."DT_END" IS 'Date in which this task should finish';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."FLG_STATUS_REQ" IS 'Value of FLG_STATUS associated with this task';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."TABLE_NAME" IS 'Name of table where this task is stored (not easy access table)';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."FLG_SHOW_METHOD" IS 'Is this task oriented to VISIT, EPISODE or PATIENT: (''V''- VISIT oriented; ''E''- EPISODE oriented; ''P''- PATIENT oriented).';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."FLG_TYPE_VIEWER" IS 'FLG_TYPE of this task in viewer logic. This field is necessary to call task detail function.';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."STATUS_STR" IS 'Request''s status (in a specific format)';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."STATUS_MSG" IS 'Request''s status message code';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."STATUS_ICON" IS 'Request''s status icon';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."STATUS_FLG" IS 'Request''s status flag (used to return the icon)';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."CODE_DESCRIPTION" IS 'Code description of this task';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA"."UNIVERSAL_DESCRIPTION" IS 'Description of this task (independent from language)';
+COMMENT ON COLUMN TASK_TIMELINE_EA_TMP.MEDICATION_SUBJECT IS 'Medication subject for status string purpose';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."DT_DG_LAST_UPDATE" IS 'Date of the last update';
+--
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."CREATE_USER" IS 'ID do profissional que criou o registo';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."CREATE_TIME" IS 'Data de criação do registo';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."CREATE_INSTITUTION" IS 'ID da instituição onde foi criado o registo';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."UPDATE_USER" IS 'ID do profissional que aplicou a última alteração';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."UPDATE_TIME" IS 'Data da última alteração';
+COMMENT ON COLUMN "ALERT"."TASK_TIMELINE_EA_TMP"."UPDATE_INSTITUTION" IS 'ID da instituição onde foi aplicado a última alteração';
+-- CHANGE END: João Ribeiro
+
+-- CHANGED BY: Tiago Lourenço
+-- CHANGE DATE: 2010-12-23
+-- CHANGE REASON: ALERT-36710
+
+ALTER TABLE TASK_TIMELINE_EA_TMP add FLG_OUTDATED NUMBER(24) DEFAULT 0;
+comment on column TASK_TIMELINE_EA_TMP.FLG_OUTDATED is 'Indica se o registo se refere a uma tarefa concluída (1-Tarefa concluída; 0-Tarefa activa)';
+
+-- CHANGE END: Tiago Lourenço
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:35
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table task_timeline_ea_tmp add id_ref_group number(24);
+
+COMMENT ON COLUMN task_timeline_ea_tmp.id_ref_group   IS 'Id that groups several task of the same type. To be used on monitorizations for instance (in the HandP is used the id_ref_group). ' ;
+
+alter table task_timeline_ea_tmp add rank number(6);
+COMMENT ON COLUMN task_timeline_ea_tmp.rank   IS 'Task rank';
+
+alter table task_timeline_ea_tmp add id_doc_area number(24);
+COMMENT ON COLUMN task_timeline_ea_tmp.id_doc_area   IS 'Doc area ID';
+
+alter table task_timeline_ea_tmp modify code_description VARCHAR2(200) null;
+alter table task_timeline_ea_tmp add id_group_import number(24);
+alter table task_timeline_ea_tmp add code_desc_group number(24);
+alter table task_timeline_ea_tmp add dt_execution TIMESTAMP(6) WITH LOCAL TIME ZONE;
+
+COMMENT ON COLUMN task_timeline_ea_tmp.id_group_import IS 'Id to be used to aggregate info in the data import(H and P)';
+COMMENT ON COLUMN task_timeline_ea_tmp.code_desc_group IS 'Code translation to be used in the title of the aggregated info in the data import (H and P)';
+COMMENT ON COLUMN task_timeline_ea_tmp.dt_execution IS 'Task execution date';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:49
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table task_timeline_ea_tmp add id_ref_group number(24);
+
+COMMENT ON COLUMN task_timeline_ea_tmp.id_ref_group   IS 'Id that groups several task of the same type. To be used on monitorizations for instance (in the HandP is used the id_ref_group). ' ;
+
+alter table task_timeline_ea_tmp add rank number(6);
+COMMENT ON COLUMN task_timeline_ea_tmp.rank   IS 'Task rank';
+
+alter table task_timeline_ea_tmp add id_doc_area number(24);
+COMMENT ON COLUMN task_timeline_ea_tmp.id_doc_area   IS 'Doc area ID';
+
+alter table task_timeline_ea_tmp modify code_description VARCHAR2(200) null;
+alter table task_timeline_ea_tmp add id_group_import number(24);
+alter table task_timeline_ea_tmp add code_desc_group number(24);
+alter table task_timeline_ea_tmp add dt_execution TIMESTAMP(6) WITH LOCAL TIME ZONE;
+
+COMMENT ON COLUMN task_timeline_ea_tmp.id_group_import IS 'Id to be used to aggregate info in the data import(H and P)';
+COMMENT ON COLUMN task_timeline_ea_tmp.code_desc_group IS 'Code translation to be used in the title of the aggregated info in the data import (H and P)';
+COMMENT ON COLUMN task_timeline_ea_tmp.dt_execution IS 'Task execution date';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 07/12/2011 09:15
+-- CHANGE REASON: [ALERT-208771] 
+alter table task_timeline_ea_tmp modify code_description VARCHAR2(200 CHAR);
+alter table task_timeline_ea_tmp modify code_desc_group VARCHAR2(200 CHAR);
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/01/2012 16:33
+-- CHANGE REASON: [ALERT-216664] 
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp add(code_status VARCHAR2(200 CHAR))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp add(ID_SUB_GROUP_IMPORT NUMBER(24))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp add(CODE_DESC_SUB_GROUP VARCHAR2(200 CHAR))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+comment on column task_timeline_ea_tmp.code_status
+  is 'Code translation to obtain the description of the task status';
+  
+comment on column task_timeline_ea_tmp.CODE_DESC_SUB_GROUP
+  is 'Code translation to be used in the title of sub group of the aggregated info in the data import (H and P)';
+  
+comment on column task_timeline_ea_tmp.ID_SUB_GROUP_IMPORT
+  is 'Id to be used to the sub group of the aggregate info in the data import(H and P)';
+
+comment on column task_timeline_ea_tmp.universal_description
+  is 'Description of this task (independent from language)';
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp modify(TABLE_NAME VARCHAR2(200 CHAR))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp modify(FLG_SHOW_METHOD VARCHAR2(1 CHAR))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp modify(STATUS_STR VARCHAR2(1000 CHAR))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp modify(STATUS_MSG VARCHAR2(1000 CHAR))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp modify(STATUS_ICON VARCHAR2(1000 CHAR))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp modify(STATUS_FLG VARCHAR2(1000 CHAR))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp modify(UNIVERSAL_DESCRIPTION VARCHAR2(1000 CHAR))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp modify(CREATE_USER VARCHAR2(24 CHAR))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp modify(UPDATE_USER VARCHAR2(24 CHAR))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp modify(FLG_TYPE_VIEWER VARCHAR2(24 CHAR))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp modify(MEDICATION_SUBJECT VARCHAR2(30 CHAR))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp add(FLG_SOS VARCHAR2(1 CHAR) default ''N'')';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp modify(FLG_SOS VARCHAR2(1 CHAR) not null)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp add(ID_TASK_AGGREGATOR NUMBER(24))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+
+comment on column task_timeline_ea.ID_TASK_AGGREGATOR
+  is 'Id that groups several task of the same type. It should be used preferentially to group information by recurrence. This option can only be inserted when ID_REF_GROUP is already used.';
+
+comment on column task_timeline_ea.ID_REF_GROUP
+  is 'Id that groups several task of the same type. It should be used preferentially to group information by functionality context. To be used on monitorizations for instance (in the HandP is used the id_ref_group).';
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 01/02/2012 09:37
+-- CHANGE REASON: [ALERT-216664] 
+comment on column task_timeline_ea_tmp.ID_TASK_AGGREGATOR
+  is 'Id that groups several task of the same type. It should be used preferentially to group information by recurrence. This option can only be inserted when ID_REF_GROUP is already used.';
+
+comment on column task_timeline_ea_tmp.ID_REF_GROUP
+  is 'Id that groups several task of the same type. It should be used preferentially to group information by functionality context. To be used on monitorizations for instance (in the HandP is used the id_ref_group).';
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 24/02/2012 14:37
+-- CHANGE REASON: [ALERT-220427 ] Versioning SinglePage and SingleNote modifications (February 2012)
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 15/02/2012
+-- CHANGE REASON: [ALERT-166586] EDIS restructuring - Present Illness
+BEGIN
+    execute immediate 'alter table task_timeline_ea_tmp modify (UNIVERSAL_DESCRIPTION VARCHAR2(4000))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+--CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 16/02/2012
+-- CHANGE REASON: [ALERT-166586] EDIS restructuring - Present Illness
+BEGIN
+    execute immediate 'alter table task_timeline_ea_tmp add (UNIVERSAL_DESC_CLOB CLOB NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+--CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 16/02/2012
+-- CHANGE REASON: [ALERT-166586] EDIS restructuring - Present Illness
+BEGIN
+    execute immediate 'COMMENT ON COLUMN task_timeline_ea_tmp.UNIVERSAL_DESC_CLOB IS ''Large Description of this task (independent from language)''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+--CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 16/02/2012
+-- CHANGE REASON: [ALERT-166586] EDIS restructuring - Present Illness
+BEGIN
+    execute immediate ('Alter table task_timeline_ea_tmp move lob(UNIVERSAL_DESC_CLOB) store as ( tablespace ALERT_LOB)');
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+--CHANGE END: António Neto
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 30/03/2012 14:03
+-- CHANGE REASON: [ALERT-225709 ] Current Visit
+DECLARE
+    e_invalid_identifier EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904); -- drop column/comment on column
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp drop column universal_description';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:45
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    execute immediate 'alter table task_timeline_ea_tmp add (id_parent_task_refid NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:51
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+begin
+execute immediate ('COMMENT ON COLUMN task_timeline_ea_tmp.id_parent_task_refid IS ''Task parent ID. To be used in editions that generate new Ids.''');
+exception
+when others then
+null;
+end;
+/
+
+BEGIN
+    execute immediate 'alter table task_timeline_ea_tmp add (FLG_ONGOING VARCHAR2(1 char) default ''Y'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+begin
+execute immediate ('COMMENT ON COLUMN task_timeline_ea_tmp.FLG_ONGOING IS ''O - The task is in an ongoing status. F- The task is in an finalized status. N- Not applicable''');
+exception
+when others then
+null;
+end;
+/
+
+BEGIN
+    execute immediate 'alter table task_timeline_ea_tmp add (FLG_NORMAL VARCHAR2(1 char) default ''Y'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+begin
+execute immediate ('COMMENT ON COLUMN task_timeline_ea_tmp.FLG_NORMAL IS ''Y - Normal result. N - Anormal result''');
+exception
+when others then
+null;
+end;
+/
+
+BEGIN
+    execute immediate 'alter table task_timeline_ea_tmp add (ID_PROF_EXEC NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+begin
+execute immediate ('COMMENT ON COLUMN task_timeline_ea_tmp.ID_PROF_EXEC IS ''Professional Id that executes the task''');
+exception
+when others then
+null;
+end;
+/
+---------------------------------
+
+BEGIN
+    execute immediate 'alter table task_timeline_ea_tmp add (flg_has_comments VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+begin
+execute immediate ('COMMENT ON COLUMN task_timeline_ea_tmp.flg_has_comments IS ''Y-The task has at least one comment associated. N-Otherwsise.''');
+exception
+when others then
+null;
+end;
+/
+
+BEGIN
+    execute immediate 'alter table task_timeline_ea_tmp add (dt_last_execution timestamp with local time zone)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+begin
+execute immediate ('COMMENT ON COLUMN task_timeline_ea_tmp.dt_last_execution IS ''Date of last execution associated to the task.''');
+exception
+when others then
+null;
+end;
+/
+
+BEGIN
+    execute immediate 'alter table task_timeline_ea_tmp add (id_parent_comments number(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+begin
+execute immediate ('COMMENT ON COLUMN task_timeline_ea_tmp.id_parent_comments IS ''ID of the parent task. To associate a comment to a task''');
+exception
+when others then
+null;
+end;
+/
+
+BEGIN
+    execute immediate 'alter table task_timeline_ea_tmp add (dt_last_update timestamp with local time zone)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+begin
+execute immediate ('COMMENT ON COLUMN task_timeline_ea_tmp.dt_last_update IS ''Last update date of the task''');
+exception
+when others then
+null;
+end;
+/
+
+BEGIN
+    execute immediate 'alter table task_timeline_ea_tmp modify (flg_status_req   VARCHAR2(24 CHAR)  null)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 07/09/2012 14:22
+-- CHANGE REASON: [ALERT-239430] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01451);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp MODIFY (ID_EPISODE NULL)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea_tmp MODIFY (ID_VISIT NULL)';
+    
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/11/2012 16:39
+-- CHANGE REASON: [ALERT-244902] 
+BEGIN
+    execute immediate 'alter table task_timeline_ea_tmp add (id_prof_review number(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN task_timeline_ea_tmp.id_prof_review IS ''Id professional that performed the last review''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table task_timeline_ea_tmp add (dt_review timestamp(6) with local time zone)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN task_timeline_ea_tmp.dt_review IS ''Last review date''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+task_timeline_ea_tmp
+BEGIN
+    execute immediate 'alter table task_timeline_ea_tmp add (id_task_notes number(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN task_timeline_ea_tmp.id_task_notes IS ''Id of the task of the associated notes. In the procedures executions can be used a template in the notes, for instance''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 17/12/2012 16:58
+-- CHANGE REASON: [ALERT-247527] 
+ALTER TABLE TASK_TIMELINE_EA_TMP ADD (ID_SAMPLE_TYPE NUMBER(12), CODE_DESC_SAMPLE_TYPE VARCHAR2(200 CHAR));
+
+COMMENT ON COLUMN TASK_TIMELINE_EA_TMP.ID_SAMPLE_TYPE IS 'Sample type id';
+
+COMMENT ON COLUMN TASK_TIMELINE_EA_TMP.CODE_DESC_SAMPLE_TYPE IS 'Sample type code for translation';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 09/05/2014 15:29
+-- CHANGE REASON: [ALERT-283927] 
+BEGIN
+    pk_versioning.run(q'[alter table TASK_TIMELINE_EA_TMP modify rank NUMBER(24)]');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 07/07/2017 14:53
+-- CHANGE REASON: [ALERT-330567] Discharge summary for FR market.
+ALTER TABLE task_timeline_ea_tmp add (flg_technical VARCHAR2(1 char) DEFAULT 'N');
+ALTER TABLE task_timeline_ea_tmp add (flg_relevant VARCHAR2(1 char) DEFAULT 'N');
+
+comment on column task_timeline_ea_tmp.flg_technical is 'Is task technical (used for exams and procedures) - Y/N';
+comment on column task_timeline_ea_tmp.flg_relevant is 'Is task technical (used for exams and analysis results) - Y/N';
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Vitor Sa
+-- CHANGE DATE: 11/12/2017 09:58
+-- CHANGE REASON: [CALERT-1133] CALERT-1133 DDL Versioning
+ALTER TABLE task_timeline_ea_tmp add (flg_stat VARCHAR2(1 char) DEFAULT 'N');
+comment on column task_timeline_ea_tmp.flg_stat is 'Indicates if order is STAT or not';
+-- CHANGE END: Vitor Sa
+
+-- CHANGED BY: rui.mendonca
+-- CHANGE DATE: 11/12/2017 15:42
+-- CHANGE REASON: [CALERT-1112] New Neurological assessment figure
+BEGIN
+    pk_versioning.run('
+ALTER TABLE 
+  task_timeline_ea_tmp 
+ADD 
+  flg_type VARCHAR2(16 CHAR)');
+END;
+/
+COMMENT ON COLUMN task_timeline_ea_tmp.flg_type IS 'Flag to be used in the filtering of records (each area must implement the code according with given value)';
+-- CHANGE END: rui.mendonca
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:32
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.task_timeline_ea_tmp move lob(universal_desc_clob) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

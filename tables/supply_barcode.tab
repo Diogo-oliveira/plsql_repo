@@ -1,0 +1,141 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 09:32
+-- CHANGE REASON: [ALERT-12334] 
+create table SUPPLY_BARCODE
+(
+  ID_SUPPLY_BARCODE  NUMBER(24) not null,
+  ID_SUPPLY          NUMBER(24) not null,
+  ID_INSTITUTION     NUMBER(24),
+  BARCODE            VARCHAR2(200 CHAR),
+  CODE               VARCHAR2(200 CHAR),
+  LOT                VARCHAR2(200 CHAR),
+  SERIAL_NUMBER      VARCHAR2(200 CHAR),
+  FLG_AVAILABLE      VARCHAR2(1 CHAR),
+  CREATE_USER        VARCHAR2(24 CHAR),
+  CREATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER        VARCHAR2(24 CHAR),
+  UPDATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table SUPPLY_BARCODE
+  is 'Supplies? barcodes.';
+-- Add comments to the columns 
+comment on column SUPPLY_BARCODE.ID_SUPPLY_BARCODE
+  is 'Primary Key';
+comment on column SUPPLY_BARCODE.ID_SUPPLY
+  is 'Supply?s ID';
+comment on column SUPPLY_BARCODE.ID_INSTITUTION
+  is 'Current institution?s ID ';
+comment on column SUPPLY_BARCODE.BARCODE
+  is 'Barcode (alphanumeric)';
+comment on column SUPPLY_BARCODE.CODE
+  is 'Coding ? US';
+comment on column SUPPLY_BARCODE.LOT
+  is 'Lot (alphanumeric)';
+comment on column SUPPLY_BARCODE.SERIAL_NUMBER
+  is 'Serial number (alphanumeric)';
+comment on column SUPPLY_BARCODE.FLG_AVAILABLE
+  is 'Flag for availability';
+comment on column SUPPLY_BARCODE.CREATE_USER
+  is 'Creation user';
+comment on column SUPPLY_BARCODE.CREATE_TIME
+  is 'Creation time';
+comment on column SUPPLY_BARCODE.CREATE_INSTITUTION
+  is 'Creation institution';
+comment on column SUPPLY_BARCODE.UPDATE_USER
+  is 'Update user';
+comment on column SUPPLY_BARCODE.UPDATE_TIME
+  is 'Update time';
+comment on column SUPPLY_BARCODE.UPDATE_INSTITUTION
+  is 'Update institution';
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 01/07/2010 15:01
+-- CHANGE REASON: [ALERT-108775] Activity therapist
+alter table supply_barcode 
+add ASSET_NUMBER VARCHAR2(200 CHAR);
+
+
+comment on column SUPPLY_BARCODE.ASSET_NUMBER
+  is 'Asset Number';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 24/08/2010 14:41
+-- CHANGE REASON: [ALERT-119317] [Activity Therapist] Error when loaning a set with fixedasset verification.
+ALTER TABLE Supply_Barcode
+DROP COLUMN asset_number;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 06/12/2011 12:05
+-- CHANGE REASON: [ALERT-208591] 
+-- Add/modify columns 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); 
+BEGIN
+    EXECUTE IMMEDIATE 'alter table SUPPLY_BARCODE add dt_expiration TIMESTAMP(6) WITH LOCAL TIME ZONE';
+EXCEPTION
+    WHEN e_already_exists THEN
+       dbms_output.put_line('dt_expiration already exists');
+END;
+/
+-- Add comments to the columns 
+comment on column SUPPLY_BARCODE.dt_expiration
+  is 'Expiration date';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/01/2016 11:20
+-- CHANGE REASON: [ALERT-317912] 
+comment on table SUPPLY_BARCODE
+  is 'Supplies barcode';
+-- Add comments to the columns 
+comment on column SUPPLY_BARCODE.id_supply_barcode
+  is 'Supply barcode ID';
+comment on column SUPPLY_BARCODE.id_supply
+  is 'Supply ID';
+comment on column SUPPLY_BARCODE.id_institution
+  is 'Institution ID';
+comment on column SUPPLY_BARCODE.barcode
+  is 'Barcode (alphanumeric)';
+comment on column SUPPLY_BARCODE.code
+  is 'Code';
+comment on column SUPPLY_BARCODE.lot
+  is 'Lot (alphanumeric)';
+comment on column SUPPLY_BARCODE.serial_number
+  is 'Serial number (alphanumeric)';
+comment on column SUPPLY_BARCODE.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column SUPPLY_BARCODE.create_user
+  is 'Creation user';
+comment on column SUPPLY_BARCODE.create_time
+  is 'Creation time';
+comment on column SUPPLY_BARCODE.create_institution
+  is 'Creation institution';
+comment on column SUPPLY_BARCODE.update_user
+  is 'Update user';
+comment on column SUPPLY_BARCODE.update_time
+  is 'Update time';
+comment on column SUPPLY_BARCODE.update_institution
+  is 'Update institution';
+comment on column SUPPLY_BARCODE.dt_expiration
+  is 'Expiration date';
+  
+  
+  
+-- CHANGE END: Ana Matos

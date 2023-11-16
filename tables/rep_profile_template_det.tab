@@ -1,0 +1,162 @@
+
+
+  CREATE TABLE REP_PROFILE_TEMPLATE_DET
+   (	ID_REP_PROFILE_TEMPLATE_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_REP_PROFILE_TEMPLATE NUMBER(12,0) NOT NULL ENABLE,
+	ID_REPORTS NUMBER(24,0) NOT NULL ENABLE,
+	ID_REP_SCREEN NUMBER(24,0),
+	FLG_AREA_REPORT VARCHAR2(2),
+	FLG_ACTION VARCHAR2(2),
+	RANK NUMBER(6,0),
+	VALUE_ACTION VARCHAR2(200),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE rep_profile_template_det IS 'Relatórios que constituem os templates de acessos aos relatórios' ;
+
+COMMENT ON COLUMN rep_profile_template_det.id_rep_profile_template_det IS 'Chave primária' ;
+COMMENT ON COLUMN rep_profile_template_det.id_rep_profile_template IS 'ID do template dos relatórios' ;
+COMMENT ON COLUMN rep_profile_template_det.id_reports IS 'ID do relatório' ;
+COMMENT ON COLUMN rep_profile_template_det.id_rep_screen IS 'ID do ecran e funcionalidade' ;
+COMMENT ON COLUMN rep_profile_template_det.flg_area_report IS 'Área na qual será alocado o relatório. R-Reports;OD-Ongoing Documents; C-Consents;CR-Certificates;F-Forms;L-Lables; DE-Documents produced in this episode; S- Save To' ;
+COMMENT ON COLUMN rep_profile_template_det.flg_action IS 'Tipo de acção:OR - Open report; OS - Open screen;' ;
+COMMENT ON COLUMN rep_profile_template_det.rank IS 'Ordem de visualização' ;
+COMMENT ON COLUMN rep_profile_template_det.value_action IS 'Valor da acção. No caso da flg_action=OR, será indicado por ex. se irá ser imprimido em PDF, no caso da flg_action=OS - o nome do ecran a ser visualizado' ;
+
+alter table REP_PROFILE_TEMPLATE_DET modify FLG_AREA_REPORT not null;
+
+--Rui Batista
+--2007/06/18
+alter table rep_profile_template_det modify flg_area_report varchar2(2) null;
+
+COMMENT ON COLUMN rep_profile_template_det.flg_area_report IS 'Área na qual será alocado o relatório. R-Reports; E-Editable reports; OD-Ongoing Documents; C-Consents;CR-Certificates;F-Forms;L-Lables; DE-Documents produced in this episode; S- Save To' ;
+
+--Rui Batista
+--2007/06/28
+alter table rep_profile_template_det
+add (
+id_institution number(12),
+flg_available varchar2(1)
+);
+
+COMMENT ON COLUMN rep_profile_template_det.id_institution IS 'ID da instituição';
+COMMENT ON COLUMN rep_profile_template_det.flg_available IS 'Disponibilidade';
+
+
+--Rui Spratley
+--2007/08/21
+
+-- Add/modify columns 
+alter table REP_PROFILE_TEMPLATE_DET modify FLG_AREA_REPORT VARCHAR2(4);
+-- Add comments to the columns 
+comment on column REP_PROFILE_TEMPLATE_DET.FLG_AREA_REPORT
+  is 'Área na qual será alocado o relatório. R-Reports; RCM-Reports Crisis; E-Editable reports; OD-Ongoing Documents; C-Consents;CCM-ConsentsCrisis;CR-Certificates;CRCM-Certificates Crisis;F-Forms;L-Lables; DE-Documents produced in this episode; S- Save To';
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 08/04/2011 19:24
+-- CHANGE REASON: [ALERT-158177] 
+alter table REP_PROFILE_TEMPLATE_DET
+  add (FLG_DISCLOSURE VARCHAR2(1 char) default 'N' not null;
+comment on column REP_PROFILE_TEMPLATE_DET.FLG_DISCLOSURE
+  is 'Flag for Confidential Health Information: Y for Yes and N for No';
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 14/04/2011 09:36
+-- CHANGE REASON: [ALERT-158177] 
+alter table REP_PROFILE_TEMPLATE_DET
+  add FLG_DISCLOSURE VARCHAR2(1 char) default 'N' not null  novalidate;
+comment on column REP_PROFILE_TEMPLATE_DET.FLG_DISCLOSURE
+  is 'Flag for Confidential Health Information: Y for Yes and N for No';
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 14/Dez/2011 11:28
+-- CHANGE REASON: ALERT-209866
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01442);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE REP_PROFILE_TEMPLATE_DET MODIFY FLG_AREA_REPORT NOT NULL ';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+-- CHANGED BY: ricardo.pires
+-- CHANGE DATE: 26/Jun/2014 12:00
+-- CHANGE REASON: ALERT-287183
+alter table REP_PROFILE_TEMPLATE_DET
+   drop column ADW_LAST_UPDATE;
+-- CHANGE END  
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON TABLE REP_PROFILE_TEMPLATE_DET IS 'Parameterization between profiles and reports';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.ID_REP_PROFILE_TEMPLATE_DET IS 'Primary Key';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.ID_REP_PROFILE_TEMPLATE IS 'Report templates identifier';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.ID_REPORTS IS 'Reports Identifier';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.ID_REP_SCREEN IS 'Screen identifier';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.FLG_AREA_REPORT IS 'Area where the report should be allocated. R- Reports, RCM- Reports Crisis, E-Editable reports, OD-Ongoing Documents, C-Consents, CCM-ConsentsCrisis, CR-Certificates, CRCM-Certificates Crisis, F-Forms, L-Lables, DE-Documents produced in this episode, S- Save To';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.FLG_ACTION IS 'Type of action: OR- Open Report, OS- Open Screen';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.RANK IS 'Line-up';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.VALUE_ACTION IS '';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.ADW_LAST_UPDATE IS 'ADW Last Update';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.ID_INSTITUTION IS 'Institution Identifier';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.FLG_AVAILABLE IS 'Disponibility';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 04/12/2020 16:47
+-- CHANGE REASON: [EMR-39495]
+ALTER TABLE rep_profile_template_det ADD FLG_TYPE VARCHAR2(1 CHAR);
+
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.ID_REP_PROFILE_TEMPLATE_DET IS 'Primary key';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.ID_REP_PROFILE_TEMPLATE IS 'Report profile template ID';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.ID_REPORTS IS 'Report ID';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.ID_REP_SCREEN IS 'Screen ID';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.FLG_AREA_REPORT IS 'Flag that indicates the report area. R - Reports; RCM - Reports (Crisis machine); E - Editable reports, OD - Ongoing Documents; C - Consents, CCM - Consents (Crisis machine); CR - Certificates; CRCM - Certificates (Crisis machine); F - Forms; L - Labels; DE - Documents produced in this episode; S - Save To';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.FLG_ACTION IS 'Type of action: OR - Open Report; OS - Open Screen';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.RANK IS 'Rank';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.ADW_LAST_UPDATE IS 'Update date';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.FLG_AVAILABLE IS 'Flag that indicates if the record is available or not (Y/N)';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.FLG_TYPE IS 'Access type: A - add access; R - remove access';
+COMMENT ON COLUMN REP_PROFILE_TEMPLATE_DET.FLG_DISCLOSURE IS 'Flag that indicates if the the disclaimer for "Confidential Health Information" is available or not (Y/N)';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 04/12/2020 16:47
+-- CHANGE REASON: [EMR-39495]
+update rep_profile_template_det
+set flg_type = decode(flg_available, 'Y', 'A', 'R')
+where 1 = 1;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 04/12/2020 16:47
+-- CHANGE REASON: [EMR-39495]
+ALTER TABLE rep_profile_template_det MODIFY FLG_TYPE VARCHAR2(1 CHAR) default 'A' NOT NULL;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/05/2021 12:12
+-- CHANGE REASON: [EMR-45192]
+ALTER TABLE rep_profile_template_det DROP COLUMN id_institution;
+ALTER TABLE rep_profile_template_det MODIFY(
+FLG_AREA_REPORT VARCHAR(4 CHAR),
+FLG_ACTION VARCHAR(2 CHAR),
+VALUE_ACTION VARCHAR(200 CHAR),
+FLG_AVAILABLE VARCHAR(1 CHAR),
+CREATE_USER VARCHAR(24 CHAR),
+UPDATE_USER VARCHAR(24 CHAR));
+-- CHANGE END: Ana Matos

@@ -1,0 +1,21 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 28/05/2010 18:36
+-- CHANGE REASON: [ALERT-101294] 
+DECLARE
+    l_sql   VARCHAR2(1000);
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM all_indexes i
+     WHERE i.index_name = 'REA_DT_REQUESTED_IDX'
+       AND owner = 'ALERT';
+
+    IF l_count = 0
+    THEN
+        l_sql := 'CREATE INDEX rea_dt_requested_idx ON REFERRAL_EA (DT_REQUESTED)';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro

@@ -1,0 +1,250 @@
+
+
+  CREATE TABLE EPIS_REPORT_SECTION
+   (	ID_EPIS_REPORT_SECTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPIS_REPORT NUMBER(24,0) NOT NULL ENABLE,
+	ID_REP_SECTION_DET NUMBER(24,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE epis_report_section IS 'Secções de um relatório impressas por episódio' ;
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 16/05/2011 15:12
+-- CHANGE REASON: [ALERT-179113] Print tool - Episode archive - Detail area - Taking into account reports printed for disclosure purposes, the report sections are not being displayed.
+DECLARE
+    l_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(l_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table EPIS_REPORT_SECTION add ID_REP_SECTION NUMBER(24) DEFAULT -1 NOT NULL';
+    EXCEPTION
+        WHEN l_already_exists THEN
+            dbms_output.put_line('Column already exists!!!');
+    END;
+
+    EXECUTE IMMEDIATE 'comment on column EPIS_REPORT_SECTION.id_rep_section_det is ''Do not use this column! Use ID_REP_SECTION instead of ID_REP_SECTION_DET.''';
+    EXECUTE IMMEDIATE 'comment on column EPIS_REPORT_SECTION.ID_REP_SECTION is ''Report section id''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 16/05/2011 16:49
+-- CHANGE REASON: [ALERT-179113] Print tool - Episode archive - Detail area - Taking into account reports printed for disclosure purposes, the report sections are not being displayed.
+DECLARE
+    l_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(l_already_exists, -1451);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table EPIS_REPORT_SECTION modify id_rep_section_det null';
+    EXCEPTION
+        WHEN l_already_exists THEN
+            dbms_output.put_line('Already modified!');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 27-Jun-2011
+-- CHANGE REASON: ALERT-185735 - Column CARDINALITY
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT_SECTION ADD CARDINALITY NUMBER(24)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_REPORT_SECTION.CARDINALITY IS ''Section cardinality.''';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 27-Jun-2011
+-- CHANGE REASON: ALERT-185735 - Column FLG_SCOPE
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT_SECTION ADD FLG_SCOPE VARCHAR(1)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_REPORT_SECTION.FLG_SCOPE IS ''Section orientation type.''';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 27-Jun-2011
+-- CHANGE REASON: ALERT-185735 - COLUMN ID_REP_LAYOUT
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT_SECTION ADD ID_REP_LAYOUT VARCHAR2(200 CHAR)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_REPORT_SECTION.ID_REP_LAYOUT IS ''Section layout identifier.''';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 04-Jul-2011
+-- CHANGE REASON: ALERT-186706 - Column ELAPSED_TIME
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT_SECTION ADD ELAPSED_TIME NUMBER(24)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_REPORT_SECTION.ELAPSED_TIME IS ''Time to generate the section.''';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+
+
+
+
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 04-Jul-2011
+-- CHANGE REASON: ALERT-190598 - Column JAVA_TIME
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT_SECTION ADD JAVA_TIME NUMBER(24)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_REPORT_SECTION.JAVA_TIME IS ''Time to generate the section (java layer).''';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 04-Jul-2011
+-- CHANGE REASON: ALERT-190598 - Column DATABASE_TIME
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT_SECTION ADD DATABASE_TIME NUMBER(24)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_REPORT_SECTION.DATABASE_TIME IS ''Time to generate the section (database layer).''';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 04-Jul-2011
+-- CHANGE REASON: ALERT-190598 - Column REMOTE_SERVICE_TIME
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT_SECTION ADD REMOTE_SERVICE_TIME NUMBER(24)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_REPORT_SECTION.REMOTE_SERVICE_TIME IS ''Time to generate the section (remote services).''';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 04-Jul-2011
+-- CHANGE REASON: ALERT-190598 - Column DATABASE_REQUESTS 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT_SECTION ADD DATABASE_REQUESTS NUMBER(24)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_REPORT_SECTION.DATABASE_REQUESTS IS ''Number of database requests.''';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 04-Jul-2011
+-- CHANGE REASON: ALERT-190598 - Column REMOTE_SERVICE_REQUESTS 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT_SECTION ADD REMOTE_SERVICE_REQUESTS NUMBER(24)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_REPORT_SECTION.REMOTE_SERVICE_REQUESTS IS ''Number of remote service requests.''';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 04-Jul-2011
+-- CHANGE REASON: ALERT-190598 - Column JASPER_TIME 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT_SECTION ADD JASPER_TIME NUMBER(24)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_REPORT_SECTION.JASPER_TIME IS ''Time to generate the section UX (jasper layer).''';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+
+
+
+
+
+

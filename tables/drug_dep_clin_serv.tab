@@ -1,0 +1,105 @@
+
+
+  CREATE TABLE DRUG_DEP_CLIN_SERV
+   (	ID_DRUG_DEP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	ID_DRUG NUMBER(12,0) NOT NULL ENABLE,
+	ID_DEP_CLIN_SERV NUMBER(12,0),
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0),
+	ID_PROFESSIONAL NUMBER(24,0),
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_TAKE_TYPE VARCHAR2(1),
+	TAKES NUMBER(12,0),
+
+	INTERVAL NUMBER(12,4),
+	DOSAGE VARCHAR2(100)
+   );
+
+
+COMMENT ON TABLE drug_dep_clin_serv IS 'Medicamentos mais frequentemente escolhidos pelos departamentos e sev. clínicos' ;
+
+COMMENT ON COLUMN drug_dep_clin_serv.id_drug IS 'Chave primaria' ;
+COMMENT ON COLUMN drug_dep_clin_serv.id_dep_clin_serv IS 'Departamento + serv. clínico que executa o medicamento, ou para o qual o medicamento é mais frequente' ;
+COMMENT ON COLUMN drug_dep_clin_serv.flg_type IS 'Tipo de acção do departamento e serv. clínico: R - fornecimento, P - pode requisitar, M - mais frequentes' ;
+COMMENT ON COLUMN drug_dep_clin_serv.id_institution IS 'Instituição para a qual o medicamento é requisitável' ;
+COMMENT ON COLUMN drug_dep_clin_serv.id_professional IS 'Profissional para o qual o medicamento é mais frequente' ;
+COMMENT ON COLUMN drug_dep_clin_serv.id_software IS 'Aplicação Alert para a qual se verifica o registo' ;
+COMMENT ON COLUMN drug_dep_clin_serv.flg_take_type IS 'Tipo de plano de tomas: A - ad eternum , C - contínuo, N - normal, S - SOS, U - unitário (só é preenchido se FLG_TYPE=''M'')' ;
+COMMENT ON COLUMN drug_dep_clin_serv.takes IS 'Nº de tomas (só é preenchido se FLG_TYPE=''M'')' ;
+COMMENT ON COLUMN drug_dep_clin_serv.interval IS 'Intervalo entre tomas (só é preenchido se FLG_TYPE=''M'' AND FLG_TAKE_TYPE=''N'': mais frequentes, tipo = normal)' ;
+COMMENT ON COLUMN drug_dep_clin_serv.dosage IS 'Posologias associada aos medicamentos mais frequentes (só é preenchido se FLG_TYPE=''M'').' ;
+
+alter table drug_dep_clin_serv modify id_dep_clin_serv number(24);
+
+-- Add comments to the columns 
+comment on column DRUG_DEP_CLIN_SERV.FLG_TYPE
+  is 'Tipo de acção do departamento e serv. clínico: R - fornecimento, P - pode requisitar, M - mais frequentes, S - Pode requisitar para a construção de soros, F - Mais frequentes na construção de soros';
+
+
+ALTER TABLE DRUG_DEP_CLIN_SERV ADD QTY_INST NUMBER(24, 4);
+ALTER TABLE DRUG_DEP_CLIN_SERV ADD FREQUENCY NUMBER(24, 4);
+ALTER TABLE DRUG_DEP_CLIN_SERV ADD DURATION NUMBER(24, 4);
+ALTER TABLE DRUG_DEP_CLIN_SERV ADD UNIT_MEASURE_INST NUMBER(24);
+ALTER TABLE DRUG_DEP_CLIN_SERV ADD UNIT_MEASURE_FREQ NUMBER(24);
+ALTER TABLE DRUG_DEP_CLIN_SERV ADD UNIT_MEASURE_DUR NUMBER(24);
+
+COMMENT ON COLUMN DRUG_DEP_CLIN_SERV.QTY_INST IS 'Quantidade';
+COMMENT ON COLUMN DRUG_DEP_CLIN_SERV.UNIT_MEASURE_INST IS 'Unidade de medida da quantidade'; 
+COMMENT ON COLUMN DRUG_DEP_CLIN_SERV.FREQUENCY IS 'Frequência'; 
+COMMENT ON COLUMN DRUG_DEP_CLIN_SERV.UNIT_MEASURE_FREQ IS 'Unidade de medida da frequência'; 
+COMMENT ON COLUMN DRUG_DEP_CLIN_SERV.DURATION IS 'Duração'; 
+COMMENT ON COLUMN DRUG_DEP_CLIN_SERV.UNIT_MEASURE_DUR IS 'Unidade de medida da duração'; 
+
+-- Drop primary, unique and foreign key constraints 
+alter table DRUG_DEP_CLIN_SERV
+  drop constraint DCST_DRUG_FK;
+  
+
+alter table drug_dep_clin_serv
+add (vers varchar2(10), flg_auto_req_pharm varchar2(1) default 'N' not null);
+
+alter table DRUG_DEP_CLIN_SERV add FLG_JUSTIFY  VARCHAR2(200);
+alter table DRUG_DEP_CLIN_SERV add FLG_MIX_FLUID  VARCHAR2(200);
+
+
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGED DATE: 2009-JUL-20
+-- CHANGING REASON: ALERT-36958
+
+alter table drug_dep_clin_serv
+add id_irregular_directions number(12);
+
+comment on column drug_dep_clin_serv.id_irregular_directions is 'Id dos intervalos pré-definidos';
+
+-- CHANGE END Pedro Albuquerque
+
+-- CHANGED BY: Patricia Neto
+-- CHANGE DATE: 28/10/2009 18:17
+-- CHANGE REASON: [ ALERT-20754  ] medication_uk - witness controlled drugs
+alter table drug_dep_clin_serv add FLG_CONTROLLED_DRUG VARCHAR2(1);
+comment on column drug_dep_clin_serv.FLG_CONTROLLED_DRUG
+  is 'indicates if a drug is or not controlled';
+-- CHANGE END: Patricia Neto
+
+-- CHANGED BY: Patricia Neto
+-- CHANGE DATE: 29/10/2009 10:27
+-- CHANGE REASON: [ALERT-20754] medication_uk - witness controlled drugs
+alter table DRUG_DEP_CLIN_SERV modify FLG_CONTROLLED_DRUG VARCHAR2(1 char);
+-- CHANGE END: Patricia Neto
+
+-- CHANGED BY:  NELSON CANASTRO
+-- CHANGE DATE: 17/08/2010 09:55
+-- CHANGE REASON: [ALERT-106585] 
+ALTER TABLE DRUG_DEP_CLIN_SERV ADD ID_PRESC_DIRECTIONS NUMBER(24);
+COMMENT ON COLUMN DRUG_DEP_CLIN_SERV.ID_PRESC_DIRECTIONS IS 'Prescription directions ID';
+-- CHANGE END:  NELSON CANASTRO
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:32
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_DEP_CLIN_SERV IS 'Medicamentos mais frequentemente escolhidos pelos departamentos e sev. clínicos [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

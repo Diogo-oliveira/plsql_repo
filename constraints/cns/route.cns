@@ -1,0 +1,17 @@
+alter table ROUTE
+  add constraint PK_ROUTE primary key (ID_ROUTE)
+  using index 
+;
+
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE ROUTE ADD CONSTRAINT ROUTE_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint ROUTE_FLG_AVAILABLE_CHK table ROUTE column FLG_AVAILABLE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto

@@ -1,0 +1,50 @@
+
+ALTER TABLE PROTOCOL_PROCESS ADD CONSTRAINT PPTS_PK PRIMARY KEY (ID_PROTOCOL_PROCESS);
+
+ALTER TABLE PROTOCOL_PROCESS ADD CONSTRAINT PROTPS_UK UNIQUE (ID_PROTOCOL_BATCH, ID_PATIENT, ID_PROTOCOL);
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 2009-MAY-14
+-- CHANGE REASON: Drop PROTPS_UK constraint
+alter table PROTOCOL_PROCESS drop constraint PROTPS_UK;
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 2010-FEB-08
+-- CHANGE REASON: [ALERT-73181]
+DECLARE
+    e_index_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_index_not_exists, -01418);
+BEGIN
+    EXECUTE IMMEDIATE 'drop index PROTPS_UK';
+EXCEPTION
+    WHEN e_index_not_exists THEN
+        NULL;
+END;
+/
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 28/03/2011 09:23
+-- CHANGE REASON: [ALERT-168339] Insert constraints for flag_status columns defined in sys_domain
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -02264); -- name already used by an existing constraint
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PROTOCOL_PROCESS add constraint PPS_FLG_STATUS_CHK check (FLG_STATUS in (''H'', ''C'', ''F'', ''E'', ''P'', ''R'', ''S''))';
+EXCEPTION
+    WHEN e_already_exists THEN
+        NULL;
+END;
+/
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -02264); -- name already used by an existing constraint
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PROTOCOL_PROCESS add constraint PPS_FLG_NESTED_PROTOCOL_CHK check (FLG_NESTED_PROTOCOL in (''Y'', ''N''))';
+EXCEPTION
+    WHEN e_already_exists THEN
+        NULL;
+END;
+/
+-- CHANGE END: Carlos Loureiro

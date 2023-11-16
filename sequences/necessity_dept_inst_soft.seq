@@ -1,0 +1,17 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/03/2011 17:33
+-- CHANGE REASON: [ALERT-156375] [EDIS] INV_ALL_096: Missing Primary Keys in Alert tables
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -955);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'create sequence SEQ_NECESSITY_DEPT_INST_SOFT';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('Sequence already exists.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

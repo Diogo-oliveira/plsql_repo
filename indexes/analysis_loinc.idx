@@ -1,0 +1,16 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 22/05/2013 11:48
+-- CHANGE REASON: [ALERT-258482] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'create index ALC_UIDX on analysis_loinc(id_analysis,id_sample_type,loinc_code,id_software,id_institution,flg_default)';
+    EXCEPTION
+        WHEN e_already_exists THEN
+            dbms_output.put_line('Object already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

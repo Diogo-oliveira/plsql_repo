@@ -1,0 +1,34 @@
+
+  ALTER TABLE P1_SPEC_DEP_CLIN_SERV ADD CONSTRAINT PSV_DCS_FK FOREIGN KEY (ID_DEP_CLIN_SERV)
+	  REFERENCES DEP_CLIN_SERV (ID_DEP_CLIN_SERV) ENABLE;
+
+  ALTER TABLE P1_SPEC_DEP_CLIN_SERV ADD CONSTRAINT PSV_PSY_FK FOREIGN KEY (ID_SPECIALITY)
+	  REFERENCES P1_SPECIALITY (ID_SPECIALITY) ENABLE;
+
+
+
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 21/06/2010 17:57
+-- CHANGE REASON: [ALERT-103305] FERTIS (2.6.0.3)
+DECLARE
+    l_sql   VARCHAR2(1000 CHAR);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'PSV_ESY_FK'
+       AND owner = 'ALERT';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := q'[alter table P1_SPEC_DEP_CLIN_SERV add constraint PSV_ESY_FK foreign key (ID_EXTERNAL_SYS) references external_sys (ID_EXTERNAL_SYS)]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro

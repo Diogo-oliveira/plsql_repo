@@ -1,0 +1,131 @@
+-- ******************** Constraints
+
+-- Primary Key
+alter table MONITORIZATIONS_EA add constraint MEA_PK primary key (ID_MONITORIZATION_VS);
+
+
+-- Check Constraints
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_STATUS_CHK
+  check (FLG_STATUS in ('A', 'C', 'D', 'F', 'I'));
+
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_STATUS_DET_CHK
+  check (FLG_STATUS in ('A', 'C', 'D', 'F', 'I'));
+	
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_STATUS_PLAN_CHK
+  check (FLG_STATUS in ('A', 'C', 'D', 'F'));
+
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_TIME_CHK
+  check (FLG_TIME in ('B', 'E', 'N'));	
+
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_NOTES_CHK
+  check (FLG_NOTES in ('N', 'Y'));	
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGED DATE: 2008-OCT-28
+-- CHANGED REASON: Create/Recreate check constraints 
+alter table MONITORIZATIONS_EA
+  drop constraint MEA_FLG_STATUS_DET_CHK;
+
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_STATUS_DET_CHK
+  check (FLG_STATUS_DET in ('A', 'C', 'D', 'F', 'I'));
+
+alter table MONITORIZATIONS_EA
+  drop constraint MEA_FLG_STATUS_PLAN_CHK;
+
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_STATUS_PLAN_CHK
+  check (FLG_STATUS_PLAN in ('A', 'C', 'D', 'F'));
+
+
+
+-- CHANGE BY: Filipe Machado
+-- CHANGED DATE: 2009/05/02
+-- CHANGED REASON: Create/Recreate check constraints   
+
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_NOTES_CHK
+  check (FLG_NOTES in ('N', 'Y'));
+alter table MONITORIZATIONS_EA
+  drop constraint MEA_FLG_STATUS_DET_CHK;
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_STATUS_DET_CHK
+  check (FLG_STATUS_DET in ('A', 'C', 'D', 'F', 'I'));
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_STATUS_PLAN_CHK
+  check (FLG_STATUS_PLAN in ('A', 'C', 'D', 'F'));
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_TIME_CHK
+  check (FLG_TIME in ('B', 'E', 'N'));
+
+-- CHANGE BY: Filipe Machado
+
+-- CHANGE BY: Nuno Neves
+-- CHANGED DATE: 2011/01/21
+-- CHANGED REASON: [ALERT-156982]
+
+alter table MONITORIZATIONS_EA
+  drop constraint MEA_FLG_STATUS_CHK;
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_STATUS_CHK
+  check (FLG_STATUS_DET in ('A', 'C', 'D', 'F', 'I','R', 'E'));
+alter table MONITORIZATIONS_EA
+  drop constraint MEA_FLG_STATUS_DET_CHK;
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_STATUS_DET_CHK
+  check (FLG_STATUS_DET in ('A', 'C', 'D', 'F', 'I','R', 'E'));
+alter table MONITORIZATIONS_EA
+  drop constraint MEA_FLG_STATUS_PLAN_CHK;
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_STATUS_PLAN_CHK
+  check (FLG_STATUS_PLAN in ('A', 'C', 'D', 'F', 'E'));
+
+-- CHANGE BY: Nuno Neves
+
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 07/12/2011 16:07
+-- CHANGE REASON: [ALERT-208839] 
+alter table MONITORIZATIONS_EA
+  drop constraint MEA_FLG_STATUS_CHK;
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 07/12/2011 16:07
+-- CHANGE REASON: [ALERT-208839] 
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_STATUS_CHK
+  check (FLG_STATUS_DET in ('A', 'C', 'D', 'F', 'I','R', 'E', 'B'));
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 07/12/2011 16:13
+-- CHANGE REASON: [ALERT-208839] 
+alter table MONITORIZATIONS_EA
+  drop constraint MEA_FLG_STATUS_DET_CHK;
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 07/12/2011 16:13
+-- CHANGE REASON: [ALERT-208839] 
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_STATUS_DET_CHK
+  check (FLG_STATUS_DET in ('A', 'C', 'D', 'F', 'I','R', 'E', 'B'));
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 21/04/2016 12:14
+-- CHANGE REASON: [ALERT-320621] 
+alter table MONITORIZATIONS_EA drop constraint MEA_FLG_STATUS_PLAN_CHK;
+
+alter table MONITORIZATIONS_EA
+  add constraint MEA_FLG_STATUS_PLAN_CHK
+  check (FLG_STATUS_PLAN in ('A', 'C', 'D', 'F', 'I','R', 'E', 'B'));
+-- CHANGE END: Paulo Teixeira

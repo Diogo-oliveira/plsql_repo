@@ -1,0 +1,1 @@
+grant select, update, delete on PAT_RECOMMENDATION_HIST to alert_reset;

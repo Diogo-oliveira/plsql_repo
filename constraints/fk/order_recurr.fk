@@ -1,0 +1,55 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 30/04/2011 18:08
+-- CHANGE REASON: [ALERT-173229] Order recurrence core development
+DECLARE
+    e_fk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_exists, -02275); -- such a referential constraint already exists in the table
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ORDER_RECURR add constraint ORC_ORCO_FK foreign key (ID_ORDER_RECURR) references ORDER_RECURR_OPTION (ID_ORDER_RECURR_OPTION)';
+    EXCEPTION
+        WHEN e_fk_already_exists THEN
+            dbms_output.put_line('foreign key already exists');   
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ORDER_RECURR add constraint ORC_REG_INTERV_UNITM_FK foreign key (ID_UNIT_MEAS_REGULAR_INTERVAL) references UNIT_MEASURE (ID_UNIT_MEASURE)';
+    EXCEPTION
+        WHEN e_fk_already_exists THEN
+            dbms_output.put_line('foreign key already exists');   
+    END;          
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ORDER_RECURR add constraint ORC_DUR_UNITM_FK foreign key (ID_UNIT_MEAS_DURATION) references UNIT_MEASURE (ID_UNIT_MEASURE)';
+    EXCEPTION
+        WHEN e_fk_already_exists THEN
+            dbms_output.put_line('foreign key already exists');   
+    END;   
+END;
+/
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 06/06/2013 14:29
+-- CHANGE REASON: [ALERT-259605] Fix of ORC_ORCO_FK constraint
+DECLARE
+    e_fk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_exists, -02443); -- cannot drop constraint - nonexistent constraint
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ORDER_RECURR drop constraint ORC_ORCO_FK';
+EXCEPTION
+    WHEN e_fk_already_exists THEN
+        NULL;
+END;
+/
+
+DECLARE
+    e_fk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_exists, -02275); -- such a referential constraint already exists in the table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ORDER_RECURR add constraint ORC_ORCO_FK foreign key (ID_ORDER_RECURR_OPTION) references ORDER_RECURR_OPTION (ID_ORDER_RECURR_OPTION)';
+EXCEPTION
+    WHEN e_fk_already_exists THEN
+        NULL;
+END;
+/
+-- CHANGE END: Tiago Silva

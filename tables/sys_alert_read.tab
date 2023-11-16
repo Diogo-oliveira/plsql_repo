@@ -1,0 +1,50 @@
+--Rui Batista 2007/07/10
+--Reestrutração dos Alertas
+
+
+/**********************************************************************************/
+--Tabela de leitura dos Alertas
+/**********************************************************************************/
+create table sys_alert_read (
+id_sys_alert_read number(24) not null,
+id_sys_alert_det  number(24) not null,
+id_professional number(24) not null,
+dt_read date not null
+);
+
+
+COMMENT ON column sys_alert_read.id_sys_alert_read IS 'ID único';
+COMMENT ON column sys_alert_read.id_sys_alert_det IS 'ID do detalhe do alerta';
+COMMENT ON column sys_alert_read.id_professional IS 'ID do profissional';
+COMMENT ON column sys_alert_read.dt_read IS 'Data que que o alerta foi lido';
+
+
+
+
+ALTER TABLE SYS_ALERT_READ ADD DT_READ_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN SYS_ALERT_READ.DT_READ_TSTZ IS 'Data que que o alerta foi lido'; 
+
+
+-- CHANGED BY: Joao Sa
+-- CHANGED DATE: 2008-03-29
+-- CHANGED REASON: Alertas por eventos
+alter table SYS_ALERT_READ modify ID_SYS_ALERT_DET null;
+ALTER TABLE SYS_ALERT_READ ADD ID_SYS_ALERT_EVENT NUMBER(24,0) null;
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table SYS_ALERT_READ drop (DT_READ);
+-- CHANGE END
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table SYS_ALERT_READ drop (DT_READ);
+-- CHANGE END
+
+COMMENT ON table  ALERT.SYS_ALERT_READ                   IS 'Table marks when alerts are read';
+COMMENT ON column ALERT.SYS_ALERT_READ.id_sys_alert_read IS 'Primary key';
+COMMENT ON column ALERT.SYS_ALERT_READ.id_sys_alert_det  IS 'ID of alert detail info';
+COMMENT ON column ALERT.SYS_ALERT_READ.id_professional   IS 'ID of professional';
+COMMENT ON COLUMN ALERT.SYS_ALERT_READ.DT_READ_TSTZ      IS 'Timetamp when the alert was read'; 

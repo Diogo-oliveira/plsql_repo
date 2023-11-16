@@ -1,0 +1,1 @@
+GRANT SELECT ON v_mcdt_req_diagnosis TO ALERT_INTER;

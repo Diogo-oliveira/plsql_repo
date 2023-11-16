@@ -1,0 +1,70 @@
+
+
+  CREATE TABLE ANALYSIS_DEP_CLIN_SERV
+   (	ID_ANALYSIS_DEP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	ID_ANALYSIS NUMBER(12,0),
+	ID_DEP_CLIN_SERV NUMBER(24,0),
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0),
+	ID_PROFESSIONAL NUMBER(24,0),
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	ID_ANALYSIS_GROUP NUMBER(24,0),
+	FLG_FIRST_RESULT VARCHAR2(6),
+
+	FLG_HARVEST VARCHAR2(1),
+	FLG_MOV_PAT VARCHAR2(1),
+	FLG_MOV_RECIPIENT VARCHAR2(1),
+	COST NUMBER(18,4),
+	PRICE NUMBER(18,4)
+   );
+
+
+COMMENT ON TABLE analysis_dep_clin_serv IS 'Análises mais frequentes.' ;
+
+COMMENT ON COLUMN analysis_dep_clin_serv.id_dep_clin_serv IS 'Departamento + serv. clínico que executa a análise, ou para o qual a análise é mais frequente' ;
+COMMENT ON COLUMN analysis_dep_clin_serv.flg_type IS 'Tipo de acção do departamento e serv. clínico: R - realização da análise, P - pode pedir a análise, M - mais frequentes' ;
+COMMENT ON COLUMN analysis_dep_clin_serv.id_institution IS 'Instituição para a qual a análise é requisitável' ;
+COMMENT ON COLUMN analysis_dep_clin_serv.id_professional IS 'Profissional para o qual a análise é mais frequente' ;
+COMMENT ON COLUMN analysis_dep_clin_serv.id_software IS 'Aplicação Alert para a qual se verifica o registo' ;
+COMMENT ON COLUMN analysis_dep_clin_serv.flg_first_result IS 'Indicação de qual categoria de profissional deve registar resultados em 1º lugar: D - médico, T - técnico, N - enfermeiro, ou combinações (ex: DT - médico ou técnico). Esta flag é utilizada para impedir o registo de resultados pelo médico antes do técnico, por ex., para que não desapareça da grelha do técnico.' ;
+COMMENT ON COLUMN analysis_dep_clin_serv.flg_harvest IS 'Indicação de q exige colheita: Y / N  (só é preenchido se FLG_TYPE=''P'')' ;
+COMMENT ON COLUMN analysis_dep_clin_serv.flg_mov_pat IS 'Necessidade de movimentação do doente (só é preenchido se FLG_TYPE=''P'')' ;
+COMMENT ON COLUMN analysis_dep_clin_serv.flg_mov_recipient IS 'Necessidade de transporte do recipiente (só é preenchido se FLG_TYPE=''P'')' ;
+COMMENT ON COLUMN analysis_dep_clin_serv.cost IS 'Custo monetário (só é preenchido se FLG_TYPE=''P'')' ;
+COMMENT ON COLUMN analysis_dep_clin_serv.price IS 'Preço de venda (só é preenchido se FLG_TYPE=''P'')' ;
+
+alter table analysis_dep_clin_serv add (flg_available varchar2(1) default 'Y' not null);
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:11
+-- CHANGE REASON: [ALERT-246248] 
+ALTER TABLE ANALYSIS_DEP_CLIN_SERV ADD (ID_SAMPLE_TYPE NUMBER(12));
+
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.ID_SAMPLE_TYPE IS 'Sample type id';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:00
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS_DEP_CLIN_SERV IS 'Lab tests configuration';
+
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.ID_ANALYSIS_DEP_CLIN_SERV IS 'Primary key';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.ID_ANALYSIS IS 'Lab test ID';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.ID_DEP_CLIN_SERV IS 'Clinical service ID';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.RANK IS 'Rank';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.ADW_LAST_UPDATE IS 'Update date';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.ID_PROFESSIONAL IS 'Professional ID';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.ID_SOFTWARE IS 'Software ID';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.ID_ANALYSIS_GROUP IS 'Lab test group ID';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.FLG_AVAILABLE IS 'Flag that indicates if the record is available or not (Y/N)';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN ANALYSIS_DEP_CLIN_SERV.ID_SAMPLE_TYPE IS 'Sample type ID';
+-- CHANGE END: Ana Matos

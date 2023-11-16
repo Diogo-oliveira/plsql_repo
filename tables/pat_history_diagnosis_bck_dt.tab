@@ -1,0 +1,25 @@
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 04/07/2014 16:10
+-- CHANGE REASON: [ALERT-289454]
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'PAT_HISTORY_DIAGNOSIS_BCK_DT',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'DPC',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N',
+                                             i_flg_nzd           => 'N');
+END;
+/
+
+CREATE TABLE pat_history_diagnosis_bck_dt AS
+    SELECT phd.id_pat_history_diagnosis, phd.year_begin, phd.month_begin, phd.day_begin, phd.dt_resolution
+      FROM pat_history_diagnosis phd
+     WHERE phd.year_begin IS NOT NULL
+        OR phd.month_begin IS NOT NULL
+        OR phd.day_begin IS NOT NULL
+        OR phd.dt_resolution IS NOT NULL;
+
+COMMENT ON TABLE pat_history_diagnosis_bck_dt IS 'Backup table created only as a safeguard for a migration. Do not use.';
+-- CHANGE END:  sergio.dias

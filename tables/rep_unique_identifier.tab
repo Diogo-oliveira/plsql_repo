@@ -1,0 +1,54 @@
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-JUL-07
+-- CHANGED REASON: ALERT-35028 - Reports
+CREATE TABLE rep_unique_identifier
+(
+  ID_REP_UNIQUE_IDENTIFIER VARCHAR2(200),
+  CREATE_USER              VARCHAR2(24),
+  CREATE_TIME              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION       NUMBER(24),
+  UPDATE_USER              VARCHAR2(24),
+  UPDATE_TIME              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION       NUMBER(24)
+);
+COMMENT ON TABLE  rep_unique_identifier IS 'Data identifiers in report sections';
+COMMENT ON COLUMN rep_unique_identifier.id_rep_unique_identifier IS 'Data ID in report section';
+COMMENT ON COLUMN rep_unique_identifier.create_user IS 'Creation User';
+COMMENT ON COLUMN rep_unique_identifier.create_time IS 'Creation Time';
+COMMENT ON COLUMN rep_unique_identifier.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN rep_unique_identifier.update_user IS 'Update User';
+COMMENT ON COLUMN rep_unique_identifier.update_time IS 'Update Time';
+COMMENT ON COLUMN rep_unique_identifier.update_institution IS 'Update Institution';
+-- CHANGED END: Ariel Geraldo Machado
+
+-- CHANGED BY: Paulo Fonseca
+-- CHANGED DATE: 19-Feb-2010
+-- CHANGED REASON: ALERT-75960
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE rep_unique_identifier add id_rep_section NUMBER(24) DEFAULT 0 NOT NULL';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('aviso: operação já executada anteriormente.');
+END;
+/
+
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE rep_unique_identifier add CONSTRAINT rui_rs_fk foreign key(id_rep_section) references rep_section(id_rep_section)';
+
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('aviso: operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON column rep_unique_identifier.id_rep_section IS 'Report Section ID';
+-- CHANGED END: Paulo Fonseca

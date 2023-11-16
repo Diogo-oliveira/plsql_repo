@@ -1,0 +1,47 @@
+CREATE TABLE PROF_ACCOUNTS 
+(
+	ID_PROFESSIONAL NUMBER(24,0),
+	ID_ACCOUNT NUMBER(24, 0),
+	ACCOUNT_VALUE VARCHAR2(200)
+);
+
+comment on table PROF_ACCOUNTS is 'Valores associados aos profissionais para as Contas genéricas';
+
+comment on column PROF_ACCOUNTS.ID_PROFESSIONAL is 'Identificação do profissional';
+comment on column PROF_ACCOUNTS.ID_ACCOUNT is 'Identificação da Conta genérica';
+comment on column PROF_ACCOUNTS.ACCOUNT_VALUE is 'Valor associado ao Profissional para a Conta genérica';
+
+DROP TABLE PROF_ACCOUNTS;
+
+create table PROF_ACCOUNTS
+(
+  ID_PROFESSIONAL NUMBER(24) NOT NULL,
+  ID_ACCOUNT      NUMBER(24) NOT NULL,
+  VALUE           VARCHAR2(200),
+	ID_INSTITUTION  NUMBER(24) NOT NULL
+)
+tablespace TABLE_M;
+-- Add comments to the table 
+comment on table PROF_ACCOUNTS is 'Professionals affiliations';
+-- Add comments to the columns 
+comment on column PROF_ACCOUNTS.ID_PROFESSIONAL is 'Professional ID';
+comment on column PROF_ACCOUNTS.ID_ACCOUNT is 'Affiliation ID';
+comment on column PROF_ACCOUNTS.VALUE is 'Value';
+comment on column PROF_ACCOUNTS.ID_INSTITUTION is 'Institution ID';
+
+comment on column PROF_ACCOUNTS.VALUE is 'Professional affiliation value';
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 24/09/2012 14:23
+-- CHANGE REASON: [ALERT-240388] new fields in accounts model
+DECLARE
+    e_already_not_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01442);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE prof_accounts modify value VARCHAR2(1000 CHAR)';
+EXCEPTION
+    WHEN e_already_not_null THEN
+        dbms_output.put_line('Not able to change column');
+END;
+/
+-- CHANGE END:  Rui Gomes

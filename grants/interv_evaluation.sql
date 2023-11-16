@@ -1,0 +1,1 @@
+grant select on alert.interv_evaluation to alert_viewer;

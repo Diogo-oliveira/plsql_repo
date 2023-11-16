@@ -1,0 +1,53 @@
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 23/03/2010 09:26
+-- CHANGE REASON: [ALERT-69945] 
+-- Create table
+create table INTERV_PLAN_CATEGORY
+( ID_INTERV_PLAN_CATEGORY  NUMBER(24) default NULL,
+  CODE_INTERV_PLAN_CATEGORY VARCHAR2(100 CHAR) not null,
+  FLG_AVAILABLE       VARCHAR2(1 CHAR) default 'Y' not null,
+ID_PARENT           NUMBER(24),
+--AUDIT
+  CREATE_USER         VARCHAR2(24 CHAR),
+  CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24 CHAR),
+  UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24)
+);
+
+-- Add comments to the table 
+comment on table INTERV_PLAN_CATEGORY
+  is 'Categories of intervention plans.';
+-- Add comments to the columns
+comment on column INTERV_PLAN_CATEGORY.ID_INTERV_PLAN_CATEGORY
+  is 'Intervention plan category ID.'; 
+comment on column INTERV_PLAN_CATEGORY.CODE_INTERV_PLAN_CATEGORY
+  is 'Code for the translation of the categories.';
+comment on column INTERV_PLAN_CATEGORY.FLG_AVAILABLE
+  is 'Flg that indicates if the category is available or not: Y - yes, N - no.';
+comment on column INTERV_PLAN_CATEGORY.ID_PARENT
+  is 'Parent id for a given category';
+--AUDIT
+comment on column INTERV_PLAN_CATEGORY.CREATE_USER 
+  is 'Creation User';
+comment on column INTERV_PLAN_CATEGORY.CREATE_TIME 
+  is 'Creation Time';
+comment on column  INTERV_PLAN_CATEGORY.CREATE_INSTITUTION 
+  is 'Creation Institution';
+comment on column  INTERV_PLAN_CATEGORY.UPDATE_USER 
+  is 'Update User';
+comment on column  INTERV_PLAN_CATEGORY.UPDATE_TIME 
+  is 'Update Time';
+comment on column INTERV_PLAN_CATEGORY.UPDATE_INSTITUTION 
+  is 'Update Institution';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: João Almeida
+-- CHANGE DATE: 16/04/2010 18:29
+-- CHANGE REASON: [ALERT-90026] 
+alter table INTERV_PLAN_CATEGORY add ID_CONTENT number(24);
+-- Add comments to the columns 
+comment on column INTERV_PLAN_CATEGORY.ID_CONTENT
+  is 'ID Content';
+-- CHANGE END: João Almeida

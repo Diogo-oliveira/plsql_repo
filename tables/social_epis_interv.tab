@@ -1,0 +1,89 @@
+
+
+  CREATE TABLE SOCIAL_EPIS_INTERV
+   (	ID_SOCIAL_EPIS_INTERV NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOCIAL_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOCIAL_INTERVENTION NUMBER(24,0) NOT NULL ENABLE,
+	DT_SOCIAL_EPIS_INTERV DATE NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000)
+   );
+
+
+
+COMMENT ON COLUMN social_epis_interv.flg_status IS 'Estado: activo / inactivo' ;
+
+alter table social_epis_interv
+add (dt_social_epis_interv_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+
+
+ALTER TABLE SOCIAL_EPIS_INTERV
+  add DESC_SOCIAL_INTERVENTION VARCHAR2(4000) NULL
+  modify ID_SOCIAL_INTERVENTION NUMBER(24) NULL ;
+
+COMMENT ON COLUMN SOCIAL_EPIS_INTERV.DESC_SOCIAL_INTERVENTION IS 'Social Intervention Description';
+
+--CHANGED BY: Rui Spratley
+--CHANGE DATE: 2008/09/22
+--CHANGE REASON: Drop colunas DATE
+alter table social_epis_interv drop column dt_social_epis_interv;
+alter table social_epis_interv drop column dt_cancel;
+-- CHANGE END
+
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table SOCIAL_EPIS_INTERV modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table SOCIAL_EPIS_INTERV modify NOTES_CANCEL varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table SOCIAL_EPIS_INTERV modify NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table SOCIAL_EPIS_INTERV modify FLG_STATUS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table SOCIAL_EPIS_INTERV modify DESC_SOCIAL_INTERVENTION varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table SOCIAL_EPIS_INTERV modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:50
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table SOCIAL_EPIS_INTERV
+  is 'DEPRECATED only used for old social episodes';  
+-- CHANGE END: Elisabete Bugalho

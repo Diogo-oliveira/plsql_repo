@@ -1,0 +1,33 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 12/05/2014 14:37
+-- CHANGE REASON: [ALERT-284329] 
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table TASK_TYPE_INFO_BUTTON add constraint TTIB_PK primary key (ID_TASK_TYPE)
+';
+exception when e_pk_exists then
+  dbms_output.put_line('primary key TTIB_PK exists!');
+end;
+/
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table TASK_TYPE_INFO_BUTTON add constraint TTIB_ID_TASK_TYPE  foreign key  (ID_TASK_TYPE) references TASK_TYPE (ID_TASK_TYPE)';
+exception when others then
+  dbms_output.put_line('primary key TTIB_ID_TASK_TYPE exists!');
+end;
+/
+
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table TASK_TYPE_INFO_BUTTON add constraint TTIB_ID_SYS_CONFIG  foreign key  (ID_SYS_CONFIG) references SYS_CONFIG (ID_SYS_CONFIG)';
+exception when others then
+  dbms_output.put_line('primary key TTIB_ID_SYS_CONFIG exists!');
+end;
+/
+-- CHANGE END: mario.mineiro

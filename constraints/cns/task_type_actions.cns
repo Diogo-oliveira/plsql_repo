@@ -1,0 +1,9 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/04/2015 16:17
+-- CHANGE REASON: [ALERT-31026901] CO-SIGN  - Database model Versioning
+BEGIN
+    pk_versioning.run(i_sql => q'[ALTER TABLE TASK_TYPE_ACTIONS ADD CONSTRAINT TTA_PK PRIMARY KEY (ID_TASK_TYPE_ACTION) ]');
+pk_versioning.run(i_sql => q'[ALTER TABLE TASK_TYPE_ACTIONS ADD CONSTRAINT TTA_TT_ACT_UK UNIQUE (ID_TASK_TYPE, ID_ACTION) ]');
+END;
+/
+-- CHANGE END: Elisabete Bugalho

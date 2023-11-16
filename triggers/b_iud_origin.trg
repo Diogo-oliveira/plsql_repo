@@ -1,0 +1,1 @@
+drop trigger b_iud_origin;

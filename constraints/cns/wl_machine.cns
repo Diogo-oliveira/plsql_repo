@@ -1,0 +1,80 @@
+
+
+  ALTER TABLE WL_MACHINE MODIFY (ID_WL_MACHINE NOT NULL ENABLE);
+
+  ALTER TABLE WL_MACHINE MODIFY (INTERN_NAME_MACHINE NOT NULL ENABLE);
+
+  ALTER TABLE WL_MACHINE MODIFY (FLG_AUDIO_ACTIVE NOT NULL ENABLE);
+
+  ALTER TABLE WL_MACHINE MODIFY (FLG_VIDEO_ACTIVE NOT NULL ENABLE);
+
+  ALTER TABLE WL_MACHINE MODIFY (ID_ROOM NOT NULL ENABLE);
+
+  ALTER TABLE WL_MACHINE MODIFY (DESC_MACHINE_VISUAL NOT NULL ENABLE);
+
+
+  ALTER TABLE WL_MACHINE MODIFY (DESC_MACHINE_AUDIO NOT NULL ENABLE);
+
+  ALTER TABLE WL_MACHINE ADD CONSTRAINT WME_PK PRIMARY KEY (ID_WL_MACHINE) ENABLE;
+
+
+ALTER TABLE WL_MACHINE 
+     ADD constraint WN_FLG_AUDIO_ACTIVE_CHK
+		     CHECK (flg_audio_active IN ('V', 'B', 'N') ) ENABLE;
+		     
+ALTER TABLE WL_MACHINE 
+     ADD constraint WN_FLG_VIDEO_ACTIVE_CHK
+		     CHECK (flg_video_active IN ('Y', 'N') ) ENABLE; 
+		     
+		     
+
+-- CHANGED BY: marcio.dias
+-- CHANGE DATE: 29/11/2011 14:16
+-- CHANGE REASON: [ALERT-207676] Demo environment for Waiting room workflow
+DECLARE
+    e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+     EXECUTE IMMEDIATE 'ALTER TABLE wl_machine add CONSTRAINT wm_flg_demo_chk CHECK(flg_demo IN (''Y'', ''N''))';
+    EXCEPTION
+        WHEN e_constraint_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');     
+END;
+/
+
+DECLARE
+    e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+     EXECUTE IMMEDIATE 'ALTER TABLE wl_machine add CONSTRAINT id_flg_demo_chk CHECK((flg_demo = ''Y'' AND id_room = -1) OR (flg_demo = ''N''))';
+    EXCEPTION
+        WHEN e_constraint_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');     
+END;
+/
+
+DECLARE
+    e_constraint_already_there  EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE wl_machine add CONSTRAINT id_room_chk CHECK((flg_demo = ''N'' AND id_room IS NOT NULL) OR (flg_demo = ''Y''))';
+    EXCEPTION
+        WHEN e_constraint_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: marcio.dias
+
+declare
+  l_sql varchar2(4000);
+begin
+
+  -- M - Monitor
+  -- P - Posto
+  -- K - Kiosk
+  l_sql := q'[alter table wl_machine add constraint WL_MACH_TYPE_CHK check (flg_mach_type IN ('P', 'K', 'M'))]';
+  pk_versioning.run( l_sql);  
+end;
+/

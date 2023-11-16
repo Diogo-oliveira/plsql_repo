@@ -1,0 +1,1 @@
+grant select, update, delete on pat_recommendation to alert_reset;

@@ -1,0 +1,45 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 21/06/2010 17:57
+-- CHANGE REASON: [ALERT-103305] FERTIS (2.6.0.3)
+DECLARE
+    l_sql   VARCHAR2(1000 CHAR);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'REN_PL_FK'
+       AND owner = 'ALERT';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := q'[ALTER TABLE REF_EXT_SESSION ADD (CONSTRAINT REN_PL_FK FOREIGN KEY  (ID_PROFESSIONAL) REFERENCES PROFESSIONAL (ID_PROFESSIONAL))]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+
+DECLARE
+    l_sql   VARCHAR2(1000 CHAR);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'REN_ERTX_FK'
+       AND owner = 'ALERT';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := q'[ALTER TABLE REF_EXT_SESSION ADD (CONSTRAINT REN_ERTX_FK FOREIGN KEY  (ID_EXTERNAL_REQUEST) REFERENCES P1_EXTERNAL_REQUEST (ID_EXTERNAL_REQUEST))]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro

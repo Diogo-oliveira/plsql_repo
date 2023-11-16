@@ -1,0 +1,32 @@
+CREATE TABLE ORDER_SET_TASK_SOFT_INST
+ (ID_TASK_TYPE NUMBER(24) NOT NULL
+ ,ID_SOFTWARE NUMBER(24) NOT NULL
+ ,ID_INSTITUTION NUMBER(24) NOT NULL
+ ,FLG_AVAILABLE VARCHAR2(1) NOT NULL
+ );
+
+COMMENT ON TABLE ORDER_SET_TASK_SOFT_INST IS 'Order Sets tasks available by institution and software';
+COMMENT ON COLUMN ORDER_SET_TASK_SOFT_INST.ID_TASK_TYPE IS 'Task type ID';
+COMMENT ON COLUMN ORDER_SET_TASK_SOFT_INST.ID_SOFTWARE IS 'Software where the order set task is available';
+COMMENT ON COLUMN ORDER_SET_TASK_SOFT_INST.ID_INSTITUTION IS 'Institution where the order set task is available';
+COMMENT ON COLUMN ORDER_SET_TASK_SOFT_INST.FLG_AVAILABLE IS 'Availability of the Order Set task for the software and institution (Y/N)';
+
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 2009-JUL-30
+-- CHANGE REASON: ALERT-31493 - define a specific task order in order sets functionality
+alter table ORDER_SET_TASK_SOFT_INST add RANK number(6);
+comment on column ORDER_SET_TASK_SOFT_INST.RANK is 'Define the order by task type in result lists';
+-- CHANGE END
+
+
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 04/07/2010 02:29
+-- CHANGE REASON: [ALERT-109296] TDE Core versioning (DDL)
+alter table ORDER_SET_TASK_SOFT_INST add ID_MARKET number(24) DEFAULT 0 not null;
+comment on column ORDER_SET_TASK_SOFT_INST.ID_MARKET is 'Market where the order set task is available';
+
+alter table ORDER_SET_TASK_SOFT_INST add ID_TASK_TYPE_PARENT number(24);
+comment on column ORDER_SET_TASK_SOFT_INST.ID_TASK_TYPE_PARENT is 'Parent task type ID, for task hierarchy ordering';
+-- CHANGE END: Carlos Loureiro

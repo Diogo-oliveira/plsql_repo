@@ -1,0 +1,65 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 14/02/2014 15:24
+-- CHANGE REASON: [ALERT-275975] department configs
+DECLARE
+    e_pk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    e_unique_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table department_resp_prof add constraint DRP_PK primary key (id_department_resp_prof) using index tablespace alert_idx';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table department_resp_prof add constraint DRP_UK unique (id_department, id_professional) using index tablespace alert_idx';
+    EXCEPTION
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('UK already exists');
+    END;
+
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 23/06/2014 11:58
+-- CHANGE REASON: new table
+DECLARE
+    e_pk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    e_unique_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table department_resp_prof add constraint DRP_PK primary key (id_department_resp_prof) using index tablespace alert_idx';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table department_resp_prof add constraint DRP_UK unique (id_department, id_professional) using index tablespace alert_idx';
+    EXCEPTION
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('UK already exists');
+    END;
+
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+
+-- CHANGED BY:  Pedro Henriques
+-- CHANGE DATE: 14/09/2016 17:20
+-- CHANGE REASON: ALERT-324829
+
+ALTER TABLE department_resp_prof ADD CONSTRAINT DEP_RESP_PROF_FLG_TYPE_CHK CHECK (FLG_TYPE IN ('C', 'S', 'B'));
+
+/
+-- CHANGE END:  Pedro Henriques

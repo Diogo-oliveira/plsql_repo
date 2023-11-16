@@ -1,0 +1,59 @@
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 06-02-2013
+-- CHANGE REASON: ALERT-251133
+DECLARE
+	e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+	pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'SCH_REHAB_GROUP_HIST', i_obj_type => 'TABLE',i_flg_category => 'HST', i_flg_nzd => 'N');
+	
+	EXECUTE IMMEDIATE 'CREATE TABLE SCH_REHAB_GROUP_HIST
+						 (ID_SCHEDULE NUMBER(24) NOT NULL
+						 ,ID_REHAB_GROUP NUMBER(24) NOT NULL
+						 ,CREATE_USER VARCHAR2(24 CHAR)
+						 ,CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+						 ,CREATE_INSTITUTION NUMBER(24)
+						 ,UPDATE_USER VARCHAR2(24 CHAR)
+						 ,UPDATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+						 ,UPDATE_INSTITUTION NUMBER(24)
+						 ,DT_UPDATE TIMESTAMP WITH LOCAL TIME ZONE DEFAULT current_timestamp
+						 )
+                      tablespace TABLE_M';
+EXCEPTION
+	WHEN e_object_exists THEN dbms_output.put_line('Tentativa de criação da tabela SCH_REHAB_GROUP_HIST falhou porque já existe');
+END;
+/
+
+COMMENT ON TABLE SCH_REHAB_GROUP_HIST IS 'History table for updates support';
+COMMENT ON COLUMN SCH_REHAB_GROUP_HIST.ID_SCHEDULE IS 'Schedule identifier';
+COMMENT ON COLUMN SCH_REHAB_GROUP_HIST.ID_REHAB_GROUP IS 'Rehab group identifier';
+COMMENT ON COLUMN SCH_REHAB_GROUP_HIST.CREATE_USER IS 'Creation user';
+COMMENT ON COLUMN SCH_REHAB_GROUP_HIST.CREATE_TIME IS 'Creation time';
+COMMENT ON COLUMN SCH_REHAB_GROUP_HIST.CREATE_INSTITUTION IS 'Creation institution';
+COMMENT ON COLUMN SCH_REHAB_GROUP_HIST.UPDATE_USER IS 'Update user';
+COMMENT ON COLUMN SCH_REHAB_GROUP_HIST.UPDATE_TIME IS 'Update time';
+COMMENT ON COLUMN SCH_REHAB_GROUP_HIST.UPDATE_INSTITUTION IS 'Update institution';
+COMMENT ON COLUMN SCH_REHAB_GROUP_HIST.DT_UPDATE IS 'date of update occurrence';
+
+-- CHANGE END:  Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 20-08-2013
+-- CHANGE REASON: ALERT-263450
+begin
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT',i_obj_name => 'SCH_REHAB_GROUP_HIST', i_obj_type => 'TABLE', i_flg_category => 'HST', i_flg_nzd => 'Y');
+end;
+/
+-- CHANGE END: Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-01-2015
+-- CHANGE REASON: ALERT-303513
+alter table SCH_REHAB_GROUP_HIST add id_prof_update number(24);
+comment on column SCH_REHAB_GROUP_HIST.id_prof_update is 'prof. responsible for the update occurring at dt_update';
+-- CHANGE END: Telmo
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 24/07/2018
+ALTER TABLE sch_rehab_group_hist add id_rehab_sch_need NUMBER(24);
+-- CHANGE END: Diogo Oliveira

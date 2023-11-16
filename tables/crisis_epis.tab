@@ -1,0 +1,167 @@
+
+
+  CREATE TABLE "ALERT"."CRISIS_EPIS"
+(	"ID_CRISIS_EPIS" NUMBER(24,0), 
+	"ID_EPISODE" NUMBER(24,0),
+	"DATE_LAST_GENERATED_TSTZ" TIMESTAMP (6) WITH LOCAL TIME ZONE DEFAULT current_timestamp, 
+	"CM_REPORT_NAME" VARCHAR2(200)  
+) ;
+
+
+-- Para adicionar colunas pode ser usado código comentado
+-- De momento só são suportados os tipos de dados mais comuns. 
+-- ALTER TABLE CRISIS_EPIS ADD ID_CRISIS_EPIS NUMBER(24,0) NOT NULL; 
+-- ALTER TABLE CRISIS_EPIS ADD ID_EPISODE NUMBER(24,0) NOT NULL;  
+-- ALTER TABLE CRISIS_EPIS ADD DATE_LAST_GENERATED_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL;
+-- ALTER TABLE CRISIS_EPIS ADD CM_REPORT_NAME VARCHAR2(200) ;  
+
+COMMENT ON COLUMN "ALERT"."CRISIS_EPIS"."ID_CRISIS_EPIS" IS 'Detalhe de XML da Máquina de Crise';  
+
+
+
+COMMENT ON COLUMN "ALERT"."CRISIS_EPIS"."ID_EPISODE" IS 'XML da Máquina de Crise';  
+
+
+
+COMMENT ON COLUMN "ALERT"."CRISIS_EPIS"."DATE_LAST_GENERATED_TSTZ" IS 'Data da ultima geração do report';
+
+
+
+COMMENT ON COLUMN "ALERT"."CRISIS_EPIS"."CM_REPORT_NAME" IS 'Nome do ficheiro a abrir na máquina de crise'; 
+
+
+
+COMMENT ON TABLE "ALERT"."CRISIS_EPIS"  IS 'Episódios já transferidos com sucesso'; 
+
+
+-- Add/modify columns 
+alter table CRISIS_EPIS add ID_CRISIS_MACHINE number(24);
+-- Add comments to the columns 
+comment on column CRISIS_EPIS.ID_CRISIS_MACHINE
+  is 'Id da máquina de crise';
+  
+-- Add/modify columns 
+alter table CRISIS_EPIS add DATE_FINISH_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE default current_timestamp not null;
+-- Add comments to the columns 
+comment on column CRISIS_EPIS.DATE_FINISH_TSTZ
+  is 'Data de fim da geração dos PDFs';
+
+
+
+-- CHANGED BY:  Álvaro Vasconcelos
+-- CHANGE DATE: 19/03/2010 17:25
+-- CHANGE REASON: [ALERT-1215] [CRISIS_MACHINE] - Crisis Machine OUTP, PP e CARE Revision
+alter table crisis_epis add id_patient number(24);
+comment on column CRISIS_EPIS.id_patient
+  is 'Patient ID';
+
+alter table crisis_epis modify id_episode null;
+  
+-- CHANGE END:  Álvaro Vasconcelos
+
+-- CHANGED BY:  Álvaro Vasconcelos
+-- CHANGE DATE: 09/09/2010 08:59
+-- CHANGE REASON: [ALERT-123420] Crisis Machine bug correction 
+alter table crisis_epis add flg_episode_type VARCHAR2(1 CHAR) NOT NULL;
+comment on column crisis_epis.flg_episode_type
+  is 'Flag identifying episode type - "P" Previous episode; "N" New episode';
+
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 13/09/2010 11:53
+-- CHANGE REASON: [ALERT-124222] 
+alter table CRISIS_EPIS drop column FLG_EPISODE_TYPE;
+
+alter table CRISIS_EPIS modify ID_PATIENT NUMBER(24) not null;
+
+alter table CRISIS_EPIS add ID_SCHEDULE NUMBER(24);
+comment on column CRISIS_EPIS.ID_SCHEDULE
+  is 'Schedule Identifier';
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 08/07/2011 12:26
+-- CHANGE REASON: [ALERT-187780] ALERT_105193 - Crisis Machine should support Print button (with configurable reports by institution and software)
+truncate table crisis_epis;
+
+ALTER TABLE crisis_epis ADD (ID_REPORT NUMBER(24) not null, flg_report_type VARCHAR2(1 CHAR) not null, id_software NUMBER(24) not null);
+
+COMMENT ON TABLE crisis_epis IS 'List of generated reports for Crisis Machine';
+COMMENT ON COLUMN crisis_epis.id_report IS 'Report identifier';
+COMMENT ON COLUMN crisis_epis.flg_report_type IS 'Report type (E - Episode\schedule based, G - Global report)';
+COMMENT ON COLUMN crisis_epis.id_software IS 'Software identifier';
+
+ALTER TABLE crisis_epis 
+ MODIFY (ID_PATIENT NULL, ID_CRISIS_MACHINE NOT NULL);
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 03/10/2013 10:57
+-- CHANGE REASON: [ALERT-266179] Crisis Machine frameword performance changes
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE CRISIS_EPIS add(
+     xml_header XMLTYPE,
+     id_crisis_log NUMBER(24)
+   ) 
+   XMLType COLUMN xml_header
+      STORE AS CLOB (
+           TABLESPACE alert_lob
+         )';
+
+    EXECUTE IMMEDIATE 'comment on column crisis_epis.xml_header is ''Header info on xml format''';
+    EXECUTE IMMEDIATE 'comment on column crisis_epis.id_crisis_log is ''CRISIS_LOG Identifier''';
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('ALTER TABLE crisis_epis - Error (' || SQLCODE || '), resuming execution...');
+END;
+/
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 13/01/2016 15:51
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON TABLE CRISIS_EPIS IS 'Generated reports to the crisis machine';
+COMMENT ON COLUMN CRISIS_EPIS.XML_HEADER IS 'Header info(XML)';
+COMMENT ON COLUMN CRISIS_EPIS.ID_CRISIS_LOG IS 'Crisis_log ID';
+COMMENT ON COLUMN CRISIS_EPIS.ID_PATIENT IS 'Patient ID';
+COMMENT ON COLUMN CRISIS_EPIS.ID_SCHEDULE IS 'Schedule ID';
+COMMENT ON COLUMN CRISIS_EPIS.ID_REPORT IS 'Report ID';
+COMMENT ON COLUMN CRISIS_EPIS.FLG_REPORT_TYPE IS 'Report type(E - Episode\schedule based, G - Global report)';
+COMMENT ON COLUMN CRISIS_EPIS.ID_SOFTWARE IS 'Software ID';
+COMMENT ON COLUMN CRISIS_EPIS.ID_CRISIS_EPIS IS 'Crisis_epis ID';
+COMMENT ON COLUMN CRISIS_EPIS.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN CRISIS_EPIS.DATE_LAST_GENERATED_TSTZ IS 'Date of the last generated report';
+COMMENT ON COLUMN CRISIS_EPIS.CM_REPORT_NAME IS 'Report Name';
+COMMENT ON COLUMN CRISIS_EPIS.ID_CRISIS_MACHINE IS 'Crisis_machine ID';
+COMMENT ON COLUMN CRISIS_EPIS.DATE_FINISH_TSTZ IS 'Completion date of report generation';
+COMMENT ON COLUMN CRISIS_EPIS.CREATE_USER IS 'User that create this record';
+COMMENT ON COLUMN CRISIS_EPIS.CREATE_TIME IS 'Time of the creation';
+COMMENT ON COLUMN CRISIS_EPIS.CREATE_INSTITUTION IS 'Instituiton that create this record';
+COMMENT ON COLUMN CRISIS_EPIS.UPDATE_USER IS 'User that updated this record';
+COMMENT ON COLUMN CRISIS_EPIS.UPDATE_TIME IS 'Time of the update';
+COMMENT ON COLUMN CRISIS_EPIS.UPDATE_INSTITUTION IS 'Instituiton that updated this record';
+-- CHANGE END:  jose.m.silva
+
+-- CHANGED BY: Gilberto Rocha
+-- CHANGE DATE: 03/12/2019 12:09
+-- CHANGE REASON: [EMR-22927]
+begin
+  pk_versioning.run('ALTER TABLE CRISIS_EPIS ADD EPISODE_TYPE VARCHAR2(10)');
+  pk_versioning.run('ALTER TABLE CRISIS_EPIS ADD FLG_SHOW_DEMOGRAPHIC_DATA VARCHAR(1)');
+  pk_versioning.run('ALTER TABLE CRISIS_EPIS ADD CONSTRAINT CEP_FLG_SHOW_DEMOG_DATA_CHK CHECK (FLG_SHOW_DEMOGRAPHIC_DATA in (''Y'',''N'')) ENABLE');
+  pk_versioning.run('ALTER TABLE CRISIS_EPIS ADD CM_REPORT_PATH VARCHAR2(500)');
+  pk_versioning.run('ALTER TABLE CRISIS_EPIS ADD FLG_STATUS VARCHAR2(2) DEFAULT ''G'' NOT NULL');
+  pk_versioning.run('ALTER TABLE CRISIS_EPIS ADD CONSTRAINT CEP_FLG_STATUS_CHK CHECK (flg_status in (''W'',''P'',''G'',''E'',''R'')) ENABLE');
+  pk_versioning.run('ALTER TABLE CRISIS_EPIS ADD TOKEN VARCHAR2(500)');
+  pk_versioning.run('ALTER TABLE CRISIS_EPIS MODIFY DATE_LAST_GENERATED_TSTZ DEFAULT NULL NULL');
+  pk_versioning.run('ALTER TABLE CRISIS_EPIS MODIFY DATE_FINISH_TSTZ DEFAULT NULL NULL');
+end;
+/
+
+COMMENT ON COLUMN CRISIS_EPIS.EPISODE_TYPE IS 'Episode type';  
+COMMENT ON COLUMN CRISIS_EPIS.FLG_SHOW_DEMOGRAPHIC_DATA IS 'Show demographic data (Y - Yes, N - No)';  
+COMMENT ON COLUMN CRISIS_EPIS.CM_REPORT_PATH IS 'Report path';
+COMMENT ON COLUMN CRISIS_EPIS.FLG_STATUS IS 'Report Status (W - Waiting to be generated, P - Generation in progress, G - Generated, E - Error, R - Retry generation)';
+COMMENT ON COLUMN CRISIS_EPIS.TOKEN IS 'Token that is used by the generating job when FLG_STATUS=''P'', to allow the change of the this record';
+-- CHANGE END: Gilberto Rocha

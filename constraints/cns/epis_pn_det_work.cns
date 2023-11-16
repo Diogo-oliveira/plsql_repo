@@ -1,0 +1,51 @@
+--26/01/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+ALTER TABLE EPIS_PN_DET_WORK
+ ADD (CONSTRAINT EPNDW_PK PRIMARY KEY 
+  (ID_EPIS_PN_DET))
+/
+
+ALTER TABLE EPIS_PN_DET_WORK
+ ADD (CONSTRAINT EPDW_STATUS_CHK CHECK (FLG_STATUS in ('A', 'R')))
+/
+
+CREATE UNIQUE INDEX EPDW_UK ON EPIS_PN_DET_WORK
+(
+ ID_EPIS_PN,
+ ID_PN_DATA_BLOCK,
+ ID_PN_SOAP_BLOCK,
+ ID_EPIS_DOCUMENTATION )
+/
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:31
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+ALTER TABLE epis_pn_det_work ADD CONSTRAINT EPNDW_FLG_SUGGESTED_CHK CHECK(flg_suggested IN ('Y', 'N'));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+ALTER TABLE epis_pn_det_work ADD CONSTRAINT EPNDW_FLG_SUGGESTED_CHK CHECK(flg_suggested IN ('Y', 'N'));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:49
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE epis_pn_det_work drop constraint EPDW_STATUS_CHK';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE epis_pn_det_work
+ADD (CONSTRAINT EPDW_STATUS_CHK CHECK (FLG_STATUS in (''A'', ''R'', ''S'', ''I'', ''Z'')))';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Luís Maia

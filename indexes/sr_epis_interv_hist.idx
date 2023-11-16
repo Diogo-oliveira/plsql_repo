@@ -1,0 +1,127 @@
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 06/12/2011 10:46
+-- CHANGE REASON: [ALERT-208518] 
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -00955);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'create index SEVH_EPIS_CONTEXT_IDX on SR_EPIS_INTERV_HIST (ID_EPISODE_CONTEXT)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -00955);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'create index SEVH_INTERV_EPIS_UK on SR_EPIS_INTERV_HIST (ID_EPISODE, ID_SR_INTERVENTION, FLG_STATUS)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -00955);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'create index SEVH_PROF_FK2_IDX on SR_EPIS_INTERV_HIST (ID_PROF_CANCEL)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -00955);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'create index SEVH_PROF_FK3_IDX on SR_EPIS_INTERV_HIST (ID_PROF_REQ_UNC)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -00955);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'create index SEVH_PROF_FK_IDX on SR_EPIS_INTERV_HIST (ID_PROF_REQ)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -00955);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'create index SEVH_SIN_FK_IDX on SR_EPIS_INTERV_HIST (ID_SR_INTERVENTION)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -00955);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'create index SEVH_SR_CAN_REA_FK_IDX on SR_EPIS_INTERV_HIST (ID_SR_CANCEL_REASON)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 30/10/2015 09:58
+-- CHANGE REASON: [ALERT-316231] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX seih_sei_IDX
+  ON sr_epis_interv_hist (id_sr_epis_interv, flg_status_hist)
+  TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

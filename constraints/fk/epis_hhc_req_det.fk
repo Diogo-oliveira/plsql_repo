@@ -1,0 +1,16 @@
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := q'[ALTER TABLE EPIS_HHC_REQ_DET ADD CONSTRAINT EPIS_HHC_DET_HHC_FK FOREIGN KEY (ID_EPIS_HHC_REQ) REFERENCES EPIS_HHC_REQ(ID_EPIS_HHC_REQ)]';
+pk_versioning.run(l_sql);
+end;
+/
+;
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := q'[ALTER TABLE EPIS_HHC_REQ_DET ADD CONSTRAINT EPIS_HHC_DET_HHC_DTYP_FK FOREIGN KEY (ID_HHC_DET_TYPE) REFERENCES HHC_DET_TYPE(ID_HHC_DET_TYPE)]';
+pk_versioning.run(l_sql);
+end;
+/

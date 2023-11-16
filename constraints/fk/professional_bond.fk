@@ -1,0 +1,16 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 28/11/2013 10:40
+-- CHANGE REASON: [ALERT-268987] new fields and content tbls
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table professional_bond add constraint PBOND_PARENT_FK foreign key (id_bond_parent) references professional_bond(id_bond)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

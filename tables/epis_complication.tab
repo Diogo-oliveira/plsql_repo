@@ -1,0 +1,114 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 25/03/2010 14:09
+-- CHANGE REASON: [ALERT-63591] Registration of complications through templates in use at JBZ (JBZ will provide the templates).
+CREATE TABLE EPIS_COMPLICATION
+(
+  ID_EPIS_COMPLICATION      NUMBER(24) NOT NULL,
+  ID_EPISODE                NUMBER(24) NOT NULL,
+  ID_EPISODE_ORIGIN         NUMBER(24),
+  ID_COMPLICATION           NUMBER(24),
+  DESCRIPTION               VARCHAR2(1000 CHAR),
+  DT_VERIF_COMP             TIMESTAMP WITH LOCAL TIME ZONE,
+  DT_VERIF_REQ              TIMESTAMP WITH LOCAL TIME ZONE,
+  ID_CLIN_SERV_DEST         NUMBER(24),  
+  FLG_STATUS_COMP           VARCHAR2(1 CHAR),
+  FLG_STATUS_REQ            VARCHAR2(1 CHAR),
+  NOTES_COMP                VARCHAR2(1000 CHAR),
+  NOTES_REQ                 VARCHAR2(1000 CHAR),
+  ID_CANCEL_REASON          NUMBER(24),
+  NOTES_CANCEL              VARCHAR2(1000 CHAR),
+  ID_REJECT_REASON          NUMBER(24),
+  NOTES_REJECTED            VARCHAR2(1000 CHAR),
+  DT_EPIS_COMPLICATION      TIMESTAMP WITH LOCAL TIME ZONE,
+  ID_PROF_CREATE            NUMBER(24),  
+  ID_PROF_CLIN_SERV         NUMBER(24),
+  CREATE_USER               VARCHAR2(24 CHAR),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24 CHAR),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24)
+);
+
+ALTER TABLE EPIS_COMPLICATION MOVE TABLESPACE TABLE_M;
+
+COMMENT ON TABLE EPIS_COMPLICATION IS 'Episode complications.';
+COMMENT ON COLUMN EPIS_COMPLICATION.ID_EPIS_COMPLICATION IS 'Primary key.';
+COMMENT ON COLUMN EPIS_COMPLICATION.ID_EPISODE IS 'Current episode';
+COMMENT ON COLUMN EPIS_COMPLICATION.ID_EPISODE_ORIGIN IS 'Associated episode';
+COMMENT ON COLUMN EPIS_COMPLICATION.ID_COMPLICATION IS 'Complication id';
+COMMENT ON COLUMN EPIS_COMPLICATION.DESCRIPTION IS 'Request description';
+COMMENT ON COLUMN EPIS_COMPLICATION.DT_VERIF_COMP IS 'Verification date of complication';
+COMMENT ON COLUMN EPIS_COMPLICATION.DT_VERIF_REQ IS 'Verification date of request';
+COMMENT ON COLUMN EPIS_COMPLICATION.ID_CLIN_SERV_DEST IS 'Request clinical service id';
+COMMENT ON COLUMN EPIS_COMPLICATION.FLG_STATUS_COMP IS 'Indicates complication state: U - Under investigation; C - Confirmed; E - Excluded; I - Cancelled';
+COMMENT ON COLUMN EPIS_COMPLICATION.FLG_STATUS_REQ IS 'Indicates request state: R - Requested; A - Accepted; I - Rejected; C - Cancelled';
+COMMENT ON COLUMN EPIS_COMPLICATION.NOTES_COMP IS 'Complication notes';
+COMMENT ON COLUMN EPIS_COMPLICATION.NOTES_REQ IS 'Request acceptation notes';
+COMMENT ON COLUMN EPIS_COMPLICATION.ID_CANCEL_REASON IS 'Cancel reason id';
+COMMENT ON COLUMN EPIS_COMPLICATION.NOTES_CANCEL IS 'Cancel notes';
+COMMENT ON COLUMN EPIS_COMPLICATION.ID_REJECT_REASON IS 'Reject reason id';
+COMMENT ON COLUMN EPIS_COMPLICATION.NOTES_REJECTED IS 'Notes of the reason for rejection';
+COMMENT ON COLUMN EPIS_COMPLICATION.DT_EPIS_COMPLICATION IS 'Registry date';
+COMMENT ON COLUMN EPIS_COMPLICATION.ID_PROF_CREATE IS 'Professional who created the record';
+COMMENT ON COLUMN EPIS_COMPLICATION.ID_PROF_CLIN_SERV IS 'Clinical service of the professional who created the record';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 10:27
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table EPIS_COMPLICATION
+  is 'Episode complications.';
+-- Add comments to the columns 
+comment on column EPIS_COMPLICATION.id_epis_complication
+  is 'Primary key.';
+comment on column EPIS_COMPLICATION.id_episode
+  is 'Current episode';
+comment on column EPIS_COMPLICATION.id_episode_origin
+  is 'Associated episode';
+comment on column EPIS_COMPLICATION.id_complication
+  is 'Complication id';
+comment on column EPIS_COMPLICATION.description
+  is 'Request description';
+comment on column EPIS_COMPLICATION.dt_verif_comp
+  is 'Verification date of complication';
+comment on column EPIS_COMPLICATION.dt_verif_req
+  is 'Verification date of request';
+comment on column EPIS_COMPLICATION.id_clin_serv_dest
+  is 'Request clinical service id';
+comment on column EPIS_COMPLICATION.flg_status_comp
+  is 'Indicates complication state: U - Under investigation; C - Confirmed; E - Excluded; I - Cancelled';
+comment on column EPIS_COMPLICATION.flg_status_req
+  is 'Indicates request state: R - Requested; A - Accepted; I - Rejected; C - Cancelled';
+comment on column EPIS_COMPLICATION.notes_comp
+  is 'Complication notes';
+comment on column EPIS_COMPLICATION.notes_req
+  is 'Request acceptation notes';
+comment on column EPIS_COMPLICATION.id_cancel_reason
+  is 'Cancel reason id';
+comment on column EPIS_COMPLICATION.notes_cancel
+  is 'Cancel notes';
+comment on column EPIS_COMPLICATION.id_reject_reason
+  is 'Reject reason id';
+comment on column EPIS_COMPLICATION.notes_rejected
+  is 'Notes of the reason for rejection';
+comment on column EPIS_COMPLICATION.dt_epis_complication
+  is 'Registry date';
+comment on column EPIS_COMPLICATION.id_prof_create
+  is 'Professional who created the record';
+comment on column EPIS_COMPLICATION.id_prof_clin_serv
+  is 'Clinical service of the professional who created the record';
+comment on column EPIS_COMPLICATION.create_user
+  is 'Creation User';
+comment on column EPIS_COMPLICATION.create_time
+  is 'Creation Time';
+comment on column EPIS_COMPLICATION.create_institution
+  is 'Creation Institution';
+comment on column EPIS_COMPLICATION.update_user
+  is 'Update User';
+comment on column EPIS_COMPLICATION.update_time
+  is 'Update Time';
+comment on column EPIS_COMPLICATION.update_institution
+  is 'Update Institution';
+-- CHANGE END: Renato Nunes

@@ -1,0 +1,65 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/07/2011 15:01
+-- CHANGE REASON: [ALERT-188174] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects('ALERT', 'PED_AREA', 'TABLE', 'DSV', 'N', '', 'N');
+    BEGIN
+        EXECUTE IMMEDIATE '
+CREATE TABLE ped_area (
+  id_ped_area            number(24,0)                      not null,
+  code_ped_area          varchar2(200 char)                not null,
+  id_summary_page        number(24,0)                      null,
+  rank                   number(6)                         null,
+  id_sys_button          number(24,0)                      not null,
+  id_doc_area            number(24,0)                      not null,
+  create_user            varchar2(24 char)                      null,
+  create_time            timestamp(6) with local time zone null,
+  create_institution     number(24,0)                      null,
+  update_user            varchar2(24 char)                      null,
+  update_time            timestamp(6) with local time zone null,
+  update_institution     NUMBER(24,0)                      NULL
+)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+COMMENT ON TABLE ped_area IS 'pediatric areas';
+COMMENT ON COLUMN ped_area.id_ped_area IS 'pediatric area identifier';
+COMMENT ON COLUMN ped_area.code_ped_area IS 'code pediatric area';
+COMMENT ON COLUMN ped_area.id_summary_page IS 'summary page identifier';
+COMMENT ON COLUMN ped_area.rank IS 'rank';
+COMMENT ON COLUMN ped_area.id_sys_button IS 'sys_button identifier';
+COMMENT ON COLUMN ped_area.id_doc_area IS 'doc_area identifier';
+COMMENT ON COLUMN ped_area.create_user IS 'Creation User';
+COMMENT ON COLUMN ped_area.create_time IS 'Creation Time';
+COMMENT ON COLUMN ped_area.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN ped_area.update_user IS 'Update User';
+COMMENT ON COLUMN ped_area.update_time IS 'Update Time';
+COMMENT ON COLUMN ped_area.update_institution IS 'Update Institution';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 20/01/2016 11:23
+-- CHANGE REASON: [ALERT-317944 ] 
+comment on table PED_AREA
+  is 'Pediatric areas';
+-- Add comments to the columns 
+comment on column PED_AREA.id_ped_area
+  is 'Pediatric area identifier';
+comment on column PED_AREA.code_ped_area
+  is 'Code pediatric area';
+comment on column PED_AREA.id_summary_page
+  is 'Summary page identifier';
+comment on column PED_AREA.rank
+  is 'Rank';
+comment on column PED_AREA.id_sys_button
+  is 'Sys_button identifier';
+comment on column PED_AREA.id_doc_area
+  is 'Documentation area identifier';
+-- CHANGE END: cristina.oliveira

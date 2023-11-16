@@ -1,0 +1,22 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 28/11/2013 10:40
+-- CHANGE REASON: [ALERT-268987] new fields and content tbls
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'create index PBR_DISTRICT_ID_IDX on professional(id_district_birth,id_district_adress) tablespace ALERT_IDX';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Index already there');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'create index PBR_GSTATE_ID_IDX on professional(id_geo_state_birth,id_geo_state_adress,id_geo_state_doc) tablespace ALERT_IDX';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Index already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

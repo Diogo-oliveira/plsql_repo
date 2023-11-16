@@ -1,0 +1,5 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGED DATE: 2010-JAN-05
+-- CHANGED REASON: ALERT-63305
+drop trigger B_IU_159447_AUDIT;
+-- CHANGE END: Ana Monteiro

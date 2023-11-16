@@ -1,0 +1,12 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 08/03/2010 18:07
+-- CHANGE REASON: [ALERT-80001] 
+grant select, references on TRANSP_ENT_INST to ALERT_DEFAULT;
+-- CHANGE END: Susana Silva
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2017-1-03
+-- CHANGED REASON: ALERT-327486
+grant SELECT on ALERT.TRANSP_ENT_INST to ALERT_APEX_TOOLS;
+-- CHANGE END: Humberto Cardoso

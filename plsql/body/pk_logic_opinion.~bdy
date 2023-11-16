@@ -1,0 +1,312 @@
+/*-- Last Change Revision: $Rev: 1972081 $*/
+/*-- Last Change by: $Author: carlos.ferreira $*/
+/*-- Date of last change: $Date: 2020-11-23 15:38:58 +0000 (seg, 23 nov 2020) $*/
+
+CREATE OR REPLACE PACKAGE BODY pk_logic_opinion IS
+
+    /*
+     * This procedure was created to calculate the status of a certain opinion
+     * status. Instead of doing this at SELECT time this function is suppose to
+     * be used at INSERT and UPDATE time.
+     *
+     * @param     i_prof               Professional type
+     * @param     i_flg_status         Opinion status
+     * @param     o_status_str         Request's status (in specific format)
+     * @param     o_status_msg         Request's status message code
+     * @param     o_status_icon        Request's status icon
+     * @param     o_status_flg         Request's status flag (to return the icon)
+     * 
+     * @author Thiago Brito
+     * @since  2008-Oct-08
+    */
+    PROCEDURE get_opinion_status
+    (
+        i_prof        IN profissional,
+        i_flg_state   IN opinion.flg_state%TYPE,
+        o_status_str  OUT opinion.status_str%TYPE,
+        o_status_msg  OUT opinion.status_msg%TYPE,
+        o_status_icon OUT opinion.status_icon%TYPE,
+        o_status_flg  OUT opinion.status_flg%TYPE
+    ) IS
+    
+        l_display_type VARCHAR2(30);
+        l_back_color   VARCHAR2(30);
+        l_status_flg   VARCHAR2(30);
+    
+        -- text || date || icon
+        l_aux VARCHAR2(200);
+    
+    BEGIN
+    
+        SELECT 'OPINION.FLG_STATE' AS aux,
+               pk_alert_constant.g_display_type_icon AS display_type,
+               NULL AS color_status,
+               i_flg_state
+          INTO l_aux, l_display_type, l_back_color, l_status_flg
+          FROM dual;
+    
+        pk_utils.build_status_string(i_display_type => pk_alert_constant.g_display_type_icon,
+                                     i_flg_state    => l_status_flg,
+                                     i_value_text   => l_aux,
+                                     i_value_date   => l_aux,
+                                     i_value_icon   => l_aux,
+                                     i_back_color   => l_back_color,
+                                     o_status_str   => o_status_str,
+                                     o_status_msg   => o_status_msg,
+                                     o_status_icon  => o_status_icon,
+                                     o_status_flg   => o_status_flg);
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            DECLARE
+                l_error t_error_out;
+                l_lang  NUMBER := to_number(pk_login_sysconfig.get_config('LANGUAGE'));
+            BEGIN
+            
+                pk_alert_exceptions.process_error(l_lang,
+                                                  SQLCODE,
+                                                  SQLERRM,
+                                                  g_error,
+                                                  g_package_owner,
+                                                  g_package_name,
+                                                  'GET_OPINION_STATUS',
+                                                  l_error);
+            
+                --Do a reset_state just-in-case to retain previous behavior, because I don't know if the following raise_error is currently used
+                pk_alert_exceptions.reset_error_state;
+                pk_alert_exceptions.raise_error(error_code_in => SQLCODE);
+            END;
+    END get_opinion_status;
+
+    /**
+    * Opinion Logic entry funtion
+    *
+    * @param i_lang               Language.
+    * @param i_prof               Logged professional.
+    * @param i_event_type         Type of event (UPDATE, INSERT, etc)
+    * @param i_rowids             List of ROWIDs belonging to the changed records.
+    * @param i_list_columns       List of columns that were changed
+    * @param i_source_table_name  Name of the table that was changed.
+    * @param i_dg_table_name      Name of the Data Governance table.
+    *
+    * @author Pedro Teixeira
+    * @version 2.4.3.d
+    * @since 2008-Oct-14
+    */
+    PROCEDURE set_opinion
+    (
+        i_lang              IN language.id_language%TYPE,
+        i_prof              IN profissional,
+        i_event_type        IN VARCHAR2,
+        i_rowids            IN table_varchar,
+        i_source_table_name IN VARCHAR2,
+        i_list_columns      IN table_varchar,
+        i_dg_table_name     IN VARCHAR
+    ) IS
+        l_status_str  interv_icnp_ea.status_str%TYPE;
+        l_status_msg  interv_icnp_ea.status_msg%TYPE;
+        l_status_icon interv_icnp_ea.status_icon%TYPE;
+        l_status_flg  interv_icnp_ea.status_flg%TYPE;
+        xpl           VARCHAR2(0050) := '''';
+    BEGIN
+        -- Validate arguments
+        g_error := 'VALIDATE ARGUMENTS';
+        IF NOT t_data_gov_mnt.validate_arguments(i_rowids                 => i_rowids,
+                                                 i_source_table_name      => i_source_table_name,
+                                                 i_dg_table_name          => i_dg_table_name,
+                                                 i_expected_table_name    => 'OPINION',
+                                                 i_expected_dg_table_name => 'OPINION',
+                                                 i_list_columns           => i_list_columns,
+                                                 i_expected_columns       => NULL)
+        THEN
+            RAISE t_data_gov_mnt.g_excp_invalid_arguments;
+        END IF;
+    
+        -- Update status for insert and update events
+        IF i_event_type = t_data_gov_mnt.g_event_insert
+           OR i_event_type = t_data_gov_mnt.g_event_update
+        THEN
+            IF i_rowids IS NOT NULL
+               AND i_rowids.count > 0
+            THEN
+                FOR r_cur IN (SELECT o.flg_state AS flg_state, o.rowid row_id, o.status_str
+                                FROM opinion o
+                               WHERE o.rowid IN (SELECT *
+                                                   FROM TABLE(i_rowids))
+                                                   and o.flg_state != pk_opinion.g_status_predefined)
+                LOOP
+                    g_error := 'GET opinion status';
+                    get_opinion_status(i_prof        => i_prof,
+                                       i_flg_state   => r_cur.flg_state,
+                                       o_status_str  => l_status_str,
+                                       o_status_msg  => l_status_msg,
+                                       o_status_icon => l_status_icon,
+                                       o_status_flg  => l_status_flg);
+                
+                    g_error := 'Update opinion status';
+                    ts_opinion.upd(status_str_in  => l_status_str,
+                                   status_msg_in  => l_status_msg,
+                                   status_icon_in => l_status_icon,
+                                   status_flg_in  => l_status_flg,
+                                   where_in       => 'rowid =  ' || xpl || r_cur.row_id || xpl);
+                END LOOP;
+            END IF;
+        END IF;
+    
+    EXCEPTION
+        WHEN t_data_gov_mnt.g_excp_invalid_arguments THEN
+            DECLARE
+                l_error t_error_out;
+            BEGIN
+                pk_alert_exceptions.process_error(i_lang,
+                                                  SQLCODE,
+                                                  SQLERRM,
+                                                  g_error,
+                                                  g_package_owner,
+                                                  g_package_name,
+                                                  'SET_OPINION',
+                                                  l_error);
+            
+                --Do a reset_state just-in-case to retain previous behavior, because I don't know if the following raise_error is currently used
+                pk_alert_exceptions.reset_error_state;
+                pk_alert_exceptions.raise_error(error_name_in => 'INVALID_ARGUMENTS');
+            END;
+        
+        WHEN OTHERS THEN
+            -- Unexpected error.
+            DECLARE
+                l_error t_error_out;
+            BEGIN
+                pk_alert_exceptions.process_error(i_lang,
+                                                  SQLCODE,
+                                                  SQLERRM,
+                                                  g_error,
+                                                  g_package_owner,
+                                                  g_package_name,
+                                                  'SET_OPINION',
+                                                  l_error);
+            
+                --Do a reset_state just-in-case to retain previous behavior, because I don't know if the following raise_error is currently used
+                pk_alert_exceptions.reset_error_state;
+                pk_alert_exceptions.raise_error(error_code_in => SQLCODE);
+            END;
+        
+    END set_opinion;
+
+    PROCEDURE set_grid_task
+    (
+        i_lang              IN language.id_language%TYPE,
+        i_prof              IN profissional,
+        i_event_type        IN VARCHAR2,
+        i_rowids            IN table_varchar,
+        i_source_table_name IN VARCHAR2,
+        i_list_columns      IN table_varchar,
+        i_dg_table_name     IN VARCHAR
+    ) IS
+    
+        CURSOR c_opinion IS
+            SELECT o.id_episode
+              FROM opinion o
+             WHERE o.rowid IN (SELECT vc_1
+                                 FROM tbl_temp);
+    
+        l_grid_task grid_task%ROWTYPE;
+    
+        l_epis_last_opinion t_rec_epis_last_opinion;
+    
+        l_error_out t_error_out;
+    
+        --****************************************
+        FUNCTION count_opinion_not_canceled(i_episode IN NUMBER) RETURN NUMBER IS
+            l_count NUMBER;
+        BEGIN
+        
+            SELECT COUNT(*)
+              INTO l_count
+              FROM opinion o
+             WHERE o.id_episode = i_episode
+               AND o.flg_state != pk_opinion.g_opinion_cancel
+               AND o.id_opinion_type IS NULL;
+        
+            RETURN l_count;
+        
+        END count_opinion_not_canceled;
+    
+        PROCEDURE cancel_grid_task(i_episode IN NUMBER) IS
+        BEGIN
+        
+            UPDATE grid_task x
+               SET x.opinion_state = NULL
+             WHERE x.id_episode = i_episode;
+        
+        END cancel_grid_task;
+    
+    BEGIN
+    
+        g_error := 'VALIDATE ARGUMENTS';
+        IF NOT t_data_gov_mnt.validate_arguments(i_rowids                 => i_rowids,
+                                                 i_source_table_name      => i_source_table_name,
+                                                 i_dg_table_name          => i_dg_table_name,
+                                                 i_expected_table_name    => i_source_table_name,
+                                                 i_expected_dg_table_name => i_dg_table_name,
+                                                 i_list_columns           => i_list_columns,
+                                                 i_expected_columns       => NULL)
+        THEN
+            RAISE t_data_gov_mnt.g_excp_invalid_arguments;
+        END IF;
+    
+        -- Loop through changed records
+        g_error := 'LOOP PROCESS';
+        IF i_rowids IS NOT NULL
+           AND i_rowids.count > 0
+        THEN
+            DELETE FROM tbl_temp;
+        
+            insert_tbl_temp(i_vc_1 => i_rowids);
+        END IF;
+    
+        g_error := 'LOOP OPINION';
+        FOR rec IN c_opinion
+        LOOP
+            -- GET OPINION INFO TO SHOW ON GRID [SHOULD RETURN ONLY 1 VALUE]        
+            IF NOT pk_opinion.get_epis_last_opinion(i_lang       => i_lang,
+                                                    i_prof       => i_prof,
+                                                    i_id_episode => rec.id_episode,
+                                                    o_data       => l_epis_last_opinion,
+                                                    o_error      => l_error_out)
+            THEN
+                g_error := 'ERROR OBTAINING [PK_OPINION.GET_EPIS_LAST_OPINION] FOR EPISODE: ' || rec.id_episode;
+                RAISE g_exception;
+            END IF;
+        
+            IF count_opinion_not_canceled(i_episode => rec.id_episode) = 0
+            THEN
+                cancel_grid_task(rec.id_episode);
+            ELSE
+        
+            g_error                   := 'SET';
+            l_grid_task.id_episode    := rec.id_episode;
+            l_grid_task.opinion_state := nvl(l_epis_last_opinion.status_string, '');
+        
+            g_error := 'CALL PK_GRID.UPDATE_GRID_TASK';
+            IF NOT pk_grid.update_grid_task(i_lang => i_lang, i_grid_task => l_grid_task, o_error => l_error_out)
+            THEN
+                g_error := 'ERROR UPDATE_GRID_TASK';
+                RAISE g_exception;
+            END IF;
+        
+            END IF;
+        
+        END LOOP;
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            pk_alert_exceptions.raise_error(error_code_in => g_error);
+    END set_grid_task;
+
+BEGIN
+    -- Log initialization.
+    pk_alertlog.who_am_i(g_package_owner, g_package_name);
+    pk_alertlog.log_init(g_package_name);
+END pk_logic_opinion;
+/

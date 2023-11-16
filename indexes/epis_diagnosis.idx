@@ -1,0 +1,21 @@
+declare
+	l_sql	varchar2(4000);
+begin
+
+	L_SQL := Q'[CREATE INDEX ALERT.EDS_SEARCH01_IDX ON ALERT.EPIS_DIAGNOSIS(ID_PATIENT,ID_DIAGNOSIS) TABLESPACE ALERT_IDX]';
+	pk_versioning.run( l_sql);
+end;
+/
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 31/01/2022 10:43
+-- CHANGE REASON: [EMR-51378] -  Performance: Diagnosis search improvements
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[create index alert.eds_search02_idx on alert.EPIS_DIAGNOSIS(ID_EPISODE,FLG_TYPE,FLG_STATUS) tablespace alert_idx]';
+pk_versioning.run(l_sql);
+end;
+/
+-- CHANGE END: Elisabete Bugalho

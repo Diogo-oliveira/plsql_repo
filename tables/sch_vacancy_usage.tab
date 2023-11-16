@@ -1,0 +1,51 @@
+CREATE TABLE sch_vacancy_usage (
+       id_sch_vacancy_usage NUMBER(24),
+			 id_institution       NUMBER(24),
+			 id_software          NUMBER(24),
+			 flg_use              VARCHAR2(1),
+			 flg_sch_type         VARCHAR2(1)
+);
+
+COMMENT ON TABLE sch_vacancy_usage IS 'Indicates whether or not should a type of schedule consume vacancies, for an institution and a software.';
+COMMENT ON COLUMN sch_vacancy_usage.id_sch_vacancy_usage IS 'Primary key identifier.';
+COMMENT ON COLUMN sch_vacancy_usage.id_institution IS 'Institution identifier.';
+COMMENT ON COLUMN sch_vacancy_usage.id_software IS 'Software identifier.';
+COMMENT ON COLUMN sch_vacancy_usage.flg_use IS 'Indicates whether or not should vacancies be consumed. Possible VALUES: ''Y'' yes, ''N'' no.';
+COMMENT ON COLUMN sch_vacancy_usage.flg_sch_type IS 'Type of schedule. Possible values: ''A'' analysis, ''E'' exams, ''C'' consults, ''S'' service room.';
+COMMENT ON COLUMN SCH_VACANCY_USAGE.ID_SCH_VACANCY_USAGE IS 'Vacancy usage identifier';
+
+ALTER TABLE SCH_VACANCY_USAGE MODIFY ID_INSTITUTION NUMBER(12);
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 24-05-2008
+-- CHANGE REASON: colunas novas FLG_SCHED_WITHOUT_VAC e FLG_EDIT_VAC
+
+alter table SCH_VACANCY_USAGE add FLG_SCHED_WITHOUT_VAC varchar2(1) default 'N';
+alter table SCH_VACANCY_USAGE add FLG_EDIT_VAC varchar2(1) default 'N';
+
+comment on column SCH_VACANCY_USAGE.FLG_SCHED_WITHOUT_VAC
+  is 'Indicates if it is possible to create schedules without an associated vacancy';
+comment on column SCH_VACANCY_USAGE.FLG_EDIT_VAC
+  is 'Indicates that a schedule’s vacancy (if there is one) can be modified if that same schedule is altered';
+--END
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 26-05-2008
+-- CHANGE REASON: drop da coluna id_sch_vacancy_usage e chave primaria
+alter table SCH_VACANCY_USAGE drop column ID_SCH_VACANCY_USAGE;
+
+--END
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 23-09-2008
+-- CHANGE REASON: igualar datatype a institution.id_institution
+alter table SCH_VACANCY_USAGE modify ID_INSTITUTION NUMBER(24);
+--END
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 09-01-2009
+-- CHANGE REASON: agenda MFR
+
+alter table SCH_VACANCY_USAGE modify FLG_SCH_TYPE VARCHAR2(2);  
+
+--END

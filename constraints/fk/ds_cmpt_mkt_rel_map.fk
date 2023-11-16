@@ -1,0 +1,15 @@
+declare
+	l_Sql varchar2(4000);
+begin
+	l_sql := q'[alter table ds_cmpt_mkt_rel_map add constraint ds_cmpt_map_orig_fk foreign key (id_cmpt_mkt_rel_orig) references ds_cmpt_mkt_rel(id_ds_cmpt_mkt_rel)]';
+	pk_versioning.run( l_sql);
+end;
+/
+
+declare
+	l_Sql varchar2(4000);
+begin
+	l_sql := q'[alter table ds_cmpt_mkt_rel_map add constraint ds_cmpt_map_dest_fk foreign key (id_cmpt_mkt_rel_dest) references ds_cmpt_mkt_rel(id_ds_cmpt_mkt_rel)]';
+	pk_versioning.run( l_sql);
+end;
+/

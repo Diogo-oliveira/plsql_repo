@@ -1,0 +1,283 @@
+CREATE GLOBAL TEMPORARY TABLE TRACKING_BOARD_EA_TMP
+ (
+  ID_EPISODE        NUMBER(24) NOT NULL,
+  ID_PATIENT        NUMBER(24) NOT NULL,
+  ID_EPIS_TYPE      NUMBER(12) NOT NULL,
+  ID_TRIAGE_COLOR   NUMBER(12),
+  ID_FAST_TRACK     NUMBER(24),
+  ID_ROOM           NUMBER(24),
+  ID_BED            NUMBER(24),
+  DT_BEGIN          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_DIET           NUMBER(24),
+  DESC_DIET         VARCHAR2(4000),
+  ID_PROF_RESP      NUMBER(24),
+  ID_NURSE_RESP     NUMBER(24),
+  LAB_COUNT         NUMBER DEFAULT 0 NOT NULL,
+  LAB_PEND          VARCHAR2(240),
+  LAB_REQ           VARCHAR2(240),
+  LAB_HARV          VARCHAR2(240),
+  LAB_TRANSP        VARCHAR2(240),
+  LAB_EXEC          VARCHAR2(240),
+  LAB_RESULT        VARCHAR2(240),
+  LAB_RESULT_READ   VARCHAR2(240),
+  EXAM_COUNT        NUMBER DEFAULT 0 NOT NULL,
+  EXAM_PEND         VARCHAR2(240),
+  EXAM_REQ          VARCHAR2(240),
+  EXAM_TRANSP       VARCHAR2(240),
+  EXAM_EXEC         VARCHAR2(240),
+  EXAM_RESULT       VARCHAR2(240),
+  EXAM_RESULT_READ  VARCHAR2(240),
+  INTERV_COUNT      NUMBER DEFAULT 0 NOT NULL,
+  INTERV_PEND       VARCHAR2(240),
+  INTERV_SOS        VARCHAR2(240),
+  INTERV_REQ        VARCHAR2(240),
+  INTERV_EXEC       VARCHAR2(240),
+  INTERV_FINISH     VARCHAR2(240),
+  MED_COUNT         NUMBER DEFAULT 0 NOT NULL,
+  MED_PEND          VARCHAR2(240),
+  MED_REQ           VARCHAR2(240),
+  MED_EXEC          VARCHAR2(240),
+  MED_FINISH        VARCHAR2(240),
+  MED_SOS           VARCHAR2(240),
+  TRANSP_COUNT      NUMBER DEFAULT 0 NOT NULL,
+  TRANSP_DELAY      VARCHAR2(240),
+  TRANSP_ONGOING    VARCHAR2(240),
+  MONIT_COUNT       NUMBER DEFAULT 0 NOT NULL,
+  MONIT_DELAY       VARCHAR2(240),
+  MONIT_ONGOING     VARCHAR2(240),
+  MONIT_FINISH      VARCHAR2(240),
+  DT_DG_LAST_UPDATE TIMESTAMP(6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
+) ON COMMIT PRESERVE ROWS;
+
+-- Add comments to the table 
+comment on table TRACKING_BOARD_EA_TMP
+  is 'Temporary table for TRACKING_BOARD_EA reconstruction or validation';
+-- Add comments to the columns 
+comment on column TRACKING_BOARD_EA_TMP.ID_EPISODE
+  is 'Episode ID';
+comment on column TRACKING_BOARD_EA_TMP.ID_PATIENT
+  is 'Patient ID';
+comment on column TRACKING_BOARD_EA_TMP.ID_TRIAGE_COLOR
+  is 'Triage Color ID';
+comment on column TRACKING_BOARD_EA_TMP.ID_FAST_TRACK
+  is 'Fast Track ID';
+comment on column TRACKING_BOARD_EA_TMP.ID_ROOM
+  is 'Room ID';
+comment on column TRACKING_BOARD_EA_TMP.ID_BED
+  is 'Bed ID';
+comment on column TRACKING_BOARD_EA_TMP.DT_BEGIN
+  is 'Episode''s begin date';
+comment on column TRACKING_BOARD_EA_TMP.ID_DIET
+  is 'Requested diet ID';
+comment on column TRACKING_BOARD_EA_TMP.DESC_DIET
+  is 'Requested diet description. If ID_DIET is not NULL this field has an associated code_translation. If ID_DIET is NULL then this field has a free-text description';
+comment on column TRACKING_BOARD_EA_TMP.ID_PROF_RESP
+  is 'Responsible physician''s ID';
+comment on column TRACKING_BOARD_EA_TMP.ID_NURSE_RESP
+  is 'Responsible nurse''s ID';
+comment on column TRACKING_BOARD_EA_TMP.LAB_COUNT
+  is 'Number of different statuses of lab tests'' requests';
+comment on column TRACKING_BOARD_EA_TMP.LAB_PEND
+  is 'Status (in a specific format) of the prioritary task of pending lab tests'' requests';
+comment on column TRACKING_BOARD_EA_TMP.LAB_REQ
+  is 'Status (in a specific format) of the prioritary task of requested lab tests'' requests';
+comment on column TRACKING_BOARD_EA_TMP.LAB_HARV
+  is 'Status (in a specific format) of the prioritary task of harvested lab tests'' requests';
+comment on column TRACKING_BOARD_EA_TMP.LAB_TRANSP
+  is 'Status (in a specific format) of the prioritary task of lab tests'' harvests that are in transport';
+comment on column TRACKING_BOARD_EA_TMP.LAB_EXEC
+  is 'Status (in a specific format) of the prioritary task of lab tests'' requests that are being executed';
+comment on column TRACKING_BOARD_EA_TMP.LAB_RESULT
+  is 'Status (in a specific format) of the prioritary task of lab tests'' requests that have unread results';
+comment on column TRACKING_BOARD_EA_TMP.LAB_RESULT_READ
+  is 'Status (in a specific format) of the prioritary task of lab tests'' requests that have read results';
+comment on column TRACKING_BOARD_EA_TMP.EXAM_COUNT
+  is 'Number of different statuses of exams'' requests';
+comment on column TRACKING_BOARD_EA_TMP.EXAM_PEND
+  is 'Status (in a specific format) of the prioritary task of pending exams'' requests';
+comment on column TRACKING_BOARD_EA_TMP.EXAM_REQ
+  is 'Status (in a specific format) of the prioritary task of requested exams'' requests';
+comment on column TRACKING_BOARD_EA_TMP.EXAM_EXEC
+  is 'Status (in a specific format) of the prioritary task of exams'' requests that are being executed';
+comment on column TRACKING_BOARD_EA_TMP.EXAM_RESULT
+  is 'Status (in a specific format) of the prioritary task of exams'' requests that have unread results';
+comment on column TRACKING_BOARD_EA_TMP.EXAM_RESULT_READ
+  is 'Status (in a specific format) of the prioritary task of exams'' requests that have read results';
+comment on column TRACKING_BOARD_EA_TMP.INTERV_COUNT
+  is 'Number of different statuses of interventions and dressings'' requests';
+comment on column TRACKING_BOARD_EA_TMP.INTERV_PEND
+  is 'Status (in a specific format) of the prioritary task of pending interventions and dressings'' requests';
+comment on column TRACKING_BOARD_EA_TMP.INTERV_SOS
+  is 'Status (in a specific format) of the prioritary task of interventions and dressings'' requests with PRN instructions';
+comment on column TRACKING_BOARD_EA_TMP.INTERV_REQ
+  is 'Status (in a specific format) of the prioritary task of requested interventions and dressings'' requests';
+comment on column TRACKING_BOARD_EA_TMP.INTERV_EXEC
+  is 'Status (in a specific format) of the prioritary task of interventions and dressings'' requests that are being executed';
+comment on column TRACKING_BOARD_EA_TMP.INTERV_FINISH
+  is 'Status (in a specific format) of the prioritary task of finished interventions and dressings'' requests';
+comment on column TRACKING_BOARD_EA_TMP.MED_COUNT
+  is 'Number of different statuses of medication''s prescriptions';
+comment on column TRACKING_BOARD_EA_TMP.MED_PEND
+  is 'Status (in a specific format) of the prioritary task of pending medication prescriptions';
+comment on column TRACKING_BOARD_EA_TMP.MED_REQ
+  is 'Status (in a specific format) of the prioritary task of requested medication';
+comment on column TRACKING_BOARD_EA_TMP.MED_EXEC
+  is 'Status (in a specific format) of the prioritary task of undergoing medications';
+comment on column TRACKING_BOARD_EA_TMP.MED_FINISH
+  is 'Status (in a specific format) of the prioritary task of finished medication';
+comment on column TRACKING_BOARD_EA_TMP.MED_SOS
+  is 'Status (in a specific format) of the prioritary task of medication prescriptions with PRN instructions';
+comment on column TRACKING_BOARD_EA_TMP.TRANSP_COUNT
+  is 'Number of different statuses of transportation'' requests';
+comment on column TRACKING_BOARD_EA_TMP.TRANSP_DELAY
+  is 'Status (in a specific format) of the prioritary task of delayed transportation requests';
+comment on column TRACKING_BOARD_EA_TMP.TRANSP_ONGOING
+  is 'Status (in a specific format) of the prioritary task of ongoing transportation requests';
+comment on column TRACKING_BOARD_EA_TMP.MONIT_COUNT
+  is 'Number of different statuses of monitorizations'' requests';
+comment on column TRACKING_BOARD_EA_TMP.MONIT_DELAY
+  is 'Status (in a specific format) of the prioritary task of delayed monitorizations'' requests';
+comment on column TRACKING_BOARD_EA_TMP.MONIT_ONGOING
+  is 'Status (in a specific format) of the prioritary task of ongoing monitorizations'' requests';
+comment on column TRACKING_BOARD_EA_TMP.MONIT_FINISH
+  is 'Status (in a specific format) of the prioritary task of finished monitorizations'' requests';
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/11/2009 18:09
+-- CHANGE REASON: [ALERT-53639] New status missing on Tracking view
+BEGIN
+    --New columns
+    EXECUTE IMMEDIATE 'ALTER TABLE tracking_board_ea_tmp add lab_ext VARCHAR2(240)';
+    EXECUTE IMMEDIATE 'ALTER TABLE tracking_board_ea_tmp add exam_ext VARCHAR2(240)';
+    EXECUTE IMMEDIATE 'ALTER TABLE tracking_board_ea_tmp add exam_perf VARCHAR2(240)';
+    --New columns comments
+    EXECUTE IMMEDIATE 'COMMENT ON column tracking_board_ea_tmp.lab_ext IS ''Status (in a specific format) of the prioritary task of exterior lab tests requests''';
+    EXECUTE IMMEDIATE 'COMMENT ON column tracking_board_ea_tmp.exam_ext IS ''Status (in a specific format) of the prioritary task of exterior exams requests''';
+    EXECUTE IMMEDIATE 'COMMENT ON column tracking_board_ea_tmp.exam_perf IS ''Status (in a specific format) of the prioritary task of performed exams requests''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 07/07/2010 15:50
+-- CHANGE REASON: [ALERT-110074] Order sets - TDE
+ALTER TABLE TRACKING_BOARD_EA_TMPADD (
+ EXAM_WTG VARCHAR2(240 CHAR),
+ LAB_WTG VARCHAR2(240 CHAR));
+
+COMMENT ON COLUMN TRACKING_BOARD_EA_TMP.EXAM_WTG IS 'Status (in a specific format) of the prioritary task of pending exams'' waiting';
+COMMENT ON COLUMN TRACKING_BOARD_EA_TMP.LAB_WTG IS 'Status (in a specific format) of the prioritary task of requested lab tests'' waiting';
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 14/09/2011 15:50
+-- CHANGE REASON: [ALERT-128866] Tasks missing on Tracking view screen
+--                ALERT_189902 - PRN status not available on Tracking view
+--                
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE TRACKING_BOARD_EA_TMP ADD LAB_CC VARCHAR2(240 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE TRACKING_BOARD_EA_TMP ADD LAB_SOS VARCHAR2(240 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE TRACKING_BOARD_EA_TMP ADD EXAM_SOS VARCHAR2(240 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRACKING_BOARD_EA_TMP.LAB_CC IS ''Status (in a specific format) of the prioritary task of Specimen collection in progress lab tests''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRACKING_BOARD_EA_TMP.LAB_SOS IS ''Status (in a specific format) of the prioritary task of PRN lab tests''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRACKING_BOARD_EA_TMP.EXAM_SOS IS ''Status (in a specific format) of the prioritary task of PRN exams requests''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 18/03/2015 10:06
+-- CHANGE REASON: [ALERT-309049] [STABLE] EDIS patient grids changes
+--                
+-- Add/modify columns 
+BEGIN
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA_TMP add oth_exam_count number default 0]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA_TMP add oth_exam_pend VARCHAR2(240)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA_TMP add oth_exam_req VARCHAR2(240)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA_TMP add oth_exam_transp VARCHAR2(240)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA_TMP add oth_exam_exec VARCHAR2(240)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA_TMP add oth_exam_result VARCHAR2(240)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA_TMP add oth_exam_result_read VARCHAR2(240)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA_TMP add oth_exam_ext VARCHAR2(240)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA_TMP add oth_exam_perf VARCHAR2(240)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA_TMP add oth_exam_wtg VARCHAR2(240)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA_TMP add oth_exam_sos VARCHAR2(240 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA_TMP add opinion_count number default 0]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA_TMP add opinion_state VARCHAR2(4000)]');
+
+END;
+/
+-- Add comments to the columns 
+comment on column TRACKING_BOARD_EA_TMP.oth_exam_count
+  is 'Number of different statuses of other exams'' requests';
+comment on column TRACKING_BOARD_EA_TMP.oth_exam_pend
+  is 'Status (in a specific format) of the prioritary task of pending other exams'' requests';
+comment on column TRACKING_BOARD_EA_TMP.oth_exam_req
+  is 'Status (in a specific format) of the prioritary task of requested other exams'' requests';
+comment on column TRACKING_BOARD_EA_TMP.oth_exam_transp
+  is 'Status (in a specific format) of the prioritary task of other exams'' requests that are in transport';
+comment on column TRACKING_BOARD_EA_TMP.oth_exam_exec
+  is 'Status (in a specific format) of the prioritary task of other exams'' requests that are being executed';
+comment on column TRACKING_BOARD_EA_TMP.oth_exam_result
+  is 'Status (in a specific format) of the prioritary task of other exams'' requests that have unread results';
+comment on column TRACKING_BOARD_EA_TMP.oth_exam_result_read
+  is 'Status (in a specific format) of the prioritary task of other exams'' requests that have read results';
+comment on column TRACKING_BOARD_EA_TMP.oth_exam_ext
+  is 'Status (in a specific format) of the prioritary task of exterior other exams requests';
+comment on column TRACKING_BOARD_EA_TMP.oth_exam_perf
+  is 'Status (in a specific format) of the prioritary task of performed other exams requests';
+comment on column TRACKING_BOARD_EA_TMP.oth_exam_wtg
+  is 'Status (in a specific format) of the prioritary task of pending other exams'' waiting';
+comment on column TRACKING_BOARD_EA_TMP.oth_exam_sos
+  is 'Status (in a specific format) of the prioritary task of PRN oth exams requests';
+comment on column TRACKING_BOARD_EA_TMP.exam_count
+  is 'Number of different statuses of image exams'' requests';
+comment on column TRACKING_BOARD_EA_TMP.exam_pend
+  is 'Status (in a specific format) of the prioritary task of pending image exams'' requests';
+comment on column TRACKING_BOARD_EA_TMP.exam_req
+  is 'Status (in a specific format) of the prioritary task of requested image exams'' requests';
+comment on column TRACKING_BOARD_EA_TMP.exam_transp
+  is 'Status (in a specific format) of the prioritary task of  image exams'' requests that are in transport';
+comment on column TRACKING_BOARD_EA_TMP.exam_exec
+  is 'Status (in a specific format) of the prioritary task of  image exams'' requests that are being executed';
+comment on column TRACKING_BOARD_EA_TMP.exam_result
+  is 'Status (in a specific format) of the prioritary task of  image exams'' requests that have unread results';
+comment on column TRACKING_BOARD_EA_TMP.exam_result_read
+  is 'Status (in a specific format) of the prioritary task of  image exams'' requests that have read results';
+comment on column TRACKING_BOARD_EA_TMP.exam_ext
+  is 'Status (in a specific format) of the prioritary task of exterior  image exams requests';
+comment on column TRACKING_BOARD_EA_TMP.exam_perf
+  is 'Status (in a specific format) of the prioritary task of performed image exams requests';
+comment on column TRACKING_BOARD_EA_TMP.exam_wtg
+  is 'Status (in a specific format) of the prioritary task of pending image exams'' waiting';
+comment on column TRACKING_BOARD_EA_TMP.exam_sos
+  is 'Status (in a specific format) of the prioritary task of PRN image exams requests';
+comment on column TRACKING_BOARD_EA_TMP.opinion_count
+  is 'Number of Consultation Requests';
+comment on column TRACKING_BOARD_EA_TMP.opinion_state
+  is 'Status (in a specific format) of the consultation request (only if exists one)';
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,24 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 06/06/2011 15:39
+-- CHANGE REASON: [ALERT-183699 ] Error when editing the H&P and trying to import assessment tool results
+drop index EPDT_UK;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 06/06/2011 15:46
+-- CHANGE REASON: [ALERT-183699 ] Error when editing the H&P and trying to import assessment tool results
+DECLARE    
+    e_index_not_exists EXCEPTION;
+   
+    PRAGMA EXCEPTION_INIT(e_index_not_exists, -01418); -- index    
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'drop index EPDT_UK';
+    EXCEPTION
+        WHEN e_index_not_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+  
+END;
+/
+-- CHANGE END: Sofia Mendes

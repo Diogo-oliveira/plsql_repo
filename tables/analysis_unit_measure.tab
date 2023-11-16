@@ -1,0 +1,133 @@
+  CREATE TABLE ANALYSIS_UNIT_MEASURE
+   (	ID_ANALYSIS_UNIT_MEASURE NUMBER(12,0) NOT NULL ENABLE,
+	ID_ANALYSIS NUMBER(12,0) NOT NULL ENABLE,
+	ID_UNIT_MEASURE NUMBER(12,0) NOT NULL ENABLE,
+	VAL_MIN NUMBER(6,0),
+	VAL_MAX NUMBER(6,0),
+	FORMAT_NUM VARCHAR2(20),
+	DECIMALS NUMBER(2,0),
+	ID_INSTITUTION NUMBER(12,0),
+	ID_SOFTWARE NUMBER(12,0),
+	ADW_LAST_UPDATE DATE
+   );
+
+
+
+COMMENT ON COLUMN analysis_unit_measure.id_analysis_unit_measure IS 'Chave primária' ;
+COMMENT ON COLUMN analysis_unit_measure.id_analysis IS 'ID da análise a que se refere' ;
+COMMENT ON COLUMN analysis_unit_measure.id_unit_measure IS 'Unidade de medida' ;
+COMMENT ON COLUMN analysis_unit_measure.val_min IS 'Valor mínimo' ;
+COMMENT ON COLUMN analysis_unit_measure.val_max IS 'Valor máximo' ;
+COMMENT ON COLUMN analysis_unit_measure.format_num IS 'Formato do valor a introduzir' ;
+COMMENT ON COLUMN analysis_unit_measure.decimals IS 'Nº de casas decimais' ;
+COMMENT ON COLUMN analysis_unit_measure.id_institution IS 'ID da instituição' ;
+COMMENT ON COLUMN analysis_unit_measure.id_software IS 'ID do software' ;
+
+
+ALTER TABLE ANALYSIS_UNIT_MEASURE 
+ ADD (ID_PARAMETER_ANALYSIS  NUMBER(12)
+ ,FLG_DEFAULT  VARCHAR2(1));
+
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.(ID_PARAMETER_ANALYSIS IS 'ID do parâmetro';
+
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.FLG_DEFAULT IS 'Flag que indica qual das unidades de medida aparece por defeito para o parâmetro. Y / N';
+
+
+ALTER TABLE ANALYSIS_UNIT_MEASURE 
+ MODIFY (ID_ANALYSIS  NUMBER(12) NULL
+ );
+
+ -- Add/modify columns 
+alter table ANALYSIS_UNIT_MEASURE add ID_ANALYSIS_PARAMETER NUMBER(24);
+-- Add comments to the columns 
+comment on column ANALYSIS_UNIT_MEASURE.ID_ANALYSIS_PARAMETER
+  is 'Parâmetro';
+  
+-- CHANGED BY: José Castro
+-- CHANGE DATE: 26/08/2010 15:22
+-- CHANGE REASON: ALERT-120072
+alter table analysis_unit_measure modify val_min NUMBER(24,3);
+alter table analysis_unit_measure modify val_max NUMBER(24,3);
+-- CHANGE END: José Castro
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 23/05/2011 09:42
+-- CHANGE REASON: [ALERT-180812] 
+alter table analysis_unit_measure modify (ID_UNIT_MEASURE null);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 01/09/2011 17:25
+-- CHANGE REASON: [ALERT-193514] 
+ALTER TABLE analysis_unit_measure add val_min_str VARCHAR2(30 CHAR);
+ALTER TABLE analysis_unit_measure add val_max_str VARCHAR2(30 CHAR);
+
+ 
+COMMENT ON column analysis_unit_measure.val_min_str IS 'Valor de referência mínimo (string)';
+COMMENT ON column analysis_unit_measure.val_max_str IS 'Valor de referência máximo (string)';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 14:57
+-- CHANGE REASON: [ALERT-246252] 
+ALTER TABLE analysis_unit_measure MODIFY (ID_SAMPLE_TYPE NUMBER(12) NOT NULL);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:11
+-- CHANGE REASON: [ALERT-246248] 
+ALTER TABLE ANALYSIS_UNIT_MEASURE ADD (ID_SAMPLE_TYPE NUMBER(12));
+
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.ID_SAMPLE_TYPE IS 'Sample type id';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:01
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS_UNIT_MEASURE IS 'Lab tests unit measure configuration';
+
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.ID_ANALYSIS_UNIT_MEASURE IS 'Primary key';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.ID_ANALYSIS IS 'Lab test ID';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.ID_UNIT_MEASURE IS 'Unit measure ID';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.VAL_MIN IS 'Minimum value';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.VAL_MAX IS 'Maximum value';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.FORMAT_NUM IS 'Number format';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.DECIMALS IS 'Decimals';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.ID_SOFTWARE IS 'Software ID';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.ADW_LAST_UPDATE IS 'Update date';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.FLG_DEFAULT IS 'Flag that indicates if the record is default or not (Y/N)';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.ID_ANALYSIS_PARAMETER IS 'Lab test parameter ID';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.VAL_MIN_STR IS 'Minimum reference value (string)';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.VAL_MAX_STR IS 'Maximum reference value (string)';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.ID_SAMPLE_TYPE IS 'Sample type ID';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.ID_SAMPLE_TYPE IS 'Sample type ID';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/04/2018 14:03
+-- CHANGE REASON: [EMR-2752] 
+ALTER TABLE analysis_unit_measure ADD gender VARCHAR2(1 CHAR);
+ALTER TABLE analysis_unit_measure ADD age_min NUMBER(3);
+ALTER TABLE analysis_unit_measure ADD age_max NUMBER(3);
+ALTER TABLE analysis_unit_measure ADD id_sample_text NUMBER(24);
+ 
+COMMENT ON COLUMN analysis_unit_measure.gender IS 'Gender';
+COMMENT ON COLUMN analysis_unit_measure.age_min IS 'Minimum age';
+COMMENT ON COLUMN analysis_unit_measure.age_max IS 'Maximum age';
+COMMENT ON COLUMN analysis_unit_measure.id_sample_text IS 'Sample text id';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 28/09/2018 16:28
+-- CHANGE REASON: [EMR-7045] 
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.VAL_MIN IS 'Minimum value for input';
+COMMENT ON COLUMN ANALYSIS_UNIT_MEASURE.VAL_MAX IS 'Maximum value for input';
+-- CHANGE END: Ana Matos

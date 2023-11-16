@@ -1,0 +1,17 @@
+  ALTER TABLE GUIDELINE_CONTEXT_IMAGE ADD CONSTRAINT GCE_PK PRIMARY KEY (ID_GUIDELINE_CONTEXT_IMAGE) ENABLE;
+
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 28/03/2011 09:23
+-- CHANGE REASON: [ALERT-168339] Insert constraints for flag_status columns defined in sys_domain
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -02264); -- name already used by an existing constraint
+BEGIN
+    EXECUTE IMMEDIATE 'alter table GUIDELINE_CONTEXT_IMAGE add constraint GCE_FLG_STATUS_CHK check (FLG_STATUS in (''A'', ''I''))';
+EXCEPTION
+    WHEN e_already_exists THEN
+        NULL;
+END;
+/
+-- CHANGE END: Carlos Loureiro

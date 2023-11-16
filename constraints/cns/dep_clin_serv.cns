@@ -1,0 +1,136 @@
+
+
+  ALTER TABLE DEP_CLIN_SERV ADD CONSTRAINT DCS_PK PRIMARY KEY (ID_DEP_CLIN_SERV) ENABLE;
+
+  ALTER TABLE DEP_CLIN_SERV MODIFY (ID_DEP_CLIN_SERV NOT NULL ENABLE);
+
+  ALTER TABLE DEP_CLIN_SERV MODIFY (ID_CLINICAL_SERVICE NOT NULL ENABLE);
+
+  ALTER TABLE DEP_CLIN_SERV MODIFY (ID_DEPARTMENT NOT NULL ENABLE);
+
+  ALTER TABLE DEP_CLIN_SERV MODIFY (RANK NOT NULL ENABLE);
+
+  ALTER TABLE DEP_CLIN_SERV MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+
+
+-- CHANGED BY: Ana Rita Martins
+-- CHANGED DATE: 2009-09-23
+-- CHANGE REASON: CODING-863 
+-- Add/modify columns 
+
+alter table DEP_CLIN_SERV
+  add constraint DCS_FLG_COD_CHK
+  check (FLG_CODING in ('CD', 'N'));
+
+-- CHANGE END: Ana Rita Martins
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 14/04/2010 15:39
+-- CHANGE REASON: [ALERT-88921] 
+ALTER TABLE dep_clin_serv ADD CONSTRAINT DCS_UK UNIQUE (id_department, id_clinical_service, flg_available) DEFERRABLE INITIALLY DEFERRED NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:31
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table DEP_CLIN_SERV add constraint DCS_FLG_TYPE_CHK check ( ( FLG_TYPE in (''D'',''I'')))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:32
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table DEP_CLIN_SERV add constraint DCS_FLG_AVAILABLE_CHK check ( ( FLG_AVAILABLE in (''N'',''Y'')))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:32
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table DEP_CLIN_SERV add constraint DCS_FLG_DEFAULT_CHK check ( FLG_DEFAULT in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:33
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table DEP_CLIN_SERV add constraint DCS_FLG_NURSE_PRE_CHK check ( FLG_NURSE_PRE in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/12/2012 16:00
+-- CHANGE REASON: [ALERT-243533] validation uk idx
+DECLARE
+    e_non_existant EXCEPTION;    
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); 
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table dep_clin_serv drop constraint DCS_UK drop index';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('UK not existing');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE:
+-- CHANGE REASON: ALERT-332197 
+ALTER TABLE DEP_CLIN_SERV ADD CONSTRAINT GENDER_DCS_CHK CHECK (GENDER IN ('I', 'U',  'N', 'F', 'M'));
+-- CHANGE END: Pedro Henriques

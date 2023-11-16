@@ -1,0 +1,33 @@
+
+
+  CREATE TABLE TRANSLATION
+   (	ID_TRANSLATION NUMBER(24,0) NOT NULL ENABLE,
+	ID_LANGUAGE NUMBER(6,0) NOT NULL ENABLE,
+	CODE_TRANSLATION VARCHAR2(200) NOT NULL ENABLE,
+	DESC_TRANSLATION VARCHAR2(4000),
+	ADW_LAST_UPDATE DATE
+   );
+
+
+COMMENT ON TABLE translation IS 'Traduções dos descritivos das tabelas' ;
+
+
+ALTER TABLE TRANSLATION ADD MODULE VARCHAR2(30);
+COMMENT ON COLUMN TRANSLATION.MODULE IS 'Campo para filtrar Módulo ( ADT, ORIS, etc )' ;
+
+
+-- cmf 18-12-2012
+ALTER TABLE ALERT.TRANSLATION RENAME TO ALERT.TRANSLATION_MIG_BCK;
+
+-- cmf 28-12-2012
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'ALTER TABLE ALERT.TRANSLATION RENAME TO TRANSLATION_MIG_BCK';
+execute immediate l_sql;
+
+exception
+when others then 
+	dbms_output.put_line( 'Evento ('||sqlcode||'), resuming execution...');
+end;
+/

@@ -1,0 +1,1 @@
+create or replace type t_tbl_report_dir_info as table of t_rec_report_dir_info;

@@ -1,0 +1,213 @@
+
+
+  CREATE TABLE PROFILE_TEMPL_ACCESS
+   (	ID_PROFILE_TEMPL_ACCESS NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFILE_TEMPLATE NUMBER(12,0) NOT NULL ENABLE,
+	RANK NUMBER(6,0),
+	ID_SYS_BUTTON_PROP NUMBER(24,0) NOT NULL ENABLE,
+	FLG_CREATE VARCHAR2(1),
+	FLG_CANCEL VARCHAR2(1),
+	FLG_SEARCH VARCHAR2(1),
+	FLG_PRINT VARCHAR2(1),
+	FLG_OK VARCHAR2(1),
+	FLG_DETAIL VARCHAR2(1),
+	FLG_CONTENT VARCHAR2(1),
+
+	FLG_HELP VARCHAR2(1),
+	ID_SYS_SHORTCUT NUMBER(24,0),
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	ID_SHORTCUT_PK NUMBER(24,0),
+	ID_SOFTWARE_CONTEXT NUMBER(24,0) NOT NULL ENABLE,
+	FLG_GRAPH VARCHAR2(1),
+	FLG_VISION VARCHAR2(1),
+	FLG_DIGITAL VARCHAR2(240),
+	FLG_FREQ VARCHAR2(1),
+	FLG_NO VARCHAR2(240)
+   );
+
+
+COMMENT ON TABLE profile_templ_access IS 'Acessos dos templates aos botões.As flags não são preenchidas para os botões com deepnavs.' ;
+
+COMMENT ON COLUMN profile_templ_access.flg_cancel IS 'Cancelamento: N - não aplicável, I - inactivo, A - activo' ;
+COMMENT ON COLUMN profile_templ_access.flg_search IS 'Pesquisa: N - não aplicável, I - inactivo, A - activo' ;
+COMMENT ON COLUMN profile_templ_access.flg_print IS 'Impressão: N - não aplicável, I - inactivo, A - activo' ;
+COMMENT ON COLUMN profile_templ_access.flg_ok IS 'Avançar: N - não aplicável, I - inactivo, A - activo' ;
+COMMENT ON COLUMN profile_templ_access.flg_detail IS 'Detalhe: N - não aplicável, I - inactivo, A - activo' ;
+COMMENT ON COLUMN profile_templ_access.flg_content IS 'Conteúdo: N - não aplicável, I - inactivo, A - activo' ;
+COMMENT ON COLUMN profile_templ_access.flg_help IS 'Ajuda: N - não aplicável, I - inactivo, A - activo' ;
+COMMENT ON COLUMN profile_templ_access.id_software_context IS 'Quando se acede numa aplicação (ex:OUTP) a funcionalidades de outra (ex: ORIS), a coluna ID_SOFTWARE deve ser preenchida com a aplicação acedida (ex:OUTP), mas ID_SOFTWARE_CONTEXT é preenchida com o ID da outra aplicação (ex: ORIS)' ;
+COMMENT ON COLUMN profile_templ_access.flg_graph IS 'Ajuda: N - não aplicável, I - inactivo, A - activo' ;
+COMMENT ON COLUMN profile_templ_access.flg_vision IS 'Ajuda: N - não aplicável, I - inactivo, A - activo' ;
+COMMENT ON COLUMN profile_templ_access.flg_digital IS 'Ajuda: N - não aplicável, I - inactivo, A - activo' ;
+COMMENT ON COLUMN profile_templ_access.flg_freq IS 'Ajuda: N - não aplicável, I - inactivo, A - activo' ;
+COMMENT ON COLUMN profile_templ_access.flg_no IS 'Ajuda: N - não aplicável, I - inactivo, A - activo' ;
+
+COMMENT ON COLUMN profile_templ_access.rank IS 'Ordem de apresentação' ;
+COMMENT ON COLUMN profile_templ_access.flg_create IS 'Criação: N - não aplicável, I - inactivo, A - activo' ;
+
+alter table profile_templ_access add position number(3);
+
+alter table profile_templ_access add toolbar_level number(2);
+
+COMMENT ON COLUMN profile_templ_access.position      IS 'Posição que o botão ocupa na toolbar superior' ;
+COMMENT ON COLUMN profile_templ_access.toolbar_level IS 'Nível em que que está incluído o botão (toolbar superior)' ;
+
+
+
+alter table profile_templ_access 
+add (FLG_ACTION VARCHAR2(1));
+
+COMMENT ON COLUMN PROFILE_TEMPL_ACCESS.FLG_ACTION IS 'Acções: N - não aplicável, I - inactivo, A - activo';
+
+
+alter table profile_templ_access 
+add (FLG_VIEW VARCHAR2(1));
+
+COMMENT ON COLUMN PROFILE_TEMPL_ACCESS.FLG_VIEW IS 'Views: N - not applicable, I - inactive, A - active';
+
+-- JSILVA 27-03-2009
+ALTER TABLE profile_templ_access ADD flg_add_remove VARCHAR2(1) DEFAULT 'A';
+COMMENT ON COLUMN profile_templ_access.flg_add_remove IS 'Access type: A - add access, R - remove access';
+-- END
+
+
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 26/09/2012 08:57
+-- CHANGE REASON: [ARCHDB-1217] 
+ALTER TABLE profile_templ_access add flg_global_shortcut VARCHAR2(1 CHAR) DEFAULT 'A';
+
+comment on column profile_templ_access.flg_global_shortcut is 'Global shortcut flag';
+-- CHANGE END: Rui Spratley
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 14/02/2014 10:16
+-- CHANGE REASON: [ALERT-276435] 
+begin
+  pk_versioning.run('alter table profile_templ_access add flg_info_button varchar2(1) default ''N'' not null');
+end;
+/
+
+begin
+  pk_versioning.run('comment on column profile_templ_access.flg_info_button is ''Views: N - not applicable, I - inactive, A - active''');
+end;
+/
+-- CHANGE END: Rui Spratley
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 17/02/2014 10:50
+-- CHANGE REASON: [ALERT-276435] 
+begin
+  pk_versioning.run('alter table profile_templ_access add flg_info_button varchar2(1 char) default ''N'' not null');
+end;
+/
+
+begin
+  pk_versioning.run('comment on column profile_templ_access.flg_info_button is ''Info button: N - not applicable, I - inactive, A - active''');
+end;
+/
+-- CHANGE END: Rui Spratley
+
+-- CMF 07-01-2016
+COMMENT ON TABLE  ALERT.profile_templ_access IS 'buttons access per profile_template. flags are not to be filled for deepnav buttons.' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.flg_cancel  		 IS 'Cancel: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.flg_search  		 IS 'Search: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.flg_print   		 IS 'Print: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.flg_ok      		 IS 'Procede: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.flg_detail  		 IS 'Detalhe: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.flg_content 		 IS 'Conteúdo: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.flg_help    		 IS 'Ajuda: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.id_software_context IS 'Quando se acede numa aplicação (ex:OUTP) a funcionalidades de outra (ex: ORIS), a coluna ID_SOFTWARE deve ser preenchida com a aplicação acedida (ex:OUTP), mas ID_SOFTWARE_CONTEXT é preenchida com o ID da outra aplicação (ex: ORIS)' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.flg_graph           IS 'Graph: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.flg_vision          IS 'Vision: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.flg_digital         IS 'Digital: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.flg_freq            IS 'Most Frequent: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.flg_no              IS 'No ( Triage ): N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.rank				 IS 'Ordering value' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.flg_create 		 IS 'Create: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.position            IS 'Position of button on upper toolbar' ;
+COMMENT ON COLUMN ALERT.profile_templ_access.toolbar_level       IS 'Level where button is included on upper toolbar' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_ACTION          IS 'Actions: N - not applicable, I - inactive, A - active';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_VIEW            IS 'Views: N - not applicable, I - inactive, A - active';
+COMMENT ON COLUMN ALERT.profile_templ_access.flg_add_remove      IS 'Access type: A - add access, R - remove access';
+comment on column ALERT.profile_templ_access.flg_global_shortcut is 'Global shortcut flag';
+comment on column ALERT.profile_templ_access.flg_info_button     is 'Info button: N - not applicable, I - inactive, A - active';
+
+
+-- cmf 07-01-2016
+COMMENT ON TABLE  ALERT.PROFILE_TEMPL_ACCESS            IS 'buttons access per profile_template. flags are not to be filled for deepnav buttons.' ;
+comment on column ALERT.PROFILE_TEMPL_ACCESS.ID_PROFILE_TEMPLATE  is 'ID of template';
+comment on column ALERT.PROFILE_TEMPL_ACCESS.ID_SYS_BUTTON_PROP   is 'ID of menu/Deepnav';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_CREATE 		  IS 'Create: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_CANCEL  		  IS 'Cancel: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_SEARCH  		  IS 'Search: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_PRINT   		  IS 'Print: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_OK      		  IS 'OK: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_DETAIL  		  IS 'Detail: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_CONTENT 		  IS 'Content: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_HELP    		  IS 'Help: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.ID_SOFTWARE_CONTEXT  IS 'when you start a functionality originating from one app to another, the column ID_SOFTWARE must be filled with the origin software, but the ID_SOFTWARE_CONTEXT is filled with the destination software' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_GRAPH           IS 'Graph: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_VISION          IS 'Vision: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_DIGITAL         IS 'Digital: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_FREQ            IS 'Most Frequent: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_NO              IS 'No ( Triage ): N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.RANK				 IS 'Ordering value' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.POSITION            IS 'Position of button on upper toolbar' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.TOOLBAR_LEVEL       IS 'Level where button is included on upper toolbar' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_ACTION          IS 'Actions: N - not applicable, I - inactive, A - active';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_VIEW            IS 'Views: N - not applicable, I - inactive, A - active';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS.FLG_ADD_REMOVE      IS 'Access type: A - add access, R - remove access';
+comment on column ALERT.PROFILE_TEMPL_ACCESS.FLG_GLOBAL_SHORTCUT is 'Global shortcut flag';
+comment on column ALERT.PROFILE_TEMPL_ACCESS.FLG_INFO_BUTTON     is 'Info button: N - not applicable, I - inactive, A - active';
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := 'alter table profile_templ_access add AGE_MIN number(3)';
+	pk_versioning.run( l_sql );
+end;
+
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := 'alter table profile_templ_access add GENDER  varchar2(2 char)';
+	pk_versioning.run( l_sql );
+end;
+/
+
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := 'alter table profile_templ_access add id_epis_type  number(24)';
+	pk_versioning.run( l_sql );
+end;
+/
+	
+
+begin
+	pk_versioning.run('alter table profile_templ_access drop column flg_info_button');
+end;
+/
+begin
+	pk_versioning.run('alter table profile_templ_access drop column flg_vision');
+end;
+/
+begin
+	pk_versioning.run('alter table profile_templ_access drop column flg_graph');
+end;
+/
+begin
+	pk_versioning.run('alter table profile_templ_access drop column flg_digital');
+end;
+/
+
+declare
+         l_sql varchar2(4000);
+begin
+         l_sql := q'[alter table alert.profile_templ_access add age_max number(3)]';
+         pk_versioning.run(l_sql);
+end;
+/

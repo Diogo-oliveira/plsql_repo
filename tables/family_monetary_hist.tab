@@ -1,0 +1,105 @@
+
+create table FAMILY_MONETARY_HIST
+(
+  ID_FAMILY_MONETARY_HIST NUMBER(24) not null,
+  ID_PAT_FAMILY           NUMBER(24) not null,
+  ALLOWANCE_FAMILY        NUMBER(7,3),
+  ALLOWANCE_COMPLEMENTARY NUMBER(7,3),
+  OTHER                   NUMBER(7,3),
+  SUBSIDY                 NUMBER(7,3),
+  FIXED_EXPENSES          NUMBER(7,3),
+  NOTES                   VARCHAR2(4000),
+  ID_PROFESSIONAL         NUMBER(24),
+  DT_REGISTRY_TSTZ        TIMESTAMP(6) WITH LOCAL TIME ZONE
+);
+
+-- Add comments to the table 
+comment on table FAMILY_MONETARY_HIST
+  is 'Histórico da situação financeira';
+-- Add comments to the columns 
+comment on column FAMILY_MONETARY_HIST.ID_FAMILY_MONETARY_HIST
+  is 'Primary key';
+comment on column FAMILY_MONETARY_HIST.ID_PAT_FAMILY
+  is 'Family ID';
+comment on column FAMILY_MONETARY_HIST.ALLOWANCE_FAMILY
+  is 'Abono de família';
+comment on column FAMILY_MONETARY_HIST.ALLOWANCE_COMPLEMENTARY
+  is 'Abonos complementares';
+comment on column FAMILY_MONETARY_HIST.SUBSIDY
+  is 'Subsídios';
+comment on column FAMILY_MONETARY_HIST.FIXED_EXPENSES
+  is 'Despesas fixas';
+comment on column FAMILY_MONETARY_HIST.ID_PROFESSIONAL
+  is 'Profissional que regista';
+comment on column FAMILY_MONETARY_HIST.DT_REGISTRY_TSTZ
+  is 'Data de registo';
+  
+  
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 23/03/2010 10:12
+-- CHANGE REASON: [ALERT-69945] 
+ALTER TABLE FAMILY_MONETARY_HIST ADD (FLG_STATUS VARCHAR2(1 CHAR));
+comment on column FAMILY_MONETARY_HIST.FLG_STATUS
+  is 'Flag status - values: A - active, C - canceled, E - edited';
+
+ALTER TABLE FAMILY_MONETARY_HIST ADD (DT_FAMILY_MONETARY_HIST TIMESTAMP(6) WITH LOCAL TIME ZONE );
+comment on column FAMILY_MONETARY_HIST.DT_FAMILY_MONETARY_HIST
+  is 'History creation date';
+
+ALTER TABLE FAMILY_MONETARY_HIST ADD (ID_CANCEL_INFO_DET NUMBER(24));
+comment on column FAMILY_MONETARY_HIST.ID_CANCEL_INFO_DET
+  is 'Cancel information details.';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 03/12/2010 10:47
+-- CHANGE REASON: [ALERT-146608] precision increased
+alter table family_monetary_hist modify
+(
+  allowance_family        number(16,5),
+  allowance_complementary number(16,5),
+  other                   number(16,5),
+  subsidy                 number(16,5),
+  fixed_expenses          number(16,5)
+)
+;
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:50
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+comment on table FAMILY_MONETARY_HIST
+  is 'Household financial situation ';
+comment on column FAMILY_MONETARY_HIST.id_pat_family
+  is 'Patient family ID';
+comment on column FAMILY_MONETARY_HIST.allowance_family
+  is 'Child benefit';
+comment on column FAMILY_MONETARY_HIST.allowance_complementary
+  is 'Other benefits';
+comment on column FAMILY_MONETARY_HIST.other
+  is 'Welfare benefits';
+comment on column FAMILY_MONETARY_HIST.subsidy
+  is 'Other income';
+comment on column FAMILY_MONETARY_HIST.fixed_expenses
+  is 'Total family fixed expenses';
+comment on column FAMILY_MONETARY_HIST.notes
+  is 'Notes';
+comment on column FAMILY_MONETARY_HIST.flg_available
+  is 'Availability (Y/N)';
+comment on column FAMILY_MONETARY_HIST.id_professional
+  is 'Professional ID';
+comment on column FAMILY_MONETARY_HIST.dt_registry_tstz
+  is 'Registry date';
+comment on column FAMILY_MONETARY_HIST.id_currency_allow_family
+  is 'Child benefit currency ID';
+comment on column FAMILY_MONETARY_HIST.id_currency_allow_comp
+  is 'Other benefits currency ID';
+comment on column FAMILY_MONETARY_HIST.id_currency_other
+  is 'Welfare benefits currency ID';
+comment on column FAMILY_MONETARY_HIST.id_currency_subsidy
+  is 'Other income currency ID';
+comment on column FAMILY_MONETARY_HIST.id_currency_fixed_exp
+  is 'Total family fixed expenses currency ID';    
+-- CHANGE END: Elisabete Bugalho

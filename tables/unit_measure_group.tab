@@ -1,0 +1,49 @@
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-JUN-29
+-- CHANGED REASON: ALERT-12013 - Keypad's with unit of measures on Touch-option templates
+create table UNIT_MEASURE_GROUP
+(
+  ID_UNIT_MEASURE_SUBTYPE NUMBER(24) NOT NULL,
+  ID_UNIT_MEASURE_TYPE    NUMBER(24) NOT NULL,
+  ID_UNIT_MEASURE         NUMBER(24) NOT NULL,
+  ID_CONTENT              VARCHAR2(200),
+  CREATE_USER             VARCHAR2(24),
+  CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION      NUMBER(24),
+  UPDATE_USER             VARCHAR2(24),
+  UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION      NUMBER(24)
+);
+comment on table UNIT_MEASURE_GROUP is 'Subsets of units of measures (UOM) defined as a subtype';
+comment on column unit_measure_group.id_unit_measure_subtype is 'Subtype ID';
+comment on column unit_measure_group.id_unit_measure_type is 'Type ID';
+comment on column unit_measure_group.id_unit_measure is 'UOM ID';
+comment on column unit_measure_group.id_content is 'Content ID';
+comment on column unit_measure_group.create_user is 'Creation User';
+comment on column unit_measure_group.create_time is 'Creation Time';
+comment on column unit_measure_group.create_institution is 'Creation Institution';
+comment on column unit_measure_group.update_user is 'Update User';
+comment on column unit_measure_group.update_time is 'Update Time';
+comment on column unit_measure_group.update_institution is 'Update Institution';
+-- CHANGE END: Ariel Geraldo Machado
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 19/02/2010 11:03
+-- CHANGE REASON: [ALERT-75562] Developments on Partogram templates
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE unit_measure_group ADD id_market NUMBER(24) DEFAULT 0';
+EXCEPTION
+WHEN OTHERS THEN
+  NULL;
+END;
+/
+
+COMMENT ON COLUMN unit_measure_group.id_market IS 'Market configuration (0 for all markets).';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 19/08/2010 12:31
+-- CHANGE REASON: [ALERT-117515] 
+alter table UNIT_MEASURE_GROUP add rank number(6) default 0 not null;
+comment on column UNIT_MEASURE_GROUP.rank is 'Unit measure rank on the subtype';
+-- CHANGE END: Tiago Silva

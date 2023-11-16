@@ -1,0 +1,31 @@
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'CAT_FORMACION', i_obj_type => 'TABLE', i_flg_category => 'CNT',
+                                             i_flg_alert_default => 'N', i_delete_script => NULL, i_flg_default_child => 'N',
+                                             i_responsible_team => 'CONTENT');
+END;
+/
+
+-- Create table
+create table CAT_FORMACION
+(
+  catalog_key         NUMBER,
+  formacion_academica VARCHAR2(255),
+  agrupacion          VARCHAR2(255),
+  grado               NUMBER,
+  id_alert            VARCHAR2(200),
+  flg_available       VARCHAR2(10) default 'Y'
+)
+tablespace ALERT_DATA
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, delete on CAT_FORMACION to ALERT_APEX_TOOLS;
+grant select, insert, update, delete on CAT_FORMACION to ALERT_CONFIG;

@@ -1,0 +1,40 @@
+BEGIN
+	EXECUTE IMMEDIATE 'alter table ANNOUNCED_ARRIVAL
+					   add constraint ANN_ARR_PRE_HOSP_ACC_FK foreign key (ID_PRE_HOSP_ACCIDENT)
+					   references PRE_HOSP_ACCIDENT(ID_PRE_HOSP_ACCIDENT)';
+
+	EXECUTE IMMEDIATE 'alter table ANNOUNCED_ARRIVAL
+					   add constraint ANN_ARR_EPI_FK foreign key (ID_EPISODE)
+					   references EPISODE(ID_EPISODE)';
+	
+	EXECUTE IMMEDIATE 'alter table ANNOUNCED_ARRIVAL
+					   add constraint ANN_ARR_SPEC_FK foreign key (ID_SPECIALITY)
+					   references SPECIALITY(ID_SPECIALITY)';
+
+	EXECUTE IMMEDIATE 'alter table ANNOUNCED_ARRIVAL
+					   add constraint ANN_ARR_CLN_SRV_FK foreign key (ID_CLINICAL_SERVICE)
+					   references CLINICAL_SERVICE(ID_CLINICAL_SERVICE)';
+
+	EXECUTE IMMEDIATE 'alter table ANNOUNCED_ARRIVAL
+					   add constraint ANN_ARR_PROF_FK foreign key (ID_ED_PHYSICIAN)
+					   references PROFESSIONAL(ID_PROFESSIONAL)';
+
+	EXECUTE IMMEDIATE 'alter table ANNOUNCED_ARRIVAL
+					   add constraint ANN_ARR_CANCEL_REASON_FK foreign key (ID_CANCEL_REASON)
+					   references CANCEL_REASON(ID_CANCEL_REASON)';	
+EXCEPTION
+WHEN others THEN
+    NULL;
+END;
+/	
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 24/07/2013 10:48
+-- CHANGE REASON: [ALERT-262378] Anounced arrival improvements (UK market)
+--                
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ANNOUNCED_ARRIVAL
+  add constraint ANN_ARR_PAT_FK foreign key (ID_PATIENT)
+  references patient (ID_PATIENT);
+		
+-- CHANGE END: Elisabete Bugalho

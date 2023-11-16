@@ -1,0 +1,105 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 22:36
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+create table EPIS_HBALANCE_HIST
+(
+  ID_EPIS_HIDRICS_BALANCE NUMBER(24) not null,
+  DT_EPIS_HBALANCE_HIST   TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_EPIS_HIDRICS         NUMBER(24) not null,
+  ID_PROF_CLOSE           NUMBER(24),
+  FLG_STATUS              VARCHAR2(1) not null,
+  TOTAL_ADMIN             NUMBER(24),
+  TOTAL_ELIM              NUMBER(24),
+  ID_UNIT_MEASURE         NUMBER(24),
+  DT_PREV_CLOSE_TSTZ      TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DT_CLOSE_BALANCE_TSTZ   TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DT_OPEN_TSTZ            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DT_REGISTER_TSTZ        TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  CREATE_USER             VARCHAR2(24),
+  CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION      NUMBER(24),
+  UPDATE_USER             VARCHAR2(24),
+  UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION      NUMBER(24),
+  ID_PROF_LAST_CHANGE     NUMBER(24),
+  DT_EH_BALANCE           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+FLG_CLOSE_TYPE          VARCHAR2(1)
+);
+
+ALTER TABLE EPIS_HBALANCE_HIST MOVE TABLESPACE TABLE_L;
+
+-- Add comments to the table 
+comment on table EPIS_HBALANCE_HIST
+  is 'Registo dos balanço dos hidricos';
+
+-- Add comments to the columns 
+comment on column EPIS_HBALANCE_HIST.ID_EPIS_HIDRICS_BALANCE
+  is 'Part of PK';
+comment on column EPIS_HBALANCE_HIST.DT_EPIS_HBALANCE_HIST
+  is 'Part of PK';
+comment on column EPIS_HBALANCE_HIST.ID_EPIS_HIDRICS
+  is 'Episódio hidrico';
+comment on column EPIS_HBALANCE_HIST.ID_PROF_CLOSE
+  is 'Profissional que encerra o balanço';
+comment on column EPIS_HBALANCE_HIST.FLG_STATUS
+  is 'Intake and output balance status: R - Required; E - Under going; I - Interrupted; C - Cancelled; F - Finnished; D - Draft; L - Cancelled draft';
+comment on column EPIS_HBALANCE_HIST.TOTAL_ADMIN
+  is 'Total de administrações';
+comment on column EPIS_HBALANCE_HIST.TOTAL_ELIM
+  is 'Total de eliminações';
+comment on column EPIS_HBALANCE_HIST.CREATE_USER
+  is 'Creation User';
+comment on column EPIS_HBALANCE_HIST.CREATE_TIME
+  is 'Creation Time';
+comment on column EPIS_HBALANCE_HIST.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column EPIS_HBALANCE_HIST.UPDATE_USER
+  is 'Update User';
+comment on column EPIS_HBALANCE_HIST.UPDATE_TIME
+  is 'Update Time';
+comment on column EPIS_HBALANCE_HIST.UPDATE_INSTITUTION
+  is 'Update Institution';
+comment on column EPIS_HBALANCE_HIST.ID_PROF_LAST_CHANGE is 'Professional who entered or last edited the record';
+comment on column EPIS_HBALANCE_HIST.DT_EH_BALANCE is 'Insertion date or date of last update';
+comment on column EPIS_HBALANCE_HIST.FLG_CLOSE_TYPE is 'Balance was closed by: A - automatically, B - manually updating auto balance time and C - manually without updating the auto balance time. ';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:22
+-- CHANGE REASON: [ALERT-153427] Intake and Output-Have the possibility to register bowel movements.
+ALTER TABLE EPIS_HBALANCE_HIST ADD CONSTRAINT EHBH_UME_FK FOREIGN KEY (ID_UNIT_MEASURE) REFERENCES UNIT_MEASURE(ID_UNIT_MEASURE);
+
+comment on table EPIS_HBALANCE_HIST
+  is 'Hidrics Balances History.';
+comment on column EPIS_HBALANCE_HIST.ID_EPIS_HIDRICS
+  is 'Hidrics episode.';
+comment on column EPIS_HBALANCE_HIST.ID_PROF_CLOSE
+  is 'Professional that closes the balance.';  
+  comment on column EPIS_HBALANCE_HIST.TOTAL_ADMIN
+  is 'Total of administrations.';
+comment on column EPIS_HBALANCE_HIST.TOTAL_ELIM
+  is 'Total of eliminations.';
+COMMENT ON COLUMN EPIS_HBALANCE_HIST.id_unit_measure IS 'Unit Measeure ID' ;
+COMMENT ON COLUMN EPIS_HBALANCE_HIST.dt_prev_close_tstz IS 'Closing Predicted date' ;
+COMMENT ON COLUMN EPIS_HBALANCE_HIST.dt_close_balance_tstz IS 'Balance Close Date' ;
+COMMENT ON COLUMN EPIS_HBALANCE_HIST.dt_open_tstz IS 'Start Date' ;
+COMMENT ON COLUMN EPIS_HBALANCE_HIST.dt_register_tstz IS 'Register Date' ;
+  
+alter table EPIS_HBALANCE_HIST modify ( create_user  varchar2(24 char));
+alter table EPIS_HBALANCE_HIST modify ( update_user  varchar2(24 char));
+alter table EPIS_HBALANCE_HIST modify ( flg_status  varchar2(1 char));
+alter table EPIS_HBALANCE_HIST modify ( flg_close_type  varchar2(1 char));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 11:24
+-- CHANGE REASON: [ALERT-153427] Intake and Output-Have the possibility to register bowel movements.
+ALTER TABLE EPIS_HBALANCE_HIST ADD TOTAL_TIMES NUMBER(12);
+COMMENT ON COLUMN EPIS_HBALANCE_HIST.TOTAL_TIMES IS 'Total number of occurences.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 18/04/2016 11:56
+-- CHANGE REASON: [ALERT-320093] PIN Intake and Output improvements - DB Development
+ALTER TABLE epis_hbalance_hist MODIFY (total_admin NUMBER(26,2), total_elim NUMBER(26,2));
+-- CHANGE END: Vanessa Barsottelli

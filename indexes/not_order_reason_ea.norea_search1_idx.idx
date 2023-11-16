@@ -1,0 +1,13 @@
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 20/05/2014 12:19
+-- CHANGE REASON: [ALERT-285323 ] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -00955); -- when ORA-00955: name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'create index NOREA_SEARCH1_IDX on NOT_ORDER_REASON_EA (ID_CONCEPT_VERSION, ID_CNCPT_VRS_INST_OWNER, ID_CONCEPT_TERM, ID_CNCPT_TRM_INST_OWNER)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+-- CHANGE END: cristina.oliveira

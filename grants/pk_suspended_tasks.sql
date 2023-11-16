@@ -1,0 +1,1 @@
+grant execute on PK_SUSPENDED_TASKS to ALERT_VIEWER;

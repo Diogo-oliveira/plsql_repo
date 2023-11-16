@@ -1,0 +1,31 @@
+
+
+  CREATE TABLE SR_RECEIVE_MANUAL
+   (	ID_SR_RECEIVE_MANUAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_PROF_MANUAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_MANUAL DATE NOT NULL ENABLE,
+	NOTES VARCHAR2(4000)
+   );
+
+
+COMMENT ON COLUMN sr_receive_manual.id_sr_receive_manual IS 'ID único' ;
+COMMENT ON COLUMN sr_receive_manual.id_episode IS 'ID do episódio' ;
+COMMENT ON COLUMN sr_receive_manual.flg_status IS 'Estado da tarefa' ;
+COMMENT ON COLUMN sr_receive_manual.id_prof_manual IS 'ID do profissional que actualizou manualmente' ;
+COMMENT ON COLUMN sr_receive_manual.dt_manual IS 'Data da actualização' ;
+COMMENT ON COLUMN sr_receive_manual.notes IS 'Notas' ;
+
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 17:42
+-- CHANGE REASON: [ALERT-186888] Drop non used tables
+begin
+execute immediate 'drop table sr_receive_manual';
+exception
+when others then
+dbms_output.put_line('ERRO tabela SR_RECEIVE_MANUAL já não existe.');
+end;
+/
+-- CHANGE END: António Neto

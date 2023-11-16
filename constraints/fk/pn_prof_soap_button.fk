@@ -1,0 +1,35 @@
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 03/12/2010 10:13
+-- CHANGE REASON: [ALERT-146512] 
+ALTER TABLE PN_PROF_SOAP_BUTTON ADD CONSTRAINT PPSB_PN_SOAP_BUTTON_REL_FK FOREIGN KEY (ID_PN_SOAP_BUTTON_REL) REFERENCES ALERT.PN_SOAP_BUTTON_REL (ID_PN_SOAP_BUTTON_REL) ENABLE;
+ALTER TABLE PN_PROF_SOAP_BUTTON ADD CONSTRAINT PPSB_PROFILE_TEMPLATE_FK FOREIGN KEY (ID_PROFILE_TEMPLATE) REFERENCES ALERT.PROFILE_TEMPLATE (ID_PROFILE_TEMPLATE) ENABLE;
+-- CHANGE END: Pedro Teixeira
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 11:50
+-- CHANGE REASON: [ALERT-164552] soap blocks existing model changes
+declare
+  constraint_exists exception;
+  pragma exception_init(constraint_exists, -02275);
+begin
+  begin
+    execute immediate '
+alter table pn_prof_soap_button
+  add constraint psbb_inst_fk foreign key (id_institution)
+  references institution (id_institution)
+';
+  exception
+    when constraint_exists then dbms_output.put_line('constraint PSBB_INST_FK already exists');
+  end;
+  begin
+    execute immediate '
+alter table pn_prof_soap_button
+  add constraint psbb_cbb_fk foreign key (id_conf_button_block)
+  references conf_button_block (id_conf_button_block)
+';
+  exception
+    when constraint_exists then dbms_output.put_line('constraint PSBB_CBB_FK already exists');
+  end;
+end;
+/
+-- CHANGE END: Pedro Carneiro

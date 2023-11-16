@@ -1,0 +1,43 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 30/04/2011 18:02
+-- CHANGE REASON: [ALERT-173229] Order recurrence core development
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE ORDER_RECURR_PLAN_TIME
+(
+  ID_ORDER_RECURR_PLAN_TIME       NUMBER(24) NOT NULL,
+  ID_ORDER_RECURR_PLAN            NUMBER(24) NOT NULL,
+  ID_ORDER_RECURR_OPTION_PARENT   NUMBER(24),
+  ID_ORDER_RECURR_OPTION_CHILD    NUMBER(24),
+  EXEC_TIME                       INTERVAL DAY(0) TO SECOND(0),
+  EXEC_TIME_OFFSET                NUMBER(6),
+  ID_UNIT_MEAS_EXEC_TIME_OFFSET   NUMBER(24),
+  CREATE_USER                     VARCHAR2(24 CHAR),
+  CREATE_TIME                     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION              NUMBER(24),
+  UPDATE_USER                     VARCHAR2(24 CHAR),
+  UPDATE_TIME                     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION              NUMBER(24)
+)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('ORDER_RECURR_PLAN_TIME table already exists');
+END;
+/
+comment on table ORDER_RECURR_PLAN_TIME is 'Order recurrence plan time table [ORCPLT]';
+comment on column ORDER_RECURR_PLAN_TIME.ID_ORDER_RECURR_PLAN_TIME     is 'Order recurrence plan time ID';
+comment on column ORDER_RECURR_PLAN_TIME.ID_ORDER_RECURR_PLAN          is 'Order recurrence plan ID';
+comment on column ORDER_RECURR_PLAN_TIME.ID_ORDER_RECURR_OPTION_PARENT is 'Order recurrence option ID (for predefined time schedule options)';
+comment on column ORDER_RECURR_PLAN_TIME.ID_ORDER_RECURR_OPTION_CHILD  is 'Order recurrence option ID (for execution time options)';
+comment on column ORDER_RECURR_PLAN_TIME.EXEC_TIME                     is 'Execution time';
+comment on column ORDER_RECURR_PLAN_TIME.EXEC_TIME_OFFSET              is 'Execution time offset';
+comment on column ORDER_RECURR_PLAN_TIME.ID_UNIT_MEAS_EXEC_TIME_OFFSET is 'Execution time offset unit measure';
+comment on column ORDER_RECURR_PLAN_TIME.CREATE_USER                   is 'Creation User';
+comment on column ORDER_RECURR_PLAN_TIME.CREATE_TIME                   is 'Creation Time';
+comment on column ORDER_RECURR_PLAN_TIME.CREATE_INSTITUTION            is 'Creation Institution';
+comment on column ORDER_RECURR_PLAN_TIME.UPDATE_USER                   is 'Update User';
+comment on column ORDER_RECURR_PLAN_TIME.UPDATE_TIME                   is 'Update Time';
+comment on column ORDER_RECURR_PLAN_TIME.UPDATE_INSTITUTION            is 'Update Institution';
+-- CHANGE END: Carlos Loureiro

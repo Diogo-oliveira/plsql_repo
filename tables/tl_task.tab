@@ -1,0 +1,269 @@
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 27/03/2009 10:11
+-- CHANGE REASON: [ALERT-21438] Criação das tabelas tl_task, tl_task_timeline e tl_task_timeline_exception necessário à apresentação de eventos na task timeline.
+CREATE TABLE TL_TASK (  
+       ID_TL_TASK                    NUMBER(24,0) NOT NULL ENABLE,
+ DEFAULT_BACK_COLOR            VARCHAR2(200),
+ LAYER                         NUMBER(24,0) NOT NULL ENABLE,
+       CODE_TL_TASK                  VARCHAR2(4000) NOT NULL ENABLE,
+ ICON                          VARCHAR2(200) NOT NULL ENABLE,
+       RANK                          NUMBER(24,0) NOT NULL ENABLE
+);
+/
+-- Table Comment
+COMMENT ON TABLE TL_TASK IS 'This table has the information about all the tasks that can be found in timeline correspondent view (Relation between tasks and timeline).';
+
+-- Column Comments
+COMMENT ON COLUMN TL_TASK.ID_TL_TASK IS 'Primary of table TL_TASK.';
+COMMENT ON COLUMN TL_TASK.DEFAULT_BACK_COLOR IS 'Default color for this task background. If NULL color should be calculated in FLASH.';
+COMMENT ON COLUMN TL_TASK.LAYER IS 'Inform which is this task priority (for now there are only two priority levels (layers): 0 ? informative events; 1 ? tasks to be done).';
+COMMENT ON COLUMN TL_TASK.CODE_TL_TASK IS 'Task code that associate this task to its description.';
+COMMENT ON COLUMN TL_TASK.ICON IS 'Timeline icon associated with this task (icon that is presented in timeline to represent this task).';
+COMMENT ON COLUMN TL_TASK.RANK IS 'Order in which tasks are presented in event (task) list.';
+
+------------------------------
+------------------------------
+------------------------------
+-- CHANGE END
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:34
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table tl_task add ID_SWF_FILE_CREATE         NUMBER(24);
+alter table tl_task add ID_SWF_FILE_DETAIL         NUMBER(24);
+alter table tl_task add internal_name              VARCHAR2(50);
+alter table tl_task add flg_functionality          VARCHAR2(3) default 'TP' not null;
+
+comment on column tl_task.id_swf_file_create is 'Swf file to create a new task';
+comment on column tl_task.id_swf_file_detail is 'Swf file to see the detail screen of the task';
+COMMENT ON column tl_task.internal_name IS 'Task type internal name';
+COMMENT ON column tl_task.flg_functionality IS 'Indicates the functionalities that use this task. T- Task Timeline; P-PDMS; H - HandP; TP- Task timeline and Pdms; TPH-Tasktimeline, Pdms and HandP.';
+
+alter table tl_task add REVIEW_CONTEXT VARCHAR2(3 CHAR);
+
+COMMENT ON column tl_task.REVIEW_CONTEXT IS 'Review context, if the review is available in the task type. Ex: TM-templates.';
+
+alter table tl_task add ID_PARENT NUMBER(24);
+COMMENT ON column tl_task.ID_PARENT IS 'Parent task. When it is defined a parent in the import it is performed only one import that load all the child records.';
+
+alter table tl_task modify icon VARCHAR2(200) null;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table tl_task add ID_SWF_FILE_CREATE         NUMBER(24);
+alter table tl_task add ID_SWF_FILE_DETAIL         NUMBER(24);
+alter table tl_task add internal_name              VARCHAR2(50);
+alter table tl_task add flg_functionality          VARCHAR2(3) default 'TP' not null;
+
+comment on column tl_task.id_swf_file_create is 'Swf file to create a new task';
+comment on column tl_task.id_swf_file_detail is 'Swf file to see the detail screen of the task';
+COMMENT ON column tl_task.internal_name IS 'Task type internal name';
+COMMENT ON column tl_task.flg_functionality IS 'Indicates the functionalities that use this task. T- Task Timeline; P-PDMS; H - HandP; TP- Task timeline and Pdms; TPH-Tasktimeline, Pdms and HandP.';
+
+alter table tl_task add REVIEW_CONTEXT VARCHAR2(3 CHAR);
+
+COMMENT ON column tl_task.REVIEW_CONTEXT IS 'Review context, if the review is available in the task type. Ex: TM-templates.';
+
+alter table tl_task add ID_PARENT NUMBER(24);
+COMMENT ON column tl_task.ID_PARENT IS 'Parent task. When it is defined a parent in the import it is performed only one import that load all the child records.';
+
+alter table tl_task modify icon VARCHAR2(200) null;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table TL_TASK modify INTERNAL_NAME varchar2(0200 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table TL_TASK modify FLG_FUNCTIONALITY varchar2(0024 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table TL_TASK modify DEFAULT_BACK_COLOR varchar2(0024 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table TL_TASK modify CODE_TL_TASK varchar2(4000)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table TL_TASK modify ICON varchar2(0200 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table TL_TASK modify CREATE_USER varchar2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table TL_TASK modify UPDATE_USER varchar2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table TL_TASK modify REVIEW_CONTEXT varchar2(0024 char)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table TL_TASK modify INTERNAL_NAME varchar2(0200 char)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:44
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    execute immediate 'alter table tl_task add (ehr_access_area VARCHAR2(30 char) NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tl_task.ehr_access_area IS ''Identifier of the EHR area to validate this task current permission''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table tl_task modify (CODE_TL_TASK VARCHAR2(1000 char))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:45
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    execute immediate 'alter table tl_task add (flg_synch_area varchar2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+begin
+execute immediate ('COMMENT ON COLUMN tl_task.flg_synch_area IS ''Y - If the task is to be synchronized immediately with the directed area when is changed in the note. N- otherwise''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/04/2012 11:51
+-- CHANGE REASON: [ALERT-226245] BD - Versioning DDL (Migrations) after migrate - EDIS restructuring - Present Illness / Current visit
+BEGIN
+    execute immediate 'alter table tl_task modify (internal_name NOT NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/10/2012 16:01
+-- CHANGE REASON: [ALERT-242379 ] Single page note for Discharge Summary
+BEGIN
+    execute immediate 'alter table tl_task add (FLG_EA VARCHAR2(1 CHAR) default ''Y'' not null)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tl_task.FLG_EA IS ''Y - The task data is obtained from the task_timeline_ea table. N - the task data is obtained from APIS''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 13/11/2017 08:51
+-- CHANGE REASON: [CALERT-344 ] Ability to copy specific records that require to be edited.
+UPDATE tl_task t
+   SET t.internal_name = 'SinglePageNote'
+ WHERE t.id_tl_task = 100;
+-- CHANGE END: Sofia Mendes

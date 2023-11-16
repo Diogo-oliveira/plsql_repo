@@ -1,0 +1,69 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:21
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+CREATE TABLE ds_event (
+       id_ds_event        NUMBER(24) NOT NULL,
+       id_ds_cmpt_mkt_rel NUMBER(24) NOT NULL,
+       value              VARCHAR2(200 CHAR),
+       --
+       create_user        VARCHAR2(24 CHAR),
+       create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution NUMBER(24),
+       update_user        VARCHAR2(24 CHAR),
+       update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution NUMBER(24)
+);
+
+--
+
+COMMENT ON TABLE ds_event IS 'Table for dinamic screens events';
+--
+COMMENT ON COLUMN ds_event.id_ds_event        IS 'Dinamic screens components event ID';
+COMMENT ON COLUMN ds_event.id_ds_cmpt_mkt_rel IS 'Component relation Id that triggers the event';
+COMMENT ON COLUMN ds_event.value              IS 'Value that triggers the event';
+--
+COMMENT ON COLUMN ds_event.create_user        IS 'Professional that created the registry';
+COMMENT ON COLUMN ds_event.create_time        IS 'Date of the registry creation';
+COMMENT ON COLUMN ds_event.create_institution IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN ds_event.update_user        IS 'Last professional that updated the registry';
+COMMENT ON COLUMN ds_event.update_time        IS 'Date of the last update to the registry';
+COMMENT ON COLUMN ds_event.update_institution IS 'Id of the last institution where the registry was updated';
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:21
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE ds_event MOVE TABLESPACE table_m;
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 24/07/2019 16:35
+-- CHANGE REASON: [ARCH-7603] Changes on DB Model
+--                
+declare
+	l_sql 	varchar2(1000 char);
+	pl		varchar2(0010 char) := '''';
+begin
+	l_sql := 'alter table ds_event add FLG_TYPE varchar2(0001 char) default '||pl||'V'||pl||' not null';
+	pk_versioning.run(l_sql);
+end;
+/
+
+comment on column DS_EVENT.FLG_TYPE is 'how to interpret field VALUE: (V)-normal value, (E)-eval expression, (S)ubmit form';
+-- CHANGE END: Elisabete Bugalho
+
+declare
+   l_sql varchar2(1000 char);
+begin
+   l_sql := 'alter table ds_event add id_action number(24) '; 
+   pk_versioning.run(l_sql);
+end;
+/
+
+COMMENT ON COLUMN ds_event.id_action IS 'ID of action associated to event' ;
+
+comment on column DS_EVENT.flg_type
+  is 'how to interpret field VALUE: (V)-normal value, (E)-eval expression, (S)ubmit form, '(F)unction to execute';
+  

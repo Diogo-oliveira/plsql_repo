@@ -1,0 +1,41 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:19
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+CREATE TABLE relationship_type (
+       id_relationship_type   NUMBER(24) NOT NULL,
+       code_relationship_type VARCHAR2(200 CHAR) NOT NULL,
+       id_content             VARCHAR2(200 CHAR),
+       flg_available          VARCHAR2(1 CHAR) DEFAULT 'Y' NOT NULL,
+       --
+       create_user            VARCHAR2(24 CHAR),
+       create_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution     NUMBER(24),
+       update_user            VARCHAR2(24 CHAR),
+       update_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution     NUMBER(24)
+);
+
+--
+
+COMMENT ON TABLE relationship_type IS 'Table for the relationship types';
+--
+COMMENT ON COLUMN relationship_type.id_relationship_type   IS 'Relationship type Id';
+COMMENT ON COLUMN relationship_type.code_relationship_type IS 'Relationship type translation code';
+COMMENT ON COLUMN relationship_type.id_content             IS 'Content Id';
+COMMENT ON COLUMN relationship_type.flg_available          IS 'If it is available to be used (Y/N - context defined in sys_domain)';
+--
+COMMENT ON COLUMN relationship_type.create_user            IS 'Professional that created the registry';
+COMMENT ON COLUMN relationship_type.create_time            IS 'Date of the registry creation';
+COMMENT ON COLUMN relationship_type.create_institution     IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN relationship_type.update_user            IS 'Last professional that updated the registry';
+COMMENT ON COLUMN relationship_type.update_time            IS 'Date of the last update to the registry';
+COMMENT ON COLUMN relationship_type.update_institution     IS 'Id of the last institution where the registry was updated';
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:19
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE relationship_type MOVE TABLESPACE table_s;
+--
+-- CHANGE END: Filipe Machado

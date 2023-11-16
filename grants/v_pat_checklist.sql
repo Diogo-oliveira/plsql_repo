@@ -1,0 +1,5 @@
+-- CHANGED BY:  Álvaro Vasconcelos
+-- CHANGE DATE: 07/09/2011 15:20
+-- CHANGE REASON: [ALERT-194276] View and grants for PAT_CHECKLIST table
+GRANT SELECT ON V_PAT_CHECKLIST TO ALERT_INTER;
+-- CHANGE END:  Álvaro Vasconcelos

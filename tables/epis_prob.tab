@@ -1,0 +1,70 @@
+-- Create table
+create table EPIS_PROB
+(
+  id_epis_problem       NUMBER(24) not null,
+  id_problem            NUMBER(24) not null,
+  id_epis_prob_group    NUMBER(24) not null,
+  id_episode            NUMBER(24) not null,
+  flg_type              VARCHAR2(1),
+  flg_status            VARCHAR2(2),
+  rank                  NUMBER(24),
+  id_cancel_reason      NUMBER(24),
+  cancel_notes          VARCHAR2(4000),
+  id_prof_cancel        NUMBER(24),
+  dt_cancel             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_user           VARCHAR2(24),
+  create_time           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution    NUMBER(24),
+  update_user           VARCHAR2(24),
+  update_time           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution    NUMBER(24),
+  id_problem_new        NUMBER(24),
+  id_professional       NUMBER(24),
+  dt_epis_prob_tstz     TIMESTAMP(6) WITH LOCAL TIME ZONE 
+  
+ );
+
+ -- Add comments to the table 
+comment on table EPIS_PROB
+  is 'Table with relationship between episode and problem with group and rank';
+-- Add comments to the columns 
+comment on column EPIS_PROB.id_epis_problem
+  is 'Primary key';
+comment on column EPIS_PROB.id_problem
+  is 'Problem id which accocitate to pat_history_diagnosis id, pat_problem id';
+comment on column EPIS_PROB.id_epis_prob_group
+  is 'Episode problem group id which accocitate to EPIS_PROB_GROUP.id_epis_prob_group';
+comment on column EPIS_PROB.id_episode
+  is 'episode id';
+comment on column EPIS_PROB.flg_type
+  is 'Where is the source from: ''D'':pat_history_diagnosis, ''P'':pat_problem';
+comment on column EPIS_PROB.flg_status
+  is 'Status: (A) Active, (C) Canceled, (P) Passive, (R) Resolved, (N) None, (U) Unknown';
+comment on column EPIS_PROB.rank
+  is 'Episode problem seq. id';
+comment on column EPIS_PROB.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column EPIS_PROB.cancel_notes
+  is 'Cancelation notes';
+comment on column EPIS_PROB.id_prof_cancel
+  is 'Cancel professional ID';
+comment on column EPIS_PROB.dt_cancel
+  is 'Cancel date';
+comment on column EPIS_PROB.create_user
+  is 'Creation User';
+comment on column EPIS_PROB.create_time
+  is 'Creation Time';
+comment on column EPIS_PROB.create_institution
+  is 'Creation Institution';
+comment on column EPIS_PROB.update_user
+  is 'Update User';
+comment on column EPIS_PROB.update_time
+  is 'Update Time';
+comment on column EPIS_PROB.update_institution
+  is 'Update Institution';
+comment on column EPIS_PROB.id_problem_new
+  is 'ID of the problem that makes it outdated';
+COMMENT ON column EPIS_PROB.id_professional 
+  IS 'id Professional';
+COMMENT ON column EPIS_PROB.dt_epis_prob_tstz 
+  IS 'insert/update date';

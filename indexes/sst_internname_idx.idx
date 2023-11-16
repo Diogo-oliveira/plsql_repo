@@ -1,0 +1,26 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 10/02/2010 14:50
+-- CHANGE REASON: [ALERT-73254] 
+DECLARE
+    l_exists NUMBER;
+    l_error  VARCHAR2(2000);
+BEGIN
+    l_error := 'Query data dictionary to retrieve index if it exists';
+    SELECT COUNT(*)
+      INTO l_exists
+      FROM user_indexes ui
+     WHERE ui.index_name = 'SST_INTERNNAME_IDX';
+
+    IF l_exists = 0
+    THEN
+        -- The index doesn't exist
+        l_error := 'Creating index SST_INTERNNAME_IDX';
+        EXECUTE IMMEDIATE 'create index SST_INTERNNAME_IDX on sample_text_type(intern_name_sample_text_type)';
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error on ' || l_error || '. SQLCode: ' || SQLCODE || ' SQLErrm:' || SQLERRM);
+END;
+/
+-- CHANGE END: Ariel Machado

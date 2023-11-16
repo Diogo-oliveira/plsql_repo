@@ -1,0 +1,294 @@
+
+
+  CREATE TABLE EPIS_DOCUMENTATION
+   (	ID_EPIS_DOCUMENTATION NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPIS_COMPLAINT NUMBER(24,0),
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_CREATION DATE NOT NULL ENABLE,
+	DT_LAST_UPDATE DATE,
+	ID_PROF_LAST_UPDATE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_DOC_AREA NUMBER(24,0),
+	DT_CANCEL DATE,
+
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(2000)
+   );
+
+
+COMMENT ON COLUMN epis_documentation.id_epis_documentation IS 'Chave primária' ;
+COMMENT ON COLUMN epis_documentation.id_epis_complaint IS 'Episódio da queixa' ;
+COMMENT ON COLUMN epis_documentation.id_episode IS 'Episódio' ;
+COMMENT ON COLUMN epis_documentation.id_professional IS 'Profissional' ;
+COMMENT ON COLUMN epis_documentation.dt_creation IS 'Data de criação' ;
+COMMENT ON COLUMN epis_documentation.dt_last_update IS 'Data em que se efectuou a última alteração' ;
+COMMENT ON COLUMN epis_documentation.id_prof_last_update IS 'Profissional que efectou a última alteração' ;
+COMMENT ON COLUMN epis_documentation.flg_status IS 'Estado: A - Activo; I - Inactivo; Cancelado' ;
+COMMENT ON COLUMN epis_documentation.adw_last_update IS 'Data da última alteração BD' ;
+COMMENT ON COLUMN epis_documentation.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN epis_documentation.id_prof_cancel IS 'Id do profissional que cancelou' ;
+COMMENT ON COLUMN epis_documentation.notes_cancel IS 'Notas de cancelamento' ;
+
+comment on column EPIS_DOCUMENTATION.ID_DOC_AREA
+  is 'Área da documentation';
+comment on column EPIS_DOCUMENTATION.ID_PROF_CANCEL
+  is 'Profissional que cancelou';
+  
+
+alter table epis_documentation add id_doc_template number(24);
+alter table epis_documentation add notes varchar2(4000);
+alter table epis_documentation add id_epis_documentation_parent number(24);
+
+COMMENT ON COLUMN epis_documentation.id_doc_template IS 'Doc_Template associado' ;
+COMMENT ON COLUMN epis_documentation.notes IS 'Notas de texto livre' ;
+COMMENT ON COLUMN epis_documentation.id_epis_documentation_parent IS 'Epis_documentation base/original' ;
+
+COMMENT ON COLUMN epis_documentation.flg_status IS 'Estado: A - Activo; I - Inactivo;C - Cancelado;O - Outdated' ;
+
+alter table epis_documentation 
+add (dt_creation_tstz timestamp with local time zone,
+dt_last_update_tstz timestamp with local time zone,
+dt_cancel_tstz timestamp with local time zone); 
+
+
+--Emilia Taborda 2007/10/15
+--Nova coluna id_epis_context
+alter table epis_documentation add (id_epis_context number(24));
+
+comment on column EPIS_DOCUMENTATION.ID_EPIS_CONTEXT
+  is 'ID de registo do contexto';
+  
+--Rui Batista 2007/12/20
+--TI: Pré-operatório
+alter table epis_documentation add (id_episode_context number(24));
+
+COMMENT ON COLUMN epis_documentation.id_episode_context IS 'ID do episódio de destino onde poderá ser consultada esta informação (TI)';
+
+--Ariel Machado 2008/05/08
+ALTER TABLE EPIS_DOCUMENTATION 
+ ADD (FLG_EDITION_TYPE VARCHAR2(1)
+ );
+COMMENT ON COLUMN EPIS_DOCUMENTATION.FLG_EDITION_TYPE IS 'Flag to indicate the type of edition that originate this record: ''N'' - New; ''E'' - Edit; ''A'' - Agree; ''U'' - Update; ''O'' - No changes; ''X'' - Exchange;';
+--Changed End  
+
+-- CHANGED BY: Sérgio Santos (sergio.santos)
+-- CHANGE DATE: 03/12/2008 09:16
+-- CHANGE REASON: ALERT-11133 Remoção de colunas com tipo DATE quando existe a equivalente TSTZ
+ALTER TABLE EPIS_DOCUMENTATION DROP COLUMN DT_CREATION;
+ALTER TABLE EPIS_DOCUMENTATION DROP COLUMN DT_LAST_UPDATE;
+ALTER TABLE EPIS_DOCUMENTATION DROP COLUMN ADW_LAST_UPDATE;
+ALTER TABLE EPIS_DOCUMENTATION DROP COLUMN DT_CANCEL;
+-- CHANGE END
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 09/02/2010 10:03
+-- CHANGE REASON: [ALERT-73254] 
+--Changes in field NOTES: VARCHAR2 to CLOB
+DECLARE
+    l_data_type VARCHAR2(106);
+    l_error     VARCHAR2(2000);
+BEGIN
+    l_error := 'Query data dictionary to retrieve column type';
+    SELECT col.data_type
+      INTO l_data_type
+      FROM user_tab_cols col
+     WHERE col.table_name = 'EPIS_DOCUMENTATION'
+       AND col.column_name = 'NOTES';
+
+    IF l_data_type = 'VARCHAR2'
+    THEN
+        -- The column type is VARCHAR2. Changing data type to CLOB...
+        l_error := 'Add NOTES_CLOB column on EPIS_DOCUMENTATION';
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_documentation ADD (notes_clob CLOB) LOB (notes_clob) STORE AS (ENABLE STORAGE IN ROW TABLESPACE alert_lob)';
+    
+        l_error := 'Data migration';
+        EXECUTE IMMEDIATE 'UPDATE epis_documentation SET notes_clob = notes';
+    
+        l_error := 'Rename original column NOTES to NOTES_BCK';
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_documentation RENAME COLUMN notes TO notes_bck';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_documentation.notes_bck  IS ''Backup of NOTES column before being changed their type to CLOB''';
+    
+        l_error := 'Rename new column NOTES_CLOB to NOTES';
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_documentation RENAME COLUMN notes_clob TO notes';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_documentation.notes  IS ''Additional notes / Free-text records''';
+    
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error on ' || l_error || '. SQLCode: ' || SQLCODE || ' SQLErrm:' || SQLERRM);
+END;
+/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 09/02/2010 10:03
+-- CHANGE REASON: [ALERT-73254] - (commit repeated because the versioning staff cannot merge differences in DDL files)
+--Changes in field NOTES: VARCHAR2 to CLOB
+DECLARE
+    l_data_type VARCHAR2(106);
+    l_error     VARCHAR2(2000);
+BEGIN
+    l_error := 'Query data dictionary to retrieve column type';
+    SELECT col.data_type
+      INTO l_data_type
+      FROM user_tab_cols col
+     WHERE col.table_name = 'EPIS_DOCUMENTATION'
+       AND col.column_name = 'NOTES';
+
+    IF l_data_type = 'VARCHAR2'
+    THEN
+        -- The column type is VARCHAR2. Changing data type to CLOB...
+        l_error := 'Add NOTES_CLOB column on EPIS_DOCUMENTATION';
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_documentation ADD (notes_clob CLOB) LOB (notes_clob) STORE AS (ENABLE STORAGE IN ROW TABLESPACE alert_lob)';
+    
+        l_error := 'Data migration';
+        EXECUTE IMMEDIATE 'UPDATE epis_documentation SET notes_clob = notes';
+    
+        l_error := 'Rename original column NOTES to NOTES_BCK';
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_documentation RENAME COLUMN notes TO notes_bck';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_documentation.notes_bck  IS ''Backup of NOTES column before being changed their type to CLOB''';
+    
+        l_error := 'Rename new column NOTES_CLOB to NOTES';
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_documentation RENAME COLUMN notes_clob TO notes';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_documentation.notes  IS ''Additional notes / Free-text records''';
+    
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error on ' || l_error || '. SQLCode: ' || SQLCODE || ' SQLErrm:' || SQLERRM);
+END;
+/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 16/04/2010 15:48
+-- CHANGE REASON: [ALERT-89937] 
+-- Add/modify columns 
+alter table EPIS_DOCUMENTATION add ID_SCALES_ACTION NUMBER(24);
+-- Add comments to the columns 
+comment on column EPIS_DOCUMENTATION.ID_SCALES_ACTION
+  is 'Indicate wich option was selected';
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 01/07/2011 10:08
+-- CHANGE REASON: [ALERT-186637] Add cancel reason support in Touch-option model
+-- Cleanup. Delete column that was added by ALERT-73254 when migrating data to backup and currently not used.
+DECLARE
+    l_exists  NUMBER;
+    l_error     VARCHAR2(2000);
+BEGIN
+    l_error := 'Query data dictionary to retrieve if column exists';
+    SELECT count (*)
+      INTO l_exists
+      FROM user_tab_cols col
+     WHERE col.table_name = 'EPIS_DOCUMENTATION'
+       AND col.column_name = 'NOTES_BCK';
+
+    IF l_exists > 0
+    THEN 
+        l_error := 'Drop backup column NOTES_BCK';
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_documentation DROP COLUMN notes_bck';
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error on ' || l_error || '. SQLCode: ' || SQLCODE || ' SQLErrm:' || SQLERRM);
+END;
+/
+
+-- Add Cancel reason ID
+ALTER TABLE epis_documentation 
+      ADD(id_cancel_reason NUMBER(24));
+
+COMMENT ON COLUMN epis_documentation.id_doc_template IS 'Doc template identifier';
+COMMENT ON COLUMN epis_documentation.id_cancel_reason IS 'Cancel reason ID';
+COMMENT ON COLUMN epis_documentation.dt_cancel_tstz IS 'Cancel time';
+COMMENT ON COLUMN epis_documentation.dt_creation_tstz IS 'Create time';
+COMMENT ON COLUMN epis_documentation.dt_last_update_tstz IS 'Last update';
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/01/2016 14:58
+-- CHANGE REASON: [ALERT-317702] 
+comment on table EPIS_DOCUMENTATION
+  is 'Episode documentation table';
+-- Add comments to the columns 
+comment on column EPIS_DOCUMENTATION.id_epis_documentation
+  is 'Episode documentation ID';
+comment on column EPIS_DOCUMENTATION.id_epis_complaint
+  is 'Episode complaint ID';
+comment on column EPIS_DOCUMENTATION.id_episode
+  is 'Episode ID';
+comment on column EPIS_DOCUMENTATION.id_professional
+  is 'Professional ID';
+comment on column EPIS_DOCUMENTATION.id_prof_last_update
+  is 'Last update professional ID';
+comment on column EPIS_DOCUMENTATION.flg_status
+  is 'Flag that indicates the status: A - Active, I - Inactive, C - Cancelled, O - Outdated';
+comment on column EPIS_DOCUMENTATION.id_doc_area
+  is 'Documentation area ID';
+comment on column EPIS_DOCUMENTATION.id_prof_cancel
+  is 'Professional that cancels the record';
+comment on column EPIS_DOCUMENTATION.notes_cancel
+  is 'Cancelation notes';
+comment on column EPIS_DOCUMENTATION.id_doc_template
+  is 'Documentation template ID';
+comment on column EPIS_DOCUMENTATION.id_epis_documentation_parent
+  is 'Episode documentation parent ID';
+comment on column EPIS_DOCUMENTATION.dt_creation_tstz
+  is 'Date that indicates when the record was registered';
+comment on column EPIS_DOCUMENTATION.dt_last_update_tstz
+  is 'Last update date';
+comment on column EPIS_DOCUMENTATION.dt_cancel_tstz
+  is 'Date that indicates when the record was cancelled';
+comment on column EPIS_DOCUMENTATION.id_epis_context
+  is 'Context ID';
+comment on column EPIS_DOCUMENTATION.id_episode_context
+  is 'Episode ID';
+comment on column EPIS_DOCUMENTATION.flg_edition_type
+  is 'Flag to indicate the type of edition that originate this record: N - New, E - Edit, A - Agree, U - Update, O - No changes, X - Exchange';
+comment on column EPIS_DOCUMENTATION.create_user
+  is 'Creation User';
+comment on column EPIS_DOCUMENTATION.create_time
+  is 'Creation Time';
+comment on column EPIS_DOCUMENTATION.create_institution
+  is 'Creation Institution';
+comment on column EPIS_DOCUMENTATION.update_user
+  is 'Update User';
+comment on column EPIS_DOCUMENTATION.update_time
+  is 'Update Time';
+comment on column EPIS_DOCUMENTATION.update_institution
+  is 'Update Institution';
+comment on column EPIS_DOCUMENTATION.notes
+  is 'Additional notes / Free-text records';
+comment on column EPIS_DOCUMENTATION.id_scales_action
+  is 'Indicate which option was selected';
+comment on column EPIS_DOCUMENTATION.id_cancel_reason
+  is 'Cancel reason ID';
+  
+  
+  
+-- CHANGE END: Ana Matos
+
+
+-- CHANGED BY: Ana Moita
+-- CHANGED DATE: 2019-4-8
+-- CHANGED REASON: EMR-14534
+
+ALTER TABLE EPIS_DOCUMENTATION ADD DT_CLINICAL TIMESTAMP WITH LOCAL TIME ZONE;
+COMMENT ON COLUMN EPIS_DOCUMENTATION.DT_CLINICAL IS 'Clinical date';
+
+-- CHANGE END: Ana Moita
+
+
+-- CHANGED BY: Ana Moita
+-- CHANGE DATE: 29/08/2019 12:10
+-- CHANGE REASON: [EMR-18979] - [CDOC] Change database model to prevent edition sick leave
+ALTER TABLE EPIS_DOCUMENTATION ADD FLG_PRINTED VARCHAR2(1);
+COMMENT ON COLUMN EPIS_DOCUMENTATION.FLG_PRINTED IS 'P - Report printed; M - Doc area migrated';
+-- CHANGE END: Ana Moita

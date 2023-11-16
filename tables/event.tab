@@ -1,0 +1,29 @@
+
+
+  CREATE TABLE EVENT
+   (	ID_EVENT NUMBER(12,0) NOT NULL ENABLE,
+	FLG_GROUP VARCHAR2(2),
+	ID_EVENT_GROUP NUMBER(12,0),
+	ID_GROUP NUMBER,
+	FLG_MOST_FREQ VARCHAR2(2)
+   );
+
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 04/12/2012 11:05
+-- CHANGE REASON: [ALERT-246248] add id_sample_type to event
+declare
+  e_col_exists exception;
+  pragma exception_init(e_col_exists, -01430);
+begin
+  execute immediate 'alter table event add (id_sample_type number(12))
+';
+exception when e_col_exists then
+  dbms_output.put_line('column event.id_sample_type already exists!');
+end;
+/
+
+comment on column EVENT.id_sample_type
+  is 'Sample type identifier for lab test parameters.';
+-- CHANGE END: Pedro Carneiro

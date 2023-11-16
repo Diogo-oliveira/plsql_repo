@@ -1,0 +1,49 @@
+
+CREATE TABLE PROTOCOL_ITEM_SOFT_INST
+ (ID_PROTOCOL_ITEM_SOFT_INST NUMBER(24) NOT NULL
+ ,FLG_ITEM_TYPE VARCHAR2(30) NOT NULL
+ ,ITEM NUMBER(24) NOT NULL
+ ,ID_SOFTWARE NUMBER(24) NOT NULL
+ ,ID_INSTITUTION NUMBER(12) NOT NULL
+ ,FLG_AVAILABLE VARCHAR2(1) NOT NULL
+ );
+
+COMMENT ON COLUMN PROTOCOL_ITEM_SOFT_INST.ID_PROTOCOL_ITEM_SOFT_INST IS 'Protocol item ID';
+COMMENT ON COLUMN PROTOCOL_ITEM_SOFT_INST.FLG_ITEM_TYPE IS 'Type of the item - (C)riteria / (T)ask';
+COMMENT ON COLUMN PROTOCOL_ITEM_SOFT_INST.ITEM IS 'Item (type of criteria or task)';
+COMMENT ON COLUMN PROTOCOL_ITEM_SOFT_INST.ID_SOFTWARE IS 'Software ID';
+COMMENT ON COLUMN PROTOCOL_ITEM_SOFT_INST.ID_INSTITUTION IS 'Institution ID';
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 08/10/2010 09:36
+-- CHANGE REASON: [ALERT-128165] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PROTOCOL_ITEM_SOFT_INST add id_market number(24) default 0 not null';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+
+comment on column PROTOCOL_ITEM_SOFT_INST.id_market is 'Market where the order set task is available';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 28/03/2011 09:23
+-- CHANGE REASON: [ALERT-168339] Insert constraints for flag_status columns defined in sys_domain
+comment on column PROTOCOL_ITEM_SOFT_INST.FLG_ITEM_TYPE is 'Item type:
+C - criteria
+T - task';
+comment on column PROTOCOL_ITEM_SOFT_INST.FLG_AVAILABLE is 'Protocol item availability:
+Y - yes (available)
+N - no (not available)';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 10:33
+-- CHANGE REASON: [ALERT-317912] 
+comment on table PROTOCOL_ITEM_SOFT_INST is 'Protocols item configuration';
+-- CHANGE END: Ana Matos

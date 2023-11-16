@@ -1,0 +1,272 @@
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 05/05/2011 11:40
+-- CHANGE REASON: [ALERT-176423] Patient education: tables and keys
+CREATE TABLE nurse_tea_req_hist(id_nurse_tea_req_hist NUMBER(24) NOT NULL, id_nurse_tea_req NUMBER(24) NOT NULL, id_prof_req NUMBER(24), id_episode NUMBER(24), req_header VARCHAR2(256 CHAR), flg_status VARCHAR2(1 CHAR), notes_req VARCHAR2(1000 CHAR), id_prof_close NUMBER(24), notes_close VARCHAR2(1000 CHAR), id_prof_exec NUMBER(24), id_prev_episode NUMBER(24), dt_nurse_tea_req_tstz TIMESTAMP(6)
+    WITH LOCAL TIME ZONE,
+    dt_begin_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    dt_close_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    id_visit NUMBER(24),
+    id_patient NUMBER(24),
+    status_flg VARCHAR2(100 CHAR),
+    status_icon VARCHAR2(100 CHAR),
+    status_msg VARCHAR2(100 CHAR),
+    status_str VARCHAR2(100 CHAR),
+    create_user VARCHAR2(24),
+    create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    create_institution NUMBER(24),
+    update_user VARCHAR2(24 CHAR),
+    update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    update_institution NUMBER(24),
+    id_cancel_reason NUMBER(24),
+    id_context NUMBER(24),
+    flg_context VARCHAR2(1 CHAR),
+    id_nurse_tea_topic NUMBER(24),
+    id_order_recurr_plan NUMBER(24),
+    description CLOB,
+    flg_time VARCHAR2(1 CHAR));
+
+COMMENT ON TABLE nurse_tea_req_hist IS 'Histórico de requisições médicas de ensinos de enfermagem';
+
+COMMENT ON column nurse_tea_req_hist.id_nurse_tea_req_hist IS 'Primary key';
+
+COMMENT ON column nurse_tea_req_hist.id_nurse_tea_req IS 'Patient education request ID';
+
+COMMENT ON column nurse_tea_req_hist.dt_nurse_tea_req_tstz IS 'Data de requisição';
+
+COMMENT ON column nurse_tea_req_hist.id_prof_req IS 'Médico que requisita';
+
+COMMENT ON column nurse_tea_req_hist.flg_status IS 'Estado: A - activo, C - cancelado, F - executado, D - pendente';
+
+COMMENT ON column nurse_tea_req_hist.dt_begin_tstz IS 'Data pretendida para início da execução (ie, ñ imediata)';
+
+COMMENT ON column nurse_tea_req_hist.notes_req IS 'Requisição do médico';
+
+COMMENT ON column nurse_tea_req_hist.id_cancel_reason IS 'Cancel reason ID';
+
+COMMENT ON column nurse_tea_req_hist.id_context IS 'Request (suggestion) context ID';
+
+COMMENT ON column nurse_tea_req_hist.flg_context IS 'Request (suggestion) context type';
+
+COMMENT ON column nurse_tea_req_hist.id_nurse_tea_topic IS 'Topic ID';
+
+COMMENT ON column nurse_tea_req_hist.id_order_recurr_plan IS 'Recurrence plan ID';
+
+COMMENT ON column nurse_tea_req_hist.description IS 'Topic description';
+
+COMMENT ON column nurse_tea_req_hist.flg_time IS 'To be performed';
+-- CHANGE END: João Martins
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 06/05/2011 18:19
+-- CHANGE REASON: [ALERT-176423] Patient education: tablespace CLOB
+alter table nurse_tea_req_hist move lob(description) store as (tablespace ALERT_LOB);
+-- CHANGE END: João Martins
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 07/06/2011 18:46
+-- CHANGE REASON: [ALERT-182704] 
+alter table nurse_tea_req_hist
+add DT_NURSE_TEA_REQ_HIST_TSTZ  TIMESTAMP(6) WITH LOCAL TIME ZONE;
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 07/06/2011 18:46
+-- CHANGE REASON: [ALERT-182704] 
+comment on column nurse_tea_req_hist.DT_NURSE_TEA_REQ_HIST_TSTZ
+  is 'Date of NURSE_TEA_REQ_HIST update';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 07/06/2011 18:55
+-- CHANGE REASON: [ALERT-182704] 
+alter table nurse_tea_req_hist
+add DT_NURSE_TEA_REQ_HIST_TSTZ  TIMESTAMP(6) WITH LOCAL TIME ZONE;
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 07/06/2011 18:55
+-- CHANGE REASON: [ALERT-182704] 
+comment on column nurse_tea_req_hist.DT_NURSE_TEA_REQ_HIST_TSTZ
+  is 'Date of NURSE_TEA_REQ_HIST update';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 05/09/2011 12:13
+-- CHANGE REASON: [ALERT-193013] 
+ALTER  table NURSE_TEA_REQ_HIST
+modify
+(
+  NOTES_REQ                  VARCHAR2(4000 CHAR)
+);
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 31/10/2011 16:58
+-- CHANGE REASON: [ALERT-193013] 
+begin
+ALTER  table notes NURSE_TEA_REQ_HIST add (req_notes clob);
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 31/10/2011 17:03
+-- CHANGE REASON: [ALERT-193013] 
+begin
+comment on column NURSE_TEA_REQ_HIST.req_notes
+  is 'Requisição do médico';
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 31/10/2011 17:04
+-- CHANGE REASON: [ALERT-193013] 
+begin
+update NURSE_TEA_REQ_HIST
+set req_notes=notes_req;
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 31/10/2011 17:04
+-- CHANGE REASON: [ALERT-193013] 
+begin
+alter table NURSE_TEA_REQ_HIST drop column notes_req;
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 31/10/2011 17:08
+-- CHANGE REASON: [ALERT-193013] 
+begin
+ALTER  table NURSE_TEA_REQ_HIST add (req_notes clob);
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 03/07/2012 09:33
+-- CHANGE REASON: [ALERT-234984] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table nurse_tea_req_hist add (desc_topic_aux varchar2(1000 char))';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('coluna a ser acrescentada já existe na tabela');
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 03/07/2012 09:33
+-- CHANGE REASON: [ALERT-234984] 
+comment on column NURSE_TEA_REQ_hist.desc_topic_aux
+  is 'Title in free text (Other)'; 
+  
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 27/05/2014 14:55
+-- CHANGE REASON: [ALERT-282667 ] 
+ALTER TABLE nurse_tea_req_hist add id_not_order_reason NUMBER(24);
+COMMENT ON column nurse_tea_req_hist.id_not_order_reason IS 'Not order reason ID';
+/
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 17:25
+-- CHANGE REASON: [ALERT-317702] 
+comment on table NURSE_TEA_REQ_HIST
+  is 'Patient education''s orders history table';
+-- Add comments to the columns 
+comment on column NURSE_TEA_REQ_HIST.id_nurse_tea_req_hist
+  is 'Primary key';
+comment on column NURSE_TEA_REQ_HIST.id_nurse_tea_req
+  is 'Order''s ID';
+comment on column NURSE_TEA_REQ_HIST.id_prof_req
+  is 'Professional that registers the order';
+comment on column NURSE_TEA_REQ_HIST.id_episode
+  is 'Episode ID';
+comment on column NURSE_TEA_REQ_HIST.req_header
+  is 'Deprecated';
+comment on column NURSE_TEA_REQ_HIST.flg_status
+  is 'Flag that indicates the order''s status';
+comment on column NURSE_TEA_REQ_HIST.notes_req
+  is 'Notes';
+comment on column NURSE_TEA_REQ_HIST.id_prof_close
+  is 'Professional that closes the order';
+comment on column NURSE_TEA_REQ_HIST.notes_close
+  is 'Closing notes';
+comment on column NURSE_TEA_REQ_HIST.id_prof_exec
+  is 'Professional that executes the order';
+comment on column NURSE_TEA_REQ_HIST.id_prev_episode
+  is 'Episode ID where the order was registered (when the visit has more than one episode)';
+comment on column NURSE_TEA_REQ_HIST.dt_nurse_tea_req_tstz
+  is 'Date that indicates when the order was registered';
+comment on column NURSE_TEA_REQ_HIST.dt_begin_tstz
+  is 'Date for which the order is to be performed';
+comment on column NURSE_TEA_REQ_HIST.dt_close_tstz
+  is 'Closing date';
+comment on column NURSE_TEA_REQ_HIST.id_visit
+  is 'Visit ID';
+comment on column NURSE_TEA_REQ_HIST.id_patient
+  is 'Patient ID';
+comment on column NURSE_TEA_REQ_HIST.status_flg
+  is 'Request''s status flag (used to return the icon)';
+comment on column NURSE_TEA_REQ_HIST.status_icon
+  is 'Request''s status icon';
+comment on column NURSE_TEA_REQ_HIST.status_msg
+  is 'Request''s status message code';
+comment on column NURSE_TEA_REQ_HIST.status_str
+  is 'Request''s status (in specific format)';
+comment on column NURSE_TEA_REQ_HIST.create_user
+  is 'Creation User';
+comment on column NURSE_TEA_REQ_HIST.create_time
+  is 'Creation Time';
+comment on column NURSE_TEA_REQ_HIST.create_institution
+  is 'Creation Institution';
+comment on column NURSE_TEA_REQ_HIST.update_user
+  is 'Update User';
+comment on column NURSE_TEA_REQ_HIST.update_time
+  is 'Update Time';
+comment on column NURSE_TEA_REQ_HIST.update_institution
+  is 'Update Institution';
+comment on column NURSE_TEA_REQ_HIST.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column NURSE_TEA_REQ_HIST.id_context
+  is 'Request (suggestion) context ID';
+comment on column NURSE_TEA_REQ_HIST.flg_context
+  is 'Request (suggestion) context type';
+comment on column NURSE_TEA_REQ_HIST.id_nurse_tea_topic
+  is 'Topic ID';
+comment on column NURSE_TEA_REQ_HIST.id_order_recurr_plan
+  is 'Recurrence plan ID';
+comment on column NURSE_TEA_REQ_HIST.description
+  is 'Topic description';
+comment on column NURSE_TEA_REQ_HIST.flg_time
+  is 'To be performed: E - this episode; B - between episodes; N - next episode';
+comment on column NURSE_TEA_REQ_HIST.dt_nurse_tea_req_hist_tstz
+  is 'Date of NURSE_TEA_REQ_HIST update';
+comment on column NURSE_TEA_REQ_HIST.desc_topic_aux
+  is 'Title in free text (Other)';
+comment on column NURSE_TEA_REQ_HIST.id_not_order_reason
+  is 'Not reason order ID';
+  
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 18/02/2023 22:12
+-- CHANGE REASON: [EMR-56895] - HTML Migration - DDLs
+BEGIN
+pk_versioning.run(i_sql => 'ALTER TABLE nurse_tea_req_hist
+MODIFY FLG_STATUS VARCHAR2(2)');
+END;
+/
+-- CHANGE END: Diogo Oliveira

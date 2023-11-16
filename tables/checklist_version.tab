@@ -1,0 +1,48 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 24/06/2010 15:26
+-- CHANGE REASON: [ALERT-70633] Checklists: Back Office & Front Office (DDL)
+/** Tables */
+CREATE TABLE CHECKLIST_VERSION(
+    FLG_CONTENT_CREATOR VARCHAR2(1 CHAR) NOT NULL,
+INTERNAL_NAME VARCHAR2(1000 CHAR) NOT NULL,
+VERSION NUMBER(6) NOT NULL,
+ID_CHECKLIST_VERSION NUMBER(24) NOT NULL,
+ID_CHECKLIST NUMBER(24) NOT NULL,
+DT_CHECKLIST_VERSION TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+FLG_TYPE VARCHAR2(1 CHAR) NOT NULL,
+NAME VARCHAR2(1000 CHAR),
+CODE_NAME VARCHAR2(200 CHAR),
+FLG_USE_TRANSLATION VARCHAR2(1 CHAR) NOT NULL,
+ID_PROFESSIONAL NUMBER(24),
+DT_CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+DT_RETIRE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+CREATE_USER VARCHAR2(24 CHAR),
+    CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION NUMBER(24),
+UPDATE_USER VARCHAR2(24 CHAR),
+UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION NUMBER(24)
+);
+
+COMMENT ON TABLE CHECKLIST_VERSION IS 'Checklist template version. Changes in checklist content causes a new version';
+
+COMMENT ON COLUMN CHECKLIST_VERSION.FLG_CONTENT_CREATOR IS 'Content creator: Checklist created by (A)LERT, Checklist created by (I)nstitution';
+COMMENT ON COLUMN CHECKLIST_VERSION.INTERNAL_NAME IS 'Checklist''s internal name (original name)';
+COMMENT ON COLUMN CHECKLIST_VERSION.VERSION IS 'An integer to represent the version number of the checklist template';
+COMMENT ON COLUMN CHECKLIST_VERSION.ID_CHECKLIST_VERSION IS 'Alternate key';
+COMMENT ON COLUMN CHECKLIST_VERSION.ID_CHECKLIST IS 'Checklist alternate key';
+COMMENT ON COLUMN CHECKLIST_VERSION.DT_CHECKLIST_VERSION IS 'Version time';
+COMMENT ON COLUMN CHECKLIST_VERSION.FLG_TYPE IS 'Type of checklist: Checklist for (G)roup - same checklist for all professionals, (I)ndividual checklist - one checklist by professional';
+COMMENT ON COLUMN CHECKLIST_VERSION.NAME IS 'Checklist name. This field is set when checklist is created by institution';
+COMMENT ON COLUMN CHECKLIST_VERSION.CODE_NAME IS 'Code to retrieve translated name. This field is set when a checklist is created by ALERT';
+COMMENT ON COLUMN CHECKLIST_VERSION.FLG_USE_TRANSLATION IS 'Use "code_name" instead of "name" to retrieve translated name: (Y)es, (N)o';
+COMMENT ON COLUMN CHECKLIST_VERSION.ID_PROFESSIONAL IS 'Professional who created this version. NULL if checklist was created by ALERT';
+COMMENT ON COLUMN CHECKLIST_VERSION.DT_CREATE_TIME IS 'Timestamp the record was created. Used for history management';
+COMMENT ON COLUMN CHECKLIST_VERSION.DT_RETIRE_TIME IS 'Timestamp the record was outdated. Used for history management';
+COMMENT ON COLUMN CHECKLIST_VERSION.create_user IS 'Creation User';
+COMMENT ON COLUMN CHECKLIST_VERSION.create_time IS 'Creation Time';
+COMMENT ON COLUMN CHECKLIST_VERSION.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN CHECKLIST_VERSION.update_user IS 'Update User';
+COMMENT ON COLUMN CHECKLIST_VERSION.update_time IS 'Update Time';
+COMMENT ON COLUMN CHECKLIST_VERSION.update_institution IS 'Update Institution';
+-- CHANGE END: Ariel Machado

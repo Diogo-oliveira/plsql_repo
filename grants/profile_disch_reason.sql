@@ -1,0 +1,8 @@
+grant select on  PROFILE_DISCH_REASON to alert_viewer;
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2017-1-03
+-- CHANGED REASON: ALERT-327486
+grant SELECT on ALERT.PROFILE_DISCH_REASON to ALERT_APEX_TOOLS;
+-- CHANGE END: Humberto Cardoso

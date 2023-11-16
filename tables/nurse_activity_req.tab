@@ -1,0 +1,116 @@
+
+
+  CREATE TABLE NURSE_ACTIVITY_REQ
+   (	ID_NURSE_ACTIVITY_REQ NUMBER(24,0) NOT NULL ENABLE,
+	DT_NURSE_ACTIVITY_REQ DATE NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	DT_BEGIN DATE,
+	FLG_TIME VARCHAR2(1) NOT NULL ENABLE,
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+
+	ID_SCHEDULE NUMBER(24,0),
+	ID_EPISODE_ORIGIN NUMBER(24,0),
+	ID_EPISODE_DESTINATION NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE nurse_activity_req IS 'Requisição de actividades de enfermagem.Podem ser requisitadas e "programadas" por um médico na consulta, para execução na mesma consulta ou no futuro. Também podem ser requisitadas pelas enfermeiras, para programar tratamentos subsequentes.Estas requisições reflectem-se em SCHEDULE.' ;
+
+COMMENT ON COLUMN nurse_activity_req.id_episode_origin IS 'ID do episódio em que foi registada a req. inicialmente (se FLG_TIME = ''N'')' ;
+COMMENT ON COLUMN nurse_activity_req.id_episode_destination IS 'ID do episódio em que foi registada a req. destino (se FLG_TIME = ''N'')' ;
+COMMENT ON COLUMN nurse_activity_req.flg_status IS 'F - concluído; R - requisitado; C - cancelado; E - em execução; D - pendente; P - parcial.' ;
+COMMENT ON COLUMN nurse_activity_req.dt_begin IS 'Data pretendida para início da execução do exame (ie, ñ imediata)' ;
+COMMENT ON COLUMN nurse_activity_req.flg_time IS 'Realização: E - neste episódio; N - próximo episódio; B - entre episódios' ;
+
+alter table NURSE_aCTIVITY_REQ add id_prev_episode number(24);
+
+COMMENT ON COLUMN nurse_activity_req.id_prev_episode IS 'ID do episódio onde foi criado a requisição' ;
+
+alter table nurse_activity_req 
+add (dt_nurse_activity_req_tstz timestamp with local time zone,
+     dt_begin_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone);
+
+--CHANGED BY: Ariel Geraldo Machado
+--CHANGE DATE: 2008-SEP-16
+--CHANGE REASON: Database denormalization
+ALTER TABLE nurse_activity_req add id_patient NUMBER(24);
+COMMENT ON column nurse_activity_req.id_patient IS 'Patient ID';
+--CHANGE END
+
+
+alter table nurse_activity_req drop column DT_NURSE_ACTIVITY_REQ;
+alter table nurse_activity_req drop column DT_BEGIN;
+alter table nurse_activity_req drop column DT_CANCEL;
+
+
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 28/05/2014 08:56
+-- CHANGE REASON: [ALERT-283443 ] 
+ALTER TABLE nurse_activity_req add id_not_order_reason NUMBER(24);
+COMMENT ON column nurse_activity_req.id_not_order_reason IS 'Not order reason ID';
+/
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 16:50
+-- CHANGE REASON: [ALERT-317702] 
+comment on table NURSE_ACTIVITY_REQ
+  is 'Dressing orders';
+-- Add comments to the columns 
+comment on column NURSE_ACTIVITY_REQ.id_nurse_activity_req
+  is 'Order''s ID';
+comment on column NURSE_ACTIVITY_REQ.id_episode
+  is 'Episode ID';
+comment on column NURSE_ACTIVITY_REQ.id_professional
+  is 'Professional ID';
+comment on column NURSE_ACTIVITY_REQ.flg_status
+  is 'Flag that indicates the order''s status';
+comment on column NURSE_ACTIVITY_REQ.notes
+  is 'Notes';
+comment on column NURSE_ACTIVITY_REQ.flg_time
+  is 'To be performed: E - this episode; B - between episodes; N - next episode';
+comment on column NURSE_ACTIVITY_REQ.id_prof_cancel
+  is 'Professional that cancels the order';
+comment on column NURSE_ACTIVITY_REQ.notes_cancel
+  is 'Cancelation notes';
+comment on column NURSE_ACTIVITY_REQ.id_schedule
+  is 'Schedule ID';
+comment on column NURSE_ACTIVITY_REQ.id_episode_origin
+  is 'Episode ID where the order was registered';
+comment on column NURSE_ACTIVITY_REQ.id_episode_destination
+  is 'Episode ID where the order is going to be performed';
+comment on column NURSE_ACTIVITY_REQ.id_prev_episode
+  is 'Episode ID where the order was registered (when the visit has more than one episode)';
+comment on column NURSE_ACTIVITY_REQ.dt_nurse_activity_req_tstz
+  is 'Date that indicates when the order was registered';
+comment on column NURSE_ACTIVITY_REQ.dt_begin_tstz
+  is 'Date for which the order is to be performed';
+comment on column NURSE_ACTIVITY_REQ.dt_cancel_tstz
+  is 'Date that indicates when the order was cancelled';
+comment on column NURSE_ACTIVITY_REQ.id_patient
+  is 'Patient ID';
+comment on column NURSE_ACTIVITY_REQ.create_user
+  is 'Creation User';
+comment on column NURSE_ACTIVITY_REQ.create_time
+  is 'Creation Time';
+comment on column NURSE_ACTIVITY_REQ.create_institution
+  is 'Creation Institution';
+comment on column NURSE_ACTIVITY_REQ.update_user
+  is 'Update User';
+comment on column NURSE_ACTIVITY_REQ.update_time
+  is 'Update Time';
+comment on column NURSE_ACTIVITY_REQ.update_institution
+  is 'Update Institution';
+comment on column NURSE_ACTIVITY_REQ.id_not_order_reason
+  is 'Not order reason ID';
+  
+  
+  
+-- CHANGE END: Ana Matos

@@ -1,0 +1,35 @@
+--26/01/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+ALTER TABLE EPIS_PN_HIST
+ ADD (CONSTRAINT EPNH_PK PRIMARY KEY 
+  (ID_EPIS_PN
+  ,DT_EPIS_PN_HIST))
+/
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 04/08/2021 11:50
+-- CHANGE REASON: [EMR-47840]
+begin
+pk_versioning.run('ALTER TABLE epis_pn_hist ADD CONSTRAINT epnh_epn_epis_fk FOREIGN KEY (id_epis_pn, id_episode) REFERENCES epis_pn (id_epis_pn, id_episode) NOVALIDATE');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 05/08/2021 14:25
+-- CHANGE REASON: [EMR-47840]
+begin
+pk_versioning.run('ALTER TABLE epis_pn_hist ADD CONSTRAINT epnh_epn_epis_fk FOREIGN KEY (id_epis_pn, id_episode) REFERENCES epis_pn (id_epis_pn, id_episode) NOVALIDATE');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 22/06/2022 16:18
+-- CHANGE REASON: [EMR-53758] - Match error when exists Single pages
+BEGIN
+pk_versioning.run('alter table EPIS_PN_HIST   drop constraint EPNH_EPN_EPIS_FK');
+END;
+/
+-- CHANGE END: Elisabete Bugalho

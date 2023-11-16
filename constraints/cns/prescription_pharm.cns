@@ -1,0 +1,98 @@
+
+
+  ALTER TABLE PRESCRIPTION_PHARM ADD CONSTRAINT PRM_PK PRIMARY KEY (ID_PRESCRIPTION_PHARM) ENABLE;
+
+  ALTER TABLE PRESCRIPTION_PHARM MODIFY (ID_PRESCRIPTION_PHARM NOT NULL ENABLE);
+
+  ALTER TABLE PRESCRIPTION_PHARM MODIFY (ID_PRESCRIPTION NOT NULL ENABLE);
+
+  ALTER TABLE PRESCRIPTION_PHARM MODIFY (QTY NOT NULL ENABLE);
+
+  ALTER TABLE PRESCRIPTION_PHARM MODIFY (FLG_CI NOT NULL ENABLE);
+
+  ALTER TABLE PRESCRIPTION_PHARM MODIFY (FLG_CHEAPER NOT NULL ENABLE);
+
+
+  ALTER TABLE PRESCRIPTION_PHARM MODIFY (FLG_JUSTIF NOT NULL ENABLE);
+
+  ALTER TABLE PRESCRIPTION_PHARM MODIFY (DT_PRESCRIPTION_PHARM NOT NULL ENABLE);
+
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-ABR-03
+-- CHANGING REASON: OVREDOSAGE MODULE
+alter table prescription_pharm
+  add constraint PP_FLG_DOSAGE_CHECK_CHK
+  check FLG_DOSAGE_CHECK IN
+      (
+       'Y',
+       'N'
+      ));
+-- CHANGE END Patrícia Neto
+
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 29/03/2010 12:21
+-- CHANGE REASON: [ALERT-84593] 
+declare
+  l_count pls_integer;
+
+begin
+  select count(1)
+  into l_count
+  from all_constraints where owner = 'ALERT' and constraint_name = 'PP_FLG_FIRST_PRESC_CHK';
+
+  if l_count = 0 then
+   execute immediate ( 'alter table PRESCRIPTION_PHARM add constraint PP_FLG_FIRST_PRESC_CHK check (FLG_FIRST_PRESC IN (''Y'', ''N''))');
+ end if;
+
+end;
+/
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 29/03/2010 15:21
+-- CHANGE REASON: [ALERT-84593] 
+declare
+  l_count pls_integer;
+
+begin
+  select count(1)
+  into l_count
+  from all_constraints where owner = 'ALERT' and constraint_name = 'PP_FLG_FIRST_PRESC_CHK';
+
+  if l_count = 0 then
+   execute immediate ( 'alter table PRESCRIPTION_PHARM add constraint PP_FLG_FIRST_PRESC_CHK check (FLG_FIRST_PRESC IN (''Y'', ''N''))');
+ end if;
+
+end;
+/
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 29/03/2010 15:29
+-- CHANGE REASON: [ALERT-84593] 
+declare
+  l_count pls_integer;
+
+begin
+  select count(1)
+  into l_count
+  from all_constraints where owner = 'ALERT' and constraint_name = 'PP_FLG_FIRST_PRESC_CHK';
+
+  if l_count = 0 then
+   execute immediate ( 'alter table PRESCRIPTION_PHARM add constraint PP_FLG_FIRST_PRESC_CHK check (FLG_FIRST_PRESC IN (''Y'', ''N''))');
+ end if;
+
+end;
+/
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 04/06/2010 11:28
+-- CHANGE REASON: [ALERT-102389] 
+alter table PRESCRIPTION_PHARM
+  add constraint PP_FLG_CHRONIC_MEDICATION_CHK
+  check (FLG_CHRONIC_MEDICATION IN ('Y', 'N'));
+-- CHANGE END:  NUNO ANTUNES

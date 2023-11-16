@@ -1,0 +1,1 @@
+grant select on epis_supplies_det to alert_viewer;

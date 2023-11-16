@@ -1,0 +1,42 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/07/2011 15:44
+-- CHANGE REASON: [ALERT-188951] Possibility to calculate partial scores
+CREATE TABLE scales_group (
+       id_scales_group NUMBER(24) NOT NULL,       
+       code_scales_group varchar2(200 char),
+       flg_config_formula varchar2(1 char) default 'Y',            
+       flg_available      varchar2(1 char) default 'Y',
+       create_user VARCHAR2(24),
+       create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution NUMBER(24),
+       update_user VARCHAR2(24),
+       update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution NUMBER(24)
+);
+
+COMMENT ON TABLE scales_group IS 'Groups of blocks that should be used to calculate a template score.';
+COMMENT ON COLUMN scales_group.id_scales_group IS 'Scales group identifier';
+COMMENT ON COLUMN scales_group.code_scales_group IS 'Translation code of the group description.';
+COMMENT ON COLUMN scales_group.flg_config_formula IS 'Type of calculation formula: (Y) configured on scales_formula table. (N) - dependent on a pl/sql function';
+COMMENT ON COLUMN scales_group.flg_available IS 'Availability: (Y) Yes (N) No';
+COMMENT ON COLUMN scales_group.create_user IS 'Creation user';
+COMMENT ON COLUMN scales_group.create_time IS 'Creation date / time';
+COMMENT ON COLUMN scales_group.create_institution IS 'Creation institution';
+COMMENT ON COLUMN scales_group.update_user IS 'Update user';
+COMMENT ON COLUMN scales_group.update_time IS 'Update date / time';
+COMMENT ON COLUMN scales_group.update_institution IS 'Update institution';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/08/2011 08:33
+-- CHANGE REASON: [ALERT-192414 ] partial scores
+alter table scales_group modify flg_config_formula varchar2(1 char) default 'Y' not null;
+alter table scales_group modify flg_available      varchar2(1 char) default 'Y' not null;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/08/2011 16:46
+-- CHANGE REASON: [ALERT-192414 ] partial scores
+alter table scales_group modify create_user VARCHAR2(24 char);
+alter table scales_group modify update_user VARCHAR2(24 char);
+-- CHANGE END: Sofia Mendes

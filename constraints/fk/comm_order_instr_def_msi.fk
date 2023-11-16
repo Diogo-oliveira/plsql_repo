@@ -1,0 +1,15 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/04/2014 11:21
+-- CHANGE REASON: [ALERT-275664] 
+BEGIN
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_INSTR_DEF_MSI add constraint corsi_abkt_fk foreign key (id_market) references alert_core_data.ab_market (id_ab_market)]');
+  pk_versioning.run(i_sql => q'[alter table COMM_ORDER_INSTR_DEF_MSI add constraint corsi_ainst_fk foreign key (id_institution) references alert_core_data.ab_institution (id_ab_institution)]');
+  pk_versioning.run(i_sql => q'[alter table COMM_ORDER_INSTR_DEF_MSI add constraint corsi_absw_fk foreign key (id_software) references alert_core_data.ab_software (id_ab_software)]');
+  pk_versioning.run(i_sql => q'[alter table COMM_ORDER_INSTR_DEF_MSI add constraint corsi_cncptty_fk foreign key (id_concept_type) references alert_core_data.concept_type (id_concept_type)]');
+  pk_versioning.run(i_sql => q'[alter table COMM_ORDER_INSTR_DEF_MSI add constraint corsi_cncptv_fk foreign key (id_concept_version,id_cncpt_vrs_inst_owner) references alert_core_data.concept_version (id_concept_version,id_inst_owner)]');
+  pk_versioning.run(i_sql => q'[alter table COMM_ORDER_INSTR_DEF_MSI add constraint corsi_cncpttr_fk foreign key (id_concept_term,id_cncpt_trm_inst_owner) references alert_core_data.concept_term (id_concept_term, id_inst_owner)]');
+pk_versioning.run(i_sql => q'[alter table COMM_ORDER_INSTR_DEF_MSI add constraint corsi_cat_fk foreign key (id_category) references category (id_category)]');
+pk_versioning.run(i_sql => q'[alter table COMM_ORDER_INSTR_DEF_MSI add constraint corsi_spt_fk foreign key (id_profile_template) references profile_template (id_profile_template)]');
+END;
+/
+-- CHANGE END: Ana Monteiro

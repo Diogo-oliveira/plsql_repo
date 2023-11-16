@@ -1,0 +1,14 @@
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 19/08/2011 11:00
+-- CHANGE REASON: [ALERT-191709] Drop unique index in diagnosis_dep_clin_serv
+DECLARE
+    e_index_doesnt_exist EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_index_doesnt_exist, -01418);
+BEGIN
+    EXECUTE IMMEDIATE 'DROP INDEX DIAGNOSIS_DEP_CLIN_SERV_UK';
+EXCEPTION
+    WHEN e_index_doesnt_exist THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: José Silva

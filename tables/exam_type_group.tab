@@ -1,0 +1,42 @@
+CREATE TABLE EXAM_TYPE_GROUP
+ (  ID_EXAM_TYPE_GROUP NUMBER(24,0) NOT NULL ENABLE,
+    ID_EXAM_TYPE NUMBER(24,0) NOT NULL ENABLE,
+    ID_EXAM NUMBER(24,0) NOT NULL ENABLE,
+    FLG_BYPASS_VALIDATION VARCHAR2(1) DEFAULT 'N'
+ );
+ 
+COMMENT ON TABLE exam_type_group IS 'Tabela com a associação entre exames e tipos de exames';
+ 
+
+COMMENT ON COLUMN exam_type_group.id_exam_type IS 'Tipo de exame'; 
+COMMENT ON COLUMN exam_type_group.id_exam IS 'Exame associado a este tipo';
+COMMENT ON COLUMN exam_type_group.flg_bypass_validation IS 'PERMITE IDENTIFICAR SE NECESSITA DE ECRAS DE VALIDAÇÃO. Y - Salta a validação N - Mostra o ecra de validação';
+
+ALTER TABLE EXAM_TYPE_GROUP ADD id_software NUMBER(12);
+ALTER TABLE EXAM_TYPE_GROUP ADD id_institution NUMBER(12);
+
+comment on column EXAM_TYPE_GROUP.id_software is 'Software';
+comment on column EXAM_TYPE_GROUP.id_institution is 'Instituição';
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:50
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EXAM_TYPE_GROUP
+  is 'Table with the association between exams and exam types';
+-- Add comments to the columns 
+comment on column EXAM_TYPE_GROUP.id_exam_type_group
+  is 'Primary Key';
+comment on column EXAM_TYPE_GROUP.id_exam_type
+  is 'Exam Type ID';
+comment on column EXAM_TYPE_GROUP.id_exam
+  is 'Exam ID';
+comment on column EXAM_TYPE_GROUP.flg_bypass_validation
+  is 'Is required validation screen. Y - Skips validation N - Shows validation scree';
+comment on column EXAM_TYPE_GROUP.id_institution
+  is 'Institution';  
+  
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,61 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+declare
+   e_fk_already_there EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); -- table already there
+begin
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_DCS
+  add constraint ICSD_DCS_FK foreign key (ID_DEP_CLIN_SERV)
+  references DEP_CLIN_SERV (ID_DEP_CLIN_SERV)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_DCS
+  add constraint ICSD_ICPS_FK foreign key (ID_CPLAN_STAND)
+  references ICNP_CPLAN_STAND (ID_CPLAN_STAND)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_DCS
+  add constraint ICSD_S_FK foreign key (ID_SOFTWARE)
+  references SOFTWARE (ID_SOFTWARE)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 02/11/2010 14:54
+-- CHANGE REASON: [ALERT-117147] 
+declare
+   e_fk_already_there EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); -- table already there
+begin
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_DCS
+  add constraint ICSD_DCS_FK foreign key (ID_DEP_CLIN_SERV)
+  references DEP_CLIN_SERV (ID_DEP_CLIN_SERV)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_DCS
+  add constraint ICSD_S_FK foreign key (ID_SOFTWARE)
+  references SOFTWARE (ID_SOFTWARE)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

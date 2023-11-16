@@ -1,0 +1,1 @@
+grant select on SR_DANGER_CONT  to ALERT_VIEWER;

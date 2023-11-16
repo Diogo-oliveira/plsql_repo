@@ -1,0 +1,18 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 11/09/2012 15:03
+-- CHANGE REASON: [ALERT-212094 ] 
+-- Create/Recreate primary, unique and foreign key constraints 
+DECLARE
+    e_exception1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception1, -02260);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table EXT_CAUSE_CODIFICATION
+  add constraint EXTCC_PK primary key (id_ext_cause_codification)';
+    EXCEPTION
+        WHEN e_exception1 THEN
+            dbms_output.put_line('Already done');
+    END;
+END;
+/
+-- CHANGE END: Sérgio Santos

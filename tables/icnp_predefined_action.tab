@@ -1,0 +1,92 @@
+
+
+  CREATE TABLE ICNP_PREDEFINED_ACTION
+   (	ID_PREDEFINED_ACTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_COMPOSITION_PARENT NUMBER(12,0) NOT NULL ENABLE,
+	ID_COMPOSITION NUMBER(12,0) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE DEFAULT SYSDATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE icnp_predefined_action IS 'Automatic Action. Primarily allows composition actions to be associated with composition diagnosis. However, it also allows all type of relation between compositions.' ;
+
+COMMENT ON COLUMN icnp_predefined_action.id_predefined_action IS 'primary key' ;
+COMMENT ON COLUMN icnp_predefined_action.id_institution IS 'institution id' ;
+COMMENT ON COLUMN icnp_predefined_action.id_composition_parent IS 'parent composition id, root compositio id, master composition' ;
+COMMENT ON COLUMN icnp_predefined_action.id_composition IS 'slave composition, leaf composition' ;
+COMMENT ON COLUMN icnp_predefined_action.flg_available IS '(Y/N) if association is available, valid' ;
+
+comment on column ICNP_PREDEFINED_ACTION.ID_COMPOSITION_PARENT
+  is 'parent composition id, root compositio id, master composition, diagnostic';
+comment on column ICNP_PREDEFINED_ACTION.ID_COMPOSITION
+  is 'slave composition, leaf composition, intervention';
+
+
+ALTER TABLE ICNP_PREDEFINED_ACTION
+ ADD (ID_SOFTWARE  NUMBER(12));
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION.ID_SOFTWARE IS 'ID do software';
+
+-- CHANGED BY: Pedro Lopes
+-- CHANGE DATE: 2009-JUN-30
+-- CHANGE REASON: ALERT-913
+
+ALTER TABLE ICNP_PREDEFINED_ACTION MODIFY (id_composition number(24,0));
+
+ALTER TABLE ICNP_PREDEFINED_ACTION MODIFY (id_composition_parent number(24,0));
+
+ALTER TABLE ICNP_PREDEFINED_ACTION MODIFY (ID_INSTITUTION number(24,0));
+
+ALTER TABLE ICNP_PREDEFINED_ACTION MODIFY (ID_SOFTWARE number(24,0));
+
+--CHANGE END
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 07/06/2013 15:16
+-- CHANGE REASON: [ALERT-257983] 
+alter table ICNP_PREDEFINED_ACTION add flg_most_freq VARCHAR2(1);
+-- Add comments to the columns 
+comment on column ICNP_PREDEFINED_ACTION.flg_most_freq
+  is '(Y/N) Most frequent nursing interventions';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 10:40
+-- CHANGE REASON: [ALERT-317702] 
+comment on table ICNP_PREDEFINED_ACTION
+  is 'Automatic action. Primarily allows composition actions to be associated with composition diagnosis. However, it also allows all type of relation between compositions';
+-- Add comments to the columns 
+comment on column ICNP_PREDEFINED_ACTION.id_predefined_action
+  is 'Primary key';
+comment on column ICNP_PREDEFINED_ACTION.id_institution
+  is 'Institution ID';
+comment on column ICNP_PREDEFINED_ACTION.id_composition_parent
+  is 'Composition parent ID';
+comment on column ICNP_PREDEFINED_ACTION.id_composition
+  is 'Composition ID';
+comment on column ICNP_PREDEFINED_ACTION.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column ICNP_PREDEFINED_ACTION.adw_last_update
+  is 'Update date';
+comment on column ICNP_PREDEFINED_ACTION.id_software
+  is 'Software ID';
+comment on column ICNP_PREDEFINED_ACTION.create_user
+  is 'Creation User';
+comment on column ICNP_PREDEFINED_ACTION.create_time
+  is 'Creation Time';
+comment on column ICNP_PREDEFINED_ACTION.create_institution
+  is 'Creation Institution';
+comment on column ICNP_PREDEFINED_ACTION.update_user
+  is 'Update User';
+comment on column ICNP_PREDEFINED_ACTION.update_time
+  is 'Update Time';
+comment on column ICNP_PREDEFINED_ACTION.update_institution
+  is 'Update Institution';
+comment on column ICNP_PREDEFINED_ACTION.flg_most_freq
+  is 'Most frequent nursing intervention (Y/N)';
+  
+  
+  
+-- CHANGE END: Ana Matos

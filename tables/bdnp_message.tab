@@ -1,0 +1,41 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE l_var PLS_INTEGER;
+
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tables
+     WHERE table_name = 'BDNP_MESSAGE';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'CREATE TABLE BDNP_MESSAGE(
+   ID_BDNP_MESSAGE NUMBER(24) NOT NULL,
+   CODE_BDNP_MESSAGE VARCHAR2(200) NOT NULL,
+   FLG_TYPE VARCHAR2(1) NOT NULL,
+   FLG_AVAILABLE VARCHAR2(1) NOT NULL,
+   FLG_PRESC_TYPE VARCHAR2(1 CHAR) NOT NULL,
+   CREATE_USER VARCHAR2(24),
+   CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+   CREATE_INSTITUTION NUMBER(24,0),
+   UPDATE_USER VARCHAR2(24),
+   UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+   UPDATE_INSTITUTION NUMBER(24,0))';
+    
+    END IF;
+
+END;
+/
+
+COMMENT ON column bdnp_message.flg_type IS 'Message type: ''W''- Warnig, ''E''- Error, ''S'' - Success';
+COMMENT ON column bdnp_message.flg_available IS 'Message is available ''Y''- Yes, ''N''- No';
+COMMENT ON column bdnp_message.create_user IS 'Creation User';
+COMMENT ON column bdnp_message.create_time IS 'Creation Time';
+COMMENT ON column bdnp_message.create_institution IS 'Creation Institution';
+COMMENT ON column bdnp_message.update_user IS 'Update User';
+COMMENT ON column bdnp_message.update_time IS 'Update Time';
+COMMENT ON column bdnp_message.update_institution IS 'Update Institution';
+COMMENT ON column bdnp_message.flg_presc_type IS 'Type of Prescription M - Medication, R - Referral , A - All';
+-- CHANGE END: Joana Barroso

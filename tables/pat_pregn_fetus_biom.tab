@@ -1,0 +1,47 @@
+
+
+  CREATE TABLE PAT_PREGN_FETUS_BIOM
+   (	ID_PAT_PREGN_FETUS_BIOM NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_PREGN_FETUS_BIOM DATE NOT NULL ENABLE,
+	ID_PAT_PREGN_FETUS NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_VITAL_SIGN NUMBER(12,0) NOT NULL ENABLE,
+	ID_VITAL_SIGN_DESC NUMBER(12,0),
+	VALUE NUMBER(10,3)
+   );
+
+
+COMMENT ON TABLE pat_pregn_fetus_biom IS 'Biometrias lidas para o feto' ;
+
+alter table pat_pregn_fetus_biom 
+add (dt_pat_pregn_fetus_biom_tstz timestamp with local time zone); 
+
+-- JSILVA 22-10-2008
+ALTER TABLE pat_pregn_fetus_biom DROP COLUMN DT_PAT_PREGN_FETUS_BIOM;
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table PAT_PREGN_FETUS_BIOM
+  is 'Fetus biometric reads';
+-- Add comments to the columns 
+comment on column PAT_PREGN_FETUS_BIOM.id_pat_pregn_fetus_biom
+  is 'Primary Key';
+comment on column PAT_PREGN_FETUS_BIOM.id_pat_pregn_fetus
+  is 'Pregnancy Fetus ID (PAT_PREGN_FETUS.ID_PAT_PREG.FETUS)';
+comment on column PAT_PREGN_FETUS_BIOM.id_professional
+  is 'Professional identifier';
+comment on column PAT_PREGN_FETUS_BIOM.id_vital_sign
+  is 'Vital sign identifier';
+comment on column PAT_PREGN_FETUS_BIOM.id_vital_sign_desc
+  is 'Vital sign description identifier';
+comment on column PAT_PREGN_FETUS_BIOM.value
+  is 'Value';
+comment on column PAT_PREGN_FETUS_BIOM.dt_pat_pregn_fetus_biom_tstz
+  is 'Biometric read date';  
+  
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,100 @@
+ALTER TABLE pat_history_diagnosis ADD (CONSTRAINT
+ PHD_PROF_FK FOREIGN KEY 
+  (id_professional) REFERENCES professional
+  (id_professional));
+
+	ALTER TABLE pat_history_diagnosis ADD (CONSTRAINT
+ PHD_phd_new_FK FOREIGN KEY 
+  (id_pat_history_diagnosis) REFERENCES pat_history_diagnosis
+  (id_pat_history_diagnosis));
+
+	ALTER TABLE pat_history_diagnosis ADD (CONSTRAINT
+ PHD_ec_FK FOREIGN KEY 
+  (id_epis_complaint) REFERENCES epis_complaint
+  (id_epis_complaint));
+
+
+ALTER TABLE pat_history_diagnosis
+add CONSTRAINT phd_patient_fk
+  FOREIGN KEY (id_patient)
+  REFERENCES patient(id_patient);
+ALTER TABLE pat_history_diagnosis
+add CONSTRAINT phd_episode_fk
+  FOREIGN KEY (id_episode)
+  REFERENCES episode(id_episode);
+ALTER TABLE pat_history_diagnosis
+add CONSTRAINT phd_institution_fk
+  FOREIGN KEY (id_institution)
+  REFERENCES institution(id_institution);
+
+ALTER TABLE pat_history_diagnosis ADD (CONSTRAINT
+ PHD_ADIAG_FK FOREIGN KEY 
+  (id_alert_diagnosis) REFERENCES alert_diagnosis
+  (id_alert_diagnosis));
+ALTER TABLE pat_history_diagnosis ADD (CONSTRAINT
+ PHD_DIAG_FK FOREIGN KEY 
+  (id_diagnosis) REFERENCES diagnosis
+  (id_diagnosis));  
+  
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 11/05/2011 13:24
+-- CHANGE REASON: [ALERT-175588 ] 
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_CDRL_FK foreign key (id_cdr_call)
+  references cdr_call (id_cdr_call);
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 17/08/2011 18:47
+-- CHANGE REASON: [ALERT-190780] 
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_EPISD_FK foreign key (ID_EPIS_DOCUMENTATION)
+  references EPIS_DOCUMENTATION (ID_EPIS_DOCUMENTATION);
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_PROFC_FK foreign key (ID_PROF_CANCEL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 19/08/2011 17:27
+-- CHANGE REASON: [ALERT-190780] 
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_PROFC_FK foreign key (ID_PROF_CANCEL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 29/08/2011 17:25
+-- CHANGE REASON: [ALERT-191228] 
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_INT_FK foreign key (ID_INTERVENTION)
+  references INTERVENTION (ID_INTERVENTION);
+  
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_EXAM_FK foreign key (ID_EXAM)
+  references EXAM (ID_EXAM);
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 28/11/2016 12:06
+-- CHANGE REASON: [ALERT-326394] 
+begin
+pk_versioning.run('ALTER TABLE PAT_HISTORY_DIAGNOSIS ADD (id_location_inst_owner NUMBER(24))');
+end;
+/
+begin
+pk_versioning.run('ALTER TABLE PAT_HISTORY_DIAGNOSIS ADD CONSTRAINT PHD_LOCATION_FK FOREIGN KEY (ID_LOCATION, ID_LOCATION_INST_OWNER) REFERENCES ALERT_CORE_DATA.CONCEPT_VERSION (ID_CONCEPT_VERSION, ID_INST_OWNER)');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: André Silva
+-- CHANGE DATE: 12/10/2017
+-- CHANGE REASON: ALERT-333554
+ALTER TABLE pat_history_diagnosis
+ ADD CONSTRAINT fk_family_relationship 
+  FOREIGN KEY (id_family_relationship)
+  REFERENCES family_relationship(id_family_relationship);
+-- CHANGE END: André Silva

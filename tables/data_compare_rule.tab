@@ -1,0 +1,39 @@
+-- Create table
+create table DATA_COMPARE_RULE
+(
+  ID_DATA_COMPARE_RULE NUMBER not null,
+  ID_INSTITUTION       NUMBER not null,
+  OBJ_SOURCE           VARCHAR2(200) not null,
+  COL_SOURCE           VARCHAR2(200) not null,
+  OBJ_TARGET           VARCHAR2(200) not null,
+  COL_TARGET           VARCHAR2(200) not null,
+  FLG_AVAILABLE        VARCHAR2(1) not null
+)
+tablespace TABLE_S
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table DATA_COMPARE_RULE
+  is 'This table contains rules for comparison data between two db objects (tables or views) per institution.';
+-- Add comments to the columns 
+comment on column DATA_COMPARE_RULE.ID_DATA_COMPARE_RULE
+  is 'Primary key';
+comment on column DATA_COMPARE_RULE.ID_INSTITUTION
+  is 'FK relation with INSTITUTION';
+comment on column DATA_COMPARE_RULE.OBJ_SOURCE
+  is 'The name of the first object (table/view) to compare';
+comment on column DATA_COMPARE_RULE.COL_SOURCE
+  is 'The name of the column in the first object to compare';
+comment on column DATA_COMPARE_RULE.OBJ_TARGET
+  is 'The name of the second object (table/view) to compare';
+comment on column DATA_COMPARE_RULE.COL_TARGET
+  is 'The name of the column in the second object to compare';
+comment on column DATA_COMPARE_RULE.FLG_AVAILABLE
+  is 'Availability of the rule.';

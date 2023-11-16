@@ -1,0 +1,356 @@
+
+
+  CREATE TABLE EPIS_TRIAGE
+   (	ID_EPIS_TRIAGE NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_TRIAGE_COLOR NUMBER(12,0),
+	ID_TRIAGE NUMBER(12,0),
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_ROOM NUMBER(24,0),
+	ID_TRIAGE_NURSE NUMBER,
+	DT_BEGIN DATE NOT NULL ENABLE,
+	DT_END DATE NOT NULL ENABLE,
+	PAIN_SCALE NUMBER(3,0),
+	FLG_LETTER VARCHAR2(1),
+
+	NOTES VARCHAR2(4000),
+	ID_NECESSITY NUMBER(12,0),
+	ID_ORIGIN NUMBER(24,0),
+	ID_TRIAGE_WHITE_REASON NUMBER(24,0),
+	ID_EPIS_ANAMNESIS NUMBER(24,0),
+	DESC_ORIGIN VARCHAR2(200)
+   );
+
+
+COMMENT ON TABLE epis_triage IS 'Episódio de Manchester' ;
+
+COMMENT ON COLUMN epis_triage.id_triage_nurse IS 'Triagem de enfermagem' ;
+COMMENT ON COLUMN epis_triage.dt_begin IS 'Data de início de triagem' ;
+COMMENT ON COLUMN epis_triage.dt_end IS 'Data de fim de triagem' ;
+COMMENT ON COLUMN epis_triage.pain_scale IS 'Valor da régua da dor' ;
+COMMENT ON COLUMN epis_triage.flg_letter IS 'Indicação se vem acompanhado de carta do médico assistente (Y / N). Valor por defeito é N.' ;
+COMMENT ON COLUMN epis_triage.notes IS 'Notas' ;
+COMMENT ON COLUMN epis_triage.id_necessity IS 'Necessidade' ;
+COMMENT ON COLUMN epis_triage.id_origin IS 'Origem de onde é proveniente o doente' ;
+COMMENT ON COLUMN epis_triage.id_triage_white_reason IS 'Razões da passagem no SU, para doentes não triados ("brancos")' ;
+COMMENT ON COLUMN epis_triage.id_epis_anamnesis IS 'Queixa' ;
+COMMENT ON COLUMN epis_triage.id_epis_triage IS 'Chave primária' ;
+COMMENT ON COLUMN epis_triage.id_episode IS 'Episódio' ;
+COMMENT ON COLUMN epis_triage.id_triage_color IS 'Côr' ;
+
+COMMENT ON COLUMN epis_triage.id_triage IS 'Triagem' ;
+COMMENT ON COLUMN epis_triage.id_professional IS 'Profissional' ;
+COMMENT ON COLUMN epis_triage.id_room IS 'Sala' ;
+
+alter table epis_triage 
+add (dt_begin_tstz timestamp with local time zone,
+dt_end_tstz timestamp with local time zone); 
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-JUL-31
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15277
+
+COMMENT ON COLUMN EPIS_TRIAGE.DESC_ORIGIN IS 'Origin description';
+COMMENT ON COLUMN EPIS_TRIAGE.DT_BEGIN_TSTZ IS 'Triage begin date';
+COMMENT ON COLUMN EPIS_TRIAGE.DT_END_TSTZ IS 'Triage end date';
+
+
+
+-- Alert Data Governance - 22-Sep-2008
+alter table EPIS_TRIAGE
+drop (dt_begin, dt_end);
+
+
+
+-- José Brito 14/05/2009 ALERT-20512 Triage T5 improvements
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_triage ADD id_triage_color_orig NUMBER(24)';
+EXCEPTION
+    WHEN OTHERS THEN
+		    NULL;
+END;
+/
+
+COMMENT ON COLUMN epis_triage.id_triage_color_orig IS 'Triage original color, if color was changed.';
+-- END
+
+
+
+
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 24/01/2010 19:50
+-- CHANGE REASON: [ALERT-70160] Triage refactoring
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE EPIS_TRIAGE ADD ID_TRANSP_ENTITY NUMBER(24)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE EPIS_TRIAGE ADD FLG_SELECTED_OPTION VARCHAR2(1)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE EPIS_TRIAGE ADD EMERGENCY_CONTACT VARCHAR2(200)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+
+COMMENT ON COLUMN EPIS_TRIAGE.ID_TRANSP_ENTITY IS 'Transportation ID';
+COMMENT ON COLUMN EPIS_TRIAGE.FLG_SELECTED_OPTION IS 'Option selected by user to confirm triage (Y) Yes (N) No';
+COMMENT ON COLUMN EPIS_TRIAGE.EMERGENCY_CONTACT IS 'Emergency contact registered in triage';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 27/01/2010 11:57
+-- CHANGE REASON: [ALERT-70160] Triage refactoring
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE EPIS_TRIAGE ADD ID_TRANSP_ENTITY NUMBER(24)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE EPIS_TRIAGE ADD FLG_SELECTED_OPTION VARCHAR2(1)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE EPIS_TRIAGE ADD EMERGENCY_CONTACT VARCHAR2(200 CHAR)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+
+COMMENT ON COLUMN EPIS_TRIAGE.ID_TRANSP_ENTITY IS 'Transportation ID';
+COMMENT ON COLUMN EPIS_TRIAGE.FLG_SELECTED_OPTION IS 'Option selected by user to confirm triage (Y) Yes (N) No';
+COMMENT ON COLUMN EPIS_TRIAGE.EMERGENCY_CONTACT IS 'Emergency contact registered in triage';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 02/03/2010 10:50
+-- CHANGE REASON: [ALERT-77123] ESI Triage
+ALTER TABLE EPIS_TRIAGE MODIFY FLG_SELECTED_OPTION VARCHAR2(1 CHAR);
+ALTER TABLE EPIS_TRIAGE MODIFY EMERGENCY_CONTACT VARCHAR2(200 CHAR);
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/06/2013 17:05
+-- CHANGE REASON: [ALERT-260856] Ability to perform triage based on EST (Échelle Suisse de Tri) (ALERT_188926) - VERSIONING DB DDL
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE ADD FLG_PREGNANT VARCHAR2(1 CHAR) DEFAULT ''N''');
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE ADD PREG_WEEKS NUMBER(24)');
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE ADD FLG_POSTPARTUM VARCHAR2(1 CHAR) DEFAULT ''N''');
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE ADD TREATMENT VARCHAR2(200 CHAR)');
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE ADD ID_TRIAGE_BOARD NUMBER(12)');
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE ADD INITIAL_NOTES VARCHAR2(1000 CHAR)');
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE ADD ACCIDENT_DESC VARCHAR2(200 CHAR)');
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_TRIAGE.FLG_PREGNANT IS ''Is a VS that only applies to pregnant women? Y -yes; N - Otherwise''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_TRIAGE.PREG_WEEKS IS ''Pregnancy weeks''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_TRIAGE.FLG_POSTPARTUM IS ''Is a VS that only applies to women with < 1 month postpartum? Y -yes; N - Otherwise''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_TRIAGE.TREATMENT IS ''Data related with the patient home medication current and recent''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_TRIAGE.ID_TRIAGE_BOARD IS ''Only used in EST triage to save the motive that has no questions associated. The questions screen isn t shown, it goes directly to the final screen''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_TRIAGE.INITIAL_NOTES IS ''Initial triage notes. This is the notes field that appears in triage form''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_TRIAGE.ACCIDENT_DESC IS ''Accident description. Italian market request.''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 04/10/2013 14:13
+-- CHANGE REASON: [ALERT-265915] 
+alter table epis_triage
+add id_transportation NUMBER(24);
+
+comment on column EPIS_TRIAGE.id_transportation
+  is 'Transportation table Identifier';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 06/12/2013 15:19
+-- CHANGE REASON: [ALERT-269683] 
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE ADD FLG_UNDER_TWO_YEARS VARCHAR2(1 CHAR)');
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE ADD FLG_IMMOBILE VARCHAR2(1 CHAR)');
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE ADD FLG_UNEXPLAINED_INJURY VARCHAR2(1 CHAR)');
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE ADD FLG_PROTECTION_PLAN VARCHAR2(1 CHAR)');
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE ADD FLG_ATTENDANCE_DELAY VARCHAR2(1 CHAR)');
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE ADD FLG_DOMESTIC_ABUSE VARCHAR2(1 CHAR)');
+
+    run_ddl(i_sql => 'alter table EPIS_TRIAGE add constraint ETR_FLG_UNDER_TWO_YEARS_CHK check (FLG_UNDER_TWO_YEARS IN (''Y'', ''N''))');
+    run_ddl(i_sql => 'alter table EPIS_TRIAGE add constraint ETR_FLG_IMMOBILE_CHK check (FLG_IMMOBILE IN (''Y'', ''N''))');
+    run_ddl(i_sql => 'alter table EPIS_TRIAGE add constraint ETR_FLG_INJURY_CHK check (FLG_UNEXPLAINED_INJURY IN (''Y'', ''N''))');
+    run_ddl(i_sql => 'alter table EPIS_TRIAGE add constraint ETR_FLG_PROTECTION_PLAN_CHK check (FLG_PROTECTION_PLAN IN (''Y'', ''N''))');
+    run_ddl(i_sql => 'alter table EPIS_TRIAGE add constraint ETR_FLG_DELAY_CHK check (FLG_ATTENDANCE_DELAY IN (''Y'', ''N''))');
+    run_ddl(i_sql => 'alter table EPIS_TRIAGE add constraint ETR_FLG_DOMESTIC_ABUSE_CHK check (FLG_DOMESTIC_ABUSE IN (''Y'', ''N''))');
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_TRIAGE.FLG_UNDER_TWO_YEARS IS ''Is the child under two years of age and could this presentation be explained by a possible injury?''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_TRIAGE.FLG_IMMOBILE IS ''Is the child immobile (ie, not yet crawling or walking)?''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_TRIAGE.FLG_UNEXPLAINED_INJURY IS ''Is the injury unexplained or the history incompatible with the developmental ability of the child?''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_TRIAGE.FLG_PROTECTION_PLAN IS ''Does the child have a child protection plan?''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_TRIAGE.FLG_ATTENDANCE_DELAY IS ''Was there a delay in attendance?''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_TRIAGE.FLG_DOMESTIC_ABUSE IS ''Is Domestic Abuse involved in the injury?''';
+END;
+/
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:34
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EPIS_TRIAGE
+  is 'Patient triage';
+-- Add comments to the columns 
+comment on column EPIS_TRIAGE.id_epis_triage
+  is 'Primary key identifier';
+comment on column EPIS_TRIAGE.id_episode
+  is 'Episode ID';
+comment on column EPIS_TRIAGE.id_triage_color
+  is 'Triage Color ID';
+comment on column EPIS_TRIAGE.id_triage
+  is 'Triage ID ';
+comment on column EPIS_TRIAGE.id_professional
+  is 'Professional ID';
+comment on column EPIS_TRIAGE.id_room
+  is 'Destination room after triage';
+comment on column EPIS_TRIAGE.id_triage_nurse
+  is 'Deprecated. Column not in use.';
+comment on column EPIS_TRIAGE.pain_scale
+  is 'Value of pain scale';
+comment on column EPIS_TRIAGE.flg_letter
+  is 'Flag that indicates if patient brings a physician letter (Y / N). Default value N.';
+comment on column EPIS_TRIAGE.notes
+  is 'Notes';
+comment on column EPIS_TRIAGE.id_necessity
+  is 'Necessity ID';
+comment on column EPIS_TRIAGE.id_origin
+  is 'Origin of patient';
+comment on column EPIS_TRIAGE.id_triage_white_reason
+  is 'Reason for patient that haven''t been triage, called Routine patients';
+comment on column EPIS_TRIAGE.id_epis_anamnesis
+  is 'Anamnesis ID';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 14/04/2016 14:55
+-- CHANGE REASON: [ ALERT-320102 ] Safeguarding Assessment form changes
+--                
+-- Add/modify columns 
+BEGIN
+pk_versioning.run('alter table EPIS_TRIAGE add flg_possible_injury VARCHAR2(1 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add flg_has_social_work VARCHAR2(1 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add social_work_name VARCHAR2(800 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add social_work_address VARCHAR2(1000 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add flg_social_services VARCHAR2(1 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add social_reason VARCHAR2(1000 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add flg_consent_social VARCHAR2(1 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add flg_info_sharing VARCHAR2(1 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add dt_social_contact TIMESTAMP WITH LOCAL TIME ZONE');
+pk_versioning.run('alter table EPIS_TRIAGE add social_info_received VARCHAR2(1000 CHAR)');
+END;
+/
+-- Add comments to the columns 
+comment on column EPIS_TRIAGE.flg_possible_injury
+  is 'Could this presentation be explained by a possible injury?';
+comment on column EPIS_TRIAGE.flg_has_social_work
+  is 'Does the child have a social worker?';
+comment on column EPIS_TRIAGE.social_work_name
+  is 'Social Worker name';
+comment on column EPIS_TRIAGE.social_work_address
+  is 'Social Worker address';
+comment on column EPIS_TRIAGE.flg_social_services
+  is 'Is contact with Social Services required?';
+comment on column EPIS_TRIAGE.social_reason
+  is 'Reason for contact';
+comment on column EPIS_TRIAGE.flg_consent_social
+  is 'Have you got consent from patient/carer to contact Social Services?';
+comment on column EPIS_TRIAGE.flg_info_sharing
+  is 'Have you given the information sharing leaflet?';
+comment on column EPIS_TRIAGE.dt_social_contact
+  is 'Date and time that Social work team was contacted';
+comment on column EPIS_TRIAGE.social_info_received
+  is 'Social work information received';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 14/04/2016 15:00
+-- CHANGE REASON: [ ALERT-320102 ] Safeguarding Assessment form changes
+--                
+-- Add/modify columns 
+BEGIN
+pk_versioning.run('alter table EPIS_TRIAGE add flg_possible_injury VARCHAR2(1 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add flg_has_social_work VARCHAR2(1 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add social_work_name VARCHAR2(800 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add social_work_address VARCHAR2(1000 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add flg_social_services VARCHAR2(1 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add social_reason VARCHAR2(1000 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add flg_consent_social VARCHAR2(1 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add flg_info_sharing VARCHAR2(1 CHAR)');
+pk_versioning.run('alter table EPIS_TRIAGE add dt_social_contact TIMESTAMP WITH LOCAL TIME ZONE');
+pk_versioning.run('alter table EPIS_TRIAGE add social_info_received VARCHAR2(1000 CHAR)');
+END;
+/
+-- Add comments to the columns 
+comment on column EPIS_TRIAGE.flg_possible_injury
+  is 'Could this presentation be explained by a possible injury?';
+comment on column EPIS_TRIAGE.flg_has_social_work
+  is 'Does the child have a social worker?';
+comment on column EPIS_TRIAGE.social_work_name
+  is 'Social Worker name';
+comment on column EPIS_TRIAGE.social_work_address
+  is 'Social Worker address';
+comment on column EPIS_TRIAGE.flg_social_services
+  is 'Is contact with Social Services required?';
+comment on column EPIS_TRIAGE.social_reason
+  is 'Reason for contact';
+comment on column EPIS_TRIAGE.flg_consent_social
+  is 'Have you got consent from patient/carer to contact Social Services?';
+comment on column EPIS_TRIAGE.flg_info_sharing
+  is 'Have you given the information sharing leaflet?';
+comment on column EPIS_TRIAGE.dt_social_contact
+  is 'Date and time that Social work team was contacted';
+comment on column EPIS_TRIAGE.social_info_received
+  is 'Social work information received';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 10/12/2018 13:24
+-- CHANGE REASON: [EMR-7600] Improvement for Canadian Triage Acuity Scale
+alter table EPIS_TRIAGE add flg_signs_abuse VARCHAR2(1 CHAR);
+alter table EPIS_TRIAGE add flg_critical_look VARCHAR2(1 CHAR);
+-- Add comments to the columns 
+comment on column EPIS_TRIAGE.flg_signs_abuse
+  is 'Does the patient reveal signs of child abuse';
+comment on column EPIS_TRIAGE.flg_critical_look
+  is 'Only used on CTAS when the triage was based on critical look';
+-- CHANGE END: Elisabete Bugalho

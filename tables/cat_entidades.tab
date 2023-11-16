@@ -1,0 +1,48 @@
+
+
+
+-- CHANGED BY: Ana Moita
+-- CHANGED DATE: 2017-9-21
+-- CHANGED REASON: ALERT-332379
+
+ALTER TABLE CAT_ENTIDADES
+RENAME COLUMN CVE_ENT to CATALOG_KEY;
+ALTER TABLE CAT_ENTIDADES
+RENAME COLUMN NOM_ENT to ENTIDAD_FEDERATIVA;
+ALTER TABLE CAT_ENTIDADES
+RENAME COLUMN NOM_ABR to ABREVIATURA;
+-- CHANGE END: Ana Moita
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 26/09/2017 16:10
+-- CHANGE REASON: [ALERT-333174] NOM024 - Catalog tables creation
+--                
+begin
+  execute immediate 'drop table alert.CAT_ENTIDADES';
+exception 
+  when others then 
+    null;
+end;
+/    
+
+create table CAT_ENTIDADES
+(
+  catalog_key        NUMBER,
+  entidad_federativa VARCHAR2(255),
+  abreviatura        VARCHAR2(255),
+  id_alert           NUMBER,
+  flg_available      VARCHAR2(255)
+)
+tablespace ALERT_DATA;
+-- CHANGE END: Elisabete Bugalho
+
+
+-- CHANGED BY: Ana Moita
+-- CHANGED DATE: 2018-3-19
+-- CHANGED REASON: EMR-149
+
+ALTER TABLE ALERT.CAT_ENTIDADES
+MODIFY CATALOG_KEY VARCHAR2(255);
+
+-- CHANGE END: Ana Moita

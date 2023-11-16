@@ -1,0 +1,45 @@
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195]
+declare
+  l_count pls_integer;
+begin
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDFSI_DEPCLINSERV_FK';
+  if l_count = 0 then
+    execute immediate ( '  ALTER TABLE ALERT.PRESC_DIR_FREQ_SOFT_INST ADD CONSTRAINT PDFSI_DEPCLINSERV_FK FOREIGN KEY (ID_DEP_CLIN_SERV)
+  REFERENCES ALERT.DEP_CLIN_SERV (ID_DEP_CLIN_SERV) ENABLE' );
+  end if;
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDFSI_INSTITUTION_FK';
+  if l_count = 0 then
+    execute immediate ( '  ALTER TABLE ALERT.PRESC_DIR_FREQ_SOFT_INST ADD CONSTRAINT PDFSI_INSTITUTION_FK FOREIGN KEY (ID_INSTITUTION)
+  REFERENCES ALERT.INSTITUTION (ID_INSTITUTION) ENABLE' );
+  end if;
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDFSI_MARKET_FK';
+  if l_count = 0 then
+    execute immediate ( '  ALTER TABLE ALERT.PRESC_DIR_FREQ_SOFT_INST ADD CONSTRAINT PDFSI_MARKET_FK FOREIGN KEY (ID_MARKET)
+  REFERENCES ALERT.MARKET (ID_MARKET) ENABLE' );
+  end if;
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDFSI_PDIR_FREQ_FK';
+  if l_count = 0 then
+    execute immediate ( '  ALTER TABLE ALERT.PRESC_DIR_FREQ_SOFT_INST ADD CONSTRAINT PDFSI_PDIR_FREQ_FK FOREIGN KEY (ID_PRESC_DIR_FREQUENCY)
+  REFERENCES ALERT.PRESC_DIR_FREQUENCY (ID_PRESC_DIR_FREQUENCY) ENABLE' );
+  end if;
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDFSI_PROFTEMPL_FK';
+  if l_count = 0 then
+    execute immediate ( '  ALTER TABLE ALERT.PRESC_DIR_FREQ_SOFT_INST ADD CONSTRAINT PDFSI_PROFTEMPL_FK FOREIGN KEY (ID_PROFILE_TEMPLATE)
+  REFERENCES ALERT.PROFILE_TEMPLATE (ID_PROFILE_TEMPLATE) ENABLE' );
+  end if;
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDFSI_SOFTWARE_FK';
+  if l_count = 0 then
+    execute immediate ( '  ALTER TABLE ALERT.PRESC_DIR_FREQ_SOFT_INST ADD CONSTRAINT PDFSI_SOFTWARE_FK FOREIGN KEY (ID_SOFTWARE)
+  REFERENCES ALERT.SOFTWARE (ID_SOFTWARE) ENABLE' );
+  end if;
+
+end;
+/
+-- CHANGE END: Nuno Ferreira

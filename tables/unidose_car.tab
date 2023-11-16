@@ -1,0 +1,68 @@
+-- Create table
+create table UNIDOSE_CAR
+(
+  ID_UNIDOSE_CAR      NUMBER(24) not null,
+  CODE_UNIDOSE_CAR    VARCHAR2(200) not null,
+  ID_INSTITUTION      NUMBER(12) not null,
+  ADW_LAST_UPDATE     DATE not null,
+  ID_CONTAINER_CONFIG NUMBER(24)
+);
+-- Add comments to the table 
+comment on table UNIDOSE_CAR
+  is 'Carro de distribuição da medicação em unidose';
+-- Add comments to the columns 
+comment on column UNIDOSE_CAR.ID_UNIDOSE_CAR
+  is 'Chave primária';
+comment on column UNIDOSE_CAR.CODE_UNIDOSE_CAR
+  is 'Código para tradução';
+comment on column UNIDOSE_CAR.ID_INSTITUTION
+  is 'ID da instituição a que o carro pertence';
+comment on column UNIDOSE_CAR.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+comment on column UNIDOSE_CAR.ID_CONTAINER_CONFIG
+  is 'ID da configuração do carro';
+-- Create/Recreate primary, unique and foreign key constraints 
+
+alter table unidose_car add (status varchar2(1), data_status  date );
+
+
+
+
+comment on column UNIDOSE_CAR.STATUS
+  is 'Estado do carro: N - Em espera; A -Pronto para aviamento; T -Pronto para transporte; S -Em transporte para o serviço; D -Disponovel no serviço' ;
+comment on column UNIDOSE_CAR.DATA_STATUS
+  is 'Data da alteração do estado';
+
+
+ALTER TABLE UNIDOSE_CAR ADD( NOTES VARCHAR2(4000));
+comment on column UNIDOSE_CAR.NOTES 
+  is 'Campo de texto livre';
+
+alter table unidose_car add (prepare_time  date);
+comment on column UNIDOSE_CAR.PREPARE_TIME
+  is 'Hora de preparação do carro';
+
+
+
+
+ALTER TABLE UNIDOSE_CAR ADD DATA_STATUS_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN UNIDOSE_CAR.DATA_STATUS_TSTZ IS 'Data da altera‡Æo do estado'; 
+
+
+
+
+ALTER TABLE UNIDOSE_CAR ADD PREPARE_TIME_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGED DATE: 2008-SEPT-22
+-- CHANGING REASON: Remoção de colunas do tipo DATE que tenham equivalentes do tipo TIMESTAMP WITH LOCAL TIME ZONE
+ALTER TABLE UNIDOSE_CAR DROP COLUMN data_status; 
+-- CHANGE END
+
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE UNIDOSE_CAR IS 'Carro de distribuição da medicação em unidose [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

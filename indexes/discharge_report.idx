@@ -1,0 +1,18 @@
+-- CHANGED BY: Nuno Alves
+-- CHANGE DATE: 09/06/2015 09:16
+-- CHANGE REASON: [ALERT-312396] ALERT-312396 Issue Replication: [BSUH] Outpatient Appointment report and Outpatient GP Letter generation and sending 2 reports in discharge
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || REPLACE(srcstr => SQLERRM, oldsub => 'ORA-', newsub => '') || '; ' ||
+                                 i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl('CREATE UNIQUE INDEX dr_pk_idx ON discharge_report(id_discharge_report ASC)');  
+    run_ddl('CREATE UNIQUE INDEX dr_fk_idx ON discharge_report(id_discharge ASC, id_report ASC) tablespace ALERT_IDX');
+END;
+/
+-- CHANGE END: Nuno Alves

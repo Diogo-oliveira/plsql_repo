@@ -1,0 +1,116 @@
+
+
+  CREATE TABLE DOCUMENTATION_REL
+   (	ID_DOCUMENTATION_REL NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOCUMENTATION NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOCUMENTATION_ACTION NUMBER(24,0),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN documentation_rel.id_documentation_rel IS 'Chave primária' ;
+COMMENT ON COLUMN documentation_rel.id_documentation IS 'Código da relação área/componente' ;
+COMMENT ON COLUMN documentation_rel.id_documentation_action IS 'Código do área/componente sobre o qual é exercida uma acção em consequência de outro componente' ;
+COMMENT ON COLUMN documentation_rel.flg_available IS 'Disponibilidade do registo' ;
+COMMENT ON COLUMN documentation_rel.adw_last_update IS 'Data da última alteração' ;
+
+ALTER TABLE documentation_rel ADD flg_action VARCHAR2(1) DEFAULT 'W' NOT NULL ENABLE;
+ALTER TABLE documentation_rel ADD value_action VARCHAR2(2000);
+ALTER TABLE documentation_rel ADD id_doc_element_crit NUMBER(24,0);
+COMMENT ON COLUMN documentation_rel.flg_action IS 'Tipo de accão a executar: W - workflow temático ; S - mostrar componente ; H - esconder componente';
+COMMENT ON COLUMN documentation_rel.value_action IS 'Valor que pode estar associado à relação entre componentes/elementos';
+COMMENT ON COLUMN documentation_rel.id_doc_element_crit IS 'Preenchido caso a relação seja entre um critério de elemento e um componente';
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-MAR-23
+-- CHANGED REASON: ALERT-11985 - Changes on Touch-Option database model to include id content
+ALTER TABLE DOCUMENTATION_REL ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN DOCUMENTATION_REL.ID_CONTENT  IS 'Content identifier';
+--CHANGE END Ariel Machado
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-APR-20
+-- CHANGED REASON: ALERT-10398 Actions between components
+ALTER TABLE documentation_rel MODIFY (flg_action VARCHAR2(2) DEFAULT 'W');
+ALTER TABLE documentation_rel ADD(
+   flg_else_action VARCHAR(2),
+   flg_applicable_criteria VARCHAR(2),
+   tab_id_documentation table_number,
+   flg_doc_op VARCHAR(10),
+   tab_id_doc_element_crit table_number,
+   flg_elem_crit_op VARCHAR(10)) 
+   NESTED TABLE tab_id_documentation 
+    STORE AS documentation_rel_doc(
+    (CONSTRAINT DOCREL_TAB_DOC_PK PRIMARY KEY(nested_table_id, column_value))
+    ORGANIZATION INDEX COMPRESS)
+   NESTED TABLE tab_id_doc_element_crit 
+    STORE AS documentation_rel_elem_crit( 
+    (CONSTRAINT DOCREL_TAB_ELEM_PK PRIMARY KEY (nested_table_id, column_value))
+    ORGANIZATION INDEX COMPRESS);
+COMMENT ON TABLE documentation_rel is 'Relationships and actions between components. Used to establish thematic workflow relationships and actions between components to be taken after evaluation of criteria and operation over inputs';
+COMMENT ON COLUMN documentation_rel.id_documentation is 'Source component where fire the action';
+COMMENT ON COLUMN documentation_rel.id_documentation_action is 'Target component where is applied the action';
+COMMENT ON COLUMN documentation_rel.flg_applicable_criteria is 'Applicable criteria to determine if this action may be or not evaluated to execute. Available values: BE - when a component changes the enabled state ; BV - when a component changes the valid state ; BC - when a component''s content changes' ;
+COMMENT ON COLUMN documentation_rel.tab_id_documentation is 'List of components used as input for evaluation if the action must be executed';
+COMMENT ON COLUMN documentation_rel.tab_id_doc_element_crit is 'List of element''s criteria (initial,selected,no selected) used as input for evaluation if the action must be executed';
+COMMENT ON COLUMN documentation_rel.flg_doc_op is 'Operation used to evaluate the component list. Available values: AND – All components must be valid ; OR – at least one component must be valid';
+COMMENT ON COLUMN documentation_rel.flg_elem_crit_op is 'Operation used to evaluate the element''s criteria list. Available values: AND – All element''s criteria must be selected; OR – at least one element''s criteria must be selected';
+COMMENT ON COLUMN documentation_rel.flg_action is 'Type of action to execute when condition is true: W - Thematic workflow ; S - Show component ; H - Hide component ; EB - Enable component ; DB - Disable component ;';
+COMMENT ON COLUMN documentation_rel.flg_else_action is 'Type of action to execute when condition is false: W - Thematic workflow ; S - Show component ; H - Hide component ; EB - Enable component ; DB - Disable component ;';
+COMMENT ON TABLE documentation_rel_doc is 'Nested table storage used by column DOCUMENTATION_REL.TAB_ID_DOCUMENTATION';
+COMMENT ON TABLE documentation_rel_elem_crit is 'Nested table storage used by column DOCUMENTATION_REL.TAB_ID_DOC_ELEMENT_CRIT';
+--CHANGE END Ariel Machado
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/01/2016 14:58
+-- CHANGE REASON: [ALERT-317702] 
+comment on table DOCUMENTATION_REL
+  is 'Relationships and actions between components. Used to establish thematic workflow relationships and actions between components to be taken after evaluation of criteria and operation over inputs';
+-- Add comments to the columns 
+comment on column DOCUMENTATION_REL.id_documentation_rel
+  is 'Primary key';
+comment on column DOCUMENTATION_REL.id_documentation
+  is 'Target component where is applied the action';
+comment on column DOCUMENTATION_REL.id_documentation_action
+  is 'Target component where is applied the action';
+comment on column DOCUMENTATION_REL.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column DOCUMENTATION_REL.adw_last_update
+  is 'Update date';
+comment on column DOCUMENTATION_REL.flg_action
+  is 'Type of action to execute when condition is true: W - Thematic workflow ; S - Show component ; H - Hide component ; EB - Enable component ; DB - Disable component ;';
+comment on column DOCUMENTATION_REL.value_action
+  is 'Associated value to elements or components';
+comment on column DOCUMENTATION_REL.id_doc_element_crit
+  is 'Documentation elemenet criteria ID';
+comment on column DOCUMENTATION_REL.id_content
+  is 'Content identifier';
+comment on column DOCUMENTATION_REL.create_user
+  is 'Creation User';
+comment on column DOCUMENTATION_REL.create_time
+  is 'Creation Time';
+comment on column DOCUMENTATION_REL.create_institution
+  is 'Creation Institution';
+comment on column DOCUMENTATION_REL.update_user
+  is 'Update User';
+comment on column DOCUMENTATION_REL.update_time
+  is 'Update Time';
+comment on column DOCUMENTATION_REL.update_institution
+  is 'Update Institution';
+comment on column DOCUMENTATION_REL.flg_else_action
+  is 'Type of action to execute when condition is false: W - Thematic workflow ; S - Show component ; H - Hide component ; EB - Enable component ; DB - Disable component ;';
+comment on column DOCUMENTATION_REL.flg_applicable_criteria
+  is 'Applicable criteria to determine if this action may be or not evaluated to execute. Available values: BE - when a component changes the enabled state ; BV - when a component changes the valid state ; BC - when a component''s content changes';
+comment on column DOCUMENTATION_REL.tab_id_documentation
+  is 'List of components used as input for evaluation if the action must be executed';
+comment on column DOCUMENTATION_REL.flg_doc_op
+  is 'Operation used to evaluate the component list. Available values: AND ? All components must be valid ; OR ? at least one component must be valid';
+comment on column DOCUMENTATION_REL.tab_id_doc_element_crit
+  is 'List of element''s criteria (initial,selected,no selected) used as input for evaluation if the action must be executed';
+comment on column DOCUMENTATION_REL.flg_elem_crit_op
+  is 'Operation used to evaluate the element''s criteria list. Available values: AND ? All element''s criteria must be selected; OR ? at least one element''s criteria must be selected';
+  
+  
+  
+-- CHANGE END: Ana Matos

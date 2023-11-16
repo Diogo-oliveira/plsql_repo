@@ -1,0 +1,210 @@
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 01/07/2009 12:26
+-- CHANGE REASON: [ALERT-31811] Added constraint for task_timeline_ea primary key
+ALTER TABLE TASK_TIMELINE_EA ADD CONSTRAINT TTEA_PK PRIMARY KEY (ID_TASK_REFID, ID_TL_TASK) ENABLE;
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 30/11/2011 11:35
+-- CHANGE REASON: [ALERT-207879] H&P
+alter table task_timeline_ea
+  add constraint ttea_tt_fk foreign key (id_tl_task)
+  references tl_task (id_tl_task);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/01/2012 16:33
+-- CHANGE REASON: [ALERT-216664] 
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table task_timeline_ea
+  add constraint ttea_flg_outdated_chk
+  check (flg_outdated IN (1,0,null))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+ 
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table task_timeline_ea
+  add constraint ttea_flg_type_viewer_chk
+  check (flg_type_viewer IN (null,''AA'',''P'',''AR'',''DP'',''E''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table task_timeline_ea
+  add constraint ttea_flg_sos_chk
+  check (flg_sos IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea add(ID_TASK_AGGREGATOR NUMBER(24))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+comment on column task_timeline_ea.ID_TASK_AGGREGATOR
+  is 'Id that groups several task of the same type. It should be used preferentially to group information by recurrence. This option can only be inserted when ID_REF_GROUP is already used.';
+
+comment on column task_timeline_ea.ID_REF_GROUP
+  is 'Id that groups several task of the same type. It should be used preferentially to group information by functionality context. To be used on monitorizations for instance (in the HandP is used the id_ref_group).';
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:51
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+BEGIN
+        EXECUTE IMMEDIATE 'alter table task_timeline_ea
+  add constraint TTEA_FLG_NORMAL_CHK
+  check (FLG_NORMAL IN (''Y'', ''N''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table task_timeline_ea
+  add constraint TTEA_FLG_ONGOING_CHK
+  check (FLG_ONGOING IN (''O'', ''F'',''N''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table task_timeline_ea
+  add constraint TTEA_FLG_HAS_COMMENTS_CHK
+  check (FLG_HAS_COMMENTS IN (''Y'', ''N''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 22/08/2012 17:03
+-- CHANGE REASON: [ALERT-238310] Import mechanism for Inactive problems
+BEGIN
+        EXECUTE IMMEDIATE 'alter table task_timeline_ea
+  drop constraint TTEA_FLG_ONGOING_CHK';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table task_timeline_ea
+  add constraint TTEA_FLG_ONGOING_CHK
+  check (FLG_ONGOING IN (''O'', ''F'',''N'',''I''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/10/2012 16:25
+-- CHANGE REASON: [ALERT-242379 ] Single page note for Discharge Summary
+BEGIN
+        EXECUTE IMMEDIATE 'alter table task_timeline_ea
+  drop constraint TTEA_FLG_ONGOING_CHK';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table task_timeline_ea
+  add constraint TTEA_FLG_ONGOING_CHK
+  check (FLG_ONGOING IN (''O'', ''F'',''N'',''I'',''D''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/05/2013 16:26
+-- CHANGE REASON: [ALERT-259145] Triage single page
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE task_timeline_ea ADD CONSTRAINT TTEA_SAMPLE_TYPE_FK FOREIGN KEY (id_sample_type) REFERENCES sample_type(id_sample_type)');
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/05/2013 16:26
+-- CHANGE REASON: [ALERT-259145] Triage single page
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE pn_area ADD CONSTRAINT PA_ID_CAT_FK FOREIGN KEY (id_category) REFERENCES category(id_category)');
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+ 
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Vítor Sá
+-- CHANGE DATE: 25/09/2018
+-- CHANGE REASON: EMR-6941 - Surgical Procedures block don't display all the information
+
+BEGIN
+	BEGIN
+			EXECUTE IMMEDIATE 'alter table task_timeline_ea
+	  drop constraint TTEA_FLG_ONGOING_CHK';
+		EXCEPTION
+			WHEN others THEN
+				dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+	END;
+
+	BEGIN
+		EXECUTE IMMEDIATE 'alter table task_timeline_ea
+	  add constraint TTEA_FLG_ONGOING_CHK
+	  check (FLG_ONGOING IN (''O'', ''F'',''N'',''I'', ''D'',''R'', ''E'', ''T''))';
+	EXCEPTION
+		WHEN OTHERS THEN
+			dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+	END;
+END;
+/
+
+-- CHANGE END: Vítor Sá

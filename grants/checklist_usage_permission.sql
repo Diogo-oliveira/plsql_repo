@@ -1,0 +1,6 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 24/06/2010 15:29
+-- CHANGE REASON: [ALERT-70633] Checklists: Back Office & Front Office (DDL)
+/** Grants */
+GRANT SELECT ON CHECKLIST_USAGE_PERMISSION TO ALERT_VIEWER;
+-- CHANGE END: Ariel Machado

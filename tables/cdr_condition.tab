@@ -1,0 +1,79 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:25
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'CDR_CONDITION',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'DSV',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => '',
+                                             i_flg_default_child => 'N');
+END;
+/
+
+create table CDR_CONDITION
+(
+  id_cdr_condition   NUMBER(24) not null,
+  code_cdr_condition VARCHAR2(200 CHAR) not null,
+  internal_name      VARCHAR2(200 CHAR) not null,
+  service            VARCHAR2(200 CHAR) not null,
+  flg_available      VARCHAR2(1 CHAR) default 'Y' not null,
+  flg_dosage         VARCHAR2(1 CHAR) default 'N' not null,
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+);
+
+comment on table CDR_CONDITION
+  is 'Clinical decision rule conditions. A rule is made of a non-empty set of conditions.';
+
+comment on column CDR_CONDITION.id_cdr_condition
+  is 'Primary key.';
+comment on column CDR_CONDITION.code_cdr_condition
+  is 'Code for translation.';
+comment on column CDR_CONDITION.internal_name
+  is 'Internal description.';
+comment on column CDR_CONDITION.service
+  is 'Rule condition service.';
+comment on column CDR_CONDITION.flg_available
+  is 'Record availability (Y/N).';
+comment on column CDR_CONDITION.flg_dosage
+  is 'Does this condition perform a validation using dosage attributes? Y/N';
+comment on column CDR_CONDITION.create_user
+  is 'Creation User';
+comment on column CDR_CONDITION.create_time
+  is 'Creation Time';
+comment on column CDR_CONDITION.create_institution
+  is 'Creation Institution';
+comment on column CDR_CONDITION.update_user
+  is 'Update User';
+comment on column CDR_CONDITION.update_time
+  is 'Update Time';
+comment on column CDR_CONDITION.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 11/04/2012 11:30
+-- CHANGE REASON: [ALERT-226949] cds popup improvements (ddl changes)
+declare
+  e_col_exists exception;
+  pragma exception_init(e_col_exists, -01430);
+begin
+  execute immediate 'alter table CDR_CONDITION add
+(
+  code_cdr_cond_fo VARCHAR2(200 char) as (''CDR_CONDITION.CODE_CDR_COND_FO.'' || id_cdr_condition)
+)
+';
+exception when e_col_exists then
+  dbms_output.put_line('column code_cdr_cond_fo already exists in alert.cdr_condition!');
+end;
+/
+
+comment on column CDR_CONDITION.code_cdr_cond_fo
+  is 'Code for front-office translation.';
+-- CHANGE END: Pedro Carneiro

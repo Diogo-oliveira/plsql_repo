@@ -1,0 +1,101 @@
+
+  CREATE TABLE P1_EXR_DIAGNOSIS
+   (	ID_EXR_DIAGNOSIS NUMBER(24,0) NOT NULL ENABLE,
+	ID_EXTERNAL_REQUEST NUMBER(24,0) NOT NULL ENABLE,
+	ID_DIAGNOSIS NUMBER(12,0) NOT NULL ENABLE,
+	DT_INSERT DATE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1)
+   );
+
+
+
+COMMENT ON COLUMN p1_exr_diagnosis.flg_type IS 'P - Problem to solve; D - Diagnosis' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE P1_EXR_DIAGNOSIS ADD DT_INSERT_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+
+COMMENT ON COLUMN p1_exr_diagnosis.flg_type IS 'P - Problem to solve; D - Diagnosis; A - Answer';
+
+ALTER TABLE P1_EXR_DIAGNOSIS ADD (DESC_DIAGNOSIS VARCHAR2(4000));
+COMMENT ON COLUMN "ALERT"."P1_EXR_DIAGNOSIS"."DESC_DIAGNOSIS" IS '"Other" diagnosis description';
+
+
+
+-- CHANGED BY: Joana Barroso	
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização P1 - eliminação de colunas
+
+alter table P1_EXR_DIAGNOSIS drop column DT_INSERT;
+
+-- CHANGE END
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 01/04/2011 17:19
+-- CHANGE REASON: [ALERT-170757] 
+alter table P1_EXR_DIAGNOSIS add DT_PROBL_BEGIN_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE;
+comment on column P1_EXR_DIAGNOSIS.ID_EXR_DIAGNOSIS is 'Primary key';
+comment on column P1_EXR_DIAGNOSIS.ID_EXTERNAL_REQUEST is 'Referral identifier';
+comment on column P1_EXR_DIAGNOSIS.ID_DIAGNOSIS is 'Diagnosis identifier associated to the referral';
+comment on column P1_EXR_DIAGNOSIS.ID_PROFESSIONAL is 'Professional identifier that inserted associated the diagnosis to the referral';
+comment on column P1_EXR_DIAGNOSIS.ID_INSTITUTION is 'Institution identifier where the associtation was done';
+comment on column P1_EXR_DIAGNOSIS.DT_INSERT_TSTZ is 'Record insert date';
+comment on column P1_EXR_DIAGNOSIS.DT_PROBL_BEGIN_TSTZ is 'Problem begin date (for problems only)';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/02/2013 14:42
+-- CHANGE REASON: [ALERT-248636] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'P1_EXR_DIAGNOSIS'
+       AND c.column_name = 'YEAR_BEGIN';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table P1_EXR_DIAGNOSIS add year_begin NUMBER(4)';
+        EXECUTE IMMEDIATE 'alter table P1_EXR_DIAGNOSIS add month_begin NUMBER(2)';
+        EXECUTE IMMEDIATE 'alter table P1_EXR_DIAGNOSIS add day_begin NUMBER(2)';
+    
+        EXECUTE IMMEDIATE 'comment on column P1_EXR_DIAGNOSIS.year_begin is ''Problem begin Year (for problems only)''';
+        EXECUTE IMMEDIATE 'comment on column P1_EXR_DIAGNOSIS.month_begin is ''Problem begin Month (for problems only)''';
+        EXECUTE IMMEDIATE 'comment on column P1_EXR_DIAGNOSIS.day_begin is ''Problem begin Day (for problems only)''';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 21/10/2013 14:52
+-- CHANGE REASON: [ALERT-267460 ] 
+comment on column P1_EXR_DIAGNOSIS.flg_type
+  is 'P - Problem to solve; D - Diagnosis; A - Answer; R - Diagnosis (Answer MX)';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on table P1_EXR_DIAGNOSIS
+  is 'Diagnosis in the referral';  
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/03/2017 16:33
+-- CHANGE REASON: [ALERT-329245] 
+begin
+pk_versioning.run('ALTER TABLE P1_EXR_DIAGNOSIS ADD ID_ALERT_DIAGNOSIS NUMBER(24)'); 
+end;
+/
+begin
+pk_versioning.run('ALTER TABLE P1_EXR_DIAGNOSIS ADD ID_ADIAG_INST_OWNER NUMBER(24)'); 
+end;
+/ 
+
+COMMENT ON COLUMN P1_EXR_DIAGNOSIS.ID_ALERT_DIAGNOSIS IS 'ALERT_DIAGNOSIS ID for synonym association';
+COMMENT ON COLUMN P1_EXR_DIAGNOSIS.ID_ADIAG_INST_OWNER IS 'Institution owner of the concept. Default 0 - ALERT';
+-- CHANGE END: Ana Matos

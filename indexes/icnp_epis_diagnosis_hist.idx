@@ -1,0 +1,29 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+-- Create/Recreate indexes 
+declare
+   e_index_already_there EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_index_already_there, -00955); -- table already there
+begin
+    BEGIN
+        EXECUTE IMMEDIATE 'create index IEDH_EIPD_FK_IDX on ICNP_EPIS_DIAGNOSIS_HIST (ID_ICNP_EPIS_DIAG)';
+    EXCEPTION
+        WHEN e_index_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'create index IEDH_EPIS_FK_IDX on ICNP_EPIS_DIAGNOSIS_HIST (ID_EPISODE)';
+    EXCEPTION
+        WHEN e_index_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'create index IEDH_PAT_FK_IDX on ICNP_EPIS_DIAGNOSIS_HIST (ID_PATIENT)';
+    EXCEPTION
+        WHEN e_index_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

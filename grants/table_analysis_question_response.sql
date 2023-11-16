@@ -1,0 +1,1 @@
+grant select on analysis_question_response to alert_viewer; 

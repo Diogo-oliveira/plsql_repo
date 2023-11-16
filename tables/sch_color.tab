@@ -1,0 +1,22 @@
+CREATE TABLE sch_color (
+       id_sch_color NUMBER(24),
+			 id_institution NUMBER(24),
+			 color_name    VARCHAR2(300),
+			 color_hex     VARCHAR2(6)
+);
+
+COMMENT ON TABLE sch_color IS 'Defines the colors to be used on Scheduler, for each institution';
+COMMENT ON COLUMN sch_color.id_sch_color IS 'Primary key';
+COMMENT ON COLUMN sch_color.id_institution IS 'Institution identifier';
+COMMENT ON COLUMN sch_color.color_name IS 'Name of the color';
+COMMENT ON COLUMN sch_color.color_hex IS 'Hexadecimal (RGB) color code';
+
+COMMENT ON COLUMN SCH_COLOR.ID_SCH_COLOR IS 'Color identifier';
+
+ALTER TABLE sch_color ADD flg_type VARCHAR2(1) DEFAULT 'N' NOT NULL;
+ALTER TABLE sch_color ADD id_dep_clin_serv NUMBER(24);
+
+COMMENT ON COLUMN sch_color.flg_type IS 'Type of color: ''D'' dep_clin_serv color, ''N'' named color';
+COMMENT ON COLUMN sch_color.id_dep_clin_serv IS 'Department-Clinical service association identifier';
+
+ALTER TABLE SCH_COLOR MODIFY ID_INSTITUTION NUMBER(12);

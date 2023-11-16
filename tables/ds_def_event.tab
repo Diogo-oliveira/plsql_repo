@@ -1,0 +1,91 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:22
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+CREATE TABLE ds_def_event (
+       id_def_event       NUMBER(24) NOT NULL,
+       id_ds_cmpt_mkt_rel NUMBER(24) NOT NULL,
+       flg_event_type     VARCHAR2(1 CHAR) NOT NULL,
+       --
+       create_user        VARCHAR2(24 CHAR),
+       create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution NUMBER(24),
+       update_user        VARCHAR2(24 CHAR),
+       update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution NUMBER(24)
+);
+
+--
+
+COMMENT ON TABLE ds_def_event IS 'Table for dinamic screens components default properties';
+--
+COMMENT ON COLUMN ds_def_event.id_def_event       IS 'Dinamic screens components default properties Id';
+COMMENT ON COLUMN ds_def_event.id_ds_cmpt_mkt_rel IS 'Dinamic screens components relation Id';
+COMMENT ON COLUMN ds_def_event.flg_event_type     IS 'Type of event (I - Inactivate / A - Activate / M - Activate and set to Mandatory / E - Exclusive - context defined in sys_domain)';
+--
+COMMENT ON COLUMN ds_def_event.create_user        IS 'Professional that created the registry';
+COMMENT ON COLUMN ds_def_event.create_time        IS 'Date of the registry creation';
+COMMENT ON COLUMN ds_def_event.create_institution IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN ds_def_event.update_user        IS 'Last professional that updated the registry';
+COMMENT ON COLUMN ds_def_event.update_time        IS 'Date of the last update to the registry';
+COMMENT ON COLUMN ds_def_event.update_institution IS 'Id of the last institution where the registry was updated';
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:22
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE ds_def_event MOVE TABLESPACE table_m;
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 14/04/2016 14:55
+-- CHANGE REASON: [ ALERT-320102 ] Safeguarding Assessment form changes
+--                
+alter table DS_DEF_EVENT drop constraint DSDE_ET_CHK;
+alter table DS_DEF_EVENT add constraint DSDE_ET_CHK check (flg_event_type IN ('I', 'A', 'M', 'E','H'));
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 14/04/2016 15:00
+-- CHANGE REASON: [ ALERT-320102 ] Safeguarding Assessment form changes
+--                
+alter table DS_DEF_EVENT drop constraint DSDE_ET_CHK;
+alter table DS_DEF_EVENT add constraint DSDE_ET_CHK check (flg_event_type IN ('I', 'A', 'M', 'E','H'));
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 24/07/2019 16:35
+-- CHANGE REASON: [ARCH-7603] Changes on DB Model
+--                
+alter table ds_def_event add id_action number(24) ;
+
+
+declare
+  xpl    varchar2(0010 char):='''';
+  l_sql varchar2(4000);
+begin
+  l_sql := 'alter table ds_def_event add FLG_DEFAULT varchar2(0001 char) default';
+  l_sql := l_sql|| chr(32)|| xpl||'N'||xpl ||'  not null';
+
+  dbms_output.put_line( l_Sql);
+  pk_versioning.run( l_sql );
+
+end;
+/
+
+comment on column DS_DEF_EVENT.flg_default is 'Enables to define default action';
+
+declare
+	l_sql	varchar2(1000 char);
+begin
+	l_sql := 'alter table DS_DEF_EVENT add constraint DSDE_ACTION_FK foreign key ( ID_ACTION ) references ALERT.ACTION (ID_ACTION)';
+	pk_versioning.run( l_sql );
+end;
+/
+
+-- Add comments to the columns 
+comment on column DS_DEF_EVENT.flg_event_type
+  is 'Type of event (I - Inactivate / A - Activate / M - Activate and set to Mandatory / E - Exclusive / R - Readonly - context defined in sys_domain)';
+-- Create/Recreate check constraints 
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,65 @@
+create table EPIS_PROB_GROUP_HIST
+(
+  id_epis_prob_group_hist NUMBER(24) not null,
+  dt_epis_prob_group_hist   TIMESTAMP WITH LOCAL TIME ZONE not null,
+  id_epis_prob_group NUMBER(24) not null,
+  id_episode         NUMBER(24) not null,
+  prob_group         NUMBER(3) not null,
+  assessment_note    CLOB,
+  plan_note          CLOB,
+  dteg_note          CLOB,
+  create_user        VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24),
+  id_professional    NUMBER(24),
+  dt_epis_prob_group_tstz  TIMESTAMP(6) WITH LOCAL TIME ZONE
+);
+
+-- Add comments to the table 
+comment on table EPIS_PROB_GROUP_HIST
+  is 'Table with relationship between episode and problem group';
+-- Add comments to the columns 
+comment on column EPIS_PROB_GROUP_HIST.id_epis_prob_group_hist
+  is 'Primary key';
+comment on column EPIS_PROB_GROUP_HIST.dt_epis_prob_group_hist
+  is 'episode problem history date';
+comment on column EPIS_PROB_GROUP_HIST.id_epis_prob_group
+  is 'episode problem group id';
+comment on column EPIS_PROB_GROUP_HIST.id_episode
+  is 'episode id';
+comment on column EPIS_PROB_GROUP_HIST.prob_group
+  is 'problem group id';
+comment on column EPIS_PROB_GROUP_HIST.assessment_note
+  is 'assessment note';
+comment on column EPIS_PROB_GROUP_HIST.plan_note
+  is 'plan note';
+comment on column EPIS_PROB_GROUP_HIST.dteg_note
+  is 'Diagnostics/Therapeutics/Education/Goal note';
+comment on column EPIS_PROB_GROUP_HIST.create_user
+  is 'Creation User';
+comment on column EPIS_PROB_GROUP_HIST.create_time
+  is 'Creation Time';
+comment on column EPIS_PROB_GROUP_HIST.create_institution
+  is 'Creation Institution';
+comment on column EPIS_PROB_GROUP_HIST.update_user
+  is 'Update User';
+comment on column EPIS_PROB_GROUP_HIST.update_time
+  is 'Update Time';
+comment on column EPIS_PROB_GROUP_HIST.update_institution
+  is 'Update Institution';
+comment on column EPIS_PROB_GROUP_HIST.id_professional
+  is 'id Professional';
+comment on column EPIS_PROB_GROUP_HIST.dt_epis_prob_group_tstz
+  is 'insert/update date';
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 20/12/2017 17:55
+-- CHANGE REASON: [CALERT-1346] Capability to document Assessment and Plan for Active problems and Inactive problems Blocks in Single Page
+--                
+alter table EPIS_PROB_GROUP_HIST drop column assessment_note;
+alter table EPIS_PROB_GROUP_HIST drop column plan_note;
+alter table EPIS_PROB_GROUP_HIST drop column dteg_note;
+-- CHANGE END: Elisabete Bugalho

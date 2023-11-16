@@ -1,0 +1,83 @@
+CREATE TABLE REPORTS_INST_SOFT
+ (ID_REPORTS_INST_SOFT NUMBER(12,0) NOT NULL
+ ,ID_REPORTS NUMBER(24) NOT NULL
+ ,ID_INSTITUTION NUMBER(24) NOT NULL
+ ,ID_SOFTWARE NUMBER(24) NOT NULL
+ ,FLG_DIGITAL_SIGNATURE VARCHAR2(1) NOT NULL
+ ,FLG_PARAM_DIGITAL_SIGNATURE VARCHAR2(256)
+ )
+ TABLESPACE TABLE_M;
+ 
+ COMMENT ON TABLE REPORTS_INST_SOFT IS 'Allows reports specific configurations by software and institution.';
+ 
+ COMMENT ON COLUMN REPORTS_INST_SOFT.ID_REPORTS_INST_SOFT IS 'Primary key';
+ 
+ COMMENT ON COLUMN REPORTS_INST_SOFT.ID_REPORTS IS 'Report to which this record applies';
+ 
+ COMMENT ON COLUMN REPORTS_INST_SOFT.ID_INSTITUTION IS 'Institution to which this records refers';
+ 
+ COMMENT ON COLUMN REPORTS_INST_SOFT.ID_SOFTWARE IS 'Softaware to which this records refers';
+ 
+ COMMENT ON COLUMN REPORTS_INST_SOFT.FLG_DIGITAL_SIGNATURE IS 'Y - digital signature required. N digital signature not required.';
+ 
+ COMMENT ON COLUMN REPORTS_INST_SOFT.FLG_PARAM_DIGITAL_SIGNATURE IS 'Digital signature configuration parameters. Used , for instance, to define the digital signature position in the report.';
+
+
+--Luís Gaspar, 12-08-2008
+--Coluna de formato de assinatura digital
+ALTER TABLE REPORTS_INST_SOFT DROP COLUMN FLG_PARAM_DIGITAL_SIGNATURE;
+
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 2009/06/19 09:55
+-- CHANGE REASON: ALERT-32911 [Change the table REPORTS_INST_SOFT]
+
+alter table REPORTS_INST_SOFT add FLG_SHOW_PHOTO VARCHAR2(1);
+comment on column REPORTS_INST_SOFT.FLG_SHOW_PHOTO is 'Y - display foto; N- don''t display photo';
+
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 2009-06-30
+-- CHANGE REASON: ALERT-34179
+ALTER TABLE REPORTS_INST_SOFT ADD
+(
+        FLG_LETTERHEAD VARCHAR2(1) DEFAULT 'N' NOT NULL,
+        HEADER_DIM     NUMBER(6)   DEFAULT 0   NOT NULL,
+        CONSTRAINT RIS_FLG_LETTERHEAD_CHK CHECK (FLG_LETTERHEAD IN ('Y', 'N')),
+        CONSTRAINT RIS_HEADER_DIM_CHK CHECK (HEADER_DIM >= 0)
+);
+
+COMMENT ON COLUMN REPORTS_INST_SOFT.FLG_LETTERHEAD IS 'Flag that indicates whether the report is printed on letterhead or plain paper.'; 	
+COMMENT ON COLUMN REPORTS_INST_SOFT.HEADER_DIM     IS 'Number of lines in the header.';
+-- CHANGE END
+
+-- cmf 12-07-2010
+ALTER TABLE REPORTS_INST_SOFT ADD N_COPIES 				NUMBER(6)				 ;
+ALTER TABLE REPORTS_INST_SOFT ADD FLG_SHOW_DIALOG VARCHAR2(1 CHAR) ;
+ALTER TABLE REPORTS_INST_SOFT ADD FLG_ORIENTATION VARCHAR2(2 CHAR) ;
+ALTER TABLE REPORTS_INST_SOFT ADD FLG_SIZE				VARCHAR2(6 CHAR) ;
+ALTER TABLE REPORTS_INST_SOFT ADD FLG_SIDES				VARCHAR2(1 CHAR) ;
+ALTER TABLE REPORTS_INST_SOFT ADD FLG_QUALITY			VARCHAR2(1 CHAR) ;
+ALTER TABLE REPORTS_INST_SOFT ADD PRINTER_NAME		VARCHAR2(30 CHAR) ;
+
+COMMENT ON COLUMN REPORTS_INST_SOFT.N_COPIES 				 IS 'Number of copies if available' ;
+COMMENT ON COLUMN REPORTS_INST_SOFT.FLG_SHOW_DIALOG  IS 'behavior to show dialog of available printers ( Y/N ) if available' ;
+COMMENT ON COLUMN REPORTS_INST_SOFT.FLG_ORIENTATION  IS 'report Orientation if available.' ;
+COMMENT ON COLUMN REPORTS_INST_SOFT.FLG_SIZE				 IS 'report Size if available.' ;
+COMMENT ON COLUMN REPORTS_INST_SOFT.FLG_SIDES				 IS 'report sides if available.' ;
+COMMENT ON COLUMN REPORTS_INST_SOFT.FLG_QUALITY			 IS 'report qualty if available.' ;
+COMMENT ON COLUMN REPORTS_INST_SOFT.PRINTER_NAME		 IS 'Printer name if available.' ;
+
+-- CHANGED BY: Tiago Lourenço
+-- CHANGE DATE: 1-Feb-2011
+	alter table REPORTS_INST_SOFT add flg_local varchar2(1) default 'Y' not null;
+	comment on column REPORTS_INST_SOFT.flg_local is 'Report will be generated in local instance (Y) or remote instance (N). Default is local.';
+-- CHANGE END: Tiago Lourenço
+
+-- CHANGED BY: nuno.amorim
+-- CHANGE DATE: 19/02/2019 
+-- CHANGE REASON: [EMR-7653] 
+ALTER TABLE REPORTS_INST_SOFT ADD FLG_SIGNABLE VARCHAR2(1) DEFAULT 'N';
+COMMENT ON COLUMN REPORTS_INST_SOFT.FLG_SIGNABLE IS 'N - Report is not signable, Y - Report is signable' ;
+-- CHANGE END: nuno.amorim

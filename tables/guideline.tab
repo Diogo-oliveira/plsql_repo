@@ -1,0 +1,106 @@
+
+  CREATE TABLE GUIDELINE
+   (	ID_GUIDELINE NUMBER(24,0) NOT NULL ENABLE,
+	ID_GUIDELINE_PREVIOUS_VERSION NUMBER(24,0),
+	FLG_LINK_TYPE VARCHAR2(1),
+	GUIDELINE_DESC VARCHAR2(200),
+	FLG_LINK_PATHOLOGY VARCHAR2(1),
+	FLG_LINK_ENVIRONMENT VARCHAR2(1),
+	FLG_LINK_PROFESSIONAL VARCHAR2(1),
+	FLG_LINK_CRITERIA VARCHAR2(1),
+	FLG_LINK_SPECIALTY VARCHAR2(1),
+	FLG_LINK_TASK VARCHAR2(1),
+	ID_PROFESSIONAL NUMBER(24,0),
+	DT_GUIDELINE DATE,
+	FLG_STATUS VARCHAR2(1),
+	CONTEXT_DESC VARCHAR2(4000),
+	CONTEXT_TITLE VARCHAR2(200),
+	CONTEXT_ADAPTATION VARCHAR2(200),
+	CONTEXT_TYPE_MEDIA NUMBER(24,0),
+	CONTEXT_EDITOR VARCHAR2(200),
+	ID_GUIDELINE_EBM NUMBER(24,0),
+	CONTEXT_EDITION_SITE VARCHAR2(200),
+	CONTEXT_EDITION VARCHAR2(200),
+	DT_CONTEXT_EDITION DATE,
+	CONTEXT_ACCESS VARCHAR2(200),
+	ID_CONTEXT_LANGUAGE NUMBER(6,0),
+	FLG_CONTEXT_IMAGE VARCHAR2(1),
+	CONTEXT_SUBTITLE VARCHAR2(200),
+	ID_CONTEXT_ASSOCIATED_LANGUAGE NUMBER(6,0),
+	ADW_LAST_UPDATE DATE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE
+   );
+
+COMMENT ON COLUMN guideline.id_prof_cancel IS 'Professional ID which cancel or deprecate guideline' ;
+COMMENT ON COLUMN guideline.dt_cancel IS 'Date when guideline was canceled or deprecated' ;
+COMMENT ON COLUMN guideline.id_guideline IS 'Guideline ID' ;
+COMMENT ON COLUMN guideline.id_guideline_previous_version IS 'Previous version of guideline in case we are still editing it' ;
+COMMENT ON COLUMN guideline.flg_link_type IS 'Type of guideline: rastreio/prevenção/tratamento/gestão/todos' ;
+COMMENT ON COLUMN guideline.guideline_desc IS 'Guideline Title' ;
+COMMENT ON COLUMN guideline.flg_link_pathology IS 'Pathologies associated to guideline' ;
+COMMENT ON COLUMN guideline.flg_link_environment IS 'Environments associated to guideline' ;
+COMMENT ON COLUMN guideline.flg_link_professional IS 'Flag set if professinal associated to this guideline' ;
+COMMENT ON COLUMN guideline.flg_link_criteria IS 'Criterias associated to guidelines' ;
+COMMENT ON COLUMN guideline.flg_link_specialty IS 'Specialties associated to guideline' ;
+COMMENT ON COLUMN guideline.flg_link_task IS 'Tasks associated to guideline' ;
+COMMENT ON COLUMN guideline.id_professional IS 'Professionals associated to guideline' ;
+COMMENT ON COLUMN guideline.dt_guideline IS 'Creation date of guideline' ;
+COMMENT ON COLUMN guideline.flg_status IS 'Status of guideline: Inactive/ Active' ;
+COMMENT ON COLUMN guideline.context_desc IS 'Description of other information' ;
+COMMENT ON COLUMN guideline.context_title IS 'Other information context title' ;
+COMMENT ON COLUMN guideline.context_adaptation IS 'Adaptation of context' ;
+COMMENT ON COLUMN guideline.context_type_media IS 'Context media type' ;
+COMMENT ON COLUMN guideline.context_editor IS 'Editor' ;
+COMMENT ON COLUMN guideline.id_guideline_ebm IS 'EBM ID' ;
+COMMENT ON COLUMN guideline.context_edition_site IS 'Edition site' ;
+COMMENT ON COLUMN guideline.context_edition IS 'Edition' ;
+COMMENT ON COLUMN guideline.dt_context_edition IS 'Date of context edition' ;
+COMMENT ON COLUMN guideline.context_access IS 'Access' ;
+COMMENT ON COLUMN guideline.id_context_language IS 'Language for context' ;
+COMMENT ON COLUMN guideline.flg_context_image IS 'Flag for image associated to context' ;
+COMMENT ON COLUMN guideline.context_subtitle IS 'Author last name' ;
+COMMENT ON COLUMN guideline.id_context_associated_language IS 'Associated language to image' ;
+COMMENT ON COLUMN guideline.adw_last_update IS 'ADW column' ;
+COMMENT ON COLUMN guideline.id_institution IS 'Institution associated to guideline' ;
+COMMENT ON COLUMN guideline.id_software IS 'Software associated to guideline' ;
+
+ALTER TABLE GUIDELINE DROP COLUMN FLG_LINK_TYPE;
+ALTER TABLE GUIDELINE DROP COLUMN FLG_LINK_PATHOLOGY;
+ALTER TABLE GUIDELINE DROP COLUMN FLG_LINK_ENVIRONMENT;
+ALTER TABLE GUIDELINE DROP COLUMN FLG_LINK_PROFESSIONAL;
+ALTER TABLE GUIDELINE DROP COLUMN FLG_LINK_CRITERIA;
+ALTER TABLE GUIDELINE DROP COLUMN FLG_LINK_SPECIALTY;
+ALTER TABLE GUIDELINE DROP COLUMN FLG_LINK_TASK;
+ALTER TABLE GUIDELINE DROP COLUMN FLG_CONTEXT_IMAGE;
+
+ALTER TABLE GUIDELINE ADD FLG_TYPE_RECOMMENDATION VARCHAR2(1) DEFAULT 'M' NOT NULL;
+COMMENT ON COLUMN GUIDELINE.FLG_TYPE_RECOMMENDATION is 'Type of recommendation for Guideline: (M)anual, (A)utomatic or (B)oth';
+
+alter table guideline modify (dt_guideline timestamp with local time zone,
+						dt_cancel timestamp with local time zone);
+						
+ALTER TABLE GUIDELINE ADD (ID_CONTENT VARCHAR2(200));
+comment on column GUIDELINE.ID_CONTENT is 'Identificador único de conteúdo';
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 28/03/2011 09:23
+-- CHANGE REASON: [ALERT-168339] Insert constraints for flag_status columns defined in sys_domain
+comment on column GUIDELINE.FLG_TYPE_RECOMMENDATION is 'Recommendation type for a guideline:
+M - manual
+A - automatic
+B - both manual and automatic';
+comment on column GUIDELINE.FLG_STATUS is 'Status of a guideline:
+T - temporary
+C - cancelled
+D - deprecated
+F - finished';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 09:59
+-- CHANGE REASON: [ALERT-317912] 
+comment on table GUIDELINE is 'Guidelines';
+-- CHANGE END: Ana Matos

@@ -1,0 +1,158 @@
+
+  CREATE TABLE P1_SPEC_DEP_CLIN_SERV
+   (	ID_SPEC_DEP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	ID_DEP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	ID_SPECIALITY NUMBER(6,0) NOT NULL ENABLE,
+	TRIAGE_STYLE VARCHAR2(1) DEFAULT '1' NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE p1_spec_dep_clin_serv IS 'Especialiades dos pedidos por departamento/serviço clinico' ;
+
+COMMENT ON COLUMN p1_spec_dep_clin_serv.id_dep_clin_serv IS 'Id do departamento/serviço clinico' ;
+COMMENT ON COLUMN p1_spec_dep_clin_serv.id_speciality IS 'Id da especialidade' ;
+
+
+ALTER TABLE P1_SPEC_DEP_CLIN_SERV ADD FLG_DEFAULT VARCHAR2(1);
+
+comment on column P1_SPEC_DEP_CLIN_SERV.FLG_DEFAULT is 'Y - Is this the default dep_clin_serv for the specialty. N - Otherwise.';
+
+-- CHANGED BY: Joana Barroso  
+-- CHANGE DATE: 2008-JUL-01
+-- CHANGE REASON: REF INTERHOSPITALAR ALERT-18963
+ALTER TABLE P1_SPEC_DEP_CLIN_SERV ADD FLG_AVAILABILITY      VARCHAR2(1) default 'A' not null;
+
+comment on column P1_SPEC_DEP_CLIN_SERV.FLG_AVAILABILITY
+  is 'Referencing availability: (E)xternal, (I)nternal or (A)ll';
+-- CHANGE END
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 09/03/2010 14:47
+-- CHANGE REASON: [ALERT-76215] 
+ALTER TABLE p1_spec_dep_clin_serv
+drop CONSTRAINT  psv_flg_availability_chk;
+
+ALTER TABLE p1_spec_dep_clin_serv
+  ADD CONSTRAINT psv_flg_availability_chk
+  CHECK (flg_availability IN ('E','I','P','A'));
+
+COMMENT ON COLUMN p1_spec_dep_clin_serv.flg_availability 
+        IS 
+'E - Id_workflow 2, I - Id_workflow 3, P - Id_workflow 4, A - All id_workflows';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 21/06/2010 17:57
+-- CHANGE REASON: [ALERT-103305] FERTIS (2.6.0.3)
+-- adiciona coluna ID_EXTERNAL_SYS
+DECLARE
+    l_sql   VARCHAR2(4000 CHAR);
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM all_tab_columns u
+     WHERE u.table_name = 'P1_SPEC_DEP_CLIN_SERV'
+       AND u.column_name = 'ID_EXTERNAL_SYS'
+       and u.owner = 'ALERT';
+
+    IF l_count = 0
+    THEN
+        l_sql := q'[alter table P1_SPEC_DEP_CLIN_SERV add ID_EXTERNAL_SYS NUMBER(12) default 0 not null]';
+        EXECUTE IMMEDIATE l_sql;
+
+l_sql := q'[comment on column P1_SPEC_DEP_CLIN_SERV.ID_EXTERNAL_SYS is 'External system identifier']';
+EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 02/12/2010 14:07
+-- CHANGE REASON: [ALERT-146260] A rede de referenciação inter-hositalar deverá suportar que uma instituição seja destino dentro e fora da rede de referenciação conforme a especialidade em causa. (ALERT142962)
+ALTER TABLE P1_SPEC_DEP_CLIN_SERV 
+ ADD (FLG_SPEC_DCS_DEFAULT VARCHAR2(1)
+ )
+ Modify (Flg_Availability Varchar2(1) Default 'E'
+ );
+
+Comment On Column P1_Spec_Dep_Clin_Serv.Flg_Spec_Dcs_Default Is 'Speciality default for dep. clin. serv.';
+ 
+PROMPT Creating Check Constraint on 'P1_SPEC_DEP_CLIN_SERV'
+Alter Table P1_Spec_Dep_Clin_Serv
+ ADD (CONSTRAINT PSV_FLG_SPEC_DCS_DEFAULT CHECK (FLG_SPEC_DCS_DEFAULT in ('Y','N')));
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 09/12/2010 17:47
+-- CHANGE REASON: [ALERT-146260] A rede de referenciação inter-hositalar deverá suportar que uma instituição seja destino dentro e fora da rede de referenciação conforme a especialidade em causa. (ALERT142962)
+DECLARE
+already_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(already_exists, -00955);
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE P1_SPEC_DEP_CLIN_SERV 
+ ADD (FLG_SPEC_DCS_DEFAULT VARCHAR2(1)
+ )
+ Modify (Flg_Availability Varchar2(1) Default ''E''
+ )';
+
+EXECUTE IMMEDIATE 'Comment On Column P1_Spec_Dep_Clin_Serv.Flg_Spec_Dcs_Default Is ''Speciality default for dep. clin. serv.''';
+ 
+EXECUTE IMMEDIATE 'Alter Table P1_Spec_Dep_Clin_Serv
+ ADD (CONSTRAINT PSV_FLG_SPEC_DCS_DEFAULT CHECK (FLG_SPEC_DCS_DEFAULT in (''Y'',''N'')))';
+EXCEPTION
+WHEN already_exists THEN
+dbms_output.put_line('Already exists.');
+END;
+/
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 22/07/2011 15:23
+-- CHANGE REASON: [ALERT-189706] 
+ALTER TABLE p1_spec_dep_clin_serv
+ MODIFY (flg_availability VARCHAR2(1) DEFAULT 'A' );
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 25/10/2012 14:56
+-- CHANGE REASON: [ALERT-242079] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'P1_SPEC_DEP_CLIN_SERV'
+       AND c.column_name = 'FLG_VISIBLE_ORIG';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table P1_SPEC_DEP_CLIN_SERV add flg_visible_orig VARCHAR2(1) default ''N'' not null';
+        EXECUTE IMMEDIATE 'comment on column P1_SPEC_DEP_CLIN_SERV.flg_visible_orig  is ''Y- dep_clin_serv visible to orig institutions, N- otherwise''';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on table P1_SPEC_DEP_CLIN_SERV
+  is 'Mapping between referral specialties and institution''s services/specialties';
+-- Add comments to the columns 
+comment on column P1_SPEC_DEP_CLIN_SERV.id_spec_dep_clin_serv
+  is 'Internal id';
+comment on column P1_SPEC_DEP_CLIN_SERV.id_dep_clin_serv
+  is 'Service/specialty mapping id';
+comment on column P1_SPEC_DEP_CLIN_SERV.id_speciality
+  is 'Referral specialty';
+comment on column P1_SPEC_DEP_CLIN_SERV.triage_style
+  is 'Not used - Always 1';
+comment on column P1_SPEC_DEP_CLIN_SERV.flg_default
+  is 'Is this the default dep_clin_serv for the specialty? Y/N';
+comment on column P1_SPEC_DEP_CLIN_SERV.flg_spec_dcs_default
+  is 'Speciality default for service/specialty mapping';
+comment on column P1_SPEC_DEP_CLIN_SERV.flg_visible_orig
+  is 'Is service/specialty visible to referral origin institution? Y/N';

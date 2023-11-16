@@ -1,0 +1,55 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/03/2011 14:13
+-- CHANGE REASON: [ALERT-170459 ] Review H&P database dvelopment with notes of DB Arch.
+BEGIN
+    EXECUTE IMMEDIATE 'create table TIMEFRAME_REP_GRP_MKT as 
+select * from TIMEFRAME_REP_GROUP';
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+
+COMMENT ON TABLE TIMEFRAME_REP_GRP_MKT IS 'Table that associates groups of options to one specific report';
+/
+
+COMMENT ON column TIMEFRAME_REP_GRP_MKT.id_timeframe_rep IS 'Id of the timeframe report';
+/
+
+COMMENT ON column TIMEFRAME_REP_GRP_MKT.id_timeframe_group IS 'Id of the timeframe group';
+/
+
+COMMENT ON column TIMEFRAME_REP_GRP_MKT.id_market IS 'Id market for this association';
+/
+
+COMMENT ON column TIMEFRAME_REP_GRP_MKT.flg_available IS 'Flag that indicates if this association is valid (''Y'' - yes; ''N'' - no)';
+/
+
+COMMENT ON column TIMEFRAME_REP_GRP_MKT.create_user IS 'Creation User';
+/
+
+COMMENT ON column TIMEFRAME_REP_GRP_MKT.create_time IS 'Creation Time';
+/
+
+COMMENT ON column TIMEFRAME_REP_GRP_MKT.create_institution IS 'Creation Institution';
+/
+
+COMMENT ON column TIMEFRAME_REP_GRP_MKT.update_user IS 'Update User';
+/
+
+COMMENT ON column TIMEFRAME_REP_GRP_MKT.update_time IS 'Update Time';
+/
+
+COMMENT ON column TIMEFRAME_REP_GRP_MKT.update_institution IS 'Update Institution';
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TIMEFRAME_REP_GRP_MKT MODIFY (FLG_AVAILABLE DEFAULT ''Y'')';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente');
+END;
+/
+-- CHANGE END: Sofia Mendes

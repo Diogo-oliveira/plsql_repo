@@ -1,0 +1,24 @@
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 03/12/2010 11:01
+-- CHANGE REASON: [ALERT-146619] 
+DECLARE
+    n_exists NUMBER := 0;
+BEGIN
+
+    SELECT COUNT(*)
+      INTO n_exists
+      FROM all_constraints
+     WHERE constraint_name = 'SOP_FLGSTATE_CK';
+
+    IF n_exists > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table schedule_outp drop constraint SOP_FLGSTATE_CK';
+        --DBMS_OUTPUT.PUT_LINE('TESTE');
+    END IF;
+
+    EXECUTE IMMEDIATE 'alter table SCHEDULE_OUTP
+  add constraint SOP_FLGSTATE_CK
+  check (flg_state IN (''A'',''D'',''E'',''G'',''M'',''N'',''P'',''T'',''R'',''W'', ''K'', ''F'',''U'',''B''))';
+END;
+/
+-- CHANGE END: Rita Lopes

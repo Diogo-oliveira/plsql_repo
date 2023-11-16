@@ -1,0 +1,73 @@
+
+ALTER TABLE ADVANCE_DIRECTIVE ADD CONSTRAINT ADVDIR_PK PRIMARY KEY (ID_ADVANCE_DIRECTIVE) ENABLE;
+
+alter table ADVANCE_DIRECTIVE
+  add constraint ADVDIR_FLG_CHK
+  check (FLG_AVAILABLE IN ('Y','N'));
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 08/04/2011 20:03
+-- CHANGE REASON: [ALERT-172088] Ability to record if a patient has a terminal illness and ability to record life expectancy (ALERT_122481)
+--                
+DECLARE
+    e_uk1 EXCEPTION;
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+BEGIN
+        EXECUTE IMMEDIATE 'alter table ADVANCE_DIRECTIVE add constraint ADVDIR_FLG_TYPE_CHK check (FLG_TYPE IN (''H'',''L'',''W'',''D'',''E'', ''C''))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 27/07/2012 10:06
+-- CHANGE REASON: [ALERT-237500] 
+alter table ADVANCE_DIRECTIVE drop constraint ADVDIR_FLG_TYPE_CHK;
+DECLARE
+    e_uk1 EXCEPTION;
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ADVANCE_DIRECTIVE add constraint ADVDIR_FLG_TYPE_CHK check (FLG_TYPE IN (''H'',''L'',''W'',''D'',''E'', ''C'', ''A''))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 23/11/2012 11:33
+-- CHANGE REASON: [ALERT-244966] 
+alter table ADVANCE_DIRECTIVE drop constraint ADVDIR_FLG_TYPE_CHK;
+DECLARE
+    e_uk1 EXCEPTION;
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ADVANCE_DIRECTIVE add constraint ADVDIR_FLG_TYPE_CHK check (FLG_TYPE IN (''H'',''L'',''W'',''D'',''E'', ''C'', ''A''))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+-- CHANGE END: Jorge Silva

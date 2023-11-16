@@ -1,0 +1,5 @@
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 24/10/2017
+-- CHANGE REASON: [ALERT-275664] 
+GRANT EXECUTE ON pk_comm_order_api TO ALERT_INTER;
+-- CHANGE END: Diogo Oliveira

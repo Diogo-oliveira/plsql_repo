@@ -1,0 +1,25 @@
+
+
+  CREATE TABLE EPIS_PROF_REC
+   (	ID_EPIS_PROF_REC NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0),
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0),
+	FLG_TYPE VARCHAR2(1),
+	DT_LAST_REC DATE
+   );
+
+
+COMMENT ON COLUMN epis_prof_rec.id_episode IS 'ID do episódio' ;
+COMMENT ON COLUMN epis_prof_rec.id_professional IS 'Id do profissional' ;
+COMMENT ON COLUMN epis_prof_rec.id_patient IS 'ID do paciente' ;
+COMMENT ON COLUMN epis_prof_rec.flg_type IS 'Tipo de registo' ;
+COMMENT ON COLUMN epis_prof_rec.dt_last_rec IS 'Data do último registo' ;
+
+comment on column EPIS_PROF_REC.ID_EPIS_PROF_REC
+  is 'Chave primária';
+alter table epis_prof_rec 
+add (dt_last_rec_tstz timestamp with local time zone); 
+
+
+alter table EPIS_PROF_REC drop column DT_LAST_REC;

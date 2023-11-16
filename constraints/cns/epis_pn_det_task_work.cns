@@ -1,0 +1,71 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:32
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+ALTER TABLE EPIS_PN_DET_TASK_WORK
+ ADD (CONSTRAINT EPDTKW_PK PRIMARY KEY 
+  (ID_EPIS_PN_DET_TASK))
+/
+
+ALTER TABLE EPIS_PN_DET_TASK_WORK
+ ADD (CONSTRAINT EPDTKW_STATUS_CHK CHECK (FLG_STATUS in ('A', 'R')))
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+ALTER TABLE EPIS_PN_DET_TASK_WORK
+ ADD (CONSTRAINT EPDTKW_PK PRIMARY KEY 
+  (ID_EPIS_PN_DET_TASK))
+/
+
+ALTER TABLE EPIS_PN_DET_TASK_WORK
+ ADD (CONSTRAINT EPDTKW_STATUS_CHK CHECK (FLG_STATUS in ('A', 'R')))
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:03
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('ALTER TABLE EPIS_PN_DET_TASK_WORK ADD CONSTRAINT EPNDTW_TORIG_CHK CHECK ( FLG_TABLE_ORIGIN in (''D'',''A'',''S'',''O'',''F'',''R'', null))');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:49
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE EPIS_PN_DET_TASK_WORK drop constraint EPDTKW_STATUS_CHK';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE EPIS_PN_DET_TASK_WORK
+ADD (CONSTRAINT EPDTKW_STATUS_CHK CHECK (FLG_STATUS in (''A'', ''R'', ''S'', ''I'', , ''Z'')))';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:55
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE EPIS_PN_DET_TASK_WORK
+ADD (CONSTRAINT EPDTKW_STATUS_CHK CHECK (FLG_STATUS in (''A'', ''R'', ''S'', ''I'', ''Z'')))';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,32 @@
+
+
+  CREATE TABLE SR_POSIT
+   (	ID_SR_POSIT NUMBER(24,0) NOT NULL ENABLE,
+	ID_SR_PARENT NUMBER(24,0),
+	CODE_SR_POSIT VARCHAR2(200) NOT NULL ENABLE,
+	RANK NUMBER(6,0),
+	FLG_EXCLUSIVE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1),
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE sr_posit IS 'Tabela de posicionamentos' ;
+
+COMMENT ON COLUMN sr_posit.id_sr_posit IS 'ID único' ;
+COMMENT ON COLUMN sr_posit.id_sr_parent IS 'ID do "pai"' ;
+COMMENT ON COLUMN sr_posit.code_sr_posit IS 'Código para obtenção da descrição na tabela TRANSLATION' ;
+COMMENT ON COLUMN sr_posit.rank IS 'Ordem de visualização' ;
+COMMENT ON COLUMN sr_posit.flg_exclusive IS 'Exclusividade Y/N. Quer dizer que apenas um item pertecente ao mesmo "pai" pode ser seleccionado' ;
+COMMENT ON COLUMN sr_posit.flg_available IS 'Disponível?' ;
+COMMENT ON COLUMN sr_posit.id_institution IS 'ID da instituição' ;
+COMMENT ON COLUMN sr_posit.adw_last_update IS 'Data da última alteração' ;
+
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 11/12/2009 08:45
+-- CHANGE REASON: [ALERT-61953] Add column ID_CONTENT in SR_POSIT table
+ALTER TABLE sr_posit ADD id_content varchar2(200 char);
+COMMENT ON COLUMN sr_posit.id_content IS 'content identifier ';
+-- CHANGE END: Filipe Silva

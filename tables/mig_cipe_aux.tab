@@ -1,0 +1,32 @@
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 27/06/2012 10:53
+-- CHANGE REASON: [ALERT-234339] 
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'mig_cipe_aux',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'DSV',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => '',
+                                             i_flg_default_child => 'N',
+                                             i_flg_nzd           => 'N');
+END;
+/
+
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE '
+create table mig_cipe_aux
+(
+  id_compo_old NUMBER(24) not null,
+  id_compo_new NUMBER(24) not null,
+  id_inst NUMBER(24) not null
+)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('mig_cipe_aux table already exists');
+END;
+/
+-- CHANGE END:  Nuno Neves

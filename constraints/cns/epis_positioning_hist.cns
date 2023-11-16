@@ -1,0 +1,54 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 11/12/2009 17:02
+-- CHANGE REASON: [ALERT-61892] CPOE 2nd phase
+alter table EPIS_POSITIONING_HIST
+  add constraint EPGH_PK primary key (ID_EPIS_POSITIONING_HIST);
+  
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:41
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+BEGIN
+
+EXECUTE IMMEDIATE 'ALTER TABLE epis_positioning_hist ADD CONSTRAINT EPH_FLG_MASSAGE_CHK CHECK (flg_massage IN (''Y'',''N''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:42
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+BEGIN
+
+EXECUTE IMMEDIATE 'ALTER TABLE epis_positioning_hist ADD CONSTRAINT EPH_FLG_STATUS_CHK CHECK (FLG_STATUS IN (''R'',''E'',''F'',''C'',''I'',''D'',''L''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 26/10/2011 11:54
+-- CHANGE REASON: [ALERT-201548] Positioning - INP: UX Intake and Output
+begin
+EXECUTE IMMEDIATE 'ALTER TABLE epis_positioning_hist drop CONSTRAINT EPH_FLG_STATUS_CHK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+
+
+begin
+EXECUTE IMMEDIATE 'alter table epis_positioning_hist  add constraint EPH_FLG_STATUS_CHK  check (FLG_STATUS IN (''R'',''E'',''F'',''C'',''I'',''D'',''L'',''O''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+-- CHANGE END: António Neto

@@ -1,0 +1,54 @@
+
+
+  CREATE GLOBAL TEMPORARY TABLE ALERT.SCH_MULT_RESCHEDULE_AUX
+   (	DT_BEGIN VARCHAR2(12),
+	DT_END VARCHAR2(12),
+	COUNTER NUMBER(4,0)
+   ) ON COMMIT PRESERVE ROWS ;
+ ;
+
+DROP TABLE sch_mult_reschedule_aux;
+
+CREATE GLOBAL TEMPORARY TABLE sch_mult_reschedule_aux (
+  dt_begin              VARCHAR2(12),
+	dt_end                VARCHAR2(12),
+	id_dep_clin_serv      NUMBER(24),
+	id_sch_event          NUMBER(24),
+	id_child              NUMBER(24),
+	flg_sch_type          VARCHAR2(1),
+	counter               NUMBER(4)
+) ON COMMIT DELETE ROWS;
+
+COMMENT ON TABLE sch_mult_reschedule_aux IS 'Stores temporary data about available vacancies. It is used on reschedules.';
+COMMENT ON COLUMN sch_mult_reschedule_aux.dt_begin IS 'Start date';
+COMMENT ON COLUMN sch_mult_reschedule_aux.dt_end IS 'End date';
+COMMENT ON COLUMN sch_mult_reschedule_aux.id_dep_clin_serv IS 'Department-Clinical service identifier';
+COMMENT ON COLUMN sch_mult_reschedule_aux.id_sch_event IS 'Event identifier';
+COMMENT ON COLUMN sch_mult_reschedule_aux.id_child IS 'Vacancies'' child table identifier (for exams, analysis, etc)';
+COMMENT ON COLUMN sch_mult_reschedule_aux.flg_sch_type IS 'Type of schedule that uses the vacancy (consults, exams, analysis, etc)';
+COMMENT ON COLUMN sch_mult_reschedule_aux.counter IS 'Number of vacancies temporarily reserved.';
+
+ALTER TABLE sch_mult_reschedule_aux ADD unplanned_counter NUMBER(4);
+COMMENT ON COLUMN sch_mult_reschedule_aux.counter IS 'Number of unplanned vacancies temporarily created.';
+
+COMMENT ON COLUMN SCH_MULT_RESCHEDULE_AUX.COUNTER IS 'Number of vacancies temporarily used.';
+COMMENT ON COLUMN SCH_MULT_RESCHEDULE_AUX.UNPLANNED_COUNTER IS 'Number of unplanned vacancies temporarily created.';
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 09-01-2009
+-- CHANGE REASON: agenda MFR
+alter table SCH_MULT_RESCHEDULE_AUX modify FLG_SCH_TYPE VARCHAR2(2);
+
+--END
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-01-2013
+-- CHANGE REASON: ALERT-246442
+begin
+    pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', 
+                                           i_obj_name => 'SCH_MULT_RESCHEDULE_AUX', 
+                                           i_obj_type => 'TABLE', 
+                                           i_flg_category => 'DPC');
+end;
+/
+-- CHANGE END: Telmo

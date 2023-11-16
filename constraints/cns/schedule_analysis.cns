@@ -1,0 +1,11 @@
+ALTER TABLE schedule_analysis ADD CONSTRAINT scha_pk PRIMARY KEY(id_schedule_analysis) ENABLE;
+ALTER TABLE schedule_analysis MODIFY (id_schedule NOT NULL ENABLE);
+ALTER TABLE schedule_analysis ADD CONSTRAINT scha_flgpreparation_ck CHECK (flg_preparation IN ('Y', 'N')) ENABLE;
+
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 26-07-2011
+-- CHANGE REASON: alert-188535
+alter table SCHEDULE_ANALYSIS add constraint SCHA_HARVEST_FK foreign key (ID_HARVEST) references harvest (ID_HARVEST);
+alter table SCHEDULE_ANALYSIS add constraint SCHA_PK primary key (ID_SCHEDULE, ID_HARVEST);
+-- CHANGE END: Telmo Castro

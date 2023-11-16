@@ -1,0 +1,19 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 09/12/2011 10:50
+-- CHANGE REASON: [ALERT-209025] Missing indexes in the table INTERV_TIME_OUT is causing a full table scan in Touch-option model when query the complete procedure detail. 
+--                The aim of this task is include indexes for INTERV_TIME_OUT columns.
+DECLARE
+    l_exists NUMBER;
+BEGIN
+    -- The index already exists?
+    SELECT COUNT(*)
+      INTO l_exists
+      FROM user_indexes ui
+     WHERE ui.index_name = 'ITO_EPISD_FK_IDX';
+    IF l_exists = 0
+    THEN
+        EXECUTE IMMEDIATE 'CREATE INDEX ito_episd_fk_idx ON interv_time_out(id_epis_documentation)';
+    END IF;
+END;
+/
+-- CHANGE END: Ariel Machado

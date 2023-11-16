@@ -1,0 +1,73 @@
+
+
+  CREATE TABLE COMPLAINT
+   (	ID_COMPLAINT NUMBER NOT NULL ENABLE,
+	CODE_COMPLAINT VARCHAR2(240) NOT NULL ENABLE,
+	RANK NUMBER,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ID_DOC_TEMPLATE NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN complaint.id_complaint IS 'Chave primária' ;
+COMMENT ON COLUMN complaint.code_complaint IS 'Descrição da queixa' ;
+COMMENT ON COLUMN complaint.rank IS 'Ordem de visualização' ;
+COMMENT ON COLUMN complaint.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN complaint.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+
+comment on column COMPLAINT.ID_DOC_TEMPLATE
+  is 'Template da queixa';
+
+
+--ET 2007/06/06
+alter table complaint add (flg_gender  varchar2(1), 
+age_max number(6,2),
+age_min number(6,2));
+
+comment on column COMPLAINT.FLG_GENDER
+  is 'sexo: f-feminino;m-masculino;g-geral';
+comment on column COMPLAINT.AGE_MAX
+  is 'idade máxima';
+Comment on column COMPLAINT.AGE_MIN
+is 'idade minima';
+
+
+--Luis Gaspar 2007-Nov-19
+alter table COMPLAINT modify ID_DOC_TEMPLATE null;
+ 
+
+
+ALTER TABLE COMPLAINT ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN COMPLAINT.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:17
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table COMPLAINT
+  is 'List of complaints';
+-- Add comments to the columns 
+comment on column COMPLAINT.id_complaint
+  is 'Primary Key';
+comment on column COMPLAINT.code_complaint
+  is 'Translation code for compalint description';
+comment on column COMPLAINT.rank
+  is 'Rank for ordering';
+comment on column COMPLAINT.adw_last_update
+  is 'Date of last change';
+comment on column COMPLAINT.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column COMPLAINT.id_doc_template
+  is 'Template associated to this complaint';
+comment on column COMPLAINT.flg_gender
+  is 'Gender: F - Female ;M-Male;G - General';
+comment on column COMPLAINT.age_max
+  is 'Maximum age';
+comment on column COMPLAINT.age_min
+  is 'Minimum age';
+comment on column COMPLAINT.id_content
+  is 'Content unique ID';
+  
+-- CHANGE END: Elisabete Bugalho

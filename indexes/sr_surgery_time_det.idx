@@ -1,0 +1,18 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 19/12/2012 12:16
+-- CHANGE REASON: [ALERT-247750] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX SR_TIM_DET_FLG_STATUS_IDX
+  ON sr_surgery_time_det (flg_status)
+  TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

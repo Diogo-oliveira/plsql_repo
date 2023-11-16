@@ -1,0 +1,100 @@
+
+
+  CREATE TABLE EPIS_DOCUMENTATION_DET
+   (	ID_EPIS_DOCUMENTATION_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPIS_DOCUMENTATION NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOCUMENTATION NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOC_ELEMENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOC_ELEMENT_CRIT NUMBER(24,0) NOT NULL ENABLE,
+	VALUE VARCHAR2(4000),
+	NOTES VARCHAR2(200),
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_CREATION DATE NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+
+COMMENT ON COLUMN epis_documentation_det.id_epis_documentation_det IS 'Chave primária' ;
+COMMENT ON COLUMN epis_documentation_det.id_epis_documentation IS 'Episódio da documentação' ;
+COMMENT ON COLUMN epis_documentation_det.id_documentation IS 'Documentação' ;
+COMMENT ON COLUMN epis_documentation_det.id_doc_element IS 'Elemento' ;
+COMMENT ON COLUMN epis_documentation_det.id_doc_element_crit IS 'Critério do elemento' ;
+COMMENT ON COLUMN epis_documentation_det.value IS 'Valor' ;
+COMMENT ON COLUMN epis_documentation_det.notes IS 'Notas' ;
+COMMENT ON COLUMN epis_documentation_det.id_professional IS 'Profissional' ;
+COMMENT ON COLUMN epis_documentation_det.dt_creation IS 'Data de criação' ;
+COMMENT ON COLUMN epis_documentation_det.adw_last_update IS 'Data da últtima alteração' ;
+
+alter table epis_documentation_det 
+add (dt_creation_tstz timestamp with local time zone);
+
+-- CHANGED BY: Sérgio Santos (sergio.santos)
+-- CHANGE DATE: 03/12/2008 09:16
+-- CHANGE REASON: ALERT-11133 Remoção de colunas com tipo DATE quando existe a equivalente TSTZ
+ALTER TABLE EPIS_DOCUMENTATION_DET DROP COLUMN DT_CREATION;
+-- CHANGE END
+
+--CHANGED BY: Ariel Geraldo Machado
+--CHANGE DATE: 2009-JAN-08
+--CHANGE REASON: ALERT-1873 - Compound elements for Date and Text types
+ALTER TABLE EPIS_DOCUMENTATION_DET 
+ ADD (VALUE_PROPERTIES VARCHAR2(200));
+
+COMMENT ON COLUMN EPIS_DOCUMENTATION_DET.VALUE_PROPERTIES IS 'Specific properties for the data stored in the value field. This field can be used for general purposes when it''s needed to save extended information about the value. In dates, this field has time-zone information if it''s used.' 
+-- CHANGE END
+
+
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 28/01/2011 16:18
+-- CHANGE REASON: [ALERT-156275] Reference values in Touch-Option templates
+COMMENT ON COLUMN EPIS_DOCUMENTATION_DET.VALUE_PROPERTIES
+  IS 'Specific properties for the data stored in the value field. This field can be used for general purposes when it''s needed to save extended information about the value. In dates, this field has time-zone information if it?s used. In numeric elements, this field may define the ID of Unit of Measure used by stored value. This field may also indicate the range of reference values that was used';
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/01/2016 14:58
+-- CHANGE REASON: [ALERT-317702] 
+comment on table EPIS_DOCUMENTATION_DET
+  is 'Episode documentation detail table';
+-- Add comments to the columns 
+comment on column EPIS_DOCUMENTATION_DET.id_epis_documentation_det
+  is 'Episode documentation detail ID';
+comment on column EPIS_DOCUMENTATION_DET.id_epis_documentation
+  is 'Episode documentation ID';
+comment on column EPIS_DOCUMENTATION_DET.id_documentation
+  is 'Documentation ID';
+comment on column EPIS_DOCUMENTATION_DET.id_doc_element
+  is 'Element ID';
+comment on column EPIS_DOCUMENTATION_DET.id_doc_element_crit
+  is 'Element criteria ID';
+comment on column EPIS_DOCUMENTATION_DET.value
+  is 'Value';
+comment on column EPIS_DOCUMENTATION_DET.notes
+  is 'Notes';
+comment on column EPIS_DOCUMENTATION_DET.id_professional
+  is 'Professional ID';
+comment on column EPIS_DOCUMENTATION_DET.adw_last_update
+  is 'Update date';
+comment on column EPIS_DOCUMENTATION_DET.dt_creation_tstz
+  is 'Date that indicates when the record was registered';
+comment on column EPIS_DOCUMENTATION_DET.value_properties
+  is 'Specific properties for the data stored in the value field. This field can be used for general purposes when it''s needed to save extended information about the value. In dates, this field has time-zone information if it?s used. In numeric elements, this field may define the ID of Unit of Measure used by stored value. This field may also indicate the range of reference values that was used';
+comment on column EPIS_DOCUMENTATION_DET.create_user
+  is 'Creation User';
+comment on column EPIS_DOCUMENTATION_DET.create_time
+  is 'Creation Time';
+comment on column EPIS_DOCUMENTATION_DET.create_institution
+  is 'Creation Institution';
+comment on column EPIS_DOCUMENTATION_DET.update_user
+  is 'Update User';
+comment on column EPIS_DOCUMENTATION_DET.update_time
+  is 'Update Time';
+comment on column EPIS_DOCUMENTATION_DET.update_institution
+  is 'Update Institution';
+  
+  
+  
+-- CHANGE END: Ana Matos

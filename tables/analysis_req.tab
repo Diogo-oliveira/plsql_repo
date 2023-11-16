@@ -1,0 +1,209 @@
+
+
+  CREATE TABLE ANALYSIS_REQ
+   (	ID_ANALYSIS_REQ NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_WRITES NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0),
+	ID_SCHEDULE NUMBER(24,0),
+	ID_SCHED_CONSULT NUMBER(24,0),
+	DT_REQ DATE NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+
+	ID_PROF_APPROVE NUMBER(24,0),
+	ID_PROF_AUTHORIZE NUMBER(24,0),
+	FLG_TIME VARCHAR2(1) NOT NULL ENABLE,
+	DT_BEGIN DATE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_EPISODE_ORIGIN NUMBER(24,0),
+	ID_EPISODE_DESTINATION NUMBER(24,0),
+	DT_PEND_REQ DATE,
+	ID_PROTOCOLS NUMBER(24,0),
+	ID_PREV_EPISODE NUMBER(24,0),
+	NOTES_TECH VARCHAR2(240)
+   );
+
+
+COMMENT ON TABLE analysis_req IS 'Cabeçalhos de requisição de análises. Permite associar os agendamentos das análises com a consulta (ou outro evento) para a qual são necessários' ;
+
+COMMENT ON COLUMN analysis_req.id_episode IS 'Chave primaria' ;
+COMMENT ON COLUMN analysis_req.id_prof_approve IS 'Profissional que aprova o pedido de exame ao exterior (Dir. Serviço)' ;
+COMMENT ON COLUMN analysis_req.id_prof_authorize IS 'Profissional que autoriza o pedido de exame ao exterior (Dir. Clínico)' ;
+COMMENT ON COLUMN analysis_req.flg_time IS 'Realização: E - neste episódio; N - próximo episódio; B - entre episódios' ;
+COMMENT ON COLUMN analysis_req.dt_begin IS 'Data pretendida para início da execução do exame (ie, ñ imediata)' ;
+COMMENT ON COLUMN analysis_req.flg_status IS 'F - c/ resultado; R - requisitado; C - cancelado; E - em execução; D - pendente; P - parcial; T - em ransporte; H - colhido' ;
+COMMENT ON COLUMN analysis_req.id_episode_origin IS 'ID do episódio em que foi registada a req. inicialmente (ie, se FLG_TIME = ''N'')' ;
+COMMENT ON COLUMN analysis_req.dt_pend_req IS 'ID do episódio em que foi registada a req. destino (se FLG_TIME = ''N'')' ;
+COMMENT ON COLUMN analysis_req.id_prev_episode IS 'ID do protocolo, caso tenha sido requesitado através de um protocolo.' ;
+COMMENT ON COLUMN analysis_req.notes_tech IS 'ID do episódio em que foi registada a req. inicialmente' ;
+
+comment on column ANALYSIS_REQ.ID_EPISODE_DESTINATION
+  is 'ID do episódio em que foi registada a req. destino (se FLG_TIME = ''N'')';
+comment on column ANALYSIS_REQ.ID_PROTOCOLS
+  is 'ID do protocolo, caso tenha sido requisitado através de um protocolo.';
+comment on column ANALYSIS_REQ.ID_PREV_EPISODE
+  is 'ID do episódio em que foi registada a req. inicialmente';
+comment on column ANALYSIS_REQ.NOTES_TECH
+  is '';
+
+  
+alter table analysis_req add (dt_req_tstz timestamp with local time zone);
+alter table analysis_req add (dt_cancel_tstz timestamp with local time zone);
+alter table analysis_req add (dt_begin_tstz timestamp with local time zone);
+alter table analysis_req add (dt_pend_req_tstz timestamp with local time zone);
+
+COMMENT ON COLUMN analysis_req.dt_begin_tstz IS 'Data pretendida para início da execução do exame (ie, ñ imediata)' ;
+COMMENT ON COLUMN analysis_req.dt_pend_req_tstz IS 'ID do episódio em que foi registada a req. destino (se FLG_TIME = ''N'')' ;
+
+-- CHANGED BY: Rui Spratley
+-- CHANGED DATE: 2007-OUT-10
+-- CHANGED REASON: Reformulação das análises
+
+-- Add/modify columns 
+alter table ANALYSIS_REQ add ID_ANALYSIS_GROUP NUMBER(24);
+-- Add comments to the columns 
+comment on column ANALYSIS_REQ.ID_ANALYSIS_GROUP
+  is 'Grupo de análises';
+
+ALTER TABLE ANALYSIS_REQ ADD (ID_PATIENT NUMBER(24));
+comment on column ANALYSIS_REQ.ID_PATIENT is 'Paciente';
+
+-- CHANGE END: Rui Spratley
+
+ALTER TABLE ANALYSIS_REQ ADD ID_PATIENT NUMBER(24,0) NOT NULL; 
+ALTER TABLE ANALYSIS_REQ ADD ID_VISIT NUMBER(24,0) ;  
+
+COMMENT ON COLUMN "ALERT"."ANALYSIS_REQ"."ID_VISIT" IS 'Visita';  
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-AUG-29
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15330
+
+COMMENT ON COLUMN ANALYSIS_REQ.ID_ANALYSIS_REQ IS 'Analysis request ID';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_PROF_WRITES IS 'Request creation professional ID';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_SCHEDULE IS 'Schedule ID';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_SCHED_CONSULT IS 'Schedule consult ID';
+COMMENT ON COLUMN ANALYSIS_REQ.DT_REQ IS 'Request date';
+COMMENT ON COLUMN ANALYSIS_REQ.NOTES IS 'Request notes';
+COMMENT ON COLUMN ANALYSIS_REQ.DT_CANCEL IS 'Request cancel date';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_PROF_CANCEL IS 'Request cancel professional ID';
+COMMENT ON COLUMN ANALYSIS_REQ.NOTES_CANCEL IS 'Request cancel notes';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_PROTOCOLS IS 'Protocols ID';
+COMMENT ON COLUMN ANALYSIS_REQ.DT_REQ_TSTZ IS 'Request date';
+COMMENT ON COLUMN ANALYSIS_REQ.DT_CANCEL_TSTZ IS 'Request cancel date';
+COMMENT ON COLUMN ANALYSIS_REQ.FLG_TIME IS 'Realização: B - entre episódios; E - neste episódio; N - próximo episódio; R - Análise trazida pelo paciente';
+COMMENT ON COLUMN ANALYSIS_REQ.FLG_STATUS IS 'F - c/ resultado; R - requisitado; C - cancelado; E - em execução; D - pendente; P - parcial; T - em ransporte; H - colhido; L - Lido';
+
+-- CHANGE END
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Desnormalização - Remover campos DATE para uso de TIMESTAMPS.
+ALTER TABLE ANALYSIS_REQ DROP COLUMN DT_REQ;
+ALTER TABLE ANALYSIS_REQ DROP COLUMN DT_CANCEL;
+ALTER TABLE ANALYSIS_REQ DROP COLUMN DT_BEGIN;
+ALTER TABLE ANALYSIS_REQ DROP COLUMN DT_PEND_REQ;
+-- CHANGE END
+
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 2010-05-10
+-- CHANGE REASON: ALERT-812
+
+ALTER TABLE task_timeline_ea MODIFY (ID_EPISODE NULL);
+ALTER TABLE task_timeline_ea MODIFY (ID_VISIT NULL);
+
+-- CHANGE END: Ana Matos
+
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 2010-07-16
+-- CHANGE REASON: ALERT-812
+ALTER TABLE analysis_req MODIFY (ID_EPISODE NULL);
+ALTER TABLE analysis_req MODIFY (ID_VISIT NULL);
+-- CHANGE END: Gustavo Serrano
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 27/04/2011 10:27
+-- CHANGE REASON: [ALERT-174844] 
+alter table analysis_req modify (flg_status varchar2(2 char));
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 14/01/2013 12:28
+-- CHANGE REASON: [ALERT-249212] 
+ALTER TABLE ANALYSIS_REQ MODIFY (DT_REQ_TSTZ TIMESTAMP WITH LOCAL TIME ZONE NOT NULL, ID_PATIENT NUMBER(24) NULL);
+
+ALTER TABLE ANALYSIS_REQ ADD (CONSTRAINT ARQ_FLG_TIME_CHK CHECK (flg_time IN ('E', 'B', 'N', 'R')));
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/09/2013 09:09
+-- CHANGE REASON: [ALERT-264901] 
+ALTER TABLE ANALYSIS_REQ DROP COLUMN ID_PROTOCOLS;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/09/2013 09:09
+-- CHANGE REASON: [ALERT-264901] 
+ALTER TABLE ANALYSIS_REQ 
+ ADD (DT_SCHEDULE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE
+ ,FLG_PRIORITY VARCHAR2(1 CHAR)
+ ,ID_EXEC_INSTITUTION NUMBER(24)
+ ,BARCODE VARCHAR2(30 CHAR)
+ ,ID_CANCEL_REASON NUMBER(24)
+ ,ID_PROF_LAST_UPDATE NUMBER(24)
+ ,DT_LAST_UPDATE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE);
+
+COMMENT ON TABLE ANALYSIS_REQ IS 'Orders table';
+
+COMMENT ON COLUMN ANALYSIS_REQ.ID_ANALYSIS_REQ IS 'Order''s ID';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_PATIENT IS 'Patient ID';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_EPISODE_ORIGIN IS 'Episode ID where the order was registered';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_EPISODE_DESTINATION IS 'Episode ID where the order is going to be performed';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_PREV_EPISODE IS 'Episode ID where the order was registered (when the visit has more than one episode)';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_VISIT IS 'Visit ID';
+COMMENT ON COLUMN ANALYSIS_REQ.FLG_TIME IS 'To be performed: E - this episode; B - between episodes; N - next episode';
+COMMENT ON COLUMN ANALYSIS_REQ.FLG_STATUS IS 'Flag that indicates the order''s status';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_PROF_WRITES IS 'Professional that registers the order';
+COMMENT ON COLUMN ANALYSIS_REQ.DT_REQ_TSTZ IS 'Date that indicates when the order was registered';
+COMMENT ON COLUMN ANALYSIS_REQ.DT_BEGIN_TSTZ IS 'Date for which the order is to be performed';
+COMMENT ON COLUMN ANALYSIS_REQ.DT_SCHEDULE_TSTZ IS 'Suggested date for scheduling';
+COMMENT ON COLUMN ANALYSIS_REQ.DT_PEND_REQ_TSTZ IS 'Date that indicates when the order has been updated from pending to ordered';
+COMMENT ON COLUMN ANALYSIS_REQ.FLG_PRIORITY IS 'Flag that indicates the urgency of an order';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_EXEC_INSTITUTION IS 'Institution ID where the order is performed';
+COMMENT ON COLUMN ANALYSIS_REQ.BARCODE IS 'Order''s barcode';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_PROF_AUTHORIZE IS 'Professional that authorizes the order';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_PROF_APPROVE IS 'Professional that approves the order';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_SCHED_CONSULT IS 'Appointment schedule ID';
+COMMENT ON COLUMN ANALYSIS_REQ.NOTES IS 'Notes';
+COMMENT ON COLUMN ANALYSIS_REQ.NOTES_TECH IS 'Notes for the technician';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_PROF_CANCEL IS 'Professional that cancels the order';
+COMMENT ON COLUMN ANALYSIS_REQ.DT_CANCEL_TSTZ IS 'Date that indicates when the order was cancelled';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_CANCEL_REASON IS 'Cancel reason ID';
+COMMENT ON COLUMN ANALYSIS_REQ.NOTES_CANCEL IS 'Cancelation notes';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_ANALYSIS_GROUP IS 'Lab tests'' group ID';
+COMMENT ON COLUMN ANALYSIS_REQ.ID_PROF_LAST_UPDATE IS 'Last update professional ID';
+COMMENT ON COLUMN ANALYSIS_REQ.DT_LAST_UPDATE_TSTZ IS 'Last update date';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:00
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS_REQ IS 'Lab tests'' orders table';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 24/02/2021 14:35
+-- CHANGE REASON: [EMR-42343] - Change the descriptions of the "Start date" and "Date to be defined" fields.
+comment on column ANALYSIS_REQ.FLG_TIME is 'To be performed: E - this episode; B - before next episode; N - next episode; D - On a defined or to be defined date';
+-- CHANGE END: Diogo Oliveira

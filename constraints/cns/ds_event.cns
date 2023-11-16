@@ -1,0 +1,75 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:21
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE ds_event ADD CONSTRAINT dsev_pk PRIMARY KEY(id_ds_event);
+--
+ALTER TABLE ds_event ADD CONSTRAINT dsev_dscm_v_uk UNIQUE(id_ds_cmpt_mkt_rel, value);
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:21
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER INDEX dsev_pk          REBUILD TABLESPACE index_m;
+ALTER INDEX dsev_dscm_v_uk   REBUILD TABLESPACE index_m;
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 24/07/2019 16:35
+-- CHANGE REASON: [ARCH-7603] Changes on DB Model
+--                
+declare
+  l_sql   varchar2(1000 char);
+begin
+  l_sql := q'[alter table DS_EVENT  drop constraint DS_EVT_FLG_TYPE]';
+  pk_versioning.run( l_sql );
+end;
+/
+
+declare
+  l_sql   varchar2(1000 char);
+begin
+  l_sql := q'[alter table DS_EVENT  add constraint DS_EVT_FLG_TYPE check (flg_type in( 'V', 'E', 'S') )]';
+  pk_versioning.run( l_sql );
+end;
+/
+-- CHANGE END: Elisabete Bugalho
+
+declare
+	l_sql	varchar2(1000 char);
+begin
+
+	L_SQL := 'ALTER TABLE DS_EVENT DROP CONSTRAINT DSEV_DSCM_V_UK';
+	pk_versioning.run( l_sql );
+
+end;
+/
+
+declare
+	l_sql	varchar2(1000 char);
+begin
+
+	L_SQL := 'ALTER TABLE DS_EVENT ADD CONSTRAINT DSEV_DSCM_V_UK UNIQUE(ID_DS_CMPT_MKT_REL, VALUE, ID_ACTION)';
+	pk_versioning.run( l_sql );
+
+end;
+/
+
+-- CMF
+-- Create/Recreate check constraints 
+declare
+	l_sql	varchar2(1000 char);
+begin
+	l_sql := 'alter table ds_event drop constraint DS_EVT_FLG_TYPE';
+	pk_versioning.run( l_sql);
+end;
+/
+
+
+declare
+	l_sql	varchar2(1000 char);
+begin
+	l_sql := q'[alter table DS_EVENT  add constraint DS_EVT_FLG_TYPE  check (flg_type in( 'V', 'E', 'S', 'F'))]';
+	pk_versioning.run( l_sql);
+end;
+/

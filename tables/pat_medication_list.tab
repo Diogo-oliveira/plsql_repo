@@ -1,0 +1,300 @@
+
+
+  CREATE TABLE PAT_MEDICATION_LIST
+   (	ID_PAT_MEDICATION_LIST NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_MEDICATION_LIST DATE NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	EMB_ID NUMBER(12,0),
+	YEAR_BEGIN NUMBER(4,0),
+	MONTH_BEGIN NUMBER(2,0),
+	DAY_BEGIN NUMBER(2,0),
+	QTY NUMBER(5,3),
+
+	FREQUENCY VARCHAR2(30),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	MED_ID NUMBER(10,0),
+	ID_DRUG NUMBER(12,0),
+	FLG_PRESC VARCHAR2(1) NOT NULL ENABLE,
+	ID_PRESCRIPTION_PHARM NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE pat_medication_list IS 'Relatos de medicação.' ;
+
+COMMENT ON COLUMN pat_medication_list.id_pat_medication_list IS 'Chave primária' ;
+COMMENT ON COLUMN pat_medication_list.dt_pat_medication_list IS 'Data de registo' ;
+COMMENT ON COLUMN pat_medication_list.id_episode IS 'ID do episódio em que foi feito o registo.' ;
+COMMENT ON COLUMN pat_medication_list.id_patient IS 'ID do paciente.' ;
+COMMENT ON COLUMN pat_medication_list.id_institution IS 'ID da instituição onde foi feito o registo.' ;
+COMMENT ON COLUMN pat_medication_list.id_software IS 'ID do software onde foi feito o registo.' ;
+COMMENT ON COLUMN pat_medication_list.emb_id IS 'Id da embalagem.' ;
+COMMENT ON COLUMN pat_medication_list.year_begin IS 'Ano (aproximado) de inicio da medicação' ;
+COMMENT ON COLUMN pat_medication_list.month_begin IS 'Mês (aproximado) de inicio da medicação' ;
+COMMENT ON COLUMN pat_medication_list.day_begin IS 'Dia (aproximado) de inicio da medicação' ;
+COMMENT ON COLUMN pat_medication_list.qty IS 'Quantidade.' ;
+COMMENT ON COLUMN pat_medication_list.frequency IS 'Frequência' ;
+COMMENT ON COLUMN pat_medication_list.flg_status IS 'A - activo, P - passivo, C - cancelado' ;
+
+COMMENT ON COLUMN pat_medication_list.id_professional IS 'ID do profissional que registou.' ;
+COMMENT ON COLUMN pat_medication_list.notes IS 'Notas.' ;
+COMMENT ON COLUMN pat_medication_list.med_id IS 'ID do medicamento. Só é preenchido, se não for relatado através do histórico.' ;
+COMMENT ON COLUMN pat_medication_list.id_drug IS 'ID do medicamento. Só está preenchido, se for um medicamento da Farmácia do Hospital.' ;
+COMMENT ON COLUMN pat_medication_list.flg_presc IS 'Flag que indica se é um relato de um medicamento prescrito (Y) ou não (N).' ;
+COMMENT ON COLUMN pat_medication_list.id_prescription_pharm IS 'Se for relato de uma prescrição, preenche esta coluna com o ID_PRESCRIPTION_PHARM correspondente a essa prescrição. Caso contrário, é NULL' ;
+
+alter table pat_medication_list 
+add (dt_pat_medication_list_tstz timestamp with local time zone); 
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-OUT-11
+-- CHANGING REASON: alteração da PAT_MEDICATION_LIST para receber o advanced-input.
+-- Add/modify columns 
+alter table PAT_MEDICATION_LIST add ID_UNIT_MEASURE_QTY NUMBER(24);
+alter table PAT_MEDICATION_LIST add ID_UNIT_MEASURE_FREQ NUMBER(24);
+alter table PAT_MEDICATION_LIST add FREQ NUMBER(24);
+alter table PAT_MEDICATION_LIST add DURATION NUMBER(24);
+alter table PAT_MEDICATION_LIST add ID_UNIT_MEASURE_DUR NUMBER(24);
+alter table PAT_MEDICATION_LIST add DT_START_PAT_MED_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table PAT_MEDICATION_LIST add DT_END_PAT_MED_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE;
+-- Add comments to the columns 
+comment on column PAT_MEDICATION_LIST.ID_UNIT_MEASURE_QTY
+  is 'id da unidade de medida da quantidade prescrita';
+comment on column PAT_MEDICATION_LIST.ID_UNIT_MEASURE_FREQ
+  is 'id da unidade de medida da frequência prescrita';
+comment on column PAT_MEDICATION_LIST.FREQ
+  is 'posologia - frequência (a este campo está associado a DURATION e a QTY)';
+comment on column PAT_MEDICATION_LIST.DURATION
+  is 'posologia - duração (a este campo está associado a FREQ e a QTY)';
+comment on column PAT_MEDICATION_LIST.ID_UNIT_MEASURE_DUR
+  is 'id da unidade de medida da duração prescrita';
+comment on column PAT_MEDICATION_LIST.DT_START_PAT_MED_TSTZ
+  is 'data de início ';
+comment on column PAT_MEDICATION_LIST.DT_END_PAT_MED_TSTZ
+  is 'data de fim ';
+-- CHANGE END Patrícia Neto
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-OUT-11
+-- CHANGING REASON: alteração da PAT_MEDICATION_LIST para receber o advanced-input.
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table PAT_MEDICATION_LIST
+  add constraint PML_UMQ_FK foreign key (ID_UNIT_MEASURE_QTY)
+  references unit_measure (ID_UNIT_MEASURE);
+alter table PAT_MEDICATION_LIST
+  add constraint PML_UMF_FK foreign key (ID_UNIT_MEASURE_FREQ)
+  references unit_measure (ID_UNIT_MEASURE);
+alter table PAT_MEDICATION_LIST
+  add constraint PML_UMD_FK foreign key (ID_UNIT_MEASURE_DUR)
+  references unit_measure (ID_UNIT_MEASURE);
+-- CHANGE END Patrícia Neto
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-OUT-16
+-- CHANGING REASON: alteração da PAT_MEDICATION_LIST para receber OUTROS PRODUTOS.
+-- Add/modify columns 
+alter table PAT_MEDICATION_LIST add ID_PROD_MED VARCHAR2(11);
+alter table PAT_MEDICATION_LIST add PROD_MED_DECR VARCHAR2(30);
+-- Add comments to the columns 
+comment on column PAT_MEDICATION_LIST.ID_PROD_MED
+  is 'ID do medicamento: OUTROS PRODUTOS criado pelo utilizador (este id não se encontra em nenhuma BD, porque é uma sequência)';
+comment on column PAT_MEDICATION_LIST.PROD_MED_DECR
+  is 'Descritivo do medicamento ID_PROD_MED';
+  -- CHANGE END Patrícia Neto
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-OUT-17
+-- CHANGING REASON: pat_medication_list - relatos da farmácia
+-- Add/modify columns 
+alter table PAT_MEDICATION_LIST add ID_DRUG_REQ_DET NUMBER(24);
+-- Add comments to the columns 
+comment on column PAT_MEDICATION_LIST.ID_DRUG_REQ_DET
+  is 'Se for relato de uma prescrição (à farmácia do hospital), preenche esta coluna com o ID_DRUG_REQ_DET correspondente a essa prescrição. Caso contrário, é NULL';
+-- CHANGE END Patrícia Neto
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-OUT-17
+-- CHANGING REASON: pat_medication_list - relatos da farmácia
+-- Add/modify columns 
+alter table PAT_MEDICATION_LIST add ID_DRUG_REQ_DET NUMBER(24);
+-- Add comments to the columns 
+comment on column PAT_MEDICATION_LIST.ID_DRUG_REQ_DET
+  is 'Se for relato de uma prescrição (à farmácia do hospital), preenche esta coluna com o ID_DRUG_REQ_DET correspondente a essa prescrição';
+-- CHANGE END Patrícia Neto
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-OUT-18
+-- CHANGING REASON: pat_medication_list - relatos da farmácia
+-- Add/modify columns 
+alter table PAT_MEDICATION_LIST add ID_DRUG_PRESC_DET NUMBER(24);
+-- Add comments to the columns 
+comment on column PAT_MEDICATION_LIST.ID_DRUG_PRESC_DET
+  is 'Se for relato de uma prescrição (NESTE LOCAL), preenche esta coluna com o ID_DRUG_PRESC_DET correspondente a essa prescrição. Caso contrário, é NULL';
+-- CHANGE END Patrícia Neto
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-OUT-23
+-- CHANGING REASON: acrescentar o campo quantity para o advanced input
+-- Add/modify columns 
+alter table PAT_MEDICATION_LIST add QUANTITY NUMBER(24);
+-- Add comments to the columns 
+comment on column PAT_MEDICATION_LIST.ID_UNIT_MEASURE_QTY
+  is 'id da unidade de medida da quantidade prescrita (QUANTITY)';
+comment on column PAT_MEDICATION_LIST.FREQ
+  is 'posologia - frequência (a este campo está associado a DURATION e a QUANTITY)';
+comment on column PAT_MEDICATION_LIST.DURATION
+  is 'posologia - duração (a este campo está associado a FREQ e a QUANTITY)';
+comment on column PAT_MEDICATION_LIST.QUANTITY
+  is 'posologia -quantidade (a este campo está associado a DURATION e a FREQ)';
+-- CHANGE END Patrícia Neto 
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-OUT-31
+-- CHANGED REASON:  novas colunas
+-- Add/modify columns 
+alter table PAT_MEDICATION_LIST add id_epis_documentation number(24);
+-- Add comments to the columns 
+comment on column PAT_MEDICATION_LIST.id_epis_documentation
+  is 'associar um relato à informação obtida pela documentation (RELEVANT PATIENT INFORMATION)';
+
+-- Add/modify columns 
+alter table PAT_MEDICATION_LIST add MED_ID_TYPE VARCHAR2(1);
+-- Add comments to the columns 
+comment on column PAT_MEDICATION_LIST.MED_ID_TYPE
+  is 'tipo da medicação se interna, se externa para o med_id';
+-- CHANGES END
+   
+
+
+
+-- Add/modify columns 
+alter table PAT_MEDICATION_LIST add CONTINUE varchar2(1);
+-- Add comments to the columns 
+comment on column PAT_MEDICATION_LIST.CONTINUE
+  is 'Indica se o paciente deve continuar a tomar a medicação (Y) ou deve interromper (N)';
+  
+-- Add/modify columns 
+alter table PAT_MEDICATION_HIST_LIST add CONTINUE varchar2(1);
+-- Add comments to the columns 
+comment on column PAT_MEDICATION_HIST_LIST.CONTINUE
+  is 'Indica se o paciente deve continuar a tomar a medicação (Y) ou se deve interromper o tratamento (N)';  
+
+  -- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-NOV-30
+-- CHANGED REASON: Modify Orders/Refills
+  -- Add/modify columns 
+alter table PAT_MEDICATION_LIST add DOSAGE varchar2(4000);
+-- Add comments to the columns 
+comment on column PAT_MEDICATION_LIST.DOSAGE
+  is 'posologia ';
+--CHANGES END
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-JAN-14
+-- CHANGING REASON:  Add/modify columns 
+alter table PAT_MEDICATION_LIST modify PROD_MED_DECR VARCHAR2(4000);
+-- CHANGE END Patrícia Neto
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-FEB-15
+-- CHANGING REASON: alterações da tabela pat_medication_list
+-- Add/modify columns 
+alter table PAT_MEDICATION_LIST add flg_no_med VARCHAR2(1);
+-- Add comments to the columns 
+comment on column PAT_MEDICATION_LIST.flg_no_med
+  is '''Y'', se NO HOME MEDICATION está seleccionado e ''N'', se ''NO HOME MEDICATION'' não está seleccionado ';
+-- CHANGE END Patrícia Neto	   
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-ABR-22
+-- CHANGE REASON: Novos campos na tabela para reacções adversas e destino de medicamentos
+--reações adversas
+ALTER TABLE PAT_MEDICATION_LIST
+ADD NOTES_ADVERS_REACT  VARCHAR2(1000);
+
+--destino dos fármaco
+ALTER TABLE PAT_MEDICATION_LIST
+ADD NOTES_MED_DESTINATION  VARCHAR2(1000);
+
+-- Add comments to the columns 
+comment on column PAT_MEDICATION_LIST.NOTES_ADVERS_REACT
+is 'Adverse reactions.';
+--
+comment on column PAT_MEDICATION_LIST.NOTES_MED_DESTINATION
+is 'Medication destination.';
+--CHANGE END
+
+
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2008-SET-22
+-- CHANGE REASON: Drop de colunas DATE com correspondentes DATE_TSTZ
+
+ALTER TABLE PAT_MEDICATION_LIST DROP COLUMN DT_PAT_MEDICATION_LIST;
+
+-- CHANGE END
+
+
+
+
+-- CHANGED BY: Rafael Santos
+-- CHANGED DATE: 2009-MAI-25
+-- CHANGING REASON: Take Type
+
+-- Add/modify columns 
+alter table PAT_MEDICATION_LIST add FLG_TAKE_TYPE varchar2(1);
+-- Add comments to the columns 
+comment on column PAT_MEDICATION_LIST.FLG_TAKE_TYPE
+  is 'Tipo de plano de tomas: N - normal, S - SOS, U - unitário, C - contínuo, A - ad eternum';
+
+-- CHANGE END Rafael Santos
+
+
+
+-- CHANGED BY: Rafael Santos
+-- CHANGED DATE: 2009-MAI-26
+-- CHANGING REASON: Correcção da tabela em dev 2.5
+
+-- Add/modify columns 
+alter table PAT_MEDICATION_LIST add QUANTITY_OLD NUMBER(24);
+
+comment on column PAT_MEDICATION_LIST.QUANTITY_OLD
+  is 'posologia -quantidade (a este campo está associado a DURATION e a FREQ)';
+
+-- CHANGE END Rafael Santos
+
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 2009-JUL-10
+-- CHANGE REASON: ALERT-35531
+
+alter table PAT_MEDICATION_LIST modify EMB_ID VARCHAR2(255);
+alter table PAT_MEDICATION_LIST modify ID_PROD_MED VARCHAR2(255);
+alter table PAT_MEDICATION_LIST modify MED_ID VARCHAR2(255);
+alter table PAT_MEDICATION_LIST modify ID_DRUG VARCHAR2(255);
+
+-- CHANGED END
+
+-- CHANGED BY: Pedro Quinteiro
+-- CHANGE DATE: 18/01/2011 16:22
+-- CHANGE REASON: [ALERT-154894] 
+alter table pat_medication_list
+add ID_PRESC_DIRECTIONS NUMBER(24)
+/
+
+comment on column pat_medication_list.ID_PRESC_DIRECTIONS
+  is 'Prescription Directions ID'
+/
+-- CHANGE END: Pedro Quinteiro
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 20/05/2011 11:45
+-- CHANGE REASON: [ALERT-180704] CDR: create concepts and conditions for dietaries, compound medications and other products
+-- Add/modify columns 
+alter table pat_medication_list add ID_CDR_CALL number(24);
+-- CHANGE END:  Pedro Morais

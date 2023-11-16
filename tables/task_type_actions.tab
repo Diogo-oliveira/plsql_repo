@@ -1,0 +1,54 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/04/2015 16:17
+-- CHANGE REASON: [ALERT-31026901] CO-SIGN  - Database model Versioning
+
+BEGIN
+    --i_flg_category
+    --DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais
+
+
+    pk_versioning.run(i_sql => q'[
+CREATE TABLE TASK_TYPE_ACTIONS
+(
+    ID_TASK_TYPE_ACTION   NUMBER (24) NOT NULL,
+    ID_TASK_TYPE          NUMBER (24) NOT NULL,
+    ID_ACTION             NUMBER (24) NOT NULL,
+FUNC_TASK_DESCRIPTION VARCHAR2 (1000 CHAR),       
+FUNC_INSTRUCTIONS     VARCHAR2 (1000 CHAR),
+FUNC_TASK_ACTION_DESC VARCHAR2 (1000 CHAR),
+  CREATE_USER           VARCHAR2(24 CHAR),
+  CREATE_TIME           TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24 CHAR),
+  UPDATE_TIME           TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+) TABLESPACE ALERT_DATA]');
+
+END;
+/
+
+COMMENT ON TABLE TASK_TYPE_ACTIONS IS 'Task type associated actions';
+COMMENT ON COLUMN TASK_TYPE_ACTIONS.ID_TASK_TYPE_ACTION IS 'Primary key';
+COMMENT ON COLUMN TASK_TYPE_ACTIONS.ID_TASK_TYPE IS 'Task type id';
+COMMENT ON COLUMN TASK_TYPE_ACTIONS.ID_ACTION IS 'Action id';
+COMMENT ON COLUMN TASK_TYPE_ACTIONS.FUNC_TASK_DESCRIPTION IS 'Function that returns the description of the order/task';
+COMMENT ON COLUMN TASK_TYPE_ACTIONS.FUNC_INSTRUCTIONS IS 'Function that returns the instructions of the order/task';
+COMMENT ON COLUMN TASK_TYPE_ACTIONS.FUNC_TASK_ACTION_DESC IS 'Function that returns the action description of the order/task';
+COMMENT ON COLUMN TASK_TYPE_ACTIONS.CREATE_USER is 'Professional ID which created the record';
+COMMENT ON COLUMN TASK_TYPE_ACTIONS.CREATE_TIME is 'Date of record creation';
+COMMENT ON COLUMN TASK_TYPE_ACTIONS.CREATE_INSTITUTION is 'Institution ID where record was created';
+COMMENT ON COLUMN TASK_TYPE_ACTIONS.UPDATE_USER is 'Professional ID who last updated the record';
+COMMENT ON COLUMN TASK_TYPE_ACTIONS.UPDATE_TIME is 'Date when record was last updated';
+COMMENT ON COLUMN TASK_TYPE_ACTIONS.UPDATE_INSTITUTION is 'Institution ID where record was last updated';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Nuno Alves
+-- CHANGE DATE: 21/10/2015 16:35
+-- CHANGE REASON: [ALERT-316284] ALERT-311010 - [EXAMS] Discharge button - Co-sign - Co-sign requests originated from recurrent imaging/other exams are not sorted properly when accessing the co-sign area
+--                
+BEGIN
+    pk_versioning.run(i_sql => 'ALTER TABLE TASK_TYPE_ACTIONS ADD FUNC_TASK_EXEC_DATE VARCHAR2 (1000 CHAR)');
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TASK_TYPE_ACTIONS.FUNC_TASK_EXEC_DATE IS ''Function that returns the execution date of the order/task''';
+END;
+/
+-- CHANGE END: Nuno Alves

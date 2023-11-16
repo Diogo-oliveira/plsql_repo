@@ -1,0 +1,18 @@
+
+
+  ALTER TABLE SOCIAL_EPISODE ADD CONSTRAINT SEE_PK PRIMARY KEY (ID_SOCIAL_EPISODE) ENABLE;
+
+  ALTER TABLE SOCIAL_EPISODE MODIFY (ID_SOCIAL_EPISODE NOT NULL ENABLE);
+
+  ALTER TABLE SOCIAL_EPISODE MODIFY (ID_EPISODE NOT NULL ENABLE);
+
+  ALTER TABLE SOCIAL_EPISODE MODIFY (FLG_STATUS NOT NULL ENABLE);
+
+  ALTER TABLE SOCIAL_EPISODE MODIFY (ID_PATIENT NOT NULL ENABLE);
+
+
+alter table social_episode
+  add constraint social_episode_status
+  check (flg_status IN ('A', 'I'));								
+
+alter table social_episode add constraint sce_pat_fk foreign key (id_patient) references patient(id_patient);

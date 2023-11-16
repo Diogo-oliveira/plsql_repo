@@ -1,0 +1,65 @@
+
+CREATE TABLE "REF_COMPLETION_CFG"(
+ID_REF_COMPLETION NUMBER(24,0) NOT NULL,
+FLG_TYPE_REF VARCHAR2(1) NOT NULL,
+ID_MARKET NUMBER(24,0) NOT NULL,
+ID_SOFTWARE NUMBER(24,0) NOT NULL,
+ID_INSTITUTION NUMBER(24,0) NOT NULL,
+ID_PROFILE_TEMPLATE NUMBER(12,0) NOT NULL,
+ID_REPORTS NUMBER(24,0) ,
+FLG_AVAILABLE VARCHAR2(1) NOT NULL,
+CREATE_USER VARCHAR2(24) ,
+CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+CREATE_INSTITUTION NUMBER(24,0) ,
+UPDATE_USER VARCHAR2(24) ,
+UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+UPDATE_INSTITUTION NUMBER(24,0) );
+
+
+   COMMENT ON COLUMN "REF_COMPLETION_CFG"."ID_REF_COMPLETION" IS 'Referral completion option identifier';
+   COMMENT ON COLUMN "REF_COMPLETION_CFG"."FLG_TYPE_REF" IS 'Referral type: C- Consultation, A- Analysis, I- Image, E- Exam, P- Procedure, F- Physiatrics';
+   COMMENT ON COLUMN "REF_COMPLETION_CFG"."ID_MARKET" IS 'Market identifier';
+   COMMENT ON COLUMN "REF_COMPLETION_CFG"."ID_SOFTWARE" IS 'Software identifier';
+   COMMENT ON COLUMN "REF_COMPLETION_CFG"."ID_INSTITUTION" IS 'Institution identifier';
+   COMMENT ON COLUMN "REF_COMPLETION_CFG"."ID_PROFILE_TEMPLATE" IS 'Professional profile identifier';
+   COMMENT ON COLUMN "REF_COMPLETION_CFG"."ID_REPORTS" IS 'Report identifier to be generated';
+   COMMENT ON COLUMN "REF_COMPLETION_CFG"."FLG_AVAILABLE" IS 'Record availability: Y - available, N - otherwise';
+   COMMENT ON COLUMN "REF_COMPLETION_CFG"."CREATE_USER" IS 'Creation User';
+   COMMENT ON COLUMN "REF_COMPLETION_CFG"."CREATE_TIME" IS 'Creation Time';
+   COMMENT ON COLUMN "REF_COMPLETION_CFG"."CREATE_INSTITUTION" IS 'Creation Institution';
+   COMMENT ON COLUMN "REF_COMPLETION_CFG"."UPDATE_USER" IS 'Update User';
+   COMMENT ON COLUMN "REF_COMPLETION_CFG"."UPDATE_TIME" IS 'Update Time';
+   COMMENT ON COLUMN "REF_COMPLETION_CFG"."UPDATE_INSTITUTION" IS 'Update Institution';
+   COMMENT ON TABLE "REF_COMPLETION_CFG"  IS 'Referral completion options configuration';
+   
+-- CHANGED BY: Ana Monteiro
+-- CHANGED DATE: 2009-OCT-27
+-- CHANGED REASON: ALERT-48308
+ALTER TABLE ref_completion_cfg add number_per_form NUMBER(24);
+COMMENT ON column ref_completion_cfg.number_per_form IS 'Maximum number of MCDTs in each referral form';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns utc
+     WHERE utc.table_name = 'ref_completion_cfg'
+       AND utc.column_name = 'id_mcdt';
+
+    IF l_var < 1
+    THEN
+        EXECUTE IMMEDIATE ' alter table ref_completion_cfg add ( id_mcdt number (24))';
+    
+    END IF;
+
+END;
+/
+
+COMMENT ON column ref_completion_cfg.id_mcdt IS 'p1_speciality.id_speciality, analysis.id_analysis, exam.id_exam or intervention.id_intervention';
+-- CHANGE END: Joana Barroso

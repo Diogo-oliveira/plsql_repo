@@ -1,0 +1,35 @@
+--26/01/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+ALTER TABLE EPIS_PN_HIST ADD (CONSTRAINT
+ EPT_EPN_FK FOREIGN KEY 
+  (ID_EPIS_PN) REFERENCES EPIS_PN
+  (ID_EPIS_PN))
+/
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:31
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table epis_pn_hist
+  add constraint epnh_pnnt_fk foreign key (id_pn_note_type)
+  references pn_note_type (id_pn_note_type);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table epis_pn_hist
+  add constraint epnh_pnnt_fk foreign key (id_pn_note_type)
+  references pn_note_type (id_pn_note_type);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:49
+-- CHANGE REASON: [ALERT-226174] 
+begin
+execute immediate ('ALTER TABLE epis_pn_hist ADD CONSTRAINT EPNH_ID_AREA_FK FOREIGN KEY (ID_PN_AREA) REFERENCES PN_AREA(ID_PN_AREA)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: Luís Maia

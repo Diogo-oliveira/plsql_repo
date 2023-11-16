@@ -1,0 +1,18 @@
+-- CHANGED BY Joao Martins
+-- CHANGE DATE 2009/07/03
+-- CHANGE REASON ALERT-874 Procedures Time Out
+create table prof_dont_show_again (id_register number(24), field_register varchar2(200), id_professional number(24) not null, code_message varchar2(200) not null, create_user varchar2(24), create_time timestamp(6) with local time zone, create_institution number(24), update_user varchar2(24), update_time timestamp(6) with local time zone, update_institution number(24));
+alter table prof_dont_show_again add constraint PSA_PROF_FK foreign key (id_professional) references professional(id_professional);
+alter table prof_dont_show_again add constraint PSA_UK unique (id_register, field_register, id_professional, code_message);
+comment on table prof_dont_show_again is 'Generic table for ''Do not show this message again'' situations';
+comment on column prof_dont_show_again.id_register is 'Your table''s primary key or unique identifier';
+comment on column prof_dont_show_again.field_register is 'Your table and column on ''TABLE.COLUMN'' format';
+comment on column prof_dont_show_again.id_professional is 'ID of the professional that checked the box';
+comment on column prof_dont_show_again.code_message is 'The message code shown to the user';
+comment on column prof_dont_show_again.create_user is 'Creation user';
+comment on column prof_dont_show_again.create_time is 'Creation time';
+comment on column prof_dont_show_again.create_institution is 'Creation institution';
+comment on column prof_dont_show_again.update_user is 'Update user';
+comment on column prof_dont_show_again.update_time is 'Update time';
+comment on column prof_dont_show_again.update_institution is 'Update institution';
+-- CHANGE END

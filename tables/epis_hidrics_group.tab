@@ -1,0 +1,56 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 02/10/2013 15:30
+-- CHANGE REASON: [ALERT-266183 ] Intake and output improvements
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -00955);
+BEGIN
+    --i_flg_category
+    --DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'EPIS_HIDRICS_GROUP',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'TRS',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+
+    BEGIN
+        EXECUTE IMMEDIATE '
+CREATE TABLE EPIS_HIDRICS_GROUP
+(
+ID_EPIS_HIDRICS_GROUP   NUMBER(24) NOT NULL,
+GROUP_DESC              VARCHAR2(200 CHAR),
+CREATE_USER VARCHAR2(30 CHAR),
+CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION NUMBER(24),
+UPDATE_USER VARCHAR2(30 CHAR),
+UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION NUMBER(24)
+) TABLESPACE TABLE_L';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE ('alter table EPIS_HIDRICS_GROUP add FLG_STATUS VARCHAR2(1 CHAR) default ''A'' NOT NULL');
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('operacao ja executada anteriormente');
+END;
+/
+
+COMMENT ON TABLE EPIS_HIDRICS_GROUP IS 'Definition of a group in a hidrics record';
+COMMENT ON COLUMN EPIS_HIDRICS_GROUP.GROUP_DESC IS 'Group descrption';
+COMMENT ON COLUMN EPIS_HIDRICS_GROUP.FLG_AVAILABLE IS 'Y-The group is available. N-Otherwise';
+COMMENT ON COLUMN EPIS_HIDRICS_GROUP.CREATE_USER IS 'Professional ID that creates the registry';
+COMMENT ON COLUMN EPIS_HIDRICS_GROUP.CREATE_TIME IS 'Date of registry creation';
+COMMENT ON COLUMN EPIS_HIDRICS_GROUP.CREATE_INSTITUTION IS 'Institution ID where registry was created';
+COMMENT ON COLUMN EPIS_HIDRICS_GROUP.UPDATE_USER IS 'Professional ID that last updates the registry';
+COMMENT ON COLUMN EPIS_HIDRICS_GROUP.UPDATE_TIME IS 'Date of registry last update';
+COMMENT ON COLUMN EPIS_HIDRICS_GROUP.UPDATE_INSTITUTION IS 'Institution ID where registry was last updated';
+-- CHANGE END: Sofia Mendes

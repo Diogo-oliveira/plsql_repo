@@ -1,0 +1,113 @@
+
+
+  ALTER TABLE DOC_ELEMENT ADD CONSTRAINT DOCE_PK PRIMARY KEY (ID_DOC_ELEMENT) ENABLE;
+
+  ALTER TABLE DOC_ELEMENT MODIFY (ID_DOC_ELEMENT NOT NULL ENABLE);
+
+  ALTER TABLE DOC_ELEMENT MODIFY (ID_DOCUMENTATION NOT NULL ENABLE);
+
+  ALTER TABLE DOC_ELEMENT MODIFY (ID_DOC_DIMENSION NOT NULL ENABLE);
+
+  ALTER TABLE DOC_ELEMENT MODIFY (RANK NOT NULL ENABLE);
+
+  ALTER TABLE DOC_ELEMENT MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+
+  ALTER TABLE DOC_ELEMENT MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+--Ariel Machado 2008/05/16
+ALTER TABLE DOC_ELEMENT ADD CONSTRAINT DOCE_FLG_BEHAVIOR_CHK CHECK (FLG_BEHAVIOR IN ('N', 'R', 'M')) ENABLE;
+ALTER TABLE DOC_ELEMENT ADD CONSTRAINT DOCE_FLG_ELEM_DOMAIN_TYPE_CHK CHECK (FLG_ELEMENT_DOMAIN_TYPE IN ('T','S','D')) ENABLE;
+ALTER TABLE DOC_ELEMENT ADD CONSTRAINT DOCE_FLG_OPTIONAL_VALUE_CHK CHECK (FLG_OPTIONAL_VALUE IN ('Y', 'N')) ENABLE;
+ALTER TABLE DOC_ELEMENT ADD CONSTRAINT DOCE_FLG_TYPE_CHK CHECK (FLG_TYPE IN ('C','D','F','G','H','I','N','O','S','T','CO','CM','CI','CH','CD','CC','CN')) ENABLE;
+--Changed End
+
+--CHANGED BY: Ariel Geraldo Machado
+--CHANGE DATE: 2008-JUN-12
+--CHANGE REASON: Touch-option review: The dimension of elements now can be calculated by Flash if it isn't defined in the BD. Then value in this field can be null.
+ALTER TABLE DOC_ELEMENT MODIFY (ID_DOC_DIMENSION NULL);
+--CHANGE END
+
+--CHANGED BY: Ariel Geraldo Machado
+--CHANGE DATE: 2009-JAN-08
+--CHANGE REASON: ALERT-1873 - Compound elements for Date and Text types
+ALTER TABLE DOC_ELEMENT DROP CONSTRAINT DOCE_FLG_TYPE_CHK;
+ALTER TABLE DOC_ELEMENT ADD CONSTRAINT DOCE_FLG_TYPE_CHK CHECK (FLG_TYPE IN ('C', 'D', 'F', 'G', 'H', 'I', 'N', 'O', 'S', 'T', 'CO', 'CM', 'CN', 'CD', 'CT')) ENABLE;
+--CHANGE END
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 28/01/2011 16:18
+-- CHANGE REASON: [ALERT-156275] Reference values in Touch-Option templates
+ALTER TABLE DOC_ELEMENT
+  DROP CONSTRAINT DOCE_FLG_TYPE_CHK;
+
+ALTER TABLE DOC_ELEMENT
+  ADD CONSTRAINT DOCE_FLG_TYPE_CHK
+  CHECK (FLG_TYPE IN ('C', 'D', 'F', 'G', 'H', 'I', 'N', 'O', 'S', 'T', 'CO', 'CM', 'CN', 'CD', 'CT', 'CR'));
+
+ALTER TABLE DOC_ELEMENT
+  ADD CONSTRAINT DOCE_FLG_REF_OP_MIN_CHK
+  CHECK (FLG_REF_OP_MIN IS NULL OR FLG_REF_OP_MIN IN ('G', 'GE'));
+
+
+ALTER TABLE DOC_ELEMENT
+  ADD CONSTRAINT DOCE_FLG_REF_OP_MAX_CHK
+  CHECK (FLG_REF_OP_MAX IS NULL OR FLG_REF_OP_MAX IN ('L', 'LE'));
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 15/02/2011 15:43
+-- CHANGE REASON: [ALERT-162460] Insert constraints in FLG_STATUS columns
+DECLARE
+    constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(constraint_already_exists, -02264);
+    l_constraint_name VARCHAR2(30) := 'DOCE_FLG_AVAILABLE_CHK';
+    l_ddl             VARCHAR(32767) := 'ALTER TABLE DOC_ELEMENT ADD CONSTRAINT DOCE_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N''))';
+BEGIN
+    EXECUTE IMMEDIATE l_ddl;
+EXCEPTION
+    WHEN constraint_already_exists THEN
+        NULL;
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error creating constraint ' || l_constraint_name || ': ' || SQLERRM);
+END;
+/
+
+DECLARE
+    constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(constraint_already_exists, -02264);
+    l_constraint_name VARCHAR2(30) := 'DOCE_FLG_GENDER_CHK';
+    l_ddl             VARCHAR(32767) := 'ALTER TABLE DOC_ELEMENT ADD CONSTRAINT DOCE_FLG_GENDER_CHK CHECK (FLG_GENDER IN (''F'', ''M'') OR FLG_GENDER IS NULL)';
+BEGIN
+    EXECUTE IMMEDIATE l_ddl;
+EXCEPTION
+    WHEN constraint_already_exists THEN
+        NULL;
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error creating constraint ' || l_constraint_name || ': ' || SQLERRM);
+END;
+/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 07/04/2011 09:13
+-- CHANGE REASON: [ALERT-164798] Touch-option framework must deal with vital signs as template elements
+ALTER TABLE DOC_ELEMENT 
+  DROP CONSTRAINT DOCE_FLG_TYPE_CHK;
+
+ALTER TABLE DOC_ELEMENT
+  ADD CONSTRAINT DOCE_FLG_TYPE_CHK
+  CHECK (FLG_TYPE IN ('C', 'D', 'F', 'G', 'H', 'I', 'N', 'O', 'S', 'T', 'CO', 'CM', 'CN', 'CD', 'CT', 'CR', 'VS'));
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 15/07/2021 17:01
+-- CHANGE REASON: [EMR-47258] -  Nursing button > Assessment scales > It is not possible to fill in template
+-- Create/Recreate check constraints
+alter table DOC_ELEMENT
+drop constraint DOCE_FLG_TYPE_CHK;
+alter table DOC_ELEMENT
+add constraint DOCE_FLG_TYPE_CHK
+check (FLG_TYPE IN ('C', 'D', 'F', 'G', 'H', 'I', 'N', 'O', 'S', 'T', 'CO', 'CM', 'CN', 'CD', 'CT', 'CR', 'VS','M'));
+-- CHANGE END: Elisabete Bugalho

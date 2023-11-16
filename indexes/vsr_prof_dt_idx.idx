@@ -1,0 +1,14 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 25/09/2014 14:49
+-- CHANGE REASON: [ALERT-292490] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'create index vsr_prof_dt_idx on VITAL_SIGN_READ(id_vital_sign_read, id_prof_read, dt_vital_sign_read_tstz)  tablespace alert_idx';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Paulo Teixeira

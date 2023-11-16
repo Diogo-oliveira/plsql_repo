@@ -1,0 +1,177 @@
+
+  CREATE TABLE P1_DEST_INSTITUTION
+   (	ID_DEST_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_INST_ORIG NUMBER(12,0) NOT NULL ENABLE,
+	ID_INST_DEST NUMBER(12,0) NOT NULL ENABLE,
+	FLG_DEFAULT VARCHAR2(1),
+	FLG_TYPE VARCHAR2(1)
+   );
+
+
+
+COMMENT ON COLUMN p1_dest_institution.id_inst_orig IS 'Id of refering institution' ;
+COMMENT ON COLUMN p1_dest_institution.id_inst_dest IS 'Id of destination institution' ;
+COMMENT ON COLUMN p1_dest_institution.flg_default IS 'Y - Default institution' ;
+COMMENT ON COLUMN p1_dest_institution.flg_type IS 'C - Consultation, A - Analysis, E - Exam, P - Procdure' ;
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGED DATE: 2009-JAN-09
+-- CHANGED REASON: ALERT-827
+
+ALTER TABLE P1_DEST_INSTITUTION ADD FLG_INSIDE_REF_AREA varchar2(1);
+
+COMMENT ON COLUMN P1_DEST_INSTITUTION.FLG_TYPE IS 'C- Consultation, A- Analysis, I- Image, E- Exam, P- Procedure, F- Physiatrics';
+COMMENT ON COLUMN P1_DEST_INSTITUTION.FLG_INSIDE_REF_AREA IS 'Y - Inside hospital referral area; N - Otherwise';
+
+-- CHANGE END;
+
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 21/10/2010 18:21
+-- CHANGE REASON: [ALERT-134029] Criar mecanismo que permita ao médico do CS visualizar os tempos médios de resposta do hospital de destino para cada especialidade. (ALERT-66799)
+PROMPT Creating Check Constraint on 'P1_DEST_INSTITUTION'
+ALTER TABLE P1_DEST_INSTITUTION
+ ADD (CONSTRAINT PDN_FLG_REF_LINE_CHK CHECK (FLG_REF_LINE in ('1','2','3')))
+/
+
+
+
+PROMPT Altering Unique Key Index 'PDN_UK'
+ALTER INDEX PDN_UK
+ REBUILD NOREVERSE
+ TABLESPACE TABLE_L
+/
+
+
+
+PROMPT Altering Table 'P1_DEST_INSTITUTION' 
+ALTER TABLE P1_DEST_INSTITUTION 
+ ADD (FLG_REF_LINE VARCHAR2(30)
+ ,FLG_TYPE_INS VARCHAR2(30)
+ )
+/
+
+COMMENT ON TABLE P1_DEST_INSTITUTION IS 'Referral network'
+/
+
+COMMENT ON COLUMN P1_DEST_INSTITUTION.ID_DEST_INSTITUTION IS 'Primary key'
+/
+
+COMMENT ON COLUMN P1_DEST_INSTITUTION.FLG_REF_LINE IS 'Referral line 1,2,3'
+/
+
+COMMENT ON COLUMN P1_DEST_INSTITUTION.FLG_TYPE_INS IS 'Rede de referencia a que pertence'
+/
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 29/10/2010 17:27
+-- CHANGE REASON: [ALERT-134029] Criar mecanismo que permita ao médico do CS visualizar os tempos médios de resposta do hospital de destino para cada especialidade. (ALERT-66799)
+PROMPT Altering Unique Key Index 'PDN_UK'
+ALTER INDEX PDN_UK
+ REBUILD NOREVERSE
+ TABLESPACE TABLE_L
+/
+
+
+
+PROMPT Altering Table 'P1_DEST_INSTITUTION' 
+ALTER TABLE P1_DEST_INSTITUTION 
+ ADD (FLG_REF_LINE VARCHAR2(30)
+ ,FLG_TYPE_INS VARCHAR2(30)
+ )
+/
+
+PROMPT Creating Check Constraint on 'P1_DEST_INSTITUTION'
+ALTER TABLE P1_DEST_INSTITUTION
+ ADD (CONSTRAINT PDN_FLG_REF_LINE_CHK CHECK (FLG_REF_LINE in ('1','2','3')))
+/
+COMMENT ON TABLE P1_DEST_INSTITUTION IS 'Referral network'
+/
+
+COMMENT ON COLUMN P1_DEST_INSTITUTION.ID_DEST_INSTITUTION IS 'Primary key'
+/
+
+COMMENT ON COLUMN P1_DEST_INSTITUTION.FLG_REF_LINE IS 'Referral line 1,2,3'
+/
+
+COMMENT ON COLUMN P1_DEST_INSTITUTION.FLG_TYPE_INS IS 'Rede de referencia a que pertence'
+/
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 17/02/2011 16:27
+-- CHANGE REASON: [ALERT-161828 ] 
+comment on column P1_DEST_INSTITUTION.flg_type_ins
+  is 'Rede de referencia a que pertence SNS,CONV ou SSMN';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 01/03/2011 17:41
+-- CHANGE REASON: [ALERT-165332] 
+comment on column P1_DEST_INSTITUTION.FLG_INSIDE_REF_AREA is 'Deprecated. Should be used the column ref_dest_institution_spec.flg_inside_ref_area';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 22/11/2012 16:09
+-- CHANGE REASON: [ALERT-235288] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns u
+     WHERE u.column_name = 'FLG_INSIDE_REF_AREA'
+       AND u.table_name = 'P1_DEST_INSTITUTION';
+
+    IF l_count > 0      
+    THEN
+        EXECUTE IMMEDIATE 'alter table P1_DEST_INSTITUTION drop column flg_inside_ref_area';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 11/02/2014 09:05
+-- CHANGE REASON: [ALERT-276023] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns t
+     WHERE t.table_name = 'P1_DEST_INSTITUTION'
+       AND t.column_name = 'FLG_REF_LINE';
+
+    IF l_count > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table P1_DEST_INSTITUTION drop column flg_ref_line';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/01/2015 14:37
+-- CHANGE REASON: [ALERT-280039] 
+BEGIN
+pk_versioning.run(i_sql => q'[alter table P1_DEST_INSTITUTION add flg_net_type VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_DEST_INSTITUTION modify create_user VARCHAR2(30 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_DEST_INSTITUTION modify FLG_DEFAULT VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_DEST_INSTITUTION modify FLG_TYPE VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_DEST_INSTITUTION modify FLG_TYPE_INS VARCHAR2(30 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_DEST_INSTITUTION modify UPDATE_USER VARCHAR2(30 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_DEST_INSTITUTION modify ID_INST_DEST number(24)]');
+pk_versioning.run(i_sql => q'[alter table P1_DEST_INSTITUTION modify ID_INST_ORIG number(24)]');
+END;
+/
+
+comment on column P1_DEST_INSTITUTION.flg_net_type is 'Types of referral network: P- at hospital entrance network type, A- otherwise';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretionsRefactor 
+comment on column P1_DEST_INSTITUTION.flg_default
+  is 'Is default institution? Y/N';
+comment on column P1_DEST_INSTITUTION.flg_type_ins
+  is 'Referral network (SNS, CONV or SSMN)';

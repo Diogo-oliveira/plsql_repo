@@ -1,0 +1,16 @@
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table EPIS_HHC_REQ_STATUS add constraint EPIS_HHC_REQ_STATUS_PK primary key ( ID_EPIS_HHC_REQ,FLG_STATUS, DT_STATUS ) using index tablespace ALERT_IDX';
+pk_versioning.run(l_sql);
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := q'[ALTER TABLE EPIS_HHC_REQ_STATUS ADD CONSTRAINT EPIS_HHC_REQ_PROF_FK FOREIGN KEY (ID_PROFESSIONAL) REFERENCES PROFESSIONAL(ID_PROFESSIONAL)]';
+pk_versioning.run(l_sql);
+end;
+/
+;

@@ -1,0 +1,11 @@
+CREATE OR REPLACE TRIGGER B_IU_PROF_TEAM
+ BEFORE INSERT OR UPDATE
+ ON PROF_TEAM
+ REFERENCING OLD AS OLD NEW AS NEW
+ FOR EACH ROW
+-- PL/SQL Block
+begin
+
+   :new.adw_last_update := sysdate;
+end;
+/

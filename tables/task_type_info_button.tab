@@ -1,0 +1,39 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 12/05/2014 14:37
+-- CHANGE REASON: [ALERT-284329] 
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create table TASK_TYPE_INFO_BUTTON (
+ID_TASK_TYPE NUMBER(24) not null, 
+ID_SYS_CONFIG VARCHAR2(300 CHAR) not null,
+
+  create_user         VARCHAR2(24 CHAR),
+  create_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution  NUMBER(24),
+  update_user         VARCHAR2(24 CHAR),
+  update_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution  NUMBER(24)
+)';
+exception when e_obj_exists then
+  dbms_output.put_line('table TASK_TYPE_INFO_BUTTON exists!');
+end;
+/
+
+comment on table TASK_TYPE_INFO_BUTTON  is 'Task_type table with info button sys config';
+comment on column TASK_TYPE_INFO_BUTTON.ID_TASK_TYPE  is 'Primary key reference to Task_Type table.';
+comment on column TASK_TYPE_INFO_BUTTON.ID_SYS_CONFIG is 'Sys_config table reference';
+comment on column TASK_TYPE_INFO_BUTTON.create_user  is 'Creation User';
+comment on column TASK_TYPE_INFO_BUTTON.create_time  is 'Creation Time';
+comment on column TASK_TYPE_INFO_BUTTON.create_institution  is 'Creation Institution';
+comment on column TASK_TYPE_INFO_BUTTON.update_user  is 'Update User';
+comment on column TASK_TYPE_INFO_BUTTON.update_time  is 'Update Time';
+comment on column TASK_TYPE_INFO_BUTTON.update_institution  is 'Update Institution';
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 06/07/2021 08:08
+-- CHANGE REASON: [EMR-46931]
+COMMENT ON COLUMN task_type_info_button.id_sys_config IS 'ID content (external_link)';
+-- CHANGE END: Ana Matos

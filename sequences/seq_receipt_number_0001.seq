@@ -1,0 +1,46 @@
+-- CHANGED BY: Adriana Ramos
+-- CHANGE DATE: 04/07/2019
+-- CHANGE REASON: [EMR-12227] 
+
+begin
+create sequence SEQ_RECEIPT_NUMBER_0001
+minvalue 1
+maxvalue 999999999999
+start with 1
+increment by 1
+cache 500
+noorder
+nocycle;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Data already exists.');
+END;
+/
+-- CHANGE END: Adriana Ramos
+
+
+-- CHANGED BY: Adriana Ramos
+-- CHANGE DATE: 04/07/2019
+-- CHANGE REASON: [EMR-12227] 
+
+begin
+pk_versioning.run('
+    create sequence SEQ_RECEIPT_NUMBER_0001
+minvalue 1
+maxvalue 999999999999
+start with 1
+increment by 1
+cache 500
+noorder
+nocycle');
+end;
+/
+-- CHANGE END: Adriana Ramos
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 02/11/2020
+-- CHANGE REASON: EMR-37607
+DROP SEQUENCE SEQ_RECEIPT_NUMBER_0001;
+-- CHANGE END: Pedro Teixeira

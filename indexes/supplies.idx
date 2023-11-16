@@ -1,0 +1,15 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/10/2011 09:16
+-- CHANGE REASON: [ALERT-196841] translation methods content indexation
+DECLARE e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'create index IDX_SUPPLIES_CNT on alert_Default.supplies (ID_CONTENT, CODE_SUPPLIES, FLG_AVAILABLE) tablespace ALERT_DEFAULT_IDX';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Index IDX_SUPPLIES_CNT already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

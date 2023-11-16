@@ -1,0 +1,151 @@
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 08/07/2009 14:40
+-- CHANGE REASON: [ALERT-35138] Workflow diferenciado entre análises, exames e procedimentos feitos na instituição e os requisitados para o exterior. Integração com pedidos de P1.
+create table interv_codification
+(
+id_interv_codification number(24),
+id_codification number(24),
+id_intervention number(24),
+flg_available varchar2(1) default 'Y' not null,
+create_user varchar2(24),
+create_time timestamp(6) with local time zone,
+create_institution number(24),
+update_user varchar2(24),
+update_time timestamp(6) with local time zone,
+update_institution number(24)
+) tablespace TABLE_M;
+
+comment on table interv_codification is 'Procedures for each codification';
+comment on column interv_codification.id_interv_codification is 'Procedure codification ID';
+comment on column interv_codification.id_codification is 'Codification ID';
+comment on column interv_codification.id_intervention is 'Procedure ID';
+comment on column interv_codification.flg_available is 'Record is available for Procedure Codification combination';
+comment on column interv_codification.create_user is 'Creation User';
+comment on column interv_codification.create_time is 'Creation Time';
+comment on column interv_codification.create_institution is 'Creation Institution';
+comment on column interv_codification.update_user is 'Update User';
+comment on column interv_codification.update_time is 'Update Time';
+comment on column interv_codification.update_institution is 'Update Institution';
+-- CHANGE END: João Martins
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 09/07/2009 11:30
+-- CHANGE REASON: [ALERT-35138] Criação de índices e alteração de tablespace da interv_codification
+alter table interv_codification move tablespace table_s;
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 07/11/2011 11:34
+-- CHANGE REASON: [ALERT-203458] 
+alter table interv_codification add (STANDARD_CODE VARCHAR2(200 CHAR),STANDARD_DESC VARCHAR2(200 CHAR));
+comment on column INTERV_CODIFICATION.STANDARD_CODE
+  is 'Standard code';
+comment on column INTERV_CODIFICATION.STANDARD_DESC
+  is 'Standard desc';
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 07/11/2011 16:22
+-- CHANGE REASON: [ALERT-203458] 
+alter table interv_codification add (DT_STANDARD_BEGIN TIMESTAMP(6) WITH LOCAL TIME ZONE,DT_STANDARD_END TIMESTAMP(6) WITH LOCAL TIME ZONE);
+comment on column exam_codification.DT_STANDARD_BEGIN
+  is 'Date Standard begin';
+comment on column exam_codification.DT_STANDARD_END
+  is 'Date Standard end';
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 22/02/2012 17:08
+-- CHANGE REASON: [ALERT-218309] 
+ALTER TABLE INTERV_CODIFICATION
+ADD (flg_show_descr_codification VARCHAR2(1) default 'Y' not null);
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 22/02/2012 17:08
+-- CHANGE REASON: [ALERT-218309] 
+comment on column INTERV_CODIFICATION.flg_show_descr_codification
+  is 'Show codification description Y/N';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 08/05/2013 15:21
+-- CHANGE REASON: [ALERT-257523 ] 
+alter table 
+   interv_codification
+modify 
+( 
+   STANDARD_DESC    varchar2(4000 char)
+);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 09/05/2013 14:58
+-- CHANGE REASON: [ALERT-257518 ] 
+alter table 
+   interv_codification
+modify 
+( 
+   STANDARD_DESC    varchar2(1000 char)
+);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 11/01/2016 16:36
+-- CHANGE REASON: [ALERT-317702] 
+comment on table INTERV_CODIFICATION
+  is 'Procedure association to a codification';
+-- Add comments to the columns 
+comment on column INTERV_CODIFICATION.id_interv_codification
+  is 'Primary key';
+comment on column INTERV_CODIFICATION.id_codification
+  is 'Codification ID';
+comment on column INTERV_CODIFICATION.id_intervention
+  is 'Procedure ID';
+comment on column INTERV_CODIFICATION.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column INTERV_CODIFICATION.create_user
+  is 'Creation User';
+comment on column INTERV_CODIFICATION.create_time
+  is 'Creation Time';
+comment on column INTERV_CODIFICATION.create_institution
+  is 'Creation Institution';
+comment on column INTERV_CODIFICATION.update_user
+  is 'Update User';
+comment on column INTERV_CODIFICATION.update_time
+  is 'Update Time';
+comment on column INTERV_CODIFICATION.update_institution
+  is 'Update Institution';
+comment on column INTERV_CODIFICATION.standard_code
+  is 'Standard code';
+comment on column INTERV_CODIFICATION.standard_desc
+  is 'Standard description';
+comment on column INTERV_CODIFICATION.dt_standard_begin
+  is 'Standard begin date';
+comment on column INTERV_CODIFICATION.dt_standard_end
+  is 'Standard end date';
+comment on column INTERV_CODIFICATION.flg_show_descr_codification
+  is 'Flag that indicates if the description is shown (Y/N)';
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 24/02/2021 15:29
+-- CHANGE REASON: [EMR-42266]
+ALTER TABLE interv_codification MODIFY flg_available VARCHAR2(1 CHAR);
+ALTER TABLE interv_codification MODIFY create_user VARCHAR2(24 CHAR);
+ALTER TABLE interv_codification MODIFY update_user VARCHAR2(24 CHAR);
+
+ALTER TABLE interv_codification ADD flg_show_code VARCHAR2(1 CHAR) default 'N';
+ALTER TABLE interv_codification ADD flg_show_codification VARCHAR2(1 CHAR) default 'N';
+
+COMMENT ON COLUMN interv_codification.flg_show_code IS 'Flag that indicates if the code is shown (Y/N)';
+COMMENT ON COLUMN interv_codification.flg_show_codification IS 'Flag that indicates if the description is shown along with the procedure (Y/N)';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 09/11/2021 08:43
+-- CHANGE REASON: [EMR-49451]
+ALTER TABLE interv_codification DROP COLUMN flg_show_descr_codification;
+-- CHANGE END: Ana Matos

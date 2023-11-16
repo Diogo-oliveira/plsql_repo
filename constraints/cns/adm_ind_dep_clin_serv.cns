@@ -1,0 +1,81 @@
+ALTER TABLE ADM_IND_DEP_CLIN_SERV ADD CONSTRAINT AIDCS_FAVAI_CHK CHECK (FLG_AVAILABLE in ('Y', 'N')) ENABLE;
+
+
+
+ALTER TABLE ADM_IND_DEP_CLIN_SERV ADD CONSTRAINT AIDCS_FPREF_CHK CHECK (FLG_PREF in ('Y', 'N')) ENABLE;
+
+
+
+ALTER TABLE ADM_IND_DEP_CLIN_SERV ADD CONSTRAINT AIDCS_PK PRIMARY KEY (ID_ADM_INDICATION, ID_DEP_CLIN_SERV) ENABLE;
+
+
+
+ALTER TABLE ADM_IND_DEP_CLIN_SERV MODIFY (ID_ADM_INDICATION NOT NULL ENABLE);
+
+
+
+ALTER TABLE ADM_IND_DEP_CLIN_SERV MODIFY (ID_DEP_CLIN_SERV NOT NULL ENABLE);
+
+
+
+ALTER TABLE ADM_IND_DEP_CLIN_SERV MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+
+
+ALTER TABLE ADM_IND_DEP_CLIN_SERV MODIFY (FLG_PREF NOT NULL ENABLE);
+
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/05/2011 16:10
+-- CHANGE REASON: [ALERT-178226] Fix problems for multiple preferences and many services/specialties - Inpatient - Indication for Admission - Admission Services / Clinical Services - Error when selected clinical services "null".
+create unique index AIDCS_FPREF_UK on adm_ind_dep_clin_serv (
+                 CASE  WHEN (id_adm_indication IS NOT NULL AND NVL(flg_available,'Y') <> 'N' AND flg_pref = 'Y') THEN id_adm_indication END, 
+                 CASE  WHEN (id_adm_indication IS NOT NULL AND NVL(flg_available,'Y') <> 'N' AND flg_pref = 'Y') THEN flg_pref END
+ );
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/05/2011 17:06
+-- CHANGE REASON: [ALERT-178226] Fix problems for multiple preferences and many services/specialties - Inpatient - Indication for Admission - Admission Services / Clinical Services - Error when selected clinical services "null".
+BEGIN
+
+EXECUTE IMMEDIATE 'create unique index AIDCS_FPREF_UK on adm_ind_dep_clin_serv (
+                 CASE  WHEN (id_adm_indication IS NOT NULL AND NVL(flg_available,''Y'') <> ''N'' AND flg_pref = ''Y'') THEN id_adm_indication END, 
+                 CASE  WHEN (id_adm_indication IS NOT NULL AND NVL(flg_available,''Y'') <> ''N'' AND flg_pref = ''Y'') THEN flg_pref END
+ )';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:28
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE ADM_IND_DEP_CLIN_SERV ADD CONSTRAINT AIDCS_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint AIDCS_FLG_AVAILABLE_CHK table ADM_IND_DEP_CLIN_SERV column FLG_AVAILABLE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:28
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE ADM_IND_DEP_CLIN_SERV ADD CONSTRAINT AIDCS_FLG_PREF_CHK CHECK (FLG_PREF IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint AIDCS_FLG_PREF_CHK table ADM_IND_DEP_CLIN_SERV column FLG_PREF: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 27/06/2017 11:40
+-- CHANGE REASON: [ALERT-331710] 
+DROP INDEX ALERT.AIDCS_FPREF_UK;
+-- CHANGE END: Pedro Henriques

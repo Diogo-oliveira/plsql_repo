@@ -1,0 +1,1 @@
+grant select on BODY_LAYER to ALERT_VIEWER;

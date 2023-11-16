@@ -1,0 +1,12 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 29/08/2012 11:45
+-- CHANGE REASON: [ALERT-238903] 
+GRANT EXECUTE ON pk_api_rcm_out TO alert_reset;
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 28/10/2014 14:21
+-- CHANGE REASON: [ALERT-300005 ] 
+GRANT EXECUTE ON ALERT.PK_API_RCM_OUT TO ALERT_INTER;
+/
+-- CHANGE END: cristina.oliveira

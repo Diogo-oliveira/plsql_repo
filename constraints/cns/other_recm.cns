@@ -1,0 +1,42 @@
+-- CHANGED BY: Bruno Martins
+-- CHANGE DATE: 2014-06-27
+-- CHANGE REASON: ADT-6591
+
+DECLARE
+      e_object_exists EXCEPTION;
+  
+      PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+  BEGIN
+  
+      BEGIN
+          EXECUTE IMMEDIATE 'alter table OTHER_RECM
+  add constraint OR_PK primary key (ID_OTHER_RECM)
+  using index 
+  tablespace INDEX_S';
+      EXCEPTION
+          WHEN e_object_exists THEN
+              dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+      END;
+  
+END;
+/
+
+DECLARE
+      e_object_exists EXCEPTION;
+  
+      PRAGMA EXCEPTION_INIT(e_object_exists, -02264);
+  BEGIN
+  
+      BEGIN
+          EXECUTE IMMEDIATE 'alter table OTHER_RECM
+  add constraint OE_FLG_AVAILABLE_CHK
+  check (FLG_AVAILABLE in (''Y'', ''N''))';
+      EXCEPTION
+          WHEN e_object_exists THEN
+              dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+      END;
+  
+END;
+/
+
+-- CHANGE END: Bruno Martins

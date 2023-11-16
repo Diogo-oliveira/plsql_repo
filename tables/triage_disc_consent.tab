@@ -1,0 +1,58 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/06/2013 15:46
+-- CHANGE REASON: [ALERT-260856] Ability to perform triage based on EST (Échelle Suisse de Tri) (ALERT_188926) - VERSIONING DB DDL
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -00955);
+BEGIN
+    --i_flg_category
+    --DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'TRIAGE_DISC_CONSENT',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'DSV',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+
+    BEGIN
+        EXECUTE IMMEDIATE '
+CREATE TABLE TRIAGE_DISC_CONSENT
+(
+  ID_TRIAGE_DISCRIMINATOR NUMBER(24) NOT NULL,
+  ID_TRIAGE_CONS_VALUE    NUMBER(24) NOT NULL,
+  FLG_VS_MANDATORY        VARCHAR2(1 CHAR) NOT NULL,
+  FLG_VS_ENABLE           VARCHAR2(1 CHAR) NOT NULL,
+  FLG_DEFAULT             VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL,
+  RANK                    NUMBER(24) NOT NULL,      
+  CONSENT_GROUP           VARCHAR2(200 CHAR) NOT NULL,
+  CREATE_USER VARCHAR2(24 CHAR),
+  CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER VARCHAR2(24 CHAR),
+  UPDATE_TIME TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+) TABLESPACE ALERT_DATA';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE TRIAGE_DISC_CONSENT IS ''Configuration table with consent options by discriminator.''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_CONSENT.ID_TRIAGE_DISCRIMINATOR IS ''Triage discriminator id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_CONSENT.ID_TRIAGE_CONS_VALUE IS ''Multichoice value''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_CONSENT.FLG_VS_MANDATORY IS ''Discrimitor vital signs are mandatory?''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_CONSENT.FLG_VS_ENABLE IS ''Discriminator vital signs are enabled?''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_CONSENT.FLG_DEFAULT IS ''This multichoice value is the default one?''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_CONSENT.RANK IS ''Order of this consent''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_CONSENT.CONSENT_GROUP IS ''Consent group''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_CONSENT.CREATE_USER is ''Professional ID which created the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_CONSENT.CREATE_TIME is ''Date of record creation''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_CONSENT.CREATE_INSTITUTION is ''Institution ID where record was created''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_CONSENT.UPDATE_USER is ''Professional ID who last updated the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_CONSENT.UPDATE_TIME is ''Date when record was last updated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_CONSENT.UPDATE_INSTITUTION is ''Institution ID where record was last updated''';
+END;
+/
+-- CHANGE END: Alexandre Santos

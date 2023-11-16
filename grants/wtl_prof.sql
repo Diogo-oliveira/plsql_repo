@@ -1,0 +1,1 @@
+grant select on WTL_PROF  to ALERT_VIEWER;

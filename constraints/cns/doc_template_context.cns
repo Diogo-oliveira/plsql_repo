@@ -1,0 +1,328 @@
+
+--constraints
+ALTER TABLE doc_template_context
+	ADD CONSTRAINT doc_template_context_pk
+	PRIMARY KEY(id_doc_template_context);
+	
+ALTER TABLE doc_template_context
+	ADD CONSTRAINT doc_templ_cont_i_pf_i_dcs_chk
+	CHECK(id_profile_template IS NOT NULL OR id_dep_clin_serv IS NOT NULL);
+	
+ALTER TABLE doc_template_context
+	ADD CONSTRAINT doc_templ_cont_3fk_uni
+	UNIQUE(id_complaint,id_institution,id_software);
+
+
+
+--ET 2007/06/06
+ALTER TABLE DOC_TEMPLATE_CONTEXT
+	DROP CONSTRAINT (DOC_TEMPL_CONT_3FK_UNI);
+	
+alter table DOC_TEMPLATE_CONTEXT
+  add constraint DOC_TEMPL_CONT_3FK_UNI unique (ID_COMPLAINT, ID_INSTITUTION, ID_SOFTWARE,id_profile_template);
+
+--RA 06/06/2007
+ALTER TABLE DOC_TEMPLATE_CONTEXT
+	DROP CONSTRAINT (DOC_TEMPL_CONT_3FK_UNI);
+
+alter table DOC_TEMPLATE_CONTEXT
+  add constraint DOC_TEMPL_CONT_3FK_UNI unique (ID_COMPLAINT, ID_INSTITUTION, ID_SOFTWARE,id_profile_template,id_dep_clin_serv);
+
+-- RUI ABREU 12/06/2007
+ALTER TABLE DOC_TEMPLATE_CONTEXT
+	DROP CONSTRAINT DOC_TEMPL_CONT_3FK_UNI;
+
+
+--Emilia Taborda 2007/07/31
+-- A flg_type só pode assumir calores iguais a C e I
+alter table DOC_TEMPLATE_CONTEXT
+   add constraint DOC_TEMPL_CONT_FLG_TY_CHK
+   check (FLG_TYPE IN ('C','I'));
+
+-- RdSN 2007/08/12
+-- Added possible values to FLG_TYPE
+alter table DOC_TEMPLATE_CONTEXT
+drop constraint DOC_TEMPL_CONT_FLG_TY_CHK;
+alter table DOC_TEMPLATE_CONTEXT
+  add constraint DOC_TEMPL_CONT_FLG_TY_CHK
+  check (FLG_TYPE IN ('C','I', 'D', 'A'));
+
+-- INPATIENT 20-08-2007
+ALTER TABLE doc_template_context
+  DROP CONSTRAINT doc_templ_cont_i_pf_i_dcs_chk;
+
+ALTER TABLE doc_template_context
+  ADD CONSTRAINT doc_templ_cont_i_pf_i_dcs_chk
+  CHECK(id_profile_template IS NOT NULL OR id_dep_clin_serv IS NOT NULL OR id_context IS NOT NULL);
+-- END
+
+-- inpatient 21-09-2007
+alter table DOC_TEMPLATE_CONTEXT
+drop constraint DOC_TEMPL_CONT_FLG_TY_CHK;
+alter table DOC_TEMPLATE_CONTEXT
+  add constraint DOC_TEMPL_CONT_FLG_TY_CHK
+  check (FLG_TYPE IN ('C','I', 'D', 'A', 'S' ));
+-- end
+
+-- Luís Gaspar, novo tipo para o PP
+alter table DOC_TEMPLATE_CONTEXT
+  drop constraint DOC_TEMPL_CONT_FLG_TY_CHK;
+	
+alter table DOC_TEMPLATE_CONTEXT
+  add constraint DOC_TEMPL_CONT_FLG_TY_CHK
+  check (FLG_TYPE IN ('C','I', 'D', 'A', 'S' , 'SD'));
+
+-- INPATIENT 17-10-2007
+alter table DOC_TEMPLATE_CONTEXT
+  drop constraint DOC_TEMPL_CONT_FLG_TY_CHK;
+	
+alter table DOC_TEMPLATE_CONTEXT
+  add constraint DOC_TEMPL_CONT_FLG_TY_CHK
+  check (FLG_TYPE IN ('C','I', 'D', 'A', 'S','SD','E', 'CT'));
+-- END
+
+---Sílvia Freitas 19-10-2007
+--- novos contextos 
+alter table DOC_TEMPLATE_CONTEXT
+drop constraint DOC_TEMPL_CONT_FLG_TY_CHK;
+
+alter table DOC_TEMPLATE_CONTEXT
+  add constraint DOC_TEMPL_CONT_FLG_TY_CHK
+  check (FLG_TYPE IN ('C','I', 'D', 'A', 'S','E','M','CT','SD' ));
+
+-- INPATIENT 23-10-2007
+ALTER TABLE DOC_TEMPLATE_CONTEXT
+  DROP CONSTRAINT DOC_TEMPL_CONT_3FK_UNI;
+
+alter table DOC_TEMPLATE_CONTEXT
+  add constraint DOC_TEMPL_CONT_3FK_UNI unique (ID_CONTEXT, FLG_TYPE, ID_INSTITUTION, ID_SOFTWARE, ID_PROFILE_TEMPLATE, ID_DEP_CLIN_SERV, ID_DOC_TEMPLATE);
+-- END
+
+
+--Luís Gaspar, 2007-Nov-20
+alter table DOC_TEMPLATE_CONTEXT
+  drop constraint DOC_TEMPL_CONT_3FK_UNI cascade;
+
+alter table DOC_TEMPLATE_CONTEXT
+  add constraint DOC_TEMPL_CONT_FK_UNI unique (ID_CONTEXT, FLG_TYPE, ID_INSTITUTION, ID_SOFTWARE, ID_PROFILE_TEMPLATE, ID_DEP_CLIN_SERV, ID_DOC_TEMPLATE, ID_SCH_EVENT);  
+
+--PLLopes 25-03-2009 INPATIENT ALERT-20311
+--new type 
+alter table DOC_TEMPLATE_CONTEXT
+drop constraint DOC_TEMPL_CONT_FLG_TY_CHK;
+
+alter table DOC_TEMPLATE_CONTEXT
+  add constraint DOC_TEMPL_CONT_FLG_TY_CHK
+  check (FLG_TYPE IN ('C','I', 'D', 'A', 'S','E','M','CT','SD','DS' ));
+
+alter table DOC_TEMPLATE_CONTEXT
+  drop constraint DOC_TEMPL_CONT_FK_UNI cascade;
+
+alter table DOC_TEMPLATE_CONTEXT
+  add constraint DOC_TEMPL_CONT_FK_UNI unique (ID_CONTEXT, FLG_TYPE, ID_INSTITUTION, ID_SOFTWARE, ID_PROFILE_TEMPLATE, ID_DEP_CLIN_SERV, ID_DOC_TEMPLATE, ID_SCH_EVENT, ID_CONTEXT_2) using index;  
+
+-- END
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-APR-21
+-- CHANGED REASON: ALERT-24615 - Template by Area + Appointment
+ALTER TABLE doc_template_context 
+    drop CONSTRAINT doc_templ_cont_flg_ty_chk;
+
+ALTER TABLE doc_template_context 
+    add CONSTRAINT doc_templ_cont_flg_ty_chk 
+            CHECK(flg_type IN('C', 'I', 'D', 'A', 'S', 'E', 'M', 'CT', 'SD', 'DS', 'DA'));
+-- CHANGE END Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 04/09/2009 17:48
+-- CHANGE REASON: [ALERT-41146] ORIS: Be able to parameterize the use of templates by Area + Surgical Procedure
+ALTER TABLE doc_template_context 
+    drop CONSTRAINT doc_templ_cont_flg_ty_chk;
+
+ALTER TABLE doc_template_context 
+    add CONSTRAINT doc_templ_cont_flg_ty_chk 
+            CHECK(flg_type IN('C', 'I', 'D', 'A', 'S', 'E', 'M', 'CT', 'SD', 'DS', 'DA', 'SP'));
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 10/01/2011 16:24
+-- CHANGE REASON: [ALERT-154261] Migration of physiatry_area_template to doc_template_context
+alter table doc_template_context drop constraint DOC_TEMPL_CONT_FLG_TY_CHK;
+alter table doc_template_context add constraint DOC_TEMPL_CONT_FLG_TY_CHK check(flg_type IN ('C', 'I', 'D', 'A', 'S', 'E', 'M', 'CT', 'SD', 'DS', 'DA', 'SP', 'R'));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 06/05/2011 12:55
+-- CHANGE REASON: [ALERT-176958] Updating a constraint that was supposedly updated in 2009 but is outdated in QC261
+ALTER TABLE alert.doc_template_context 
+    drop CONSTRAINT doc_templ_cont_fk_uni;
+
+ALTER TABLE doc_template_context 
+    add CONSTRAINT doc_templ_cont_fk_uni UNIQUE(id_context,
+    flg_type,
+    id_institution,
+    id_software,
+    id_profile_template,
+    id_dep_clin_serv,
+    id_doc_template,
+    id_sch_event,
+    id_context_2);
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 06/05/2011 15:19
+-- CHANGE REASON: [ALERT-176958] Updating a constraint that was supposedly updated in 2009 but is outdated in QC261
+DECLARE
+    l_constraint_found PLS_INTEGER;
+    l_uindex_found     PLS_INTEGER;
+BEGIN
+    SELECT COUNT(*)
+      INTO l_constraint_found
+      FROM user_constraints uc
+     WHERE uc.table_name = 'DOC_TEMPLATE_CONTEXT'
+       AND uc.constraint_name = 'DOC_TEMPL_CONT_FK_UNI';
+
+    IF l_constraint_found > 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE doc_template_context drop CONSTRAINT doc_templ_cont_fk_uni';
+    END IF;
+
+    SELECT COUNT(*)
+      INTO l_uindex_found
+      FROM user_indexes ui
+     WHERE ui.table_name = 'DOC_TEMPLATE_CONTEXT'
+       AND ui.index_name = 'DOC_TEMPL_CONT_FK_UNI';
+
+    IF l_uindex_found > 0
+    THEN
+        EXECUTE IMMEDIATE 'DROP INDEX DOC_TEMPL_CONT_FK_UNI';
+    END IF;
+
+    EXECUTE IMMEDIATE 'ALTER TABLE doc_template_context add CONSTRAINT doc_templ_cont_fk_uni UNIQUE(id_context,flg_type,id_institution,id_software,id_profile_template,id_dep_clin_serv,id_doc_template,id_sch_event,id_context_2)';
+
+END;
+/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 25/05/2011 08:47
+-- CHANGE REASON: [ALERT-170813] 
+begin
+ALTER TABLE DOC_TEMPLATE_CONTEXT 
+    drop CONSTRAINT DOC_TEMPL_CONT_FLG_TY_CHK;
+
+
+alter table DOC_TEMPLATE_CONTEXT
+add constraint DOC_TEMPL_CONT_FLG_TY_CHK
+check (flg_type IN('C', 'I', 'D', 'A', 'S', 'E', 'M', 'CT', 'SD', 'DS', 'DA', 'SP','P'));
+end;
+/
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 25/05/2011 08:47
+-- CHANGE REASON: [ALERT-170813] 
+ALTER TABLE DOC_TEMPLATE_CONTEXT 
+    drop CONSTRAINT DOC_TEMPL_CONT_FLG_TY_CHK;
+
+alter table DOC_TEMPLATE_CONTEXT
+add constraint DOC_TEMPL_CONT_FLG_TY_CHK
+check (flg_type IN('C', 'I', 'D', 'A', 'S', 'E', 'M', 'CT', 'SD', 'DS', 'DA', 'SP','P'));
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 20/09/2011 18:06
+-- CHANGE REASON: [ALERT-187042] constraints
+DECLARE
+e_pk_already_there EXCEPTION;
+    e_unique_already_there EXCEPTION;
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.DOC_TEMPLATE_CONTEXT
+  add constraint DOC_TEMPL_CONT_FK_UNI unique (ID_CONTEXT, FLG_TYPE, ID_SOFTWARE, ID_PROFILE_TEMPLATE, ID_CLINICAL_SERVICE, ID_DOC_TEMPLATE, ID_SCH_EVENT, ID_CONTEXT_2,VERSION,ID_MARKET)
+  using index 
+  tablespace alert_default_idx';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.DOC_TEMPLATE_CONTEXT
+  add constraint DTC_I_PF_I_DCS_CHK
+  check (id_profile_template IS NOT NULL OR id_clinical_service IS NOT NULL OR id_context IS NOT NULL)';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 10/05/2012 12:38
+-- CHANGE REASON: [ALERT-229830] Missing constraint in DOC_TEMPLATE_CONTEXT
+DECLARE
+    l_constraint_found PLS_INTEGER;
+BEGIN
+    SELECT COUNT(*)
+      INTO l_constraint_found
+      FROM user_constraints uc
+     WHERE uc.table_name = 'DOC_TEMPLATE_CONTEXT'
+       AND uc.constraint_name = 'DOC_TEMPL_CONT_FLG_TY_CHK';
+
+    IF l_constraint_found > 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE doc_template_context drop CONSTRAINT doc_templ_cont_flg_ty_chk';
+    END IF;
+    EXECUTE IMMEDIATE 'DELETE FROM doc_template_context dtc WHERE dtc.flg_type IS NULL OR dtc.flg_type NOT IN (''C'', ''I'', ''D'', ''A'', ''S'', ''E'', ''M'', ''CT'', ''SD'', ''DS'', ''DA'', ''SP'', ''DC'', ''R'', ''P'')';
+    EXECUTE IMMEDIATE 'ALTER TABLE doc_template_context add CONSTRAINT doc_templ_cont_flg_ty_chk CHECK(flg_type IN (''C'', ''I'', ''D'', ''A'', ''S'', ''E'', ''M'', ''CT'', ''SD'', ''DS'', ''DA'', ''SP'', ''DC'', ''R'', ''P''))';
+
+END;
+/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 25/11/2013 10:22
+-- CHANGE REASON: [ALERT-268453 ] 
+-- Create/Recreate check constraints 
+alter table DOC_TEMPLATE_CONTEXT
+  drop constraint DOC_TEMPL_CONT_FLG_TY_CHK;
+alter table DOC_TEMPLATE_CONTEXT
+  add constraint DOC_TEMPL_CONT_FLG_TY_CHK
+  check (flg_type IN ('C', 'I', 'D', 'A', 'S', 'E', 'M', 'CT', 'SD', 'DS', 'DA', 'SP', 'DC', 'R', 'P','ER'));
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 21/08/2019 17:15
+-- CHANGE REASON: [EMR-19010] - New area for Medical Orders (DDL)
+alter table DOC_TEMPLATE_CONTEXT
+drop constraint DOC_TEMPL_CONT_FLG_TY_CHK;
+alter table DOC_TEMPLATE_CONTEXT
+add constraint DOC_TEMPL_CONT_FLG_TY_CHK
+check (flg_type IN ('C', 'I', 'D', 'A', 'S', 'E', 'M', 'CT', 'SD', 'DS', 'DA', 'SP', 'DC', 'R', 'P','ER', 'MO', 'CO'));
+-- CHANGE END: Diogo Oliveira

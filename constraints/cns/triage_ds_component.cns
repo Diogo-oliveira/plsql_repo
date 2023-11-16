@@ -1,0 +1,79 @@
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 03/05/2012 18:23
+-- CHANGE REASON: [ALERT-228955] EST simplified triage
+DECLARE
+    e_pk EXCEPTION;
+    e_uk1 EXCEPTION;
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);
+    PRAGMA EXCEPTION_INIT(e_pk, -2260);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DS_COMPONENT ADD CONSTRAINT TDSC_PK PRIMARY KEY (ID_TRIAGE_DS_COMPONENT) USING INDEX TABLESPACE INDEX_S';
+    EXCEPTION
+        WHEN e_pk THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DS_COMPONENT ADD CONSTRAINT TDSC_FLG_CMP_TYP_CHK CHECK (FLG_COMPONENT_TYPE IN (''R''))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DS_COMPONENT ADD CONSTRAINT TDSC_INT_NAME_UK UNIQUE (INTERNAL_NAME) USING INDEX TABLESPACE INDEX_S';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: José Silva
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 03/05/2012 18:39
+-- CHANGE REASON: [ALERT-228955] EST simplified triage
+DECLARE
+    e_pk EXCEPTION;
+    e_uk1 EXCEPTION;
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);
+    PRAGMA EXCEPTION_INIT(e_pk, -2260);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DS_COMPONENT ADD CONSTRAINT TDSC_PK PRIMARY KEY (ID_TRIAGE_DS_COMPONENT) USING INDEX TABLESPACE INDEX_S';
+    EXCEPTION
+        WHEN e_pk THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DS_COMPONENT ADD CONSTRAINT TDSC_FLG_CMP_TYP_CHK CHECK (FLG_COMPONENT_TYPE IN (''R''))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DS_COMPONENT ADD CONSTRAINT TDSC_INT_NAME_UK UNIQUE (INTERNAL_NAME) USING INDEX TABLESPACE INDEX_S';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: José Silva

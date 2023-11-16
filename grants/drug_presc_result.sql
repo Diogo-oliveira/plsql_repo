@@ -1,0 +1,1 @@
+GRANT SELECT ON ALERT.drug_presc_result TO ALERT_VIEWER;

@@ -1,0 +1,1 @@
+create OR REPLACE TYPE t_tbl_rec_sum_act_meds IS TABLE OF t_rec_sum_act_meds;

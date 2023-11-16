@@ -1,0 +1,238 @@
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 03/12/2010 10:10
+-- CHANGE REASON: [ALERT-146512] 
+ALTER TABLE PN_DATA_BLOCK ADD CONSTRAINT PNDB_PK PRIMARY KEY (ID_PN_DATA_BLOCK) ENABLE;
+ALTER TABLE PN_DATA_BLOCK ADD CONSTRAINT PNDB_FLG_TYPE_CHK CHECK (FLG_TYPE IN ('T','D','F','M')) ENABLE;
+ALTER TABLE PN_DATA_BLOCK ADD CONSTRAINT PNDB_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN ('Y','N')) ENABLE;
+-- CHANGE END: Pedro Teixeira
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 11:49
+-- CHANGE REASON: [ALERT-164552] soap blocks existing model changes
+alter table pn_data_block
+  drop constraint pndb_flg_type_chk;
+alter table pn_data_block
+  add constraint pndb_flg_type_chk
+  check (flg_type IN ('T', 'D', 'F', 'C', 'S'));
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:29
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table pn_data_block
+  drop constraint pndb_flg_type_chk;
+
+alter table pn_data_block
+  add constraint pndb_flg_type_chk
+  check (flg_type IN ('T', 'D', 'F', 'C', 'S', 'P', null));
+
+alter table pn_data_block
+  add constraint pndb_flg_wf_viewer_chk
+  check (flg_type IN ('ALL', 'ANL', 'EXM', 'MDC', 'INT', null));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 09:59
+-- CHANGE REASON: H&P phase2
+alter table pn_data_block
+  drop constraint pndb_flg_type_chk;
+
+alter table pn_data_block
+  add constraint pndb_flg_type_chk
+  check (flg_type IN ('T', 'D', 'F', 'C', 'S', 'P', null));
+
+alter table pn_data_block
+  add constraint pndb_flg_wf_viewer_chk
+  check (flg_type IN ('ALL', 'ANL', 'EXM', 'MDC', 'INT', null));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:10
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table pn_data_block
+  drop constraint pndb_flg_type_chk;
+
+alter table pn_data_block
+  add constraint pndb_flg_type_chk
+  check (flg_type IN ('T', 'D', 'F', 'C', 'S', 'P', null));
+
+alter table pn_data_block
+  add constraint pndb_flg_wf_viewer_chk
+  check (flg_type IN ('ALL', 'ANL', 'EXM', 'MDC', 'INT', null));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:15
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_DATA_BLOCK DROP CONSTRAINT PNDB_FLG_WF_VIEWER_CHK');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:15
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_DATA_BLOCK ADD CONSTRAINT PNDB_FLG_WF_VIEWER_CHK CHECK ( FLG_WF_VIEWER IN (''ALL'', ''ANL'', ''EXM'', ''MDC'', ''INT'') OR FLG_WF_VIEWER IS NULL) ENABLE');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/01/2012 16:29
+-- CHANGE REASON: [ALERT-216664] 
+DECLARE
+    e_non_existant EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+BEGIN
+  BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_data_block
+  drop constraint pndb_flg_type_chk';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+  
+END;
+/
+
+DECLARE
+    e_unique_already_there EXCEPTION;    
+
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261); -- unique constraint    
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_data_block
+  add constraint pndb_flg_type_chk
+  check (flg_type IN (''T'', ''D'', ''F'', ''C'', ''S'', ''P'', ''M'',''ID'',''IG'',''IS''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 22/08/2012 17:02
+-- CHANGE REASON: [ALERT-238310] Import mechanism for Inactive problems
+DECLARE
+    e_non_existant EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+BEGIN
+  BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_data_block
+  drop constraint pndb_flg_type_chk';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+  
+END;
+/
+
+DECLARE
+    e_unique_already_there EXCEPTION;    
+
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261); -- unique constraint    
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_data_block
+  add constraint pndb_flg_type_chk
+  check (flg_type IN (''T'', ''D'', ''F'', ''C'', ''S'', ''P'', ''M'',''ID'',''IG'',''IS'',''TB''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 29/01/2013 15:15
+-- CHANGE REASON: [ALERT-250486 ] A physician suggested to add the option "Anamnesi Fisiologica" (or in (truncated)
+begin
+execute immediate ('ALTER TABLE pn_data_block ADD CONSTRAINT PNDB_TT_FK FOREIGN KEY (id_task_type) REFERENCES tl_task(id_tl_task)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 07/07/2017 14:53
+-- CHANGE REASON: [ALERT-330567] Discharge summary for FR market.
+alter table pn_data_block
+  drop constraint pndb_flg_type_chk;
+  
+alter table pn_data_block
+  add constraint pndb_flg_type_chk
+  check (flg_type IN ('T', 'D', 'F', 'C', 'S', 'P', 'M','ID','IG','IS','TB', 'A'));
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 17/01/2018 12:42
+-- CHANGE REASON: [CALERT-1724] Data block multichoice selection list
+-- Create/Recreate check constraints 
+alter table PN_DATA_BLOCK
+  drop constraint PNDB_FLG_TYPE_CHK;
+alter table PN_DATA_BLOCK
+  add constraint PNDB_FLG_TYPE_CHK
+  check (flg_type IN ('T', 'D', 'F', 'C', 'S', 'P', 'M','ID','IG','IS','TB', 'A','SL'));
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Howard Cheng
+-- CHANGE DATE: 19/01/2018 
+-- CHANGE REASON: [CALERT-213] CCH Progress note - ICU Assessment Summary Note
+alter table PN_DATA_BLOCK
+  add constraint PNDB_DMS_FK foreign key (ID_MTOS_SCORE)
+  references MTOS_SCORE (ID_MTOS_SCORE);
+-- CHANGE END: Howard Cheng
+
+-- CHANGED BY: Vítor Sá
+-- CHANGE DATE: 06/02/2019
+-- CHANGE REASON: EMR-8685 - [DB] New data block type for arabic - single page developments
+DECLARE
+    e_non_existant EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+BEGIN
+  BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_data_block
+  drop constraint pndb_flg_type_chk';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+  
+END;
+/
+
+DECLARE
+    e_unique_already_there EXCEPTION;    
+
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261); -- unique constraint    
+BEGIN  
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_data_block
+  add constraint pndb_flg_type_chk
+  check (flg_type IN (''T'', ''D'', ''F'', ''C'', ''S'', ''P'', ''M'',''ID'',''IG'',''IS'',''TB'', ''FA''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Vítor Sá

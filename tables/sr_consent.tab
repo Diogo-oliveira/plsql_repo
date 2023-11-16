@@ -1,0 +1,137 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 29/09/2009 16:21
+-- CHANGE REASON: [ALERT-47078] Consulta de Pré-Operatório
+CREATE TABLE SR_CONSENT
+   (  
+ ID_SR_CONSENT NUMBER(24,0) NOT NULL,
+ ID_SCHEDULE_SR NUMBER(24,0) NOT NULL,
+ FLG_PHYSICIAN_SIGN VARCHAR2(1) NOT NULL,
+ ID_PROF_RESP NUMBER(24,0) NOT NULL,
+ FLG_PATIENT_SIGN VARCHAR2(1) NOT NULL,
+ PATIENT_REP_NAME  VARCHAR2(200),
+ ID_FAMILY_RELATIONSHIPNUMBER(24),
+ FLG_CONSENT_DESTVARCHAR2(1) NOT NULL,
+ FLG_STATUSVARCHAR2(1) NOT NULL,
+ ID_PROF_REG NUMBER(24) NOT NULL,
+ DT_REG TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+ CREATE_USER VARCHAR2(24),
+ CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+ CREATE_INSTITUTION NUMBER(24,0),
+ UPDATE_USER VARCHAR2(24),
+ UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+ UPDATE_INSTITUTION NUMBER(24,0) 
+   );
+ 
+ COMMENT ON COLUMN SR_CONSENT.ID_SR_CONSENT IS 'Chave primária';
+ COMMENT ON COLUMN SR_CONSENT.ID_SCHEDULE_SR IS 'ID da tabela SCHEDULE_SR';
+ COMMENT ON COLUMN SR_CONSENT.FLG_PHYSICIAN_SIGN IS 'Indica se o consentimento está assinado pelo médico. Valores possíveis: Y/N';
+ COMMENT ON COLUMN SR_CONSENT.ID_PROF_RESP IS 'ID do profissional responsável pela assinatura do consentimento';
+ COMMENT ON COLUMN SR_CONSENT.FLG_PATIENT_SIGN IS 'Indica se o consentimento está assinado pelo paciente. Valores possíveis: Y/N';
+ COMMENT ON COLUMN SR_CONSENT.PATIENT_REP_NAME IS 'Nome do representante do paciente';
+ COMMENT ON COLUMN SR_CONSENT.ID_FAMILY_RELATIONSHIP IS 'Identificador do grau parentesco do representante';
+ COMMENT ON COLUMN SR_CONSENT.FLG_CONSENT_DEST IS 'Destino do consentimento. Valores possíveis: A - Administrativo; Q - Arquivo; D - Director Clínico; P ? processo clínico';
+ COMMENT ON COLUMN SR_CONSENT.FLG_STATUS IS 'Estado do registo. Valores possíveis: A ? Activo, O - desactualizado';
+ COMMENT ON COLUMN SR_CONSENT.ID_PROF_REG IS 'ID do profissional que registou os dados';
+ COMMENT ON COLUMN SR_CONSENT.DT_REG IS 'Data do registo dos dados';
+   COMMENT ON COLUMN SR_CONSENT.CREATE_USER IS 'Creation User';
+   COMMENT ON COLUMN SR_CONSENT.CREATE_TIME IS 'Creation Time';
+   COMMENT ON COLUMN SR_CONSENT.CREATE_INSTITUTION IS 'Creation Institution';
+   COMMENT ON COLUMN SR_CONSENT.UPDATE_USER IS 'Update User';
+   COMMENT ON COLUMN SR_CONSENT.UPDATE_TIME IS 'Update Time';
+   COMMENT ON COLUMN SR_CONSENT.UPDATE_INSTITUTION IS 'Update Institution'; 
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 19/10/2009
+-- CHANGE REASON: [ALERT-47078] Consulta de Pré-Operatório
+CREATE TABLE SR_CONSENT
+   (  
+ ID_SR_CONSENT NUMBER(24,0) NOT NULL,
+ ID_SCHEDULE_SR NUMBER(24,0) NOT NULL,
+ FLG_PHYSICIAN_SIGN VARCHAR2(1) NOT NULL,
+ ID_PROF_RESP NUMBER(24,0) NOT NULL,
+ FLG_PATIENT_SIGN VARCHAR2(1) NOT NULL,
+ PATIENT_REP_NAME  VARCHAR2(200),
+ ID_FAMILY_RELATIONSHIP NUMBER(24),
+ FLG_CONSENT_DEST VARCHAR2(1) NOT NULL,
+ FLG_STATUS VARCHAR2(1) NOT NULL,
+ ID_PROF_REG NUMBER(24) NOT NULL,
+ DT_REG TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+ CREATE_USER VARCHAR2(24),
+ CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+ CREATE_INSTITUTION NUMBER(24,0),
+ UPDATE_USER VARCHAR2(24),
+ UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+ UPDATE_INSTITUTION NUMBER(24,0) 
+   );
+ 
+COMMENT ON COLUMN SR_CONSENT.ID_SR_CONSENT IS 'Chave primária';
+COMMENT ON COLUMN SR_CONSENT.ID_SCHEDULE_SR IS 'ID da tabela SCHEDULE_SR';
+COMMENT ON COLUMN SR_CONSENT.FLG_PHYSICIAN_SIGN IS 'Indica se o consentimento está assinado pelo médico. Valores possíveis: Y/N';
+COMMENT ON COLUMN SR_CONSENT.ID_PROF_RESP IS 'ID do profissional responsável pela assinatura do consentimento';
+COMMENT ON COLUMN SR_CONSENT.FLG_PATIENT_SIGN IS 'Indica se o consentimento está assinado pelo paciente. Valores possíveis: Y/N';
+COMMENT ON COLUMN SR_CONSENT.PATIENT_REP_NAME IS 'Nome do representante do paciente';
+COMMENT ON COLUMN SR_CONSENT.ID_FAMILY_RELATIONSHIP IS 'Identificador do grau parentesco do representante';
+COMMENT ON COLUMN SR_CONSENT.FLG_CONSENT_DEST IS 'Destino do consentimento. Valores possíveis: A - Administrativo; Q - Arquivo; D - Director Clínico; P ? processo clínico';
+COMMENT ON COLUMN SR_CONSENT.FLG_STATUS IS 'Estado do registo. Valores possíveis: A ? Activo, O - desactualizado';
+COMMENT ON COLUMN SR_CONSENT.ID_PROF_REG IS 'ID do profissional que registou os dados';
+COMMENT ON COLUMN SR_CONSENT.DT_REG IS 'Data do registo dos dados';
+COMMENT ON COLUMN SR_CONSENT.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN SR_CONSENT.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN SR_CONSENT.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN SR_CONSENT.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN SR_CONSENT.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN SR_CONSENT.UPDATE_INSTITUTION IS 'Update Institution'; 
+-- CHANGE END: Gustavo Serrano
+
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 25/01/2016 09:12
+-- CHANGE REASON: [ALERT-318078] CDOC Functionalities V8
+-- Add comments to the table 
+comment on table SR_CONSENT
+  is 'Transactional table with surgery room consents';
+-- Add comments to the columns 
+comment on column SR_CONSENT.id_sr_consent
+  is 'surgery room consent identifier';
+comment on column SR_CONSENT.id_schedule_sr
+  is 'SCHEDULE_SR identifier';
+comment on column SR_CONSENT.flg_physician_sign
+  is 'Indicates if the consent is assined by the doctor. Values: Y -Yes, N-No.
+';
+comment on column SR_CONSENT.id_prof_resp
+  is 'Identifies the Professional responsable by the consent .
+';
+comment on column SR_CONSENT.flg_patient_sign
+  is 'Identifies if the consent is signed by the patient.
+Values: Y- Yes, N- No.
+';
+comment on column SR_CONSENT.patient_rep_name
+  is 'Name of pacient agent.';
+comment on column SR_CONSENT.id_family_relationship
+  is 'Identifies the agent degree of kinship.';
+comment on column SR_CONSENT.flg_consent_dest
+  is 'Consent destiny. Values: A - Registrar, Q - archive, D - Clinical Director, P - Clinical process.
+';
+comment on column SR_CONSENT.flg_status
+  is 'Record status.Values: A - Active, O - Outdated.
+';
+comment on column SR_CONSENT.id_prof_reg
+  is 'Register professional identifier
+';
+comment on column SR_CONSENT.dt_reg
+  is 'Record date';
+comment on column SR_CONSENT.create_user
+  is 'Creation User';
+comment on column SR_CONSENT.create_time
+  is 'Creation Time';
+comment on column SR_CONSENT.create_institution
+  is 'Creation Institution';
+comment on column SR_CONSENT.update_user
+  is 'Update User';
+comment on column SR_CONSENT.update_time
+  is 'Update Time';
+comment on column SR_CONSENT.update_institution
+  is 'Update Institution';
+  
+-- CHANGE END: Pedro Fernandes

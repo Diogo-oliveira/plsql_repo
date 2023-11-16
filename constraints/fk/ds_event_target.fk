@@ -1,0 +1,34 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:22
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE ds_event_target ADD CONSTRAINT dset_dsev_fk FOREIGN KEY(id_ds_event)        REFERENCES ds_event(id_ds_event);
+ALTER TABLE ds_event_target ADD CONSTRAINT dset_dscm_fk FOREIGN KEY(id_ds_cmpt_mkt_rel) REFERENCES ds_cmpt_mkt_rel(id_ds_cmpt_mkt_rel);
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 24/07/2019 16:35
+-- CHANGE REASON: [ARCH-7603] Changes on DB Model
+--                
+declare
+	l_sql	varchar2(1000 char);
+begin
+	l_sql := 'alter table DS_EVENT_target add constraint DSDE_I_DS_EVT_ACT_FK foreign key ( ID_DS_CMPT_MKT_REL, id_action ) references DS_DEF_EVENT (ID_DS_CMPT_MKT_REL, id_action)';
+	pk_versioning.run( l_sql );
+end;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 26/07/2019 08:41
+-- CHANGE REASON: [ARCH-7603] Changes on DB Model
+--                
+declare
+	l_sql	varchar2(1000 char);
+begin
+	l_sql := 'alter table DS_EVENT_TARGET add constraint DSET_DSCM_FK foreign key (ID_DS_CMPT_MKT_REL)
+  references DS_CMPT_MKT_REL (ID_DS_CMPT_MKT_REL);';
+	pk_versioning.run( l_sql );
+end;
+/
+-- CHANGE END: Elisabete Bugalho

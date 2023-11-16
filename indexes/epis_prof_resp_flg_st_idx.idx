@@ -1,0 +1,18 @@
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 06/06/2012 15:43
+-- CHANGE REASON: [ALERT-232566] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_indexes i
+     WHERE i.index_name = 'EPIS_PROF_RESP_FLG_ST_IDX';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'create index epis_prof_resp_flg_st_idx on epis_prof_resp(flg_status) tablespace index_l';
+    END IF;
+END;
+/
+-- CHANGE END: Rui Spratley

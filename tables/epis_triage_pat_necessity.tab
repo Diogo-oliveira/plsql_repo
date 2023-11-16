@@ -1,0 +1,30 @@
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 24/01/2010 19:50
+-- CHANGE REASON: [ALERT-70160] Triage refactoring
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE EPIS_TRIAGE_PAT_NECESSITY( ' || --
+                      '  ID_EPIS_TRIAGE NUMBER(24) NOT NULL, ' || --
+                      '  ID_PAT_NECESSITY NUMBER(24) NOT NULL, ' || --
+                      '  CREATE_USER VARCHAR2(24), ' || --
+                      '  CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE, ' || --
+                      '  CREATE_INSTITUTION NUMBER(24), ' || --
+                      '  UPDATE_USER VARCHAR2(24), ' || --
+                      '  UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE, ' || --
+                      '  UPDATE_INSTITUTION NUMBER(24) ' || --
+                      ') TABLESPACE TABLE_L';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+
+COMMENT ON TABLE EPIS_TRIAGE_PAT_NECESSITY IS 'Store the relation between triage events and patient necessities';
+COMMENT ON COLUMN EPIS_TRIAGE_PAT_NECESSITY.ID_EPIS_TRIAGE IS 'Triage event identifier';
+COMMENT ON COLUMN EPIS_TRIAGE_PAT_NECESSITY.ID_PAT_NECESSITY IS 'Patient necessity identifier';
+COMMENT ON COLUMN EPIS_TRIAGE_PAT_NECESSITY.CREATE_USER IS 'Creation user';
+COMMENT ON COLUMN EPIS_TRIAGE_PAT_NECESSITY.CREATE_TIME IS 'Creation date / time';
+COMMENT ON COLUMN EPIS_TRIAGE_PAT_NECESSITY.CREATE_INSTITUTION IS 'Creation institution';
+COMMENT ON COLUMN EPIS_TRIAGE_PAT_NECESSITY.UPDATE_USER IS 'Update user';
+COMMENT ON COLUMN EPIS_TRIAGE_PAT_NECESSITY.UPDATE_TIME IS 'Update date / time';
+COMMENT ON COLUMN EPIS_TRIAGE_PAT_NECESSITY.UPDATE_INSTITUTION IS 'Update institution';
+-- CHANGE END: José Brito

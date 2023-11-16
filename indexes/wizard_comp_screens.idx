@@ -1,0 +1,23 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 23/12/2010 16:32
+-- CHANGE REASON: [ALERT-151846] DB versioning - Tables
+CREATE INDEX WCS_FLG_AV_SCREEN_IDX ON WIZARD_COMP_SCREENS(FLG_AVAILABLE,SCREEN_NAME) TABLESPACE INDEX_S;
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 19/01/2011 16:46
+-- CHANGE REASON: [ALERT-151846] DB versioning - Tables
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -955);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'CREATE INDEX WCS_FLG_AV_SCREEN_IDX ON WIZARD_COMP_SCREENS(FLG_AVAILABLE,SCREEN_NAME) TABLESPACE INDEX_S';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

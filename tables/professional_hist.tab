@@ -1,0 +1,197 @@
+-- CHANGED BY: Nuno Alves
+-- CHANGE DATE: 06/07/2015 10:13
+-- CHANGE REASON: [ALERT-313314] ALERT-313314 Issue Replication: The system must provide the ability to alert the users to update/confirm the bleep number when trying to add one medication order and display prescriber contact details in the prescription detail
+BEGIN
+    pk_versioning.run('
+create table PROFESSIONAL_HIST (
+id_operation NUMBER(24) not null,
+operation_type VARCHAR2(1 char) not null,
+dt_operation TIMESTAMP(6) WITH LOCAL TIME ZONE default current_timestamp,
+operation_user  VARCHAR2(50 char) not null,
+id_professional     NUMBER(24) not null,
+  name                VARCHAR2(800 char) ,
+  nick_name           VARCHAR2(800 char) ,
+  dt_birth            DATE,
+  address             VARCHAR2(800 char),
+  district            VARCHAR2(800 char),
+  city                VARCHAR2(800 char),
+  zip_code            VARCHAR2(200 char),
+  num_contact         VARCHAR2(200 char),
+  marital_status      VARCHAR2(240 char),
+  gender              VARCHAR2(1 char) not null,
+  flg_state           VARCHAR2(1 char) not null,
+  num_order           VARCHAR2(200 char),
+  id_scholarship      NUMBER(12),
+  id_speciality       NUMBER(12),
+  id_country          NUMBER(12),
+  barcode             VARCHAR2(200 char),
+  initials            VARCHAR2(200 char),
+  title               VARCHAR2(200 char),
+  short_name          VARCHAR2(800 char),
+  dt_birth_tstz       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  cell_phone          VARCHAR2(200 char),
+  fax                 VARCHAR2(200 char),
+  email               VARCHAR2(400 char),
+  first_name          VARCHAR2(200 char),
+  middle_name         VARCHAR2(400 char),
+  last_name           VARCHAR2(200 char),
+  work_phone          VARCHAR2(200 char),
+  upin                VARCHAR2(200 char),
+  dea                 VARCHAR2(200 char),
+  flg_migration       VARCHAR2(1 char),
+  flg_prof_test       VARCHAR2(1 char),
+  adress_type         VARCHAR2(10 CHAR),
+  id_cpf              NUMBER(24),
+  id_cns              NUMBER(24),
+  mother_name         VARCHAR2(200 CHAR),
+  father_name         VARCHAR2(200 CHAR),
+  id_geo_state_birth  NUMBER(24),
+  id_district_birth   NUMBER(24),
+  code_race           VARCHAR2(200 CHAR),
+  code_scoolarship    VARCHAR2(200 CHAR),
+  flg_in_school       VARCHAR2(1 CHAR),
+  code_logr_type      VARCHAR2(200 CHAR),
+  door_number         VARCHAR2(200 CHAR),
+  address_extension   VARCHAR2(200 CHAR),
+  id_geo_state_adress NUMBER(24),
+  id_district_adress  NUMBER(24),
+  adress_area         VARCHAR2(200 CHAR),
+  code_banq           VARCHAR2(200 CHAR),
+  desc_banq_ag        VARCHAR2(200 CHAR),
+  id_banq_account     VARCHAR2(200 CHAR),
+  code_doc_type       VARCHAR2(200 CHAR),
+  code_certificate    VARCHAR2(200 CHAR),
+  desc_balcony        VARCHAR2(200 CHAR),
+  desc_book           VARCHAR2(200 CHAR),
+  desc_page           VARCHAR2(200 CHAR),
+  desc_term           VARCHAR2(200 CHAR),
+  dt_emission_cert    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  id_document         VARCHAR2(200 CHAR),
+  code_emitant_cert   VARCHAR2(200 CHAR),
+  id_geo_state_doc    NUMBER(24),
+  dt_emission_id      TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  code_emitant_crm    VARCHAR2(200 CHAR),
+  id_geo_state_crm    NUMBER(24),
+  code_family_status  VARCHAR2(200 CHAR),
+  id_prof_formation   NUMBER(24),
+  other_doc_desc      VARCHAR2(1000 CHAR),
+  id_health_plan      NUMBER(24),
+  bleep_number        VARCHAR2(200 CHAR),
+  suffix              VARCHAR2(50 CHAR),
+  county              VARCHAR2(200 CHAR),
+  address_other_name  VARCHAR2(1000 CHAR),
+  create_user   VARCHAR2(24 char),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 char),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+)tablespace alert_data');
+
+    -- Add comments to the table 
+    pk_versioning.run('comment on table PROFESSIONAL_HIST is ''Personal professional information History''');
+    -- Add comments to the columns 
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_professional is ''Professional ID''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.name is ''Nome completo''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.nick_name is ''Nome abreviado''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.dt_birth is ''Data nascimento''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.address is ''Morada''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.district is ''Distrito''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.city is ''Cidade''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.zip_code is ''Código postal''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.num_contact is ''Nº de contacto''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.marital_status is ''Estado civil: S - solteiro, C - casado, V - viúvo, D - divorciado''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.gender is ''Gender: M - Male; F - Female; I - Indefinite''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.flg_state is ''Estado: A - activo, I - inactivo''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.num_order is ''Nº Ordem dos Médicos''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_scholarship is ''Scholarship ID''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_speciality is ''Speciality ID''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_country is ''Country ID''');
+
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.barcode is ''Código de barras''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.initials is ''Iniciais dos nomes do profissionais''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.title is ''Título do profissional''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.short_name is ''Short name''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.dt_birth_tstz is ''Data nascimento''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.cell_phone is ''Número de telemóvel''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.fax is ''Número de fax''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.email is ''E-mail do profissional''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.first_name is ''Primeiro Nome''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.middle_name is ''Nome(s) do meio''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.last_name is ''Último Nome''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.work_phone is ''Número de tefeone de trabalho''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.upin is ''UPIN Number''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.dea is ''DEA''');
+
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.flg_migration is ''This column will have default A value for ALERT, migrated records will have M value, and test records will have T value''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.create_user is ''Creation User''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.create_time is ''Creation Time''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.create_institution is ''Creation Institution''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.update_user is ''Update User''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.update_time is ''Update Time''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.update_institution is ''Update Institution''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.flg_prof_test is ''Profissional de teste: Y - Sim, N - Não''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.adress_type is ''Adress type of the professional (sys_domain list).''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_cpf is ''CPF number.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_cns is ''CNS number.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.mother_name is ''Professional mother name.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.father_name is ''Professional father name.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_geo_state_birth is ''UF id birth.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_district_birth is ''IBGE ID birth.''');
+
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.code_race is ''Race or skin colour.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.code_scoolarship is ''professional scolarship.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.flg_in_school is ''IS professional studying?''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.code_logr_type is ''Type of street (domain).''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.door_number is ''adress door number.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.address_extension is ''extension to adress.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_geo_state_adress is ''UF id address.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_district_adress is ''IBGE ID adress.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.adress_area is ''adress area or neighbourhood.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.code_banq is ''Bank National Code.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.desc_banq_ag is ''Bank agency.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_banq_account is ''Bank account number.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.code_doc_type is ''Domain code of document type.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.code_certificate is ''Residence certificate code.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.desc_balcony is ''balcony desc.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.desc_book is ''certificate book desc.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.desc_page is ''certificate book page.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.desc_term is ''certificate term.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.dt_emission_cert is ''certificate emission date.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_document is ''NAtional Identifiction number.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.code_emitant_cert is ''Identification emitant.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_geo_state_doc is ''UF id for the identity document.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.dt_emission_id is ''Identification emission date.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.code_emitant_crm is ''Regional medical counsil code.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_geo_state_crm is ''Id geo state to crm emitant.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.code_family_status is ''Domain code to family status.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_prof_formation is ''Professional Training area.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.other_doc_desc is ''Other documents free text''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_health_plan is ''Health Plan ID.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.bleep_number is ''Professional bleep number.''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.suffix is ''Professional suffix''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.county is ''county description''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.address_other_name is ''adress other designation''');
+
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.id_operation is ''History talbe PK identifier''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.operation_type is ''Type of operation performed: C-Create, U-Update, R-Remove''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.dt_operation is ''date when changes are stored''');
+    pk_versioning.run('comment on column PROFESSIONAL_HIST.operation_user is ''user that changed data''');
+END;
+/
+-- CHANGE END: Nuno Alves
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 08/09/2020 17:10
+-- CHANGE REASON: [EMR-35781]
+ALTER TABLE PROFESSIONAL_HIST ADD TAXPAYER_NUMBER NUMBER(24);
+ALTER TABLE PROFESSIONAL_HIST ADD CLINICAL_NAME VARCHAR2(200 CHAR);
+COMMENT ON COLUMN PROFESSIONAL_HIST.TAXPAYER_NUMBER IS 'TAXPAYER NUMBER (NIF)';
+COMMENT ON COLUMN PROFESSIONAL_HIST.CLINICAL_NAME IS 'Professional clinical name';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 06/07/2021 09:44
+-- CHANGE REASON: [EMR-46301]
+ALTER TAbLE professional_hist ADD ID_AGRUPACION_INSTIT NUMBER(24);
+-- CHANGE END: Pedro Henriques

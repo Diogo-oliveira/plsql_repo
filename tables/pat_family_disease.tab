@@ -1,0 +1,62 @@
+
+
+  CREATE TABLE PAT_FAMILY_DISEASE
+   (	ID_PAT_FAMILY_DISEASE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_DIAGNOSIS NUMBER(12,0) NOT NULL ENABLE,
+	DT_PAT_FAMILY_DISEASE DATE NOT NULL ENABLE,
+	ID_PAT_FAMILY_MEMBER NUMBER(24,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	YEAR_BEGIN NUMBER(4,0),
+	MONTH_BEGIN NUMBER(2,0),
+	DAY_BEGIN NUMBER(2,0),
+	YEAR_END NUMBER(4,0),
+	MONTH_END NUMBER(2,0),
+
+	DAY_END NUMBER(2,0),
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE pat_family_disease IS 'Doencas de que padecem ou padeceram os familiares;ocorrência de diabetes, hipertensão arterial, doenças malignas, doenças transmissíveis geneticamente.' ;
+
+COMMENT ON COLUMN pat_family_disease.id_pat_family_disease IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_family_disease.id_diagnosis IS 'Chave primária' ;
+COMMENT ON COLUMN pat_family_disease.dt_pat_family_disease IS 'Data do registo' ;
+COMMENT ON COLUMN pat_family_disease.id_pat_family_member IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_family_disease.year_begin IS 'Ano (aproximado) de inicio da doença' ;
+COMMENT ON COLUMN pat_family_disease.month_begin IS 'Mês (aproximado) de inicio da doença' ;
+COMMENT ON COLUMN pat_family_disease.day_begin IS 'Dia (aproximado) de inicio da doença' ;
+COMMENT ON COLUMN pat_family_disease.year_end IS 'Ano (aproximado) de fim da doença' ;
+COMMENT ON COLUMN pat_family_disease.month_end IS 'Mês (aproximado) de fim da doença' ;
+COMMENT ON COLUMN pat_family_disease.day_end IS 'Dia (aproximado) de fim da doença' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_FAMILY_DISEASE ADD DT_PAT_FAMILY_DISEASE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_FAMILY_DISEASE.DT_PAT_FAMILY_DISEASE_TSTZ IS 'Data do registo'; 
+
+
+
+alter table PAT_FAMILY_DISEASE drop column DT_PAT_FAMILY_DISEASE;
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY_DISEASE modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY_DISEASE modify NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY_DISEASE modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro

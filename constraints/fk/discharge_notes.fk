@@ -1,0 +1,42 @@
+
+
+  ALTER TABLE DISCHARGE_NOTES ADD CONSTRAINT DNT_EPIS_FK FOREIGN KEY (ID_EPISODE)
+	  REFERENCES EPISODE (ID_EPISODE) ENABLE;
+
+  ALTER TABLE DISCHARGE_NOTES ADD CONSTRAINT DNT_PROF_FK FOREIGN KEY (ID_PROFESSIONAL)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE DISCHARGE_NOTES ADD CONSTRAINT DNT_PROF_FK2 FOREIGN KEY (ID_PROF_CANCEL)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+
+  ALTER TABLE discharge_notes ADD CONSTRAINT DNT_F_UP_TY_FK FOREIGN KEY (id_follow_up_type)
+	  REFERENCES follow_up_type (id_follow_up_type) ENABLE;
+	  
+  ALTER TABLE discharge_notes ADD CONSTRAINT DNT_EPI_RPT_FK FOREIGN KEY (id_epis_report)
+	  REFERENCES EPIS_REPORT (ID_EPIS_REPORT) ENABLE;
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 2008/06/25
+-- CHANGE REASON: In discharge, patient instructions if in "Follow-up with" if "Other" is selected then after reloading DEEPNAV the filed is empty
+ALTER TABLE discharge_notes add(CONSTRAINT dnt_prl_fk foreign key(follow_up_with) references
+                                professional(id_professional));
+-- CHANGE END
+
+--CHANGED BY: Ariel Geraldo Machado
+--CHANGE DATE: 2008-SEP-16
+--CHANGE REASON: Database denormalization
+ALTER TABLE discharge_notes add CONSTRAINT dnt_pat_fk foreign key(id_patient) references patient(id_patient) enable;
+--CHANGE END
+
+
+-- José Brito 01/04/2009 ALERT-10317
+ALTER TABLE discharge_notes ADD CONSTRAINT dnt_pendissue_fk FOREIGN KEY (id_pending_issue)
+REFERENCES pending_issue (id_pending_issue) ENABLE;
+
+ALTER TABLE discharge_notes ADD CONSTRAINT dnt_iassign_prof_fk FOREIGN KEY (id_issue_assign_prof)
+REFERENCES professional (id_professional) ENABLE;
+
+ALTER TABLE discharge_notes ADD CONSTRAINT dnt_iassign_group_fk FOREIGN KEY (id_issue_assign_group)
+REFERENCES group_pending_issues (id_grupo) ENABLE;
+

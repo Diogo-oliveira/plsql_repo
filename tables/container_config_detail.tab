@@ -1,0 +1,27 @@
+-- Create table
+create table CONTAINER_CONFIG_DETAIL
+(
+  ID_CONTAINER_CONFIG_DETAIL NUMBER(24) not null,
+  ID_CONTAINER_CONFIG        NUMBER(24),
+  LINES                      NUMBER(4),
+  COLUMNS                    NUMBER(4)
+);
+-- Add comments to the table 
+comment on table CONTAINER_CONFIG_DETAIL
+  is 'Detalhe do mapeamento do carro unidose';
+-- Add comments to the columns 
+comment on column CONTAINER_CONFIG_DETAIL.ID_CONTAINER_CONFIG_DETAIL
+  is 'id da tabela';
+comment on column CONTAINER_CONFIG_DETAIL.ID_CONTAINER_CONFIG
+  is 'id da configuração';
+comment on column CONTAINER_CONFIG_DETAIL.LINES
+  is 'Linha de gavetas ';
+comment on column CONTAINER_CONFIG_DETAIL.COLUMNS
+  is 'coluna de gavetas';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table CONTAINER_CONFIG_DETAIL
+  add constraint PK_CONTAINER_CONFIG_DETAIL primary key (ID_CONTAINER_CONFIG_DETAIL)
+  using index ;
+alter table CONTAINER_CONFIG_DETAIL
+  add constraint FK_CONTAINER_CONFIG foreign key (ID_CONTAINER_CONFIG)
+  references CONTAINER_CONFIG (ID_CONTAINER_CONFIG);

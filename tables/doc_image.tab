@@ -1,0 +1,99 @@
+
+
+  CREATE TABLE DOC_IMAGE
+   (	ID_DOC_IMAGE NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOC_EXTERNAL NUMBER(24,0) NOT NULL ENABLE,
+	RANK NUMBER(6,0),
+	FILE_NAME VARCHAR2(2000),
+	DT_IMG DATE,
+	DOC_IMG BLOB,
+	DOC_IMG_THUMBNAIL BLOB,
+	FLG_IMPORT VARCHAR2(1),
+	DT_IMPORT DATE,
+	SERVER_FILE_NAME VARCHAR2(4000),
+	FLG_STATUS VARCHAR2(1)
+
+   );
+
+
+COMMENT ON COLUMN doc_image.flg_status IS 'Estado: A - activo, I - inactivo' ;
+
+-- Adicionar coluna ID_PROFESSIONAL
+alter table DOC_IMAGE add ID_PROFESSIONAL NUMBER(24);
+
+alter table DOC_IMAGE add FLG_IMG_THUMBNAIL varchar2(1);
+
+comment on column DOC_IMAGE.FLG_IMG_THUMBNAIL is '(Y)es if it has thumbnail (N)o otherwise';
+
+alter table doc_image 
+add (dt_img_tstz timestamp with local time zone,
+dt_import_tstz timestamp with local time zone); 
+
+
+
+
+alter table DOC_IMAGE add DT_CANCEL TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table DOC_IMAGE add ID_PROF_CANCEL number(24);
+-- Add comments to the columns 
+comment on column DOC_IMAGE.DT_CANCEL
+  is 'data cancelamento';
+comment on column DOC_IMAGE.ID_PROF_CANCEL
+  is 'quem cancelou';
+
+alter table DOC_IMAGE add TITLE varchar2(200);
+-- Add comments to the columns 
+comment on column DOC_IMAGE.TITLE
+  is 'descritivo da imagem';
+
+
+
+-- Alert Data Governance - 22-Sep-2008
+alter table DOC_IMAGE
+drop (DT_IMG, DT_IMPORT);
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/02/2010 14:06
+-- CHANGE REASON: [ALERT-75548] 
+ALTER TABLE DOC_IMAGE ADD IMG_SIZE NUMBER(24);
+COMMENT ON COLUMN DOC_IMAGE.IMG_SIZE IS 'Document size, in bytes.';
+-- CHANGE END: orlando.antunes
+
+
+-- CHANGED BY: Paulo Silva
+-- CHANGE DATE: 15/05/2014 14:28
+-- CHANGE REASON: [ALERT-284513]
+ALTER TABLE DOC_IMAGE  ADD (OID VARCHAR2(200 CHAR));
+ALTER TABLE DOC_IMAGE  ADD (MIME_TYPE VARCHAR2(200 CHAR));
+
+comment on column DOC_IMAGE.OID is 'Attachment OID. This OID should be unique in the world!';
+comment on column DOC_IMAGE.MIME_TYPE is 'Attachment mime type';
+-- CHANGE END: Paulo Silva
+
+-- CMF 08-07-2014
+alter table doc_image add id_institution number(24) ;
+comment on column DOC_IMAGE.ID_INSTITUTION is 'institution Owner of image';
+
+-- cmf 15-01-2016
+COMMENT ON TABLE  ALERT.DOC_IMAGE                       IS 'Contains images related do document' ;
+
+COMMENT ON COLUMN ALERT.DOC_IMAGE.FLG_STATUS 			IS 'Status: A - active, I - inactive' ;
+COMMENT ON COLUMN ALERT.DOC_IMAGE.FLG_IMG_THUMBNAIL 	IS '(Y)es if it has thumbnail (N)o otherwise';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.DT_CANCEL  			IS 'Cancellation date';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.ID_PROF_CANCEL  		IS 'Professional id that canceled';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.TITLE  				IS 'title for image';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.IMG_SIZE 			IS 'Document size, in bytes.';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.OID 				IS 'Attachment OID. This OID should be unique in the world!';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.MIME_TYPE 			IS 'Attachment mime type';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.ID_INSTITUTION 		IS 'institution Owner of image';
+
+COMMENT ON COLUMN ALERT.DOC_IMAGE.ID_DOC_IMAGE 			IS 'Primary key';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.ID_DOC_EXTERNAL 		IS 'Document that owns current image';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.RANK            		IS 'value for sorting purpose';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.FILE_NAME       		IS 'Name of file of image';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.DOC_IMG         		IS 'Image';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.DOC_IMG_THUMBNAIL     IS 'Thumbnail';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.FLG_IMPORT            IS 'indicates if img was miport ou not.';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.SERVER_FILE_NAME      IS 'Full location path of file';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.ID_PROFESSIONAL       IS 'Professional id that added the image';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.DT_IMG_TSTZ           IS 'Date of image';
+COMMENT ON COLUMN ALERT.DOC_IMAGE.DT_IMPORT_TSTZ        IS 'Date of import';

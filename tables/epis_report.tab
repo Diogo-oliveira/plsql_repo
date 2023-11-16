@@ -1,0 +1,391 @@
+  CREATE TABLE EPIS_REPORT
+   (	ID_EPIS_REPORT NUMBER(24,0) NOT NULL ENABLE,
+	ID_REPORTS NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1),
+	DT_CREATION DATE NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE epis_report IS 'Relatórios impressos por episódio' ;
+
+comment on column EPIS_REPORT.FLG_STATUS
+  is 'Indica o destino do relatório. Valores possíveis: I- Impresso, E- Enviado por e-mail, F- Enviado por fax, N- Não gerado';
+
+alter table epis_report add (FLG_EDIT VARCHAR2(1));
+
+comment on column EPIS_REPORT.FLG_EDIT is 'Relatório Editado: Y - Sim, N - Não';
+
+alter table epis_report add (rep_binary_file BLOB);
+
+alter table epis_report 
+add (dt_creation_tstz timestamp with local time zone); 
+
+--João Eiras, 26-09-2007
+--Colunas que definem novos contextos.
+alter table epis_report add ID_AUDIT_REQ_PROF_EPIS number;
+alter table epis_report add ID_AUDIT_REQ_PROF number;
+
+--João Eiras, 03-10-2007
+--novo contexto
+alter table epis_report add ID_REPORTS_GEN_PARAM number;
+
+--CHANGED BY: Rui Spratley
+--CHANGE DATE: 2008/05/26
+--CHANGE REASON: 
+ALTER TABLE EPIS_REPORT ADD (FLG_SIGNED VARCHAR2(1) DEFAULT 'N' NOT NULL ,PKCS7_BINARY_FILE BLOB);
+COMMENT ON COLUMN EPIS_REPORT.FLG_SIGNED IS 'Flag that indicates if the document is digitally signed or not';
+COMMENT ON COLUMN EPIS_REPORT.PKCS7_BINARY_FILE IS 'Digitaly signed document';
+-- CHANGE END
+
+--CHANGED BY: Ricardo Pires, 19-06-2008
+--CHANGE REASON: Adicionadas as colunas para obter novos contextos
+alter table EPIS_REPORT add ID_SOCIAL_EPISODE NUMBER(24);
+alter table EPIS_REPORT add ID_PATIENT NUMBER(24);
+alter table EPIS_REPORT add ID_EXTERNAL_REQUEST NUMBER(24);
+alter table EPIS_REPORT add ID_VISIT NUMBER(24);
+
+COMMENT ON COLUMN EPIS_REPORT.ID_SOCIAL_EPISODE IS 'Identification of the social episode.';
+COMMENT ON COLUMN EPIS_REPORT.ID_PATIENT IS 'Identification of the patient.';
+COMMENT ON COLUMN EPIS_REPORT.ID_EXTERNAL_REQUEST IS 'Identification for P1 request.';
+COMMENT ON COLUMN EPIS_REPORT.ID_VISIT IS 'Identification of the Visit.';
+COMMENT ON COLUMN EPIS_REPORT.ID_EPIS_REPORT IS 'Type id.';
+COMMENT ON COLUMN EPIS_REPORT.ID_REPORTS IS 'Identification on the report that was generated.';
+COMMENT ON COLUMN EPIS_REPORT.ID_EPISODE IS 'Identification of the episode.';
+COMMENT ON COLUMN EPIS_REPORT.ID_PROFESSIONAL IS 'Identification of the professional that printed the report.';
+COMMENT ON COLUMN EPIS_REPORT.DT_CREATION IS 'Date of the generation of the report.';
+COMMENT ON COLUMN EPIS_REPORT.ADW_LAST_UPDATE IS 'Date of the actualization of the entry.';
+COMMENT ON COLUMN EPIS_REPORT.REP_BINARY_FILE IS 'Report generated (real report).';
+COMMENT ON COLUMN EPIS_REPORT.DT_CREATION_TSTZ IS 'Date of the generation of the report.';
+COMMENT ON COLUMN EPIS_REPORT.ID_AUDIT_REQ_PROF_EPIS IS 'Identifier that relates the episode with the audited professional.';
+COMMENT ON COLUMN EPIS_REPORT.ID_AUDIT_REQ_PROF IS 'Identifier of the requested audit.';
+COMMENT ON COLUMN EPIS_REPORT.ID_REPORTS_GEN_PARAM IS 'Identifier used to generate the audit report.';
+COMMENT ON COLUMN EPIS_REPORT.DT_CREATION_TSTZ IS 'Date of the generation of the report.';
+--CHANGE END: Ricardo Pires, 19-06-2008
+
+
+
+-- CHANGED BY: Carlos Vieira
+-- CHANGE DATE: 2008-Set-22
+-- CHANGE REASON:date columns, timestamp 
+
+alter table EPIS_REPORT drop column DT_CREATION;
+
+--end
+
+
+-- José Brito 26/11/2008 ALERT-10540
+ALTER TABLE epis_report ADD (id_audit_req NUMBER);
+COMMENT ON COLUMN epis_report.id_audit_req_prof IS 'Identifier that relates the requested audit with the auditor or the audited professional.';
+COMMENT ON COLUMN epis_report.id_audit_req IS 'Identifier of the requested audit.';
+-- END
+
+--CHANGED BY: Gonçalo Almeida
+--CHANGE DATE: 2009/03/10
+--CHANGE REASON: ALERT-29600
+ALTER TABLE EPIS_REPORT ADD (TEMPORARY_SIGNED_BINARY_FILE BLOB);
+COMMENT ON COLUMN EPIS_REPORT.TEMPORARY_SIGNED_BINARY_FILE IS 'Temporary digital signed document. Used for ACROBAT mode only. Should be empty almost everytime.';
+-- CHANGE END
+
+--CHANGED BY: Paulo Fonseca
+--CHANGE DATE: 13-Apr-2010
+--CHANGE REASON: ALERT-83203
+alter table epis_report add flg_confidential varchar2(1) default 'Y' not null;
+alter table epis_report add constraint er_fc_chk check(flg_confidential in ('Y', 'N'));
+comment on column epis_report.flg_confidential is 'Confidential information is present in this report.';
+-- CHANGE END: Paulo Fonseca
+
+
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 04-Fev-2011
+-- CHANGE REASON: ALERT-160056
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table epis_report add json_params varchar2(4000)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_report.json_params IS ''Service call parameters (JSON format).''';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 04-Fev-2011
+-- CHANGE REASON: ALERT-160056
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table epis_report add elapsed_time NUMBER(24)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_report.elapsed_time IS ''Time to generate the report.''';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:18
+-- CHANGE REASON: [ALERT-126939] 
+alter table epis_report add epis_report_thumbnail blob;
+comment on column epis_report.epis_report_thumbnail is 'Thumbnail for Report';
+alter table epis_report add id_doc_external number(24);
+comment on column epis_report.id_doc_external is 'Reference to DOC_EXTERNAL table';
+alter table epis_report add flg_report_origin varchar2(1);
+comment on column epis_report.flg_report_origin is 'Origin of report generation: (D)ischarge; (P)rint tool; ';
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 25/02/2011 17:35
+-- CHANGE REASON: [ALERT-164703] DDL Reports - H & P reformulation in INPATIENT
+DECLARE 
+e_column_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT ADD (DT_TIMEFRAME_BEGIN TIMESTAMP(6) WITH LOCAL TIME ZONE)';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON COLUMN EPIS_REPORT.DT_TIMEFRAME_BEGIN IS 'Date begin of the information printed in one timeframe report';
+--
+DECLARE 
+e_column_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT ADD (DT_TIMEFRAME_END TIMESTAMP(6) WITH LOCAL TIME ZONE)';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON COLUMN EPIS_REPORT.DT_TIMEFRAME_END IS 'Date end of the information printed in one timeframe report';
+--
+DECLARE 
+e_column_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT ADD (FLG_DATE_FILTERS VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL)';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON COLUMN EPIS_REPORT.FLG_DATE_FILTERS IS 'Was this report printed with date filtering? (''Y''- Yes; ''N''- No)';
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 04/04/2011 10:01
+-- CHANGE REASON: [ALERT-163169] Issue Replication: Generate Reports on BackGround (v2.6.1)
+DECLARE
+    e_col_already_used EXCEPTION;
+    e_name_does_not_exist EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_col_already_used, -01430);
+    PRAGMA EXCEPTION_INIT(e_name_does_not_exist, -00942);
+    
+    l_table_name VARCHAR2(30) := 'EPIS_REPORT';
+    
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name ||
+                      ' ADD (FLG_BACKGROUND  VARCHAR2(1))';
+     EXECUTE IMMEDIATE 'comment on column EPIS_REPORT.FLG_BACKGROUND is ''Flag that indicates if the report will be generated in background''';
+EXCEPTION
+    WHEN e_name_does_not_exist THEN
+        dbms_output.put_line('WARNING - Table ' || l_table_name || ' table or view does not exist.');
+    WHEN e_col_already_used THEN
+        dbms_output.put_line('WARNING - column in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END: Filipe Machado
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 08/04/2011 20:25
+-- CHANGE REASON: [ALERT-172090] Define reports as the formal health record for disclosure purposes (ALERT_60289)
+DECLARE
+  e_column_already_exists EXCEPTION;
+  
+  PRAGMA EXCEPTION_INIT(e_column_already_exists, -1430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT ADD FLG_DISCLOSURE VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL';
+EXCEPTION 
+WHEN e_column_already_exists THEN
+ dbms_output.put_line('EPIS_REPORT.FLG_DISCLOSURE already exists.');
+END;
+/
+
+COMMENT ON COLUMN EPIS_REPORT.FLG_DISCLOSURE IS 'Is a report disclosure? Y - Yes; N - Otherwise';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Tiago Lourenço
+-- CHANGE DATE: 31-May-2011
+-- CHANGE REASON: ALERT-182484
+comment on column EPIS_REPORT.flg_status is 'Indica o destino do relatório. Valores possíveis: I- Impresso, E- Enviado por e-mail, F- Enviado por fax, N- Não gerado, S-Saved';
+-- CHANGE END: Tiago Lourenço
+
+
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 24/01/2012 09:06
+-- CHANGE REASON: ALERT-216472
+DECLARE
+    e_column_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_exists, -1430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT ADD FLG_ENCRYPTED VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL';
+EXCEPTION
+    WHEN e_column_already_exists THEN
+        dbms_output.put_line('EPIS_REPORT.FLG_ENCRYPTED already exists.');
+END;
+/
+
+COMMENT ON column epis_report.flg_encrypted IS 'Is the report encrypted (Y - zip) or not (N - pdf)?';
+-- CHANGE END
+
+
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 24/01/2012 09:06
+-- CHANGE REASON: ALERT-216472
+DECLARE
+  e_nonexistent EXCEPTION;
+  e_name_already_exists EXCEPTION;
+
+  PRAGMA EXCEPTION_INIT(e_nonexistent, -2443);  
+  PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);  
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'alter table EPIS_REPORT drop constraint EPIS_REPORT_FLG_ENCRYPTION_CHK';
+    EXCEPTION
+      WHEN e_nonexistent THEN
+        dbms_output.put_line('EPIS_REPORT_FLG_ENCRYPTION_CHK doesn''t exist.');
+  END;
+  BEGIN
+    EXECUTE IMMEDIATE 'alter table EPIS_REPORT add constraint EPIS_REPORT_FLG_ENCRYPTION_CHK check (flg_encrypted IN (''Y'', ''N''))';
+    EXCEPTION
+      WHEN e_name_already_exists THEN
+        dbms_output.put_line('EPIS_REPORT_FLG_ENCRYPTION_CHK already exists.');
+  END;
+END;
+/
+-- CHANGE END
+
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 24/01/2012 09:06
+-- CHANGE REASON: ALERT-216472
+DECLARE
+    e_column_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_exists, -1430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT ADD REP_BINARY_ENCRYPTED_FILE BLOB';
+EXCEPTION
+    WHEN e_column_already_exists THEN
+        dbms_output.put_line('EPIS_REPORT.REP_BINARY_ENCRYPTED_FILE already exists.');
+END;
+/
+
+COMMENT ON column epis_report.rep_binary_encrypted_file IS 'Encrypted file (zip)';
+-- CHANGE END
+
+
+-- CHANGED BY: tiago.pereira
+-- CHANGE DATE: 24/11/2014 
+-- CHANGE REASON: ALERT-302611
+DECLARE
+    e_column_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_exists, -1430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT ADD ID_PROFESSIONAL_REQ NUMBER(24)';
+EXCEPTION
+    WHEN e_column_already_exists THEN
+        dbms_output.put_line('EPIS_REPORT.ID_PROFESSIONAL_REQ already exists.');
+END;
+/
+
+COMMENT ON column epis_report.id_professional_req IS 'Identification of the professional that requested the report (printing list)';
+-- CHANGE END
+
+-- CHANGED BY: tiago.pereira
+-- CHANGE DATE: 20/03/2015
+-- CHANGE REASON: ALERT-307854
+
+ALTER TABLE EPIS_REPORT
+  ADD id_epis_parent number(24);
+
+ALTER TABLE EPIS_REPORT
+ADD FLG_TYPE VARCHAR2(1 CHAR) default 'C' not null;
+
+ comment on column EPIS_REPORT.id_epis_parent
+  is 'This field identifies the original id_epis_report that represents the original report that was generated. ';
+  comment on column EPIS_REPORT.FLG_TYPE
+  is 'This field identifies if the generation of the report is the main regist(the original report generation) or if is history(further generations in episode archive)';
+
+ --CHANGE END
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.epis_report move lob(rep_binary_encrypted_file) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Andre Silva
+-- CHANGE DATE: 28/07/2022
+-- CHANGE REASON: [EMR-54364] 
+alter table epis_report
+add flg_saved_outside VARCHAR2(1) DEFAULT 'N';
+-- CHANGE END: Andre Silva
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 14/10/2022 16:17
+-- CHANGE REASON: [EMR-55269]
+begin
+pk_versioning.run('ALTER TABLE epis_report MODIFY flg_saved_outside VARCHAR2(1 CHAR)');
+end;
+/
+
+begin
+pk_versioning.run('COMMENT ON COLUMN epis_report.flg_saved_outside IS 'Flag that indicates if the report is saved locally (Y/N)');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 13/12/2022 14:41
+-- CHANGE REASON: [EMR-56303] - Print > Print tool > Episode archive > Print this note > All notes printed has name Physician progress note
+begin
+pk_versioning.run('ALTER TABLE EPIS_REPORT
+ADD CODE_DYNAMIC_TITLE varchar2(200 char)');
+end;
+/
+
+begin
+pk_versioning.run('comment on column EPIS_REPORT.CODE_DYNAMIC_TITLE
+is ''Dynamic code for the translation that identifies the name that will appear on the Report.''');
+end;
+/
+-- CHANGE END: Diogo Oliveira

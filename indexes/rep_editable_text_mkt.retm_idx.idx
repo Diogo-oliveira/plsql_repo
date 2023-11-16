@@ -1,0 +1,20 @@
+-- CHANGED BY: filipe.f.pereira
+-- CHANGE DATE: 18/07/2013
+-- CHANGE REASON: ALERT-217073
+
+CREATE UNIQUE INDEX RETM_REP_MAK_LAN_IDX ON REP_EDITABLE_TEXT_MKT
+ (ID_REPORTS
+ ,ID_MARKET
+ ,ID_LANGUAGE)
+/
+
+
+begin
+execute immediate ('ALTER index RETM_REP_MAK_LAN_IDX REBUILD TABLESPACE INDEX_M');
+exception
+when others then
+null;
+end;
+/
+
+-- CHANGE END: filipe.f.pereira

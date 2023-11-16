@@ -1,0 +1,23 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 16:35
+-- CHANGE REASON: [ALERT-229222] VERSIONING TRANSACTIONAL MODEL - SCHEMA ALERT - DDL
+DECLARE
+    e_pk EXCEPTION;
+    e_uk1 EXCEPTION;
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);
+    PRAGMA EXCEPTION_INIT(e_pk, -2260);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAG_STAG ADD CONSTRAINT EDSTGG_PK PRIMARY KEY (ID_EPIS_DIAGNOSIS, NUM_STAGING_BASIS) USING INDEX TABLESPACE ALERT_IDX';
+    EXCEPTION
+        WHEN e_pk THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

@@ -1,0 +1,56 @@
+create table REP_EDIT_REPORT
+(
+  ID_REP_EDIT_REPORT NUMBER(24) not null,
+  ID_REPORTS         NUMBER(24),
+  ID_PROFESSIONAL    NUMBER(24) not null,
+  DT_REPORT          DATE not null,
+  FLG_PRINT          VARCHAR2(1) not null,
+  FLG_STATUS         VARCHAR2(1) not null,
+  REP_TEXT           CLOB,
+  ID_EPISODE         NUMBER(24)
+);
+
+comment on table REP_EDIT_REPORT
+  is 'Conteúdo dos relatórios editáveis impressos';
+
+comment on column REP_EDIT_REPORT.ID_REP_EDIT_REPORT
+  is 'Chave única';
+comment on column REP_EDIT_REPORT.ID_REPORTS
+  is 'ID do relatório';
+comment on column REP_EDIT_REPORT.ID_PROFESSIONAL
+  is 'Id do profissional que editou o report';
+comment on column REP_EDIT_REPORT.DT_REPORT
+  is 'Data da alteração do report';
+comment on column REP_EDIT_REPORT.FLG_PRINT
+  is 'Indica se o relatório foi impresso. (Y/N)';
+comment on column REP_EDIT_REPORT.FLG_STATUS
+  is 'Estado do report. A- Activo, I- Inactivo, C- Cancelado';
+comment on column REP_EDIT_REPORT.REP_TEXT
+  is 'Texto que constitui o report';
+alter table rep_edit_report 
+add (dt_report_tstz timestamp with local time zone); 
+
+
+-- Alert Data Governance - 22-Sep-2008
+alter table REP_EDIT_REPORT 
+drop column dt_report;
+
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON TABLE REP_EDIT_REPORT IS 'Content of editable reports';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON COLUMN REP_EDIT_REPORT.ID_REP_EDIT_REPORT IS 'Primary Key';
+COMMENT ON COLUMN REP_EDIT_REPORT.ID_REPORTS IS 'Report Identifier';
+COMMENT ON COLUMN REP_EDIT_REPORT.ID_PROFESSIONAL IS 'Professional Identifier';
+COMMENT ON COLUMN REP_EDIT_REPORT.FLG_PRINT IS 'Flag that tells if the report was printed. Possible Values: (Y- Yes, N- No)';
+COMMENT ON COLUMN REP_EDIT_REPORT.FLG_STATUS IS 'Report Status. Possible Values: I- Inactive, A- Active';
+COMMENT ON COLUMN REP_EDIT_REPORT.REP_TEXT IS 'Text that build up the report';
+COMMENT ON COLUMN REP_EDIT_REPORT.ID_EPISODE IS 'Episode Identifier';
+COMMENT ON COLUMN REP_EDIT_REPORT.DT_REPORT_TSTZ IS '';
+-- CHANGE END:  ruben.araujo

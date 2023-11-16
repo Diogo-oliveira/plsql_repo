@@ -1,0 +1,5 @@
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 31/03/2017 10:22
+-- CHANGE REASON: [ALERT-329965] Added grant to package pk_api_analysis
+GRANT EXECUTE ON ALERT.PK_RESET_SCHEDULER TO ALERT_RESET;
+-- CHANGE END: Pedro Henriques

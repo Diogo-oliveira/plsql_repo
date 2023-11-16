@@ -1,0 +1,37 @@
+
+
+  ALTER TABLE FLOORS ADD CONSTRAINT FLO_PK PRIMARY KEY (ID_FLOORS) ENABLE;
+
+  ALTER TABLE FLOORS MODIFY (ID_FLOORS NOT NULL ENABLE);
+
+  ALTER TABLE FLOORS MODIFY (CODE_FLOORS NOT NULL ENABLE);
+
+  ALTER TABLE FLOORS MODIFY (RANK NOT NULL ENABLE);
+
+  ALTER TABLE FLOORS MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE FLOORS MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+
+
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:33
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table FLOORS add constraint FLOORS_FLG_AVAILABLE_CHK check ( FLG_AVAILABLE in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

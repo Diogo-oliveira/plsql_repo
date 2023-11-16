@@ -1,0 +1,67 @@
+
+
+  CREATE TABLE SYS_DOMAIN
+   (	CODE_DOMAIN VARCHAR2(200) NOT NULL ENABLE,
+	ID_LANGUAGE NUMBER(6,0) NOT NULL ENABLE,
+	DESC_VAL VARCHAR2(200) NOT NULL ENABLE,
+	VAL VARCHAR2(30) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	IMG_NAME VARCHAR2(200),
+	ADW_LAST_UPDATE DATE
+   );
+
+
+COMMENT ON TABLE sys_domain IS 'Descritivo correspondente aos valores das flags guardadas nas tabelas.As traduções encontram-se na própria tabela; a PK é constituída por duas colunas: ID_MESSAGE e ID_LANG.' ;
+
+COMMENT ON COLUMN sys_domain.code_domain IS '<tabela>.<coluna>' ;
+COMMENT ON COLUMN sys_domain.desc_val IS 'Descritivo do valor' ;
+COMMENT ON COLUMN sys_domain.val IS 'Valor do domínio' ;
+COMMENT ON COLUMN sys_domain.rank IS 'Ordenação dos valores' ;
+COMMENT ON COLUMN sys_domain.img_name IS 'Nome da imagem correspondente' ;
+
+ALTER TABLE SYS_DOMAIN 
+ ADD (FLG_AVAILABLE  VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ );
+
+COMMENT ON COLUMN SYS_DOMAIN.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD';
+
+ALTER TABLE SYS_DOMAIN MODIFY FLG_AVAILABLE default null;
+
+
+insert into sys_domain (CODE_DOMAIN, ID_LANGUAGE, DESC_VAL, VAL, RANK, IMG_NAME, ADW_LAST_UPDATE, FLG_AVAILABLE)
+values ('COMPLAINT.FLG_STATUS', 1, 'Desactualizado', 'O', 0, '', to_date('30-05-2007 17:15:37', 'dd-mm-yyyy hh24:mi:ss'), 'Y');
+
+insert into sys_domain (CODE_DOMAIN, ID_LANGUAGE, DESC_VAL, VAL, RANK, IMG_NAME, ADW_LAST_UPDATE, FLG_AVAILABLE)
+values ('COMPLAINT.FLG_STATUS', 2, 'OUTDATED', 'O', 0, '', to_date('30-05-2007 17:15:59', 'dd-mm-yyyy hh24:mi:ss'), 'Y');
+
+
+insert into sys_domain (CODE_DOMAIN, ID_LANGUAGE, DESC_VAL, VAL, RANK, IMG_NAME, ADW_LAST_UPDATE, FLG_AVAILABLE)
+values ('COMPLAINT.FLG_STATUS', 1, 'Desactualizado', 'O', 0, '', to_date('30-05-2007 17:15:37', 'dd-mm-yyyy hh24:mi:ss'), 'Y');
+
+insert into sys_domain (CODE_DOMAIN, ID_LANGUAGE, DESC_VAL, VAL, RANK, IMG_NAME, ADW_LAST_UPDATE, FLG_AVAILABLE)
+values ('COMPLAINT.FLG_STATUS', 2, 'OUTDATED', 'O', 0, '', to_date('30-05-2007 17:15:59', 'dd-mm-yyyy hh24:mi:ss'), 'Y');
+
+
+-- CHANGED BY: Fábio Oliveira
+-- CHANGE DATE: 07/09/2009 18:04
+-- CHANGE REASON: [ALERT-42194] Datamodel changes for UTF-8 compliance
+alter table 
+   SYS_DOMAIN
+modify 
+( 
+   desc_val    varchar2(800)
+);
+-- CHANGE END: Fábio Oliveira
+
+alter table sys_domain                 add domain_owner varchar2(0030 char) default 'ALERT' not null;
+
+COMMENT ON COLUMN SYS_DOMAIN.domain_owner IS 'Owner of domain: ALERT, ALERT_PHARMACY_FUNC';
+
+COMMENT ON TABLE alert.sys_domain IS 'description of matching value of flags saved in operational tables.';
+
+COMMENT ON COLUMN alert.sys_domain.code_domain 	IS '<table>.<column>' ;
+COMMENT ON COLUMN alert.sys_domain.desc_val 		IS 'Description of value' ;
+COMMENT ON COLUMN alert.sys_domain.val IS 'Value of domain' ;
+COMMENT ON COLUMN alert.sys_domain.rank IS 'value for ordering purposes' ;
+COMMENT ON COLUMN alert.sys_domain.img_name IS 'Name of matching icon' ;
+COMMENT ON COLUMN alert.sys_domain.FLG_AVAILABLE IS 'Availability of record';

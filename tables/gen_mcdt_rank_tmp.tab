@@ -1,0 +1,156 @@
+CREATE GLOBAL TEMPORARY TABLE GEN_MCDT_RANK_TMP
+( 
+       ID_EXECUTION            NUMBER NOT NULL,
+       ID                      NUMBER, 
+       DESCRIPTION             VARCHAR2(4000),
+       TITLE                   VARCHAR2(4000),
+			 DT_REQ_TSTZ             TIMESTAMP WITH LOCAL TIME ZONE,
+			 FLG_STATUS              VARCHAR2(4000),
+       FLG_TYPE                VARCHAR2(4000),
+       DESC_STATUS             VARCHAR2(4000),
+			 RANK                    NUMBER,
+			 RANK_ORDER              NUMBER
+)
+ON COMMIT DELETE ROWS;
+ 
+COMMENT ON TABLE GEN_MCDT_RANK_TMP IS 'Temporary table to manage aggregate information of MCTD and its order' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.ID_EXECUTION IS 'Numeric ID generated and used only for the execution in progress' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.ID IS 'Unique identifier of the MCDT' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.DESCRIPTION IS 'Description of the MCDT' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.TITLE IS 'Description of flg_type if applicable' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.DT_REQ_TSTZ IS 'Request date of the MCDT' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.FLG_STATUS IS 'Current status' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.FLG_TYPE IS 'Flag type of the MCDT if applicable' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.DESC_STATUS IS 'Status string to be parsed by the Flash layer' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.RANK IS 'Classification of the record' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.RANK_ORDER IS 'Number that represents the time difference for the current time. Allows ordering of records with the same rank.' ;
+
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2009-FEV-06
+-- CHANGE REASON: Alteração da tabela
+
+DROP TABLE GEN_MCDT_RANK_TMP;
+
+CREATE GLOBAL TEMPORARY TABLE GEN_MCDT_RANK_TMP
+( 
+       ID_EXECUTION            NUMBER NOT NULL,
+       ID                      NUMBER, 
+       CODE_DESCRIPTION             VARCHAR2(4000),
+       DESCRIPTION             VARCHAR2(4000),
+       TITLE                   VARCHAR2(4000),
+			 DT_REQ_TSTZ             TIMESTAMP WITH LOCAL TIME ZONE,
+			 FLG_STATUS              VARCHAR2(4000),
+       FLG_TYPE                VARCHAR2(4000),
+       DESC_STATUS             VARCHAR2(4000),
+			 RANK                    NUMBER,
+			 RANK_ORDER              NUMBER
+)
+ON COMMIT DELETE ROWS;
+ 
+COMMENT ON TABLE GEN_MCDT_RANK_TMP IS 'Temporary table to manage aggregate information of MCTD and its order' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.ID_EXECUTION IS 'Numeric ID generated and used only for the execution in progress' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.ID IS 'Unique identifier of the MCDT' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.CODE_DESCRIPTION IS 'Code of the MCDT description' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.DESCRIPTION IS 'Description of the MCDT' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.TITLE IS 'Description of flg_type if applicable' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.DT_REQ_TSTZ IS 'Request date of the MCDT' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.FLG_STATUS IS 'Current status' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.FLG_TYPE IS 'Flag type of the MCDT if applicable' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.DESC_STATUS IS 'Status string to be parsed by the Flash layer' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.RANK IS 'Classification of the record' ;
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.RANK_ORDER IS 'Number that represents the time difference for the current time. Allows ordering of records with the same rank.' ;
+
+
+
+-- CHANGE END
+
+
+
+
+-- CHANGED BY: Teresa Coutinho
+-- CHANGE DATE: 2010-Jul-01
+-- CHANGE REASON: Adicionar novas colunas
+
+-- Add/modify columns 
+alter table GEN_MCDT_RANK_TMP add tooltip_title_notes_tech VARCHAR2(4000);
+alter table GEN_MCDT_RANK_TMP add tooltip_text_notes_tech VARCHAR2(4000);
+alter table GEN_MCDT_RANK_TMP add tooltip_title_notes_pat VARCHAR2(4000);
+alter table GEN_MCDT_RANK_TMP add tooltip_text_notes_pat VARCHAR2(4000);
+alter table GEN_MCDT_RANK_TMP add tooltip_title_lab_test VARCHAR2(4000);
+alter table GEN_MCDT_RANK_TMP add tooltip_text_lab_test VARCHAR2(4000);
+alter table GEN_MCDT_RANK_TMP add msg_notes VARCHAR2(4000);
+-- Add comments to the columns 
+comment on column GEN_MCDT_RANK_TMP.tooltip_title_notes_tech
+  is 'Tooltip Title Technician Notes';
+comment on column GEN_MCDT_RANK_TMP.tooltip_text_notes_tech
+  is 'Tooltip Technician Notes';
+comment on column GEN_MCDT_RANK_TMP.tooltip_title_notes_pat
+  is 'Tooltip Title Patient Notes';
+comment on column GEN_MCDT_RANK_TMP.tooltip_text_notes_pat
+  is 'Tooltip Patient Notes';
+comment on column GEN_MCDT_RANK_TMP.tooltip_title_lab_test
+  is 'Tooltip Title Lab Test';
+comment on column GEN_MCDT_RANK_TMP.tooltip_text_lab_test
+  is 'Tooltip Lab Test';
+comment on column GEN_MCDT_RANK_TMP.msg_notes
+  is 'Tooltip Notes';
+-- CHANGE END
+
+
+
+
+-- CHANGED BY: Joana Madureira Barroso
+-- CHANGE DATE: 20/03/2014 14:34
+-- CHANGE REASON: [ALERT-274673 ] 
+-- Add/modify columns 
+alter table GEN_MCDT_RANK_TMP add  instr_bg_color VARCHAR2(100 char);
+alter table GEN_MCDT_RANK_TMP add  instr_bg_alpha VARCHAR2(100 char);
+
+-- Add comments to the columns 
+comment on column GEN_MCDT_RANK_TMP.instr_bg_color
+  is 'Backgroud color for viewer row';
+comment on column GEN_MCDT_RANK_TMP.instr_bg_alpha
+  is 'Backgroud alpha for viewer row';
+-- CHANGE END: Joana Madureira Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/12/2014 08:14
+-- CHANGE REASON: [ALERT-304679] 
+BEGIN
+    pk_versioning.run(i_sql => q'[alter table GEN_MCDT_RANK_TMP add icon_skinning VARCHAR2(100 CHAR)]');
+END;
+
+
+begin	
+
+-- CHANGED BY: Miguel Leite
+-- CHANGE DATE: 16/06/2016 08:14
+-- CHANGE REASON: [ALERT-321577] 
+
+    pk_versioning.run(i_sql => q'[ALTER TABLE gen_mcdt_rank_tmp add(dt_req VARCHAR2(50 CHAR))]');
+    pk_versioning.run(i_sql => q'[COMMENT ON column gen_mcdt_rank_tmp.dt_req IS 'DT_REQ_TSTZ formatted to varchar']');
+
+
+END;
+/
+comment on column GEN_MCDT_RANK_TMP.icon_skinning is 'Icon to be shown for viewer row (edit icon or other)';
+-- CHANGE END: Miguel Leite
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 08/01/2020 12:13
+-- CHANGE REASON: [ARCH-8025]
+begin
+pk_versioning.run(i_sql => q'[ALTER TABLE gen_mcdt_rank_tmp add(TASK_TITLE VARCHAR2(200 CHAR))]');
+pk_versioning.run(i_sql => q'[COMMENT ON column gen_mcdt_rank_tmp.TASK_TITLE IS 'Title of task type']');
+end;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/02/2020 16:08
+-- CHANGE REASON: [EMR-26488]
+ALTER TABLE GEN_MCDT_RANK_TMP ADD TASK_TITLE VARCHAR2(200 CHAR);
+COMMENT ON COLUMN GEN_MCDT_RANK_TMP.TASK_TITLE IS 'Title of task type';
+-- CHANGE END: Pedro Henriques

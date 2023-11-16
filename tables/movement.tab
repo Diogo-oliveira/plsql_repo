@@ -1,0 +1,93 @@
+  CREATE TABLE MOVEMENT
+   (	ID_MOVEMENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_REQUEST NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_MOVE NUMBER(24,0),
+	ID_PROF_RECEIVE NUMBER(24,0),
+	DT_BEGIN DATE,
+	DT_END DATE,
+	DT_REQ DATE NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+
+	ID_NECESSITY NUMBER(24,0),
+	ID_ROOM_FROM NUMBER(24,0) NOT NULL ENABLE,
+	ID_ROOM_TO NUMBER(24,0) NOT NULL ENABLE,
+	NOTES_CANCEL VARCHAR2(4000),
+	ID_EPISODE_WRITE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE movement IS 'Movimentos internos do doente' ;
+
+COMMENT ON COLUMN movement.id_episode IS 'Chave primaria' ;
+COMMENT ON COLUMN movement.dt_begin IS 'Data / hora inicial do movimento' ;
+COMMENT ON COLUMN movement.dt_end IS 'Data / hora final do movimento' ;
+COMMENT ON COLUMN movement.dt_req IS 'Data / hora requisição' ;
+COMMENT ON COLUMN movement.flg_status IS 'Estado: R - requisitado, P - pendente, T - em transporte, S - interrompido, F - terminado, C - cancelado' ;
+COMMENT ON COLUMN movement.dt_cancel IS 'Data / hora de cancelamento' ;
+COMMENT ON COLUMN movement.id_episode_write IS 'ID do episódio em que o movimento foi completado' ;
+
+alter table movement 
+add (dt_req_tstz timestamp with local time zone,
+     dt_begin_tstz timestamp with local time zone,
+     dt_end_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-JUL-31
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 16297
+
+COMMENT ON COLUMN  MOVEMENT.ID_MOVEMENT IS 'Movement ID'; 
+COMMENT ON COLUMN  MOVEMENT.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN  MOVEMENT.ID_PROF_REQUEST IS 'Professional request ID'; 
+COMMENT ON COLUMN  MOVEMENT.ID_PROF_MOVE IS 'Professional move ID'; 
+COMMENT ON COLUMN  MOVEMENT.ID_PROF_RECEIVE IS 'Professional receive ID'; 
+COMMENT ON COLUMN  MOVEMENT.ID_PROF_CANCEL IS 'Professional cancel ID'; 
+COMMENT ON COLUMN  MOVEMENT.ID_NECESSITY IS 'Necessity ID'; 
+COMMENT ON COLUMN  MOVEMENT.ID_ROOM_FROM IS 'Room from ID'; 
+COMMENT ON COLUMN  MOVEMENT.ID_ROOM_TO IS 'Room to ID'; 
+COMMENT ON COLUMN  MOVEMENT.NOTES_CANCEL IS 'Cancel notes'; 
+COMMENT ON COLUMN  MOVEMENT.DT_REQ_TSTZ IS 'Request date'; 
+COMMENT ON COLUMN  MOVEMENT.DT_BEGIN_TSTZ IS 'Begin date'; 
+COMMENT ON COLUMN  MOVEMENT.DT_END_TSTZ IS 'End date'; 
+COMMENT ON COLUMN  MOVEMENT.DT_CANCEL_TSTZ IS 'Cancel date'; 
+
+-- CHANGED END: Nuno Ferreira
+
+
+-- Alert Data Governance - 22-Sep-2008
+alter table MOVEMENT
+drop (dt_begin, dt_end, dt_req, dt_cancel);
+
+-- CHANGED BY: Hugo Vieira
+-- CHANGE DATE: 16/06/2010
+-- CHANGE REASON: 
+ALTER TABLE MOVEMENT ADD (FLG_STATUS_PREV VARCHAR2(1 CHAR));
+-- CHANGE END: Hugo Vieira
+
+-- CHANGED BY: Hugo Vieira
+-- CHANGE DATE: 29/06/2010
+-- CHANGE REASON: [ALERT-104064]
+COMMENT ON COLUMN  MOVEMENT.FLG_STATUS_PREV IS 'Previous Status'; 
+-- CHANGE END: Hugo Vieira
+
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 06/10/2010 16:00
+-- CHANGE REASON: [ALERT-129840] New development on movement functionality; distinguish movements from detours (v2.6.0.4)
+ALTER TABLE MOVEMENT ADD (FLG_MOV_TYPE VARCHAR2(1 CHAR));
+COMMENT ON COLUMN  MOVEMENT.FLG_MOV_TYPE IS 'Movement type: D - detour, M - movement';
+-- CHANGE END: Rui Duarte
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+comment on table MOVEMENT
+  is 'Patient movement';
+comment on column MOVEMENT.flg_status
+  is 'Estado: R - Ordered, P -Pending, T - In transit, S -Discontinued, F -Complete, C - Cancelled';
+  
+-- CHANGE END: Elisabete Bugalho

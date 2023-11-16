@@ -1,0 +1,14 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/06/2011 17:20
+-- CHANGE REASON: [ALERT-183749] created indexes
+DECLARE
+    name_already_used EXCEPTION;
+    PRAGMA EXCEPTION_INIT(name_already_used, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'create index pop_evt_fk_idx on periodic_observation_param (id_event)';
+EXCEPTION
+    WHEN name_already_used THEN
+        dbms_output.put_line('index already exists...');
+END;
+/
+-- CHANGE END: Pedro Carneiro

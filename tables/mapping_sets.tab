@@ -1,0 +1,69 @@
+-- Created by    : Carlos Mota Silva
+-- Creation Date : 2009/07/16
+CREATE TABLE MAPPING_SETS
+ (ID_MAPPING_SETS VARCHAR2(30) NOT NULL
+ ,MAP_SET_NAME VARCHAR2(200) NOT NULL
+ ,MAP_SET_TYPE VARCHAR2(30) NOT NULL
+ ,MAP_SET_SCHEME_ID VARCHAR2(200) NOT NULL
+ ,MAP_SET_SCHEME_NAME VARCHAR2(200)
+ ,MAP_SET_SCHEME_VERSION VARCHAR2(30)
+ ,MAP_SET_DEF_LANGUAGE VARCHAR2(30)
+ ,MAP_SET_SEPARATOR VARCHAR2(30)
+ ,MAP_SET_STATUS VARCHAR2(30) 
+ ,CREATE_USER VARCHAR2(30) NOT NULL
+ ,CREATE_TIME_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL
+ ,UPDATE_USER VARCHAR2(30)
+ ,UPDATE_TIME_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ ,CREATE_INSTITUTION NUMBER(24)
+ )
+;
+
+COMMENT ON TABLE MAPPING_SETS IS 'This table contains the Sets of Standards with which the Contents can map'
+;
+
+COMMENT ON COLUMN MAPPING_SETS.ID_MAPPING_SETS IS 'The unique identifier of the Mapping Set, generated automatically'
+;
+
+COMMENT ON COLUMN MAPPING_SETS.MAP_SET_NAME IS 'The internal name by which this Mapping Set will be identified'
+;
+
+COMMENT ON COLUMN MAPPING_SETS.MAP_SET_TYPE IS 'The type of the mappings allowed for this Mapping Set: one to one; one to many and choices of maps'
+;
+
+COMMENT ON COLUMN MAPPING_SETS.MAP_SET_SCHEME_ID IS 'The standard (external) identifier for this Mapping Set; this will relate with the same column in the Mapping Targets table'
+;
+
+COMMENT ON COLUMN MAPPING_SETS.MAP_SET_SCHEME_NAME IS 'The full name of this Mapping Set'
+;
+
+COMMENT ON COLUMN MAPPING_SETS.MAP_SET_SCHEME_VERSION IS 'The (external) number of the version of this Mapping Set'
+;
+
+COMMENT ON COLUMN MAPPING_SETS.MAP_SET_DEF_LANGUAGE IS 'The Default Language to use when extracting the Mapping Set Descriptions for the Content; useful if the extraction does not define a language or if it explicitly demands for the language used by default'
+;
+
+COMMENT ON COLUMN MAPPING_SETS.MAP_SET_SEPARATOR IS 'The character used to separate distinct Codes, when a Target Concept is composed of several Codes in the Target Set; it must be a character never used within the codification of the Target Set'
+;
+
+COMMENT ON COLUMN MAPPING_SETS.CREATE_USER IS 'User who created the record'
+;
+
+COMMENT ON COLUMN MAPPING_SETS.CREATE_TIME_TSTZ IS 'Date of creation of the record'
+;
+
+COMMENT ON COLUMN MAPPING_SETS.UPDATE_USER IS 'User who changed the record last'
+;
+
+COMMENT ON COLUMN MAPPING_SETS.UPDATE_TIME_TSTZ IS 'Date of last change of the record'
+;
+
+COMMENT ON COLUMN MAPPING_SETS.MAP_SET_STATUS IS 'The Status of the Mapping Set'
+;
+
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 15/10/2009 17:18
+-- CHANGE REASON: [ALERT-49804] 
+alter table MAPPING_SETS modify MAP_SET_SCHEME_VERSION VARCHAR2(200);
+-- CHANGE END: Tiago Silva

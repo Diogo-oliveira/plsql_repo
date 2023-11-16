@@ -1,0 +1,86 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 06/07/2010 21:24
+-- CHANGE REASON: [ALERT-109293] DB Versioning - TS_PACKAGES
+create table EPIS_HIDRICS_LINE_HIST
+(
+  ID_EPIS_HIDRICS_LINE  NUMBER(24) NOT NULL,
+  DT_EPIS_HID_LINE_HIST TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
+  ID_EPIS_HIDRICS       NUMBER(24) NOT NULL,
+  ID_HIDRICS            NUMBER(24) NOT NULL,
+  ID_WAY        NUMBER(24) NOT NULL,
+  ID_HIDRICS_LOCATION   NUMBER(24),
+  FLG_STATUS            VARCHAR2(1 CHAR) NOT NULL,
+  DT_CREATION           TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
+ID_PROF_CANCEL        NUMBER(24),
+  ID_CANCEL_REASON      NUMBER(24),
+  NOTES_CANCEL          VARCHAR2(1000 CHAR),
+  DT_CANCEL             TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_USER           VARCHAR2(24 CHAR),
+  CREATE_TIME           TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24 CHAR),
+  UPDATE_TIME           TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24),
+  ID_PROF_LAST_CHANGE   NUMBER(24),
+  DT_EPIS_HIDRICS_LINE  TIMESTAMP(6) WITH LOCAL TIME ZONE
+);
+
+
+COMMENT ON TABLE EPIS_HIDRICS_LINE_HIST IS 'Representation of a line in the hidrics flowsheet (history records).';
+
+COMMENT ON COLUMN EPIS_HIDRICS_LINE_HIST.ID_EPIS_HIDRICS_LINE IS 'Primary key';
+COMMENT ON COLUMN EPIS_HIDRICS_LINE_HIST.DT_EPIS_HID_LINE_HIST IS 'History creation date';
+COMMENT ON COLUMN EPIS_HIDRICS_LINE_HIST.ID_EPIS_HIDRICS IS 'Episode hidrics ID';
+COMMENT ON COLUMN EPIS_HIDRICS_LINE_HIST.ID_HIDRICS IS 'Hidrics ID (negative values if registered in free text or not applicable)';
+COMMENT ON COLUMN EPIS_HIDRICS_LINE_HIST.ID_WAY IS 'Hidrics way ID (negative values if registered in free text or not applicable)';
+COMMENT ON COLUMN EPIS_HIDRICS_LINE_HIST.ID_HIDRICS_LOCATION IS 'Hidrics location ID. Associates a body part with a body side (negative values if registered in free text or not applicable)';
+COMMENT ON COLUMN EPIS_HIDRICS_LINE_HIST.FLG_STATUS IS 'Line status: A - active, C - cancelled';
+COMMENT ON COLUMN EPIS_HIDRICS_LINE_HIST.DT_CREATION IS 'Creation date';
+COMMENT ON COLUMN EPIS_HIDRICS_LINE_HIST.ID_PROF_CANCEL is 'Professional who cancelled the record';
+COMMENT ON COLUMN EPIS_HIDRICS_LINE_HIST.ID_CANCEL_REASON is 'Cancel reason id';
+COMMENT ON COLUMN EPIS_HIDRICS_LINE_HIST.NOTES_CANCEL is 'Cancel notes';
+COMMENT ON COLUMN EPIS_HIDRICS_LINE_HIST.DT_CANCEL is 'Cancel date';
+comment on column EPIS_HIDRICS_LINE_HIST.ID_PROF_LAST_CHANGE is 'Professional who entered or last edited the record';
+comment on column EPIS_HIDRICS_LINE_HIST.DT_EPIS_HIDRICS_LINE is 'Insertion date or date of last update';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:43
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+comment on column EPIS_HIDRICS_LINE_HIST.CREATE_USER is 'Creation User';
+comment on column EPIS_HIDRICS_LINE_HIST.CREATE_TIME is 'Creation Time';
+comment on column EPIS_HIDRICS_LINE_HIST.CREATE_INSTITUTION is 'Creation Institution';
+comment on column EPIS_HIDRICS_LINE_HIST.UPDATE_USER is 'Update User';
+comment on column EPIS_HIDRICS_LINE_HIST.UPDATE_TIME is 'Update Time';
+comment on column EPIS_HIDRICS_LINE_HIST.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 11:24
+-- CHANGE REASON: [ALERT-153427] Intake and Output-Have the possibility to register bowel movements.
+ALTER TABLE EPIS_HIDRICS_LINE_HIST ADD FLG_ACTION VARCHAR2(1 CHAR);
+COMMENT ON COLUMN EPIS_HIDRICS_LINE_HIST.FLG_ACTION IS 'A - Insertion; E - Edition; C - Cancellaction; I - Interruption';
+
+update EPIS_HIDRICS_LINE_HIST e
+set e.flg_action = e.flg_status;
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table EPIS_HIDRICS_LINE_HIST modify (FLG_ACTION not null)'; 
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Coluna já existe');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 16/06/2011 11:17
+-- CHANGE REASON: [ALERT-185056 ] Intake and Output: It is not possible to use a created free text in more than one line
+alter table epis_hidrics_line_hist add ID_EPIS_HID_FTXT_WAY  NUMBER(24);
+alter table epis_hidrics_line_hist add ID_EPIS_HID_FTXT_FLUID  NUMBER(24);
+alter table epis_hidrics_line_hist add ID_EPIS_HID_FTXT_LOC  NUMBER(24);
+
+comment on column epis_hidrics_line_hist.ID_EPIS_HID_FTXT_WAY is 'Free Text Id of the way (if the way is inserted in free text)';
+comment on column epis_hidrics_line_hist.ID_EPIS_HID_FTXT_FLUID is 'Free Text Id of the fluid (if the fluid is inserted in free text)';
+comment on column epis_hidrics_line_hist.ID_EPIS_HID_FTXT_LOC is 'Free Text Id of the location/body part (if the location/body part is inserted in free text)';
+-- CHANGE END: Sofia Mendes

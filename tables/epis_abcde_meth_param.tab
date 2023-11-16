@@ -1,0 +1,47 @@
+CREATE TABLE epis_abcde_meth_param (
+       id_epis_abcde_meth_param NUMBER(24) NOT NULL,
+	     id_epis_abcde_meth NUMBER(24) NOT NULL,
+			 id_param NUMBER(24) NOT NULL,
+			 flg_type VARCHAR2(2) NOT NULL,
+			 param_text VARCHAR2(4000),
+       flg_status VARCHAR2(1) NOT NULL,
+       id_prof_create NUMBER(24) NOT NULL,
+			 dt_create TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+			 create_user VARCHAR2(24),
+			 create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 create_institution NUMBER(24),
+			 update_user VARCHAR2(24),
+			 update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 update_institution NUMBER(24)
+) TABLESPACE TABLE_M;
+
+COMMENT ON TABLE epis_abcde_meth_param IS 'ABCDE assessments registered data for an episode';
+COMMENT ON COLUMN epis_abcde_meth_param.id_epis_abcde_meth_param IS 'Registered value identifier';
+COMMENT ON COLUMN epis_abcde_meth_param.id_epis_abcde_meth IS 'Assessment identifier';
+COMMENT ON COLUMN epis_abcde_meth_param.id_param IS 'Identifier of the registered value. Depends on FLG_TYPE. Value “-1” if free text.';
+COMMENT ON COLUMN epis_abcde_meth_param.flg_type IS 'Type of parameter: (A) Allergy (P) Prescription (H) Past Medication (C) Chief Complaint (D) Diet (M) Meal (E) Event (S) Symptoms (I) Imunisation (PI) Parents impression (DI) Diapers';
+COMMENT ON COLUMN epis_abcde_meth_param.param_text IS 'Free text, when supported';
+COMMENT ON COLUMN epis_abcde_meth_param.flg_status IS 'Record status: (A) Active (O) Outdated';
+COMMENT ON COLUMN epis_abcde_meth_param.id_prof_create IS 'Creation user (showed in ALERT®)';
+COMMENT ON COLUMN epis_abcde_meth_param.dt_create IS 'Creation date (showed in ALERT®)';
+COMMENT ON COLUMN epis_abcde_meth_param.create_user IS 'Creation user';
+COMMENT ON COLUMN epis_abcde_meth_param.create_time IS 'Creation date / time';
+COMMENT ON COLUMN epis_abcde_meth_param.create_institution IS 'Creation institution';
+COMMENT ON COLUMN epis_abcde_meth_param.update_user IS 'Update user';
+COMMENT ON COLUMN epis_abcde_meth_param.update_time IS 'Update date / time';
+COMMENT ON COLUMN epis_abcde_meth_param.update_institution IS 'Update institution';
+
+
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 25/01/2011 17:28
+-- CHANGE REASON: [ALERT-157666] Trauma/Medication changes
+COMMENT ON COLUMN epis_abcde_meth_param.flg_type IS 'Type of parameter: (A) Allergy (P) Prescription (PO) Prescription - other (H) Past Medication (C) Chief Complaint (D) Diet (M) Meal (E) Event (S) Symptoms (I) Imunisation (PI) Parents impression (DI) Diapers';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 02/09/2011 09:32
+-- CHANGE REASON: [ALERT-161965] Update the comment to reflect the development.
+ comment on column EPIS_ABCDE_METH_PARAM.flg_type
+  is 'Type of parameter: (A) Allergy (AU) Allergy Unawareness (P) Prescription (PO) Prescription - other (h) Past Medication (C) Chief Complaint (d) Diet (M) Meal (E) Event (S) Symptoms (I) Imunisation (PI) Parents impression (DI) Diapers';
+-- CHANGE END: Pedro Fernandes

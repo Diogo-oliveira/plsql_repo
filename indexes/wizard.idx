@@ -1,0 +1,23 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 23/12/2010 16:31
+-- CHANGE REASON: [ALERT-151846] DB versioning - Tables
+CREATE INDEX WID_FLG_AV_WID_IDX ON WIZARD (FLG_AVAILABLE,ID_WIZARD) TABLESPACE INDEX_S;
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 19/01/2011 14:11
+-- CHANGE REASON: [ALERT-151846] DB versioning - Tables
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -955);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'CREATE INDEX WID_FLG_AV_WID_IDX ON WIZARD (FLG_AVAILABLE,ID_WIZARD) TABLESPACE INDEX_S';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

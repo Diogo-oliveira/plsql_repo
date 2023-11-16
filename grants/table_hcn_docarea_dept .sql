@@ -1,0 +1,1 @@
+grant select on alert.hcn_docarea_dept to alert_viewer;

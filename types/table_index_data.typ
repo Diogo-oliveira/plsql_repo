@@ -1,0 +1,5 @@
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-MAR-28
+-- CHANGING REASON: ALLERGIES MODULE
+CREATE OR REPLACE TYPE table_index_data IS TABLE OF index_data;
+-- CHANGE END Patrícia Neto

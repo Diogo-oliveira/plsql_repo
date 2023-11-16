@@ -1,0 +1,317 @@
+
+
+  CREATE TABLE DISCHARGE
+   (	ID_DISCHARGE NUMBER(24,0) NOT NULL ENABLE,
+	ID_DISCH_REAS_DEST NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	ID_PROF_MED NUMBER(24,0),
+	DT_MED DATE,
+	NOTES_MED VARCHAR2(4000),
+	ID_PROF_ADMIN NUMBER(24,0),
+	DT_ADMIN DATE,
+
+	NOTES_ADMIN VARCHAR2(4000),
+	FLG_STATUS VARCHAR2(1),
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	ID_TRANSP_ENT_ADM NUMBER(24,0),
+	ID_TRANSP_ENT_MED NUMBER(24,0),
+	NOTES_JUSTIFY VARCHAR2(4000),
+	PRICE NUMBER(12,4),
+	CURRENCY VARCHAR2(10),
+	FLG_PAYMENT VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE discharge IS 'Alta administrativa e médica. Marca o fim do episódio.Mesmo que o utente não responda à chamada e o episódio não contenha registo de informação clínica, há sempre uma alta administrativa, onde se regista a falta de comparência. A alta clínica é dada pelo médico. Pode haver cancelamento de qualquer uma das altas.Para cada epis. existe um único registo não cancelado nesta tabela.' ;
+
+COMMENT ON COLUMN discharge.id_episode IS 'Chave primaria' ;
+COMMENT ON COLUMN discharge.id_prof_cancel IS 'Prof responsável palo cancelamento da alta médica' ;
+COMMENT ON COLUMN discharge.notes_cancel IS 'Notas de cancelamento' ;
+COMMENT ON COLUMN discharge.id_prof_med IS 'Prof. responsável pela alta médica' ;
+COMMENT ON COLUMN discharge.dt_med IS 'Data de alta médica' ;
+COMMENT ON COLUMN discharge.notes_med IS 'Notas de alta médica' ;
+COMMENT ON COLUMN discharge.id_prof_admin IS 'Prof. responsável pela alta administrativa' ;
+COMMENT ON COLUMN discharge.dt_admin IS 'Data de alta administrativa' ;
+COMMENT ON COLUMN discharge.notes_admin IS 'Notas de alta administrativa' ;
+COMMENT ON COLUMN discharge.flg_status IS 'A - activo, C - cancelado' ;
+COMMENT ON COLUMN discharge.flg_type IS 'Tipo: F - fim de episódio; D - alta (fim de seguimento do doente); P - pendente' ;
+COMMENT ON COLUMN discharge.id_transp_ent_adm IS 'Transporte indicado pelo administrativo' ;
+COMMENT ON COLUMN discharge.id_transp_ent_med IS 'Transporte indicado pelo médico' ;
+
+COMMENT ON COLUMN discharge.price IS 'Appointment price' ;
+COMMENT ON COLUMN discharge.currency IS 'Appointment price currency' ;
+COMMENT ON COLUMN discharge.flg_payment IS 'Y when appointment is payed, N when appointment is not payed. Null if not applicable.' ;
+
+comment on column DISCHARGE.FLG_STATUS
+  is 'A - activo, C - cancelado, R - reaberto';
+comment on column DISCHARGE.FLG_TYPE
+  is 'Tipo: F - fim de episódio; D - alta (fim de seguimento do doente)';
+
+--ET: 2007/05/10 - Novas colunas para a alta médica pendente
+alter table discharge add (id_prof_pend_active number(24),
+                           dt_pend_active date);
+																 
+COMMENT ON COLUMN discharge.flg_status IS 'A - activo, C - cancelado, R - reaberto, P - pendente ' ;																 
+COMMENT ON COLUMN discharge.id_prof_pend_active IS 'Prof.responsável pela passagem de alta pendente para activa';
+COMMENT ON COLUMN discharge.dt_pend_active IS 'Data da passagem de alta pendente para activa';
+
+alter table discharge 
+add (dt_med_tstz timestamp with local time zone,
+     dt_admin_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone,
+		 dt_pend_active_tstz timestamp with local time zone); 
+
+
+alter table discharge add dt_pend date;
+
+alter table discharge add dt_pend_tstz timestamp with local time zone;
+
+COMMENT ON COLUMN discharge.dt_pend      IS 'Data de alta pendente' ;
+
+COMMENT ON COLUMN discharge.dt_pend_tstz IS 'Data de alta pendente' ;
+
+ALTER TABLE DISCHARGE ADD (ID_CPT_CODE NUMBER(24));
+COMMENT ON COLUMN DISCHARGE.ID_CPT_CODE IS 'The CPT Code associated to this discharge';
+
+
+-- Add/modify columns 
+alter table DISCHARGE add ID_PROF_NURSE NUMBER(24);
+alter table DISCHARGE add DT_NURSE TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table DISCHARGE add NOTES_NURSE VARCHAR2(4000);
+alter table DISCHARGE add FLG_TYPE_DISCH VARCHAR2(1);
+-- Add comments to the columns 
+comment on column DISCHARGE.ID_PROF_NURSE
+  is 'Prof. responsável pela alta de enfermagem (Cons. de enfermagem)';
+comment on column DISCHARGE.DT_NURSE
+  is 'Data de alta de enfermagem (Cons. de enfermagem)';
+comment on column DISCHARGE.NOTES_NURSE
+  is 'Notas de alta de enfermagem (Cons. de enfermagem)';
+comment on column DISCHARGE.FLG_TYPE_DISCH
+  is 'Tipo de alta (''A'' Administrativa,''D'' Médica, ''N'' Enfermagem)';
+
+-- correcção do tipo de alta de enfermagem
+
+comment on column DISCHARGE.FLG_TYPE_DISCH
+  is 'Tipo de alta (''A'' Administrativa,''D'' Médica, ''P'' Enfermagem)';
+
+
+
+-- Acrescentar campos para alta de sessao de fisioterapia
+alter table DISCHARGE add ID_PROF_THERAPIST NUMBER(24);
+alter table DISCHARGE add DT_THERAPIST TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table DISCHARGE add NOTES_THERAPIST VARCHAR2(4000);
+-- Add comments to the columns 
+comment on column DISCHARGE.ID_PROF_THERAPIST
+  is 'Prof. responsável pela alta de sesssao de fisioterapia (tratamentos de fisioterapia)';
+comment on column DISCHARGE.DT_THERAPIST
+  is 'Data de alta de sesssao de fisioterapia (tratamentos de fisioterapia)';
+comment on column DISCHARGE.NOTES_THERAPIST
+  is 'Notas de alta sesssao de fisioterapia (tratamentos de fisioterapia)';
+comment on column DISCHARGE.FLG_TYPE_DISCH
+  is 'Tipo de alta (''A'' Administrativa,''D'' Médica, ''P'' Enfermagem, ''F'' Terapeuta)';
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-JUL-31
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15301
+
+
+COMMENT ON COLUMN  DISCHARGE.ID_DISCHARGE IS 'Discharge ID'; 
+COMMENT ON COLUMN  DISCHARGE.ID_DISCH_REAS_DEST IS 'Discharge destiny reason'; 
+COMMENT ON COLUMN  DISCHARGE.DT_CANCEL IS 'Cancel date'; 
+COMMENT ON COLUMN  DISCHARGE.NOTES_JUSTIFY IS 'Justify notes'; 
+COMMENT ON COLUMN  DISCHARGE.DT_MED_TSTZ IS 'Discharge date'; 
+COMMENT ON COLUMN  DISCHARGE.DT_ADMIN_TSTZ IS 'Administrative date'; 
+COMMENT ON COLUMN  DISCHARGE.DT_CANCEL_TSTZ IS 'Cancel date'; 
+COMMENT ON COLUMN  DISCHARGE.DT_PEND_ACTIVE_TSTZ IS 'Pending active date'; 
+COMMENT ON COLUMN  DISCHARGE.FLG_TYPE_DISCH is 'Discharge type: A - Medical; D - Doctor; P - Nurse';
+
+-- CHANGED END: Nuno Ferreira
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-SEP-02
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15301
+COMMENT ON COLUMN DISCHARGE.FLG_TYPE_DISCH IS 'Discharge type: A - Medical; D - Doctor; P - Nurse; F - THERAPIST';
+-- CHANGE END
+
+
+-- INPATIENT LMAIA 22-09-2008
+-- DROP das colunas DT_... que não são Timezone (desnormalização)
+alter table discharge drop (DT_CANCEL, DT_MED, DT_ADMIN, DT_PEND_ACTIVE, DT_PEND);
+-- END
+
+
+-- JSILVA 29-12-2008
+COMMENT ON COLUMN discharge.flg_type_disch IS 'Discharge type: A - Medical; D - Doctor; P - Nurse; F - THERAPIST; M - Manchester';
+-- END
+
+
+-- José Brito 07/03/2009 ALERT-9546
+ALTER TABLE discharge ADD (id_cancel_reason NUMBER(24));
+COMMENT ON COLUMN discharge.id_cancel_reason IS 'Cancel reason ID';
+
+
+-- José Brito 07/03/2009 ALERT-10317
+-- Discharge
+ALTER TABLE discharge ADD flg_cancel_type VARCHAR2(1);
+COMMENT ON COLUMN discharge.flg_status IS '(A) active (C) cancelled (R) reopen (P) pending';
+COMMENT ON COLUMN discharge.flg_cancel_type IS '(N) normal (R) cancelled by patient refusal to be transfered';
+
+
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 01/06/2009 14:55
+-- CHANGE REASON: [ALERT-889] Perfil nutricionista
+-- Acrescentar campos para alta de consultas de nutricao
+alter table DISCHARGE add ID_PROF_NUTRITIONIST NUMBER(24);
+alter table DISCHARGE add DT_NUTRITIONIST TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table DISCHARGE add NOTES_NUTRICIONIST VARCHAR2(4000);
+-- Add comments to the columns 
+comment on column DISCHARGE.ID_PROF_THERAPIST
+  is 'Prof. responsável pela alta das consultas de nutricao';
+comment on column DISCHARGE.DT_THERAPIST
+  is 'Data de alta das consultas de nutricao';
+comment on column DISCHARGE.NOTES_THERAPIST
+  is 'Notas de alta das consultas de nutricao';
+COMMENT ON COLUMN discharge.flg_type_disch IS 'Discharge type: A - Medical; D - Doctor; P - Nurse; F - THERAPIST; M - Manchester; U - NUTRITIONIST';
+-- CHANGE END: Rita Lopes
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 21-01-2010
+-- CHANGE REASON: ALERT-70771
+ALTER TABLE discharge add flg_bill_type VARCHAR2(1);
+COMMENT ON column discharge.flg_bill_type IS 'Bill Type Flag: (N)ormal, (R)eturn';
+-- CHANGE END
+
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 11/03/2010 19:08
+-- CHANGE REASON: [ALERT-80873] Reason for pending discharge: DB developments
+ALTER TABLE DISCHARGE ADD ID_DISCHARGE_STATUS NUMBER(24);
+COMMENT ON COLUMN DISCHARGE.ID_DISCHARGE_STATUS IS 'Discharge status ID. This column must be used to get the description of the type of discharge.';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 26/08/2010 22:29
+-- CHANGE REASON: [ALERT-119364] Administrative discharge cancellation
+ALTER TABLE discharge ADD flg_status_adm VARCHAR2(1 CHAR);
+COMMENT ON COLUMN discharge.flg_status_adm IS 'Administrative discharve status';
+
+ALTER TABLE discharge ADD flg_market VARCHAR2(2 CHAR);
+COMMENT ON COLUMN discharge.flg_market IS 'Discharge type: PT - portuguese discharge, US - US/NL/UK discharge';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 03/10/2011 14:27
+-- CHANGE REASON: [ALERT-196387] 
+ALTER TABLE discharge MODIFY flg_bill_type VARCHAR2(3 CHAR);
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/09/2012 17:11
+-- CHANGE REASON: [ALERT-240560] Issue Replication: DISPOSITION - Show all records in summary screen regardless of the settings in profile_disch_reason
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE DISCHARGE ADD ID_DISCHARGE_FLASH_FILES NUMBER(24)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DISCHARGE.ID_DISCHARGE_FLASH_FILES is ''Note: US discharge type only. This field has the flash file id used when the patient was discharged''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/09/2013 16:11
+-- CHANGE REASON: [ ALERT-265726] [UK-Brighton] - Organization Code for Ambulance Trust (Emergency department report dispatch to the GP).
+--                
+-- Add/modify columns 
+alter table DISCHARGE add flg_crm_status varchar2(1 CHAR);
+-- Add comments to the columns 
+comment on column DISCHARGE.flg_crm_status
+  is 'Message status to CRM R- Requested / S - Sent';
+	
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 29/10/2014 11:14
+-- CHANGE REASON: [ALERT-300102] 
+BEGIN
+  pk_versioning.run(i_sql => q'[alter table DISCHARGE add
+(
+  ID_CONCEPT_TERM             number(24),
+id_cncpt_trm_inst_owner     number(24),
+id_terminology_version      number(24)
+)]');
+END;
+/
+comment on column DISCHARGE.ID_CONCEPT_TERM is 'Concept term identifier';
+comment on column DISCHARGE.id_cncpt_trm_inst_owner is 'Concept institution owner identifier';
+comment on column DISCHARGE.id_terminology_version is 'Terminology version identifier';
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table DISCHARGE
+  is 'Administrative and medical discharge. For each episode existe only one active discharge';
+-- Add comments to the columns 
+comment on column DISCHARGE.id_episode
+  is 'Episode ID';
+comment on column DISCHARGE.id_prof_cancel
+  is 'Professional thar cancelled the discharge';
+comment on column DISCHARGE.notes_cancel
+  is 'Cancellation notes';
+comment on column DISCHARGE.id_prof_med
+  is 'Professional responsible for medical discharge';
+comment on column DISCHARGE.notes_med
+  is 'Medical discharge notes';
+comment on column DISCHARGE.id_prof_admin
+  is 'Professional responsible for administrative discharge';
+comment on column DISCHARGE.notes_admin
+  is 'Administrative discharge notes';
+comment on column DISCHARGE.flg_type
+  is 'Type: F - Follow-up; D - Discharge U - Dietitian discharge';
+comment on column DISCHARGE.id_transp_ent_adm
+  is 'Transport registered by the registrar';
+comment on column DISCHARGE.id_transp_ent_med
+  is 'Transport registered by the physican';
+comment on column DISCHARGE.id_prof_pend_active
+  is 'Professional responsible for confirming pending discharge';
+comment on column DISCHARGE.dt_pend_tstz
+  is 'Pending discharge date';
+comment on column DISCHARGE.id_prof_nurse
+  is 'Professional responsible for nurse discharge (For nurse appointment)';
+comment on column DISCHARGE.dt_nurse
+  is 'Nurse discharge date  (For nurse appointment)';
+comment on column DISCHARGE.notes_nurse
+  is 'Nurse discharge notes (For nurse appointment)';
+comment on column DISCHARGE.id_prof_therapist
+  is 'Professional responsible for Physical Therapy discharge';
+comment on column DISCHARGE.dt_therapist
+  is 'Physical Therapy Discharge date';
+comment on column DISCHARGE.notes_therapist
+  is 'Physical Therapy discharge notes';
+comment on column DISCHARGE.id_prof_nutritionist
+  is 'DEPRECATED  filled when is a nutrition discharge';
+comment on column DISCHARGE.dt_nutritionist
+  is 'Date when nutrition discharge was done';
+comment on column DISCHARGE.notes_nutricionist
+  is 'Nutrition discharge notes';
+comment on column DISCHARGE.dt_pend_active_tstz
+  is 'Date when pending discharge is confirmed';
+-- CHANGE END: Elisabete Bugalho

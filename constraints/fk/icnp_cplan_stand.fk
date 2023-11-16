@@ -1,0 +1,71 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:38
+-- CHANGE REASON: [ALERT-117147] 
+-- Create/Recreate primary, unique and foreign key constraints 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); -- fk
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND
+  add constraint ICPS_INN_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+DECLARE
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND
+  drop constraint ICPS_PRL_FK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+alter table ICNP_CPLAN_STAND
+  add constraint ICPS_PRL_FK foreign key (ID_PROFESSIONAL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 26/10/2010 15:17
+-- CHANGE REASON: [ALERT-117147] 
+-- Create/Recreate primary, unique and foreign key constraints 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); -- fk
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND
+  add constraint ICPS_INN_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+DECLARE
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND
+  drop constraint ICPS_PRL_FK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+alter table ICNP_CPLAN_STAND
+  add constraint ICPS_PRL_FK foreign key (ID_PROFESSIONAL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+-- CHANGE END: Sérgio Santos

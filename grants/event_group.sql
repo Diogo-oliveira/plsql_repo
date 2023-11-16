@@ -1,0 +1,14 @@
+GRANT REFERENCES ON event_group TO alert_default;
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 28/08/2009 16:51
+-- CHANGE REASON: [ALERT-40932] 
+GRANT REFERENCES ON event_group TO alert_default;
+-- CHANGE END: Tércio Soares
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2017-1-03
+-- CHANGED REASON: ALERT-327486
+grant SELECT on ALERT.EVENT_GROUP to ALERT_APEX_TOOLS;
+-- CHANGE END: Humberto Cardoso

@@ -1,0 +1,7 @@
+GRANT SELECT ON v_exam_result TO INTF_ALERT;
+
+-- CHANGED BY: Ana Rita Martins 
+-- CHANGE REASON: 19/04/2011
+-- CHANGE DATE:ALERT-173965 
+grant select on V_EXAM_RESULT to ALERT_ADTCOD;
+-- CHANGED END: Ana Rita Martins 

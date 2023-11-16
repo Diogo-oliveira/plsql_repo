@@ -1,0 +1,21 @@
+-- ADDED BY: Jose Castro
+-- ADDED DATE: 17/02/2011
+-- ADDED REASON: ALERT-842
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table REP_COLLECT_REASON_DCS
+  add constraint RCC_PK primary key (ID_REP_COLL_REASON_DCS);
+  
+-- Create/Recreate check constraints 
+alter table REP_COLLECT_REASON_DCS
+  add constraint RCC_FLG_AVAILABLE
+  check (FLG_AVAILABLE IN ('Y', 'N'));
+alter table REP_COLLECT_REASON_DCS
+  add constraint RCC_FLG_DEFAULT
+  check (FLG_DEFAULT IN ('Y', 'N'));
+  
+alter table rep_collect_reason_dcs
+  add constraint RCC_UK UNIQUE (id_rep_coll_reason,id_institution, id_software, id_dep_clin_serv);
+  
+alter table rep_collect_reason_dcs 
+ add constraint RCC_DEP_CLIN_SERV_CHK check ((id_dep_clin_serv != 0 AND id_institution != 0) OR id_dep_clin_serv = 0);
+  

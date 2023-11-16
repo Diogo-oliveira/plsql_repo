@@ -1,0 +1,35 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 17/06/2016 10:08
+-- CHANGE REASON: [ALERT-321813] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+    e_object_exists1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists1, -02260);
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -06512);
+    e_object_exists3 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists3, -02264);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE graphic
+  ADD CONSTRAINT g_vs_x_fk FOREIGN KEY (id_related_object_x)
+  REFERENCES vital_sign (id_vital_sign)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE graphic
+  ADD CONSTRAINT g_um_x_fk FOREIGN KEY (ID_UNIT_MEASURE_x)
+  REFERENCES UNIT_MEASURE (ID_UNIT_MEASURE)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

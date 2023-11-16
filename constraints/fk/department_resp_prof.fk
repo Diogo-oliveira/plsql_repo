@@ -1,0 +1,53 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 14/02/2014 15:24
+-- CHANGE REASON: [ALERT-275975] department configs
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table department_resp_prof
+  add constraint DRP_DEPART_FK foreign key (ID_DEPartment)
+  references DEParTment (ID_DEPartment)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+        BEGIN
+        EXECUTE IMMEDIATE 'alter table department_resp_prof
+  add constraint DRP_PROF_FK foreign key (id_professional)
+  references professional (id_professional)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 23/06/2014 11:58
+-- CHANGE REASON: new table
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table department_resp_prof
+  add constraint DRP_DEPART_FK foreign key (ID_DEPartment)
+  references DEParTment (ID_DEPartment)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+        BEGIN
+        EXECUTE IMMEDIATE 'alter table department_resp_prof
+  add constraint DRP_PROF_FK foreign key (id_professional)
+  references professional (id_professional)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

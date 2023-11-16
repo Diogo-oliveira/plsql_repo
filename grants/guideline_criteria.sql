@@ -1,0 +1,12 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 08/03/2010 11:49
+-- CHANGE REASON: [ALERT-79827] 
+grant select, references on GUIDELINE_CRITERIA_type to alert_Default;
+-- CHANGE END: Susana Silva
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2017-1-03
+-- CHANGED REASON: ALERT-327486
+grant SELECT on ALERT.GUIDELINE_CRITERIA to ALERT_APEX_TOOLS;
+-- CHANGE END: Humberto Cardoso

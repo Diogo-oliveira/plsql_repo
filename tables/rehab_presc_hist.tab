@@ -1,0 +1,232 @@
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 29/07/2010 15:05
+-- CHANGE REASON: [ALERT-116048] 
+create table REHAB_PRESC_HIST
+(
+  ID_REHAB_PRESC_HIST    NUMBER(24) not null,
+  DT_REHAB_PRESC_HIST    TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  ID_PROFESSIONAL_HIST   NUMBER(24) not null,
+  ID_REHAB_PRESC         NUMBER(24),
+  DT_REHAB_PRESC         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROFESSIONAL        NUMBER(24),
+  ID_INSTITUTION         NUMBER(24),
+  ID_REHAB_AREA_INTERV   NUMBER(24),
+  ID_REHAB_SCH_NEED      NUMBER(24),
+  ID_EXEC_INSTITUTION    NUMBER(24),
+  EXEC_PER_SESSION       NUMBER(6),
+  FLG_STATUS             VARCHAR2(1 CHAR),
+  NOTES                  VARCHAR2(1000 CHAR),
+  ID_CANCEL_REASON       NUMBER(24),
+  NOTES_CANCEL           VARCHAR2(1000 CHAR),
+  DT_CANCEL              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_CANCEL_PROFESSIONAL NUMBER(24),
+  CREATE_USER            VARCHAR2(24 CHAR),
+  CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION     NUMBER(24),
+  UPDATE_USER            VARCHAR2(24 CHAR),
+  UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION     NUMBER(24)
+);
+comment on table REHAB_PRESC_HIST
+  is 'Rehabilitation procedures prescriptions history';
+comment on column REHAB_PRESC_HIST.DT_REHAB_PRESC_HIST
+  is 'Date of the change';
+comment on column REHAB_PRESC_HIST.ID_PROFESSIONAL_HIST
+  is 'Professional ID that made the change';  
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Eduardo Reis
+-- CHANGE DATE: 26/08/2010 15:40
+-- CHANGE REASON: [ALERT-119608] acções de rejeitar e aceitar propostas
+alter table rehab_presc_hist add (notes_change varchar2(1000 char));
+comment on column rehab_presc_hist.notes_change is 'Notes entered when making a change';
+-- CHANGE END: Eduardo Reis
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 02/12/2011 15:16
+-- CHANGE REASON: [ALERT-208144] 
+alter table REHAB_PRESC_HIST
+  add constraint RPT_flg_status_CHK
+  check (flg_status IN  ('B', 'C', 'P', 'Q', 'E', 'D', 'S', 'F', 'O', 'X', 'L', 'R'));
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 01/10/2012 16:52
+-- CHANGE REASON: [ALERT-241270] 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there,-01430); -- add column
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE rehab_presc_hist add(flg_laterality VARCHAR2(1 CHAR))';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        NULL;
+END;
+/
+
+COMMENT ON COLUMN rehab_presc_hist.flg_laterality IS  'Laterality of intervention: N- (N)ot Applicable, B- (B)ilateral, L- (L)eft, R- (R)ight';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/03/2013 16:28
+-- CHANGE REASON: [ALERT-253717 ] 
+comment on column REHAB_PRESC_HIST.flg_laterality
+  is 'Laterality of intervention: N- (N)ot Applicable, B- (B)ilateral, L- (L)eft, R- (R)ight, Z- Bilatéral-comparatif';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 28/05/2014 11:05
+-- CHANGE REASON: [ALERT-283905 ] 
+ALTER TABLE rehab_presc_hist add id_not_order_reason NUMBER(24);
+COMMENT ON column rehab_presc_hist.id_not_order_reason IS 'Not order reason ID';
+/
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/01/2016 16:47
+-- CHANGE REASON: [ALERT-317912] 
+comment on table REHAB_PRESC_HIST
+  is 'Rehabilitation procedures'' orders history';
+-- Add comments to the columns 
+comment on column REHAB_PRESC_HIST.id_rehab_presc_hist
+  is 'Primary key';
+comment on column REHAB_PRESC_HIST.dt_rehab_presc_hist
+  is 'Date of the change';
+comment on column REHAB_PRESC_HIST.id_professional_hist
+  is 'Professional ID that made the change';
+comment on column REHAB_PRESC_HIST.id_rehab_presc
+  is 'Order''s ID';
+comment on column REHAB_PRESC_HIST.dt_rehab_presc
+  is 'Date that indicates when tjhe order was registered';
+comment on column REHAB_PRESC_HIST.id_professional
+  is 'Professional ID';
+comment on column REHAB_PRESC_HIST.id_institution
+  is 'Institution ID';
+comment on column REHAB_PRESC_HIST.id_rehab_area_interv
+  is 'Rehabilitation procedure area';
+comment on column REHAB_PRESC_HIST.id_rehab_sch_need
+  is 'Rehabilitation schedule need ID';
+comment on column REHAB_PRESC_HIST.id_exec_institution
+  is 'Institution where it will be executed';
+comment on column REHAB_PRESC_HIST.exec_per_session
+  is 'Executions per session';
+comment on column REHAB_PRESC_HIST.flg_status
+  is 'Flag that indicates the order''s status';
+comment on column REHAB_PRESC_HIST.notes
+  is 'Notes';
+comment on column REHAB_PRESC_HIST.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column REHAB_PRESC_HIST.notes_cancel
+  is 'Cancelation notes';
+comment on column REHAB_PRESC_HIST.dt_cancel
+  is 'Date that indicates when the order was cancelled';
+comment on column REHAB_PRESC_HIST.id_cancel_professional
+  is 'Professional that cancels the order';
+comment on column REHAB_PRESC_HIST.create_user
+  is 'Creation User';
+comment on column REHAB_PRESC_HIST.create_time
+  is 'Creation Time';
+comment on column REHAB_PRESC_HIST.create_institution
+  is 'Creation Institution';
+comment on column REHAB_PRESC_HIST.update_user
+  is 'Update User';
+comment on column REHAB_PRESC_HIST.update_time
+  is 'Update Time';
+comment on column REHAB_PRESC_HIST.update_institution
+  is 'Update Institution';
+comment on column REHAB_PRESC_HIST.notes_change
+  is 'Notes entered when making a change';
+comment on column REHAB_PRESC_HIST.id_codification
+  is 'Codification ID';
+comment on column REHAB_PRESC_HIST.flg_referral
+  is 'Flag that shows if requisiton was added to referral. Options are (A)vailable,  (R)eserved, electronically sent (I) or printed (S).';
+comment on column REHAB_PRESC_HIST.flg_laterality
+  is 'Flag that indicates the procedure laterality: N - Not Applicable, B - Bilateral, L - Left, R - Right, Z - Bilateral-comparative';
+comment on column REHAB_PRESC_HIST.id_not_order_reason
+  is 'Not order reason ID';
+  
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 16/03/2021 17:01
+-- CHANGE REASON: [EMR-39019]
+BEGIN
+pk_versioning.run('alter table rehab_presc_hist add id_pat_health_plan       NUMBER(24)');
+END;
+/
+
+BEGIN
+pk_versioning.run('alter table rehab_presc_hist add id_pat_exemption         NUMBER(24)');
+END;
+/
+
+comment on column rehab_presc_hist.id_pat_health_plan
+is 'Healthcare insurance plan ID used';
+
+comment on column rehab_presc_hist.id_pat_exemption
+is 'Exemption ID used';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 12/11/2021 12:03
+-- CHANGE REASON: [EMR-49547] - Improvements on rehabilitation treatments request form
+DECLARE
+e_object_exists EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+
+BEGIN
+EXECUTE IMMEDIATE ' ALTER TABLE rehab_presc_hist
+ADD diagnosis_notes VARCHAR2(1000 CHAR)';
+EXCEPTION
+WHEN e_object_exists THEN
+dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+END;
+
+END;
+/
+
+comment on column rehab_presc_hist.diagnosis_notes is 'Diagnosis free text field';
+
+DECLARE
+e_object_exists EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE rehab_presc_hist ADD (ID_CLINICAL_PURPOSE NUMBER(24))';
+EXCEPTION
+WHEN e_object_exists THEN
+dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+END;
+
+END;
+/
+;
+
+COMMENT ON COLUMN rehab_presc_hist.ID_CLINICAL_PURPOSE IS 'Clinical purpose ID';
+
+DECLARE
+e_object_exists EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE rehab_presc_hist ADD (clinical_purpose_notes VARCHAR2(1000 CHAR))';
+EXCEPTION
+WHEN e_object_exists THEN
+dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+END;
+
+END;
+/
+;
+
+COMMENT ON COLUMN rehab_presc_hist.clinical_purpose_notes IS 'Clinical purpose free text field (when id_clinical_purpose = 0)';
+-- CHANGE END: Diogo Oliveira

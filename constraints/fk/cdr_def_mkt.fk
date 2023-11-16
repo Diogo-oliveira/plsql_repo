@@ -1,0 +1,42 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 29/02/2012 11:58
+-- CHANGE REASON: [ALERT-219213] add market to cds data model (262)
+declare
+  e_fk_exists exception;
+  pragma exception_init(e_fk_exists, -02275);
+begin
+  begin
+    execute immediate 'alter table CDR_DEF_MKT
+  add constraint CDRDM_CAT_FK foreign key (ID_CATEGORY)
+  references CATEGORY (ID_CATEGORY)
+';
+  exception when e_fk_exists then
+    dbms_output.put_line('foreign key cdrdm_cat_fk already exists!');
+  end;
+  begin
+    execute immediate 'alter table CDR_DEF_MKT
+  add constraint CDRDM_CDRD_FK foreign key (ID_CDR_DEFINITION)
+  references CDR_DEFINITION (ID_CDR_DEFINITION)
+';
+  exception when e_fk_exists then
+    dbms_output.put_line('foreign key cdrdm_cdrd_fk already exists!');
+  end;
+  begin
+    execute immediate 'alter table CDR_DEF_MKT
+  add constraint CDRDM_MRK_FK foreign key (ID_MARKET)
+  references MARKET (ID_MARKET)
+';
+  exception when e_fk_exists then
+    dbms_output.put_line('foreign key cdrdm_mrk_fk already exists!');
+  end;
+  begin
+    execute immediate 'alter table CDR_DEF_MKT
+  add constraint CDRDM_S_FK foreign key (ID_SOFTWARE)
+  references SOFTWARE (ID_SOFTWARE)
+';
+  exception when e_fk_exists then
+    dbms_output.put_line('foreign key cdrdm_s_fk already exists!');
+  end;
+end;
+/
+-- CHANGE END: Pedro Carneiro

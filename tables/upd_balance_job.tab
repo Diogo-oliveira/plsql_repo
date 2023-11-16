@@ -1,0 +1,28 @@
+create table UPD_BALANCE_JOB
+(
+  ID         NUMBER(24) not null,
+  TABLE_NAME VARCHAR2(50),
+  ID_PROCESS NUMBER(24),
+  STARTED    VARCHAR2(1),
+  ENDED      VARCHAR2(2),
+  START_DATE DATE,
+  END_DATE   DATE
+);
+
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table upd_balance_job add vers VARCHAR2(255)';
+EXCEPTION
+    WHEN e_exception THEN
+    NULL;
+END;
+/
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:27
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE UPD_BALANCE_JOB IS ' [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

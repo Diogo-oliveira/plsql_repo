@@ -1,0 +1,171 @@
+
+
+  CREATE TABLE ICNP_EPIS_DIAG_INTERV
+   (	ID_ICNP_EPIS_DIAG_INTERV NUMBER(24,0) NOT NULL ENABLE,
+	ID_ICNP_EPIS_DIAG NUMBER(24,0) NOT NULL ENABLE,
+	ID_ICNP_EPIS_INTERV NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE icnp_epis_diag_interv IS 'Relations table. Relates nursing actions and their precedent diagnoses. Each action must have an associated diagnosis.' ;
+
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 25/11/2011 11:24
+-- CHANGE REASON: [ALERT-206738] 
+alter table icnp_epis_diag_interv
+add (flg_status VARCHAR2(1) Default 'A' not null ,
+dt_inactivation     TIMESTAMP(6) WITH LOCAL TIME ZONE);
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 25/11/2011 11:24
+-- CHANGE REASON: [ALERT-206738] 
+comment on column icnp_epis_diag_interv.flg_status
+  is 'Connection status, A - active, I - inactive';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 25/11/2011 11:24
+-- CHANGE REASON: [ALERT-206738] 
+comment on column icnp_epis_diag_interv.dt_inactivation
+  is 'Date of inactivation';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 02/03/2012 11:48
+-- CHANGE REASON: [ALERT-221432] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE icnp_epis_diag_interv ADD id_prof_assoc number(24)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('id_prof_assoc column already exists in icnp_epis_diag_interv table');
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 02/03/2012 11:48
+-- CHANGE REASON: [ALERT-221432] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE icnp_epis_diag_interv ADD flg_moment_assoc varchar2(1)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('flg_moment_assoc column already exists in icnp_epis_diag_interv table');
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 02/03/2012 11:48
+-- CHANGE REASON: [ALERT-221432] 
+comment on column icnp_epis_diag_interv.id_prof_assoc
+  is 'The health profissional who created this association';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 02/03/2012 11:49
+-- CHANGE REASON: [ALERT-221432] 
+comment on column icnp_epis_diag_interv.flg_moment_assoc
+  is 'Moment of creation of the association between intervention and diagnosis';
+  
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 02/03/2012 11:49
+-- CHANGE REASON: [ALERT-221432] 
+comment on column ICNP_EPIS_DG_INT_HIST.flg_moment_assoc
+  is 'Moment of creation of the association between intervention and diagnosis';
+  
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 13/03/2012 17:00
+-- CHANGE REASON: [ALERT-223084] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE icnp_epis_diag_interv ADD flg_status_rel varchar2(1)default ''A''  not null';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('column already exists');
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 13/03/2012 17:00
+-- CHANGE REASON: [ALERT-223084] 
+comment on column ICNP_EPIS_DIAG_INTERV.FLG_STATUS_REL
+  is 'State of the relationship of the intervention A - active, C - cancel, I - discontinued, H - hold, R - reactivated';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 13/03/2012 17:00
+-- CHANGE REASON: [ALERT-223084] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE icnp_epis_diag_interv  ADD flg_type_assoc varchar2(1)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('column being added already exists in table');
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 13/03/2012 17:00
+-- CHANGE REASON: [ALERT-223084] 
+comment on column ICNP_EPIS_DIAG_INTERV.flg_type_assoc
+  is 'Type of insert that creates the association between diagnosis and intervention (D - In creation of diagnosis, I - In creation of intervention)';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 10:39
+-- CHANGE REASON: [ALERT-317702] 
+comment on table ICNP_EPIS_DIAG_INTERV
+  is 'Relations table. Relates nursing actions and their precedent diagnoses. Each action must have an associated diagnosis.';
+-- Add comments to the columns 
+comment on column ICNP_EPIS_DIAG_INTERV.id_icnp_epis_diag_interv
+  is 'Primary key';
+comment on column ICNP_EPIS_DIAG_INTERV.id_icnp_epis_diag
+  is 'Episode ICNP diagnosis ID';
+comment on column ICNP_EPIS_DIAG_INTERV.id_icnp_epis_interv
+  is 'Episode ICNP intervention ID';
+comment on column ICNP_EPIS_DIAG_INTERV.create_user
+  is 'Creation User';
+comment on column ICNP_EPIS_DIAG_INTERV.create_time
+  is 'Creation Time';
+comment on column ICNP_EPIS_DIAG_INTERV.create_institution
+  is 'Creation Institution';
+comment on column ICNP_EPIS_DIAG_INTERV.update_user
+  is 'Update User';
+comment on column ICNP_EPIS_DIAG_INTERV.update_time
+  is 'Update Time';
+comment on column ICNP_EPIS_DIAG_INTERV.update_institution
+  is 'Update Institution';
+comment on column ICNP_EPIS_DIAG_INTERV.flg_status
+  is 'Connection status: A - active, I - inactive';
+comment on column ICNP_EPIS_DIAG_INTERV.dt_inactivation
+  is 'Date of inactivation';
+comment on column ICNP_EPIS_DIAG_INTERV.id_prof_assoc
+  is 'Profissional who created this association';
+comment on column ICNP_EPIS_DIAG_INTERV.flg_moment_assoc
+  is 'Moment of creation of the association between intervention and diagnosis';
+comment on column ICNP_EPIS_DIAG_INTERV.flg_status_rel
+  is 'State of the relationship of the intervention A - active, C - cancel, I - discontinued, H - hold, R - reactivated';
+comment on column ICNP_EPIS_DIAG_INTERV.flg_type_assoc
+  is 'Type of insert that creates the association between diagnosis and intervention (D - In creation of diagnosis, I - In creation of intervention)';
+  
+  
+  
+-- CHANGE END: Ana Matos

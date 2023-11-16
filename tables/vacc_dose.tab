@@ -1,0 +1,71 @@
+-- Create table vacc_dose
+create table VACC_DOSE
+(
+  ID_VACC_DOSE NUMBER(12) not null,
+  ID_VACC      NUMBER(12) not null,
+  ID_TIME      NUMBER(12),
+  N_DOSE       NUMBER(12),
+  DOSAGE       VARCHAR2(240)
+)
+
+-- Add comments to the table 
+comment on table VACC_DOSE
+  is 'Tabela de parametrização das doses por vacina';
+-- Add comments to the columns 
+comment on column VACC_DOSE.ID_VACC_DOSE
+  is 'Chave primária';
+comment on column VACC_DOSE.ID_VACC
+  is 'Vacina parametrizada';
+comment on column VACC_DOSE.ID_TIME
+  is 'Associação da dose a uma idade de admnistração';
+comment on column VACC_DOSE.N_DOSE
+  is 'Nº da dose';
+comment on column VACC_DOSE.DOSAGE
+  is 'Quantidade a administrar';
+
+
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 11/11/2014 15:26
+-- CHANGE REASON: [ALERT-301386] 
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table vacc_dose add FLG_BOOSTER VARCHAR2(1 CHAR) default ''N'' not null';
+  EXECUTE IMMEDIATE 'comment on column VACC_DOSE.flg_booster  is ''Indicação se é dose de reforço (Y - Sim, N - Não)''';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+   
+END;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 14:38
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON TABLE VACC_DOSE IS 'This table stores doses per vaccine';
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 14:40
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON COLUMN VACC_DOSE.ID_VACC_DOSE IS 'Vaccine dose ID';
+/
+COMMENT ON COLUMN VACC_DOSE.ID_VACC IS 'Vaccine ID';
+/
+COMMENT ON COLUMN VACC_DOSE.ID_TIME IS 'Time ID';
+/
+COMMENT ON COLUMN VACC_DOSE.N_DOSE IS 'Dose number';
+/
+COMMENT ON COLUMN VACC_DOSE.DOSAGE IS 'Dose quantity';
+/
+COMMENT ON COLUMN VACC_DOSE.FLG_BOOSTER IS 'Flg that identifies whether a booster dose; (Y - yes; N - no)';
+/
+-- CHANGE END: Sofia Mendes

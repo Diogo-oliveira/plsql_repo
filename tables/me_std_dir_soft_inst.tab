@@ -1,0 +1,87 @@
+-- Create table
+create table ME_STD_DIR_SOFT_INST
+(
+  ID_ME_STD_DIR_SOFT_INST NUMBER(24) not null,
+  EMB_ID                  VARCHAR2(255) not null,
+  VERS                    VARCHAR2(255) not null,
+  ID_PRESC_DIRECTIONS     NUMBER(24) not null,
+  ID_MARKET               NUMBER(24) not null,
+  ID_SOFTWARE             NUMBER(24) not null,
+  ID_INSTITUTION          NUMBER(24) not null,
+  ID_DEP_CLIN_SERV        NUMBER(24) not null,
+  ID_PROFILE_TEMPLATE     NUMBER(24) not null,
+  ID_PROFESSIONAL         NUMBER(24) not null,
+  CREATE_USER             VARCHAR2(24 CHAR),
+  CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION      NUMBER(24),
+  UPDATE_USER             VARCHAR2(24 CHAR),
+  UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION      NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table ME_STD_DIR_SOFT_INST
+  is 'Link between MI_MED and STD_PRESC_DIRECTIONS';
+-- Add comments to the columns 
+comment on column ME_STD_DIR_SOFT_INST.ID_ME_STD_DIR_SOFT_INST
+  is 'Mi_med_std_directions ID';
+comment on column ME_STD_DIR_SOFT_INST.EMB_ID
+  is 'Emb ID';
+comment on column ME_STD_DIR_SOFT_INST.VERS
+  is 'Drug supplier';
+comment on column ME_STD_DIR_SOFT_INST.ID_PRESC_DIRECTIONS
+  is 'Prescription directions ID';
+comment on column ME_STD_DIR_SOFT_INST.ID_MARKET
+  is 'Market ID';
+comment on column ME_STD_DIR_SOFT_INST.ID_SOFTWARE
+  is 'Software ID';
+comment on column ME_STD_DIR_SOFT_INST.ID_INSTITUTION
+  is 'Institution ID';
+comment on column ME_STD_DIR_SOFT_INST.ID_DEP_CLIN_SERV
+  is 'Dep Clinical Service ID';
+comment on column ME_STD_DIR_SOFT_INST.ID_PROFILE_TEMPLATE
+  is 'Profile Template ID';
+comment on column ME_STD_DIR_SOFT_INST.ID_PROFESSIONAL
+  is 'Professional ID';
+comment on column ME_STD_DIR_SOFT_INST.CREATE_USER
+  is 'Creation User';
+comment on column ME_STD_DIR_SOFT_INST.CREATE_TIME
+  is 'Creation Time';
+comment on column ME_STD_DIR_SOFT_INST.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column ME_STD_DIR_SOFT_INST.UPDATE_USER
+  is 'Update User';
+comment on column ME_STD_DIR_SOFT_INST.UPDATE_TIME
+  is 'Update Time';
+comment on column ME_STD_DIR_SOFT_INST.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ME_STD_DIR_SOFT_INST
+  add constraint ME_STD_DIR_PK primary key (ID_ME_STD_DIR_SOFT_INST)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:49
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE ME_STD_DIR_SOFT_INST IS 'Link between MI_MED and STD_PRESC_DIRECTIONS [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

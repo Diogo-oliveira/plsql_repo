@@ -1,0 +1,73 @@
+CREATE TABLE EPIS_DOC_DELIVERY
+ (  ID_EPIS_DOC_DELIVERY NUMBER(24,0) NOT NULL ENABLE,
+    ID_PAT_PREGNANCY NUMBER(24,0) NOT NULL ENABLE,
+    ID_EPIS_DOCUMENTATION NUMBER(24,0) NOT NULL ENABLE
+ );
+ 
+COMMENT ON TABLE EPIS_DOC_DELIVERY IS 'Tabela com o registo de avaliações do partograma (formato documentation)';
+ 
+COMMENT ON COLUMN EPIS_DOC_DELIVERY.ID_PAT_PREGNANCY IS 'Gravidez associada ao partograma';
+COMMENT ON COLUMN EPIS_DOC_DELIVERY.ID_EPIS_DOCUMENTATION IS 'Documentação da avalização';
+
+ALTER TABLE epis_doc_delivery ADD fetus_number NUMBER(2, 0);
+COMMENT ON COLUMN EPIS_DOC_DELIVERY.fetus_number IS 'Número de fetos associado à documentação da gravidez';
+
+alter table EPIS_DOC_DELIVERY add dt_register_tstz timestamp with local time zone;
+COMMENT ON COLUMN EPIS_DOC_DELIVERY.fetus_number IS 'Data em que foi efectuado o registo';
+
+ALTER TABLE epis_doc_delivery ADD child_number NUMBER(2, 0);
+COMMENT ON COLUMN EPIS_DOC_DELIVERY.child_number IS 'Número da criança avaliada';
+
+ALTER TABLE EPIS_DOC_DELIVERY ADD flg_child_status VARCHAR2(1);
+COMMENT ON COLUMN EPIS_DOC_DELIVERY.flg_child_status IS 'Estado do recem nascido: A - alive; D - dead';
+
+alter table EPIS_DOC_DELIVERY add dt_delivery_tstz timestamp with local time zone;
+COMMENT ON COLUMN EPIS_DOC_DELIVERY.dt_delivery_tstz IS 'Data registada para o ínicio do parto';
+
+ALTER TABLE epis_doc_delivery ADD id_child_episode NUMBER(24);
+COMMENT ON COLUMN epis_doc_delivery.id_child_episode IS 'Episodio gerado para o recem-nascido';
+
+ALTER TABLE epis_doc_delivery DROP COLUMN id_epis_doc_delivery;
+
+
+COMMENT ON COLUMN epis_doc_delivery.dt_delivery_tstz IS 'Data registada para o ínicio do parto (observação inicial) ou data de nascimento (avaliação do recém-nascido)';
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EPIS_DOC_DELIVERY
+  is 'stores information of delivery';
+-- Add comments to the columns 
+comment on column EPIS_DOC_DELIVERY.id_pat_pregnancy
+  is 'Patient pregnancy identifier';
+comment on column EPIS_DOC_DELIVERY.id_epis_documentation
+  is 'Avaliation documentation ID';
+comment on column EPIS_DOC_DELIVERY.fetus_number
+  is 'Fetus number';
+comment on column EPIS_DOC_DELIVERY.dt_register_tstz
+  is 'Register date';
+comment on column EPIS_DOC_DELIVERY.child_number
+  is 'Child number';
+comment on column EPIS_DOC_DELIVERY.flg_child_status
+  is 'The newborn status: A - alive; D - dead';
+comment on column EPIS_DOC_DELIVERY.dt_delivery_tstz
+  is 'Delivery beginning date (initial observation) and date of birth (evaluation of the newborn)';
+comment on column EPIS_DOC_DELIVERY.id_child_episode
+  is 'Episode ID of newborn';  
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 23/12/2016 11:26
+-- CHANGE REASON: [ALERT-326777] Ability to document details regarding the newborn and the birth certificate
+ALTER TABLE epis_doc_delivery
+  MODIFY flg_child_status varchar2(2);
+  
+comment on column EPIS_DOC_DELIVERY.flg_child_status
+  is 'The newborn status: A - alive; D - dead; SI - se ignora';  
+  
+-- CHANGE END: Vanessa Barsottelli

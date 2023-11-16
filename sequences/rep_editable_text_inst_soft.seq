@@ -1,0 +1,19 @@
+-- CHANGED BY: filipe.f.pereira
+-- CHANGE DATE: 18/07/2013
+-- CHANGE REASON: ALERT-217073
+
+DECLARE
+  e_no_existent_index EXCEPTION;
+  l_seq_name VARCHAR2(30) := 'SEC_REP_EDIT_TEXT_INST_SOFT';
+  PRAGMA EXCEPTION_INIT(e_no_existent_index, -00955);
+BEGIN
+  EXECUTE IMMEDIATE 'CREATE sequence ' || l_seq_name ||
+                    ' minvalue 1 maxvalue 999999999999 START WITH 1 increment BY 1 cache 500 noorder nocycle';
+EXCEPTION
+  WHEN e_no_existent_index THEN
+    dbms_output.put_line('WARNING - Sequence ' || l_seq_name ||
+                         ' already created in previous version.');
+END;
+/
+
+-- CHANGE END: filipe.f.pereira

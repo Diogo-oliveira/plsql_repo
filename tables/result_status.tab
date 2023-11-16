@@ -1,0 +1,46 @@
+
+
+  CREATE TABLE RESULT_STATUS
+   (	ID_RESULT_STATUS NUMBER(24,0) NOT NULL ENABLE,
+	VALUE VARCHAR2(1) NOT NULL ENABLE,
+	DESC_RESULT_STATUS VARCHAR2(4000) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE result_status IS 'Parametrização de estados dos resultados (registos da tabela "0085 - Observation result status codes interpretation" do HL7)' ;
+
+COMMENT ON COLUMN result_status.value IS 'Valor na tabela de HL7' ;
+COMMENT ON COLUMN result_status.desc_result_status IS 'Descrição na tabela de HL7' ;
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 15-01-2009
+-- CHANGE REASON: ALERT-9198
+ALTER TABLE RESULT_STATUS 
+ ADD (CODE_RESULT_STATUS VARCHAR2(200) NOT NULL
+ )
+/
+
+COMMENT ON COLUMN RESULT_STATUS.CODE_RESULT_STATUS IS 'Código da descrição na tabela de HL7'
+/
+
+ALTER TABLE RESULT_STATUS DROP COLUMN DESC_RESULT_STATUS
+/
+-- CHANGE END
+
+
+-- CHANGED BY: Carlos Nogueira
+-- CHANGE DATE: 01/06/2010 09:25
+-- CHANGE REASON: [ALERT-14490] New columns and comments
+
+ALTER TABLE RESULT_STATUS
+  ADD (SHORT_CODE_RESULT_STATUS VARCHAR2(200 char) ,
+       FLG_MULTICHOICE VARCHAR2(1 char) ,
+       FLG_DEFAULT     VARCHAR2(1 char) );
+/
+comment on column result_status.short_code_result_status IS 'Short Result Status Description';
+/
+comment on column result_status.FLG_MULTICHOICE IS  'Result Status that are available to the user to be inserted manually using Multichoice: (Y)es or (N)o';
+/
+comment on column result_status.FLG_DEFAULT IS 'Default value for the Multichoice Result Status option';
+/
+-- CHANGE END: Carlos Nogueira

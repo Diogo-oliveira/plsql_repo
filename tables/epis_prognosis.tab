@@ -1,0 +1,60 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 06/12/2016 12:12
+-- CHANGE REASON: [ALERT-326422] Ability to indicate the patient prognosis
+--                
+CREATE TABLE epis_prognosis
+(
+  id_epis_prognosis      NUMBER(24) NOT NULL,
+  id_episode             NUMBER(24) NOT NULL,
+  flg_status             VARCHAR2(1 CHAR) NOT NULL,
+  prognosis_notes        CLOB NOT NULL,
+  id_prof_create         NUMBER(24) NOT NULL,
+  dt_create              TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+  id_prof_last_update    NUMBER(24),
+  dt_last_update         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  id_prof_cancel         NUMBER(24),
+  id_cancel_reason       NUMBER(24),
+  cancel_notes           VARCHAR2(4000 CHAR),
+  dt_cancel              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_user            VARCHAR2(24 CHAR),
+  create_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution     NUMBER(24),
+  update_user            VARCHAR2(24 CHAR),
+  update_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution     NUMBER(24)  
+);
+
+COMMENT ON TABLE epis_prognosis IS 'Table to store the episode prognosis';
+COMMENT ON COLUMN epis_prognosis.id_epis_prognosis IS 'Prognosis identifier';
+COMMENT ON COLUMN epis_prognosis.id_episode IS 'Episode identifier';
+COMMENT ON COLUMN epis_prognosis.flg_status IS 'Prognosis status: A - Active; C - Cancelled';
+COMMENT ON COLUMN epis_prognosis.prognosis_notes IS 'Prognosis notes';
+COMMENT ON COLUMN epis_prognosis.id_prof_create IS 'Professional that created the record';
+COMMENT ON COLUMN epis_prognosis.dt_create IS 'Creation date';
+COMMENT ON COLUMN epis_prognosis.id_prof_last_update IS 'Professional that performed the last update';
+COMMENT ON COLUMN epis_prognosis.dt_last_update IS 'Last update date';
+COMMENT ON COLUMN epis_prognosis.id_prof_cancel IS 'Professional that cancelled the record';
+COMMENT ON COLUMN epis_prognosis.id_cancel_reason IS 'Cancel reason identifier';
+COMMENT ON COLUMN epis_prognosis.cancel_notes IS 'Notes when canceling the record';
+COMMENT ON COLUMN epis_prognosis.dt_cancel IS 'Cancellation date';
+COMMENT ON COLUMN epis_prognosis.create_user IS 'Creation User';
+COMMENT ON COLUMN epis_prognosis.create_time IS 'creation Time';
+COMMENT ON COLUMN epis_prognosis.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN epis_prognosis.update_user IS 'update User';
+COMMENT ON COLUMN epis_prognosis.update_time IS 'update Time';
+COMMENT ON COLUMN epis_prognosis.update_institution IS 'Update Institution';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:33
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.epis_prognosis move lob(prognosis_notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

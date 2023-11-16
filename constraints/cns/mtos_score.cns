@@ -1,0 +1,29 @@
+ALTER TABLE mtos_score ADD CONSTRAINT MSE_PK PRIMARY KEY (id_mtos_score) ENABLE;
+ALTER TABLE mtos_score ADD CONSTRAINT MSE_INTNAME_UK UNIQUE (internal_name) ENABLE;
+ALTER TABLE mtos_score ADD CONSTRAINT MSE_FLGSCORETYPE_CHK CHECK(flg_score_type IN ('GCS', 'RTS', 'PTS', 'ISS', 'TRISS'));
+ALTER TABLE mtos_score ADD CONSTRAINT MSE_FLGAVAILABLE_CHK CHECK(flg_available IN ('Y', 'N'));
+
+ALTER TABLE mtos_score DROP CONSTRAINT MSE_FLGSCORETYPE_CHK;
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 23/08/2013 14:53
+-- CHANGE REASON: [ALERT-262898] 
+BEGIN
+     EXECUTE IMMEDIATE 'ALTER TABLE MTOS_SCORE ADD CONSTRAINT MSE_FLGVIEWER_CHK CHECK ( FLG_VIEWER IN (''N'',''Y'')) ENABLE;';
+exception when others then
+  dbms_output.put_line('ALTER TABLE MTOS_SCORE ADD FLG_VIEWER ERROR!');   
+end;
+/
+-- CHANGE END: mario.mineiro
+
+
+declare
+l_sql varchar2(4000);
+pl  varchar2(0010 char) := '''';
+begin
+l_Sql := 'alter table MTOS_SCORE   add constraint MSE_FLGVISIBLE_CHK   check (flg_title_visible IN (';
+l_sql := l_sql || pl||'Y'||pl||', '||pl||'N'||pl||'))';
+pk_versioning.run( l_sql);
+end;
+/
+

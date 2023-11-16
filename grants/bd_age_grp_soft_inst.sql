@@ -1,0 +1,12 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 29/05/2009 09:02
+-- CHANGE REASON: [ALERT-19154] Body diagram - Filter images by age
+GRANT SELECT ON BD_AGE_GRP_SOFT_INST TO alert_viewer;
+-- CHANGE END: Sérgio Santos
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2017-1-03
+-- CHANGED REASON: ALERT-327486
+grant SELECT on ALERT.BD_AGE_GRP_SOFT_INST to ALERT_APEX_TOOLS;
+-- CHANGE END: Humberto Cardoso

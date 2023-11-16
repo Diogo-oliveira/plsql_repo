@@ -1,0 +1,18 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 30/04/2013 11:08
+-- CHANGE REASON: [ALERT-241113] 
+CREATE UNIQUE INDEX HID_OCCUR_TYPE_CNT_UK ON hidrics_occurs_type 
+       (CASE
+           WHEN id_content IS NOT NULL
+                AND nvl(flg_available, 'Y') <> 'N' THEN
+            id_content
+       END,
+       CASE
+           WHEN id_content IS NOT NULL
+                AND nvl(flg_available, 'Y') <> 'N' THEN
+            flg_available
+       END);
+
+CREATE INDEX HID_OCCUR_TYPE_CNT_IDX ON hidrics_occurs_type 
+       (ID_CONTENT, FLG_AVAILABLE);
+-- CHANGE END: Paulo Teixeira

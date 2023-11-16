@@ -1,0 +1,62 @@
+
+CREATE TABLE geo_state(
+  id_geo_state        NUMBER,
+  id_country          NUMBER,
+  code_geo_state      VARCHAR2(200) NOT NULL,
+  code_geo_state_abbr VARCHAR2(200) NOT NULL,
+  flg_available       VARCHAR2(1) DEFAULT 'Y' NOT NULL);
+
+COMMENT ON geo_state IS 'Chave primária';
+COMMENT ON column geo_state.id_geo_state IS 'Estado, região administrativa de um país';
+COMMENT ON column geo_state.id_country IS 'Id do país a que este estado pertence (FK para COUNTRY.ID_COUNTRY)';
+COMMENT ON column geo_state.code_geo_state IS 'Código da translation para o nome do estado';
+COMMENT ON column geo_state.code_geo_state_abbr IS 'Código da translation para a abreviatura do nome do estado';
+COMMENT ON column geo_state.flg_available IS 'Indica se o registo está disponível';
+
+
+
+-- CHANGED BY:  Álvaro Vasconcelos
+-- CHANGE DATE: 16/06/2011 14:48
+-- CHANGE REASON: [ALERT-184978] Sis Pre Natal
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE geo_state add code_state VARCHAR2(24 CHAR)';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('Column already exists');
+END;
+/
+
+COMMENT ON COLUMN geo_state.code_state                IS 'Official number attributed to state - used on Sis Pre-Natal';
+-- CHANGE END:  Álvaro Vasconcelos
+
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 2011-10-14
+-- CHANGE REASON: ADT-5595
+
+comment on table GEO_STATE
+  is 'Estados (usados em BR, US, etc.)';
+
+DECLARE
+    e_object_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table GEO_STATE add id_content varchar2(200 char)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+    END;
+
+END;
+/
+
+comment on column GEO_STATE.id_content is 'Content unique identifier';
+
+-- CHANGED END: Bruno Martins

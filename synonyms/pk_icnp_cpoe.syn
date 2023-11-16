@@ -1,0 +1,20 @@
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/12/2009 21:08
+-- CHANGE REASON: [ALERT-62132] CPOE Procedures/Dressings/Patient education
+CREATE OR REPLACE SYNONYM ALERT_VIEWER.PK_ICNP_CPOE FOR ALERT.PK_ICNP_CPOE;
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 29/07/2011 18:01
+-- CHANGE REASON: [ALERT-182932] Implementation of the recurrence mechanism in ICNP functionality
+DECLARE
+    e_synonym_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_synonym_not_exists, -01434); -- synonym to be dropped doesnt exist
+BEGIN
+  EXECUTE IMMEDIATE 'drop synonym alert_viewer.pk_icnp_cpoe';
+EXCEPTION
+  WHEN e_synonym_not_exists THEN
+    dbms_output.put_line('The synonym alert_viewer.pk_icnp_fo doesnt exist');   
+END;
+/
+-- CHANGE END: Luis Oliveira

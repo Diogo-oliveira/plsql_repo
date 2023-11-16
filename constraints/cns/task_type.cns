@@ -1,0 +1,29 @@
+ALTER TABLE TASK_TYPE ADD CONSTRAINT TTY_PK PRIMARY KEY
+	(ID_TASK_TYPE);
+
+ALTER TABLE TASK_TYPE ADD CONSTRAINT TTY_UK UNIQUE 
+  (FLG_TYPE);
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 04/07/2010 02:37
+-- CHANGE REASON: [ALERT-109296] TDE Core versioning (DDL)
+alter table TASK_TYPE add constraint TTY_FLG_DEPENDENCY_SUPPORT_CHK check (FLG_DEPENDENCY_SUPPORT in ('A', 'S', 'F', 'N'));
+alter table TASK_TYPE add constraint TTY_FLG_EPISODE_TASK_CHK check (FLG_EPISODE_TASK in ('T', 'E', 'B'));
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 10/11/2011 15:02
+-- CHANGE REASON: [ALERT-198676] Institutionalized diet task type integration in Order Sets
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -02264); -- name already used by an existing constraint
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table TASK_TYPE add constraint TTY_FLG_MODULAR_WORKFLOW_CHK CHECK (FLG_MODULAR_WORKFLOW IN (''Y'', ''N''))';
+    EXCEPTION
+        WHEN e_already_exists THEN
+            dbms_output.put_line('constraint TTY_FLG_MODULAR_WORKFLOW_CHK already exists');
+    END;
+END;
+/
+-- CHANGE END: Carlos Loureiro

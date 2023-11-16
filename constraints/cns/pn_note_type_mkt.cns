@@ -1,0 +1,562 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:29
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table pn_note_type_mkt
+  add constraint pntm_pk primary key (id_software, id_market, id_pn_area, id_pn_note_type, id_category, id_profile_template, flg_config_type);
+  
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_ADDEND_OTHER_PROF_CHK CHECK(FLG_ADDEND_OTHER_PROF IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_SHOW_EMPTY_BLOCKS_CHK CHECK(FLG_SHOW_EMPTY_BLOCKS IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_IMPORT_AVAILABLE_CHK CHECK(FLG_IMPORT_AVAILABLE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_SIGNOFFLOGIN_AVAIL_CHK CHECK(FLG_SIGN_OFF_LOGIN_AVAIL IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_LAST_24H_CHK CHECK(FLG_LAST_24H IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_DICTATION_EDIT_CHK CHECK(FLG_DICTATION_EDITABLE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_AUTO_POPULATED_CHK CHECK(FLG_AUTO_POPULATED IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_CLEAR_INFORMATION_CHK CHECK(FLG_CLEAR_INFORMATION IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_REVIEW_ALL_CHK CHECK(flg_review_all IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_EDIT_AFTER_DISCH_CHK CHECK(FLG_EDITABLE_AFTER_DISCHARGE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_IMPORT_FIRST_CHK CHECK(FLG_IMPORT_FIRST IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_SCREEN_REVIEW_CHK CHECK(FLG_SHOW_SCREEN_REVIEW IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_WRITE_CHK CHECK(FLG_WRITE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_CFG_TYPE_CHK CHECK(FLG_CONFIG_TYPE IN ('S', 'C','P'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_COPY_EDIT_CHK CHECK(FLG_COPY_EDIT_REPLACE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_EXPAND_CHK CHECK(FLG_EXPAND_SBLOCKS IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_SYNCHRONIZED_CHK CHECK(FLG_SYNCHRONIZED IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_SHOW_IMPORT_MENU_CHK CHECK(FLG_SHOW_IMPORT_MENU IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_EDIT_OTHER_PROF_CHK CHECK(FLG_EDIT_OTHER_PROF IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_CREATE_ON_APP_CHK CHECK(FLG_CREATE_ON_APP IN ('Y', 'N'));
+
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_CFG_TYPE_CHK CHECK(case when FLG_CONFIG_TYPE = 'S' and id_software<>0 and id_category=-1 and id_profile_template=0 then 1 when
+FLG_CONFIG_TYPE = 'C' and id_software=0 and id_category<>-1 and id_profile_template=0 then 1 
+when FLG_CONFIG_TYPE = 'P' and id_software=0 and id_category=-1 and id_profile_template<>0 then 1 else null end 
+is not null);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 09:59
+-- CHANGE REASON: H&P phase2
+alter table pn_note_type_mkt
+  add constraint pntm_pk primary key (id_software, id_market, id_pn_area, id_pn_note_type, id_category, id_profile_template, flg_config_type);
+  
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_ADDEND_OTHER_PROF_CHK CHECK(FLG_ADDEND_OTHER_PROF IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_SHOW_EMPTY_BLOCKS_CHK CHECK(FLG_SHOW_EMPTY_BLOCKS IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_IMPORT_AVAILABLE_CHK CHECK(FLG_IMPORT_AVAILABLE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_SIGNOFFLOGIN_AVAIL_CHK CHECK(FLG_SIGN_OFF_LOGIN_AVAIL IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_LAST_24H_CHK CHECK(FLG_LAST_24H IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_DICTATION_EDIT_CHK CHECK(FLG_DICTATION_EDITABLE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_AUTO_POPULATED_CHK CHECK(FLG_AUTO_POPULATED IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_CLEAR_INFORMATION_CHK CHECK(FLG_CLEAR_INFORMATION IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_REVIEW_ALL_CHK CHECK(flg_review_all IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_EDIT_AFTER_DISCH_CHK CHECK(FLG_EDITABLE_AFTER_DISCHARGE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_IMPORT_FIRST_CHK CHECK(FLG_IMPORT_FIRST IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_SCREEN_REVIEW_CHK CHECK(FLG_SHOW_SCREEN_REVIEW IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_WRITE_CHK CHECK(FLG_WRITE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_CFG_TYPE_CHK CHECK(FLG_CONFIG_TYPE IN ('S', 'C','P'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_COPY_EDIT_CHK CHECK(FLG_COPY_EDIT_REPLACE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_EXPAND_CHK CHECK(FLG_EXPAND_SBLOCKS IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_SYNCHRONIZED_CHK CHECK(FLG_SYNCHRONIZED IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_SHOW_IMPORT_MENU_CHK CHECK(FLG_SHOW_IMPORT_MENU IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_EDIT_OTHER_PROF_CHK CHECK(FLG_EDIT_OTHER_PROF IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_CREATE_ON_APP_CHK CHECK(FLG_CREATE_ON_APP IN ('Y', 'N'));
+
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_CFG_TYPE_CHK CHECK(case when FLG_CONFIG_TYPE = 'S' and id_software<>0 and id_category=-1 and id_profile_template=0 then 1 when
+FLG_CONFIG_TYPE = 'C' and id_software=0 and id_category<>-1 and id_profile_template=0 then 1 
+when FLG_CONFIG_TYPE = 'P' and id_software=0 and id_category=-1 and id_profile_template<>0 then 1 else null end 
+is not null);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:10
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table pn_note_type_mkt
+  add constraint pntm_pk primary key (id_software, id_market, id_pn_area, id_pn_note_type, id_category, id_profile_template, flg_config_type);
+  
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_ADDEND_OTHER_PROF_CHK CHECK(FLG_ADDEND_OTHER_PROF IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_SHOW_EMPTY_BLOCKS_CHK CHECK(FLG_SHOW_EMPTY_BLOCKS IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_IMPORT_AVAILABLE_CHK CHECK(FLG_IMPORT_AVAILABLE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_SIGNOFFLOGIN_AVAIL_CHK CHECK(FLG_SIGN_OFF_LOGIN_AVAIL IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_LAST_24H_CHK CHECK(FLG_LAST_24H IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_DICTATION_EDIT_CHK CHECK(FLG_DICTATION_EDITABLE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_AUTO_POPULATED_CHK CHECK(FLG_AUTO_POPULATED IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_CLEAR_INFORMATION_CHK CHECK(FLG_CLEAR_INFORMATION IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_REVIEW_ALL_CHK CHECK(flg_review_all IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_EDIT_AFTER_DISCH_CHK CHECK(FLG_EDITABLE_AFTER_DISCHARGE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_IMPORT_FIRST_CHK CHECK(FLG_IMPORT_FIRST IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_SCREEN_REVIEW_CHK CHECK(FLG_SHOW_SCREEN_REVIEW IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_WRITE_CHK CHECK(FLG_WRITE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_CFG_TYPE_CHK CHECK(FLG_CONFIG_TYPE IN ('S', 'C','P'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_COPY_EDIT_CHK CHECK(FLG_COPY_EDIT_REPLACE IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_EXPAND_CHK CHECK(FLG_EXPAND_SBLOCKS IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_SYNCHRONIZED_CHK CHECK(FLG_SYNCHRONIZED IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_SHOW_IMPORT_MENU_CHK CHECK(FLG_SHOW_IMPORT_MENU IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_EDIT_OTHER_PROF_CHK CHECK(FLG_EDIT_OTHER_PROF IN ('Y', 'N'));
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_CREATE_ON_APP_CHK CHECK(FLG_CREATE_ON_APP IN ('Y', 'N'));
+
+ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_CFG_TYPE_CHK CHECK(case when FLG_CONFIG_TYPE = 'S' and id_software<>0 and id_category=-1 and id_profile_template=0 then 1 when
+FLG_CONFIG_TYPE = 'C' and id_software=0 and id_category<>-1 and id_profile_template=0 then 1 
+when FLG_CONFIG_TYPE = 'P' and id_software=0 and id_category=-1 and id_profile_template<>0 then 1 else null end 
+is not null);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:03
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT add constraint PNNTM_EDT_AFT_DISCH_CHK check (FLG_EDIT_AFTER_DISCH IN (''Y'', ''N''))');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:03
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('ALTER TABLE PN_NOTE_TYPE_MKT ADD CONSTRAINT PNNTMKT_CLEAR_INFO CHECK ( FLG_CLEAR_INFORMATION IN (''Y'', ''N''))');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:48
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT add constraint PNNTM_EDT_AFT_DISCH_CHK check (FLG_EDIT_AFTER_DISCH IN (''Y'', ''N''))');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:48
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('ALTER TABLE PN_NOTE_TYPE_MKT ADD CONSTRAINT PNNTMKT_CLEAR_INFO_CHK CHECK ( FLG_CLEAR_INFORMATION IN (''Y'', ''N''))');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:48
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT add constraint PNNTMKT_GENDER_CHK CHECK (gender IN (''N'',''M'', ''F'', ''I'', ''U'', ''H'') OR gender IS NULL)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:11
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_NOTE_TYPE_MKT DROP CONSTRAINT PNTM_FLG_CLEAR_INFORMATION_CHK ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:11
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_NOTE_TYPE_MKT DROP CONSTRAINT PNNTMKT_CLEAR_INFO_CHK ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:11
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_NOTE_TYPE_MKT add CONSTRAINT PNTM_FLG_CLEAR_INFORMATION_CHK CHECK (FLG_CLEAR_INFORMATION IN (''Y'', ''N'')) ENABLE');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:11
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_NOTE_TYPE_MKT DROP CONSTRAINT PNNTM_EDT_AFT_DISCH_CHK ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:11
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_NOTE_TYPE_MKT add CONSTRAINT PNTM_EDT_AFT_DISCH_CHK CHECK (FLG_EDIT_AFTER_DISCH IN (''Y'', ''N'')) ENABLE');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:11
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_NOTE_TYPE_MKT DROP CONSTRAINT PNNTMKT_GENDER_CHK ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:11
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_NOTE_TYPE_MKT add CONSTRAINT PNTM_GENDER_CHK CHECK (GENDER IN (''N'',''M'', ''F'', ''I'', ''U'', ''H'') OR GENDER IS NULL) ENABLE');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:11
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_NOTE_TYPE_MKT add CONSTRAINT PNTM_REVIEW_ALL_CHK CHECK (FLG_REVIEW_ALL IN (''Y'', ''N'')) ENABLE');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 10/01/2012 15:37
+-- CHANGE REASON: [ALERT-213298 ] H&P import: It are only appearing the today's records
+begin
+execute immediate ('alter table pn_note_type_mkt drop constraint PNTM_FLG_LAST_24H_CHK');
+exception
+when others then
+dbms_output.put_line('Operacao já executada anteriormente');
+end;
+/
+
+begin
+execute immediate ('ALTER TABLE pn_note_type_mkt ADD CONSTRAINT PNTM_FLG_LAST_24H_CHK CHECK(FLG_LAST_24H IN (''Y'', ''N'', ''T''))');
+exception
+when others then
+dbms_output.put_line('Operacao já executada anteriormente');
+end;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/01/2012 16:29
+-- CHANGE REASON: [ALERT-216664] 
+DECLARE
+    e_unique_already_there EXCEPTION;    
+
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261); -- unique constraint    
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type_mkt
+  add constraint pntm_flg_discharge_warning_chk
+  check (flg_discharge_warning IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_unique_already_there EXCEPTION;    
+
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261); -- unique constraint    
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type_mkt
+  add constraint pntm_FLG_AUTOPOP_WARNING_chk
+  check (FLG_AUTOPOP_WARNING IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_unique_already_there EXCEPTION;    
+
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261); -- unique constraint    
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type_mkt
+  add constraint pntm_FLG_AUTOSAVE_WARNING_chk
+  check (FLG_AUTOSAVE_WARNING IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_unique_already_there EXCEPTION;    
+
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261); -- unique constraint    
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type_mkt
+  add constraint pntm_FLG_REMOVE_WARNING_chk
+  check (FLG_REMOVE_WARNING IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:49
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt ADD (CONSTRAINT PNTM_FLG_DIS_WAR_OPT_CHK CHECK (flg_disch_warning_option IN (''M'', ''V'')))';
+EXCEPTION
+    WHEN others THEN
+        null;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt ADD (CONSTRAINT PNTM_FLG_REVIEW_WARN_CHK CHECK (flg_review_warning IN (''Y'', ''N'')))';
+EXCEPTION
+    WHEN others THEN
+        null;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt ADD (CONSTRAINT PNTM_FLG_REV_WARN_OP_CHK CHECK (flg_review_warn_option IN (''M'', ''V'')))';
+EXCEPTION
+    WHEN others THEN
+        null;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt ADD (CONSTRAINT PNTM_FLG_IMPORT_WARN_CHK CHECK (flg_import_warning IN (''Y'', ''N'')))';
+EXCEPTION
+    WHEN others THEN
+        null;
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 05/04/2012 10:03
+-- CHANGE REASON: [ALERT-226388] Allow software = 0 for note type and free texts configurations - EDIS restructuring - Present Illness / Current visit
+begin
+execute immediate('alter table PN_NOTE_TYPE_MKT
+  drop constraint PNTM_CFG_TYPE_CHK');
+exception
+when others then
+     dbms_output.put_line('Script already executed');
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 05/04/2012 10:07
+-- CHANGE REASON: [ALERT-226388] Allow software = 0 for note type and free texts configurations - EDIS restructuring - Present Illness / Current visit
+begin
+execute immediate('alter table PN_NOTE_TYPE_MKT
+  add constraint PNTM_CFG_TYPE_CHK
+  check (case when FLG_CONFIG_TYPE = ''S'' and id_software<>-1 and id_category=-1 and id_profile_template=0 then 1 when
+FLG_CONFIG_TYPE = ''C'' and id_software=-1 and id_category<>-1 and id_profile_template=0 then 1
+when FLG_CONFIG_TYPE = ''P'' and id_software=-1 and id_category=-1 and id_profile_template<>0 then 1 else null end
+is not null)');
+exception
+when others then
+     dbms_output.put_line('Script already executed');
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:51
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type_mkt
+  add constraint PNTM_FLG_STATUS_AVAILABLE_CHK
+  check (FLG_STATUS_AVAILABLE IN (''Y'', ''N''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type_mkt
+  add constraint PNTM_FLG_SAVE_ONLY_SCREEN_CHK
+  check (FLG_SAVE_ONLY_SCREEN IN (''Y'', ''N''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type_mkt
+  add constraint PNTM_FLG_EDIT_ONLY_LAST_CHK
+  check (FLG_EDIT_ONLY_LAST IN (''Y'', ''N''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type_mkt
+  add constraint PNTM_FLG_REMOVE_ON_OK_CHK
+  check (FLG_REMOVE_ON_OK IN (''Y'', ''N''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type_mkt
+  add constraint PNTM_FLG_HELP_SAVE_CHK
+  check (FLG_HELP_SAVE IN (''Y'', ''N''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type_mkt
+  add constraint PNTM_FLG_PARTIAL_WARNING_CHK
+  check (FLG_PARTIAL_WARNING IN (''Y'', ''N''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:55
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type
+  add constraint PNT_FLG_TASK_CHK
+  check (FLG_TASK IN (''HP'', ''PN''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/10/2012 16:02
+-- CHANGE REASON: [ALERT-242379 ] Single page note for Discharge Summary
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt ADD (CONSTRAINT PNTM_SUGGEST_CONCEPT_CHK CHECK (FLG_SUGGEST_CONCEPT IN (''R'', ''P'',''E'',''N'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt ADD (CONSTRAINT PNTM_FLG_REVIEW_ON_OK_CHK CHECK (FLG_REVIEW_ON_OK IN (''Y'', ''N'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt ADD (CONSTRAINT PNTM_FLG_PARTIAL_LOAD_CHK CHECK (FLG_PARTIAL_LOAD IN (''Y'', ''N'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY:  Vanessa Barsottelli
+-- CHANGE DATE: 31/03/2014 10:02
+-- CHANGE REASON: [ALERT-280545] DB Dev - Sign-off Reformulation
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE pn_note_type_mkt ADD CONSTRAINT pntm_sign_off_chk CHECK (FLG_SIGN_OFF IN (''Y'', ''N''))');
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END:  Vanessa Barsottelli
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 13/11/2017 08:50
+-- CHANGE REASON: [CALERT-344 ] Ability to copy specific records that require to be edited.
+alter table pn_note_type_mkt drop constraint PNTM_FLG_REV_WARN_OP_CHK;
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt ADD (CONSTRAINT PNTM_FLG_REV_WARN_OP_CHK CHECK (flg_review_warn_option IN (''M'', ''V'', ''W'')))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 06/12/2017 15:11
+-- CHANGE REASON: [CALERT-1161 ] DDL versioning
+alter table PN_NOTE_TYPE_MKT
+  drop constraint PNTM_FLG_IMPORT_AVAILABLE_CHK;
+alter table PN_NOTE_TYPE_MKT
+  add constraint PNTM_FLG_IMPORT_AVAILABLE_CHK
+  check (FLG_IMPORT_AVAILABLE IN ('Y', 'N','E'));
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 28/05/2019 12:16
+-- CHANGE REASON: [EMR-16174] - [DB] Improvements to Psychiatric assessment (SA Market)
+ALTER TABLE pn_note_type_mkt
+ADD CONSTRAINT PNTM_FLG_PATIENT_WARNING_CHK
+CHECK (FLG_PATIENT_ID_WARNING IN ('Y', 'N'));
+-- CHANGE END: Nuno Coelho

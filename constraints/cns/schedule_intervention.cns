@@ -1,0 +1,25 @@
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table SCHEDULE_INTERVENTION
+  add constraint SCHI_PK primary key (ID_SCHEDULE_INTERVENTION)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+
+
+-- CHANGE BY: RitA lOPES
+-- CHANGE REASON: Acrescentar check contrainst na tabela schedule_intervention
+-- CHANGE DATE: 20080704
+
+alter table SCHEDULE_INTERVENTION
+  add constraint SI_FLGSTATE_CK
+  check (flg_state IN ('S','A','E','M','C','O','F','P'));
+
+-- CHANGE END

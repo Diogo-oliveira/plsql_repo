@@ -1,0 +1,18 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/11/2013 16:44
+-- CHANGE REASON: [ALERT-270542] 
+BEGIN
+    pk_versioning.run(i_sql => 'ALTER TABLE REF_COMMENTS
+ ADD (CONSTRAINT RCS_FLG_STATUS_CHK CHECK (FLG_STATUS in (''A'', ''O'', ''C'')))');
+
+pk_versioning.run(i_sql => 'ALTER TABLE REF_COMMENTS
+ ADD (CONSTRAINT RCS_FLG_TYPE_CHK CHECK (FLG_TYPE in (''A'', ''C'')))');
+
+pk_versioning.run(i_sql => 'ALTER TABLE REF_COMMENTS
+ ADD (CONSTRAINT RCS_PK PRIMARY KEY 
+  (ID_REF_COMMENT)
+ USING INDEX 
+ TABLESPACE INDEX_L)');
+END;
+/
+-- CHANGE END: Joana Barroso

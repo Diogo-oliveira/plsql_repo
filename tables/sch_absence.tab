@@ -1,0 +1,26 @@
+CREATE TABLE sch_absence (
+  id_sch_absence  NUMBER(24),
+  id_professional NUMBER(24),
+  id_institution  NUMBER(12),
+  dt_begin_tstz   TIMESTAMP WITH LOCAL TIME ZONE,
+  dt_end_tstz     TIMESTAMP WITH LOCAL TIME ZONE,
+  desc_absence    VARCHAR2(4000),
+  flg_type        VARCHAR2(1),
+  flg_status      VARCHAR2(1)
+);
+
+COMMENT ON TABLE sch_absence IS 'Stores professionals'' absence periods on an institution.';
+COMMENT ON COLUMN sch_absence.id_sch_absence IS 'Absence identifier';
+COMMENT ON COLUMN sch_absence.id_professional IS 'Professional identifier';
+COMMENT ON COLUMN sch_absence.id_institution IS 'Institution identifier';
+COMMENT ON COLUMN sch_absence.dt_begin_tstz  IS 'Absence start date';
+COMMENT ON COLUMN sch_absence.dt_end_tstz IS 'Absence end date';
+COMMENT ON COLUMN sch_absence.desc_absence IS 'Absence description';
+COMMENT ON COLUMN sch_absence.flg_type IS 'Absence type: T training, S sick, V vacations, O other';
+COMMENT ON COLUMN sch_absence.flg_status IS 'Absence status: A active, I inactive';
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 23-09-2008
+-- CHANGE REASON: igualar datatype a institution.id_institution
+alter table SCH_ABSENCE modify ID_INSTITUTION NUMBER(24);
+--END

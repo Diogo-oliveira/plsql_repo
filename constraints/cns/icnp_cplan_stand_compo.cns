@@ -1,0 +1,153 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+-- Create/Recreate check constraints
+DECLARE
+e_unique_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261); -- unique constraint
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO
+  add constraint ICSC_PK primary key (ID_CPLAN_STAND_COMPO)';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO
+  add constraint ICSC_UK unique (ID_CPLAN_STAND, ID_COMPOSITION, ID_COMPOSITION_PARENT)';
+    EXCEPTION
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+DECLARE
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO drop constraint ICSC_FLG_COMPO_TYPE_CHK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+alter table ICNP_CPLAN_STAND_COMPO
+  add constraint ICSC_FLG_COMPO_TYPE_CHK
+  check (FLG_COMPO_TYPE IN ('D', 'I', 'R'));
+DECLARE
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO drop constraint ICSC_FLG_DURATION_UNIT_CHK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+alter table ICNP_CPLAN_STAND_COMPO
+  add constraint ICSC_FLG_DURATION_UNIT_CHK
+  check (flg_duration_unit in ('D','H','M'));
+DECLARE
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO drop constraint ICSC_FLG_FREQ_CHK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+alter table ICNP_CPLAN_STAND_COMPO
+  add constraint ICSC_FLG_FREQ_CHK
+  check (flg_freq in ('D','S','M'));
+DECLARE
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO drop constraint ICSC_FLG_INTERVAL_UNIT_CHK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+alter table ICNP_CPLAN_STAND_COMPO
+  add constraint ICSC_FLG_INTERVAL_UNIT_CHK
+  check (flg_interval_unit in ('D','H','M'));
+DECLARE
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO drop constraint ICSC_FLG_STATUS_CHK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+alter table ICNP_CPLAN_STAND_COMPO
+  add constraint ICSC_FLG_STATUS_CHK
+  check (FLG_STATUS IN ('A', 'I'));
+DECLARE
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO drop constraint ICSC_FLG_TIME_CHK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+alter table ICNP_CPLAN_STAND_COMPO
+  add constraint ICSC_FLG_TIME_CHK
+  check (flg_time in ('B','E','N'));
+DECLARE
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO drop constraint ICSC_FLG_TYPE_CHK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+alter table ICNP_CPLAN_STAND_COMPO
+  add constraint ICSC_FLG_TYPE_CHK
+  check (flg_type in ('C','N','S','U'));
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 29/07/2011 18:01
+-- CHANGE REASON: [ALERT-182932] Implementation of the recurrence mechanism in ICNP functionality
+DECLARE
+  e_nonexistent_constraint EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_nonexistent_constraint, -02443); -- nonexistent constraint
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE icnp_cplan_stand_compo DROP CONSTRAINT icsc_flg_type_chk';
+  EXCEPTION
+    WHEN e_nonexistent_constraint THEN
+      dbms_output.put_line('Constraint icnp_cplan_stand_compo.icsc_flg_type_chk doesnt exist');
+  END;
+
+  EXECUTE IMMEDIATE 'ALTER TABLE icnp_cplan_stand_compo ADD CONSTRAINT icsc_flg_type_chk check (flg_type IN (
+        -- Old status, remove after migration: Normal (N), Unitário (U), SOS  (S), Ad eternum  (A), Contínuo  (C)
+        ''N'',''U'',''S'',''A'',''C'',
+        -- New status
+        ''O'', ''N'', ''R''))';
+END;
+/
+-- CHANGE END: Luis Oliveira

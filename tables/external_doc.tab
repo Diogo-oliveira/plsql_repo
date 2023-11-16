@@ -1,0 +1,42 @@
+CREATE TABLE EXTERNAL_DOC
+(
+  ID_EXTERNAL_DOC NUMBER NOT NULL,
+  ID_EXT          VARCHAR2(100),
+  NAME_EXT        VARCHAR2(300),
+  DT_EXEC_EXT     DATE,
+  DOC_EXT         CLOB,
+  DT_INSERT       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DOC_JPEG_EXT    BLOB,
+  FLG_STATE       VARCHAR2(1),
+	ID_EXTERNAL_SYS NUMber(12)
+);
+
+comment on table EXTERNAL_DOC
+  is 'Tabela de dados externos que nao têm interface completo, como os ECG';
+	
+comment on column EXTERNAL_DOC.ID_EXTERNAL_DOC
+  is 'Chave primaria';
+
+comment on column EXTERNAL_DOC.ID_EXT
+  is 'Id que o sistema externo nos manda, pode ser o numero de codigo de barras, pode ser o id do sonho, ou outro previamente combinado com a empresa externa';
+
+comment on column EXTERNAL_DOC.NAME_EXT
+  is 'Nome do paciente que o sistema externo nos manda';
+
+comment on column EXTERNAL_DOC.DT_EXEC_EXT
+  is 'Data de execução do exame no sistema externo';	
+	
+comment on column EXTERNAL_DOC.DOC_EXT
+  is 'Ficheiro de texto enviado, no caso dos ecgs o SVG';	
+
+comment on column EXTERNAL_DOC.DT_INSERT
+  is 'Data de inserção na base de dados pelo interface';	
+	
+comment on column EXTERNAL_DOC.DOC_JPEG_EXT
+  is 'Ficheiro de imagem';	
+
+comment on column EXTERNAL_DOC.FLG_STATE
+  is 'Estado : A-activo para seleção; F- ja usado por um paciente';	
+	
+comment on column EXTERNAL_DOC.ID_EXTERNAL_SYS
+  is 'Id do sistema externo';	

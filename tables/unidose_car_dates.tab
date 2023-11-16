@@ -1,0 +1,43 @@
+-- Create table
+create table UNIDOSE_CAR_DATES
+(
+  ID_UNIDOSE_CAR_DATES NUMBER(24),
+  ID_UNIDOSE_CAR       NUMBER(24),
+  STATUS               VARCHAR2(1),
+  CIRCUIT_DATE         DATE,
+  STATUS_DATE          DATE
+);
+-- Add comments to the table 
+comment on table UNIDOSE_CAR_DATES
+  is 'Datas em que o carro fez o circuito';
+-- Add comments to the columns 
+comment on column UNIDOSE_CAR_DATES.ID_UNIDOSE_CAR_DATES
+  is 'id da tabela';
+comment on column UNIDOSE_CAR_DATES.ID_UNIDOSE_CAR
+  is 'id do carro unidose';
+comment on column UNIDOSE_CAR_DATES.STATUS
+  is 'Estado do carro na data em questão N não preparado, P preparado, T em transporte, F finalizado';
+comment on column UNIDOSE_CAR_DATES.CIRCUIT_DATE
+  is 'Dia em que o carro fez o circuito';
+comment on column UNIDOSE_CAR_DATES.STATUS_DATE
+  is 'data da alteração do status';
+
+
+
+
+ALTER TABLE UNIDOSE_CAR_DATES ADD CIRCUIT_DATE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN UNIDOSE_CAR_DATES.CIRCUIT_DATE_TSTZ IS 'Dia em que o carro fez o circuito'; 
+
+
+
+
+ALTER TABLE UNIDOSE_CAR_DATES ADD STATUS_DATE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN UNIDOSE_CAR_DATES.STATUS_DATE_TSTZ IS 'data da altera‡Æo do status'; 
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGED DATE: 2008-SEPT-22
+-- CHANGING REASON: Remoção de colunas do tipo DATE que tenham equivalentes do tipo TIMESTAMP WITH LOCAL TIME ZONE
+ALTER TABLE UNIDOSE_CAR_DATES DROP COLUMN circuit_date; 
+ALTER TABLE UNIDOSE_CAR_DATES DROP COLUMN status_date; 
+-- CHANGE END
+

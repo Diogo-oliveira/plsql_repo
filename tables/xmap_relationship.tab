@@ -1,0 +1,48 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 25/03/2011 15:30
+-- CHANGE REASON: [ALERT-164551] 
+CREATE TABLE XMAP_RELATIONSHIP
+(
+  ID_SOURCE_MAP_CONCEPT   NUMBER(24) NOT NULL,
+  ID_TARGET_MAP_CONCEPT   NUMBER(24) NOT NULL,
+  ID_SOURCE_MAP_SET     NUMBER(24) NOT NULL,
+  ID_TARGET_MAP_SET     NUMBER(24) NOT NULL,  
+  SOURCE_COORDINATED_EXPR  VARCHAR2(1000 char) NOT NULL,
+  TARGET_COORDINATED_EXPR  VARCHAR2(1000 char) NOT NULL,
+  MAP_STATUS       VARCHAR2(2 CHAR) NOT NULL,
+  MAP_CATEGORY     VARCHAR2(30 char),
+  MAP_OPTION       NUMBER(6),
+  MAP_PRIORITY     NUMBER(6), 
+  MAP_QUALITY      NUMBER(24),
+  MAP_CREATION_DATE     TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+  MAP_ENABLE_DATE     DATE NOT NULL,
+  MAP_DISABLE_DATE   DATE,
+  CREATE_USER            VARCHAR2(24),
+  CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION     NUMBER(24),
+  UPDATE_USER            VARCHAR2(24),
+  UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION     NUMBER(24)
+);
+comment on table XMAP_RELATIONSHIP is                            'Cross mappings table containing the relationships between concepts (concepts cross mappings) [XMR]';
+comment on column XMAP_RELATIONSHIP.ID_SOURCE_MAP_CONCEPT is     'Source mapping concept ID';
+comment on column XMAP_RELATIONSHIP.ID_TARGET_MAP_CONCEPT is     'Target mapping concept ID';
+comment on column XMAP_RELATIONSHIP.ID_SOURCE_MAP_SET is         'Source mapping set ID';
+comment on column XMAP_RELATIONSHIP.ID_TARGET_MAP_SET is         'Target mapping set ID';
+comment on column XMAP_RELATIONSHIP.SOURCE_COORDINATED_EXPR is   'String with the pre or post-coordinated expression of the source concept';
+comment on column XMAP_RELATIONSHIP.TARGET_COORDINATED_EXPR is   'String with the pre or post-coordinated expression of the target concept';
+comment on column XMAP_RELATIONSHIP.MAP_STATUS is              'Mapping status ((A)ctive or (I)nactive)';
+comment on column XMAP_RELATIONSHIP.MAP_CATEGORY is              'Mapping category (according to SNOMED-CT mapping categorization methodology)';
+comment on column XMAP_RELATIONSHIP.MAP_OPTION is               'Allows to distinguish between alternative mappings, when more than one is possible; if two or more Concept mapping can be used together, without the need to establish an explicit relationship, the value of option should be the same in both concept mappings';
+comment on column XMAP_RELATIONSHIP.MAP_PRIORITY is              'Priority of alternative mappings, when more than one option is possible; the first priority is the default mapping; rows with the same option can have different priorities';
+comment on column XMAP_RELATIONSHIP.MAP_QUALITY is          'Mapping quality indicator';
+comment on column XMAP_RELATIONSHIP.MAP_CREATION_DATE is       'Timestamp when the mapping was loaded';
+comment on column XMAP_RELATIONSHIP.MAP_ENABLE_DATE is         'Record activation date';
+comment on column XMAP_RELATIONSHIP.MAP_DISABLE_DATE is         'Record deactivation date';
+comment on column XMAP_RELATIONSHIP.CREATE_USER is               'Creation user';
+comment on column XMAP_RELATIONSHIP.CREATE_TIME is               'Creation time';
+comment on column XMAP_RELATIONSHIP.CREATE_INSTITUTION is        'Creation institution';
+comment on column XMAP_RELATIONSHIP.UPDATE_USER is               'Update user';
+comment on column XMAP_RELATIONSHIP.UPDATE_TIME is               'Update time';
+comment on column XMAP_RELATIONSHIP.UPDATE_INSTITUTION is        'Update institution';
+-- CHANGE END: Tiago Silva

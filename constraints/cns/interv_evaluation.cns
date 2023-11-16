@@ -1,0 +1,34 @@
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table INTERV_EVALUATION
+  add constraint IEND_PK primary key (ID_INTERV_EVALUATION)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+
+  -- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 20-01-2009
+-- CHANGE REASON: ALERT-684 Avaliações MFR
+-- Creating Check Constraint on 'INTERV_EVALUATION'
+ALTER TABLE INTERV_EVALUATION
+ ADD (CONSTRAINT IEND_FKG_STATUS_CHK CHECK (FLG_STATUS IN ('A','C')));
+
+-- Creating Check Constraint on 'INTERV_EVALUATION'
+ALTER TABLE INTERV_EVALUATION
+ ADD (CONSTRAINT IEND_FLG_TYPE_CHK CHECK (FLG_TYPE IN ('I','N','O','P')));
+-- CHANGE END
+
+--CHANGED BY Joao Martins
+--CHANGE DATE 2009/04/17
+--CHANGE REASON
+ALTER TABLE INTERV_EVALUATION DROP CONSTRAINT IEND_FKG_STATUS_CHK;
+ALTER TABLE INTERV_EVALUATION ADD (CONSTRAINT IEND_FKG_STATUS_CHK CHECK (FLG_STATUS IN ('A','C','O','I')));
+--CHANGE END
+

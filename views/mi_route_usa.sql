@@ -1,0 +1,3 @@
+CREATE OR REPLACE VIEW MI_ROUTE_USA AS 
+SELECT GCRT ROUTE_ID, INITCAP(GCRT_DESC) ROUTE_DESCR,null as gender, null as age_min, null as age_max,'Y' as flg_available,'USA' VERS
+FROM RROUTED_ROUTE_DESC;

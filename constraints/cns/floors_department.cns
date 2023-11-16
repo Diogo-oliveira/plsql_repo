@@ -1,0 +1,57 @@
+
+
+  ALTER TABLE FLOORS_DEPARTMENT ADD CONSTRAINT FLSDEP_PK PRIMARY KEY (ID_FLOORS_DEPARTMENT) ENABLE;
+
+  ALTER TABLE FLOORS_DEPARTMENT MODIFY (ID_FLOORS_DEPARTMENT NOT NULL ENABLE);
+
+  ALTER TABLE FLOORS_DEPARTMENT MODIFY (ID_DEPARTMENT NOT NULL ENABLE);
+
+  ALTER TABLE FLOORS_DEPARTMENT MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE FLOORS_DEPARTMENT MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+  ALTER TABLE FLOORS_DEPARTMENT MODIFY (ID_FLOORS_INSTITUTION NOT NULL ENABLE);
+
+
+
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:33
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table FLOORS_DEPARTMENT add constraint FL_DEP_FLG_AVAILABLE_CHK check ( FLG_AVAILABLE in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:33
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table FLOORS_DEPARTMENT add constraint FL_DEP_FLG_DEP_DEFAULT_CHK check ( FLG_DEP_DEFAULT in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

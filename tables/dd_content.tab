@@ -1,0 +1,40 @@
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 02/12/2021 09:12
+-- CHANGE REASON: [EMR-49823]
+DECLARE
+e_object_exists EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE dd_content
+ADD DATA_CODE_MESSAGE_REPORTS varchar2(200 char) ';
+EXCEPTION
+WHEN e_object_exists THEN
+dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+END;
+END;
+/
+
+comment on column dd_content.DATA_CODE_MESSAGE_REPORTS is 'Sys message where the desciption of the detail line is stored, used for reports. (If null, DATA_CODE_MESSAGE is used instead)';
+
+
+DECLARE
+e_object_exists EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE dd_content
+ADD RANK_REPORTS NUMBER(24) ';
+EXCEPTION
+WHEN e_object_exists THEN
+dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+END;
+END;
+/
+
+comment on column dd_content.RANK_REPORTS is 'Rank/order in which the content should be shown in the report (if null, RANK is used instead)';
+-- CHANGE END: Pedro Henriques

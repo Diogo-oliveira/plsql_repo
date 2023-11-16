@@ -1,0 +1,46 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 20/01/2011 14:47
+-- CHANGE REASON: [ALERT-156748] DB Versioning - DDL
+--                Patient conditions
+CREATE TABLE DISCH_REAS_STATUS_VAL
+(
+ID_DISCH_REAS_STATUS     NUMBER(12),
+VAL                      VARCHAR2(30 CHAR),
+  RANK                     NUMBER(12) NOT NULL,
+FLG_DEFAULT              VARCHAR2(1 CHAR) DEFAULT 'N' NOT NULL,
+FLG_AVAILABLE            VARCHAR2(1 CHAR) DEFAULT 'Y' NOT NULL,
+CREATE_USER              VARCHAR2(24 CHAR),
+CREATE_TIME              TIMESTAMP WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION       NUMBER(24),
+UPDATE_USER              VARCHAR2(24 CHAR),
+UPDATE_TIME              TIMESTAMP WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION       NUMBER(24)
+);
+
+ALTER TABLE DISCH_REAS_STATUS_VAL MOVE TABLESPACE TABLE_S;
+
+COMMENT ON TABLE DISCH_REAS_STATUS_VAL IS 'Discharge reason status values';
+COMMENT ON COLUMN DISCH_REAS_STATUS_VAL.ID_DISCH_REAS_STATUS IS 'Disch_reas_status ID. Part of PK.';
+COMMENT ON COLUMN DISCH_REAS_STATUS_VAL.VAL IS 'Option value. Part of PK.';
+COMMENT ON COLUMN DISCH_REAS_STATUS_VAL.FLG_AVAILABLE IS 'Availability of the record';
+COMMENT ON COLUMN DISCH_REAS_STATUS_VAL.CREATE_USER is 'Professional ID which created the record';
+COMMENT ON COLUMN DISCH_REAS_STATUS_VAL.CREATE_TIME is 'Date of record creation';
+COMMENT ON COLUMN DISCH_REAS_STATUS_VAL.CREATE_INSTITUTION is 'Institution ID where record was created';
+COMMENT ON COLUMN DISCH_REAS_STATUS_VAL.UPDATE_USER is 'Professional ID who last updated the record';
+COMMENT ON COLUMN DISCH_REAS_STATUS_VAL.UPDATE_TIME is 'Date when record was last updated';
+COMMENT ON COLUMN DISCH_REAS_STATUS_VAL.UPDATE_INSTITUTION is 'Institution ID where record was last updated';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column DISCH_REAS_STATUS_VAL.rank
+  is 'Rank for ordering';
+comment on column DISCH_REAS_STATUS_VAL.flg_default
+  is 'Flag that indicated if it is the default value (Y/N)';
+comment on column DISCH_REAS_STATUS_VAL.flg_available
+  is 'Availability of the record (Y/N)';  
+  
+-- CHANGE END: Elisabete Bugalho

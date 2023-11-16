@@ -1,0 +1,87 @@
+
+
+  CREATE TABLE EPIS_OBSERVATION
+   (	ID_EPIS_OBSERVATION NUMBER(24,0) NOT NULL ENABLE,
+	DT_EPIS_OBSERVATION DATE NOT NULL ENABLE,
+	DESC_EPIS_OBSERVATION VARCHAR2(4000),
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_TEMP VARCHAR2(1) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0),
+	ID_SOFTWARE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE epis_observation IS 'Revisão de aparelhos e sistemas, exame físico e observações gerais registadas durante a consulta' ;
+
+COMMENT ON COLUMN epis_observation.dt_epis_observation IS 'Data do registo' ;
+COMMENT ON COLUMN epis_observation.id_episode IS 'Chave primaria' ;
+COMMENT ON COLUMN epis_observation.flg_temp IS 'Indica se o registo é: H - histórico, T - temporário (temporariamente gravado(Auto Save)); D - definitivo' ;
+COMMENT ON COLUMN epis_observation.id_institution IS 'Instituição onde foi registado.' ;
+COMMENT ON COLUMN epis_observation.id_software IS 'Software onde foi registado.' ;
+
+
+--Emilia Taborda 2007/08/08
+alter table epis_observation add flg_type varchar2(2);
+
+comment on column EPIS_OBSERVATION.flg_type is 'Tipo de registo: E-Exam; A-Assessment';
+alter table epis_observation 
+add (dt_epis_observation_tstz timestamp with local time zone); 
+
+
+--Emilia Taborda 2007/09/17
+alter table epis_observation add (id_epis_observation_parent number(24));
+comment on column epis_observation.id_epis_observation_parent
+  is 'epis_observation base/original ';
+--changed end
+
+
+--Emilia Taborda 2007/09/17
+alter table epis_observation add flg_status varchar2(1);
+comment on column epis_observation.flg_status
+  is 'estado: a - activo; o - outdated';
+--changed end 
+
+--Ariel Machado 2008/05/08
+ALTER TABLE EPIS_OBSERVATION 
+ ADD (FLG_EDITION_TYPE VARCHAR2(1)
+ );
+COMMENT ON COLUMN EPIS_OBSERVATION.FLG_EDITION_TYPE IS 'Flag to indicate the type of edition that originate this record: ''N'' - New; ''E'' - Edit; ''A'' - Agree; ''U'' - Update; ''O'' - No changes; ''X'' - Exchange;' ;
+--Changed End
+
+-- CHANGED BY: Sérgio Santos (sergio.santos)
+-- CHANGE DATE: 03/12/2008 09:16
+-- CHANGE REASON: ALERT-11133 Remoção de colunas com tipo DATE quando existe a equivalente TSTZ
+ALTER TABLE EPIS_OBSERVATION DROP COLUMN DT_EPIS_OBSERVATION;
+-- CHANGE END
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EPIS_OBSERVATION
+  is 'Physical exam and general patient evaluation (only used on ORIS and PP) ';
+-- Add comments to the columns 
+comment on column EPIS_OBSERVATION.id_epis_observation
+  is 'Primary Key';
+comment on column EPIS_OBSERVATION.desc_epis_observation
+  is 'Physical exam and patient observation in free text';
+comment on column EPIS_OBSERVATION.id_episode
+  is 'Episode ID';
+comment on column EPIS_OBSERVATION.id_professional
+  is 'Professional that made the record';
+comment on column EPIS_OBSERVATION.flg_temp
+  is 'Type of record: H - History, T -Temporary; D - Definitive';
+comment on column EPIS_OBSERVATION.id_institution
+  is 'Institution where the record was made';
+comment on column EPIS_OBSERVATION.id_software
+  is 'Software where the record was made';
+comment on column EPIS_OBSERVATION.dt_epis_observation_tstz
+  is 'Record date ';
+comment on column EPIS_OBSERVATION.flg_type
+  is 'Record Type: E-Exam; A-Assessment';
+comment on column EPIS_OBSERVATION.flg_status
+  is 'Status: A - active; O - Outdated';
+  
+-- CHANGE END: Elisabete Bugalho

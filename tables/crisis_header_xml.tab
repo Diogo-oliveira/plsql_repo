@@ -1,0 +1,35 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 08/07/2011 12:26
+-- CHANGE REASON: [ALERT-187780] ALERT_105193 - Crisis Machine should support Print button (with configurable reports by institution and software)
+begin
+pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'CRISIS_HEADER_XML', i_obj_type => 'TABLE', i_flg_category => 'TRS', i_flg_alert_default => 'N', i_flg_default_child => 'N', i_flg_nzd => 'N');
+execute immediate 'alter table header_xml rename to crisis_header_xml';
+end;
+/
+
+ALTER TABLE CRISIS_HEADER_XML 
+ DROP (create_user, 
+create_time, 
+create_institution, 
+update_user, 
+update_time, 
+update_institution
+ );
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 08/10/2013 12:30
+-- CHANGE REASON: [ALERT-266177] Crisis Machine cleanup
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner        => 'ALERT',
+                                             i_obj_name     => 'CRISIS_HEADER_XML',
+                                             i_obj_type     => 'TABLE',
+                                             i_flg_category => 'DPC');
+																						 
+		EXECUTE IMMEDIATE 'drop table crisis_header_xml';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('drop table crisis_header_xml - Error (' || SQLCODE || '), resuming execution...');
+END;
+/
+-- CHANGE END: Gustavo Serrano

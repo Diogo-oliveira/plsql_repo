@@ -1,0 +1,67 @@
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 12/12/2009 15:05
+-- CHANGE REASON: [ALERT-59653] 
+-- Create table
+create table ACTION_EXCEPTION
+(
+  ID_ACTION           NUMBER(24) not null,
+  ID_CATEGORY         NUMBER(24) default NULL,
+  ID_PROFILE_TEMPLATE NUMBER(24) default NULL,
+ID_PROFISSIONAL     NUMBER(24) default NULL, 
+  ID_SOFTWARE         NUMBER(24) not null,
+  FLG_AVAILABLE       VARCHAR2(1) default 'Y' not null,
+  FLG_STATUS          VARCHAR2(1) not null,
+  CREATE_USER         VARCHAR2(24),
+  CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24),
+  UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24)
+);
+-- Add comments to the table 
+comment on table ACTION_EXCEPTION
+  is 'Table to set exceptions for the existing actions.';
+-- Add comments to the columns 
+comment on column ACTION_EXCEPTION.ID_ACTION
+  is 'ID ACTION to set the exception.';
+comment on column ACTION_EXCEPTION.ID_CATEGORY
+  is 'ID CATEGORY of the professionals to which the exception will apply';
+comment on column ACTION_EXCEPTION.ID_PROFILE_TEMPLATE
+  is 'ID PROFILE TEMPLATE of the professionals to which the exception will apply';
+comment on column ACTION_EXCEPTION.ID_SOFTWARE
+  is 'ID SOFTWARE';
+comment on column ACTION_EXCEPTION.FLG_AVAILABLE
+  is 'Exception available or not';
+comment on column ACTION_EXCEPTION.FLG_STATUS
+  is 'Exception status: A - active; I - inactive';
+comment on column ACTION_EXCEPTION.ID_PROFISSIONAL
+  is 'ID PROFESSIONAL of the professional to which the exception will apply';
+comment on column ACTION_EXCEPTION.CREATE_USER 
+  is 'Creation User';
+comment on column ACTION_EXCEPTION.CREATE_TIME 
+  is 'Creation Time';
+comment on column  ACTION_EXCEPTION.CREATE_INSTITUTION 
+  is 'Creation Institution';
+comment on column  ACTION_EXCEPTION.UPDATE_USER 
+  is 'Update User';
+comment on column  ACTION_EXCEPTION.UPDATE_TIME 
+  is 'Update Time';
+comment on column ACTION_EXCEPTION.UPDATE_INSTITUTION 
+  is 'Update Institution';
+-- CHANGE END: orlando.antunes
+
+-- Add/modify columns 
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ACTION_EXCEPTION add id_action_exception number(24)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+-- Add comments to the columns 
+comment on column ACTION_EXCEPTION.id_action_exception
+  is 'Primary Key, ID of action exception';
+-- CHANGE END:  Pedro Morais
+
+comment on column ACTION_EXCEPTION.FLG_STATUS  is 'Exception status: A - active; I - inactive; N - not visible';

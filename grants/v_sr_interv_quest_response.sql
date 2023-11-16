@@ -1,0 +1,6 @@
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 11/10/2017 12:12
+-- CHANGE REASON: [ALERT-333461] 
+GRANT SELECT ON v_sr_interv_quest_response TO ALERT_INTER;
+GRANT SELECT ON v_sr_interv_quest_response TO INTER_ALERT_V2;
+-- CHANGE END: Ana Matos

@@ -1,0 +1,33 @@
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195]
+declare
+  l_count pls_integer;
+	l_sql_stat varchar2(4000):='  ALTER TABLE ALERT.PRESC_DIRECTIONS ADD CONSTRAINT PRESC_DIR_RT_FK FOREIGN KEY (ID_ROUTE, VERS)
+  REFERENCES ALERT.MI_ROUTE (ROUTE_ID, VERS) ENABLE';
+
+begin
+  select count(1)
+  into l_count
+  from all_constraints where owner = 'ALERT' and constraint_name = 'PRESC_DIR_RT_FK';
+
+  if l_count = 0 then
+	  execute immediate (l_sql_stat);
+	end if;
+
+end;
+/
+-- CHANGE END: Nuno Ferreira
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 31/05/2010 11:04
+-- CHANGE REASON: [ALERT-101410] 
+ALTER TABLE presc_directions
+disable CONSTRAINT PRESC_DIR_RT_FK;
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Rodrigues
+-- CHANGED DATE: 29-10-2010
+-- CHANGING REASON: INV_ALL_091 MEDICATION: Disabled constraints in ALERT
+	alter table presc_directions drop constraint  presc_dir_rt_fk;
+-- CHANGE END Pedro Rodrigues

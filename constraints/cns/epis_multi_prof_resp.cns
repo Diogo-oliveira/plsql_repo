@@ -1,0 +1,74 @@
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 28/10/2009 19:29
+-- CHANGE REASON: [ALERT-52603] Taking responsibility over episode by multiple professionals
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_multi_prof_resp drop CONSTRAINT EMPR_PK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_multi_prof_resp ADD CONSTRAINT EMPR_PK PRIMARY KEY (id_epis_multi_prof_resp) ENABLE';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_multi_prof_resp drop CONSTRAINT EMPR_EPR_UK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+ALTER TABLE epis_multi_prof_resp ADD CONSTRAINT EMPR_EPR_UK UNIQUE (id_epis_prof_resp);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_multi_prof_resp drop CONSTRAINT EMPR_FLGSTATUS_CHK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+ALTER TABLE epis_multi_prof_resp ADD CONSTRAINT EMPR_FLGSTATUS_CHK CHECK(flg_status IN ('A', 'H', 'O'));
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 18/11/2010 14:16
+-- CHANGE REASON: [ALERT-142370] Hand-off NL refactoring - replication to 2.6.0.4
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_multi_prof_resp ADD CONSTRAINT EMPR_FLGPROFILE_CHK CHECK(FLG_PROFILE IN (''S'', ''R'', ''I'', ''N''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_multi_prof_resp ADD CONSTRAINT EMPR_FLGMAINRESPONSIBLE_CHK CHECK(FLG_MAIN_RESPONSIBLE IN (''Y'', ''N''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_multi_prof_resp ADD CONSTRAINT EMPR_FLGRESPTYPE_CHK CHECK(FLG_RESP_TYPE IN (''E'', ''O''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 24/10/2018 14:36
+-- CHANGE REASON: [EMR-8129] [DB] [CL][REDUC] Error on discharge due to more than one principal profe (truncated)
+alter table EPIS_MULTI_PROF_RESP
+    add constraint MPR_EPIS_STATUS_MAIN_RESP_CHK
+    check (case when FLG_MAIN_RESPONSIBLE = 'Y' and ID_EPISODE = ID_EPISODE then 0 else 1 end = 1) novalidate;
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/10/2018 11:15
+-- CHANGE REASON: [EMR-8195] [DB] SA_Edis - Error to take over responsibility
+ alter table EPIS_MULTI_PROF_RESP drop constraint MPR_EPIS_STATUS_MAIN_RESP_CHK;
+-- CHANGE END: Nuno Coelho

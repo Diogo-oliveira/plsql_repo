@@ -1,0 +1,39 @@
+
+-- José Brito @ 22/10/2008 Denormalization
+ALTER TABLE INTERV_ICNP_EA
+ ADD (CONSTRAINT IIA_FLG_STATUS_CHK CHECK (FLG_STATUS IN ('A','C','E','F','I','M','T')));
+ALTER TABLE INTERV_ICNP_EA
+ ADD (CONSTRAINT IIA_FLG_TIME_CHK CHECK (FLG_TIME IN ('B','E','N')));
+ALTER TABLE INTERV_ICNP_EA
+ ADD (CONSTRAINT IIA_FLG_TYPE_CHK CHECK (FLG_TYPE IN ('N','U','S','A','C')));
+ALTER TABLE INTERV_ICNP_EA
+ ADD (CONSTRAINT IIA_FLG_DURATION_UNIT_CHK CHECK (FLG_DURATION_UNIT IN ('D','H','M')));
+ALTER TABLE INTERV_ICNP_EA
+ ADD (CONSTRAINT IIA_FLG_INTERVAL_UNIT_CHK CHECK (FLG_INTERVAL_UNIT IN ('D','H','M')));
+ 
+ 
+ 
+
+
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 29/07/2011 18:00
+-- CHANGE REASON: [ALERT-182932] Implementation of the recurrence mechanism in ICNP functionality
+DECLARE
+  e_nonexistent_constraint EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_nonexistent_constraint, -02443); -- nonexistent constraint
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE interv_icnp_ea DROP CONSTRAINT iia_flg_type_chk';
+  EXCEPTION
+    WHEN e_nonexistent_constraint THEN
+      dbms_output.put_line('Constraint interv_icnp_ea.iia_flg_type_chk doesnt exist');
+  END;
+
+  EXECUTE IMMEDIATE 'ALTER TABLE interv_icnp_ea ADD CONSTRAINT iia_flg_type_chk check (flg_type IN (
+      -- Old status, remove after migration: Normal (N), Unitário (U), SOS  (S), Ad eternum  (A), Contínuo  (C)
+      ''N'',''U'',''S'',''A'',''C'',
+      -- New status
+      ''O'', ''N'', ''R''))';
+END;
+/
+-- CHANGE END: Luis Oliveira

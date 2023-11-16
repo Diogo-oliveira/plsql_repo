@@ -1,0 +1,9 @@
+CREATE OR REPLACE VIEW V_DISCHARGE_REP_NOTES AS
+		SELECT ID_DISCHARGE_REP_NOTES,
+		       ID_DISCHARGE,
+		       ID_EPISODE,
+		       FLG_TASK,
+		       FLG_TYPE,
+		       DT_REG
+FROM discharge_rep_notes;
+ 

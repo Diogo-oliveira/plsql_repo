@@ -1,0 +1,1 @@
+grant select on institution_ext to alert_viewer;

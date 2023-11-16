@@ -1,0 +1,16 @@
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 02/03/2012 11:50
+-- CHANGE REASON: [ALERT-221432] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -02275); -- name is already used by an existing object
+BEGIN
+EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DG_INT_HIST
+  add constraint IEDIH_EIPI_FK foreign key (ID_ICNP_EPIS_INTERV)
+  references ICNP_EPIS_INTERVENTION (ID_ICNP_EPIS_INTERV)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('such a referential constraint already exists in the table');
+END;
+/
+-- CHANGE END:  Nuno Neves

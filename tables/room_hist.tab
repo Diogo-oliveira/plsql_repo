@@ -1,0 +1,111 @@
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/06/2010 16:05
+-- CHANGE REASON: [ALERT-105487] 
+-- Create table
+create table ROOM_HIST
+(
+  ID_ROOM                   NUMBER(24) not null,
+  FLG_PROF                  VARCHAR2(1) not null,
+  ID_DEPARTMENT             NUMBER(24) not null,
+  CODE_ROOM                 VARCHAR2(200) not null,
+  CAPACITY                  NUMBER(3),
+  INTERVAL_TIME             NUMBER(6),
+  FLG_RECOVERY              VARCHAR2(1) not null,
+  FLG_LAB                   VARCHAR2(1) not null,
+  RANK                      NUMBER(6) not null,
+  ADW_LAST_UPDATE           DATE,
+  FLG_WAIT                  VARCHAR2(1) not null,
+  FLG_WL                    VARCHAR2(1) not null,
+  IMG_NAME                  VARCHAR2(200),
+  FLG_TRANSP                VARCHAR2(1),
+  CODE_ABBREVIATION         VARCHAR2(200),
+  ID_FLOORS_DEPARTMENT      NUMBER(24),
+  FLG_AVAILABLE             VARCHAR2(1) not null,
+  CREATE_USER               VARCHAR2(24),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24),
+  ID_ROOM_TYPE              NUMBER(24),
+  FLG_SCHEDULABLE           VARCHAR2(1),
+  FLG_STATUS                VARCHAR2(1 CHAR),
+  FLG_PARAMETERIZATION_TYPE VARCHAR2(1 CHAR),
+  ID_PROFESSIONAL           NUMBER(24),
+  DT_CREATION               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DT_LAST_UPDATE            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  FLG_SELECTED_SPECIALTIES  VARCHAR2(1 CHAR),
+  DESC_ROOM                 VARCHAR2(1000 CHAR),
+DESC_ROOM_ABBREVIATION    VARCHAR2(100 CHAR)
+  ID_ROOM_HIST              NUMBER(24) not null,
+);
+COMMENT ON TABLE ROOM_HIST IS 'Room history';
+COMMENT ON COLUMN ROOM_HIST.FLG_STATUS IS 'Status of this data: A - active, E - edited, C - canceled.';
+COMMENT ON COLUMN ROOM_HIST.FLG_PARAMETERIZATION_TYPE IS 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+COMMENT ON COLUMN ROOM_HIST.ID_PROFESSIONAL IS 'Id professional that creates the data, when using backoffice.';
+COMMENT ON COLUMN ROOM_HIST.DT_CREATION IS 'Creation date.';
+COMMENT ON COLUMN ROOM_HIST.DT_LAST_UPDATE IS 'Last date when this data was updated.';
+COMMENT ON COLUMN ROOM_HIST.DESC_ROOM IS 'Room description.';
+COMMENT ON COLUMN ROOM_HIST.FLG_SCHEDULABLE IS 'Y - this room can receive new scheduler appointments';
+COMMENT ON COLUMN ROOM_HIST.ID_ROOM IS 'Chave primária';
+COMMENT ON COLUMN ROOM_HIST.FLG_PROF IS 'Indicada para profissionais de saúde';
+COMMENT ON COLUMN ROOM_HIST.ID_DEPARTMENT IS 'Departamento';
+COMMENT ON COLUMN ROOM_HIST.CODE_ROOM IS 'Código para nome';
+COMMENT ON COLUMN ROOM_HIST.CAPACITY IS 'Número de utentes que pode conter em simultâneo';
+COMMENT ON COLUMN ROOM_HIST.INTERVAL_TIME IS 'Tempo de intervalo, em minutos, necessário entre utilizações';
+COMMENT ON COLUMN ROOM_HIST.FLG_RECOVERY IS 'Indica se é uma sala de Recobro';
+COMMENT ON COLUMN ROOM_HIST.FLG_LAB IS 'Indicação de q é laboratório';
+COMMENT ON COLUMN ROOM_HIST.RANK IS 'Ordem de apresentação';
+COMMENT ON COLUMN ROOM_HIST.ADW_LAST_UPDATE IS 'Data da última alteração';
+COMMENT ON COLUMN ROOM_HIST.FLG_WAIT IS 'Sala de espera';
+COMMENT ON COLUMN ROOM_HIST.FLG_WL IS 'Sala para chamada no Waiting Line';
+COMMENT ON COLUMN ROOM_HIST.IMG_NAME IS 'Nome da imagem correspondente';
+COMMENT ON COLUMN ROOM_HIST.FLG_TRANSP IS 'Indicação se é sala de destino de transporte de doentes';
+COMMENT ON COLUMN ROOM_HIST.CODE_ABBREVIATION IS 'Abreviação do nome da sala';
+COMMENT ON COLUMN ROOM_HIST.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD';
+COMMENT ON COLUMN ROOM_HIST.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ROOM_HIST.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ROOM_HIST.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ROOM_HIST.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ROOM_HIST.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ROOM_HIST.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN ROOM_HIST.ID_ROOM_TYPE IS 'Type of room';
+COMMENT ON COLUMN ROOM_HIST.flg_status IS 'Status of this data: A - active, E - edited, C - canceled.';
+COMMENT ON COLUMN ROOM_HIST.flg_parameterization_type IS 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+COMMENT ON COLUMN ROOM_HIST.id_professional IS 'Id professional that creates the data, when using backoffice.';
+COMMENT ON COLUMN ROOM_HIST.dt_creation IS 'Creation date.';
+COMMENT ON COLUMN ROOM_HIST.dt_last_update IS 'Last date when this data was updated.';
+COMMENT ON COLUMN ROOM_HIST.flg_selected_specialties IS 'Flag that indicates the type of sellection of specialties: A - all, N - none, O - other';
+COMMENT ON COLUMN ROOM_HIST.desc_room IS 'Room description.';
+COMMENT ON COLUMN ROOM_HIST.desc_room_abbreviation IS 'Room abbreviation.';
+
+ALTER TABLE ROOM_HIST ADD 
+(
+DCS_IDS table_number
+) NESTED TABLE DCS_IDS STORE AS DCS_IDS_ROOM_TAB;
+
+COMMENT ON COLUMN ROOM_HIST.DCS_IDS IS 'List of services/clinical services for which the ROOM is parametrized.';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 14/04/2011 18:10
+-- CHANGE REASON: [ALERT-173251 ] [NZD] Correct problem with tables: BED_HIST, ROOM_HIST, ADM_INDICATION_HIST
+alter table room_hist drop column dcs_ids;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 2018-06-11
+-- CHANGE REASON: [CEMR-1649] API to manage Bed Room Services
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE room_hist ADD (FLG_ICU VARCHAR2(1 CHAR))';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+
+COMMENT ON COLUMN room_hist.FLG_ICU IS 'Is this a icu room? Y/N';
+-- CHANGE END: Amanda Lee

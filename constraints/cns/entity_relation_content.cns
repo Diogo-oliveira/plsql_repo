@@ -1,0 +1,22 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 15/06/2010 12:15
+-- CHANGE REASON: [ALERT-94601] entity_relation_content
+alter table entity_relation_content
+  add constraint erc_pk primary key (id_content);
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 27/10/2010 10:17
+-- CHANGE REASON: [ALERT-135489] added constraint
+declare
+  uc_exists exception;
+  pragma exception_init(uc_exists, -02261);
+begin
+  execute immediate '
+alter table entity_relation_content
+  add constraint erc_uk unique (id_relation_set)
+';
+exception when uc_exists then dbms_output.put_line('unique constraint exists!');
+end;
+/
+-- CHANGE END: Pedro Carneiro

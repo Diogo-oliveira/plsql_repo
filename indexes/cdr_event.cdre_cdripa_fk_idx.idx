@@ -1,0 +1,13 @@
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 17/10/2014 15:33
+-- CHANGE REASON: [ALERT-298882 ] Orders_Medication_Administration and Tasks Tab_RUN_DEFAULT_FILTER_Its's taking around 30\40s to load 
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create index CDRE_CDRIPA_FK_IDX on CDR_EVENT (ID_CDR_CALL,ID_CDR_INST_PAR_ACTION)';
+exception when others then
+  dbms_output.put_line('index CDRE_PK_IDX exists!');
+end;
+/
+-- CHANGE END: teresa.coutinho

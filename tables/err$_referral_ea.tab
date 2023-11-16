@@ -1,0 +1,39 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 23/01/2012 15:02
+-- CHANGE REASON: [ALERT-215345] 
+DECLARE
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -00942); -- not exists table
+BEGIN
+    ----------------------------------       
+    BEGIN
+        EXECUTE IMMEDIATE 'drop table ERR$_REFERRAL_EA';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+BEGIN
+    dbms_errlog.create_error_log('REFERRAL_EA');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/02/2012 08:56
+-- CHANGE REASON: [ALERT-215345] 
+DECLARE
+    e_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_existant, -00955);
+BEGIN
+
+    dbms_errlog.create_error_log('REFERRAL_EA');
+
+EXCEPTION
+    WHEN e_existant THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Ana Monteiro

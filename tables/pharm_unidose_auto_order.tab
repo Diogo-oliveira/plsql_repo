@@ -1,0 +1,28 @@
+
+create table pharm_unidose_auto_order
+(
+	id_dep_clin_serv		number(24) not null,
+	flg_auto_pharmacy_order	varchar2(1 char) default 'Y' not null
+)
+tablespace TABLE_S;
+
+comment on table pharm_unidose_auto_order is
+	'controls if automatic unit-dose pharmacy order is active by clinical service';
+
+comment on column pharm_unidose_auto_order.id_dep_clin_serv is
+	'id_dep_clin_serv';
+comment on column pharm_unidose_auto_order.flg_auto_pharmacy_order is
+	'auto order is active?';
+
+alter table pharm_unidose_auto_order
+add dt_stop_at timestamp with local time zone;
+
+comment on column pharm_unidose_auto_order.dt_stop_at is
+	'time at witch the automatic order was stopped';
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:57
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PHARM_UNIDOSE_AUTO_ORDER IS 'controls if automatic unit-dose pharmacy order is active by clinical service [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

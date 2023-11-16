@@ -1,0 +1,13 @@
+CREATE OR REPLACE TYPE t_rec_epis_diagnosis AS OBJECT(id_epis_diagnosis      NUMBER(24),
+                                                      id_epis_diagnosis_hist NUMBER(24),
+                                                      id_diagnosis           NUMBER(24),
+                                                      diag_desc              VARCHAR2(1000 CHAR),
+                                                      flg_type               VARCHAR2(10),
+                                                      type_desc              VARCHAR2(1000 CHAR),
+                                                      flg_status             VARCHAR2(10),
+                                                      status_desc            VARCHAR2(1000 CHAR),
+                                                      problem_status         VARCHAR2(10),
+                                                      notes                  VARCHAR2(1000 CHAR),
+                                                      general_notes          VARCHAR2(1000 CHAR),
+                                                      notes_cancel           VARCHAR2(1000 CHAR),
+                                                      flg_has_recent_data    VARCHAR2(10));

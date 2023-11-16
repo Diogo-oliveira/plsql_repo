@@ -1,0 +1,34 @@
+CREATE OR REPLACE TRIGGER B_IU_DOCUMENTATION
+BEFORE INSERT OR UPDATE
+ON ALERT.DOCUMENTATION
+REFERENCING NEW AS New OLD AS Old
+FOR EACH ROW
+DECLARE
+
+
+BEGIN
+
+   :NEW.ADW_LAST_UPDATE := SYSDATE;
+
+END B_IU_DOCUMENTATION;
+/
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 14/12/2011 10:52
+-- CHANGE REASON: [ALERT-209821] Remove unnecessary triggers in metadata tables for Touch-option templates
+DECLARE
+    l_exists NUMBER;
+BEGIN
+    SELECT COUNT(*)
+      INTO l_exists
+      FROM user_objects uo
+     WHERE uo.object_name = 'B_IU_DOCUMENTATION'
+       AND uo.object_type = 'TRIGGER';
+    IF l_exists = 1
+    THEN
+        EXECUTE IMMEDIATE 'DROP TRIGGER B_IU_DOCUMENTATION';
+    END IF;
+END;
+/
+-- CHANGE END: Ariel Machado

@@ -1,0 +1,91 @@
+
+
+  ALTER TABLE PAT_PREGNANCY ADD CONSTRAINT PPY_PK PRIMARY KEY (ID_PAT_PREGNANCY) ENABLE;
+
+  ALTER TABLE PAT_PREGNANCY MODIFY (ID_PAT_PREGNANCY NOT NULL ENABLE);
+
+  ALTER TABLE PAT_PREGNANCY MODIFY (DT_PAT_PREGNANCY NOT NULL ENABLE);
+
+  ALTER TABLE PAT_PREGNANCY MODIFY (ID_PATIENT NOT NULL ENABLE);
+
+  ALTER TABLE PAT_PREGNANCY MODIFY (ID_PROFESSIONAL NOT NULL ENABLE);
+
+  ALTER TABLE PAT_PREGNANCY MODIFY (DT_PROB_DELIVERY NOT NULL ENABLE);
+
+
+
+
+  ALTER TABLE pat_pregnancy MODIFY (flg_status NOT NULL);
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 06/06/2011 11:16
+-- CHANGE REASON: [ALERT-183624] Pregnancy developments
+BEGIN
+EXECUTE IMMEDIATE 'alter table PAT_PREGNANCY
+  add constraint PPY_FLG_DT_INT_CHK
+  check (FLG_DT_INTERV_PRECISION IN (''Y'',''M'',''D'',''H''))';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+
+BEGIN
+EXECUTE IMMEDIATE 'alter table PAT_PREGNANCY
+  add constraint PPY_FLG_DT_CON_CHK
+  check (FLG_DT_CONTRAC_PRECISION IN (''Y'',''M'',''D''))';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+-- CHANGE END: José Silva
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 26/09/2014 17:26
+-- CHANGE REASON: [ALERT-285765] 
+alter table PAT_PREGNANCY
+  drop constraint PPY_FLG_STAT_CHK;
+
+alter table PAT_PREGNANCY
+  add constraint PPY_FLG_STAT_CHK
+  check (flg_status IN ('A','AA','AB','AC','AE','AI','AP','AS','C','E','GE','M','N','P', 'IV', 'SV', 'CS'));
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  Anna Kurowska
+-- CHANGE DATE: 31/08/2017 18:02
+-- CHANGE REASON: [ALERT-332724] NOM024 - Additional needs related to guide "SAEH" Pregnancy process
+-- Create/Recreate check constraints 
+alter table PAT_PREGNANCY
+  add constraint PPY_FLG_EXTRACT_CHK
+  check (FLG_EXTRACTION IN ('N','Y'));
+alter table PAT_PREGNANCY
+  drop constraint PPY_FLG_STAT_CHK;
+alter table PAT_PREGNANCY
+  add constraint PPY_FLG_STAT_CHK
+  check (flg_status IN ('A','AA','AB','AC','AE','AI','AP','AS','C','E','GE','M','N','P', 'IV', 'SV', 'CS', 'B'));  
+
+alter table PAT_PREGNANCY
+  add constraint PPY_FLG_PREG_OUT_CHK
+  check (FLG_PREG_OUT_TYPE IN ('B','AB')); 
+alter table PAT_PREGNANCY
+  add constraint PPY_FLG_GEST_WEEKS_CHK
+  check (FLG_GEST_WEEKS IN ('U', 'K'));
+alter table PAT_PREGNANCY
+  add constraint PPY_FLG_GEST_WEEKS_E_CHK
+  check (FLG_GEST_WEEKS_EXAM IN ('U', 'K'));
+alter table PAT_PREGNANCY
+  add constraint PPY_FLG_GEST_WEEKS_U_CHK
+  check (FLG_GEST_WEEKS_US IN ('U', 'K'));
+-- CHANGE END:  Anna Kurowska
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 06/03/2018 10:31
+-- CHANGE REASON: [EMR-1727] New option "No labor" for Labor onset field in Pregnancy area?
+-- Create/Recreate check constraints 
+alter table PAT_PREGNANCY
+  drop constraint PPY_FLG_DEL_ONST_CHK;
+alter table PAT_PREGNANCY
+  add constraint PPY_FLG_DEL_ONST_CHK
+  check (flg_del_onset IN ('I', 'S','N'));
+-- CHANGE END: Elisabete Bugalho

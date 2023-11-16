@@ -1,0 +1,33 @@
+-- Create/Recreate primary and unique constraints 
+alter table INTERV_PRESC_DET_CHANGE
+  add constraint IPDC_PK primary key (ID_INTERV_PRESC_DET, ID_CHANGE);
+
+
+-- CHANGE BY: Rita Lopes
+-- CHANGE REASON: As colunas do tipo flg nao tinham chek contrainsts
+-- CHANGE DATE: 20080704
+
+alter table INTERV_PRESC_DET_CHANGE
+  add constraint IPDC_FLGFREQ_CK
+  check (flg_freq IN ('D','S','M'));
+
+alter table INTERV_PRESC_DET_CHANGE
+  add constraint IPDC_FLGPRTY_CK
+  check (flg_prty IN ('U','M','N'));
+
+alter table INTERV_PRESC_DET_CHANGE
+  add constraint IPDC_FLGSTATUS_CK
+  check (flg_status_change IN ('B','H','Q','T','U'));
+
+-- CHANGE END:
+
+-- CHANGE BY: Eduardo Reis
+-- CHANGE REASON: [ALERT-94238] Add missing values of flg_status
+-- CHANGE DATE: 30/04/2010
+alter table INTERV_PRESC_DET_CHANGE
+  drop constraint IPDC_FLGSTATUS_CK;
+
+alter table INTERV_PRESC_DET_CHANGE
+  add constraint IPDC_FLGSTATUS_CK
+  check (flg_status_change IN ('B','H','Q','T','U','C','M'));
+-- CHANGE END: Eduardo Reis

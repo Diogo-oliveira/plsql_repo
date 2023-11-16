@@ -1,0 +1,33 @@
+create table FORM_FARM_UNIT
+(
+  ID_FORM_FARM_UNIT    NUMBER(24),
+  FORM_FARM_ID         VARCHAR2(255),
+  ID_UNIT_MEASURE      NUMBER(24)
+);
+
+COMMENT ON TABLE FORM_FARM_UNIT IS 'Relação entre apresentação de medicamento e unidades de medida';
+
+COMMENT ON COLUMN FORM_FARM_UNIT.FORM_FARM_ID IS 'Identificação da forma de apresentação do medicamento';
+COMMENT ON COLUMN FORM_FARM_UNIT.ID_UNIT_MEASURE IS 'Identificação da unidade de medida';
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-FEB-28
+-- CHANGING REASON: form_farm_unit parametrização dietéticos e manipulados
+-- Add/modify columns 
+alter table FORM_FARM_UNIT add TYPE varchar2(255);
+alter table FORM_FARM_UNIT add VERS VARCHAR2(255);
+alter table FORM_FARM_UNIT add FLG_DEFAULT VARCHAR2(1);
+-- Add comments to the columns 
+comment on column FORM_FARM_UNIT.TYPE
+  is 'MANIP_EXT, DIET_EXT';
+comment on column FORM_FARM_UNIT.VERS
+  is 'versão';
+comment on column FORM_FARM_UNIT.FLG_DEFAULT
+  is '''Y'' OU ''N''';
+-- CHANGE END Patrícia Neto	
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-JUL-17
+-- CHANGING REASON: excepçãop de unidades de medida alternativas
+alter table form_farm_unit add med_id varchar2(255);
+-- CHANGE END Patrícia Neto	

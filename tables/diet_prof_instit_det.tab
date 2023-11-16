@@ -1,0 +1,151 @@
+-- CHANGED BY: elisabete.bugalho
+-- CHANGE DATE: 01/06/2009 14:07
+-- CHANGE REASON: [ALERT-889 ] Criação do novo modelo de dados das dietas
+-- Creating Table 'DIET_PROF_INSTIT_DET'
+CREATE TABLE DIET_PROF_INSTIT_DET
+ (ID_DIET_PROF_INSTIT_DET NUMBER(24) NOT NULL
+ ,ID_DIET_PROF_INSTIT NUMBER(24) NOT NULL
+ ,NOTES VARCHAR2(4000)
+ ,ID_DIET_SCHEDULE NUMBER(24) NOT NULL
+ ,DT_DIET_SCHEDULE TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_DIET NUMBER(24) NOT NULL
+ ,QUANTITY NUMBER NOT NULL
+ ,ID_UNIT_MEASURE VARCHAR2(10) NOT NULL
+ ,ENERGY_QUANTITY_VALUE NUMBER NOT NULL
+ ,CREATE_USER             VARCHAR2(24)
+ ,CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,CREATE_INSTITUTION      NUMBER(24)
+ ,UPDATE_USER             VARCHAR2(24)
+ ,UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION      NUMBER(24)
+ 
+ );
+
+COMMENT ON TABLE DIET_PROF_INSTIT_DET IS 'Predefine detail diet';
+
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.ID_DIET_PROF_INSTIT_DET IS 'Record ID';
+
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.ID_DIET_PROF_INSTIT IS 'Diet_prof_institution ID';
+
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.NOTES IS 'Notes';
+
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.ID_DIET_SCHEDULE IS 'Diet_schedule id';
+
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.DT_DIET_SCHEDULE IS 'Meal hour';
+
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.ID_DIET IS 'Diet id';
+
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.QUANTITY IS 'Quantity';
+
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.ID_UNIT_MEASURE IS 'ID of Quantity unit measure';
+
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.ENERGY_QUANTITY_VALUE IS 'Energy value';
+
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN DIET_PROF_INSTIT_DET.UPDATE_INSTITUTION IS 'Update Institution';
+-- CHANGE END: elisabete.bugalho
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 10/11/2011 09:13
+-- CHANGE REASON: [ALERT-202720] 
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -01451);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table DIET_PROF_INSTIT_DET modify quantity null';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -01451);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table DIET_PROF_INSTIT_DET modify ID_UNIT_MEASURE null';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table DIET_PROF_INSTIT_DET modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table DIET_PROF_INSTIT_DET modify NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table DIET_PROF_INSTIT_DET modify ID_UNIT_MEASURE varchar2(10 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table DIET_PROF_INSTIT_DET modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 14/01/2016 12:29
+-- CHANGE REASON: [ALERT-317702] 
+comment on table DIET_PROF_INSTIT_DET
+  is 'Predefined detail diets';
+-- Add comments to the columns 
+comment on column DIET_PROF_INSTIT_DET.id_diet_prof_instit_det
+  is 'Primary key';
+comment on column DIET_PROF_INSTIT_DET.id_diet_prof_instit
+  is 'Predefined diet ID';
+comment on column DIET_PROF_INSTIT_DET.notes
+  is 'Notes';
+comment on column DIET_PROF_INSTIT_DET.id_diet_schedule
+  is 'Diet schedule ID';
+comment on column DIET_PROF_INSTIT_DET.dt_diet_schedule
+  is 'Meal hour';
+comment on column DIET_PROF_INSTIT_DET.id_diet
+  is 'Diet ID';
+comment on column DIET_PROF_INSTIT_DET.quantity
+  is 'Quantity';
+comment on column DIET_PROF_INSTIT_DET.id_unit_measure
+  is 'Unit measure quantity ID';
+comment on column DIET_PROF_INSTIT_DET.create_user
+  is 'Creation User';
+comment on column DIET_PROF_INSTIT_DET.create_time
+  is 'Creation Time';
+comment on column DIET_PROF_INSTIT_DET.create_institution
+  is 'Creation Institution';
+comment on column DIET_PROF_INSTIT_DET.update_user
+  is 'Update User';
+comment on column DIET_PROF_INSTIT_DET.update_time
+  is 'Update Time';
+comment on column DIET_PROF_INSTIT_DET.update_institution
+  is 'Update Institution';
+  
+  
+  
+-- CHANGE END: Ana Matos

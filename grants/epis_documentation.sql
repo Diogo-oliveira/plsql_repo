@@ -1,0 +1,1 @@
+GRANT SELECT ON epis_documentation TO alert_inter;

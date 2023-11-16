@@ -1,0 +1,87 @@
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 06/04/2011 10:20
+-- CHANGE REASON: [ALERT-171418] 
+DECLARE
+
+ e_column_already_there EXCEPTION;
+
+ PRAGMA EXCEPTION_INIT(e_column_already_there, -00955); -- add column
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'create table VACC_ADVERS_REACT (  ID_REG           NUMBER(24) not null,FLG_TYPE            VARCHAR2(1) not null,FLG_STATUS          VARCHAR2(1) not null,
+ID_VALUE            VARCHAR2(30) not null,NOTES_ADVERS_REACT  VARCHAR2(2000) not null,ID_PROF_WRITE       NUMBER(24) not null,  DT_PROF_WRITE       TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  CREATE_USER        VARCHAR2(24),  CREATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,  CREATE_INSTITUTION NUMBER(24),  UPDATE_USER        VARCHAR2(24),  UPDATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+
+
+comment on table ALERT.VACC_ADVERS_REACT
+is 'Reaccoes adversas de vacinas';
+comment on column VACC_ADVERS_REACT.ID_REG
+is 'Id da tabela vacc no caso de relatos e vacinas fora do PNV, id drug_presc_plan nos restantes casos';
+comment on column VACC_ADVERS_REACT.FLG_TYPE
+is 'Tipo de id: O no caso de relatos e vacinas fora do PNV, V nos restantes casos';
+comment on column VACC_ADVERS_REACT.ID_VALUE
+is 'Id da reaccao adversa seleccionada';
+comment on column VACC_ADVERS_REACT.NOTES_ADVERS_REACT
+is 'Notas';
+comment on column VACC_ADVERS_REACT.ID_PROF_WRITE
+is 'Id do profissional que registou as reaccoes adversas';
+comment on column VACC_ADVERS_REACT.DT_PROF_WRITE
+is 'Data de registo das reaccoes adversas';
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/05/2014 22:23
+-- CHANGE REASON: [ALERT-281683] 
+alter table vacc_advers_react add id_vacc_adver_reac number(24) default (-1);
+comment on column vacc_advers_react.id_vacc_adver_reac is 'Id adverse reaction with vacc_adverse_reaction';
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 14:38
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON TABLE VACC_ADVERS_REACT IS 'This table stores all adverse reactions information';
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 14:40
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON COLUMN VACC_ADVERS_REACT.ID_REG IS 'Unique identification for the adverse reaction (Now it is always the vaccine ID)';
+/
+COMMENT ON COLUMN VACC_ADVERS_REACT.FLG_TYPE IS 'Adverse reaction origin (Now it is always O - Vaccination origin)';
+/
+COMMENT ON COLUMN VACC_ADVERS_REACT.FLG_STATUS  IS 'This flag indicates the state of the record';
+/
+COMMENT ON COLUMN VACC_ADVERS_REACT.ID_VALUE IS '[DEPRECATED]';
+/
+COMMENT ON COLUMN VACC_ADVERS_REACT.NOTES_ADVERS_REACT IS 'Notes';
+/
+COMMENT ON COLUMN VACC_ADVERS_REACT.ID_PROF_WRITE IS 'Profissional who created the recorded';
+/
+COMMENT ON COLUMN VACC_ADVERS_REACT.DT_PROF_WRITE IS 'The date where the row was recorded';
+/
+COMMENT ON COLUMN VACC_ADVERS_REACT.CREATE_USER IS 'Creation User';
+/
+COMMENT ON COLUMN VACC_ADVERS_REACT.CREATE_TIME IS 'Creation Time';
+/
+COMMENT ON COLUMN VACC_ADVERS_REACT.CREATE_INSTITUTION IS 'Creation Institution';
+/
+COMMENT ON COLUMN VACC_ADVERS_REACT.UPDATE_USER IS 'Update User';
+/
+COMMENT ON COLUMN VACC_ADVERS_REACT.UPDATE_TIME IS 'Update Time';
+/
+COMMENT ON COLUMN VACC_ADVERS_REACT.UPDATE_INSTITUTION IS 'Update Institution';
+/
+COMMENT ON COLUMN VACC_ADVERS_REACT.ID_VACC_ADVER_REAC IS 'Vaccination adverse reaction ID';
+/
+-- CHANGE END: Sofia Mendes

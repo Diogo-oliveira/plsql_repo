@@ -1,0 +1,44 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 18/11/2013 14:02
+-- CHANGE REASON: [ALERT-269873] A&E diagnoses_Some diagnosis are not giving the option to document "anatomical side". (ALERT_268880)
+--                BSUH - Diagnosis/Problems/Past history - possibility to define the classification to be used in each functional area (ALERT_265471)
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    --i_flg_category
+    --DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'DIAGNOSIS_CONF_EA',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'DSV',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+
+    run_ddl(i_sql => '
+CREATE TABLE DIAGNOSIS_CONF_EA
+(
+  FLG_TERMINOLOGY         VARCHAR2(200 CHAR) NOT NULL,
+  ID_LANGUAGE             NUMBER(24)         DEFAULT 0 NOT NULL,
+  ID_TASK_TYPE            NUMBER(24)         NOT NULL,
+  TASK_TYPE_INTERNAL_NAME VARCHAR2(200 CHAR) NULL,
+  ID_INSTITUTION          NUMBER(24)         NOT NULL,
+  ID_SOFTWARE             NUMBER(24)         NOT NULL
+) TABLESPACE ALERT_DATA');
+
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE DIAGNOSIS_CONF_EA IS ''Contains the terminologies used by functionality, these settings are derived from table MSI_TERMIN_VERSION and should not be changed manually since the charging process of EAs updates these settings.''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_CONF_EA.FLG_TERMINOLOGY IS ''Terminology internal name''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_CONF_EA.ID_LANGUAGE IS ''Terminology language. If 0 then use application language.''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_CONF_EA.ID_TASK_TYPE IS ''Functionality ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_CONF_EA.TASK_TYPE_INTERNAL_NAME IS ''The purpose of this column, is only, the rapid identification of the functionality''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_CONF_EA.ID_INSTITUTION IS ''Institution ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_CONF_EA.ID_SOFTWARE is ''Software ID''';
+END;
+/
+-- CHANGE END: Alexandre Santos

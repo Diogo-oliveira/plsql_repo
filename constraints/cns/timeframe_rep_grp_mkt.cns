@@ -1,0 +1,26 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/03/2011 14:13
+-- CHANGE REASON: [ALERT-170459 ] Review H&P database dvelopment with notes of DB Arch.
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TIMEFRAME_REP_GRP_MKT
+ ADD (CONSTRAINT TRGPM_PK PRIMARY KEY 
+  (FLG_AVAILABLE
+  ,ID_MARKET
+  ,ID_TIMEFRAME_GROUP
+  ,ID_TIMEFRAME_REP))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+--
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TIMEFRAME_REP_GRP_MKT
+ ADD (CONSTRAINT TRGPM_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

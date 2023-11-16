@@ -1,0 +1,30 @@
+
+
+  CREATE TABLE PAT_GINEC_OBSTET
+   (	ID_PAT_GINEC_OBSTET NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_GINEC_OBSTET DATE NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_GINEC_OBSTET NUMBER(24,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	YEAR_BEGIN NUMBER(4,0) NOT NULL ENABLE,
+	MONTH_BEGIN NUMBER(2,0),
+	DAY_BEGIN NUMBER(2,0)
+   );
+
+
+COMMENT ON TABLE pat_ginec_obstet IS 'História ginecológica / obstétrica da utente' ;
+
+COMMENT ON COLUMN pat_ginec_obstet.dt_pat_ginec_obstet IS 'Data de registo' ;
+COMMENT ON COLUMN pat_ginec_obstet.year_begin IS 'Ano (aproximando) do acontecimento ginecológico / obstétrico' ;
+COMMENT ON COLUMN pat_ginec_obstet.month_begin IS 'Mês (aproximando) do acontecimento ginecológico / obstétrico' ;
+COMMENT ON COLUMN pat_ginec_obstet.day_begin IS 'Dia (aproximando) do acontecimento ginecológico / obstétrico' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_GINEC_OBSTET ADD DT_PAT_GINEC_OBSTET_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_GINEC_OBSTET.DT_PAT_GINEC_OBSTET_TSTZ IS 'Data de registo'; 
+
+
+-- DROP DATE TYPE
+ALTER table PAT_GINEC_OBSTET DROP column DT_PAT_GINEC_OBSTET;

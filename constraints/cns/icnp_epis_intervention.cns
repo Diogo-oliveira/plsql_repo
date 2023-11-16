@@ -1,0 +1,46 @@
+
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION ADD CONSTRAINT EIPI_PK PRIMARY KEY (ID_ICNP_EPIS_INTERV) ENABLE;
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION MODIFY (ID_ICNP_EPIS_INTERV NOT NULL ENABLE);
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION MODIFY (DT_ICNP_EPIS_INTERV NOT NULL ENABLE);
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION MODIFY (ID_PATIENT NOT NULL ENABLE);
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION MODIFY (ID_EPISODE NOT NULL ENABLE);
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION MODIFY (ID_COMPOSITION NOT NULL ENABLE);
+
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION MODIFY (FLG_STATUS NOT NULL ENABLE);
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION MODIFY (DT_BEGIN NOT NULL ENABLE);
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION MODIFY (ID_PROF NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 29/07/2011 18:00
+-- CHANGE REASON: [ALERT-182932] Implementation of the recurrence mechanism in ICNP functionality
+DECLARE
+  e_nonexistent_constraint EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_nonexistent_constraint, -02443); -- nonexistent constraint
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE icnp_epis_intervention DROP CONSTRAINT iei_flg_type_chk';
+  EXCEPTION
+    WHEN e_nonexistent_constraint THEN
+      dbms_output.put_line('Constraint icnp_epis_intervention.iei_flg_type_chk doesnt exist');
+  END;
+
+  EXECUTE IMMEDIATE 'ALTER TABLE icnp_epis_intervention ADD CONSTRAINT iei_flg_type_chk check (flg_type IN (
+        -- Old status, remove after migration: Normal (N), Unitário (U), SOS  (S), Ad eternum  (A), Contínuo  (C)
+        ''N'',''U'',''S'',''A'',''C'',
+        -- New status
+        ''O'', ''N'', ''R''))';
+END;
+/
+-- CHANGE END: Luis Oliveira

@@ -1,0 +1,94 @@
+CREATE SEQUENCE  SEQ_DEPT  MINVALUE 1 MAXVALUE 999999999999 INCREMENT BY 1 START WITH 1 NOCACHE  NOORDER  NOCYCLE ;
+alter sequence SEQ_DEPT noorder cache 500;
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2017 09:00
+-- CHANGE REASON: [ALERT-334520] 
+DECLARE
+		maxVal NUMBER;
+		nxSeq NUMBER;
+BEGIN
+nxSeq := seq_DEPT.nextVal;
+
+SELECT MAX(a.id_dept) + 1 INTO maxVal FROM DEPT a;
+maxVal := maxVal - nxSeq + 1;
+
+EXECUTE IMMEDIATE 'ALTER SEQUENCE seq_DEPT MAXVALUE 999999999999999999999999';
+EXECUTE IMMEDIATE 'ALTER SEQUENCE seq_DEPT INCREMENT BY ' || maxVal;
+
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2017 09:00
+-- CHANGE REASON: [ALERT-334520] 
+DECLARE
+    maxVal NUMBER;
+    nxSeq NUMBER;
+BEGIN
+
+
+BEGIN
+	SELECT z.id_dept + 1 INTO maxVal FROM (
+            SELECT t.id_dept , (l.id_dept - t.id_dept) diff 
+            FROM (
+                           SELECT a.id_dept, rownum rn 
+                               FROM DEPT a order by 1) t,
+                         (
+                               SELECT a.id_dept, rownum rn 
+                               FROM DEPT a order by 1 ) l
+            WHERE t.rn+1 = l.rn
+                              ANd l.id_dept - t.id_dept  > 1000000
+            ) z
+	WHERE rownum = 1 ;
+EXCEPTION WHEN OTHERS THEN
+	SELECT MAX(id_dept) + 1 INTO maxVal FROM DEPT;
+END;
+
+EXECUTE IMMEDIATE 'DROP SEQUENCE seq_DEPT';
+EXECUTE IMMEDIATE 'CREATE SEQUENCE seq_DEPT  MINVALUE 1 MAXVALUE 999999999999 INCREMENT BY 1 START WITH '|| maxVal || ' NOCACHE  NOORDER  NOCYCLE';
+
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2017 09:00
+-- CHANGE REASON: [ALERT-334520] 
+DECLARE
+    maxVal NUMBER;
+    nxSeq NUMBER;
+BEGIN
+
+
+BEGIN
+	SELECT z.id_dept + 1 INTO maxVal FROM (
+            SELECT t.id_dept , (l.id_dept - t.id_dept) diff 
+            FROM (
+                           SELECT a.id_dept, rownum rn 
+                               FROM DEPT a order by 1) t,
+                         (
+                               SELECT a.id_dept, rownum rn 
+                               FROM DEPT a order by 1 ) l
+            WHERE t.rn+1 = l.rn
+                              ANd l.id_dept - t.id_dept  > 1000000
+            ) z
+	WHERE rownum = 1 ;
+EXCEPTION WHEN OTHERS THEN
+	SELECT MAX(id_dept) + 1 INTO maxVal FROM DEPT;
+END;
+
+IF maxVal = 0 THEN
+	  maxVal := 1;
+END IF;
+
+EXECUTE IMMEDIATE 'DROP SEQUENCE seq_DEPT';
+EXECUTE IMMEDIATE 'CREATE SEQUENCE seq_DEPT  MINVALUE 1 MAXVALUE 9999999999999999 INCREMENT BY 1 START WITH '|| maxVal || ' NOCACHE  NOORDER  NOCYCLE';
+
+END;
+/
+-- CHANGE END: Pedro Henriques

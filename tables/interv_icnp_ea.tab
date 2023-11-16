@@ -1,0 +1,108 @@
+
+-- José Brito @ 22/10/2008 Denormalization
+CREATE TABLE INTERV_ICNP_EA
+ (ID_ICNP_EPIS_INTERV NUMBER(24) NOT NULL
+ ,ID_COMPOSITION_INTERV NUMBER(12) NOT NULL
+ ,ID_ICNP_EPIS_DIAG NUMBER(24)
+ ,ID_COMPOSITION_DIAG NUMBER(12)
+ ,FLG_TIME VARCHAR2(1)
+ ,STATUS_STR VARCHAR2(200)
+ ,STATUS_MSG VARCHAR2(200)
+ ,STATUS_ICON VARCHAR2(200)
+ ,STATUS_FLG VARCHAR2(1)
+ ,FLG_STATUS VARCHAR2(1) NOT NULL
+ ,FLG_TYPE VARCHAR2(1)
+ ,DT_NEXT TIMESTAMP WITH LOCAL TIME ZONE
+ ,DT_PLAN TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_VS VARCHAR2(8)
+ ,ID_PROF_CLOSE NUMBER(24)
+ ,DT_CLOSE TIMESTAMP WITH LOCAL TIME ZONE
+ ,DT_ICNP_EPIS_INTERV TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_PROF NUMBER(24) NOT NULL
+ ,ID_EPISODE_ORIGIN NUMBER(24)
+ ,ID_EPISODE NUMBER(24) NOT NULL
+ ,ID_PATIENT NUMBER(24) NOT NULL
+ ,FLG_STATUS_PLAN VARCHAR2(1)
+ ,ID_PROF_TAKE NUMBER(24)
+ ,FREQ NUMBER(6)
+ ,NOTES VARCHAR2(4000)
+ ,NOTES_CLOSE VARCHAR2(4000)
+ ,DT_BEGIN TIMESTAMP WITH LOCAL TIME ZONE
+ ,FLG_DURATION_UNIT VARCHAR2(1)
+ ,DURATION NUMBER(12)
+ ,NUM_TAKE NUMBER(3)
+ ,FLG_INTERVAL_UNIT VARCHAR2(2)
+ ,INTERVAL NUMBER(12,4)
+ ,DT_TAKE_EA TIMESTAMP WITH LOCAL TIME ZONE
+ ,DT_DG_LAST_UPDATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+ );
+
+-- Pkey
+ALTER TABLE INTERV_ICNP_EA
+ ADD (CONSTRAINT IIA_PK PRIMARY KEY 
+  (ID_ICNP_EPIS_INTERV));
+
+COMMENT ON TABLE INTERV_ICNP_EA IS 'This table stores the relevant information to show on nursing interventions, summary page and viewer workflow.';
+COMMENT ON COLUMN INTERV_ICNP_EA.ID_ICNP_EPIS_INTERV IS 'Request''s ID';
+COMMENT ON COLUMN INTERV_ICNP_EA.ID_COMPOSITION_INTERV IS 'Associated diagnosis ID';
+COMMENT ON COLUMN INTERV_ICNP_EA.ID_ICNP_EPIS_DIAG IS 'Associated diagnosis registry''s ID';
+COMMENT ON COLUMN INTERV_ICNP_EA.ID_COMPOSITION_DIAG IS 'Diagnosis'' ID';
+COMMENT ON COLUMN INTERV_ICNP_EA.FLG_TIME IS 'Treatment type: in this (E)pisode, (B)etween episodes, (N)ext episode.';
+COMMENT ON COLUMN INTERV_ICNP_EA.STATUS_STR IS 'Request''s status (in a specific format)';
+COMMENT ON COLUMN INTERV_ICNP_EA.STATUS_MSG IS 'Request''s status message code';
+COMMENT ON COLUMN INTERV_ICNP_EA.STATUS_ICON IS 'Request''s status icon';
+COMMENT ON COLUMN INTERV_ICNP_EA.STATUS_FLG IS 'Request''s status flag (used to return the icon)';
+COMMENT ON COLUMN INTERV_ICNP_EA.FLG_STATUS IS 'Request''s status';
+COMMENT ON COLUMN INTERV_ICNP_EA.FLG_TYPE IS 'Type of execution: N - dose and interval, U - Single dose, S - PRN, A - Scheduled dose, C - Continuous';
+COMMENT ON COLUMN INTERV_ICNP_EA.DT_NEXT IS 'Next execution date';
+COMMENT ON COLUMN INTERV_ICNP_EA.DT_PLAN IS 'Next execution planned date';
+COMMENT ON COLUMN INTERV_ICNP_EA.ID_VS IS 'Associated vital sign ID';
+COMMENT ON COLUMN INTERV_ICNP_EA.ID_PROF_CLOSE IS 'Cancellation''s professional''s ID';
+COMMENT ON COLUMN INTERV_ICNP_EA.DT_CLOSE IS 'Cancellation date';
+COMMENT ON COLUMN INTERV_ICNP_EA.DT_ICNP_EPIS_INTERV IS 'Request''s date';
+COMMENT ON COLUMN INTERV_ICNP_EA.ID_PROF IS 'Request''s professional ID';
+COMMENT ON COLUMN INTERV_ICNP_EA.ID_EPISODE_ORIGIN IS 'When the patient has an episode with an intervention request with FLG_TIME = ''N'', then the patient comes to another appointment and that request is duplicated to this new episode. In this new request, this column is filled with the episode ID of the first request.';
+COMMENT ON COLUMN INTERV_ICNP_EA.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN INTERV_ICNP_EA.ID_PATIENT IS 'Patient ID';
+COMMENT ON COLUMN INTERV_ICNP_EA.FLG_STATUS_PLAN IS 'Planned status';
+COMMENT ON COLUMN INTERV_ICNP_EA.ID_PROF_TAKE IS 'Professional ID responsible by the execution';
+COMMENT ON COLUMN INTERV_ICNP_EA.FREQ IS 'On a cyclic action case, this is the frequency with which action should be performed';
+COMMENT ON COLUMN INTERV_ICNP_EA.NOTES IS 'Intervention notes';
+COMMENT ON COLUMN INTERV_ICNP_EA.NOTES_CLOSE IS 'Close notes';
+COMMENT ON COLUMN INTERV_ICNP_EA.DT_BEGIN IS 'Intervention begin date';
+COMMENT ON COLUMN INTERV_ICNP_EA.FLG_DURATION_UNIT IS 'Time unit for intervention duration, if FLG_TYPE = ''C'' (D – days, H – hours, M – minutes)';
+COMMENT ON COLUMN INTERV_ICNP_EA.DURATION IS 'Intervention duration, if FLG_TYPE = ''C''';
+COMMENT ON COLUMN INTERV_ICNP_EA.NUM_TAKE IS 'Number of times for intervention execution';
+COMMENT ON COLUMN INTERV_ICNP_EA.FLG_INTERVAL_UNIT IS 'Time unit chosen by user (D – days, H – hours, M – minutes)';
+COMMENT ON COLUMN INTERV_ICNP_EA.INTERVAL IS 'Interval between consecutive interventions';
+COMMENT ON COLUMN INTERV_ICNP_EA.DT_TAKE_EA IS 'Plan execution date or intervention close date';
+COMMENT ON COLUMN INTERV_ICNP_EA.DT_DG_LAST_UPDATE IS 'Data governance last update';
+
+
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 29/07/2011 18:00
+-- CHANGE REASON: [ALERT-182932] Implementation of the recurrence mechanism in ICNP functionality
+--  Add columns related with recurrence and PRN (id_order_recurr_plan, flg_prn)
+DECLARE
+  e_column_already_exist EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_column_already_exist, -01430); -- column being added already exists in table
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE interv_icnp_ea ADD id_order_recurr_plan number(24)';
+  EXCEPTION
+    WHEN e_column_already_exist THEN
+      dbms_output.put_line('The column interv_icnp_ea.id_order_recurr_plan already exist');
+  END;
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE interv_icnp_ea ADD flg_prn VARCHAR2(1)';
+  EXCEPTION
+    WHEN e_column_already_exist THEN
+      dbms_output.put_line('The column interv_icnp_ea.flg_prn already exist');
+  END;
+END;
+/
+
+COMMENT ON COLUMN interv_icnp_ea.id_order_recurr_plan is 'Recurrence plan ID';
+COMMENT ON COLUMN interv_icnp_ea.flg_prn IS 'Flag that indicates if the intervention should only be executed as the situation demands.';
+COMMENT ON COLUMN interv_icnp_ea.flg_type is 'Frequency type: once (O), no schedule (N), with recurrence (R)';
+-- CHANGE END: Luis Oliveira

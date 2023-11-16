@@ -1,0 +1,104 @@
+
+
+  CREATE TABLE EXAM_GROUP
+   (	ID_EXAM_GROUP NUMBER(24,0) NOT NULL ENABLE,
+	CODE_EXAM_GROUP VARCHAR2(200) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	GENDER VARCHAR2(1),
+	AGE_MIN NUMBER(3,0),
+	AGE_MAX NUMBER(3,0)
+   );
+
+
+COMMENT ON TABLE exam_group IS 'Grupos de exames, para que, seleccionando um grupo, sejam criadas requisições para os vários exames incluídos no grupo.' ;
+
+COMMENT ON COLUMN exam_group.code_exam_group IS 'Código para tradução do noem do grupo' ;
+COMMENT ON COLUMN exam_group.gender IS 'Género ao qual se aplica' ;
+COMMENT ON COLUMN exam_group.age_min IS 'Idade mínima à qual se aplica' ;
+COMMENT ON COLUMN exam_group.age_max IS 'Idade máxima à qual se aplica' ;
+
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGED DATE: 2009-MAR-27
+-- CHANGED REASON: ALERT-645
+
+ALTER TABLE EXAM_GROUP ADD (ID_GROUP_PARENT NUMBER(24));
+
+COMMENT ON COLUMN EXAM_GROUP.ID_GROUP_PARENT IS 'Id grupo-pai';
+
+-- CHANGE END: Ana Matos
+
+
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 09/10/2013 10:36
+-- CHANGE REASON: [ALERT-265174] 
+DECLARE
+    l_sql VARCHAR2(4000);
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || REPLACE(srcstr => SQLERRM, oldsub => 'ORA-', newsub => '') || '; ' ||
+                                 i_sql || ';');
+    END run_ddl;
+BEGIN
+    l_sql := 'alter table exam_group add id_content VARCHAR2(200 CHAR)';
+    run_ddl(l_sql);
+
+    l_sql := 'COMMENT ON COLUMN response.id_content IS ''Content Identifier''';
+    run_ddl(l_sql);
+
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 09/10/2013 12:11
+-- CHANGE REASON: [ALERT-265174] 
+DECLARE
+    l_sql VARCHAR2(4000);
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || REPLACE(srcstr => SQLERRM, oldsub => 'ORA-', newsub => '') || '; ' ||
+                                 i_sql || ';');
+    END run_ddl;
+BEGIN
+    l_sql := 'alter table exam_group add id_content VARCHAR2(200 CHAR)';
+    run_ddl(l_sql);
+
+    l_sql := 'COMMENT ON COLUMN response.id_content IS ''Content Identifier''';
+    run_ddl(l_sql);
+
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 06/01/2016 17:51
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE EXAM_GROUP IS 'Exam''s groups catalogue';
+
+COMMENT ON COLUMN EXAM_GROUP.ID_EXAM_GROUP IS 'Exam group ID';
+COMMENT ON COLUMN EXAM_GROUP.CODE_EXAM_GROUP IS 'Translation code';
+COMMENT ON COLUMN EXAM_GROUP.RANK IS 'Rank';
+COMMENT ON COLUMN EXAM_GROUP.ADW_LAST_UPDATE IS 'Update date';
+COMMENT ON COLUMN EXAM_GROUP.GENDER IS 'Gender';
+COMMENT ON COLUMN EXAM_GROUP.AGE_MIN IS 'Minimum age';
+COMMENT ON COLUMN EXAM_GROUP.AGE_MAX IS 'Maximum age';
+COMMENT ON COLUMN EXAM_GROUP.ID_GROUP_PARENT IS 'Exam group parent ID';
+COMMENT ON COLUMN EXAM_GROUP.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN EXAM_GROUP.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN EXAM_GROUP.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN EXAM_GROUP.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN EXAM_GROUP.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN EXAM_GROUP.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN EXAM_GROUP.ID_CONTENT IS 'Content unique ID';
+-- CHANGE END: Ana Matos

@@ -1,0 +1,91 @@
+-- CHANGED BY: tiago.pereira
+-- CHANGED DATE: 19-03-2015
+-- CHANGING REASON: ALERT-307109
+
+-- Create table
+create table REP_LOGOS
+(
+  id_rep_logos       NUMBER(24) not null,
+  id_rep_group_logos NUMBER(24) not null,
+  internal_name      VARCHAR2(30) not null,
+  flg_available      VARCHAR2(1 CHAR) default 'N' not null,
+  image_logo         BLOB
+  
+)
+LOB(image_logo)         
+STORE AS BASICFILE seg_image_logo(TABLESPACE ALERT_LOB)
+tablespace ALERT_DATA
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON TABLE REP_LOGOS IS 'Logos';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON COLUMN REP_LOGOS.ID_REP_LOGOS IS 'Primary Key';
+COMMENT ON COLUMN REP_LOGOS.ID_REP_GROUP_LOGOS IS 'Logos Groups Identifier';
+COMMENT ON COLUMN REP_LOGOS.INTERNAL_NAME IS 'Internal Name';
+COMMENT ON COLUMN REP_LOGOS.FLG_AVAILABLE IS 'Disponibility';
+COMMENT ON COLUMN REP_LOGOS.IMAGE_LOGO IS 'Logo';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table REP_LOGOS add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column rep_logos.create_user IS 'Creation User';
+COMMENT ON column rep_logos.create_time IS 'Creation Time';
+COMMENT ON column rep_logos.create_institution IS 'Creation Institution';
+COMMENT ON column rep_logos.update_user IS 'Update User';
+COMMENT ON column rep_logos.update_time IS 'Update Time';
+COMMENT ON column rep_logos.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table rep_logos add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column rep_logos.create_user IS 'Creation User';
+COMMENT ON column rep_logos.create_time IS 'Creation Time';
+COMMENT ON column rep_logos.create_institution IS 'Creation Institution';
+COMMENT ON column rep_logos.update_user IS 'Update User';
+COMMENT ON column rep_logos.update_time IS 'Update Time';
+COMMENT ON column rep_logos.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

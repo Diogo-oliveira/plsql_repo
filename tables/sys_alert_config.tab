@@ -1,0 +1,137 @@
+--Rui Batista 2008/03/19
+--Alertas v3.0
+--Rui Batista 2008/03/19
+--Alertas v3.0
+create table sys_alert_config
+(
+  ID_SYS_ALERT_CONFIG NUMBER(24) not null,
+  ID_SYS_ALERT        NUMBER(24) not null,
+  ID_SOFTWARE         NUMBER(24) not null,
+  ID_INSTITUTION      NUMBER(24) not null,
+  ID_PROFILE_TEMPLATE NUMBER(12) not null,
+  ID_SYS_SHORTCUT     NUMBER(24),
+  ID_SHORTCUT_PK      NUMBER(24),
+  FLG_READ            VARCHAR2(1),
+  FLG_DUPLICATE       VARCHAR2(1),
+  MSG_DUP_YES         VARCHAR2(200),
+  MSG_DUP_NO          VARCHAR2(200),
+  MSG_DUP_YES 	varchar2(200),
+  MSG_DUP_NO 		varchar2(200)
+  );
+  
+  ALTER TABLE sys_alert_event MOVE TABLE_M;  
+  
+-- Add comments to the columns 
+comment on column SYS_ALERT_CONFIG.ID_SYS_ALERT  is 'Alert Id';
+comment on column SYS_ALERT_CONFIG.ID_SOFTWARE  is 'Available for this software id (0 for all).';
+comment on column SYS_ALERT_CONFIG.ID_INSTITUTION  is 'Available for this institution id (0 for all).';
+comment on column SYS_ALERT_CONFIG.ID_PROFILE_TEMPLATE  is 'Available for this profile id (0 for all).';
+comment on column SYS_ALERT_CONFIG.ID_SYS_SHORTCUT  is 'Shortcut Id';
+comment on column SYS_ALERT_CONFIG.ID_SHORTCUT_PK  is 'Shortcut unique key';
+comment on column SYS_ALERT_CONFIG.FLG_READ  is 'Can be read more than once (Y/N)';
+comment on column SYS_ALERT_CONFIG.FLG_DUPLICATE  is 'Y - Allows duplication (episode/alert_type); N - Otherwise';
+comment on column SYS_ALERT_CONFIG.MSG_DUP_YES  is 'Código da mensagem (sys_message) a mostrar quando o alerta mostra duplicados';
+comment on column SYS_ALERT_CONFIG.MSG_DUP_NO  is 'Código da mensagem (sys_message) a mostrar quando o alerta não mostra duplicados';
+comment on column SYS_ALERT_CONFIG.MSG_DUP_YES IS 'Código da mensagem (sys_message) a mostrar quando o alerta mostra duplicados';
+comment on column SYS_ALERT_CONFIG.MSG_DUP_NO IS 'Código da mensagem (sys_message) a mostrar quando o alerta não mostra duplicados';
+
+--Rui Batista 2008/03/19
+--Alertas v3.0
+create table sys_alert_config
+(
+  ID_SYS_ALERT_CONFIG NUMBER(24) not null,
+  ID_SYS_ALERT        NUMBER(24) not null,
+  ID_SOFTWARE         NUMBER(24) not null,
+  ID_INSTITUTION      NUMBER(24) not null,
+  ID_PROFILE_TEMPLATE NUMBER(12) not null,
+  ID_SYS_SHORTCUT     NUMBER(24),
+  ID_SHORTCUT_PK      NUMBER(24),
+  FLG_READ            VARCHAR2(1),
+  FLG_DUPLICATE       VARCHAR2(1),
+  MSG_DUP_YES         VARCHAR2(200),
+  MSG_DUP_NO          VARCHAR2(200)
+  );
+  
+ALTER TABLE sys_alert_event MOVE TABLE_M;  
+	
+-- Add comments to the columns 
+comment on column SYS_ALERT_CONFIG.ID_SYS_ALERT  is 'Alert Id';
+comment on column SYS_ALERT_CONFIG.ID_SOFTWARE  is 'Available for this software id (0 for all).';
+comment on column SYS_ALERT_CONFIG.ID_INSTITUTION  is 'Available for this institution id (0 for all).';
+comment on column SYS_ALERT_CONFIG.ID_PROFILE_TEMPLATE  is 'Available for this profile id (0 for all).';
+comment on column SYS_ALERT_CONFIG.ID_SYS_SHORTCUT  is 'Shortcut Id';
+comment on column SYS_ALERT_CONFIG.ID_SHORTCUT_PK  is 'Shortcut unique key';
+comment on column SYS_ALERT_CONFIG.FLG_READ  is 'Can be read more than once (Y/N)';
+comment on column SYS_ALERT_CONFIG.FLG_DUPLICATE  is 'Y - Allows duplication (episode/alert_type); N - Otherwise';
+comment on column SYS_ALERT_CONFIG.MSG_DUP_YES  is 'Código da mensagem (sys_message) a mostrar quando o alerta mostra duplicados';
+comment on column SYS_ALERT_CONFIG.MSG_DUP_NO  is 'Código da mensagem (sys_message) a mostrar quando o alerta não mostra duplicados';
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 2009-MAY-02
+-- CHANGE REASON: Add new column
+alter table SYS_ALERT_CONFIG add FLG_SEND_SMS VARCHAR2(1);
+
+comment on column SYS_ALERT_CONFIG.FLG_SEND_SMS is 'Send SMS (Y/N)';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 01/03/2011 17:33
+-- CHANGE REASON: [ALERT-165367] SMS, Beep and PDA notifications of workflow actions
+--                
+alter table SYS_ALERT_CONFIG add FLG_SMS VARCHAR2(1 CHAR) default 'Y';
+alter table SYS_ALERT_CONFIG add FLG_EMAIL VARCHAR2(1 CHAR) default 'Y';
+alter table SYS_ALERT_CONFIG add FLG_IM VARCHAR2(1 CHAR) default 'Y';
+ 
+comment on column SYS_ALERT_CONFIG.FLG_SMS is '(N)  -  sms notifications won''t be possible to this alert; (Y) - sms notifications will be possible to this alert;';
+comment on column SYS_ALERT_CONFIG.FLG_EMAIL is '(N)  -  email notifications won''t be possible to this alert; (Y) - email notifications will be possible to this alert;';
+comment on column SYS_ALERT_CONFIG.FLG_IM is '(N)  -  instant messaging won''t be possible to this alert; (Y) - instant messaging notifications will be possible to this alert;';
+
+comment on table SYS_ALERT_CONFIG is 'This table allows the parameterization of an alert';
+-- CHANGE END: Rui Duarte
+
+-- cmf 11-01-2016 cmf
+comment on column alert.SYS_ALERT_CONFIG.MSG_DUP_YES  is 'Code of sys_message to show when alert shows duplicates';
+comment on column alert.SYS_ALERT_CONFIG.MSG_DUP_NO  is 'Code of sys_message to show when alert is not showing duplicates';
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 28/04/2022 16:43
+-- CHANGE REASON: [EMR-52935]
+begin
+pk_versioning.run('ALTER TABLE sys_alert_config ADD flg_notification_all VARCHAR2(1 CHAR) DEFAULT ''Y''');
+end;
+/
+
+begin
+pk_versioning.run('ALTER TABLE sys_alert_config DROP COLUMN flg_send_sms');
+end;
+/
+
+COMMENT ON TABLE sys_alert_config IS 'Alerts'' configuration';
+
+COMMENT ON COLUMN sys_alert_config.id_sys_alert_config IS 'Primary key';
+COMMENT ON COLUMN sys_alert_config.id_sys_alert IS 'Alert ID';
+COMMENT ON COLUMN sys_alert_config.id_software IS 'Software ID';
+COMMENT ON COLUMN sys_alert_config.id_institution IS 'Institution ID';
+COMMENT ON COLUMN sys_alert_config.id_profile_template IS 'Profile template ID';
+COMMENT ON COLUMN sys_alert_config.id_sys_shortcut IS 'Shortcut ID';
+COMMENT ON COLUMN sys_alert_config.id_shortcut_pk IS 'Shortcut unique key';
+COMMENT ON COLUMN sys_alert_config.flg_read IS 'Flag that indicates if the alert can be read more than once (Y/N)';
+COMMENT ON COLUMN sys_alert_config.flg_duplicate IS 'Flag that indicates if the alert allows duplication (by episode/alert_type)';
+COMMENT ON COLUMN sys_alert_config.msg_dup_yes IS 'Sys_message code (if FLG_DUPLICATE = ''Y'')';
+COMMENT ON COLUMN sys_alert_config.msg_dup_no IS 'Sys_message code (if FLG_DUPLICATE = ''N'')';
+COMMENT ON COLUMN sys_alert_config.flg_sms IS 'Flag that indicates if the alert will be sent by sms (Y/N)';
+COMMENT ON COLUMN sys_alert_config.flg_email IS 'Flag that indicates if the alert will be sent by email (Y/N)';
+COMMENT ON COLUMN sys_alert_config.flg_im IS 'Flag that indicates if the alert will be sent by instant messaging (Y/N)';
+COMMENT ON COLUMN sys_alert_config.flg_notification_all IS 'Flag that indicates if the alert notification will be sent when there is no specific professional (if FLG_SMS = ''Y'' or FLG_EMAIL = ''Y'' or FLG_IM = ''Y'')';
+-- CHANGE END: Ana Matos
+
+declare
+       l_sql varchar2(4000);
+begin
+       l_sql := q'[alter table sys_alert_config add flg_delete varchar2(0001 char) default 'N']';
+       pk_versioning.run( l_sql );
+end;
+/
+
+comment on column sys_alert_config.FLG_DELETE IS 'Y - Alert is deleted on read, N - Alert is NOT deleted on read.';

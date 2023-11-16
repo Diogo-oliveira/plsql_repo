@@ -1,0 +1,51 @@
+
+
+  CREATE TABLE SOCIAL_EPIS_DIAG
+   (	ID_SOCIAL_EPIS_DIAG NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOCIAL_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	DT_SOCIAL_EPIS_DIAG DATE NOT NULL ENABLE,
+	ID_SOCIAL_DIAGNOSIS NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000)
+   );
+
+
+
+COMMENT ON COLUMN social_epis_diag.dt_social_epis_diag IS 'Data de registo' ;
+COMMENT ON COLUMN social_epis_diag.flg_status IS 'Estado: activo / inactivo' ;
+
+alter table social_epis_diag
+add (dt_social_epis_diag_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+--CHANGED BY: Rui Spratley
+--CHANGE DATE: 2008/09/22
+--CHANGE REASON: Drop colunas DATE
+alter table social_epis_diag drop column dt_social_epis_diag;
+alter table social_epis_diag drop column dt_cancel;
+-- CHANGE END
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 12:41
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table SOCIAL_EPIS_DIAG
+  is 'DEPRECATED only used for old social episodes';  
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 26/01/2016 14:44
+-- CHANGE REASON: [ALERT-318122] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table SOCIAL_EPIS_DIAG
+  is 'DEPRECATED only used for old social episodes';  
+  
+-- CHANGE END: Elisabete Bugalho

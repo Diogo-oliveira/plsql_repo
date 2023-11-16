@@ -1,0 +1,44 @@
+
+
+  CREATE TABLE EPIS_READMISSION
+   (	ID_EPIS_READMISSION NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	DT_BEGIN DATE NOT NULL ENABLE,
+	DT_END DATE,
+	ID_PROFESSIONAL NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE epis_readmission IS 'Readmissões' ;
+
+COMMENT ON COLUMN epis_readmission.dt_begin IS 'Data de início' ;
+COMMENT ON COLUMN epis_readmission.dt_end IS 'Data de fim' ;
+
+comment on column EPIS_READMISSION.ID_PROFESSIONAL
+  is 'Profissional que reabriu o episódio';
+alter table epis_readmission 
+add (dt_begin_tstz timestamp with local time zone,
+     dt_end_tstz timestamp with local time zone); 
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-JUL-31
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 16496
+
+
+COMMENT ON COLUMN  EPIS_READMISSION.DT_BEGIN_TSTZ IS 'Begin date'; 
+COMMENT ON COLUMN  EPIS_READMISSION.DT_END_TSTZ IS 'End date'; 
+COMMENT ON COLUMN  EPIS_READMISSION.ID_EPIS_READMISSION IS 'Episode readmission ID'; 
+COMMENT ON COLUMN  EPIS_READMISSION.ID_EPISODE IS 'Episode ID'; 
+
+-- CHANGED END: Nuno Ferreira
+
+
+-- CHANGED BY: Carlos Vieira
+-- CHANGE DATE: 2008-Set-22
+-- CHANGE REASON: 
+
+alter table EPIS_READMISSION drop column DT_BEGIN;
+alter table EPIS_READMISSION drop column DT_END;
+
+-- CHANGE END

@@ -1,0 +1,9 @@
+alter table PROFILE_TEMPLATE_CATEGORY add constraint PTC_PK primary key (ID_PROFILE_TEMPLATE, ID_CATEGORY);
+
+declare
+l_sql    varchar2(1000 char);
+begin
+l_sql := q'[ALTER TABLE PROFILE_TEMPLATE_CATEGORY ADD CONSTRAINT PTC_FLG_PROF_CHK CHECK (FLG_CAT_PROF = 'Y' )]';
+pk_versioning.run( l_sql );
+end;
+/

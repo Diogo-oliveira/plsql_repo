@@ -1,0 +1,104 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:18
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+CREATE TABLE death_registry (
+       id_death_registry      NUMBER(24) NOT NULL,
+       id_episode             NUMBER(24) NOT NULL,
+       dt_death               TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+       id_prof_verified_death NUMBER(24) NOT NULL,
+       id_sl_natural_cause    NUMBER(24) NOT NULL,
+       id_sl_coroner_warned   NUMBER(24),
+       id_sl_autopsy          NUMBER(24) NOT NULL,
+       id_prof_death_registry NUMBER(24) NOT NULL,
+       dt_death_registry      TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+       id_cancel_reason       NUMBER(24),
+       notes_cancel           CLOB,
+       flg_status             VARCHAR2(1 CHAR) NOT NULL,
+       id_susp_action         NUMBER(24),
+       --
+       create_user            VARCHAR2(24 CHAR),
+       create_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution     NUMBER(24),
+       update_user            VARCHAR2(24 CHAR),
+       update_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution     NUMBER(24)
+)
+LOB(notes_cancel) STORE AS dthr_notes_cancel(ENABLE STORAGE IN ROW TABLESPACE alert_lob)
+;
+
+--
+
+COMMENT ON TABLE death_registry IS 'Table for death registries';
+--
+COMMENT ON COLUMN death_registry.id_death_registry      IS 'Death registry Id';
+COMMENT ON COLUMN death_registry.id_episode             IS 'Id of the episode where the death occurred';
+COMMENT ON COLUMN death_registry.dt_death               IS 'Death date';
+COMMENT ON COLUMN death_registry.id_prof_verified_death IS 'Id of the professional that verified the death';
+COMMENT ON COLUMN death_registry.id_sl_natural_cause    IS 'If it died of natural causes (Y/N - context defined in sys_list)';
+COMMENT ON COLUMN death_registry.id_sl_coroner_warned   IS 'If the coroner was warned (Y/N - context defined in sys_list)';
+COMMENT ON COLUMN death_registry.id_sl_autopsy          IS 'If an autopsy was or is going to be made (Y/N - context defined in sys_list)';
+COMMENT ON COLUMN death_registry.id_prof_death_registry IS 'Id of the professional that made the registry';
+COMMENT ON COLUMN death_registry.dt_death_registry      IS 'Date of the registry';
+COMMENT ON COLUMN death_registry.id_cancel_reason       IS 'Cancel Reason Id';
+COMMENT ON COLUMN death_registry.notes_cancel           IS 'Registry cancel notes';
+COMMENT ON COLUMN death_registry.flg_status             IS 'Status of the registry (A - Active / C - Cancelled - context defined in sys_domain)';
+COMMENT ON COLUMN death_registry.id_susp_action         IS 'Suspension action Id';
+--
+COMMENT ON COLUMN death_registry.create_user            IS 'Professional that created the registry';
+COMMENT ON COLUMN death_registry.create_time            IS 'Date of the registry creation';
+COMMENT ON COLUMN death_registry.create_institution     IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN death_registry.update_user            IS 'Last professional that updated the registry';
+COMMENT ON COLUMN death_registry.update_time            IS 'Date of the last update to the registry';
+COMMENT ON COLUMN death_registry.update_institution     IS 'Id of the last institution where the registry was updated';
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:18
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE death_registry MOVE TABLESPACE table_m;
+--
+-- CHANGE END: Filipe Machado
+
+declare
+	pl      varchar2(0010 char) := '''';
+	l_sql	varchar2(4000);
+begin
+	l_sql := 'ALTER TABLE DEATH_REGISTRY ADD FLG_TYPE varchar2(0001 char) default '||pl||'P'||pl;
+	pk_versioning.run(l_sql);
+end;
+/
+
+comment on column ALERT.DEATH_REGISTRY.FLG_TYPE 		is 'Type patient affected: (P)atient, (F)etal';
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 26/01/2017 10:39
+-- CHANGE REASON: [ALERT-328235] Error when saving death registry
+--                
+-- Add/modify columns 
+alter table DEATH_REGISTRY modify id_prof_verified_death null;
+alter table DEATH_REGISTRY modify id_sl_natural_cause null;
+alter table DEATH_REGISTRY modify id_sl_autopsy null;
+alter table DEATH_REGISTRY modify id_prof_death_registry null;
+alter table DEATH_REGISTRY modify dt_death_registry null;
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 26/01/2017 14:59
+-- CHANGE REASON: [    ALERT-328235] Errors on Dêath registry data
+-- Add/modify columns 
+alter table DEATH_REGISTRY modify dt_death null;
+-- CHANGE END: Elisabete Bugalho
+
+declare
+	l_sql	varchar2(4000);
+begin
+
+	l_sql := q'[ALTER TABLE death_registry ADD DEATH_DATE_FORMAT VARCHAR2(0020 CHAR) DEFAULT 'FULL_DATE']';
+	pk_versioning.run( l_sql);
+	
+end;
+/
+
+COMMENT ON COLUMN death_registry.DEATH_DATE_FORMAT IS 'FULL_DATE for full display; PARTIAL: for MM/YYYY or YYYY display';

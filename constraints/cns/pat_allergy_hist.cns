@@ -1,0 +1,52 @@
+
+
+  ALTER TABLE PAT_ALLERGY_HIST ADD CONSTRAINT PAH_PK PRIMARY KEY (ID_PAT_ALLERGY_HIST) ENABLE;
+
+  ALTER TABLE PAT_ALLERGY_HIST MODIFY (ID_PAT_ALLERGY_HIST NOT NULL ENABLE);
+
+  ALTER TABLE PAT_ALLERGY_HIST MODIFY (ID_PAT_ALLERGY NOT NULL ENABLE);
+
+  ALTER TABLE PAT_ALLERGY_HIST MODIFY (DT_PAT_ALLERGY NOT NULL ENABLE);
+
+  ALTER TABLE PAT_ALLERGY_HIST MODIFY (ID_PATIENT NOT NULL ENABLE);
+
+  ALTER TABLE PAT_ALLERGY_HIST MODIFY (FLG_STATUS NOT NULL ENABLE);
+
+
+  ALTER TABLE PAT_ALLERGY_HIST MODIFY (ID_PROF_WRITE NOT NULL ENABLE);
+
+  ALTER TABLE PAT_ALLERGY_HIST MODIFY (FLG_APROVED NOT NULL ENABLE);
+
+  ALTER TABLE PAT_ALLERGY_HIST MODIFY (ID_INSTITUTION NOT NULL ENABLE);
+
+alter table pat_allergy_hist add constraint pah_pat_fk foreign key (id_patient) references patient(id_patient);
+
+
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 30/03/2009 10:28
+-- CHANGE REASON: [ALERT-12181] Notes Problems / Cancelation reason
+--                CCHIT: ED 25.01
+ ALTER TABLE pat_allergy_hist ADD CONSTRAINT PAH_CR_FK FOREIGN KEY (id_cancel_reason)
+ REFERENCES cancel_reason (id_cancel_reason) ENABLE;
+ 
+-- CHANGE END
+
+-- CHANGED BY:  Gisela Couto
+-- CHANGE DATE: 16/06/2014 15:45
+-- CHANGE REASON: [ALERT-286096] Dev DB - CDA Section: Medication allergies
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+
+    run_ddl(i_sql =>' ALTER TABLE pat_allergy_hist add CONSTRAINT phd_flg_cda_reconciliation_chk CHECK(flg_cda_reconciliation IN (''Y'',''N''))');
+END;
+/
+-- CHANGE END:  Gisela Couto

@@ -1,0 +1,22 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/05/2014 11:59
+-- CHANGE REASON: [ALERT-282042] data export detail
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE CDA_REQ_det add CONSTRAINT CDARD_CDAR_fk foreign key(id_cda_req) references cda_req(id_cda_req)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE CDA_REQ_det add CONSTRAINT CDARD_REP_fk foreign key(id_report) references reports(id_reports)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

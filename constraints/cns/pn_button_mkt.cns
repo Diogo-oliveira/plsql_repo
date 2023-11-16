@@ -1,0 +1,58 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 10:10
+-- CHANGE REASON: [ALERT-164483] soap note blocks configuration data model
+alter table pn_button_mkt
+  add constraint pbm_pk primary key (id_software, id_market, flg_type, id_pn_soap_block, id_conf_button_block);
+alter table pn_button_mkt
+  add constraint pbm_flg_type_chk
+  check (flg_type in ('A', 'H', 'P', 'L', 'CC', 'CR'));
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/10/2011 10:26
+-- CHANGE REASON: [ALERT-199727] H&P phase 2
+alter table pn_button_mkt drop primary key drop index;
+
+alter table pn_button_mkt
+  add constraint pbm_pk primary key (id_software, id_market, id_pn_note_type, id_pn_soap_block, id_conf_button_block);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 12:59
+-- CHANGE REASON: [ALERT-206417] H&P phase 2
+alter table pn_button_mkt drop primary key drop index;
+
+alter table pn_button_mkt
+  add constraint pbm_pk primary key (id_software, id_market, id_pn_note_type, id_pn_soap_block, id_conf_button_block);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 08/06/2012 16:52
+-- CHANGE REASON: [ALERT-232682] Allow to filter buttons to be filtered by gender and age - Improvements to Single page functionality including(H&P, CV, PPH), Phase IV
+begin
+execute immediate 'alter table pn_button_mkt add constraint pbm_gender_chk CHECK(gender IN (''N'',''M'', ''F'', ''I'', ''U'', ''H'') OR gender IS NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/07/2013 11:13
+-- CHANGE REASON: [ALERT-259145 ] EDIS nurse single page
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists1, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_button_mkt add constraint pnbm_flg_activation_chk  check (flg_activation IN (''N'',''O''))';
+    EXCEPTION
+        WHEN e_object_exists1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes

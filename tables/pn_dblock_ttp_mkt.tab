@@ -1,0 +1,307 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/05/2012 10:40
+-- CHANGE REASON: [ALERT-231085 ] Improvements to Single page funcionality including(H&P, CV, PPH)
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE pn_dblock_ttp_mkt(
+                     id_pn_data_block NUMBER(24) NOT NULL,
+                     id_pn_soap_block NUMBER(24) NOT NULL,
+                     id_pn_note_type  NUMBER(24) NOT NULL,
+                     id_software NUMBER(24) NOT NULL, 
+                     id_market NUMBER(24) NOT NULL, 
+                     FLG_AUTO_POPULATED varchar2(24 char) default ''N'',                
+                     create_user VARCHAR2(24 CHAR),
+                     create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                     create_institution NUMBER(24),
+                     update_user VARCHAR2(24 CHAR),
+                     update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                     update_institution NUMBER(24))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+
+comment on table pn_dblock_ttp_mkt
+  is 'Table to indicate which task types are associated to each data block. Defaul parametrization';
+
+COMMENT ON column pn_dblock_ttp_mkt.id_pn_data_block IS 'Data block identifier';
+COMMENT ON column pn_dblock_ttp_mkt.id_pn_soap_block IS 'Soap block identifier';
+COMMENT ON column pn_dblock_ttp_mkt.id_pn_note_type IS 'Note type identifier';
+COMMENT ON column pn_dblock_ttp_mkt.id_software IS 'Software identifier.';
+COMMENT ON column pn_dblock_ttp_mkt.id_market IS 'Market identifier.';
+COMMENT ON column pn_dblock_ttp_mkt.FLG_AUTO_POPULATED IS 'Y-This area should be auto-populated. O-Auto-populated with ongoing records; F-Auto-populated with finalized records; A-Auto-populated with anormal results; M-Auto-populated with normal results; R-The first record is autopopulated. L-The last record is auto-populated. P -Auto-populate records created since last recheck. W-auto-populate records with notes/comments (can only be used if ''T'' is not used in one config); T-auto-populate records without notes/comments (can only be used if ''W'' is not used in one config); C-Ongoing records with at least one completed execution since last note; B-All records since last note + all records without notes/comments; N-It is not auto-populated.';
+COMMENT ON column pn_dblock_ttp_mkt.create_user IS 'Creation user';
+COMMENT ON column pn_dblock_ttp_mkt.create_time IS 'Creation date / time';
+COMMENT ON column pn_dblock_ttp_mkt.create_institution IS 'Creation institution';
+COMMENT ON column pn_dblock_ttp_mkt.update_user IS 'Update user';
+COMMENT ON column pn_dblock_ttp_mkt.update_time IS 'Update date / time';
+COMMENT ON column pn_dblock_ttp_mkt.update_institution IS 'Update institution';
+
+
+BEGIN
+    execute immediate 'alter table pn_dblock_ttp_mkt add (id_task_type NUMBER(24) not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_dblock_ttp_mkt.id_task_type IS ''Task type ID.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 22/08/2012 17:02
+-- CHANGE REASON: [ALERT-238310] Import mechanism for Inactive problems
+BEGIN
+    execute immediate 'alter table pn_dblock_ttp_mkt add (flg_selected VARCHAR2(24 CHAR) DEFAULT ''N'')';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'alter table pn_dblock_ttp_mkt add (flg_import_filter VARCHAR2(24 CHAR) DEFAULT ''N'')';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_dblock_ttp_mkt.flg_selected IS ''Indicate if the item is selected by default in the import screen. Y - Selected item. N- Unselected item. O-The ongoing records are selected. F - The finalized records are selected. I - The inactive records are selected.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_dblock_ttp_mkt.flg_import_filter IS ''Indicate if some filter is applied when importing records. Y - Selected item. N- Unselected item. O-The ongoing records are selected. F - The finalized records are selected. I - The inactive records are selected.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/10/2012 16:02
+-- CHANGE REASON: [ALERT-242379 ] Single page note for Discharge Summary
+BEGIN
+    execute immediate 'alter table pn_dblock_ttp_mkt add (LAST_N_RECORDS_NR NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_dblock_ttp_mkt.LAST_N_RECORDS_NR IS ''Last n records to be imported/auto-populated. To be used together with the flg_auto_populated/flg_import_filter (L, S and G)''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+COMMENT ON column pn_dblock_ttp_mkt.FLG_AUTO_POPULATED IS 'Y-This area should be auto-populated. O-Auto-populated with ongoing records; F-Auto-populated with finalized records;I-Auto-populated withinactive records; D- Auto-populate with pending records (only available for lab and imaging requests); A-Auto-populated with anormal results; M-Auto-populated with normal results; R-The first record is autopopulated. L-The last record is auto-populated. P -Auto-populate records created since last recheck. W-auto-populate records with notes/comments (can only be used if ''T'' is not used in one config); T-auto-populate records without notes/comments (can only be used if ''W'' is not used in one config); C-Ongoing records with at least one completed execution since last note; B-All records since last note + all records without notes/comments; S- Last N records by subgroup (only available for analysis); V-Info reviewed in the episode. K - Prescriptions that not originated a new prescription, only available for medication continue at home and continue in the hospital.';
+
+BEGIN
+    execute immediate 'alter table pn_dblock_ttp_mkt add (FLG_SHORTCUT_FILTER VARCHAR2(1 CHAR) default ''N'' not null)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_dblock_ttp_mkt.FLG_SHORTCUT_FILTER IS ''Indicate if some filter should be applied when importing the records created by single page shortcuts. N - No filter to apply. K - Prescriptions that was not originated in the medication reconciliation (only available for Ambulatory medication)''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 30/11/2012 08:55
+-- CHANGE REASON: [ALERT-246012 ] Alteração do mecanismo de sincronização na single page
+BEGIN
+    execute immediate 'alter table pn_dblock_ttp_mkt add (FLG_SYNCHRONIZED VARCHAR2(24 CHAR) default ''N'' not null)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_dblock_ttp_mkt.FLG_SYNCHRONIZED IS ''Y-This area should be sincronized. O-Sincronized with ongoing records; F-Sincronized with finalized records;I-Sincronized withinactive records; D- Auto-populate with pending records (only available for lab and imaging requests); A-Sincronized with anormal results; M-Sincronized with normal results; R-The first record is autopopulated. L-The last record is Sincronized. P -Auto-populate records created since last recheck. W-auto-populate records with notes/comments (can only be used if ''T'' is not used in one config); T-auto-populate records without notes/comments (can only be used if ''W'' is not used in one config); C-Ongoing records with at least one completed execution since last note; B-All records since last note + all records without notes/comments; S- Last N records by subgroup (only available for analysis); V-Info reviewed in the episode. K - Prescriptions that not originated a new prescription, only available for medication continue at home and continue in the hospital.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_ttp_mkt ADD (CONSTRAINT PNDBTTM_FLG_SYNCHRONIZED_CHK CHECK (REGEXP_LIKE(FLG_SYNCHRONIZED, ''^([YOFAMRLWTPBCNSVZDIEGKHJ])'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 29/01/2013 15:15
+-- CHANGE REASON: [ALERT-250486 ] A physician suggested to add the option "Anamnesi Fisiologica" (or in (truncated)
+BEGIN
+    execute immediate 'COMMENT ON column pn_dblock_ttp_mkt.flg_synchronized IS ''Indicate if some filter is applied when synchronizing records.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/05/2013 16:25
+-- CHANGE REASON: [ALERT-259145] Triage single page
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_ttp_mkt modify flg_selected VARCHAR2(24 CHAR) not null';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_ttp_mkt modify flg_import_filter VARCHAR2(24 CHAR) not null';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_ttp_mkt modify flg_auto_populated varchar2(24 char) not null';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_ttp_mkt add review_cat varchar2(200 char)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON column pn_dblock_ttp_mkt.review_cat IS 'Professional category flg_type to consider  in the records review(join in this column all the needed categories). Null-consider all the professional categories. For instance, if review_cat = D, the record appears as not reviewed (red colored) if the record had not been reviewed by a professional from doctor category. Only available for tasks with review (allergies, problems, habits, past history)';
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_ttp_mkt add flg_review_avail varchar2(1 char) default ''N'' not null';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON column pn_dblock_ttp_mkt.flg_review_avail IS 'Indicates if the review option should be available for the current task type. Only available for tasks with review (allergies, problems, habits, past history)';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 23/04/2014 15:04
+-- CHANGE REASON: [ALERT-281928] 
+alter table pn_dblock_ttp_mkt modify flg_shortcut_filter varchar2(24 char);
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 07/07/2017 14:53
+-- CHANGE REASON: [ALERT-330567] Discharge summary for FR market.
+ALTER TABLE pn_dblock_ttp_mkt add (flg_description VARCHAR2(24 char));
+COMMENT ON COLUMN tmp_pn_configs.flg_description is 'Task description type: S - short; L- Long; D - Detailed';
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 10/07/2017 08:20
+-- CHANGE REASON: [ALERT-330567] Discharge summary for FR market.
+ALTER TABLE pn_dblock_ttp_mkt add (flg_description VARCHAR2(24 char));
+COMMENT ON COLUMN pn_dblock_ttp_mkt.flg_description is 'Task description type: S - short; L- Long; D - Detailed';
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 10/10/2017 17:00
+-- CHANGE REASON: [ALERT-173] Improve filter mechanism
+ALTER TABLE pn_dblock_ttp_mkt
+  MODIFY flg_import_filter VARCHAR2(200 CHAR);
+  
+ALTER TABLE pn_dblock_ttp_mkt
+  MODIFY FLG_SHORTCUT_FILTER VARCHAR2(200 CHAR);
+  
+ALTER TABLE pn_dblock_ttp_mkt
+  MODIFY FLG_SYNCHRONIZED VARCHAR2(200 CHAR);
+
+ALTER TABLE pn_dblock_ttp_mkt
+  MODIFY FLG_AUTO_POPULATED VARCHAR2(200 CHAR);
+-- CHANGE END: Amanda Lee
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 11/10/2017
+-- CHANGE REASON: CALERT-174
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_ttp_mkt add description_condition VARCHAR2(1000 CHAR)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Operation already executed.');
+END;
+/
+
+COMMENT ON COLUMN pn_dblock_ttp_mkt.flg_description IS 'Task description type: S - short; L- Long; D - Detailed; C - Conditional (uses DESCRIPTION_CONDITION as a condition for desc calculation)';
+COMMENT ON COLUMN pn_dblock_ttp_mkt.description_condition IS 'If flg_description = C, then this field must be filled with the necessary condition(s), this condition(s) must be interpreted in code';
+-- CHANGE END: Pedro Teixeira
+
+
+-- CHANGED BY: rui.mendonca
+-- CHANGE DATE: 11/12/2017 15:42
+-- CHANGE REASON: [CALERT-1112] New Neurological assessment figure
+COMMENT ON COLUMN pn_dblock_ttp_mkt.flg_auto_populated IS 'Y-This area should be auto-populated. O-Auto-populated with ongoing records; F-Auto-populated with finalized records;I-Auto-populated withinactive records; D- Auto-populate with pending records (only available for lab and imaging requests); A-Auto-populated with anormal results; M-Auto-populated with normal results; R-The first record is autopopulated. L-The last record is auto-populated. P -Auto-populate records created since last recheck. W-auto-populate records with notes/comments (can only be used if ''T'' is not used in one config); T-auto-populate records without notes/comments (can only be used if ''W'' is not used in one config); C-Ongoing records with at least one completed execution since last note; B-All records since last note + all records without notes/comments; S- Last N records by subgroup (only available for analysis); V-Info reviewed in the episode. K - Prescriptions that not originated a new prescription, only available for medication continue at home and continue in the hospital. BN - Body diagrams for neurological assessment. BD - Body diagrams for drainage. BO - Other body diagrams.';
+COMMENT ON COLUMN pn_dblock_ttp_mkt.flg_import_filter IS 'Indicate if some filter is applied when importing records. Y - Selected item. N- Unselected item. O-The ongoing records are selected. F - The finalized records are selected. I - The inactive records are selected. BN - Body diagrams for neurological assessment. BD - Body diagrams for drainage. BO - Other body diagrams.';
+COMMENT ON COLUMN pn_dblock_ttp_mkt.flg_shortcut_filter IS 'Indicate if some filter should be applied when importing the records created by single page shortcuts. N - No filter to apply. K - Prescriptions that was not originated in the medication reconciliation (only available for Ambulatory medication). BN - Body diagrams for neurological assessment. BD - Body diagrams for drainage. BO - Other body diagrams.';
+-- CHANGE END: rui.mendonca
+
+-- CHANGED BY: Lillian Lu
+-- CHANGE DATE: 2018-06-15
+-- CHANGE REASON: [CEMR-1560] New import mechanism results filter in single page documentation notes for TW market
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_ttp_mkt add flg_dt_task VARCHAR2(200 CHAR)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Operation already executed.');
+END;
+/
+
+COMMENT ON COLUMN pn_dblock_ttp_mkt.flg_dt_task IS 'Define date field in task_timeline_ea to check import filter date. Use ''|'' if more then one date';
+-- CHANGE END: Lillian Lu
+
+-- CHANGED BY: Webber Chiou
+-- CHANGE DATE: 2018/09/11
+-- CHANGE REASON: [CEMR-1992] Important process  fail to get orderreport for consultation and lab
+BEGIN
+	EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_ttp_mkt ADD id_task_related NUMBER(24)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Operation already executed.');
+END;
+/
+COMMENT ON COLUMN pn_dblock_ttp_mkt.id_task_related IS 'Task type identifier to be autopopulated with the informatition related';
+-- CHANGE END: Webber Chiou

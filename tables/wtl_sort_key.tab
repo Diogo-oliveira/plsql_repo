@@ -1,0 +1,172 @@
+-- CHANGED BY: RicardoNunoAlmeida
+-- CHANGE DATE: 12/03/2010 17:23
+-- CHANGE REASON: [ALERT-60382] 
+CREATE TABLE wtl_sort_key
+(  
+  id_wtl_sort_key NUMBER(24,0),
+  id_wtl_s_key_parent NUMBER(24,0),
+  flg_has_child VARCHAR2(1) NOT NULL,
+  value VARCHAR2(200),
+  code_desc VARCHAR2(200),
+  internal_name VARCHAR2(200),
+flg_show_req  VARCHAR2(1) NOT NULL,
+id_wtl_checklist NUMBER(24),  
+  
+  CREATE_USER  VARCHAR2(24),
+  CREATE_TIME  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),                         
+  UPDATE_USER  VARCHAR2(24),                       
+  UPDATE_TIME  TIMESTAMP(6) WITH LOCAL TIME ZONE,  
+  UPDATE_INSTITUTION  NUMBER(24)                  
+);
+
+
+
+--constraints
+alter table wtl_sort_key
+  add constraint WSK_PK primary key (id_wtl_sort_key) ENABLE;
+
+alter table wtl_sort_key
+  add constraint WSK_WSK_FK foreign key (id_wtl_s_key_parent) REFERENCES wtl_sort_key (id_wtl_sort_key) ENABLE;
+
+alter table wtl_sort_key
+  add constraint WSK_WCHK_FK foreign key (id_wtl_checklist) REFERENCES wtl_checklist (id_wtl_checklist) ENABLE;
+
+alter table wtl_sort_key
+  add constraint WSK_FLG_HAS_CHILD_CHK
+  check (flg_has_child IN ('Y', 'N'));
+
+alter table wtl_sort_key
+  add constraint WSK_FLG_SHOW_REQ_CHK
+  check (flg_show_req IN ('Y', 'N'));
+
+alter table wtl_sort_key
+  add constraint WSK_CODE_DESC_UNI unique (CODE_DESC) ;
+
+alter table wtl_sort_key
+  add constraint WSK_CODE_KEY_UNI unique (CODE_KEY) ;
+-- CHANGE END: RicardoNunoAlmeida
+
+-- CHANGED BY: RicardoNunoAlmeida
+-- CHANGE DATE: 12/03/2010 17:32
+-- CHANGE REASON: [ALERT-60382] 
+CREATE TABLE wtl_sort_key
+(  
+  id_wtl_sort_key NUMBER(24,0),
+  id_wtl_s_key_parent NUMBER(24,0),
+  flg_has_child VARCHAR2(1) NOT NULL,
+  value VARCHAR2(200),
+  code_desc VARCHAR2(200),
+  internal_name VARCHAR2(200),
+flg_show_req  VARCHAR2(1) NOT NULL,
+id_wtl_checklist NUMBER(24),  
+  
+  CREATE_USER  VARCHAR2(24),
+  CREATE_TIME  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),                         
+  UPDATE_USER  VARCHAR2(24),                       
+  UPDATE_TIME  TIMESTAMP(6) WITH LOCAL TIME ZONE,  
+  UPDATE_INSTITUTION  NUMBER(24)                  
+);
+
+
+--comments
+comment on table wtl_sort_key
+  is 'Table containing the order criteria for the Waiting List.';
+comment on column wtl_sort_key.id_wtl_sort_key
+  is 'Primary key, versioned content.';
+comment on column wtl_sort_key.id_wtl_s_key_parent
+  is 'References a parent criteria. This allows the creation of subcriteria with different priorities defined.';
+comment on column wtl_sort_key.flg_has_child
+  is 'Indicates whether or not a criteria record has subcriteria.';
+comment on column wtl_sort_key.value
+  is 'Value of the key for the parent criteria. Only valid for keys with defined parents';
+comment on column wtl_sort_key.code_desc
+  is 'Code of the description of the criteria.';
+comment on column wtl_sort_key.internal_name
+  is 'Internal name to identify the sorting key';
+comment on column wtl_sort_key.flg_show_req
+  is 'Defines if the key is visible in the application';
+comment on column wtl_sort_key.id_wtl_checklist
+  is 'Defines a correspondence between a sorting key and an item in the checklist.';
+-- CHANGE END: RicardoNunoAlmeida
+
+-- CHANGED BY: RicardoNunoAlmeida
+-- CHANGE DATE: 15/03/2010 11:47
+-- CHANGE REASON: [ALERT-60382] 
+CREATE TABLE wtl_sort_key
+(  
+  id_wtl_sort_key NUMBER(24,0),
+  id_wtl_s_key_parent NUMBER(24,0),
+  flg_has_child VARCHAR2(1) NOT NULL,
+  value VARCHAR2(200),
+  code_desc VARCHAR2(200),
+  internal_name VARCHAR2(200),
+  flg_show_req  VARCHAR2(1) NOT NULL,
+  id_wtl_checklist NUMBER(24),    
+  CREATE_USER  VARCHAR2(24),
+  CREATE_TIME  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),                         
+  UPDATE_USER  VARCHAR2(24),                       
+  UPDATE_TIME  TIMESTAMP(6) WITH LOCAL TIME ZONE,  
+  UPDATE_INSTITUTION  NUMBER(24)                  
+);
+
+
+--comments
+comment on table wtl_sort_key
+  is 'Table containing the order criteria for the Waiting List.';
+comment on column wtl_sort_key.id_wtl_sort_key
+  is 'Primary key, versioned content.';
+comment on column wtl_sort_key.id_wtl_s_key_parent
+  is 'References a parent criteria. This allows the creation of subcriteria with different priorities defined.';
+comment on column wtl_sort_key.flg_has_child
+  is 'Indicates whether or not a criteria record has subcriteria.';  
+comment on column wtl_sort_key.value
+  is 'Value of the key for the parent criteria. Only valid for keys with defined parents';  
+comment on column wtl_sort_key.code_desc
+  is 'Code of the description of the criteria.';  
+comment on column wtl_sort_key.internal_name
+  is 'Internal name to identify the sorting key';  
+comment on column wtl_sort_key.flg_show_req
+  is 'Defines if the key is visible in the application';    
+comment on column wtl_sort_key.id_wtl_checklist
+  is 'Defines a correspondence between a sorting key and an item in the checklist.';    
+-- CHANGE END: RicardoNunoAlmeida
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 21/01/2016 12:30
+-- CHANGE REASON: [ALERT-318028] CDOC Functionalities V7
+-- Add comments to the table 
+comment on table WTL_SORT_KEY
+  is 'Table containing the order criteria for the Waiting List.';
+-- Add comments to the columns 
+comment on column WTL_SORT_KEY.id_wtl_sort_key
+  is 'Primary key, versioned content.';
+comment on column WTL_SORT_KEY.id_wtl_s_key_parent
+  is 'References a parent criteria. This allows the creation of subcriteria with different priorities defined.';
+comment on column WTL_SORT_KEY.flg_has_child
+  is 'Indicates whether or not a criteria record has subcriteria.';
+comment on column WTL_SORT_KEY.value
+  is 'Value of the key for the parent criteria. Only valid for keys with defined parents';
+comment on column WTL_SORT_KEY.code_desc
+  is 'Code of the description of the criteria.';
+comment on column WTL_SORT_KEY.internal_name
+  is 'Internal name to identify the sorting key';
+comment on column WTL_SORT_KEY.flg_show_req
+  is 'Defines if the key is visible in the application';
+comment on column WTL_SORT_KEY.id_wtl_checklist
+  is 'Defines a correspondence between a sorting key and an item in the checklist.';
+comment on column WTL_SORT_KEY.create_user
+  is 'CREATE_USER';
+comment on column WTL_SORT_KEY.create_time
+  is 'CREATE_TIME';
+comment on column WTL_SORT_KEY.create_institution
+  is 'CREATE_INSTITUTION';
+comment on column WTL_SORT_KEY.update_user
+  is 'UPDATE_USER';
+comment on column WTL_SORT_KEY.update_time
+  is 'UPDATE_TIME';
+comment on column WTL_SORT_KEY.update_institution
+  is 'UPDATE_INSTITUTION';
+-- CHANGE END: Pedro Fernandes

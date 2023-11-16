@@ -1,0 +1,71 @@
+
+
+  CREATE TABLE "ALERT"."DOC_TYPES_CONFIG"
+   (	"ID_DOC_TYPES_CONFIG" NUMBER(24,0),
+	"ID_DOC_TYPE" NUMBER(12,0),
+	"ID_DOC_ORI_TYPE" NUMBER(6,0),
+	"ID_DOC_ORIGINAL" NUMBER(12,0),
+	"ID_DOC_DESTINATION" NUMBER(6,0),
+	"ID_INSTITUTION" NUMBER(12,0),
+	"ID_SOFTWARE" NUMBER(24,0),
+	"ID_PROFILE_TEMPLATE" NUMBER(12,0),
+	"ID_SYS_BUTTON_PROP" NUMBER(24,0),
+	"FLG_VIEW" VARCHAR2(1) DEFAULT 'Y',
+	"FLG_INSERT" VARCHAR2(1) DEFAULT 'Y',
+	"FLG_OTHER" VARCHAR2(1) DEFAULT 'Y'
+   ) ;
+
+
+-- Creating column DOC_TYPES_CONFIG.ID_DOC_ORI_TYPE_PARENT
+ALTER TABLE DOC_TYPES_CONFIG  ADD (ID_DOC_ORI_TYPE_PARENT NUMBER(6))
+/
+
+COMMENT ON COLUMN DOC_TYPES_CONFIG.ID_DOC_ORI_TYPE_PARENT IS 'Id_doc_ori_type for this id_doc_type. Only used when id_doc_type is not null'
+/
+
+
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:19
+-- CHANGE REASON: [ALERT-126939] 
+ALTER TABLE DOC_TYPES_CONFIG ADD (FLG_PUBLISHABLE VARCHAR2(1 CHAR));
+COMMENT ON COLUMN DOC_TYPES_CONFIG.FLG_PUBLISHABLE IS 'Is the document publishable?';
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:19
+-- CHANGE REASON: [ALERT-126939] 
+alter table doc_types_config 
+ modify (id_institution number(24) );
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 12-04-2011
+-- CHANGE REASON: ALERT-172558
+alter table DOC_TYPES_CONFIG add flg_download varchar2(1);
+
+comment on column DOC_TYPES_CONFIG.flg_download is 'Y= this file can be downloaded  N=this file cannot be downloaded';
+  
+-- CHANGE END: Telmo
+
+COMMENT ON TABLE  ALERT.DOC_TYPES_CONFIG     is 'Doc_type configuration';
+
+COMMENT ON COLUMN ALERT.DOC_TYPES_CONFIG.ID_DOC_TYPES_CONFIG     is 'Doc_type configuration id';
+COMMENT ON COLUMN ALERT.DOC_TYPES_CONFIG.ID_DOC_TYPE             is 'configurated doc_type';
+COMMENT ON COLUMN ALERT.DOC_TYPES_CONFIG.ID_DOC_ORI_TYPE         is 'Type of document';
+COMMENT ON COLUMN ALERT.DOC_TYPES_CONFIG.ID_DOC_ORIGINAL         is 'Type of original document';
+COMMENT ON COLUMN ALERT.DOC_TYPES_CONFIG.ID_DOC_DESTINATION     is 'document location';
+COMMENT ON COLUMN ALERT.DOC_TYPES_CONFIG.ID_INSTITUTION         is 'Institution id where configuration is applied . 0 - all';
+COMMENT ON COLUMN ALERT.DOC_TYPES_CONFIG.ID_SOFTWARE             is 'Software id where configuration applied. 0 - all';
+COMMENT ON COLUMN ALERT.DOC_TYPES_CONFIG.ID_PROFILE_TEMPLATE     is 'Profile_template configurated. 0 - all ';
+COMMENT ON COLUMN ALERT.DOC_TYPES_CONFIG.ID_SYS_BUTTON_PROP 	is 'Button associated with type configurated';
+COMMENT ON COLUMN ALERT.DOC_TYPES_CONFIG.FLG_VIEW 				is 'Set if configuration is visible';
+COMMENT ON COLUMN ALERT.DOC_TYPES_CONFIG.FLG_INSERT 			is 'Set if type of document can be insert via application';
+COMMENT ON COLUMN ALERT.DOC_TYPES_CONFIG.FLG_OTHER 				is 'MArks type of document as "Other..."';
+
+-- CHANGED BY: Kelsey Lai
+-- CHANGE DATE: 2018/09/10
+-- CHANGE REASON: [CEMR-1942] EHR button-Wrong translation
+ALTER TABLE DOC_TYPES_CONFIG ADD RANK NUMBER(6);
+COMMENT ON COLUMN doc_types_config.rank IS 'Document archive rank';
+-- CHANGE END: Kelsey Lai

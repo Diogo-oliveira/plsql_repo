@@ -1,0 +1,14 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/10/2014 13:35
+-- CHANGE REASON: [ALERT-298852] 
+BEGIN
+    pk_versioning.run(i_sql => q'[alter table PRINT_LIST_JOB add constraint plj_pla_fk foreign key (ID_PRINT_LIST_AREA) references PRINT_LIST_AREA (ID_PRINT_LIST_AREA)]');    
+    pk_versioning.run(i_sql => q'[alter table PRINT_LIST_JOB add constraint plj_wsw_fk foreign key (ID_WORKFLOW, ID_STATUS) references WF_STATUS_WORKFLOW (ID_WORKFLOW, ID_STATUS)]');
+    pk_versioning.run(i_sql => q'[alter table PRINT_LIST_JOB add constraint plj_pat_fk foreign key (ID_PATIENT) references ALERT_ADTCOD.PATIENT (ID_PATIENT)]');
+    pk_versioning.run(i_sql => q'[alter table PRINT_LIST_JOB add constraint plj_epis_fk foreign key (ID_EPISODE) references EPISODE (ID_EPISODE)]');    
+    pk_versioning.run(i_sql => q'[alter table PRINT_LIST_JOB add constraint plj_ainst_fk foreign key (ID_INST_REQ) references ALERT_CORE_DATA.AB_INSTITUTION (ID_AB_INSTITUTION)]');
+    pk_versioning.run(i_sql => q'[alter table PRINT_LIST_JOB add constraint plj_prof_sts_fk foreign key (ID_PROF_STATUS) references PROFESSIONAL (ID_PROFESSIONAL)]');
+    pk_versioning.run(i_sql => q'[alter table PRINT_LIST_JOB add constraint plj_prof_req_fk foreign key (ID_PROF_REQ) references PROFESSIONAL (ID_PROFESSIONAL)]');
+END;
+/
+-- CHANGE END: Ana Monteiro

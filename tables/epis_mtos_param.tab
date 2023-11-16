@@ -1,0 +1,151 @@
+CREATE TABLE epis_mtos_param (
+       id_epis_mtos_score NUMBER(24) NOT NULL,
+			 id_mtos_param NUMBER(24) NOT NULL,
+			 registered_value VARCHAR2(200),
+			 id_vital_sign_read NUMBER(24),
+			 id_prof_create NUMBER(24) NOT NULL,
+			 dt_create TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+			 create_user VARCHAR2(24),
+			 create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 create_institution NUMBER(24),
+			 update_user VARCHAR2(24),
+			 update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 update_institution NUMBER(24)
+) TABLESPACE TABLE_M;
+
+COMMENT ON TABLE epis_mtos_param IS 'Registered value and correspondent score value for each parameter of the MTOS dataset scores';
+COMMENT ON COLUMN epis_mtos_param.id_epis_mtos_score IS 'Episode dataset score identifier';
+COMMENT ON COLUMN epis_mtos_param.id_mtos_param IS 'Parameter identifier';
+COMMENT ON COLUMN epis_mtos_param.registered_value IS 'Value registered in the score parameter';
+COMMENT ON COLUMN epis_mtos_param.id_vital_sign_read IS 'Identifier  of the vital sign read value ';
+COMMENT ON COLUMN epis_mtos_param.id_prof_create IS 'Creation user (showed in ALERT®)';
+COMMENT ON COLUMN epis_mtos_param.dt_create IS 'Creation user (showed in ALERT®)';
+COMMENT ON COLUMN epis_mtos_param.create_user IS 'Creation user';
+COMMENT ON COLUMN epis_mtos_param.create_time IS 'Creation date / time';
+COMMENT ON COLUMN epis_mtos_param.create_institution IS 'Creation institution';
+COMMENT ON COLUMN epis_mtos_param.update_user IS 'Update user';
+COMMENT ON COLUMN epis_mtos_param.update_time IS 'Update date / time';
+COMMENT ON COLUMN epis_mtos_param.update_institution IS 'Update institution';
+
+
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 21/09/2009 11:19
+-- CHANGE REASON: [ALERT-44836] Convert type of column EPIS_MTOS_PARAM.REGISTERED_VALUE to NUMBER
+CREATE TABLE epis_mtos_param_20090921 AS SELECT * FROM epis_mtos_param;
+ALTER TABLE epis_mtos_param DROP COLUMN registered_value;
+ALTER TABLE epis_mtos_param ADD registered_value NUMBER(24,4);
+COMMENT ON COLUMN epis_mtos_param.registered_value IS 'Value registered in the score parameter';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/11/2017 10:19
+-- CHANGE REASON: [CALERT-804] 
+ALTER TABLE epis_mtos_param ADD EXTRA_SCORE VARCHAR2(1 CHAR);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 08/01/2018 16:00
+-- CHANGE REASON: [CALERT-1672]
+ALTER TABLE EPIS_MTOS_PARAM
+ADD FLG_PARAM_TASK_TYPE VARCHAR2(2) DEFAULT NULL;
+
+UPDATE EPIS_MTOS_PARAM m
+   SET m.FLG_PARAM_TASK_TYPE = 'VS'
+ WHERE m.Id_Vital_Sign_Read IS NOT NULL;
+
+ALTER TABLE EPIS_MTOS_PARAM
+ADD ID_TASK_REFID NUMBER(24) DEFAULT NULL; 
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 19/01/2018 17:30
+-- CHANGE REASON: [CALERT-1468] 
+alter table epis_mtos_param
+add notes clob;
+-- CHANGE END: Diogo Oliveira
+
+COMMENT ON COLUMN EPIS_MTOS_PARAM.Flg_Param_Task_Type
+        IS 'Flag than indicates the type of parameter: VS-"Vital Sign"';
+        
+COMMENT ON COLUMN EPIS_MTOS_PARAM.Id_Task_Refid
+        IS 'Transactional ID of the task of the parameter (Id related to FLG_PARAM_TASK_TYPE)';
+
+COMMENT ON COLUMN EPIS_MTOS_PARAM.Id_Vital_Sign_Read
+  is 'Identifier  of the vital sign read value  - DEPRECATED';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 16/01/2018 08:00
+-- CHANGE REASON: [CALERT-1800]
+ALTER TABLE epis_mtos_param
+DISABLE CONSTRAINT EMP_PK;
+
+DROP INDEX EMP_PK;
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 26/01/2018 08:00
+-- CHANGE REASON: [CALERT-219]
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+
+    l_sql := 'alter table epis_mtos_param add id_epis_mtos_param number(24)';
+    pk_versioning.run(l_sql);
+END;
+/
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 26/01/2018 08:00
+-- CHANGE REASON: [CALERT-219]
+DECLARE
+
+    CURSOR c IS
+        SELECT ROWID
+          FROM epis_mtos_param emp
+         ORDER BY emp.create_time ASC;
+
+    l_id VARCHAR2(1000);
+
+BEGIN
+    OPEN c;
+    LOOP
+        FETCH c
+            INTO l_id;
+        EXIT WHEN c%NOTFOUND;
+        UPDATE epis_mtos_param e
+           SET e.id_epis_mtos_param = seq_epis_mtos_param.nextval
+         WHERE ROWID = l_id;
+    END LOOP;
+END;
+/
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 26/01/2018 08:00
+-- CHANGE REASON: [CALERT-219]
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+
+    l_sql := 'ALTER TABLE epis_mtos_param ADD CONSTRAINT EMP_PK PRIMARY KEY (ID_EPIS_MTOS_SCORE, ID_MTOS_PARAM, ID_EPIS_MTOS_PARAM)';
+    pk_versioning.run(l_sql);      
+END;
+/
+COMMENT ON COLUMN epis_mtos_param.ID_EPIS_MTOS_PARAM IS 'Epis Parameter identifier (Primary Key)';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.epis_mtos_param move lob(notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

@@ -1,0 +1,14 @@
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 21/04/2015 17:31
+-- CHANGE REASON: [ALERT-310273 ] 
+DECLARE
+    e_idx_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_idx_already_exists, -00955); 
+BEGIN
+    EXECUTE IMMEDIATE 'create index IPD_CSO_FK_IDX on interv_presc_det (ID_CO_SIGN_ORDER)';
+EXCEPTION
+    WHEN e_idx_already_exists THEN
+        dbms_output.put_line('index IPD_CSO_FK_IDX already exists');   
+END;
+/
+-- CHANGE END: cristina.oliveira

@@ -1,0 +1,27 @@
+
+
+  CREATE TABLE ROOM_SCHEDULED
+   (	ID_ROOM_SCHEDULED NUMBER(24,0) NOT NULL ENABLE,
+	DT_ROOM_SCHEDULED DATE NOT NULL ENABLE,
+	ID_SCHEDULE NUMBER(24,0) NOT NULL ENABLE,
+	ID_ROOM NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_START DATE,
+	DT_END DATE
+   );
+
+
+COMMENT ON TABLE room_scheduled IS 'Salas requisitadas para um mesmo agendamento' ;
+
+COMMENT ON COLUMN room_scheduled.flg_status IS 'Estado da sala. Valores possíveis: A- Agendada F- Pronta, B- Ocupada, C- Em limpeza' ;
+COMMENT ON COLUMN room_scheduled.dt_start IS 'Data de início da ocupação da sala' ;
+COMMENT ON COLUMN room_scheduled.dt_end IS 'Data de fim da ocupação da sala' ;
+
+comment on column ROOM_SCHEDULED.FLG_STATUS
+  is 'Estado da sala. Valores possíveis: A- Agendada F- Pronta, B- Ocupada, C- Em limpeza, D- Suja';
+  
+
+-- José Brito 22/09/2008 Eliminar colunas DATE
+alter table room_scheduled drop column dt_room_scheduled;
+alter table room_scheduled drop column dt_start;
+alter table room_scheduled drop column dt_end;

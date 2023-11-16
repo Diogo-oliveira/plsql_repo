@@ -1,0 +1,200 @@
+
+
+  CREATE TABLE WOUND_TREAT
+   (	ID_WOUND_TREATMENT NUMBER(24,0) NOT NULL ENABLE,
+	DT_WOUND_TREATMENT DATE NOT NULL ENABLE,
+	ID_WOUND_EVALUATION NUMBER(24,0) NOT NULL ENABLE,
+	DT_PLAN DATE NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_TAKE DATE,
+	ID_PROF_EXEC NUMBER(24,0),
+	NOTES VARCHAR2(4000),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+
+	ID_EPISODE_WRITE NUMBER(24,0)
+   );
+
+
+COMMENT ON COLUMN wound_treat.dt_wound_treatment IS 'Data registo' ;
+COMMENT ON COLUMN wound_treat.dt_plan IS 'Data planeada' ;
+COMMENT ON COLUMN wound_treat.flg_status IS 'A - executado, N - não executado, C-  cancelado' ;
+COMMENT ON COLUMN wound_treat.dt_take IS 'Data de execução' ;
+COMMENT ON COLUMN wound_treat.id_prof_exec IS 'Prof. execução' ;
+COMMENT ON COLUMN wound_treat.dt_cancel IS 'Data cancelamento' ;
+COMMENT ON COLUMN wound_treat.id_episode_write IS 'ID do episódio em que foi executado o penso' ;
+
+alter table wound_treat 
+add (dt_wound_treatment_tstz timestamp with local time zone,
+     dt_plan_tstz timestamp with local time zone,
+     dt_take_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone);
+
+
+
+
+alter table wound_treat drop column DT_PLAN;
+alter table wound_treat drop column  DT_TAKE;
+alter table wound_treat drop column  DT_CANCEL;
+alter table wound_treat drop column  DT_WOUND_TREATMENT;
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 2009/04/07
+-- CHANGE REASON: ALERT-22463
+COMMENT ON TABLE WOUND_TREAT IS 'Wound treatments (dressings executions)';
+COMMENT ON COLUMN WOUND_TREAT.ID_WOUND_TREATMENT IS 'Wound treatment ID';
+COMMENT ON COLUMN WOUND_TREAT.ID_WOUND_EVALUATION IS 'Wound evaluation ID';
+COMMENT ON COLUMN WOUND_TREAT.FLG_STATUS IS 'Status: A-Completed, N-Not completed, C-Cancelled';
+COMMENT ON COLUMN WOUND_TREAT.ID_PROF_EXEC IS 'Execution professional';
+COMMENT ON COLUMN WOUND_TREAT.NOTES IS 'Notes';
+COMMENT ON COLUMN WOUND_TREAT.ID_PROF_CANCEL IS 'Cancelling professional';
+COMMENT ON COLUMN WOUND_TREAT.NOTES_CANCEL IS 'Cancelling notes';
+COMMENT ON COLUMN WOUND_TREAT.DT_WOUND_TREATMENT_TSTZ IS 'Row insertion date';
+COMMENT ON COLUMN WOUND_TREAT.DT_PLAN_TSTZ IS 'Planned date';
+COMMENT ON COLUMN WOUND_TREAT.DT_TAKE_TSTZ IS 'Execution date';
+COMMENT ON COLUMN WOUND_TREAT.DT_CANCEL_TSTZ IS 'Cancelling date';
+-- CHANGE END
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 04/05/2010 19:41
+-- CHANGE REASON: [ALERT-94512] Config mandatory "intervention to be charged" on dressings execution
+declare
+  column_exists exception;
+  pragma exception_init(column_exists, -1430);
+begin
+  execute immediate 'alter table wound_treat add flg_interv_reg varchar2(1 char)';
+  execute immediate 'comment on column wound_treat.flg_interv_reg is ''Was the Procedure to be charged field filled?''';
+exception
+  when column_exists then
+    null;
+end;
+/
+-- CHANGE END: João Martins
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 11/04/2011 15:18
+-- CHANGE REASON: [ALERT-163522] 
+BEGIN
+    ALTER TABLE WOUND_TREAT add id_cancel_reason NUMBER(24);
+
+    COMMENT ON column WOUND_TREAT.id_cancel_reason IS 'Cancel reason ID';
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/04/2011 12:27
+-- CHANGE REASON: [ALERT-163522] 
+
+    ALTER TABLE WOUND_TREAT add id_cancel_reason NUMBER(24);
+
+    COMMENT ON column WOUND_TREAT.id_cancel_reason IS 'Cancel reason ID';
+
+
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/04/2011 12:27
+-- CHANGE REASON: [ALERT-163522] 
+
+    ALTER TABLE WOUND_TREAT add id_cancel_reason NUMBER(24);
+
+    COMMENT ON column WOUND_TREAT.id_cancel_reason IS 'Cancel reason ID';
+
+
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/04/2011 12:28
+-- CHANGE REASON: [ALERT-163522] 
+
+    ALTER TABLE WOUND_TREAT add id_cancel_reason NUMBER(24);
+
+    COMMENT ON column WOUND_TREAT.id_cancel_reason IS 'Cancel reason ID';
+
+
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 16:50
+-- CHANGE REASON: [ALERT-317702] 
+comment on table WOUND_TREAT
+  is 'Dressings executions';
+-- Add comments to the columns 
+comment on column WOUND_TREAT.id_wound_treatment
+  is 'Wound treatment ID';
+comment on column WOUND_TREAT.id_wound_evaluation
+  is 'Wound evaluation ID';
+comment on column WOUND_TREAT.flg_status
+  is 'Status: A - Completed, N - Not completed, C - Cancelled';
+comment on column WOUND_TREAT.id_prof_exec
+  is 'Professional ID';
+comment on column WOUND_TREAT.notes
+  is 'Notes';
+comment on column WOUND_TREAT.id_prof_cancel
+  is 'Professional that cancels the execution';
+comment on column WOUND_TREAT.notes_cancel
+  is 'Cancelation notes';
+comment on column WOUND_TREAT.id_episode_write
+  is 'Execution episode ID';
+comment on column WOUND_TREAT.dt_wound_treatment_tstz
+  is 'Date that indicates when the execution was registered';
+comment on column WOUND_TREAT.dt_plan_tstz
+  is 'Date that indicates when the execution planning';
+comment on column WOUND_TREAT.dt_take_tstz
+  is 'Date that indicates when the execution was executed';
+comment on column WOUND_TREAT.dt_cancel_tstz
+  is 'Date that indicates when the execution was cancelled';
+comment on column WOUND_TREAT.create_user
+  is 'Creation User';
+comment on column WOUND_TREAT.create_time
+  is 'Creation Time';
+comment on column WOUND_TREAT.create_institution
+  is 'Creation Institution';
+comment on column WOUND_TREAT.update_user
+  is 'Update User';
+comment on column WOUND_TREAT.update_time
+  is 'Update Time';
+comment on column WOUND_TREAT.update_institution
+  is 'Update Institution';
+comment on column WOUND_TREAT.flg_interv_reg
+  is 'Flag that indicates if a procedure is to be charged (Y/N)';
+comment on column WOUND_TREAT.id_cancel_reason
+  is 'Cancel reason ID';
+  
+  
+  
+--~>wound_type|table
+comment on table WOUND_TYPE
+  is 'Wound type catalogue';
+-- Add comments to the columns 
+comment on column WOUND_TYPE.id_wound_type
+  is 'Wound type ID';
+comment on column WOUND_TYPE.code_wound_type
+  is 'Translation code';
+comment on column WOUND_TYPE.intern_name
+  is 'Internal description';
+comment on column WOUND_TYPE.id_parent
+  is 'Parent ID';
+comment on column WOUND_TYPE.code_help_wound_type
+  is 'Translation code for context help';
+comment on column WOUND_TYPE.rank
+  is 'Rank';
+comment on column WOUND_TYPE.adw_last_update
+  is 'Update date';
+comment on column WOUND_TYPE.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column WOUND_TYPE.create_user
+  is 'Creation User';
+comment on column WOUND_TYPE.create_time
+  is 'Creation Time';
+comment on column WOUND_TYPE.create_institution
+  is 'Creation Institution';
+comment on column WOUND_TYPE.update_user
+  is 'Update User';
+comment on column WOUND_TYPE.update_time
+  is 'Update Time';
+comment on column WOUND_TYPE.update_institution
+  is 'Update Institution';
+-- CHANGE END: Ana Matos

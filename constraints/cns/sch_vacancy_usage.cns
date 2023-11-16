@@ -1,0 +1,32 @@
+ALTER TABLE sch_vacancy_usage ADD CONSTRAINT svu_pk PRIMARY KEY(id_sch_vacancy_usage) ENABLE;
+ALTER TABLE sch_vacancy_usage MODIFY id_institution NOT NULL ENABLE;
+ALTER TABLE sch_vacancy_usage MODIFY id_software NOT NULL ENABLE;
+ALTER TABLE sch_vacancy_usage MODIFY flg_use NOT NULL ENABLE;
+ALTER TABLE sch_vacancy_usage MODIFY flg_sch_type NOT NULL ENABLE;
+ALTER TABLE sch_vacancy_usage ADD CONSTRAINT svu_flguse_ck CHECK (flg_use IN ('Y', 'N')) ENABLE;
+ALTER TABLE sch_vacancy_usage ADD CONSTRAINT svu_flgsch_type_ck CHECK (flg_sch_type IN ('A', 'E', 'C', 'S')) ENABLE;
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 24-05-2008
+-- CHANGE REASON: colunas novas FLG_SCHED_WITHOUT_VAC e FLG_EDIT_VAC
+
+alter table SCH_VACANCY_USAGE modify FLG_SCHED_WITHOUT_VAC not null;
+alter table SCH_VACANCY_USAGE modify FLG_EDIT_VAC not null;
+--END
+
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 26-05-2008
+-- CHANGE REASON: nova pk e checks para novas colunas flg
+
+alter table SCH_VACANCY_USAGE add constraint SVU_PK primary key (ID_INSTITUTION, ID_SOFTWARE, FLG_SCH_TYPE);
+
+alter table SCH_VACANCY_USAGE add constraint SVU_FLGSWV_CK check (flg_sched_without_vac IN ('Y', 'N'));
+alter table SCH_VACANCY_USAGE add constraint SVU_FLGEDITV_CK check (flg_edit_vac IN ('Y', 'N'));
+--END
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 01-07-2008
+-- CHANGE REASON: esta check constraint foi abolida e criada a FK svu_sdt_fk porque os dep_type agora estão reunidos na sch_dep_type
+alter table SCH_VACANCY_USAGE drop constraint SVU_FLGSCH_TYPE_CK;
+--END

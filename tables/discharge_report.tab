@@ -1,0 +1,47 @@
+-- CHANGED BY: Nuno Alves
+-- CHANGE DATE: 09/06/2015 09:16
+-- CHANGE REASON: [ALERT-312396] ALERT-312396 Issue Replication: [BSUH] Outpatient Appointment report and Outpatient GP Letter generation and sending 2 reports in discharge
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || REPLACE(srcstr => SQLERRM, oldsub => 'ORA-', newsub => '') || '; ' ||
+                                 i_sql || ';');
+    END run_ddl;
+BEGIN
+
+    run_ddl('
+    create table DISCHARGE_REPORT
+    (
+      id_discharge_report NUMBER(24) not null,
+      id_discharge        NUMBER(24) not null,
+      id_report           NUMBER(24) not null,
+      flg_status          VARCHAR2(1 CHAR),
+      create_user        VARCHAR2(24 CHAR),
+      create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+      create_institution NUMBER(24),
+      update_user        VARCHAR2(24 CHAR),
+      update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+      update_institution NUMBER(24)
+    )
+    tablespace ALERT_DATA
+    ');
+    
+    run_ddl('COMMENT ON TABLE DISCHARGE_REPORT IS ''Discharge reports transactional table, records of the reports sent on discharge and its status''');
+    run_ddl('COMMENT ON column DISCHARGE_REPORT.id_discharge_report IS ''discharge_report primary key''');
+    run_ddl('COMMENT ON column DISCHARGE_REPORT.id_discharge IS ''Foreign key to discharge''');
+    run_ddl('COMMENT ON column DISCHARGE_REPORT.id_report IS ''Foreign key to reports''');
+    run_ddl('COMMENT ON column DISCHARGE_REPORT.flg_status IS ''Message status to CRM R- Requested / S - Sent''');
+    run_ddl('COMMENT ON column DISCHARGE_REPORT.create_user IS ''Creation user''');
+    run_ddl('COMMENT ON column DISCHARGE_REPORT.create_time IS ''Creation time''');
+    run_ddl('COMMENT ON column DISCHARGE_REPORT.create_institution IS ''Creation institution''');
+    run_ddl('COMMENT ON column DISCHARGE_REPORT.update_user IS ''Update user''');
+    run_ddl('COMMENT ON column DISCHARGE_REPORT.update_time IS ''Update time''');
+    run_ddl('COMMENT ON column DISCHARGE_REPORT.update_institution IS ''Update institution''');
+  
+
+END;
+/
+-- CHANGE END: Nuno Alves

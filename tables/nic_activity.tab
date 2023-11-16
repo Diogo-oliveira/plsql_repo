@@ -1,0 +1,75 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 18/07/2014 16:36
+-- CHANGE REASON: [ALERT-290969] Nursing Care Plan: NANDA, NIC, NOC - Data Model
+
+
+BEGIN
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'NIC_ACTIVITY', i_obj_type => 'TABLE', i_flg_category => 'CNT', i_flg_alert_default => 'N', i_delete_script => '', i_flg_default_child => 'N', i_flg_nzd => 'N', i_responsible_team => 'NURSING');
+END;
+/
+CREATE TABLE NIC_ACTIVITY
+  (
+    ID_NIC_ACTIVITY        NUMBER (24) NOT NULL ,
+    ID_TERMINOLOGY_VERSION NUMBER (24) NOT NULL ,
+    ACTIVITY_CODE          VARCHAR2 (200 CHAR) NOT NULL ,
+    CODE_DESCRIPTION       VARCHAR2 (200 CHAR) AS ( 'NIC_ACTIVITY.CODE_DESCRIPTION.'
+    ||TO_CHAR(ID_NIC_ACTIVITY) ) VIRTUAL NOT NULL ,
+    FLG_TASKLIST       VARCHAR2 (1 CHAR) DEFAULT 'N' NOT NULL ,
+    ID_INST_OWNER      NUMBER (24) ,
+    ID_CONCEPT_VERSION NUMBER (24) ,
+    ID_CONCEPT_TERM    NUMBER (24) ,
+    CREATE_USER        VARCHAR2 (30 CHAR) ,
+    CREATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE ,
+    CREATE_INSTITUTION NUMBER (24) ,
+    UPDATE_USER        VARCHAR2 (30 CHAR) ,
+    UPDATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE ,
+    UPDATE_INSTITUTION NUMBER (24)
+  )
+  TABLESPACE ALERT_DATA ;
+COMMENT ON TABLE NIC_ACTIVITY
+IS
+  'NIC - Nursing Activity' ;
+  COMMENT ON COLUMN NIC_ACTIVITY.ID_NIC_ACTIVITY
+IS
+  'Activity ID (surrogate key)' ;
+  COMMENT ON COLUMN NIC_ACTIVITY.ID_TERMINOLOGY_VERSION
+IS
+  'NIC Version ID' ;
+  COMMENT ON COLUMN NIC_ACTIVITY.ACTIVITY_CODE
+IS
+  'Activity code in the standardized classification of nursing interventions or an internal code used to uniquely identify the concept' ;
+  COMMENT ON COLUMN NIC_ACTIVITY.CODE_DESCRIPTION
+IS
+  'Translation code for Activity description' ;
+  COMMENT ON COLUMN NIC_ACTIVITY.FLG_TASKLIST
+IS
+  'This activity acts as a parent and involves a list of child activities as tasks.
+When value = "Y" this entry does not form part of the NIC Classification. Is used to group a set of activities that do not make sense be possible to request and document individually but used as if they were items of a checklist when an intervention is performed.' ;
+  COMMENT ON COLUMN NIC_ACTIVITY.ID_INST_OWNER
+IS
+  'Institution owner of the concept. 0 - ALERT' ;
+  COMMENT ON COLUMN NIC_ACTIVITY.ID_CONCEPT_VERSION
+IS
+  'Concept version ID' ;
+  COMMENT ON COLUMN NIC_ACTIVITY.ID_CONCEPT_TERM
+IS
+  'Concept term ID' ;
+  COMMENT ON COLUMN NIC_ACTIVITY.CREATE_USER
+IS
+  'Creation User' ;
+  COMMENT ON COLUMN NIC_ACTIVITY.CREATE_TIME
+IS
+  'Creation Time' ;
+  COMMENT ON COLUMN NIC_ACTIVITY.CREATE_INSTITUTION
+IS
+  'Creation Institution' ;
+  COMMENT ON COLUMN NIC_ACTIVITY.UPDATE_USER
+IS
+  'Update User' ;
+  COMMENT ON COLUMN NIC_ACTIVITY.UPDATE_TIME
+IS
+  'Update Time' ;
+  COMMENT ON COLUMN NIC_ACTIVITY.UPDATE_INSTITUTION
+IS
+  'Update Institution' ;
+-- CHANGE END: Ariel Machado

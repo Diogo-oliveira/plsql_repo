@@ -1,0 +1,174 @@
+
+
+  ALTER TABLE ANALYSIS_INSTIT_SOFT ADD CONSTRAINT AIS_PK PRIMARY KEY (ID_ANALYSIS_INSTIT_SOFT) ENABLE;
+
+  ALTER TABLE ANALYSIS_INSTIT_SOFT MODIFY (ID_ANALYSIS_INSTIT_SOFT NOT NULL ENABLE);
+
+  ALTER TABLE ANALYSIS_INSTIT_SOFT MODIFY (ID_ANALYSIS NOT NULL ENABLE);
+
+  ALTER TABLE ANALYSIS_INSTIT_SOFT MODIFY (FLG_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE ANALYSIS_INSTIT_SOFT MODIFY (ID_INSTITUTION NOT NULL ENABLE);
+
+  ALTER TABLE ANALYSIS_INSTIT_SOFT MODIFY (ID_SOFTWARE NOT NULL ENABLE);
+
+
+  ALTER TABLE ANALYSIS_INSTIT_SOFT MODIFY (ID_EXAM_CAT NOT NULL ENABLE);
+
+  ALTER TABLE ANALYSIS_INSTIT_SOFT MODIFY (RANK NOT NULL ENABLE);
+
+  ALTER TABLE ANALYSIS_INSTIT_SOFT MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+
+alter table ANALYSIS_INSTIT_SOFT
+  add constraint AIS_UK unique (ID_ANALYSIS, ID_INSTITUTION, ID_SOFTWARE);
+
+  alter table ANALYSIS_INSTIT_SOFT
+  drop constraint AIS_UK cascade;
+alter table ANALYSIS_INSTIT_SOFT
+  add constraint AIS_UK unique (ID_ANALYSIS, ID_INSTITUTION, ID_SOFTWARE, ID_ANALYSIS_GROUP);
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 17/01/2011 14:57
+-- CHANGE REASON: [ALERT-155887] 
+ALTER TABLE ANALYSIS_INSTIT_SOFT ADD (CONSTRAINT AIS_FLG_COLLECTION_AUTHOR_CHK CHECK (flg_collection_author IN ('D', 'L')));
+ALTER TABLE ANALYSIS_INSTIT_SOFT ADD (CONSTRAINT AIS_FLG_DUPLICATE_WARN_CHK CHECK (flg_duplicate_warn IN ('Y', 'N')));
+ALTER TABLE ANALYSIS_INSTIT_SOFT ADD (CONSTRAINT AIS_FLG_FILL_TYPE_CHK CHECK (flg_fill_type IN ('V', 'B', 'T', 'N')));
+ALTER TABLE ANALYSIS_INSTIT_SOFT ADD (CONSTRAINT AIS_FLG_FIRST_RESULT_CHK CHECK (instr(flg_first_result, 'T') > 0 OR instr(flg_first_result, 'D') > 0 OR instr(flg_first_result, 'N') > 0));
+ALTER TABLE ANALYSIS_INSTIT_SOFT ADD (CONSTRAINT AIS_FLG_MOV_PAT_CHK CHECK (flg_mov_pat IN ('Y', 'N')));
+ALTER TABLE ANALYSIS_INSTIT_SOFT ADD (CONSTRAINT AIS_FLG_TYPE_CHK CHECK (flg_type IN ('P', 'W', 'C')));
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/02/2011 14:33
+-- CHANGE REASON: [ALERT-162892] 
+ALTER TABLE analysis_instit_soft drop CONSTRAINT AIS_FLG_TYPE_CHK;
+ALTER TABLE analysis_instit_soft add CONSTRAINT AIS_FLG_TYPE_CHK CHECK (flg_type IN ('P', 'W', 'C', 'E', 'X'));
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/07/2011 15:33
+-- CHANGE REASON: [ALERT-188755] 
+ALTER TABLE ANALYSIS_INSTIT_SOFT DROP CONSTRAINT AIS_UK;
+ALTER TABLE ANALYSIS_INSTIT_SOFT ADD CONSTRAINT AIS_UK UNIQUE (ID_ANALYSIS, ID_ANALYSIS_GROUP, FLG_TYPE, ID_INSTITUTION, ID_SOFTWARE, FLG_AVAILABLE);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 20/09/2011 18:06
+-- CHANGE REASON: [ALERT-187042] constraints
+DECLARE
+e_pk_already_there EXCEPTION;
+    e_unique_already_there EXCEPTION;
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+
+BEGIN
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.ANALYSIS_INSTIT_SOFT
+  add constraint AIS_FLG_FILL_TYPE_CHK
+  check (flg_fill_type IN (''V'', ''B'', ''T'', ''N''))';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.ANALYSIS_INSTIT_SOFT
+  add constraint AIS_FLG_FIRST_RESULT_CHK
+  check (instr(flg_first_result, ''T'') > 0 OR instr(flg_first_result, ''D'') > 0 OR instr(flg_first_result, ''N'') > 0)';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.ANALYSIS_INSTIT_SOFT
+  add constraint AIS_FLG_MOV_PAT_CHK
+  check (flg_mov_pat IN (''Y'', ''N''))';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.ANALYSIS_INSTIT_SOFT
+  add constraint AIS_FLG_TYPE_CHK
+  check (flg_type IN (''P'', ''W'', ''C'', ''E'', ''X''))';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.ANALYSIS_INSTIT_SOFT
+  add constraint AIS_FLG_AVL_CHK
+  check (flg_available IN (''Y'', ''N''))';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:26
+-- CHANGE REASON: [ALERT-246248] 
+ALTER TABLE ANALYSIS_INSTIT_SOFT ADD (CONSTRAINT AIS_ASE_FK FOREIGN KEY (ID_ANALYSIS, ID_SAMPLE_TYPE) REFERENCES ANALYSIS_SAMPLE_TYPE (ID_ANALYSIS, ID_SAMPLE_TYPE));
+
+ALTER TABLE ANALYSIS_INSTIT_SOFT DROP CONSTRAINT AIS_UK;
+
+ALTER TABLE ANALYSIS_INSTIT_SOFT ADD (CONSTRAINT AIS_UK UNIQUE (ID_ANALYSIS, ID_INSTITUTION, ID_SOFTWARE, ID_ANALYSIS_GROUP, ID_SAMPLE_TYPE));
+-- CHANGE END: Ana Matos
+
+declare
+	l_sql	varchar2(4000);
+begin
+	l_sql := q'[ALTER TABLE ANALYSIS_INSTIT_SOFT ADD CONSTRAINT AIS_ID_ANALYSIS_ID_GROUP_CHK CHECK ( NOT ( ID_ANALYSIS IS NULL AND ID_ANALYSIS_GROUP IS NULL ) )]';
+	pk_versioning.run(l_sql );
+end;
+/

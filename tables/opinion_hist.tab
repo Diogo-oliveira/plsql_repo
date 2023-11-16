@@ -1,0 +1,129 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 16/04/2010 15:50
+-- CHANGE REASON: [ALERT-86898] opinion_hist
+create table opinion_hist
+(
+  id_opinion_hist      number(24) not null,
+  id_opinion           number(24) not null,
+  id_episode           number(24) not null,
+  flg_state            varchar2(1 char) not null,
+  desc_problem         varchar2(1000 char),
+  id_prof_questions    number(24) not null,
+  id_prof_questioned   number(24),
+  id_speciality        number(24),
+  notes_cancel         varchar2(1000 char),
+  dt_problem_tstz      timestamp with local time zone not null,
+  dt_cancel_tstz       timestamp with local time zone,
+  status_flg           varchar2(100 char),
+  status_icon          varchar2(100 char),
+  status_msg           varchar2(100 char),
+  status_str           varchar2(100 char),
+  id_management_level  number(24),
+  id_episode_answer    number(24),
+  id_cancel_reason     number(24),
+  id_patient           number(24) not null,
+  dt_last_update       timestamp with local time zone,
+  id_opinion_type      number(24),
+  id_clinical_service  number(12),
+  dt_approved          timestamp with local time zone,
+  id_prof_approved     number(24),
+  notes                clob,
+  id_prof_created_hist number(24),
+  dt_created_hist      timestamp with local time zone,
+  create_user          varchar2(24 char),
+  create_time          timestamp with local time zone,
+  create_institution   number(24),
+  update_user          varchar2(24 char),
+  update_time          timestamp with local time zone,
+  update_institution   number(24)
+)
+LOB (notes) STORE AS (TABLESPACE alert_lob ENABLE STORAGE IN ROW);
+
+comment on table opinion_hist
+  is 'History of consult requests.';
+
+comment on column opinion_hist.id_opinion_hist
+  is 'Primary key.';
+comment on column opinion_hist.id_opinion
+  is 'Request identifier.';
+comment on column opinion_hist.id_episode
+  is 'Episode identifier.';
+comment on column opinion_hist.flg_state
+  is 'Request state.';
+comment on column opinion_hist.desc_problem
+  is 'Request reason.';
+comment on column opinion_hist.id_prof_questions
+  is 'Request created by.';
+comment on column opinion_hist.id_prof_questioned
+  is 'Request created to.';
+comment on column opinion_hist.id_speciality
+  is 'Request specialty.';
+comment on column opinion_hist.notes_cancel
+  is 'Request cancellation notes.';
+comment on column opinion_hist.dt_problem_tstz
+  is 'Request creation date.';
+comment on column opinion_hist.dt_cancel_tstz
+  is 'Request cancellation date.';
+comment on column opinion_hist.status_flg
+  is 'Request status flag (udes to return the icon).';
+comment on column opinion_hist.status_icon
+  is 'Request status icon.';
+comment on column opinion_hist.status_msg
+  is 'Request status message code.';
+comment on column opinion_hist.status_str
+  is 'Request status (in specific format).';
+comment on column opinion_hist.id_management_level
+  is 'Case manager request management level.';
+comment on column opinion_hist.id_episode_answer
+  is 'Paramedical episode identifier.';
+comment on column opinion_hist.id_cancel_reason
+  is 'Cancel reason identifier.';
+comment on column opinion_hist.id_patient
+  is 'Patient identifier.';
+comment on column opinion_hist.dt_last_update
+  is 'Request last change date.';
+comment on column opinion_hist.id_opinion_type
+  is 'Opinion type identifier.';
+comment on column opinion_hist.id_clinical_service
+  is 'Clinical service identifier.';
+comment on column opinion_hist.dt_approved
+  is 'Request approval date.';
+comment on column opinion_hist.id_prof_approved
+  is 'Request approved by.';
+comment on column opinion_hist.notes
+  is 'Request notes.';
+comment on column opinion_hist.id_prof_created_hist
+  is 'Record created by.';
+comment on column opinion_hist.dt_created_hist
+  is 'Record creation date.';
+comment on column opinion_hist.create_user
+  is 'Create User';
+comment on column opinion_hist.create_time
+  is 'Create Time';
+comment on column opinion_hist.create_institution
+  is 'Create Institution';
+comment on column opinion_hist.update_user
+  is 'Update User';
+comment on column opinion_hist.update_time
+  is 'Update Time';
+comment on column opinion_hist.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 19/04/2010 11:03
+-- CHANGE REASON: [ALERT-90102] added field to opinion
+alter table opinion_hist add (id_episode_approval number(24));
+
+comment on column opinion_hist.id_episode_approval
+  is 'Approval episode identifier.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/10/2011 12:22
+-- CHANGE REASON: [ALERT-200521] 
+alter table opinion_hist add FLG_AUTO_FOLLOW_UP varchar2(1 CHAR) DEFAULT 'N' NOT NULL ;
+
+comment on column opinion_hist.FLG_AUTO_FOLLOW_UP
+  is 'Follow-up done automatically';
+-- CHANGE END: Jorge Silva

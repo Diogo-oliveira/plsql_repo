@@ -1,0 +1,25 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 06/10/2014 17:14
+-- CHANGE REASON: [ALERT-297767] 
+DECLARE
+    e_object_nexists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_nexists, -02443);
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table sr_intervention drop constraint sin_flg_coding_chk';
+    EXCEPTION
+        WHEN e_object_nexists THEN
+            dbms_output.put_line('AVISO: cns nao existe');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table sr_intervention add constraint sin_flg_coding_chk check (flg_coding IN(''I'', ''S'', ''G'', ''J'', ''A'', ''Z'', ''C'', ''T'', ''K'', ''D'', ''F'', ''L'', ''N'', ''O'', ''P'', ''Q'',''M'',''U'',''V'',''X'',''R''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: cns nao existe');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

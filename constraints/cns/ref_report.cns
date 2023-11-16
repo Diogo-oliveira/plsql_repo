@@ -1,0 +1,19 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 19/03/2014 15:30
+-- CHANGE REASON: [ALERT-279242] 
+BEGIN
+  pk_versioning.run(i_sql => q'[alter table REF_REPORT add constraint RREP_PK primary key (id_external_request, flg_type)]');
+pk_versioning.run(i_sql => q'[alter table REF_REPORT add constraint RREP_FLG_TYPE_CHK check (FLG_TYPE in ('D'))]');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 19/03/2015 11:50
+-- CHANGE REASON: [ALERT-309089] 
+alter table REF_REPORT drop constraint RREP_PK cascade;
+alter table REF_REPORT add constraint RREP_PK primary key (ID_EXTERNAL_REQUEST, FLG_TYPE);
+
+alter table REF_REPORT drop constraint RREP_FLG_TYPE_CHK;
+alter table REF_REPORT add constraint RREP_FLG_TYPE_CHK check (FLG_TYPE in ('D','R'));
+-- CHANGE END: Ana Monteiro

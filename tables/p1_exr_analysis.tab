@@ -1,0 +1,140 @@
+
+  CREATE TABLE P1_EXR_ANALYSIS
+   (	ID_EXR_ANALYSIS NUMBER(24,0) NOT NULL ENABLE,
+	ID_EXTERNAL_REQUEST NUMBER(24,0),
+	ID_ANALYSIS NUMBER(12,0) NOT NULL ENABLE
+   );
+
+
+ALTER TABLE P1_EXR_ANALYSIS ADD (ID_ANALYSIS_REQ_DET NUMBER(24))
+/
+COMMENT ON COLUMN P1_EXR_ANALYSIS.ID_ANALYSIS_REQ_DET IS 'Requisiton detail in the origin of this request'
+/
+
+
+
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 11/09/2009 19:29
+-- CHANGE REASON: [ALERT-910] 
+alter table P1_EXR_ANALYSIS add id_codification NUMBER(24);
+
+comment on column P1_EXR_ANALYSIS.id_codification
+  is 'Id_analysis_codification';
+ 
+alter table P1_EXR_ANALYSIS
+  add constraint PEY_COD_FK foreign key (id_codification)
+  references codification (ID_CODIFICATION);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 12/09/2011 16:35
+-- CHANGE REASON: [ALERT-194915 ] 
+
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns
+     WHERE table_name = 'P1_EXR_ANALYSIS'
+       AND column_name = 'AMOUNT';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_analysis ADD ( amount number(2) )';
+    
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 13/09/2011 09:31
+-- CHANGE REASON: [ALERT-194915 ] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns
+     WHERE table_name = 'P1_EXR_ANALYSIS'
+       AND column_name = 'AMOUNT';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_analysis ADD ( amount number(2) DEFAULT 1 )';
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns
+     WHERE table_name = 'P1_EXR_ANALYSIS'
+       AND column_name = 'AMOUNT';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_analysis ADD ( amount number(2) )';
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 23/09/2012 22:36
+-- CHANGE REASON: [ALERT-240371] 
+Alter table p1_exr_analysis add( flg_ALD VARCHAR2(1 CHAR) default 'N');
+Alter table p1_exr_analysis MODIFY( flg_ALD  not null);
+comment on column p1_exr_analysis.flg_ALD  is 'Chronic disease (Y/N)';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/11/2012 16:44
+-- CHANGE REASON: [ALERT-245662] 
+alter table p1_exr_analysis add 
+  id_sample_type         NUMBER(12);
+  
+comment on column p1_exr_analysis.id_sample_type
+  is  'Sample type id';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 03/12/2012 17:17
+-- CHANGE REASON: [ALERT-246252] 
+ALTER TABLE p1_exr_analysis MODIFY (ID_SAMPLE_TYPE NUMBER(12) NOT NULL);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on table P1_EXR_ANALYSIS
+  is 'Mapping between lab test orders and referrals. Defines the list of lab tests included in the referral';
+-- Add comments to the columns 
+comment on column P1_EXR_ANALYSIS.id_exr_analysis
+  is 'Internal';
+comment on column P1_EXR_ANALYSIS.id_external_request
+  is 'Referral';
+comment on column P1_EXR_ANALYSIS.id_analysis
+  is 'Lab test';
+comment on column P1_EXR_ANALYSIS.id_analysis_req_det
+  is 'Lab test order ';
+comment on column P1_EXR_ANALYSIS.amount
+  is 'Number of items';
+comment on column P1_EXR_ANALYSIS.flg_ald
+  is 'Is chronic disease? Y/N';  
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 05/05/2021 16:02
+-- CHANGE REASON: [EMR-44727]
+ALTER TABLE p1_exr_analysis ADD id_p1_exr_temp NUMBER(24);
+-- CHANGE END: Pedro Henriques

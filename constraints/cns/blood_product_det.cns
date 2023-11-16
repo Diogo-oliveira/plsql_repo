@@ -1,0 +1,34 @@
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/09/2018 11:06
+-- CHANGE REASON: [EMR-6418] 
+alter table BLOOD_PRODUCT_DET
+  add constraint BLOOD_PD_PK primary key (ID_BLOOD_PRODUCT_DET)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 1M
+    next 512K
+    minextents 1
+    maxextents unlimited
+    pctincrease 0
+  );
+  
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 20/09/2018 11:08
+-- CHANGE REASON: [EMR-6779] 
+ALTER TABLE BLOOD_PRODUCT_DET DROP CONSTRAINT BPD_INN_FK;
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 05/03/2021 16:24
+-- CHANGE REASON: [EMR-42682] - BBank: Order details missed when more than one bag required
+alter table BLOOD_PRODUCT_DET
+add constraint BPD_FLG_REQ_WITHOUT_CROSSMATCH_CHK
+check (flg_req_without_crossmatch IN ('Y','N'));
+-- CHANGE END: Diogo Oliveira

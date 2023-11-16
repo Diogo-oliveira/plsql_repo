@@ -1,0 +1,215 @@
+
+
+  CREATE TABLE DIAGNOSIS
+   (	ID_DIAGNOSIS NUMBER(12,0) NOT NULL ENABLE,
+	ID_DIAGNOSIS_PARENT NUMBER(12,0),
+	CODE_DIAGNOSIS VARCHAR2(200) NOT NULL ENABLE,
+	CODE_ICD VARCHAR2(30) NOT NULL ENABLE,
+	FLG_SELECT VARCHAR2(1) NOT NULL ENABLE,
+	FLG_FAMILY VARCHAR2(1),
+	FLG_POS_BIRTH VARCHAR2(1),
+	FLG_JOB VARCHAR2(1),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+
+	FLG_OTHER VARCHAR2(1),
+	GENDER VARCHAR2(1),
+	AGE_MIN NUMBER(3,0),
+	AGE_MAX NUMBER(3,0),
+	MDM_CODING NUMBER(12,0),
+	FLG_SUBTYPE VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE diagnosis IS 'Tabela que contém os diagnósticos atribuíveis aos pacientes.' ;
+
+COMMENT ON COLUMN diagnosis.id_diagnosis IS 'Chave primária' ;
+COMMENT ON COLUMN diagnosis.code_diagnosis IS 'Código para diagnóstico' ;
+COMMENT ON COLUMN diagnosis.code_icd IS 'Código internacional do diagnóstico' ;
+COMMENT ON COLUMN diagnosis.flg_select IS 'Diagnóstico seleccionável pelo utilizador. Nem todos os diag. válidos são seleccionáveis (por ex, os níveis superiores da hierarquia de diag.)' ;
+COMMENT ON COLUMN diagnosis.flg_family IS 'Diagnóstico dos Antecedentes Familiares' ;
+COMMENT ON COLUMN diagnosis.flg_pos_birth IS 'Doença habitual no período neo natal' ;
+COMMENT ON COLUMN diagnosis.flg_job IS 'Doença de trabalho' ;
+COMMENT ON COLUMN diagnosis.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN diagnosis.flg_type IS 'Tipo: D - ICD9, P-  ICPC2, C - ICD9 CM' ;
+COMMENT ON COLUMN diagnosis.flg_other IS 'Indicação de "outro diagnóstico" (permite seleccionar um diag. registado manualmente)' ;
+COMMENT ON COLUMN diagnosis.gender IS 'Género ao qual se aplica' ;
+COMMENT ON COLUMN diagnosis.age_min IS 'Idade mínima à qual se aplica' ;
+COMMENT ON COLUMN diagnosis.age_max IS 'Idade máxima à qual se aplica' ;
+
+COMMENT ON COLUMN diagnosis.mdm_coding IS 'Codificação de  MDM "Medical Decision Making"' ;
+COMMENT ON COLUMN diagnosis.flg_subtype IS 'Subtipo ICPC2: S - Sinais/Sintomas; I - Infecções; N - Neoplasias; T - Traumatismos; A - Anomalias Congénitas; O - Outros diagnósticos' ;
+
+COMMENT ON COLUMN diagnosis.flg_type IS 'Tipo: D - ICD9, P-  ICPC2, C - ICD9 CM, B - ICD10 (Brazilian market)';
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 2008-JUL-01
+-- CHANGE REASON: Update flg_type column comment because a new diagnosis standard was added. 
+COMMENT ON COLUMN diagnosis.flg_type IS 'Tipo: D - ICD9, P-  ICPC2, C - ICD9 CM, B - ICD10 (Brazilian market), I - ICD9 CM (Italian market)';
+-- CHANGE END: Tiago Silva
+
+
+
+ALTER TABLE DIAGNOSIS  ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN DIAGNOSIS.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 2009-JAN-29
+-- CHANGE REASON: Update flg_type column comment because a new diagnosis standard was added (ICD10)
+COMMENT ON COLUMN diagnosis.flg_type IS 'Tipo: D - ICD9, P-  ICPC2, C - ICD9 CM, B - ICD10 (Brazilian market), I - ICD9 CM (Italian market), M - ICD10';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 2009-APR-21
+-- CHANGE REASON: Update flg_type column comment because a new diagnosis standard was added (ICD9 DE)
+COMMENT ON COLUMN diagnosis.flg_type IS 'Tipo: D - ICD9, P-  ICPC2, C - ICD9 CM, B - ICD10 (Brazilian market), I - ICD9 CM (Italian market), M - ICD10, N - ICD9 DE';
+-- CHANGE END: Tiago Silva
+
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 2009-JUN-16
+-- CHANGE REASON: ALERT-32170 - change comments in diagnosis table to enable the new standard
+comment on column DIAGNOSIS.FLG_TYPE
+  is 'Tipo: D-ICD9, P-ICPC2, C-ICD9 CM (PT), B-ICD10 (BR), I-ICD9 CM (IT), M-ICD10, N-ICD9 DE (NL), U-ICD9 CM (US)';
+-- CHANGE END: Carlos Loureiro	
+
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 25/03/2010 18:26
+-- CHANGE REASON: [ALERT-80816] Social worker developments
+comment on column diagnosis.flg_type is
+  'Tipo: D-ICD9, P-ICPC2, C-ICD9 CM (PT), B-ICD10 (BR), I-ICD9 CM (IT), M-ICD10, N-ICD9 DE (NL), U-ICD9 CM (US), X-Uncoded';
+-- CHANGE END: Sérgio Santos
+
+
+-- CHANGED BY Filipe Faria
+-- CHANGE DATE: 2010-Jul-16
+-- CHANGE REASON: ALERT-112684
+comment on column DIAGNOSIS.FLG_TYPE
+  is 'Tipo: D-ICD9, P-ICPC2, C-ICD9 CM (PT), B-ICD10 (BR), I-ICD9 CM (IT), M-ICD10, N-ICD9 DE (NL), U-ICD9 CM (US), X-Uncoded, F-ICD10-CIM-FR, Z-CPT (Current Procedural Terminology)';
+-- END CHANGE BY Filipe Faria 
+
+-- CHANGED BY Filipe Faria
+-- CHANGE DATE: 2010-Jul-21
+-- CHANGE REASON: ALERT-110651
+comment on column DIAGNOSIS.FLG_TYPE
+  is 'Tipo: D-ICD9, P-ICPC2, C-ICD9 CM (PT), B-ICD10 (BR), I-ICD9 CM (IT), M-ICD10, N-ICD9 DE (NL), U-ICD9 CM (US), X-Uncoded, F-ICD10-CIM-FR, Z-CPT (Current Procedural Terminology), E-ICD-10 (CL)';
+-- END CHANGE BY Filipe Faria 
+
+
+-- CHANGED BY Filipe Faria
+-- CHANGE DATE: 2010-Jul-21
+-- CHANGE REASON: ALERT-113581
+comment on column DIAGNOSIS.FLG_TYPE
+  is 'Tipo: D-ICD9, P-ICPC2, C-ICD9 CM (PT), B-ICD10 (BR), I-ICD9 CM (IT), M-ICD10, N-ICD9 DE (NL), U-ICD9 CM (US), X-Uncoded, F-ICD10-CIM-FR, Z-CPT (Current Procedural Terminology), E-ICD-10 (CL)';
+-- END CHANGE BY Filipe Faria 
+
+-- CHANGED BY:  filipe.faria
+-- CHANGE DATE: 21/07/2010 11:42
+-- CHANGE REASON: [ALERT-113687] 
+comment on column DIAGNOSIS.FLG_TYPE
+  is 'Tipo: D-ICD9, P-ICPC2, C-ICD9 CM (PT), B-ICD10 (BR), I-ICD9 CM (IT), M-ICD10, N-ICD9 DE (NL), U-ICD9 CM (US), X-Uncoded, F-ICD10-CIM-FR, Z-CPT (Current Procedural Terminology), E-ICD-10 (CL), L-ICPC2 (CL)';
+-- CHANGE END:  filipe.faria
+
+-- CHANGED BY:  filipe.faria
+-- CHANGE DATE: 21/07/2010 14:41
+-- CHANGE REASON: [ALERT-113761] 
+comment on column DIAGNOSIS.FLG_TYPE
+  is 'Tipo: D-ICD9, P-ICPC2, C-ICD9 CM (PT), B-ICD10 (BR), I-ICD9 CM (IT), M-ICD10, N-ICD9 DE (NL), U-ICD9 CM (US), X-Uncoded, F-ICD10-CIM-FR, Z-CPT (Current Procedural Terminology), E-ICD-10 (CL), L-ICPC2 (CL), A-Accident & Emergency Diagnosis table';
+-- CHANGE END:  filipe.faria
+
+-- CHANGED BY:  filipe.faria
+-- CHANGE DATE: 30/08/2010 09:45
+-- CHANGE REASON: [ALERT-120545] 
+comment on column DIAGNOSIS.FLG_TYPE
+  is 'Tipo: D-ICD9, P-ICPC2, C-ICD9 CM (PT), B-ICD10 (BR), I-ICD9 CM (IT), M-ICD10, N-ICD9 DE (NL), U-ICD9 CM (US), X-Uncoded, F-ICD10-CIM-FR, Z-CPT (Current Procedural Terminology), E-ICD-10 (CL), L-ICPC2 (CL), A-Accident & Emergency Diagnosis table, G-ICD-10 UK';
+
+  
+-- CHANGE END:  filipe.faria
+
+-- CHANGED BY:  filipe.faria
+-- CHANGE DATE: 08/09/2010 09:51
+-- CHANGE REASON: [ALERT-122976] 
+comment on column DIAGNOSIS.FLG_TYPE
+  is 'Tipo: D-ICD9, P-ICPC2, C-ICD9 CM (PT), B-ICD10 (BR), I-ICD9 CM (IT), M-ICD10, N-ICD9 DE (NL), U-ICD9 CM (US), X-Uncoded, F-ICD10-CIM-FR, Z-CPT (Current Procedural Terminology), E-ICD-10 (CL), L-ICPC2 (CL), A-Accident & Emergency Diagnosis table, G-ICD-10 UK, H-A & E + ICD-10 (UK)';
+-- CHANGE END:  filipe.faria
+
+-- CHANGED BY:  filipe.faria
+-- CHANGE DATE: 08/09/2010 17:57
+-- CHANGE REASON: [ALERT-123417] 
+comment on column DIAGNOSIS.FLG_TYPE
+  is 'Tipo: A-CDS - A & E (UK), B-ICD-10 (BR), C-ICD-9 CM (PT), D-ICD-9, E-ICD-10 (CL), F-ICD-10 (FR), G-ICD-10 (UK), H-A & E + ICD-10 (UK), I-ICD-9 CM (IT), K-ICPC-2 (UK), L-ICPC-2 (CL), M-ICD-10 (MY), N-ICD-9 DE (NL), P-ICPC-2, S-SNOMED CT (UK), U-ICD-9 CM (US), X-Uncoded, Z-CPT (Current Procedural Terminology)  (US)';
+
+  
+-- CHANGE END:  filipe.faria
+
+-- CHANGED BY:  filipe.faria
+-- CHANGE DATE: 10/09/2010 14:31
+-- CHANGE REASON: [ALERT-120861] 
+comment on column DIAGNOSIS.FLG_TYPE
+  is 'Tipo: A-CDS - A & E (UK), B-ICD-10 (BR), C-ICD-9 CM (PT), D-ICD-9, E-ICD-10 (CL), F-ICD-10 (FR), G-ICD-10 (UK), H-A & E + ICD-10 (UK), I-ICD-9 CM (IT), J-ICD-10 (NL), K-ICPC-2 (UK), L-ICPC-2 (CL), M-ICD-10 (MY), N-ICD-9 DE (NL), P-ICPC-2, S-SNOMED CT (UK), U-ICD-9 CM (US), X-Uncoded, Z-CPT (Current Procedural Terminology) (US)';
+-- CHANGE END:  filipe.faria
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 14/09/2010 18:11
+-- CHANGE REASON: [ALERT-124682] Increase CODE_ICD column on diagnosis table
+ALTER TABLE diagnosis MODIFY code_icd VARCHAR2(100 CHAR);
+-- CHANGE END: José Silva
+
+-- CHANGED BY:  filipe.faria
+-- CHANGE DATE: 13/10/2010 09:53
+-- CHANGE REASON: [ALERT-131479] 
+comment on column DIAGNOSIS.FLG_TYPE
+  is 'Tipo: A-CDS - A & E (UK), B-ICD-10 (BR), C-ICD-9 CM (PT), D-ICD-9, E-ICD-10 (CL), F-ICD-10 (FR), G-ICD-10 (UK), H-A & E + ICD-10 (UK), I-ICD-9 CM (IT), J-ICD-10 (NL), K-ICPC-2 (UK), L-ICPC-2 (CL), M-ICD-10 (MY), N-ICD-9 DE (NL), P-ICPC-2, Q-SIA-SUS (BR), S-SNOMED CT (UK), U-ICD-9 CM (US), X-Uncoded, Z-CPT (Current Procedural Terminology) (US)';
+-- CHANGE END:  filipe.faria
+
+-- CHANGED BY: Daniel Conceicao
+-- CHANGED DATE: 2011-Jul-25
+-- CHANGED REASON: ALERT-189908 
+
+comment on column diagnosis.flg_type is 'Tipo: A-CDS - A & E (UK), B-ICD-10 (BR), C-ICD-9 CM (PT), D-ICD-9, E-ICD-10 (CL) (MX), F-ICD-10 (FR), G-ICD-10 (UK), H-A & E + ICD-10 (UK), I-ICD-9 CM (IT), J-ICD-10 (NL), K-ICPC-2 (UK), L-ICPC-2 (CL), M-ICD-10 (MY), N-ICD-9 DE (NL), P-ICPC-2, Q-SIA-SUS (BR), S-SNOMED CT (UK), U-ICD-9 CM (US), X-Uncoded, Z-CPT (Current Procedural Terminology) (US)';
+
+-- CHANGE END: Daniel Conceicao
+
+-- CHANGED BY: Daniel Conceicao
+-- CHANGED DATE: 2011-Sep-13
+-- CHANGED REASON: ALERT-194972 
+
+comment on column diagnosis.flg_type is 'Tipo: A-CDS - A & E (UK), B-ICD-10 (BR), C-ICD-9 CM (PT), D-ICD-9, E-ICD-10 (CL) (MX), F-ICD-10 (FR), G-ICD-10 (UK), H-A & E + ICD-10 (UK), I-ICD-9 CM (IT), J-ICD-10 (NL), K-ICPC-2 (UK), L-ICPC-2 (CL) (MX), M-ICD-10 (MY), N-ICD-9 DE (NL), P-ICPC-2, Q-SIA-SUS (BR), S-SNOMED CT (UK), U-ICD-9 CM (US), X-Uncoded, Z-CPT (Current Procedural Terminology) (US)';
+
+-- CHANGE END: Daniel Conceicao
+
+
+-- CHANGED BY: Daniel Conceicao
+-- CHANGED DATE: 2011-11-14
+-- CHANGED REASON: ALERT-203750
+
+comment on column diagnosis.flg_type is 'Tipo: A-CDS - A & E (UK), B-ICD-10 (BR), C-ICD-9 CM (PT), D-ICD-9, E-ICD-10 (CL) (MX), F-ICD-10 (FR), G-ICD-10 (UK), H-A & E + ICD-10 (UK), I-ICD-9 CM (IT), J-ICD-10 (NL), K-ICPC-2 (UK), L-ICPC-2 (CL) (MX), M-ICD-10 (MY), N-ICD-9 DE (NL), P-ICPC-2, Q-SIA-SUS (BR), R-ICD-10 (CH), S-SNOMED CT (UK), U-ICD-9 CM (US), X-Uncoded, Z-CPT (Current Procedural Terminology) (US)';
+-- CHANGE END: Daniel Conceicao
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 14:40
+-- CHANGE REASON: [ALERT-229308] VERSIONING TRANSACTIONAL MODEL MIGRATION - SCHEMA ALERT - CHANGE NAME AND VIEWS
+DECLARE
+    e_already_renamed EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_already_renamed, -942);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE DIAGNOSIS RENAME TO MIG_DIAGNOSIS';
+EXCEPTION
+    WHEN e_already_renamed THEN
+        dbms_output.put_line('Already renamed.');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Daniel Conceicao
+-- CHANGED DATE: 2012-May-07
+-- CHANGED REASON: ALERT-223600 
+
+COMMENT ON COLUMN diagnosis.FLG_TYPE IS 'Tipo: A-CDS - A & E (UK), B-ICD-10 (BR), C-ICD-9 CM (PT), D-ICD-9, E-ICD-10 (CL) (MX), F-ICD-10 (FR), G-ICD-10 (UK), H-A & E + ICD-10 (UK), I-ICD-9 CM (IT), J-ICD-10 (NL), K-ICPC-2 (UK), L-ICPC-2 (CL) (MX), M-ICD-10 (MY), N-ICD-9 DE (NL), P-ICPC-2, Q-SIGTAP (BR), R-ICD-10 (CH), S-SNOMED CT (UK), T-SIAB e outros (BR), U-ICD-9 CM (US), X-Uncoded, Z-CPT (Current Procedural Terminology) (US)';
+
+-- CHANGE END: Daniel Conceicao

@@ -1,0 +1,29 @@
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 30/11/2012 10:15
+-- CHANGE REASON: [ALERT-246082] 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -01418);
+BEGIN
+   EXECUTE IMMEDIATE 'drop index ITM_ITM_FK_I';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('AVISO: índice especificado não existe');
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 30/11/2012 10:18
+-- CHANGE REASON: [ALERT-246082] 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -00955);
+BEGIN
+   EXECUTE IMMEDIATE 'create index ITM_ITM_FK_I on ICNP_TERM (PARENT_CODE, ID_AXIS_PARENT)';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('AVISO: o nome já está a ser utilizado por um objecto existente');
+end;
+/
+-- CHANGE END:  Nuno Neves

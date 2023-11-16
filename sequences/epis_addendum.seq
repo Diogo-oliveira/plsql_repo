@@ -1,0 +1,23 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 21/12/2010 12:25
+-- CHANGE REASON: [ALERT-139534] 
+declare
+  e_protection_1 EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_protection_1, -00955);
+begin
+BEGIN
+        EXECUTE IMMEDIATE 'create sequence SEQ_EPIS_ADDENDUM
+             minvalue 1
+             maxvalue 999999999999
+             start with 1
+             increment by 1
+             cache 500
+             noorder
+             nocycle';
+    EXCEPTION
+        WHEN e_protection_1 THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

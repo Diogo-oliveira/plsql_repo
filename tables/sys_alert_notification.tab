@@ -1,0 +1,79 @@
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 01/03/2011 17:33
+-- CHANGE REASON: [ALERT-165367] SMS, Beep and PDA notifications of workflow actions
+--                
+create table SYS_ALERT_NOTIFICATION
+(
+  ID_SYS_ALERT_EVENT VARCHAR2(24) not null,
+  DT_RECORD          TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  DT_PROCESSED       TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  ID_PROF            NUMBER(24) not null,
+  ID_SYS_ALERT       NUMBER(24) not null,
+  ID_LANGUAGE        NUMBER(24) not null,
+  ID_PATIENT         NUMBER(24),
+  ID_EPISODE         NUMBER(24),
+  ID_SOFTWARE        NUMBER(24) not null,
+  REPLACE1           VARCHAR2(100 CHAR),
+  REPLACE2           VARCHAR2(100 CHAR),
+  REPLACE3           VARCHAR2(100 CHAR),
+  REPLACE4           VARCHAR2(100 CHAR),
+  REPLACE5           VARCHAR2(100 CHAR),
+  REPLACE6           VARCHAR2(100 CHAR),
+  REPLACE7           VARCHAR2(100 CHAR),
+  REPLACE8           VARCHAR2(100 CHAR),
+  REPLACE9           VARCHAR2(100 CHAR),
+  REPLACE10          VARCHAR2(100 CHAR),
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+);
+
+comment on table SYS_ALERT_NOTIFICATION is 'Repository of notifications that will be sent to INTER_ALERT -> CRM SERVICES';
+
+comment on column SYS_ALERT_NOTIFICATION.ID_SYS_ALERT_EVENT is 'ID sys alert event';
+comment on column SYS_ALERT_NOTIFICATION.DT_RECORD is 'Date of the event register';
+comment on column SYS_ALERT_NOTIFICATION.DT_PROCESSED is 'Date of the processing';
+comment on column SYS_ALERT_NOTIFICATION.ID_PROF is 'ID of the professional that will receive the notification';
+comment on column SYS_ALERT_NOTIFICATION.ID_SYS_ALERT is 'ID of the sys_alert';
+comment on column SYS_ALERT_NOTIFICATION.ID_LANGUAGE is 'ID of language of the professional (FK)';
+comment on column SYS_ALERT_NOTIFICATION.ID_PATIENT is 'ID of PATIENT (FK)';
+comment on column SYS_ALERT_NOTIFICATION.ID_EPISODE is 'ID of EPISODE (FK)';
+comment on column SYS_ALERT_NOTIFICATION.ID_SOFTWARE is 'ID of SOFTWARE (FK)';
+comment on column SYS_ALERT_NOTIFICATION.REPLACE1 is 'Field used to replace the metadata of the messages';
+comment on column SYS_ALERT_NOTIFICATION.REPLACE2 is 'Field used to replace the metadata of the messages';
+comment on column SYS_ALERT_NOTIFICATION.REPLACE3 is 'Field used to replace the metadata of the messages';
+comment on column SYS_ALERT_NOTIFICATION.REPLACE4 is 'Field used to replace the metadata of the messages';
+comment on column SYS_ALERT_NOTIFICATION.REPLACE5 is 'Field used to replace the metadata of the messages';
+comment on column SYS_ALERT_NOTIFICATION.REPLACE6 is 'Field used to replace the metadata of the messages';
+comment on column SYS_ALERT_NOTIFICATION.REPLACE7 is 'Field used to replace the metadata of the messages';
+comment on column SYS_ALERT_NOTIFICATION.REPLACE8 is 'Field used to replace the metadata of the messages';
+comment on column SYS_ALERT_NOTIFICATION.REPLACE9 is 'Field used to replace the metadata of the messages';
+comment on column SYS_ALERT_NOTIFICATION.REPLACE10 is 'Field used to replace the metadata of the messages';
+
+COMMENT ON COLUMN SYS_ALERT_NOTIFICATION.create_user            IS 'Professional that created the registry';
+COMMENT ON COLUMN SYS_ALERT_NOTIFICATION.create_time            IS 'Date of the registry creation';
+COMMENT ON COLUMN SYS_ALERT_NOTIFICATION.create_institution     IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN SYS_ALERT_NOTIFICATION.update_user            IS 'Last professional that updated the registry';
+COMMENT ON COLUMN SYS_ALERT_NOTIFICATION.update_time            IS 'Date of the last update to the registry';
+COMMENT ON COLUMN SYS_ALERT_NOTIFICATION.update_institution     IS 'Id of the last institution where the registry was updated';
+-- CHANGE END: Rui Duarte
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 06/09/2018 11:42
+-- CHANGE REASON: [EMR-6159] 
+ALTER TABLE SYS_ALERT_NOTIFICATION
+  MODIFY (ID_PROF NUMBER(24) NULL,
+	REPLACE1 VARCHAR2(1000 CHAR),
+	REPLACE2 VARCHAR2(1000 CHAR),
+	REPLACE3 VARCHAR2(1000 CHAR),
+	REPLACE4 VARCHAR2(1000 CHAR),
+	REPLACE5 VARCHAR2(1000 CHAR),
+	REPLACE6 VARCHAR2(1000 CHAR),
+	REPLACE7 VARCHAR2(1000 CHAR),
+	REPLACE8 VARCHAR2(1000 CHAR),
+	REPLACE9 VARCHAR2(1000 CHAR),
+	REPLACE10 VARCHAR2(1000 CHAR));
+-- CHANGE END: Ana Matos

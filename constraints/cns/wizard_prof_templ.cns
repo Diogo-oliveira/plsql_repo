@@ -1,0 +1,38 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 23/12/2010 16:31
+-- CHANGE REASON: [ALERT-151846] DB versioning - Tables
+ALTER TABLE WIZARD_PROF_TEMPL ADD CONSTRAINT WPL_PK PRIMARY KEY (ID_WIZARD, ID_PROFILE_TEMPLATE);
+ALTER TABLE WIZARD_PROF_TEMPL ADD CONSTRAINT WPL_FLG_AV_CHK CHECK (FLG_AVAILABLE IN ('Y','N'));
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 19/01/2011 14:11
+-- CHANGE REASON: [ALERT-151846] DB versioning - Tables
+DECLARE
+    e_pk EXCEPTION;
+    e_uk1 EXCEPTION;
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);
+    PRAGMA EXCEPTION_INIT(e_pk, -2260);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE WIZARD_PROF_TEMPL ADD CONSTRAINT WPL_PK PRIMARY KEY (ID_WIZARD, ID_PROFILE_TEMPLATE)';
+    EXCEPTION
+        WHEN e_pk THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE WIZARD_PROF_TEMPL ADD CONSTRAINT WPL_FLG_AV_CHK CHECK (FLG_AVAILABLE IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

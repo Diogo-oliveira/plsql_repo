@@ -1,0 +1,72 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 16/12/2014 18:20
+-- CHANGE REASON: [ALERT-304404] 
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner            => 'ALERT',
+                                             i_obj_name         => 'FUNC_HELP_ICON',
+                                             i_obj_type         => 'TABLE',
+                                             i_flg_category     => 'DSV',
+                                             i_responsible_team => 'TOOLS');
+
+    pk_versioning.run(i_sql => 'CREATE TABLE FUNC_HELP_ICON (
+    ID_FUNC_HELP_ICON        NUMBER(24) NOT NULL,
+    CODE_ICON_NAME           AS (''FUNC_HELP_ICON.CODE_ICON_NAME.''||TO_CHAR(ID_FUNC_HELP_ICON)),
+    CODE_FUNC_HELP_ICON      AS (''FUNC_HELP_ICON.CODE_FUNC_HELP_ICON.''||TO_CHAR(ID_FUNC_HELP_ICON)),
+    FLG_AVAILABLE            VARCHAR2(1 CHAR) NOT NULL,
+    ICON_BG_COLOR            VARCHAR2(6 CHAR),
+    ICON_FG_COLOR            VARCHAR2(6 CHAR),
+    CREATE_USER              VARCHAR2(200 CHAR),
+    CREATE_TIME              TIMESTAMP WITH LOCAL TIME ZONE,
+    CREATE_INSTITUTION       NUMBER(24),
+    UPDATE_USER              VARCHAR2(200 CHAR),
+    UPDATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE,
+    UPDATE_INSTITUTION       NUMBER(24))');
+    
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE FUNC_HELP_ICON IS ''Functionality help icon registration''';
+    
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON.ID_FUNC_HELP_ICON       IS ''Functionality help icon unique identifier''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON.CODE_ICON_NAME          IS ''Code Icon Identifier defined in translation''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON.CODE_FUNC_HELP_ICON     IS ''Code Functionality Help used in translation''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON.FLG_AVAILABLE           IS ''Flag available (Y\N)''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON.ICON_BG_COLOR           IS ''Icon background color (Hex format: 000000)''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON.ICON_FG_COLOR           IS ''Icon foreground color (Hex format: 000000)''';
+    --
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON.create_user        IS ''Professional that created the registry''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON.create_time        IS ''Date of the registry creation''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON.create_institution IS ''Id of the institution where the registry was created''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON.update_user        IS ''Last professional that updated the registry''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON.update_time        IS ''Date of the last update to the registry''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON.update_institution IS ''Id of the last institution where the registry was updated''';        
+END;
+/
+-- CHANGE END: Gustavo Serrano
+
+declare
+	l_Sql	varchar2(4000);
+begin
+
+	l_Sql := q'[alter table func_help_icon drop column code_func_help_icon]';
+	pk_versioning.run(l_sql);
+	
+	l_sql := q'[alter table func_help_icon drop column code_icon_name]';
+	pk_versioning.run(l_sql);
+	
+end;
+/
+
+
+declare
+	l_Sql	varchar2(4000);
+begin
+
+	l_Sql := q'[alter table func_help_icon add code_func_help_icon varchar2(0200 char)]';
+	pk_versioning.run(l_sql);
+	
+	l_sql := q'[alter table func_help_icon add code_icon_name      varchar2(0200 char)]';
+	pk_versioning.run(l_sql);
+	
+end;
+/
+
+COMMENT ON COLUMN FUNC_HELP_ICON.CODE_ICON_NAME          IS 'Code Icon Identifier defined in translation';
+COMMENT ON COLUMN FUNC_HELP_ICON.CODE_FUNC_HELP_ICON     IS 'Code Functionality Help used in translation';

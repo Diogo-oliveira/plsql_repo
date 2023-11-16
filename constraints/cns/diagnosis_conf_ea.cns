@@ -1,0 +1,17 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 18/11/2013 14:02
+-- CHANGE REASON: [ALERT-269873] A&E diagnoses_Some diagnosis are not giving the option to document "anatomical side". (ALERT_268880)
+--                BSUH - Diagnosis/Problems/Past history - possibility to define the classification to be used in each functional area (ALERT_265471)
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'ALTER TABLE DIAGNOSIS_CONF_EA ADD CONSTRAINT DGCFG_PK PRIMARY KEY (FLG_TERMINOLOGY, ID_TASK_TYPE, ID_INSTITUTION, ID_SOFTWARE) USING INDEX TABLESPACE ALERT_IDX ');
+END;
+/
+-- CHANGE END: Alexandre Santos

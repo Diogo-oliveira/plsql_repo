@@ -1,0 +1,79 @@
+
+
+  CREATE TABLE PROF_INSTITUTION
+   (	ID_PROF_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1),
+	FLG_STATE VARCHAR2(1) NOT NULL ENABLE,
+	DT_BEGIN DATE,
+	DT_END DATE,
+	NUM_MECAN VARCHAR2(30)
+   );
+
+
+COMMENT ON TABLE prof_institution IS 'Relação entre os profissionais e as instituições' ;
+
+COMMENT ON COLUMN prof_institution.id_prof_institution IS 'Chave primária' ;
+COMMENT ON COLUMN prof_institution.flg_type IS 'N - normal, P - prestador de serviços' ;
+COMMENT ON COLUMN prof_institution.flg_state IS 'Validade da relação (A-activa, I-inactiva)' ;
+COMMENT ON COLUMN prof_institution.dt_begin IS 'Data de início da ligação do profissional à instituição' ;
+COMMENT ON COLUMN prof_institution.dt_end IS 'Data de fim da ligação do profissional à instituição' ;
+COMMENT ON COLUMN prof_institution.num_mecan IS 'Nº mecanográfico' ;
+
+
+
+
+ALTER TABLE PROF_INSTITUTION ADD DT_BEGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PROF_INSTITUTION.DT_BEGIN_TSTZ IS 'Data de in¡cio da liga‡Æo do profissional … institui‡Æo'; 
+
+
+
+
+ALTER TABLE PROF_INSTITUTION ADD DT_END_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PROF_INSTITUTION.DT_END_TSTZ IS 'Data de fim da liga‡Æo do profissional … institui‡Æo'; 
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-AGO-18
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 17067
+
+COMMENT ON COLUMN PROF_INSTITUTION.ID_PROFESSIONAL IS 'Professional ID';
+COMMENT ON COLUMN PROF_INSTITUTION.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN PROF_INSTITUTION.FLG_STATE IS 'Relation state: A - Active; I - Inactive; S - Suspended';
+
+-- Change END
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 2008/09/22
+-- CHANGE REASON: Drop obsolete columns of type DATE
+ALTER TABLE PROF_INSTITUTION DROP COLUMN DT_BEGIN;
+ALTER TABLE PROF_INSTITUTION DROP COLUMN DT_END;
+-- CHANGE END
+
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 24/02/2010 15:37
+-- CHANGE REASON: [ALERT-71106] 
+ALTER TABLE PROF_INSTITUTION ADD (FLG_EXTERNAL VARCHAR2(1) DEFAULT 'N'  NOT NULL);
+comment on column PROF_INSTITUTION.FLG_EXTERNAL is 'External professional? Y - Yes, N - No';
+-- CHANGE END: Tércio Soares
+
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 12-03-2010
+-- CHANGE REASON: SCH-386
+alter table PROF_INSTITUTION add FLG_SCHEDULABLE varchar2(1);
+comment on column PROF_INSTITUTION.FLG_SCHEDULABLE is 'Y - this professional can receive new scheduler appointments';
+-- CHANGE END: Telmo Castro
+
+
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 05/07/2010 16:26
+-- CHANGE REASON: [ALERT-109378] 
+ALTER TABLE prof_institution ADD (dn_flg_status VARCHAR2(1 CHAR) DEFAULT 'V');
+comment on column PROF_INSTITUTION.DN_FLG_STATUS is 'Status of the record regarding the staging area values: I - Professional doesn''t exist in the Stg. Area; V - Values valited by the System Administrator; E - Values edited by the System Adminitrator; A - Values needed to be validated by the System administrator';
+-- CHANGE END: Tércio Soares

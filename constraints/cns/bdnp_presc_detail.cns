@@ -1,0 +1,73 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE constraint_name = 'BPL_FLG_INDEPENDENT_CHK'
+       AND table_name = 'BDNP_PRESC_DETAIL';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE BDNP_PRESC_DETAIL add constraint BPL_FLG_INDEPENDENT_CHK check (FLG_INDEPENDENT IN (''Y'',''N''))';
+    END IF;
+END;
+/
+
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE constraint_name = 'BPL_FLG_INDFESS_CHK'
+       AND table_name = 'BDNP_PRESC_DETAIL';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE BDNP_PRESC_DETAIL add constraint BPL_FLG_INDFESS_CHK check (flg_indfess IN (''Y'',''N''))';
+    END IF;
+END;
+/
+
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE constraint_name = 'BPL_FLG_MIGRATOR_CHK'
+       AND table_name = 'BDNP_PRESC_DETAIL';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE BDNP_PRESC_DETAIL add constraint BPL_FLG_MIGRATOR_CHK check (FLG_MIGRATOR IN (''Y'',''N''))';
+    END IF;
+END;
+/
+
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE constraint_name = 'BPL_FLG_OCC_DISEASE_CHK'
+       AND table_name = 'BDNP_PRESC_DETAIL';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE BDNP_PRESC_DETAIL add constraint BPL_FLG_OCC_DISEASE_CHK  check (FLG_OCC_DISEASE IN (''Y'',''N''))';
+    END IF;
+END;
+/
+
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE constraint_name = 'BPL_FLG_PRESC_TYPE_CHK'
+       AND table_name = 'BDNP_PRESC_DETAIL';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE BDNP_PRESC_DETAIL add constraint BPL_FLG_PRESC_TYPE_CHK check (FLG_PRESC_TYPE IN (''M'',''R''))';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso

@@ -1,0 +1,24 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 30/09/2011 14:39
+-- CHANGE REASON: [ALERT-197754] Pre-hospital data - Road Traffic Accident (RTA)
+--                DB Versioning - New tables
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_SECTION_FIELDS ADD CONSTRAINT PHSF_PHSS_FK FOREIGN KEY(ID_PRE_HOSP_FORM, ID_PRE_HOSP_STEP, ID_PRE_HOSP_SECTION, ID_MARKET, ID_INSTITUTION) REFERENCES PRE_HOSP_STEP_SECTIONS(ID_PRE_HOSP_FORM, ID_PRE_HOSP_STEP, ID_PRE_HOSP_SECTION, ID_MARKET, ID_INSTITUTION)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_SECTION_FIELDS ADD CONSTRAINT PHSF_PHFL_FK FOREIGN KEY(ID_PRE_HOSP_FIELD) REFERENCES PRE_HOSP_FIELD(ID_PRE_HOSP_FIELD)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

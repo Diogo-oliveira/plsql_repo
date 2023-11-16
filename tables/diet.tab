@@ -1,0 +1,95 @@
+
+
+  CREATE TABLE DIET
+   (	ID_DIET NUMBER(24,0) NOT NULL ENABLE,
+	CODE_DIET VARCHAR2(200) NOT NULL ENABLE,
+	ID_DIET_PARENT NUMBER(24,0),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	RANK NUMBER(24,0)
+   );
+
+
+
+-- CHANGED BY: elisabete.bugalho
+-- CHANGE DATE: 01/06/2009 14:07
+-- CHANGE REASON: [ALERT-889 ] Criação do novo modelo de dados das dietas
+-- Altering Table 'DIET' 
+ALTER TABLE DIET ADD ID_DIET_TYPE NUMBER(24);
+ALTER TABLE DIET ADD ID_CONTENT VARCHAR2(200);
+ALTER TABLE DIET ADD QUANTITY_DEFAULT NUMBER(24,3);
+ALTER TABLE DIET ADD ID_UNIT_MEASURE NUMBER(24);
+ALTER TABLE DIET ADD ENERGY_QUANTITY_VALUE NUMBER(24,3);
+ALTER TABLE DIET ADD ID_UNIT_MEASURE_ENERGY NUMBER(24);
+
+COMMENT ON TABLE DIET IS 'Diet content';
+
+COMMENT ON COLUMN DIET.ID_DIET IS 'Record ID';
+
+COMMENT ON COLUMN DIET.CODE_DIET IS 'Code for diet type translation';
+
+COMMENT ON COLUMN DIET.ID_DIET_PARENT IS 'Id diet parent';
+
+COMMENT ON COLUMN DIET.FLG_AVAILABLE IS 'Indicates if it is available';
+
+COMMENT ON COLUMN DIET.RANK IS 'Content rank';
+
+COMMENT ON COLUMN DIET.ID_DIET_TYPE IS 'Id of diet type';
+
+COMMENT ON COLUMN DIET.ID_CONTENT IS 'Content parametrization';
+
+COMMENT ON COLUMN DIET.QUANTITY_DEFAULT IS 'Default quantity';
+
+COMMENT ON COLUMN DIET.ID_UNIT_MEASURE IS 'Food unit measure';
+
+COMMENT ON COLUMN DIET.ENERGY_QUANTITY_VALUE IS 'Energy quantity, usualy kcal';
+
+COMMENT ON COLUMN DIET.ID_UNIT_MEASURE_ENERGY IS 'Energy measure';
+-- CHANGE END: elisabete.bugalho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 14/01/2016 12:29
+-- CHANGE REASON: [ALERT-317702] 
+comment on table DIET
+  is 'Diet catalogue';
+-- Add comments to the columns 
+comment on column DIET.id_diet
+  is 'Diet ID';
+comment on column DIET.code_diet
+  is 'Translation code';
+comment on column DIET.id_diet_parent
+  is 'Diet parent ID';
+comment on column DIET.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column DIET.adw_last_update
+  is 'Update date';
+comment on column DIET.rank
+  is 'Rank';
+comment on column DIET.create_user
+  is 'Creation User';
+comment on column DIET.create_time
+  is 'Creation Time';
+comment on column DIET.create_institution
+  is 'Creation Institution';
+comment on column DIET.update_user
+  is 'Update User';
+comment on column DIET.update_time
+  is 'Update Time';
+comment on column DIET.update_institution
+  is 'Update Institution';
+comment on column DIET.id_diet_type
+  is 'Diet type ID';
+comment on column DIET.id_content
+  is 'Content unique ID';
+comment on column DIET.quantity_default
+  is 'Default quantity';
+comment on column DIET.id_unit_measure
+  is 'Unit measure ID';
+comment on column DIET.energy_quantity_value
+  is 'Energy quantity (usualy kcal)';
+comment on column DIET.id_unit_measure_energy
+  is 'Energy unit measure ID';
+  
+  
+  
+-- CHANGE END: Ana Matos

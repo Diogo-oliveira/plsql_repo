@@ -1,0 +1,55 @@
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 28/10/2009 19:28
+-- CHANGE REASON: [ALERT-52603] Taking responsibility over episode by multiple professionals
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE handoff_permission_inst ( ' || --
+                      '       id_profile_template_req NUMBER(24) NOT NULL, ' || --
+                      ' id_institution NUMBER(24) NOT NULL, ' || --
+                      ' id_profile_template_dest NUMBER(24) NOT NULL, ' || --
+                      ' flg_available VARCHAR2(1) NOT NULL, ' || --
+                      ' create_user VARCHAR2(24), ' || --
+                      ' create_time TIMESTAMP(6) WITH LOCAL TIME ZONE, ' || --
+                      ' create_institution NUMBER(24), ' || --
+                      ' update_user VARCHAR2(24), ' || --
+                      ' update_time TIMESTAMP(6) WITH LOCAL TIME ZONE, ' || --
+                      ' update_institution NUMBER(24) ' || --
+                      ') TABLESPACE TABLE_M';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+COMMENT ON TABLE handoff_permission_inst IS 'Hand-off request permissions for each profile';
+COMMENT ON COLUMN handoff_permission_inst.id_profile_template_req IS 'Profile ID of the professional that requests the hand-off';
+COMMENT ON COLUMN handoff_permission_inst.id_institution IS 'Institution ID';
+COMMENT ON COLUMN handoff_permission_inst.id_profile_template_dest IS 'Profile ID of the hand-off destination professional';
+COMMENT ON COLUMN handoff_permission_inst.create_user IS 'Creation user';
+COMMENT ON COLUMN handoff_permission_inst.create_time IS 'Creation date / time';
+COMMENT ON COLUMN handoff_permission_inst.create_institution IS 'Creation institution';
+COMMENT ON COLUMN handoff_permission_inst.update_user IS 'Update user';
+COMMENT ON COLUMN handoff_permission_inst.update_time IS 'Update date / time';
+COMMENT ON COLUMN handoff_permission_inst.update_institution IS 'Update institution';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 18/11/2010 14:16
+-- CHANGE REASON: [ALERT-142370] Hand-off NL refactoring - replication to 2.6.0.4
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE handoff_permission_inst ADD flg_resp_type VARCHAR2(1 CHAR) DEFAULT ''E''';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+COMMENT ON COLUMN handoff_permission_inst.flg_resp_type IS 'Type of responsability: (E - default) Episode (O) overall - patient responsability';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column HANDOFF_PERMISSION_INST.flg_available
+  is 'Availability (Y/N)';
+-- CHANGE END: Elisabete Bugalho

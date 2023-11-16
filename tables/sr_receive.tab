@@ -1,0 +1,48 @@
+
+
+  CREATE TABLE SR_RECEIVE
+   (	ID_SR_RECEIVE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	FLG_MANUAL VARCHAR2(1) NOT NULL ENABLE,
+	DT_RECEIVE DATE NOT NULL ENABLE,
+	ID_PROF NUMBER(24,0),
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE sr_receive IS 'Informação acerca do estado de admissão para cirurgia de um episódio' ;
+
+COMMENT ON COLUMN sr_receive.id_sr_receive IS 'Id da admissão' ;
+COMMENT ON COLUMN sr_receive.flg_status IS 'Estado da admissão. Y- Admitido; N- Não admitido' ;
+COMMENT ON COLUMN sr_receive.flg_manual IS 'Indica se o estado de admissão foi definido manualmente. Y- Manual; N- Automático' ;
+COMMENT ON COLUMN sr_receive.dt_receive IS 'Data de criação do registo' ;
+COMMENT ON COLUMN sr_receive.id_prof IS 'Id do profissional no caso da admissão ser manual.' ;
+COMMENT ON COLUMN sr_receive.id_episode IS 'Id do episódio' ;
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização SR - eliminação de colunas
+ALTER TABLE SR_RECEIVE drop column DT_RECEIVE;
+-- CHANGE END
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 20/01/2016 11:35
+-- CHANGE REASON: [ALERT-317944 ] 
+-- Add comments to the table 
+comment on table SR_RECEIVE
+  is 'Information about the acceptance state of a surgical episode';
+-- Add comments to the columns 
+comment on column SR_RECEIVE.id_sr_receive
+  is 'Admission id';
+comment on column SR_RECEIVE.flg_status
+  is 'State of admission. Y- admitted; not admitted';
+comment on column SR_RECEIVE.flg_manual
+  is 'It indicates whether the admission status was defined manually. Y-Manual; N-Auto';
+comment on column SR_RECEIVE.id_prof
+  is 'Professional id in case of admission be manual';
+comment on column SR_RECEIVE.id_episode
+  is 'Episode Id';
+comment on column SR_RECEIVE.dt_receive_tstz
+  is 'Record date of creation';
+-- CHANGE END: cristina.oliveira

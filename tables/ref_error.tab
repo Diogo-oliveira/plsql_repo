@@ -1,0 +1,154 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/01/2010 12:06
+-- CHANGE REASON: [ALERT-31116] 
+CREATE TABLE REF_ERROR (
+        ID_REF_ERROR NUMBER(24,0) NOT NULL,
+        CODE_REF_ERROR VARCHAR2(200) NOT NULL,
+        DESC_ERROR VARCHAR2(1000),
+  CREATE_USER         VARCHAR2(24),
+  CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24),
+  UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24)
+);
+
+COMMENT ON TABLE REF_ERROR  IS 'Referral error codes';
+COMMENT ON COLUMN REF_ERROR.ID_REF_ERROR IS 'Error identifier';
+COMMENT ON COLUMN REF_ERROR.CODE_REF_ERROR IS 'Error code for translation';
+COMMENT ON COLUMN REF_ERROR.DESC_ERROR IS 'Error description. For internal use.';
+comment on column REF_ERROR.CREATE_USER is 'Creation User';
+comment on column REF_ERROR.CREATE_TIME is 'Creation Time';
+comment on column REF_ERROR.CREATE_INSTITUTION is 'Creation Institution';
+comment on column REF_ERROR.UPDATE_USER is 'Update User';
+comment on column REF_ERROR.UPDATE_TIME is 'Update Time';
+comment on column REF_ERROR.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/01/2010 17:59
+-- CHANGE REASON: [ALERT-58261] 
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_objects u
+     WHERE u.object_name = 'REF_ERROR';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+    
+        l_sql := 'CREATE TABLE REF_ERROR (
+ID_REF_ERROR NUMBER(24,0) NOT NULL,
+CODE_REF_ERROR VARCHAR2(200) NOT NULL,
+DESC_ERROR VARCHAR2(1000),
+CREATE_USER         VARCHAR2(24),
+CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION  NUMBER(24),
+UPDATE_USER         VARCHAR2(24),
+UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION  NUMBER(24))';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON TABLE REF_ERROR  IS 'Referral error codes']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_ERROR.ID_REF_ERROR IS 'Error identifier']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_ERROR.CODE_REF_ERROR IS 'Error code for translation']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_ERROR.DESC_ERROR IS 'Error description. For internal use.']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ERROR.CREATE_USER is 'Creation User']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ERROR.CREATE_TIME is 'Creation Time']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ERROR.CREATE_INSTITUTION is 'Creation Institution']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ERROR.UPDATE_USER is 'Update User']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ERROR.UPDATE_TIME is 'Update Time']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ERROR.UPDATE_INSTITUTION is 'Update Institution']';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/03/2010 14:05
+-- CHANGE REASON: [ALERT-79864] 
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_objects u
+     WHERE u.object_name = 'REF_ERROR';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+    
+        l_sql := 'CREATE TABLE REF_ERROR (
+            ID_REF_ERROR     NUMBER(24,0) NOT NULL,
+            CODE_REF_ERROR     VARCHAR2(200) NOT NULL,
+            DESC_ERROR       VARCHAR2(1000),
+          CREATE_USER         VARCHAR2(24),
+          CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+          CREATE_INSTITUTION  NUMBER(24),
+          UPDATE_USER         VARCHAR2(24),
+          UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+          UPDATE_INSTITUTION  NUMBER(24))';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON TABLE REF_ERROR  IS 'Referral error codes']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_ERROR.ID_REF_ERROR IS 'Error identifier']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_ERROR.CODE_REF_ERROR IS 'Error code for translation']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_ERROR.DESC_ERROR IS 'Error description. For internal use.']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ERROR.CREATE_USER is 'Creation User']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ERROR.CREATE_TIME is 'Creation Time']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ERROR.CREATE_INSTITUTION is 'Creation Institution']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ERROR.UPDATE_USER is 'Update User']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ERROR.UPDATE_TIME is 'Update Time']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ERROR.UPDATE_INSTITUTION is 'Update Institution']';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro

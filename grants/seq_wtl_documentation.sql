@@ -1,0 +1,5 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 12/03/2010 17:05
+-- CHANGE REASON: [ALERT-81062] ALERT_679 Development
+grant select on SEQ_WTL_DOCUMENTATION to ALERT_VIEWER;
+-- CHANGE END: Gustavo Serrano

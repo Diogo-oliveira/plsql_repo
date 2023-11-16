@@ -1,0 +1,11 @@
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 21/12/2010 14:42
+-- CHANGE REASON: [ALERT-148695] Issue Replication: Responsability is not implemented in OUTPATIENT like others software
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE INDEX EMPR_EPIS_STATUS_RESP_IDX ON EPIS_MULTI_PROF_RESP (ID_EPISODE, FLG_STATUS, FLG_RESP_TYPE) TABLESPACE INDEX_L';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: José Brito

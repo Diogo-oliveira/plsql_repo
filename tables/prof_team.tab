@@ -1,0 +1,184 @@
+
+
+  CREATE TABLE PROF_TEAM
+   (	ID_PROF_TEAM NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_TEAM_LEADER NUMBER(24,0) NOT NULL ENABLE,
+	PROF_TEAM_NAME VARCHAR2(200),
+	PROF_TEAM_DESC VARCHAR2(2000),
+	FLG_AVAILABLE VARCHAR2(1),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0),
+	ID_INSTITUTION NUMBER(12,0),
+	ADW_LAST_UPDATE DATE
+   );
+
+
+COMMENT ON TABLE prof_team IS 'Tabela de equipas de profissionais' ;
+
+COMMENT ON COLUMN prof_team.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN prof_team.id_prof_team IS 'ID único' ;
+COMMENT ON COLUMN prof_team.id_prof_team_leader IS 'ID do profissional chefe de equipa' ;
+COMMENT ON COLUMN prof_team.prof_team_name IS 'Nome da equipa' ;
+COMMENT ON COLUMN prof_team.prof_team_desc IS 'Descrição da equipa' ;
+COMMENT ON COLUMN prof_team.flg_available IS 'Disponível (Y/N)' ;
+COMMENT ON COLUMN prof_team.flg_status IS ' (Activa/Inactiva)' ;
+
+
+ALTER TABLE PROF_TEAM MODIFY ID_PROF_TEAM_LEADER NULL;
+
+ALTER TABLE PROF_TEAM ADD (FLG_TYPE VARCHAR2(1));
+ALTER TABLE PROF_TEAM ADD (DT_BEGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE);
+ALTER TABLE PROF_TEAM ADD (DT_END_TSTZ TIMESTAMP WITH LOCAL TIME ZONE);
+ALTER TABLE PROF_TEAM ADD (ID_PROF_TEAM_OLD NUMBER(24));
+
+comment on column PROF_TEAM.FLG_TYPE is 'Tipo de equipa por aplicação: O - Oris, C - Care';
+comment on column PROF_TEAM.DT_BEGIN_TSTZ is 'Data de formação da equipa';
+comment on column PROF_TEAM.DT_END_TSTZ is 'Data de fim de actividade da equipa';
+comment on column PROF_TEAM.ID_PROF_TEAM_OLD is 'Equipa precedente';
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 25/09/08
+-- CHANGE REASON: Discontinuation of adw_last_update
+ALTER TABLE PROF_TEAM DROP COLUMN ADW_LAST_UPDATE;
+-- CHANGE END
+
+
+-- JSILVA 08-03-2009
+ALTER TABLE prof_team ADD id_department    NUMBER(24);
+ALTER TABLE prof_team ADD notes            VARCHAR2(4000);
+ALTER TABLE prof_team ADD ID_CANCEL_REASON NUMBER(24);
+ALTER TABLE prof_team ADD NOTES_CANCEL     VARCHAR2(4000);
+ALTER TABLE prof_team ADD DT_CANCEL        TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE prof_team ADD num_members      NUMBER(6);
+ALTER TABLE prof_team ADD create_time      TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE prof_team ADD create_user      NUMBER(24);
+
+COMMENT ON COLUMN prof_team.flg_status IS 'Record status: A - active, I - inactive, C - cancelled.';
+COMMENT ON COLUMN prof_team.id_software IS 'Team software.';
+COMMENT ON COLUMN prof_team.id_institution IS 'Team institution.';
+COMMENT ON COLUMN prof_team.id_department IS 'Department where the team works.';
+COMMENT ON COLUMN prof_team.notes IS 'Team notes.';
+COMMENT ON COLUMN prof_team.ID_CANCEL_REASON IS 'Cancellation reason.';
+COMMENT ON COLUMN prof_team.NOTES_CANCEL IS 'Cancellation notes.';
+COMMENT ON COLUMN prof_team.DT_CANCEL IS 'Cancellation date.';
+COMMENT ON COLUMN prof_team.num_members IS 'Team members (Automatic update based on prof_team_det table)';
+COMMENT ON COLUMN prof_team.create_time IS 'Register date.';
+COMMENT ON COLUMN prof_team.create_user IS 'Professional who made the record.';
+-- END
+
+
+
+
+-- JSILVA 25-05-2009
+BEGIN
+     EXECUTE IMMEDIATE 'ALTER TABLE PROF_TEAM ADD ID_PROF_REGISTER NUMBER(24)';
+EXCEPTION
+  WHEN OTHERS THEN
+   NULL;
+END;
+/
+
+BEGIN
+     EXECUTE IMMEDIATE 'ALTER TABLE PROF_TEAM ADD DT_REGISTER TIMESTAMP WITH LOCAL TIME ZONE';
+EXCEPTION
+  WHEN OTHERS THEN
+   NULL;
+END;
+/
+
+COMMENT ON COLUMN prof_team.dt_register IS 'Register date.';
+COMMENT ON COLUMN prof_team.id_prof_register IS 'Professional who made the record.';
+-- END
+
+
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 03/07/2009 18:04
+-- CHANGE REASON: [ALERT-665] Alteracoes para as consultas de decisão terapeutica
+-- Altering Table 'PROF_TEAM' 
+ALTER TABLE PROF_TEAM 
+ ADD ID_TEAM_TYPE NUMBER(24) NULL;
+
+COMMENT ON COLUMN PROF_TEAM.ID_TEAM_TYPE IS 'id team type';
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 21/01/2016 11:19
+-- CHANGE REASON: [ALERT-318028] ALERT-318028 CDOC Functionalities V7
+-- Add comments to the table 
+comment on table PROF_TEAM
+  is 'Table with professional teams records';
+-- Add comments to the columns 
+comment on column PROF_TEAM.id_prof_team
+  is 'Professional team identifier (primary key)';
+comment on column PROF_TEAM.id_prof_team_leader
+  is 'Professional team leader identifier ';
+comment on column PROF_TEAM.prof_team_name
+  is 'Team name';
+comment on column PROF_TEAM.prof_team_desc
+  is 'Description of the team';
+comment on column PROF_TEAM.flg_available
+  is 'Record Availability. Values Y- Yes; N- No;';
+comment on column PROF_TEAM.flg_status
+  is 'Record status: A - active, I - inactive, C - cancelled.';
+comment on column PROF_TEAM.id_software
+  is 'Team software.';
+comment on column PROF_TEAM.id_institution
+  is 'Team institution.';
+comment on column PROF_TEAM.adw_last_update
+  is 'Date of last update, used by adw';
+comment on column PROF_TEAM.flg_type
+  is 'Type of team by software. O- Operating room; C -Care;';
+comment on column PROF_TEAM.dt_begin_tstz
+  is 'Date of team begin';
+comment on column PROF_TEAM.dt_end_tstz
+  is 'Date of end team activity';
+comment on column PROF_TEAM.id_prof_team_old
+  is 'previous professional team identifier';
+comment on column PROF_TEAM.id_department
+  is 'Department where the team works.';
+comment on column PROF_TEAM.notes
+  is 'Team notes.';
+comment on column PROF_TEAM.id_cancel_reason
+  is 'Cancellation reason.';
+comment on column PROF_TEAM.notes_cancel
+  is 'Cancellation notes.';
+comment on column PROF_TEAM.dt_cancel
+  is 'Cancellation date.';
+comment on column PROF_TEAM.num_members
+  is 'Team members (Automatic update based on prof_team_det table)';
+comment on column PROF_TEAM.create_time
+  is 'Creation Time';
+comment on column PROF_TEAM.create_user
+  is 'Creation User';
+comment on column PROF_TEAM.create_institution
+  is 'Creation Institution';
+comment on column PROF_TEAM.update_user
+  is 'Update User';
+comment on column PROF_TEAM.update_time
+  is 'Update Time';
+comment on column PROF_TEAM.update_institution
+  is 'Update Institution';
+comment on column PROF_TEAM.id_prof_register
+  is 'Professional who made the record.';
+comment on column PROF_TEAM.dt_register
+  is 'Register date.';
+comment on column PROF_TEAM.id_team_type
+  is 'id team type';
+  
+ 
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 28/01/2020 12:14
+-- CHANGE REASON: [EMR-26001] - [Subtask] [DB] Versioning packages
+ALTER TABLE PROF_TEAM ADD ID_EPISODE NUMBER(24);
+
+alter table PROF_TEAM
+add constraint PROF_TEAM_EPIS_FK foreign key (ID_EPISODE)
+references EPISODE (ID_EPISODE);
+
+
+comment on column PROF_TEAM.id_episode
+is 'Episode id';
+-- CHANGE END: Nuno Coelho

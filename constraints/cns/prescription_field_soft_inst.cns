@@ -1,0 +1,13 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 10:21
+-- CHANGE REASON: [ALERT-37067] 
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table PRESC_FIELD_SOFT_INST
+  add constraint PFSI_PK primary key (ID_PROFILE_TEMPLATE, ID_PROFESSIONAL, ID_DEP_CLIN_SERV, ID_SOFTWARE, ID_INSTITUTION, ID_PRESCRIPTION_FIELD_REL)
+  using index 
+  tablespace TABLE_M;
+-- Create/Recreate check constraints 
+alter table PRESC_FIELD_SOFT_INST
+  add constraint PFSI_FLG_EDIT_CHK
+  check (FLG_EDIT in ('Y','N'));
+-- CHANGE END: Pedro Albuquerque

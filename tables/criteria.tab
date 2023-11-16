@@ -1,0 +1,79 @@
+
+
+  CREATE TABLE CRITERIA
+   (	ID_CRITERIA NUMBER NOT NULL ENABLE,
+	CODE_CRITERIA VARCHAR2(30) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	CRIT_MCHOICE_SELECT VARCHAR2(4000),
+	CRIT_CONDITION VARCHAR2(4000)
+   );
+
+
+COMMENT ON COLUMN criteria.id_criteria IS 'ID único' ;
+COMMENT ON COLUMN criteria.code_criteria IS 'Código do critério' ;
+COMMENT ON COLUMN criteria.flg_type IS 'Indicador do tipo de auxiliar de preenchimento a mostrar: D - Keypad para datas; M - Multi choice; V - texto livre' ;
+COMMENT ON COLUMN criteria.crit_mchoice_select IS 'Select que preenche os campos multi choice' ;
+COMMENT ON COLUMN criteria.crit_condition IS 'condição de restrição dos dados' ;
+
+
+
+
+
+-- CHANGED BY: Fábio Oliveira
+-- CHANGE DATE: 05/06/2009	 
+-- [ALERT-25549] Alterações incorrentes da validação de arq.
+comment on table CRITERIA
+  is 'Esta tabela contém a informação relativa a cada critério';
+comment on column CRITERIA.FLG_TYPE
+  is 'Tipo de entrada de dados. V para texto livre; N para numérico; D para data; M para multichoice; e C para multivalor';
+-- CHANGE END: Fábio Oliveira
+
+
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 28/10/2010 16:00
+-- CHANGE REASON: [ALERT-136249] 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+  -- ADD COLUMN
+    EXECUTE IMMEDIATE 'ALTER TABLE CRITERIA ADD FROM_CONDITION VARCHAR2(4000)';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('Warning: operation have been previously performed. Column FROM_CONDITION already existed in the table CRITERIA');
+END;
+/
+
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    -- ADD COMMENT
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN CRITERIA.FROM_CONDITION IS ''Condition in SQL FROM Clause ''';
+EXCEPTION
+    WHEN e_invalid_identifier THEN
+        dbms_output.put_line('Warning: operation have been previously performed. Comment already existed CRITERIA.FROM_CONDITION');
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 28/02/2011 15:05
+-- CHANGE REASON: [ALERT-162470] Perfomance problem in patient search
+ALTER TABLE CRITERIA ADD HINT_CONDITION VARCHAR2(4000);
+COMMENT ON COLUMN CRITERIA.HINT_CONDITION IS 'Hint to be placed in the patient main query';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 05/05/2011 17:08
+-- CHANGE REASON: [ALERT-176410] 
+BEGIN
+    EXECUTE IMMEDIATE ' alter table criteria add desc_criteria varchar2(4000 char)';
+    EXECUTE IMMEDIATE ' COMMENT ON COLUMN criteria.desc_criteria IS ''function that returns criteria label''';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Paulo Teixeira

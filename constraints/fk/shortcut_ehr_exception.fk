@@ -1,0 +1,36 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 21/09/2011 15:19
+-- CHANGE REASON: [ALERT-196265 ] 
+DECLARE
+    e_gen EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_gen, -02264); 
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SHORTCUT_EHR_EXCEPTION
+  add constraint SEHRE_INST_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION)';
+    EXCEPTION
+        WHEN e_gen THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+DECLARE
+    e_gen EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_gen, -02264); 
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SHORTCUT_EHR_EXCEPTION
+  add constraint SEHRE_PT_FK foreign key (ID_PROFILE_TEMPLATE)
+  references PROFILE_TEMPLATE (ID_PROFILE_TEMPLATE)';
+    EXCEPTION
+        WHEN e_gen THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

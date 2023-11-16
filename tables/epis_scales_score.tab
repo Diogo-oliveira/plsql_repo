@@ -1,0 +1,138 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/07/2011 16:30
+-- CHANGE REASON: [ALERT-188951 ] Possibility to calculate partial scores
+CREATE TABLE epis_scales_score (
+       id_epis_scales_score NUMBER(24) NOT NULL,
+ id_episode NUMBER(24) NOT NULL,
+       id_visit   number(24) NOT NULL,
+       id_patient number(24) NOT NULL,
+       id_epis_documentation NUMBER(24) not null,
+ flg_status VARCHAR2(1) NOT NULL,
+ id_prof_create NUMBER(24) NOT NULL,
+ dt_create TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+       id_cancel_reason NUMBER(24),
+       notes_cancel VARCHAR2(1000 CHAR),
+       dt_cancel TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       id_prof_cancel NUMBER(24),       
+       id_scales NUMBER(24),       
+       id_scales_group               number(24),
+       id_documentation              number(24),
+       score_value                         number(20,4),
+       id_scales_formula                   number(24),
+ create_user VARCHAR2(24),
+ create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+ create_institution NUMBER(24),
+ update_user VARCHAR2(24),
+ update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+ update_institution NUMBER(24)
+);
+
+COMMENT ON TABLE epis_scales_score IS 'Scales scores for an episode';
+COMMENT ON COLUMN epis_scales_score.id_epis_scales_score IS 'Episode dataset score identifier';
+COMMENT ON COLUMN epis_scales_score.id_episode IS 'Episode identifier';
+COMMENT ON COLUMN epis_scales_score.id_visit IS 'Visit identifier';
+COMMENT ON COLUMN epis_scales_score.id_patient IS 'Patient identifier';
+COMMENT ON COLUMN epis_scales_score.id_epis_documentation IS 'epis documentation identifier';
+COMMENT ON COLUMN epis_scales_score.flg_status IS 'Record status: (A) Active - ongoing evaluation (O) Outdated';
+COMMENT ON COLUMN epis_scales_score.id_prof_create IS 'Creation user (showed in ALERT®)';
+COMMENT ON COLUMN epis_scales_score.dt_create IS 'Creation date (showed in ALERT®)';
+COMMENT ON COLUMN epis_scales_score.create_user IS 'Creation user';
+COMMENT ON COLUMN epis_scales_score.create_time IS 'Creation date / time';
+COMMENT ON COLUMN epis_scales_score.create_institution IS 'Creation institution';
+COMMENT ON COLUMN epis_scales_score.update_user IS 'Update user';
+COMMENT ON COLUMN epis_scales_score.update_time IS 'Update date / time';
+COMMENT ON COLUMN epis_scales_score.update_institution IS 'Update institution';
+comment on column epis_scales_score.FLG_STATUS is 'Record status: (A) Active - ongoing evaluation (O) Outdated';
+comment on column epis_scales_score.ID_CANCEL_REASON is 'Cancellation reason';
+comment on column epis_scales_score.NOTES_CANCEL is 'Cancellation notes';
+comment on column epis_scales_score.DT_CANCEL is 'Cancellation date';
+comment on column epis_scales_score.ID_PROF_CANCEL is 'Cancellation user (showed in ALERT®)';
+comment on column epis_scales_score.id_scales is 'Scale Identifier';
+comment on column epis_scales_score.id_scales_group is 'Group Identifier';
+comment on column epis_scales_score.id_documentation is 'Documentation Identifier';
+comment on column epis_scales_score.score_value is 'Value of the calculated score';
+comment on column epis_scales_score.id_scales_formula is 'Scales Formula identifier';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/08/2011 08:33
+-- CHANGE REASON: [ALERT-192414 ] partial scores
+alter table epis_scales_score modify flg_status VARCHAR2(1 char);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/08/2011 09:17
+-- CHANGE REASON: [ALERT-188951 ] partial scores
+alter table epis_scales_score drop column id_visit;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/08/2011 16:47
+-- CHANGE REASON: [ALERT-192414 ] partial scores
+alter table epis_scales_score modify create_user VARCHAR2(24 char);
+alter table epis_scales_score modify update_user VARCHAR2(24 char);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 26/08/2011 08:06
+-- CHANGE REASON: [ALERT-188951] partial scores
+COMMENT ON COLUMN epis_scales_score.id_patient IS 'Patient identifier';
+COMMENT ON COLUMN epis_scales_score_hist.id_epis_documentation IS 'epis documentation identifier';
+COMMENT ON COLUMN epis_scales_score_hist.flg_status IS 'Record status: (A) Active - ongoing evaluation (O) Outdated';
+COMMENT ON COLUMN epis_scales_score_hist.id_prof_create IS 'Creation user (showed in ALERT®)';
+COMMENT ON COLUMN epis_scales_score_hist.dt_create IS 'Creation date (showed in ALERT®)';
+COMMENT ON COLUMN epis_scales_score_hist.create_user IS 'Creation user';
+COMMENT ON COLUMN epis_scales_score_hist.create_time IS 'Creation date / time';
+COMMENT ON COLUMN epis_scales_score_hist.create_institution IS 'Creation institution';
+COMMENT ON COLUMN epis_scales_score_hist.update_user IS 'Update user';
+COMMENT ON COLUMN epis_scales_score_hist.update_time IS 'Update date / time';
+COMMENT ON COLUMN epis_scales_score_hist.update_institution IS 'Update institution';
+comment on column epis_scales_score_hist.FLG_STATUS is 'Record status: (A) Active - ongoing evaluation (O) Outdated (C) Cancelled';
+comment on column epis_scales_score_hist.ID_CANCEL_REASON is 'Cancellation reason';
+comment on column epis_scales_score_hist.NOTES_CANCEL is 'Cancellation notes';
+comment on column epis_scales_score_hist.DT_CANCEL is 'Cancellation date';
+comment on column epis_scales_score_hist.ID_PROF_CANCEL is 'Cancellation user (showed in ALERT®)';
+comment on column epis_scales_score_hist.id_scales is 'Scale Identifier';
+comment on column epis_scales_score_hist.id_scales_group is 'Group Identifier';
+comment on column epis_scales_score_hist.id_documentation is 'Documentation Identifier';
+comment on column epis_scales_score_hist.score_value is 'Value of the calculated score';
+comment on column epis_scales_score_hist.id_scales_formula is 'Scales Formula identifier';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 26/08/2011 08:12
+-- CHANGE REASON: [ALERT-188951] partial scores
+COMMENT ON COLUMN epis_scales_score_hist.id_patient IS 'Patient identifier';
+COMMENT ON COLUMN epis_scales_score_hist.id_epis_documentation IS 'epis documentation identifier';
+COMMENT ON COLUMN epis_scales_score_hist.flg_status IS 'Record status: (A) Active - ongoing evaluation (O) Outdated';
+COMMENT ON COLUMN epis_scales_score_hist.id_prof_create IS 'Creation user (showed in ALERT®)';
+COMMENT ON COLUMN epis_scales_score_hist.dt_create IS 'Creation date (showed in ALERT®)';
+COMMENT ON COLUMN epis_scales_score_hist.create_user IS 'Creation user';
+COMMENT ON COLUMN epis_scales_score_hist.create_time IS 'Creation date / time';
+COMMENT ON COLUMN epis_scales_score_hist.create_institution IS 'Creation institution';
+COMMENT ON COLUMN epis_scales_score_hist.update_user IS 'Update user';
+COMMENT ON COLUMN epis_scales_score_hist.update_time IS 'Update date / time';
+COMMENT ON COLUMN epis_scales_score_hist.update_institution IS 'Update institution';
+comment on column epis_scales_score_hist.FLG_STATUS is 'Record status: (A) Active - ongoing evaluation (O) Outdated (C) Cancelled';
+comment on column epis_scales_score_hist.ID_CANCEL_REASON is 'Cancellation reason';
+comment on column epis_scales_score_hist.NOTES_CANCEL is 'Cancellation notes';
+comment on column epis_scales_score_hist.DT_CANCEL is 'Cancellation date';
+comment on column epis_scales_score_hist.ID_PROF_CANCEL is 'Cancellation user (showed in ALERT®)';
+comment on column epis_scales_score_hist.id_scales is 'Scale Identifier';
+comment on column epis_scales_score_hist.id_scales_group is 'Group Identifier';
+comment on column epis_scales_score_hist.id_documentation is 'Documentation Identifier';
+comment on column epis_scales_score_hist.score_value is 'Value of the calculated score';
+comment on column epis_scales_score_hist.id_scales_formula is 'Scales Formula identifier';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/05/2021 14:05
+-- CHANGE REASON: [EMR-45291] - Assessment scales: use clinical date to update records done through the assessme
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[alter table EPIS_SCALES_SCORE add id_vital_sign_read NUMBER(24)]';
+pk_versioning.run(l_sql);
+end;
+/
+-- CHANGE END: Elisabete Bugalho

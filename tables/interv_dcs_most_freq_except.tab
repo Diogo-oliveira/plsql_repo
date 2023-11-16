@@ -1,0 +1,152 @@
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/10/2012 16:28
+-- CHANGE REASON: [ALERT-241706] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'create table INTERV_DCS_MOST_FREQ_EXCEPT
+(
+  id_interv_dcs_most_freq_except NUMBER(24) not null,
+  id_interv_dep_clin_serv        NUMBER(24) not null,
+  flg_cat_prof                   VARCHAR2(1) not null,
+  flg_available                  VARCHAR2(1) default ''Y'' not null,
+  flg_status                     VARCHAR2(1) not null,
+  adw_last_update                DATE default sysdate,
+  create_user                    VARCHAR2(24),
+  create_time                    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution             NUMBER(24),
+  update_user                    VARCHAR2(24),
+  update_time                    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution             NUMBER(24)
+)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('o nome já está a ser utilizado por um objecto existente');
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/10/2012 16:28
+-- CHANGE REASON: [ALERT-241706] 
+comment on table INTERV_DCS_MOST_FREQ_EXCEPT
+  is 'Procedures more frequent by professional category';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/10/2012 16:28
+-- CHANGE REASON: [ALERT-241706] 
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.id_interv_dep_clin_serv
+  is 'Interv_dep_clin_serv id';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/10/2012 16:28
+-- CHANGE REASON: [ALERT-241706] 
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.flg_cat_prof
+  is 'Category of professional P-physician, N-nurse';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/10/2012 16:28
+-- CHANGE REASON: [ALERT-241706] 
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.flg_available
+  is 'Exception available or not';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/10/2012 16:28
+-- CHANGE REASON: [ALERT-241706] 
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.adw_last_update
+  is 'Date for ADW purposes';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/10/2012 16:28
+-- CHANGE REASON: [ALERT-241706] 
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.create_user
+  is 'Creation User';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/10/2012 16:28
+-- CHANGE REASON: [ALERT-241706] 
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.create_time
+  is 'Creation Time';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/10/2012 16:28
+-- CHANGE REASON: [ALERT-241706] 
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.create_institution
+  is 'Creation Institution';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/10/2012 16:28
+-- CHANGE REASON: [ALERT-241706] 
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.update_user
+  is 'Update User';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/10/2012 16:28
+-- CHANGE REASON: [ALERT-241706] 
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.update_time
+  is 'Update Time';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/10/2012 16:28
+-- CHANGE REASON: [ALERT-241706] 
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.update_institution
+  is 'Update Institution';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/10/2012 16:28
+-- CHANGE REASON: [ALERT-241706] 
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.flg_status
+  is 'Exception status: A - active; I - inactive';
+  
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 11/01/2016 16:36
+-- CHANGE REASON: [ALERT-317702] 
+comment on table INTERV_DCS_MOST_FREQ_EXCEPT
+  is 'Procedures most frequent configuration by professional category';
+-- Add comments to the columns 
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.id_interv_dcs_most_freq_except
+  is 'Primary key';
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.id_interv_dep_clin_serv
+  is 'Procedure clinical service association ID';
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.flg_cat_prof
+  is 'Flag that indicates the professional category';
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.flg_status
+  is 'Flag that indicates the status: A - active; I - inactive';
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.adw_last_update
+  is 'Update date';
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.create_user
+  is 'Creation User';
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.create_time
+  is 'Creation Time';
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.create_institution
+  is 'Creation Institution';
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.update_user
+  is 'Update User';
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.update_time
+  is 'Update Time';
+comment on column INTERV_DCS_MOST_FREQ_EXCEPT.update_institution
+  is 'Update Institution';
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/10/2022 14:05
+-- CHANGE REASON: [EMR-55411]
+COMMENT ON COLUMN interv_dcs_most_freq_except.flg_cat_prof IS 'Flag that indicates the professional category: P - physician; N - nurse';
+-- CHANGE END: Ana Matos

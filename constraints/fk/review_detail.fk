@@ -1,0 +1,34 @@
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 23/10/2009 08:27
+-- CHANGE REASON: New developments,  provide the ability to document that the information was reviewed in the current visit or episode (v2.5.0.7)
+alter table review_detail
+add ( constraint revp_fk foreign key(id_professional)
+references professional(id_professional)
+) ;
+-- CHANGE END: Rui Duarte
+
+
+-- change by: rui.baeta
+-- change date: 23/10/2009 08:26
+-- change reason: ALERT-870: provide the ability to document that the information was reviewed in the current visit or episode
+alter table review_detail
+add ( constraint revp_fk foreign key(id_professional)
+references professional(id_professional)
+) ;
+-- change end: rui.baeta
+
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/11/2010 11:54
+-- CHANGE REASON: [ALERT-71181] 
+DECLARE
+    e_already_not_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -02275);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE review_detail  ADD CONSTRAINT rd_epis_fk FOREIGN KEY (id_episode) REFERENCES episode (id_episode)';
+EXCEPTION
+    WHEN e_already_not_null THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');    
+END;
+/
+-- CHANGE END: Paulo Teixeira

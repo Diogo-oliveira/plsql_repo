@@ -1,0 +1,41 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 17/11/2010 14:11
+-- CHANGE REASON: [ALERT-141929] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE INDEX VSR_VITAL_SIGN_READ_TSTZ_IDX ON VITAL_SIGN_READ(DT_VITAL_SIGN_READ_TSTZ) TABLESPACE index_l';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Vítor Sá
+-- CHANGE DATE: 14/06/2018 11:25
+-- CHANGE REASON: [EMR-4059] 
+DECLARE
+    l_sql VARCHAR2(4000);
+BEGIN
+    l_sql := 'create index alert.vsr_search01_idx on alert.vital_sign_read(id_patient, id_episode, flg_state) tablespace alert_idx';
+    pk_versioning.run(l_sql);
+END;
+/
+-- CHANGE END: Vítor Sá
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 15/06/2021 16:39
+-- CHANGE REASON: [EMR-46287] - Performance: several improvements on vital sign (including reports)
+BEGIN
+pk_versioning.run('create index alert.vsr_search03_idx on alert.vital_sign_read(id_patient,id_vital_sign,flg_state,dt_vital_sign_read_tstz) tablespace alert_idx');
+END;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 30/06/2021 16:17
+-- CHANGE REASON: [EMR-46761] - Nursing button > Vital signs and indicators > Vital sign associated with assessment scale is not updat
+create index VSR_ED_FK_IDX on VITAL_SIGN_READ (ID_EPIS_DOCUMENTATION)   tablespace ALERT_IDX;
+-- CHANGE END: Elisabete Bugalho

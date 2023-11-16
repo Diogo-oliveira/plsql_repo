@@ -1,0 +1,534 @@
+CREATE TABLE ANALYSIS_REQ_DET
+   (	ID_ANALYSIS_REQ_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_ANALYSIS NUMBER(12,0) NOT NULL ENABLE,
+	ID_ANALYSIS_REQ NUMBER(24,0) NOT NULL ENABLE,
+	ID_ARD_PARENT NUMBER(24,0),
+	DT_TARGET DATE,
+	DT_FINAL_TARGET DATE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_FINAL_RESULT DATE,
+	NOTES VARCHAR2(4000),
+	ID_MOVEMENT NUMBER(24,0),
+	FLG_PRE_REQ VARCHAR2(1),
+
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	ID_ROOM NUMBER(12,0),
+	NOTES_TECH VARCHAR2(240)
+   );
+
+
+COMMENT ON TABLE analysis_req_det IS 'Análises requisitadas no cabeçalho' ;
+
+COMMENT ON COLUMN analysis_req_det.dt_target IS 'Data / hora para a qual é requisitado' ;
+COMMENT ON COLUMN analysis_req_det.dt_final_target IS 'Data limite para a realização' ;
+COMMENT ON COLUMN analysis_req_det.flg_status IS 'Estado: R - requisitado, E - em execução, F - terminado, C - cancelado; D - pendente; L - lido' ;
+COMMENT ON COLUMN analysis_req_det.dt_final_result IS 'Data limite para a entrega de resultados' ;
+COMMENT ON COLUMN analysis_req_det.flg_pre_req IS 'Indicação de pré-requisito: Y / N. Por defeito é N.' ;
+COMMENT ON COLUMN analysis_req_det.dt_cancel IS 'Data / hora de cancelamento' ;
+
+alter table ANALYSIS_REQ_DET add BARCODE VARCHAR2(30);
+
+comment on column ANALYSIS_REQ_DET.BARCODE
+  is 'Código de barras gerado pelo sistema laboratorial externo ao Alert. É arquivado nesta tabela quando ainda não foi registada no Alert a colheita e a requisição registada no sistema externo vem identificada com um código de barras.';
+
+
+--Emilia Taborda 2007/07/24
+--Alterar o tamanho da coluna ID_ROOM
+alter table analysis_req_det modify id_room number(24);
+
+alter table analysis_req_det add (dt_target_tstz timestamp with local time zone);
+alter table analysis_req_det add (dt_final_target_tstz timestamp with local time zone);
+alter table analysis_req_det add (dt_final_result_tstz timestamp with local time zone);
+alter table analysis_req_det add (dt_cancel_tstz timestamp with local time zone);
+
+COMMENT ON COLUMN analysis_req_det.dt_target_tstz IS 'Data / hora para a qual é requisitado' ;
+COMMENT ON COLUMN analysis_req_det.dt_final_target_tstz IS 'Data limite para a realização' ;
+COMMENT ON COLUMN analysis_req_det.dt_final_result_tstz IS 'Data limite para a entrega de resultados' ;
+COMMENT ON COLUMN analysis_req_det.dt_cancel_tstz IS 'Data / hora de cancelamento' ;
+
+
+
+-- CHANGE REASON: Novas colunas para contemplar requisições feitas por ordem de outros 
+-- CHANGED BY: Sílvia Freitas
+-- CHANGE DATE: 27/08/2007
+
+
+alter table ANALYSIS_REQ_DET add DT_ORDER TIMESTAMP WITH LOCAL TIME ZONE;
+alter table ANALYSIS_REQ_DET add ID_PROF_ORDER NUMBER(24);
+alter table ANALYSIS_REQ_DET add ID_ORDER_TYPE NUMBER(24);
+alter table ANALYSIS_REQ_DET add FLG_CO_SIGN VARCHAR2(1) DEFAULT 'N' NOT NULL;
+alter table ANALYSIS_REQ_DET add DT_CO_SIGN TIMESTAMP WITH LOCAL TIME ZONE;
+alter table ANALYSIS_REQ_DET add NOTES_CO_SIGN VARCHAR2(4000);
+alter table ANALYSIS_REQ_DET add ID_PROF_CO_SIGN NUMBER(24);
+
+
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_ORDER IS 'Moment when the ordering professional ask the registering professional to request' ;
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_PROF_ORDER IS 'Ordering professional' ;
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ORDER_TYPE IS 'Request order type (telephone, verbal, ...)' ;
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_CO_SIGN IS 'Co-sign flag. (Y)-Order co-signed. (N)-Order not co-signed.';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_CO_SIGN IS 'Co-sign moment';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES_CO_SIGN IS 'Co-sign notes';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_PROF_CO_SIGN IS 'Co-sign professional';
+
+
+-- Add/modify columns 
+alter table ANALYSIS_REQ_DET add NOTES_JUSTIFY VARCHAR2(4000);
+-- Add comments to the columns 
+comment on column ANALYSIS_REQ_DET.NOTES_JUSTIFY
+  is 'Justificação da requisição';
+  
+alter table ANALYSIS_REQ_DET add FLG_TIME_HARVEST VARCHAR2(1);
+alter table ANALYSIS_REQ_DET add DT_BEGIN_HARVEST TIMESTAMP WITH LOCAL TIME ZONE;
+alter table ANALYSIS_REQ_DET add FLG_EXEC_RESULT VARCHAR2(1);
+alter table ANALYSIS_REQ_DET add DT_BEGIN_RESULT TIMESTAMP WITH LOCAL TIME ZONE;
+alter table ANALYSIS_REQ_DET add FLG_URGENCY VARCHAR2(1);
+alter table ANALYSIS_REQ_DET add FLG_FASTING VARCHAR2(1);
+
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_TIME_HARVEST IS 'Realização da colheita (Temporaral) B, N, E';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_BEGIN_HARVEST IS 'Data de colheita (Temporal)';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_EXEC_RESULT IS 'Indicação de execução do resultado na instituição (Y/N)';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_BEGIN_RESULT IS 'Sugestão de data de execução do resultado';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_FASTING IS 'Jejum (Y/N)';
+
+
+--Rui Batista 2007/10/16
+--Reformulação das análises
+alter table analysis_req_det add (flg_col_inst varchar2(1));
+
+comment on column analysis_req_det.flg_col_inst  is 'Indica se é para colher na instituição. Y/N';
+
+alter table ANALYSIS_REQ_DET add ID_EXAM_CAT NUMBER(24);
+-- Add comments to the columns 
+comment on column ANALYSIS_REQ_DET.ID_EXAM_CAT
+  is 'Categoria da análise';
+
+  
+--Rui Batista 2007/11/19
+--Reformulação das análises
+alter table analysis_req_det add (id_episode_origin number(24));
+alter table analysis_req_det add (id_episode_destination number(24));
+
+comment on column analysis_req_det.id_episode_origin  is 'Id do episódio em que foi registada a req. inicialmente (ie, se flg_time = N) ';
+comment on column analysis_req_det.id_episode_destination  is 'Id do episódio em que foi registada a req. destino (se flg_time = N) ';
+
+
+--Rui Batista 2007/11/19
+--Reformulação das análises: dt_pend_req_tstz
+alter table analysis_req_det add (dt_pend_req_tstz timestamp with local time zone);
+
+comment on column analysis_req_det.dt_pend_req_tstz  is 'Data em que a requisição passou de pendente a requisitada';
+
+
+alter table ANALYSIS_REQ_DET add ID_ROOM_REQ number(24);
+comment on column ANALYSIS_REQ_DET.ID_ROOM_REQ  is 'Laboratório associado à análise';
+
+--Rui Spratley 2008/01/30
+--Reformulação das análises: id_analysis_group
+ALTER TABLE ANALYSIS_REQ_DET ADD (ID_ANALYSIS_GROUP NUMBER(24));
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_EPISODE_ORIGIN IS 'Id do episódio em que foi registada a req. inicialmente (ie, se flg_time = N)';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_EPISODE_DESTINATION IS 'Id do episódio em que foi registada a req. destino (se flg_time = N)';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ANALYSIS_GROUP IS 'Grupo de Análises';
+
+
+-- DDL: Coluna para indicar se requisicao de analises ja foi incluida em algum P1
+ALTER TABLE ANALYSIS_REQ_DET ADD (FLG_REFERRAL VARCHAR2(1));
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_REFERRAL IS 'Flag that shows if requisiton was added to referral. Options are (A)vailable, (R)eserved or (S)ent.';
+
+ALTER TABLE ANALYSIS_REQ_DET ADD (ORDER_REQ_CODE NUMBER(24,0));
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ORDER_REQ_CODE IS 'Order requisition code (Interfaces)';
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGED DATE: 2008-AGO-22
+-- CHANGING REASON: View Analysis Detail - WO 17280
+alter table  analysis_req_det
+add (ID_PROF_LAST_UPDATE number(24), DT_LAST_UPDATE_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE);
+
+comment on column analysis_req_det.ID_PROF_LAST_UPDATE is 'Last update professional ID';
+comment on column analysis_req_det.DT_LAST_UPDATE_TSTZ is 'Last update date';
+
+-- CHANGE END
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-AUG-29
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15331
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ANALYSIS_REQ_DET IS 'Analysis request detail ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ANALYSIS IS 'Analysis ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ANALYSIS_REQ IS 'Analysis request ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ARD_PARENT IS 'Analysis request parent ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES IS 'Analysis request detail notes';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_MOVEMENT IS 'Movement ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_PROF_CANCEL IS 'Analysis request cancel professional ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES_CANCEL IS 'Cancel notes';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ROOM IS 'Analysis room ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES_TECH IS 'Technical notes';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_URGENCY IS 'Analysis urgency: U - Urgent; N - Normal';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_STATUS IS 'Estado: C - cancelado; D - pendente; E - em execução; F - c/ resultado; L - Lido; R - requisitado; S - Suspenso';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_TIME_HARVEST IS 'Harvest (Time):  B - Before next episode; E - Current episode; N - Next episode; R - Lab test brought by patient';
+-- CHANGE END
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Desnormalização - Remover campos DATE para uso de TIMESTAMPS.
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ORDER_REQ_CODE IS 'Order requisition code (Interfaces)';
+ALTER TABLE ANALYSIS_REQ_DET DROP COLUMN DT_TARGET;
+ALTER TABLE ANALYSIS_REQ_DET DROP COLUMN DT_FINAL_TARGET;
+ALTER TABLE ANALYSIS_REQ_DET DROP COLUMN DT_FINAL_RESULT;
+ALTER TABLE ANALYSIS_REQ_DET DROP COLUMN DT_CANCEL;
+-- CHANGE END
+
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 2009/05/01
+-- CHANGE REASON: ALERT-696
+ALTER TABLE ANALYSIS_REQ_DET 
+ ADD (ID_ROUND NUMBER(24)
+ ,INSTR_DURATION VARCHAR2(30)
+ ,INSTR_INTERVAL VARCHAR2(30)
+ )
+/
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_STATUS IS 'Estado: C - cancelado; D - pendente; E - em execução; F - c/ resultado; L - Lido; R - requisitado; S - Suspenso'
+/
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ORDER_REQ_CODE IS 'Order requisition code (Interfaces)'
+/
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ROUND IS 'Associated round id'
+/
+-- CHANGE END
+
+ANALYSIS_REQ_DET
+-- CHANGED BY: José Castro
+-- CHANGED DATE: 24-04-2009
+-- CHANGED REASON: ALERT-696
+-- Add/modify columns 
+ALTER TABLE ANALYSIS_REQ_DET ADD ID_CANCEL_REASON NUMBER(24);
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_CANCEL_REASON IS 'Cancel Reason ID';
+
+ALTER TABLE ANALYSIS_REQ_DET ADD COLLECTION_RESP_TYPE VARCHAR2(1);
+COMMENT ON COLUMN ANALYSIS_REQ_DET.COLLECTION_RESP_TYPE IS 'Collection Responsibility Type';
+-- CHANGE END: José Castro
+
+-- CHANGED BY: Jose Castro
+-- CHANGED DATE: 02-06-2009
+-- CHANGED REASON: ALERT-22654
+-- Add/modify columns 
+ALTER TABLE ANALYSIS_REQ_DET ADD FLG_PDF_STATUS VARCHAR2(1);
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_PDF_STATUS IS 'N - Nao Lido; L - Lido';
+-- CHANGE END: Jose Castro
+
+-- CHANGED BY: Jose Castro
+-- CHANGED DATE: 08-07-2009
+-- CHANGED REASON: ALERT-910
+-- Add/modify columns 
+ALTER TABLE ANALYSIS_REQ_DET ADD ID_ANALYSIS_CODIFICATION NUMBER(24);
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ANALYSIS_CODIFICATION IS 'ID da codificacao';
+
+ALTER TABLE ANALYSIS_REQ_DET ADD ID_EXEC_INSTITUTION NUMBER(24);
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_EXEC_INSTITUTION IS 'ID da instituicao que executa a analise';
+
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_REFERRAL IS 'Flag that shows if requisiton was added to referral. Options are (A)vailable,  (R)eserved, electronically sent (I) or printed (S).';
+-- CHANGE END: Jose Castro
+
+-- CHANGED BY: Jose Castro
+-- CHANGE DATE: 2009/12/28
+-- CHANGE REASON: ALERT-61387
+alter table ANALYSIS_REQ_DET modify FLG_TIME_HARVEST not null;
+alter table ANALYSIS_REQ_DET modify FLG_COL_INST not null;
+-- CHANGE END: Jose Castro
+
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 07/07/2010 15:50
+-- CHANGE REASON: [ALERT-110074] Order sets - TDE
+ALTER TABLE analysis_req_det 
+ ADD (id_task_dependency NUMBER(24), flg_req_origin_module VARCHAR(1 CHAR) DEFAULT 'D' NOT NULL);
+
+COMMENT ON COLUMN analysis_req_det.id_task_dependency IS 'Task dependency identifier (fk to TDE_TASK_DEPENDENCY)';
+COMMENT ON COLUMN analysis_req_det.flg_status IS 'Estado: C - cancelado; D - pendente; E - em execução; F - c/ resultado; L - Lido; R - requisitado; S - Suspenso; X - Exterior; W - Em espera de instruções Task Dependency';
+COMMENT ON COLUMN analysis_req_det.flg_req_origin_module IS 'Request created by : D - Default, O - Order Sets, I - Interfaces';
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 27/04/2011 10:27
+-- CHANGE REASON: [ALERT-174844] 
+alter table analysis_req_det modify (flg_status varchar2(2 char));
+
+ALTER TABLE ANALYSIS_REQ_DET 
+ ADD (FLG_CLINICAL_PURPOSE VARCHAR2(1)
+ ,NOTES_PATIENT CLOB
+ ,DT_SCHEDULE TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_ORDER_RECURRENCE NUMBER(24)
+ ,FLG_PRN VARCHAR2(1)
+ ,NOTES_PRN CLOB
+ ,ID_PAT_HEALTH_PLAN NUMBER(24)
+ );
+
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_TASK_DEPENDENCY IS 'Id task dependency';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_CLINICAL_PURPOSE IS 'Flag that indicates the clinical purpose';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES_PATIENT IS 'Notes for the patient';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_SCHEDULE IS 'Suggested date for scheduling';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ORDER_RECURRENCE IS 'Order recurrence id';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_PRN IS 'Flag that indicates wether the order is PRN or not';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES_PRN IS 'Notes to indicate when a PRN order should be activated';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_PAT_HEALTH_PLAN IS 'Id that indicates the healthcare insurance plan used';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 03/05/2011 17:33
+-- CHANGE REASON: [ALERT-176144] 
+comment on column ANALYSIS_REQ_DET.flg_req_origin_module
+  is 'Request created by : D - Default, O - Order Sets, I - Interfaces R - Referral';  
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 04/05/2011 14:51
+-- CHANGE REASON: [ALERT-175637] 
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_REQ_ORIGIN_MODULE IS 'Request created by : D - Default, I - Interfaces, S - Scheduler, C - Care Plans, O - Order Sets, R - Referral';  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 10/05/2011 09:50
+-- CHANGE REASON: [ALERT-177746] 
+ALTER TABLE ANALYSIS_REQ_DET ADD (ID_CDR NUMBER(24));
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_CDR IS 'Clinical decision rule id';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 01/09/2011 17:25
+-- CHANGE REASON: [ALERT-193514] 
+ALTER TABLE ANALYSIS_REQ_DET MODIFY (NOTES_TECH VARCHAR2(4000));
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 14:57
+-- CHANGE REASON: [ALERT-246252] 
+ALTER TABLE analysis_req_det MODIFY (ID_SAMPLE_TYPE NUMBER(12) NOT NULL);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:11
+-- CHANGE REASON: [ALERT-246248] 
+ALTER TABLE ANALYSIS_REQ_DET ADD (ID_SAMPLE_TYPE NUMBER(12));
+
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_SAMPLE_TYPE IS 'Sample type id';
+
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_STATUS IS 'Status: S - PRN; X - External facility; R - Ordered; D - Pending; W - Pending due to dependency; PA - To be scheduled; A - Scheduled; EF - Performed; CC - Specimen collection in progress; E - In progress; V - On hold; NR - Cancelled; F - With result; L - Read; C - Cancelled';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 09/04/2013 15:27
+-- CHANGE REASON: [ALERT-253711] 
+ALTER TABLE ANALYSIS_REQ_DET ADD (CLINICAL_PURPOSE_NOTES VARCHAR2(1000 CHAR));
+
+COMMENT ON COLUMN ANALYSIS_REQ_DET.CLINICAL_PURPOSE_NOTES IS 'Clinical purpose free text field (when flg_clinical_purpose = ''O'')';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/09/2013 09:09
+-- CHANGE REASON: [ALERT-264901] 
+ALTER TABLE ANALYSIS_REQ_DET DROP COLUMN ID_ROUND;
+ALTER TABLE ANALYSIS_REQ_DET DROP COLUMN INSTR_DURATION;
+ALTER TABLE ANALYSIS_REQ_DET DROP COLUMN INSTR_INTERVAL;
+ALTER TABLE ANALYSIS_REQ_DET DROP COLUMN COLLECTION_RESP_TYPE;
+ALTER TABLE ANALYSIS_REQ_DET DROP COLUMN FLG_PDF_STATUS;
+ALTER TABLE ANALYSIS_REQ_DET DROP COLUMN ORDER_REQ_CODE;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/09/2013 09:09
+-- CHANGE REASON: [ALERT-264901] 
+COMMENT ON TABLE ANALYSIS_REQ_DET IS 'Lab tests table';
+
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ANALYSIS_REQ_DET IS 'Lab test''s order detail ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ANALYSIS IS 'Lab test''s ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ANALYSIS_REQ IS 'Order''s ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ARD_PARENT IS 'Lab tests order detail parent ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_STATUS IS 'Flag that indicates the lab_test''s status';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES IS 'Notes';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_MOVEMENT IS 'Movement id';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_PRE_REQ IS 'Flag that indicates if the lab test needs pre-req';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_PROF_CANCEL IS 'Professional that cancels the lab test';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES_CANCEl IS 'Cancelation notes';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ROOM IS 'Room ID that where the lab test will be collected';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES_TECH IS 'Notes for the technician';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.BARCODE IS 'Lab test''s barcode';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_ORDER IS 'Moment when the ordering professional ask the registering professional to request';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_PROF_ORDER IS 'Ordering professional';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ORDER_TYPE IS 'Request order type (telephone, verbal, ...)';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_CO_SIGN IS 'Co-sign flag. (Y)-order co-signed. (N)-order not co-signed.';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_CO_SIGN IS 'Co-sign date';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES_CO_SIGN IS 'Co-sign notes';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_PROF_CO_SIGN IS 'Co-sign professional';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_TARGET_TSTZ IS 'Date for which the order is to be performed';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_FINAL_TARGET_TSTZ IS 'Limit date for the lab test to be performed';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_FINAL_RESULT_TSTZ IS 'Limit date for the results to be available';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_CANCEL_TSTZ IS 'Date that indicates when the lab test was cancelled';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES_JUSTIFY IS 'Notes for justifying the lab test order';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_TIME_HARVEST IS 'To be performed: E - this episode; B - between episodes; N - next episode';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_BEGIN_HARVEST IS 'Date that indicates collection';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_EXEC_RESULT IS 'Flag that indicates if the result will be registered in the institution or not';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_BEGIN_RESULT IS 'Suggested date for the results to be available';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_URGENCY IS 'Flag that indicates the urgency of a lab test';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_FASTING IS 'Flag that indicates wether the patient must be fasting for the collection of the lab test';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_COL_INST IS 'Flag that indicates if the lab tests will be collected in the institution or not';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_EXAM_CAT IS 'Lab test''s category ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_EPISODE_ORIGIN IS 'Episode ID where the order was registered';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_EPISODE_DESTINATION IS 'Episode ID where the order is going to be performed';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_PEND_REQ_TSTZ IS 'Date that indicates when the lab test has been updated from pending to ordered';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ROOM_REQ IS 'Room ID that indicates where the lab test will be performed';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ANALYSIS_GROUP IS 'Lab test''s group ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_REFERRAL IS 'Flag that shows if requisiton was added to referral. Options are (A)vailable,  (R)eserved, electronically sent (I) or printed (S).';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ORDER_REQ_CODE IS 'Order requisition code (interfaces)';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_PROF_LAST_UPDATE IS 'Last update professional ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_LAST_UPDATE_TSTZ IS 'Last update date';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_CANCEL_REASON IS 'Cancel reason ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_MOVEMENT IS 'Movement ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ANALYSIS_CODIFICATION IS 'Lab test''s codification ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_EXEC_INSTITUTION IS 'Institution ID where the order is performed';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_TASK_DEPENDENCY IS 'Task dependency ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_REQ_ORIGIN_MODULE IS 'Request created by : D - Default, O - Order sets, I - Interfaces R - Referral';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_CLINICAL_PURPOSE IS 'Flag that indicates the clinical purpose';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES_PATIENT IS 'Notes for the patient';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.DT_SCHEDULE IS 'Suggested date for scheduling';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_ORDER_RECURRENCE IS 'Order recurrence ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_PRN IS 'Flag that indicates wether the lab test is PRN or not';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES_PRN IS 'Notes to indicate when a PRN order should be activated';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_PAT_HEALTH_PLAN IS 'Healthcare insurance plan ID used';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_CDR IS 'Clinical decision rule ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_SAMPLE_TYPE IS 'Sample type ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.CLINICAL_PURPOSE_NOTES IS 'Clinical purpose free text field (when flg_clinical_purpose = ''O'')';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 20/09/2013 08:55
+-- CHANGE REASON: [ALERT-265451] 
+ALTER TABLE ANALYSIS_REQ_DET 
+ ADD (ID_PAT_EXEMPTION NUMBER(24));
+
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_PAT_EXEMPTION IS 'Exemption ID used';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 24/03/2014 11:11
+-- CHANGE REASON: [ALERT-276746] 
+alter table ANALYSIS_REQ_DET modify flg_clinical_purpose VARCHAR2(2);
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 14/07/2014 10:25
+-- CHANGE REASON: [ALERT-290326 ] 
+comment on column ANALYSIS_REQ_DET.flg_fasting
+  is 'Fasting Y - Yes; N - No; U - According to lab';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 26/11/2014 14:09
+-- CHANGE REASON: [ALERT-302555] 
+begin
+pk_versioning.run('COMMENT ON COLUMN ANALYSIS_REQ_DET.FLG_FASTING IS ''Flag that indicates wether the patient must be fasting for the collection of the lab test''');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 09/03/2015 11:22
+-- CHANGE REASON: [ALERT-308718] 
+begin
+pk_versioning.run('ALTER TABLE ANALYSIS_REQ_DET ADD (NOTES_SCHEDULER VARCHAR(1000 CHAR))');
+end;
+/
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES IS 'General notes';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.NOTES_SCHEDULER IS 'Scheduling notes';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/04/2015 16:48
+-- CHANGE REASON: [ALERT-310273] 
+ALTER TABLE ANALYSIS_REQ_DET 
+ ADD (ID_CO_SIGN_ORDER NUMBER(24)
+ ,ID_CO_SIGN_CANCEL NUMBER(24));
+
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_CO_SIGN_ORDER IS 'Co-sign order ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_CO_SIGN_CANCEL IS 'Co-sign cancel ID';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:00
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS_REQ_DET IS 'Lab tests'' orders detail table';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 26/01/2016 14:45
+-- CHANGE REASON: [ALERT-318118] 
+ALTER TABLE analysis_req_det DROP COLUMN dt_order;
+ALTER TABLE analysis_req_det DROP COLUMN id_prof_order;
+ALTER TABLE analysis_req_det DROP COLUMN id_order_type;
+ALTER TABLE analysis_req_det DROP COLUMN flg_co_sign;
+ALTER TABLE analysis_req_det DROP COLUMN dt_co_sign;
+ALTER TABLE analysis_req_det DROP COLUMN notes_co_sign;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 26/01/2016 17:33
+-- CHANGE REASON: [ALERT-318118] 
+ALTER TABLE analysis_req_det DROP COLUMN id_prof_co_sign;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 04/05/2017 10:17
+-- CHANGE REASON: [ALERT-330278] 
+ALTER TABLE ANALYSIS_REQ_DET ADD (ID_CLINICAL_PURPOSE NUMBER(24));
+
+COMMENT ON COLUMN ANALYSIS_REQ_DET.ID_CLINICAL_PURPOSE IS 'Clinical purpose ID';
+COMMENT ON COLUMN ANALYSIS_REQ_DET.CLINICAL_PURPOSE_NOTES IS 'Clinical purpose free text field (when id_clinical_purpose = 0)';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE 
+	l_sql VARCHAR2(1000 CHAR);
+	l_sql_1 VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.analysis_req_det move lob(notes_patient) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+	l_sql_1 := 'ALTER TABLE alert.analysis_req_det move lob(notes_prn) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql_1);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 24/02/2021 14:36
+-- CHANGE REASON: [EMR-42343] - Change the descriptions of the "Start date" and "Date to be defined" fields.
+comment on column ANALYSIS_REQ_DET.FLG_TIME_HARVEST is 'To be performed: E - this episode; B - before next episode; N - next episode; D - On a defined or to be defined date';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 05/03/2021 08:07
+-- CHANGE REASON: [EMR-42532] - Change the MCDT's request form in the clinical indication area.
+ALTER TABLE analysis_req_det
+ADD diagnosis_notes varchar2(1000);
+
+comment on column analysis_req_det.diagnosis_notes is 'Diagnosis free text field';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 12/03/2021 15:30
+-- CHANGE REASON: [EMR-42532] - Orders: new field in the Clinical Indication block
+ALTER TABLE ANALYSIS_REQ_DET
+MODIFY DIAGNOSIS_NOTES VARCHAR2(1000 CHAR);
+-- CHANGE END: Diogo Oliveira

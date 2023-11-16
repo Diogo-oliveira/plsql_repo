@@ -1,0 +1,27 @@
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 27/03/2009 10:11
+-- CHANGE REASON: [ALERT-21438] Criação das tabelas tl_task, tl_task_timeline e tl_task_timeline_exception necessário à apresentação de eventos na task timeline.
+CREATE TABLE TL_TASK_TIMELINE (  
+ ID_TL_TIMELINE                NUMBER(24,0) NOT NULL ENABLE,
+       ID_PROFILE_TEMPLATE           NUMBER(24,0) NOT NULL ENABLE,
+ ID_TL_TASK                    NUMBER(24,0) NOT NULL ENABLE,
+ FLG_DEFAULT_VALUE             VARCHAR2(1) DEFAULT 'A' NOT NULL,
+       FLG_AVAILABLE                 VARCHAR2(1) DEFAULT 'Y' NOT NULL,
+ RANK                          NUMBER(24,0)
+);
+/
+-- Table Comment
+COMMENT ON TABLE TL_TASK_TIMELINE IS 'This table has the configuration of all the tasks that can be found in timeline (Relation between tasks in timeline with different profiles).';
+
+-- Column Comments
+COMMENT ON COLUMN TL_TASK_TIMELINE.ID_TL_TIMELINE IS 'ID of timeline that presents these tasks information.';
+COMMENT ON COLUMN TL_TASK_TIMELINE.ID_PROFILE_TEMPLATE IS 'Primary key of table PROFILE_TEMPLATE.';
+COMMENT ON COLUMN TL_TASK_TIMELINE.ID_TL_TASK IS 'Primary key of table TL_TASK.';
+COMMENT ON COLUMN TL_TASK_TIMELINE.FLG_DEFAULT_VALUE IS 'Inform if this task should be active (''A'') or inactive (''I'') by default in timeline for a specific professional (''A'' ? Active; ''I'' ? Inactive) (default option: ''A'').';
+COMMENT ON COLUMN TL_TASK_TIMELINE.FLG_AVAILABLE IS 'Inform if this task should be available or not in a specific professional timeline (''Y'' ? Yes; ''N'' ? No)(default option: ''Y'').';
+COMMENT ON COLUMN TL_TASK_TIMELINE.RANK IS 'Order in which tasks are presented in event (task) list. If NULL the order is in field TL_TASK.RANK.';
+
+------------------------------
+------------------------------
+------------------------------
+-- CHANGE END

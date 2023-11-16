@@ -1,0 +1,1 @@
+DROP trigger B_IUD_DOCUMENT_AREA;

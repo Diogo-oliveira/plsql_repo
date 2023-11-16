@@ -1,0 +1,69 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:21
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE ds_cmpt_mkt_rel ADD CONSTRAINT dscm_cp_fk     FOREIGN KEY(id_ds_component_parent)                          REFERENCES ds_component(id_ds_component);
+ALTER TABLE ds_cmpt_mkt_rel ADD CONSTRAINT dscm_inp_tp_fk FOREIGN KEY(internal_name_parent, flg_component_type_parent) REFERENCES ds_component(internal_name, flg_component_type);
+ALTER TABLE ds_cmpt_mkt_rel ADD CONSTRAINT dscm_cc_fk     FOREIGN KEY(id_ds_component_child)                           REFERENCES ds_component(id_ds_component);
+ALTER TABLE ds_cmpt_mkt_rel ADD CONSTRAINT dscm_inc_tc_fk FOREIGN KEY(internal_name_child, flg_component_type_child)   REFERENCES ds_component(internal_name, flg_component_type);
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 30/04/2012 15:26
+-- CHANGE REASON: [ALERT-228936] EST simplified triage
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL ADD CONSTRAINT DSCM_INST_FK FOREIGN KEY (ID_INSTITUTION) REFERENCES INSTITUTION (ID_INSTITUTION)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL ADD CONSTRAINT DSCM_SOFT_FK FOREIGN KEY (ID_SOFTWARE) REFERENCES SOFTWARE (ID_SOFTWARE)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 17:20
+-- CHANGE REASON: [ALERT-229222] VERSIONING TRANSACTIONAL MODEL - SCHEMA ALERT - DDL
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL ADD CONSTRAINT DSCM_INST_FK FOREIGN KEY (ID_INSTITUTION) REFERENCES INSTITUTION (ID_INSTITUTION)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL ADD CONSTRAINT DSCM_SOFT_FK FOREIGN KEY (ID_SOFTWARE) REFERENCES SOFTWARE (ID_SOFTWARE)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 16:48
+-- CHANGE REASON: [ARCH-7603] - [DB] Changes on DB Model
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[alter table DS_CMPT_MKT_REL add constraint DSCM_PT_FK foreign key (ID_PROFILE_TEMPLATE) references profile_template (ID_PROFILE_TEMPLATE)]';
+pk_versioning.run( l_sql );
+end;
+/
+-- CHANGE END: Elisabete Bugalho

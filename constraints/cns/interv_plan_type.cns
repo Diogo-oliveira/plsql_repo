@@ -1,0 +1,19 @@
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 23/03/2010 09:26
+-- CHANGE REASON: [ALERT-69945] 
+alter table INTERV_PLAN_TYPE
+  add constraint IPTYPE_PK primary key (ID_INTERV_PLAN_TYPE) ENABLE;
+ 
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 23/03/2010 09:30
+-- CHANGE REASON: [ALERT-69945] 
+-- Create/Recreate check constraints 
+alter table INTERV_PLAN_TYPE
+  add constraint IPT_FLG_AVAIL_CK
+  check (FLG_AVAILABLE IN ('Y', 'N'));
+alter table INTERV_PLAN_TYPE
+  add constraint IPT_FLG_TYPE_CK
+  check (FLG_TYPE IN ('S', 'P', 'D'));
+-- CHANGE END: orlando.antunes

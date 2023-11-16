@@ -1,0 +1,83 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 31/07/2009 16:30
+-- CHANGE REASON: [ALERT-18963 ] 
+
+CREATE TABLE "WF_TRANSITION_CONFIG"(
+ID_WORKFLOW NUMBER(12,0) NOT NULL,
+ID_STATUS_BEGIN NUMBER(24,0) NOT NULL,
+ID_STATUS_END NUMBER(24,0) NOT NULL,
+ID_SOFTWARE NUMBER(24,0) NOT NULL,
+ID_INSTITUTION NUMBER(24,0) NOT NULL,
+ID_PROFILE_TEMPLATE NUMBER(12,0) NOT NULL,
+ID_FUNCTIONALITY NUMBER(12,0) NOT NULL,
+FUNCTION VARCHAR2(2000) ,
+RANK NUMBER(6,0) NOT NULL,
+FLG_PERMISSION VARCHAR2(1) NOT NULL,
+CREATE_USER VARCHAR2(24) ,
+CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+CREATE_INSTITUTION NUMBER(24,0) ,
+UPDATE_USER VARCHAR2(24) ,
+UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+UPDATE_INSTITUTION NUMBER(24,0) );
+
+
+   COMMENT ON COLUMN "WF_TRANSITION_CONFIG"."ID_WORKFLOW" IS 'Workflow Id';
+
+   COMMENT ON COLUMN "WF_TRANSITION_CONFIG"."ID_STATUS_BEGIN" IS 'Starting status for transition';
+
+   COMMENT ON COLUMN "WF_TRANSITION_CONFIG"."ID_STATUS_END" IS 'Finish status for transition';
+
+   COMMENT ON COLUMN "WF_TRANSITION_CONFIG"."ID_SOFTWARE" IS 'Software that can perform this action';
+
+   COMMENT ON COLUMN "WF_TRANSITION_CONFIG"."ID_INSTITUTION" IS 'Institution that can perform this action';
+
+   COMMENT ON COLUMN "WF_TRANSITION_CONFIG"."ID_PROFILE_TEMPLATE" IS 'Profile that can performe this action';
+
+   COMMENT ON COLUMN "WF_TRANSITION_CONFIG"."ID_FUNCTIONALITY" IS 'Functionality that can perform this action';
+
+   COMMENT ON COLUMN "WF_TRANSITION_CONFIG"."FUNCTION" IS 'This function returns flg_permission for this transition availability';
+
+   COMMENT ON COLUMN "WF_TRANSITION_CONFIG"."RANK" IS 'Transition rank';
+
+   COMMENT ON COLUMN "WF_TRANSITION_CONFIG"."FLG_PERMISSION" IS 'A - if this transition is allowed for the software, institution, profile_template and functionality, D - otherwise';
+
+   COMMENT ON TABLE "WF_TRANSITION_CONFIG"  IS 'Configures if the software, institution, profile_template and functionality can execute this transition';
+-- CHANGE END: Elisabete Bugalho
+
+
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 11/09/2009 12:33
+-- CHANGE REASON: [ALERT-910] 
+comment on column wf_transition_config.CREATE_USER is 'Creation User';
+comment on column wf_transition_config.CREATE_TIME is 'Creation Time';
+comment on column wf_transition_config.CREATE_INSTITUTION is 'Creation Institution';
+comment on column wf_transition_config.UPDATE_USER is 'Update User';
+comment on column wf_transition_config.UPDATE_TIME is 'Update Time';
+comment on column wf_transition_config.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: João Almeida
+-- CHANGED DATE: 2009-SET-22
+-- CHANGED REASON: ALERT-45152
+alter TABLE WF_TRANSITION_CONFIG
+modify id_workflow NUMBER(24);
+-- CHANGE END: João Almeida
+
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/08/2010 17:15
+-- CHANGE REASON: [ALERT-103302] ALERT-83871: REFERRAL Integration With OUTPATIENT
+alter table WF_TRANSITION_CONFIG add ID_CATEGORY NUMBER(12) default 0; 
+comment on column WF_TRANSITION_CONFIG.ID_CATEGORY is 'Professional category identifier';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/09/2011 15:02
+-- CHANGE REASON: [ALERT-187994] 
+alter table wf_transition_config add
+  flg_visible         VARCHAR2(1 CHAR) default 'Y' not null;
+comment on column WF_TRANSITION_CONFIG.flg_visible
+  is 'Is a visible transition ''Y''- Yes ''N''- No';
+  
+-- CHANGE END: Joana Barroso

@@ -1,0 +1,1 @@
+grant references on CALCULATOR to ALERT_DEFAULT;

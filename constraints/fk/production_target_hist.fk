@@ -1,0 +1,28 @@
+alter table PRODUCTION_TARGET_HIST
+  add constraint PTTHDCSS_FK foreign key (ID_DCS_SUBJECT)
+  references DEP_CLIN_SERV (ID_DEP_CLIN_SERV);
+alter table PRODUCTION_TARGET_HIST
+  add constraint PTTHDCSTS_FK foreign key (ID_DCS_TYPE_SLOT)
+  references DEP_CLIN_SERV (ID_DEP_CLIN_SERV);
+alter table PRODUCTION_TARGET_HIST
+  add constraint PTTHI_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION);
+alter table PRODUCTION_TARGET_HIST
+  add constraint PTTHPRC_FK foreign key (PROF_CREATE)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table PRODUCTION_TARGET_HIST
+  add constraint PTTHPRF_FK foreign key (ID_PROFESSIONAL_SUBJECT)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table PRODUCTION_TARGET_HIST
+  add constraint PTTHSDT_FK foreign key (ID_SCH_DEP_TYPE)
+  references SCH_DEP_TYPE (ID_SCH_DEP_TYPE);
+alter table PRODUCTION_TARGET_HIST
+  add constraint PTTHSE_FK foreign key (ID_SCH_EVENT)
+  references SCH_EVENT (ID_SCH_EVENT);
+alter table PRODUCTION_TARGET_HIST
+  add constraint PTTHST_FK foreign key (ID_SOFTWARE)
+  references SOFTWARE (ID_SOFTWARE);
+-- Create/Recreate check constraints 
+alter table PRODUCTION_TARGET_HIST
+  add constraint PTTHFA
+  check (FLG_AVAILABLE IN ('Y','N'));

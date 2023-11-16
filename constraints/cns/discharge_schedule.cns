@@ -1,0 +1,22 @@
+alter table DISCHARGE_SCHEDULE
+  add constraint DISCH_SCHED_PK primary key (ID_DISCHARGE_SCHEDULE);
+
+alter table DISCHARGE_SCHEDULE
+  add constraint DISCH_SCHED_FLG_STATUS_CHK
+  check (FLG_STATUS IN ('Y','N')); 
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/05/2011 17:28
+-- CHANGE REASON: [ALERT-178367] Add constraint to discharge_schedule - Inpatient - Indication for Admission - Admission Services / Clinical Services - Error when selected clinical services "null".
+BEGIN
+
+EXECUTE IMMEDIATE 'create unique index DSCH_FSTAT_UK on discharge_schedule (
+                 CASE  WHEN (id_episode IS NOT NULL AND NVL(flg_status,''Y'') <> ''N'') THEN id_episode END, 
+                 CASE  WHEN (id_episode IS NOT NULL AND NVL(flg_status,''Y'') <> ''N'') THEN flg_status END
+                 ) ';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto

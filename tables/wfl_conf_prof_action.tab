@@ -1,0 +1,24 @@
+create table wfl_conf_prof_action
+(
+	action number(4) not null,
+	professional number(24) not null,
+	flg_permission char(1) not null
+) tablespace TABLE_M;
+
+--comments
+comment on table wfl_conf_prof_action
+	is 'Table that Allow/Deny special permissions to a professional (powers beyond the power of the professional category)';
+	
+comment on column wfl_conf_prof_action.action
+	is 'id of the action';
+comment on column wfl_conf_prof_action.professional
+	is 'id of the professional';
+comment on column wfl_conf_prof_action.flg_permission
+	is 'A: Allow the professional this special action. D: Deny this action for the professional (override category powers)';
+
+alter table wfl_conf_prof_action
+drop constraint wfl_cpa_sa_fk;
+
+alter table wfl_conf_prof_action
+add constraint wfl_cpa_a_fk foreign key (action)
+references wfl_action (id_action);

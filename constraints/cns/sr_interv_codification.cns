@@ -1,0 +1,62 @@
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/07/2012 10:16
+-- CHANGE REASON: [ALERT-235117] Add columns required and codification - Add CODIFICATION id and episode ID_DEP_CLIN_SERV to the v_surgical_detail view
+begin
+-- Create/Recreate primary, unique and foreign key constraints 
+execute immediate ('alter table SR_INTERV_CODIFICATION
+  add constraint ICODIF_PK primary key (id_SR_INTERV_CODIFICATION)
+  using index 
+  tablespace TABLE_S
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 128K
+    next 128K
+    minextents 1
+    maxextents unlimited
+    pctincrease 0
+  )');
+exception
+when others then
+NULL;
+end;
+/
+
+begin
+execute immediate ('alter table SR_INTERV_CODIFICATION
+  add constraint ICODIF_FLG_AVAILABLE_CHK
+  check (flg_available in (''Y'',''N''))');
+exception
+when others then
+NULL;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 31/08/2012 10:21
+-- CHANGE REASON: [ALERT-239064] 
+DECLARE
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -02260);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE sr_interv_codification  ADD CONSTRAINT flg_diag_type_pk PRIMARY KEY (flg_diag_type)  USING INDEX TABLESPACE index_m';
+    EXCEPTION    WHEN e_object_exists2 THEN        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 03/09/2012 09:13
+-- CHANGE REASON: [ALERT-239064] 
+DECLARE
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -02260);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE sr_interv_codification  ADD CONSTRAINT FLG_CODING_pk PRIMARY KEY (FLG_CODING)  USING INDEX TABLESPACE index_m';
+    EXCEPTION    WHEN e_object_exists2 THEN        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Paulo Teixeira

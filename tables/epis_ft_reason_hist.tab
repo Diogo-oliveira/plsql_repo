@@ -1,0 +1,31 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 13/06/2016 15:37
+-- CHANGE REASON: [ALERT-322139] Issue Replication: Fast Tracks Manual Activation
+--                
+
+ BEGIN
+        pk_versioning.run('CREATE TABLE epis_ft_reason_hist (
+  id_epis_fast_track_hist         NUMBER(24)         not null,
+  id_fast_track_reason   NUMBER(24)         not null,
+  flg_add_cancel         VARCHAR2(1 char)   not null,
+  create_user            varchar2(24 char)                 null,
+  create_time            timestamp(6) with local time zone null,
+  create_institution     number(24)                      null,
+  update_user            varchar2(24 char)                 null,
+  update_time            timestamp(6) with local time zone null,
+  update_institution     NUMBER(24)                      NULL)');
+   
+END;
+/
+COMMENT ON TABLE epis_ft_reason_hist IS 'fast track reason hist transactional table';
+
+COMMENT ON COLUMN epis_ft_reason_hist.id_epis_fast_track_hist IS 'epis_fast_track_hist identifier';
+COMMENT ON COLUMN epis_ft_reason_hist.id_fast_track_reason    IS 'fast_track_reason identifier';
+COMMENT ON COLUMN epis_ft_reason_hist.flg_add_cancel          IS 'add or cancel reason - A/C';
+COMMENT ON COLUMN epis_ft_reason_hist.create_user IS 'Creation User';
+COMMENT ON COLUMN epis_ft_reason_hist.create_time IS 'Creation Time';
+COMMENT ON COLUMN epis_ft_reason_hist.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN epis_ft_reason_hist.update_user IS 'Update User';
+COMMENT ON COLUMN epis_ft_reason_hist.update_time IS 'Update Time'; 
+COMMENT ON COLUMN epis_ft_reason_hist.update_institution IS 'Update Institution';
+-- CHANGE END: Elisabete Bugalho

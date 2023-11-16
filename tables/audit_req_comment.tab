@@ -1,0 +1,45 @@
+
+create table AUDIT_REQ_COMMENT
+(
+	ID_AUDIT_REQ_COMMENT NUMBER,
+	ID_PROFESSIONAL NUMBER,
+	ID_AUDIT_REQ NUMBER,
+	ID_AUDIT_REQ_PROF NUMBER,
+	ID_AUDIT_REQ_PROF_EPIS NUMBER,
+	ID_AUDIT_QUEST_ANSWER NUMBER,
+	FLG_STATUS VARCHAR2(1) DEFAULT 'N',
+	DT_SAVED DATE,
+	DT_SAVED_TSTZ TIMESTAMP WITH LOCAL TIME ZONE,
+	T_COMMENT CLOB,
+	ANSWER VARCHAR2(4000),
+	ADW_LAST_UPDATE DATE DEFAULT SYSDATE
+);
+comment on table AUDIT_REQ_COMMENT
+	is 'Comentários introduzidos sobre uma auditoria, nas diferentes fases: por pergunta, por episódios, por profissional, ou por auditoria';
+comment on column AUDIT_REQ_COMMENT.ID_AUDIT_REQ_COMMENT
+	is 'chave primária';
+comment on column AUDIT_REQ_COMMENT.ID_PROFESSIONAL
+	is 'id do auditor que escreveu o comentário';
+comment on column AUDIT_REQ_COMMENT.ID_AUDIT_REQ
+	is 'id do auditor que escreveu o comentário';
+comment on column AUDIT_REQ_COMMENT.ID_AUDIT_REQ_PROF
+	is 'id do auditado vs. auditoria (retrospectiva)';
+comment on column AUDIT_REQ_COMMENT.ID_AUDIT_REQ_PROF_EPIS
+	is 'id do episódio no qual se inseriu o comentário';
+comment on column AUDIT_REQ_COMMENT.ID_AUDIT_QUEST_ANSWER
+	is 'id da pergunta a que estes comentários estão associados. A pergunta não deve permitir texto livre';
+comment on column AUDIT_REQ_COMMENT.FLG_STATUS
+	is 'estado do comentário: C - cancelado, N - normal';
+comment on column AUDIT_REQ_COMMENT.DT_SAVED
+	is 'data do registo';
+comment on column AUDIT_REQ_COMMENT.DT_SAVED_TSTZ
+	is 'data do registo';
+comment on column AUDIT_REQ_COMMENT.T_COMMENT
+	is 'texto do comentário introduzido pelo auditor';
+comment on column AUDIT_REQ_COMMENT.ANSWER
+	is 'resposta à pergunta que foi guardada juntamente com este comentário';
+
+-- JSILVA 22-10-2008
+ALTER TABLE audit_req_comment DROP COLUMN DT_SAVED;
+-- END
+

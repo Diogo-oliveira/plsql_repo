@@ -1,0 +1,54 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 10/12/2013 15:54
+-- CHANGE REASON: [ALERT-271758] 
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table CDR_EXTERNAL add constraint CDREX_PK primary key (ID_CDR_EXTERNAL)
+';
+exception when e_pk_exists then
+  dbms_output.put_line('primary key CDREX_PK exists!');
+end;
+/
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table CDR_EXTERNAL add constraint CDREX_ID_CDR_CALL  foreign key  (ID_CDR_CALL) references CDR_CALL (ID_CDR_CALL)';
+exception when others then
+  dbms_output.put_line('primary key CDREX_CDR_CALL exists!');
+end;
+/
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table CDR_EXTERNAL add constraint CDREX_ID_CDR_TYPE  foreign key  (ID_CDR_TYPE) references CDR_TYPE (ID_CDR_TYPE)
+';
+exception when others then
+  dbms_output.put_line('primary key CDREX_ID_CDR_TYPE exists!');
+end;
+/
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table CDR_EXTERNAL add constraint CDREX_ID_CDR_SEVERITY  foreign key  (ID_CDR_SEVERITY) references CDR_SEVERITY (ID_CDR_SEVERITY)
+';
+exception when others then
+  dbms_output.put_line('primary key CDREX_ID_CDR_SEVERITY exists!');
+end;
+/
+
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table CDR_EXTERNAL add constraint CDREX_ID_PRODUCT  foreign key  (ID_PRODUCT,ID_PRODUCT_SUPPLIER) references PRODUCT (ID_PRODUCT,ID_PRODUCT_SUPPLIER)
+';
+exception when others then
+  dbms_output.put_line('primary key CDREX_ID_PRODUCT exists!');
+end;
+/
+-- CHANGE END: mario.mineiro

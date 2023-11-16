@@ -1,0 +1,18 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 30/01/2012 10:42
+-- CHANGE REASON: [ALERT-215345] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_indexes i
+     WHERE i.index_name = 'PTG_ID_EXT_STS_TYPE_DT_INDEX';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'create index PTG_ID_EXT_STS_TYPE_DT_INDEX on P1_TRACKING (ID_EXTERNAL_REQUEST, EXT_REQ_STATUS, FLG_TYPE, DT_TRACKING_TSTZ)';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro

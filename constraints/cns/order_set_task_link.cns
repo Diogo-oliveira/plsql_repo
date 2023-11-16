@@ -1,0 +1,40 @@
+ALTER TABLE ORDER_SET_TASK_LINK ADD CONSTRAINT OSTL_PK PRIMARY KEY 
+  (ID_ORDER_SET_TASK, ID_TASK_LINK);
+  
+ALTER TABLE order_set_task_link add CONSTRAINT ostl_flg_task_link_chk CHECK(flg_task_link_type IN ('A', 'E', 'G', 'C'));
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 27/09/2009 19:07
+-- CHANGE REASON: [ALERT-44856] 
+ALTER TABLE order_set_task_link drop CONSTRAINT ostl_flg_task_link_chk;
+ALTER TABLE order_set_task_link add CONSTRAINT ostl_flg_task_link_chk CHECK(flg_task_link_type IN ('A', 'E', 'G', 'C', 'P'));
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 29/09/2009 09:40
+-- CHANGE REASON: [ALERT-44856] 
+ALTER TABLE ORDER_SET_TASK_LINK drop primary key drop index;
+
+ALTER TABLE ORDER_SET_TASK_LINK ADD CONSTRAINT OSTL_PK PRIMARY KEY 
+  (ID_ORDER_SET_TASK, ID_TASK_LINK, FLG_TASK_LINK_TYPE);
+
+ALTER TABLE order_set_task_link drop CONSTRAINT ostl_flg_task_link_chk;
+ALTER TABLE order_set_task_link add CONSTRAINT ostl_flg_task_link_chk CHECK(flg_task_link_type IN ('A', 'E', 'G', 'C', 'P', 'N')) NOVALIDATE;
+  
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 30/09/2009 08:24
+-- CHANGE REASON: [ALERT-44856] 
+ALTER TABLE ORDER_SET_TASK_LINK ADD CONSTRAINT OSTL_PK PRIMARY KEY 
+  (ID_ORDER_SET_TASK, ID_TASK_LINK, FLG_TASK_LINK_TYPE);
+
+ALTER TABLE order_set_task_link add CONSTRAINT ostl_flg_task_link_chk CHECK(flg_task_link_type IN ('A', 'E', 'G', 'C', 'P', 'N')) NOVALIDATE;
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 20/02/2014 17:32
+-- CHANGE REASON: [ALERT-276906] 
+alter table ORDER_SET_TASK_LINK drop constraint OSTL_FLG_TASK_LINK_CHK;
+alter table ORDER_SET_TASK_LINK add constraint OSTL_FLG_TASK_LINK_CHK check (flg_task_link_type IN ('A', 'E', 'G', 'C', 'P', 'N', 'L'));
+-- CHANGE END: Tiago Silva

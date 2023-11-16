@@ -1,0 +1,86 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 22/11/2011 17:33
+-- CHANGE REASON: [ALERT-199760] changes_ddl
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner        => 'ALERT',
+                                             i_obj_name     => 'CDR_CALL_DET',
+                                             i_obj_type     => 'TABLE',
+                                             i_flg_category => 'TRS');
+END;
+/
+
+create table CDR_CALL_DET
+(
+  id_cdr_call        NUMBER(24) not null,
+  id_cdr_inst_param  NUMBER(24) not null,
+  id_task_type       NUMBER(24) not null,
+  id_task_request    VARCHAR2(200 CHAR) not null,
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+)
+;
+ 
+comment on table CDR_CALL_DET
+  is 'Clinical decision rule call details. Stores additional information provided by the validation services.';
+ 
+comment on column CDR_CALL_DET.id_cdr_call
+  is 'Rule engine call identifier.';
+comment on column CDR_CALL_DET.id_cdr_inst_param
+  is 'Rule instance parameter identifier.';
+comment on column CDR_CALL_DET.id_task_type
+  is 'Task type identifier.';
+comment on column CDR_CALL_DET.id_task_request
+  is 'Task request identifier.';
+comment on column CDR_CALL_DET.create_user
+  is 'Creation User';
+comment on column CDR_CALL_DET.create_time
+  is 'Creation Time';
+comment on column CDR_CALL_DET.create_institution
+  is 'Creation Institution';
+comment on column CDR_CALL_DET.update_user
+  is 'Update User';
+comment on column CDR_CALL_DET.update_time
+  is 'Update Time';
+comment on column CDR_CALL_DET.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 11/04/2012 11:30
+-- CHANGE REASON: [ALERT-226949] cds popup improvements (ddl changes)
+declare
+  e_already_nullable exception;
+  pragma exception_init(e_already_nullable, -01451);
+begin
+  execute immediate 'alter table CDR_CALL_DET modify
+(
+  id_task_type    null,
+  id_task_request null
+)
+';
+exception when e_already_nullable then
+  dbms_output.put_line('columns id_task_type, id_task_request are already nullable in alert.cdr_call_det!');
+end;
+/
+
+declare
+  e_col_exists exception;
+  pragma exception_init(e_col_exists, -01430);
+begin
+  execute immediate 'alter table CDR_CALL_DET add
+(
+  param_value VARCHAR2(200 char)
+)
+';
+exception when e_col_exists then
+  dbms_output.put_line('column param_value already exist in alert.cdr_call_det!');
+end;
+/
+
+comment on column CDR_CALL_DET.param_value
+  is 'Rule instance parameter valuation.';
+-- CHANGE END: Pedro Carneiro

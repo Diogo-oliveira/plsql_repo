@@ -1,0 +1,11 @@
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 09/Jun/2011 11:38
+-- CHANGE REASON: ALERT-180219
+BEGIN
+    UPDATE sys_config sc
+       SET VALUE = 452
+     WHERE sc.id_sys_config IN
+           ('TL_REPORT', 'TIMELINE_REPORT', 'PRINT_DISCHARGE_REPORT', 'PRINT_DISPOSITION_REPORT', 'PREV_EPIS_REPORT') and sc.id_software = 24;
+END;
+/
+-- CHANGE END

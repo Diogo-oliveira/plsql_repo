@@ -1,0 +1,49 @@
+
+
+  CREATE TABLE HEMO_REQ
+   (	ID_HEMO_REQ NUMBER(24,0) NOT NULL ENABLE,
+	DT_HEMO_REQ DATE NOT NULL ENABLE,
+	ID_PROF_REQ NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_SCHEDULE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	NOTES VARCHAR2(2000),
+	FLG_EMERGENCY VARCHAR2(1),
+	DT_TARGET DATE,
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+
+	NOTES_CANCEL VARCHAR2(2000),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN hemo_req.id_hemo_req IS 'ID único' ;
+COMMENT ON COLUMN hemo_req.dt_hemo_req IS 'Data da requisição' ;
+COMMENT ON COLUMN hemo_req.id_prof_req IS 'ID do profissional que efectuou a requisição' ;
+COMMENT ON COLUMN hemo_req.id_episode IS 'ID do episódio' ;
+COMMENT ON COLUMN hemo_req.id_schedule IS 'ID do agendamento do bloco' ;
+COMMENT ON COLUMN hemo_req.flg_status IS 'Estado da requisição. Valores possíveis: D - Pendente, R - Requisitado, T - Em transporte, P - Parcial, F - Terminado, C - Cancelado' ;
+COMMENT ON COLUMN hemo_req.notes IS 'Notas' ;
+COMMENT ON COLUMN hemo_req.flg_emergency IS 'Requisição urgente? (Y/N)' ;
+COMMENT ON COLUMN hemo_req.dt_target IS 'Data para a qual é feita a requisição. Por defeito é a data agendada da cirurgia mas pode ser diferente' ;
+COMMENT ON COLUMN hemo_req.dt_cancel IS 'Data de cancelamento da requisição' ;
+COMMENT ON COLUMN hemo_req.id_prof_cancel IS 'ID do profissional que cancelou' ;
+COMMENT ON COLUMN hemo_req.notes_cancel IS 'Notas de cancelamento' ;
+COMMENT ON COLUMN hemo_req.adw_last_update IS 'Data da última alteração' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE HEMO_REQ ADD DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN HEMO_REQ.DT_CANCEL_TSTZ IS 'Data de cancelamento da requisi‡Æo'; 
+ALTER TABLE HEMO_REQ ADD DT_HEMO_REQ_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN HEMO_REQ.DT_HEMO_REQ_TSTZ IS 'Data da requisi‡Æo'; 
+ALTER TABLE HEMO_REQ ADD DT_TARGET_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN HEMO_REQ.DT_TARGET_TSTZ IS 'Data para a qual ‚ feita a requisi‡Æo. Por defeito ‚ a data agendada da cirurgia mas pode ser diferente'; 
+
+
+--CHANGED BY: Pedro Santos
+--CHANGE DATE: 22-09-2008
+--CHANGE REASON: drop of DATE column types
+ALTER TABLE "HEMO_REQ" DROP (DT_HEMO_REQ,DT_TARGET,DT_CANCEL);
+--CHANGE END

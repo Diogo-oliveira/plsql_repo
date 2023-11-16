@@ -1,0 +1,114 @@
+CREATE TABLE ORDER_SET
+ (ID_ORDER_SET NUMBER(24) NOT NULL
+ ,ID_ORDER_SET_INTERNAL VARCHAR2(240)
+ ,ID_ORDER_SET_PREVIOUS_VERSION NUMBER(24)
+ ,TITLE VARCHAR2(200)
+ ,AUTHOR_DESC VARCHAR2(200)
+ ,FLG_TARGET_PROFESSIONALS VARCHAR2(1)
+ ,FLG_EDIT_PERMISSIONS VARCHAR2(1)
+ ,FLG_STATUS VARCHAR2(1) NOT NULL
+ ,NOTES_GLOBAL VARCHAR2(4000)
+ ,FLG_ADDITIONAL_INFO VARCHAR2(1) NOT NULL
+ ,DT_ORDER_SET_TSTZ TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_PROFESSIONAL NUMBER(24)
+ ,ID_INSTITUTION NUMBER(24) NOT NULL
+ ,ID_SOFTWARE NUMBER(24) NOT NULL
+ ,ID_PROF_CANCEL NUMBER(24)
+ ,DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE
+ );
+
+COMMENT ON TABLE ORDER_SET IS 'Contains all the order sets';
+COMMENT ON COLUMN ORDER_SET.ID_ORDER_SET IS 'Order Set ID';
+COMMENT ON COLUMN ORDER_SET.ID_ORDER_SET_INTERNAL IS 'Internal order set identifier used only for order sets that are parameterizations';
+COMMENT ON COLUMN ORDER_SET.ID_ORDER_SET_PREVIOUS_VERSION IS 'Previous version of the Order Set in case we are still editing it';
+COMMENT ON COLUMN ORDER_SET.TITLE IS 'Order Set title';
+COMMENT ON COLUMN ORDER_SET.AUTHOR_DESC IS 'Order Set author description';
+COMMENT ON COLUMN ORDER_SET.FLG_TARGET_PROFESSIONALS IS 'Indicate which type of professionals can use the order set (S - Professionals of the same specialty; N - No one else)';
+COMMENT ON COLUMN ORDER_SET.FLG_EDIT_PERMISSIONS IS 'Indicate which type of professionals can edit the order set (S - Professionals of the same specialty; N - No one else)';
+COMMENT ON COLUMN ORDER_SET.FLG_STATUS IS 'Order Set status (T - temporary; F - finished; C - deleted; D - deprecated)';
+COMMENT ON COLUMN ORDER_SET.NOTES_GLOBAL IS 'Order Set global notes';
+COMMENT ON COLUMN ORDER_SET.FLG_ADDITIONAL_INFO IS 'Indicates if additional information should be associated to the Order Set (Y - Yes; N - No)';
+COMMENT ON COLUMN ORDER_SET.DT_ORDER_SET_TSTZ IS 'Order Set creation date';
+COMMENT ON COLUMN ORDER_SET.ID_PROFESSIONAL IS 'Professional that creates the Order Set';
+COMMENT ON COLUMN ORDER_SET.ID_INSTITUTION IS 'Institution where the Order Set was created';
+COMMENT ON COLUMN ORDER_SET.ID_SOFTWARE IS 'Software where the Order Set was created';
+COMMENT ON COLUMN ORDER_SET.ID_PROF_CANCEL IS 'Professional who cancels or deprecate the Order Set';
+COMMENT ON COLUMN ORDER_SET.DT_CANCEL_TSTZ IS 'Date when Order Set was canceled or deprecated';
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 03/03/2010 17:52
+-- CHANGE REASON: [ALERT-78803] 
+ALTER TABLE order_Set ADD ID_CONTENT VARCHAR2(200);
+COMMENT ON COLUMN order_Set.ID_CONTENT IS 'Content identification';
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 07/11/2012 10:50
+-- CHANGE REASON: [ALERT-240453] new clinical indication and order set type fields on order sets
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ORDER_SET add clinical_indications clob';
+EXCEPTION
+    WHEN e_exception THEN NULL;
+END;
+/
+comment on column ORDER_SET.clinical_indications is 'Clinical indications/diagnoses of the order set';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 22/01/2014 11:46
+-- CHANGE REASON: [ALERT-271094] Task selection improvements
+alter table ORDER_SET modify flg_additional_info default 'N';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:30
+-- CHANGE REASON: [EMR-4796] 
+DECLARE 
+	l_sql_1 VARCHAR2(1000 CHAR);
+BEGIN
+	l_sql_1 := 'ALTER TABLE alert.order_set move lob(clinical_indications) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql_1);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 18/02/2023 22:12
+-- CHANGE REASON: [EMR-56895] - HTML Migration - DDLs
+BEGIN
+pk_versioning.run(i_sql => 'alter table order_set
+add id_cancel_reason NUMBER(24)');
+END;
+/
+
+BEGIN
+pk_versioning.run(i_sql => 'alter table order_set
+add notes_cancel VARCHAR2(4000)');
+END;
+/
+
+BEGIN
+pk_versioning.run(i_sql => 'comment on column order_set.id_cancel_reason
+is ''Cancel reason ID''');
+END;
+/
+
+BEGIN
+pk_versioning.run(i_sql => 'comment on column order_set.notes_cancel
+is ''Cancelation notes''');
+END;
+/
+
+BEGIN
+pk_versioning.run(i_sql => 'alter table order_set
+add constraint OST_CR_FK foreign key (ID_CANCEL_REASON)
+references CANCEL_REASON (ID_CANCEL_REASON)');
+END;
+/
+-- CHANGE END: Diogo Oliveira

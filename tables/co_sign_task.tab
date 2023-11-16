@@ -1,0 +1,39 @@
+-- José Brito 05/06/2008 Carregamento inicial
+CREATE TABLE co_sign_task (
+       id_co_sign_task NUMBER(24,0) NOT NULL,
+       id_task NUMBER(24,0) NOT NULL,
+			 flg_type VARCHAR2(2) NOT NULL,
+			 id_prof_order   NUMBER(24,0) NOT NULL,
+			 id_prof_dest   NUMBER(24,0) NOT NULL,
+			 id_episode NUMBER(24,0) NOT NULL
+);
+
+COMMENT ON TABLE co_sign_task IS 'Stores tasks waiting for co-sign.';
+
+COMMENT ON COLUMN co_sign_task.id_task IS 'Foreign key that references a task on one of the following tables: ANALYSIS_REQ, DRUG_PRESCRIPTION, EXAM_REQ, INTERV_PRESCRIPTION, MONITORIZATION.';
+COMMENT ON COLUMN co_sign_task.flg_type IS 'Type of the task on ID_TASK: (A) Analysis, (DR) Drug request, (P) Drug prescription, (PP) Pharmacy prescription, (E) Exams, (I) Interventions, (M) Monitorizations.';
+COMMENT ON COLUMN co_sign_task.id_prof_order IS 'Professional that requested the task.';                                                                                                                                 
+COMMENT ON COLUMN co_sign_task.id_prof_dest IS 'Professional that will confirm co-sign.';
+COMMENT ON COLUMN co_sign_task.id_episode IS 'Episode associated with the ordered task.';
+
+
+-- CHANGED BY: Pedro Martins Santos
+-- CHANGE DATE: 01/04/2010
+-- CHANGE REASON: [ALERT-85738] 
+COMMENT ON COLUMN co_sign_task.flg_type IS 'Type of the task on ID_TASK: (A) Analysis,(DD) Drug request detail, (DR) Drug request, (E) Exams, (I) Interventions, (M) Monitorizations, (P) Drug prescription, (PP) Pharmacy prescription.';
+-- CHANGE END: Pedro Martins Santos
+
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 22/03/2011 15:02
+-- CHANGE REASON: [ALERT-168666] 
+comment on column CO_SIGN_TASK.flg_type
+  is 'Type of the task on ID_TASK: (A) Analysis, (DR) Drug request, (P) Drug prescription, (PP) Pharmacy prescription, (E) Exams, (I) Interventions, (M) Monitorizations, (OP) Opinions.';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/04/2014 10:47
+-- CHANGE REASON: [ALERT-275664] 
+comment on column CO_SIGN_TASK.flg_type
+is 'Type of the task on ID_TASK: (A) Analysis, (DR) Drug request, (P) Drug prescription, (PP) Pharmacy prescription, (E) Exams, (I) Interventions, (M) Monitorizations, (OP) Opinions, (CO) Communication order.';
+-- CHANGE END: Ana Monteiro

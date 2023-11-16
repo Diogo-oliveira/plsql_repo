@@ -1,0 +1,24 @@
+
+exec pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'PHA_XML_DATA', i_obj_type => 'TABLE', i_flg_category => 'TRS', i_flg_alert_default => 'N', i_delete_script => null, i_flg_default_child => 'N');
+
+create table PHA_XML_DATA (
+	id_xml_data				number(24) not null,
+	xml_data				xmltype,
+	dt_xml_data				timestamp with local time zone default current_timestamp not null,
+	xml_data_context_info	varchar2(200 char)
+)
+tablespace TABLE_M
+xmltype xml_data store as clob (tablespace ALERT_LOB);
+
+comment on table PHA_XML_DATA is
+	'table for XML cursor transfer between institutions (ZANOB PHARMACY)';
+
+comment on column PHA_XML_DATA.id_xml_data is
+	'id (PK)';
+comment on column PHA_XML_DATA.xml_data is
+	'xml cursor (column definition (metadata) and row set (data))';
+comment on column PHA_XML_DATA.dt_xml_data is
+	'date of the xml cursor';
+comment on column PHA_XML_DATA.xml_data_context_info is
+	'extra info about the xml data';
+

@@ -1,0 +1,36 @@
+
+--constraints fk
+ALTER TABLE doc_area_inst_soft
+	ADD CONSTRAINT doc_area_inst_soft_id_da_fk FOREIGN KEY (id_doc_area)
+	REFERENCES doc_area (id_doc_area);
+	
+ALTER TABLE doc_area_inst_soft
+	ADD CONSTRAINT doc_area_inst_soft_id_ins_fk FOREIGN KEY (id_institution)
+	REFERENCES institution (id_institution);
+	
+ALTER TABLE doc_area_inst_soft
+	ADD CONSTRAINT doc_area_inst_soft_id_soft_fk FOREIGN KEY (id_software)
+	REFERENCES software (id_software);
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 29/11/2010 15:48
+-- CHANGE REASON: [ALERT-140014] Data paging solution in summary pages
+DECLARE
+    l_exists     PLS_INTEGER;
+    l_constraint VARCHAR2(30) := 'DAIS_MRK_FK';
+    l_ddl        VARCHAR2(32767) := 'ALTER TABLE doc_area_inst_soft ADD CONSTRAINT DAIS_MRK_FK FOREIGN KEY(id_market) REFERENCES market(id_market)';
+BEGIN
+    SELECT count(1)
+      INTO l_exists
+      FROM user_constraints uc
+     WHERE uc.constraint_name = l_constraint;
+    IF l_exists = 0
+    THEN
+        EXECUTE IMMEDIATE l_ddl;
+    ELSE
+        dbms_output.put_line('Info: Constraint already exists in DB: ' || l_constraint);
+    END IF;
+END;
+/
+-- CHANGE END: Ariel Machado

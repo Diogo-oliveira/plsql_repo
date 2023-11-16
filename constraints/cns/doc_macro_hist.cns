@@ -1,0 +1,23 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 30/03/2012 17:38
+-- CHANGE REASON: [ALERT-188349] 
+ALTER TABLE DOC_MACRO_HIST
+ ADD (CONSTRAINT DCMH_PK PRIMARY KEY (ID_DOC_MACRO, DT_DOC_MACRO_HIST));
+ 
+ALTER TABLE DOC_MACRO_HIST
+ ADD (CONSTRAINT DCMH_FLG_STATUS_CHK CHECK (FLG_STATUS IN ('A', 'I', 'C', 'D')));
+ 
+ALTER TABLE DOC_MACRO_HIST
+ ADD (CONSTRAINT DCMH_FLG_SHARE_CHK CHECK (FLG_SHARE IN ('Y', 'N')));
+  
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 11/02/2013 17:35
+-- CHANGE REASON: [ALERT-250607] Method to migrate prefilled templates created by professionals when a template is updated
+alter table DOC_MACRO_HIST
+  drop constraint DCMH_FLG_STATUS_CHK;
+alter table DOC_MACRO_HIST
+  add constraint DCMH_FLG_STATUS_CHK
+  check (FLG_STATUS IN ('A', 'I', 'C', 'D', 'P'));
+-- CHANGE END: Ariel Machado

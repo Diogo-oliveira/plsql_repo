@@ -1,0 +1,62 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/04/2015 16:17
+-- CHANGE REASON: [ALERT-31026901] CO-SIGN  - Database model Versioning
+BEGIN
+
+    pk_versioning.run(i_sql => q'[
+create table CO_SIGN_HIST
+(
+id_co_sign_hist    NUMBER(24) not null,
+id_co_sign         NUMBER(24),
+id_task            NUMBER(24) not null,
+id_task_group      NUMBER(24) not null,
+id_task_type       NUMBER(24) not null,
+id_action          NUMBER(24) not null,
+id_order_type      NUMBER(24) not null,
+id_episode         NUMBER(24) not null,
+id_prof_created    NUMBER(24) not null,
+id_prof_ordered_by NUMBER(24),
+id_prof_co_signed  NUMBER(24),
+dt_created         TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+dt_ordered_by      TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+dt_co_signed       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+flg_status         VARCHAR2(30 CHAR) not null,
+co_sign_notes      CLOB,
+flg_made_auth      VARCHAR2(1 CHAR),
+create_user        VARCHAR2(24 CHAR),
+create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+create_institution NUMBER(24),
+update_user        VARCHAR2(24 CHAR),
+update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+update_institution NUMBER(24)
+)
+tablespace ALERT_DATA
+]');
+END;
+/
+
+COMMENT ON TABLE co_sign_hist IS 'Co-sign history table';
+COMMENT ON column co_sign_hist.id_co_sign_hist IS 'Co-sign task history primary key';
+COMMENT ON column co_sign_hist.id_co_sign IS 'Co-sign task primary key';
+COMMENT ON column co_sign_hist.id_task IS 'Foreign key that references a task on one of the following tables: ANALYSIS_REQ, DRUG_PRESCRIPTION, EXAM_REQ, INTERV_PRESCRIPTION, MONITORIZATION.';
+COMMENT ON column co_sign_hist.id_task_group IS ' Task group identifier ';
+COMMENT ON column co_sign_hist.id_task_type IS ' Task type identifier ';
+COMMENT ON column co_sign_hist.id_action IS ' Action identifier ';
+COMMENT ON column co_sign_hist.id_order_type IS ' Order type identifier ';
+COMMENT ON column co_sign_hist.id_episode IS ' Episode identifier ';
+COMMENT ON column co_sign_hist.id_prof_created IS ' Professional identifier that was created the order ';
+COMMENT ON column co_sign_hist.id_prof_ordered_by IS ' Professional identifier that is the ordered by ';
+COMMENT ON column co_sign_hist.id_prof_co_signed IS ' Professional identifier that was co - signed the co - sign request ';
+COMMENT ON column co_sign_hist.dt_created IS ' Order creation date ';
+COMMENT ON column co_sign_hist.dt_ordered_by IS ' Ordering date ';
+COMMENT ON column co_sign_hist.dt_co_signed IS 'Date when the co-sign was co-signed';
+COMMENT ON column co_sign_hist.flg_status IS 'Co-sign status: P - Waiting for co-sign, CS - Co-signed, D - Draft, NA - Not applicable';
+COMMENT ON column co_sign_hist.co_sign_notes IS 'Co-sign notes (code translation related with translation_trs)';
+COMMENT ON column co_sign_hist.flg_made_auth IS 'Flag that indicates if professional was made authentication: (Y) - Yes, (N) - No';
+COMMENT ON column co_sign_hist.create_user IS 'Creation user';
+COMMENT ON column co_sign_hist.create_time IS 'Creation time';
+COMMENT ON column co_sign_hist.create_institution IS 'Creation institution';
+COMMENT ON column co_sign_hist.update_user IS 'Update user';
+COMMENT ON column co_sign_hist.update_time IS 'Update time';
+COMMENT ON column co_sign_hist.update_institution IS 'Update institution';
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,226 @@
+-- Create table
+create table GRAPHIC
+(
+  ID_GRAPHIC         NUMBER(12) not null,
+  ID_RELATED_OBJECT  NUMBER(24) not null,
+  INTERN_NAME        VARCHAR2(30) not null,
+  X_AXIS_START       NUMBER(4) not null,
+  X_AXIS_END         NUMBER(4) not null,
+  X_AXIS_INCREMENT   NUMBER(3),
+  X_AXIS_ALTERNATIVE VARCHAR2(100),
+  CODE_X_AXIS_LABEL  VARCHAR2(200),
+  Y_AXIS_START       NUMBER(4) not null,
+  Y_AXIS_END         NUMBER(4) not null,
+  Y_AXIS_INCREMENT   NUMBER(3),
+  Y_AXIS_ALTERNATIVE VARCHAR2(100),
+  CODE_Y_AXIS_LABEL  VARCHAR2(200),
+  FLG_X_AXIS_TYPE    VARCHAR2(1),
+  PATIENT_GENDER     VARCHAR2(1),
+  ADW_LAST_UPDATE    DATE not null,
+  CODE_GRAPHIC       VARCHAR2(200),
+  GRAPHIC_COLOR      VARCHAR2(50),
+  GRAPHIC_TEXT_COLOR VARCHAR2(50),
+  ID_UNIT_MEASURE    NUMBER(24)
+);
+
+
+
+comment on table GRAPHIC
+  is 'Esta tabela contem uma descrição completa para a representação de um gráfico. A tabela é genérica e pode ser usada em qualquer cenário.';
+-- Add comments to the columns 
+comment on column GRAPHIC.ID_GRAPHIC
+  is 'Chave primária da tabela';
+comment on column GRAPHIC.ID_RELATED_OBJECT
+  is 'ID do objecto a que este gráfico está associado';
+comment on column GRAPHIC.INTERN_NAME
+  is 'Nome interno para o gráfico';
+comment on column GRAPHIC.X_AXIS_START
+  is 'Valor inicial do eixo dos Xs (max = 9999).';
+comment on column GRAPHIC.X_AXIS_END
+  is 'Valor final do eixo dos Xs (max = 9999)';
+comment on column GRAPHIC.X_AXIS_INCREMENT
+  is 'Incremento no eixo dos Xs (max = 999)';
+comment on column GRAPHIC.X_AXIS_ALTERNATIVE
+  is 'Campo alternativo para os valores no eixo dos Xs, usado quando os valores não são constantes. Deve ser uma string separada por (,).';
+comment on column GRAPHIC.CODE_X_AXIS_LABEL
+  is 'Código para a label a apresentar no eixo dos Xs';
+comment on column GRAPHIC.Y_AXIS_START
+  is 'Valor inicial do eixo dos Ys (max = 9999)';
+comment on column GRAPHIC.Y_AXIS_END
+  is 'Valor final do eixo dos Ys (max = 9999)';
+comment on column GRAPHIC.Y_AXIS_INCREMENT
+  is 'Incremento no eixo dos Ys (max = 999)';
+comment on column GRAPHIC.Y_AXIS_ALTERNATIVE
+  is 'Campo alternativo para os valores no eixo dos Ys, usado quando os valores não são constantes. Deve ser uma string separada por (,).';
+comment on column GRAPHIC.CODE_Y_AXIS_LABEL
+  is 'Código para a label a apresentar no eixo dos Ys';
+comment on column GRAPHIC.FLG_X_AXIS_TYPE
+  is 'Flag que indica o tipo de escala do eixo dos Xs: M -meses; Y-anos.';
+comment on column GRAPHIC.PATIENT_GENDER
+  is 'Campo opcional com indicação do sexo do paciente:F - feminino, M - masculino, NULL - não se aplica.';
+comment on column GRAPHIC.ADW_LAST_UPDATE
+  is 'Registo da data da última alteração';
+comment on column GRAPHIC.CODE_GRAPHIC
+  is 'Nome associado ao gráfico';
+comment on column GRAPHIC.GRAPHIC_COLOR
+  is 'Côr atribuida a cada gráfico (visão gráfica).';
+comment on column GRAPHIC.GRAPHIC_TEXT_COLOR
+  is 'Côr atribuida ao texto associado a cada gráfico.';
+comment on column GRAPHIC.ID_UNIT_MEASURE
+  is 'Unidade de medida.';
+
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 27/01/2010 18:05
+-- CHANGE REASON: [ALERT-71272] altered and added graphics, added lines
+alter table graphic modify (x_axis_increment number, y_axis_increment number);
+alter table graphic add (id_content varchar2(200));
+alter table graphic add (rank number(6));
+comment on column graphic.id_content is 'Content identifier';
+comment on column graphic.rank is 'Sort order';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 20/09/2011 14:53
+-- CHANGE REASON: [ALERT-195952 ] 
+alter table graphic modify (x_axis_increment number, y_axis_increment number);
+
+declare
+col_exists exception;
+pragma exception_init(col_exists, -01430);
+begin
+execute immediate 'alter table graphic add (id_content varchar2(200))';
+exception when col_exists then dbms_output.put_line('column GRAPHIC.ID_CONTENT already exists');
+end;
+/
+
+declare
+col_exists exception;
+pragma exception_init(col_exists, -01430);
+begin
+execute immediate 'alter table graphic add (rank number(6))';
+exception when col_exists then dbms_output.put_line('column GRAPHIC.RANK already exists');
+end;
+/
+
+comment on column graphic.id_content is 'Content identifier';
+comment on column graphic.rank is 'Sort order';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 21/01/2016 10:06
+-- CHANGE REASON: [ALERT-317983] ALERT-317983 CDOC Functionalities V5 Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table GRAPHIC
+  is 'This is a general table and contains a complete description for graphics representations';
+-- Add comments to the columns 
+comment on column GRAPHIC.id_graphic
+  is 'Primary key';
+comment on column GRAPHIC.id_related_object
+  is 'Id vital sign in vital_sign table';
+comment on column GRAPHIC.intern_name
+  is 'Graphic internal name';
+comment on column GRAPHIC.x_axis_start
+  is 'Initial Xs axis value (max = 9999)';
+comment on column GRAPHIC.x_axis_end
+  is 'Final Xs axis value (max = 9999)';
+comment on column GRAPHIC.x_axis_increment
+  is 'Xs axis increment value (max = 999)';
+comment on column GRAPHIC.x_axis_alternative
+  is 'Xs axis alternative value used when the values aren''t constants. String splited by (,)';
+comment on column GRAPHIC.code_x_axis_label
+  is 'Xs axis label code';
+comment on column GRAPHIC.y_axis_start
+  is 'Initial Ys axis value (max = 9999)';
+comment on column GRAPHIC.y_axis_end
+  is 'Final Ys axis value (max = 9999)';
+comment on column GRAPHIC.y_axis_increment
+  is 'Ys axis increment value (max = 999)';
+comment on column GRAPHIC.y_axis_alternative
+  is 'Ys axis alternative value used when the values aren''t constants. String splited by (,)';
+comment on column GRAPHIC.code_y_axis_label
+  is 'Ys axis label code';
+comment on column GRAPHIC.flg_x_axis_type
+  is 'Xs axis flag to set the scale type: M - months, Y - years';
+comment on column GRAPHIC.patient_gender
+  is 'Optional fiel with patient gender: F - female, M - male, null - not applicable';
+comment on column GRAPHIC.adw_last_update
+  is 'Last change date : deprecated';
+comment on column GRAPHIC.code_graphic
+  is 'Translation code graphic';
+comment on column GRAPHIC.graphic_color
+  is 'Graphic color (graphic visualization)';
+comment on column GRAPHIC.graphic_text_color
+  is 'Graphic text color';
+comment on column GRAPHIC.id_unit_measure
+  is 'Graphic unit measure';
+comment on column GRAPHIC.create_user
+  is 'Creation User';
+comment on column GRAPHIC.create_time
+  is 'Creation Time';
+comment on column GRAPHIC.create_institution
+  is 'Creation Institution';
+comment on column GRAPHIC.update_user
+  is 'Update User';
+comment on column GRAPHIC.update_time
+  is 'Update Time';
+comment on column GRAPHIC.update_institution
+  is 'Update Institution';
+comment on column GRAPHIC.id_content
+  is 'Content identifier';
+comment on column GRAPHIC.rank
+  is 'Sort order';
+-- CHANGE END: Renato Nunes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 17/06/2016 10:08
+-- CHANGE REASON: [ALERT-321813] 
+DECLARE
+    e_col_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_col_exists, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE graphic ADD (id_related_object_x number(24))';
+EXCEPTION
+    WHEN e_col_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+END;
+/
+COMMENT ON column graphic.id_related_object_x IS 'Id vital sign in vital_sign table x axis';
+
+DECLARE
+    e_col_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_col_exists, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE graphic ADD (ID_UNIT_MEASURE_x number(24))';
+EXCEPTION
+    WHEN e_col_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+END;
+/
+COMMENT ON column graphic.ID_UNIT_MEASURE_x IS 'unit measure x axis';
+
+DECLARE
+    e_col_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_col_exists, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE graphic ADD (age_min number(12))';
+EXCEPTION
+    WHEN e_col_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+END;
+/
+COMMENT ON column graphic.age_min IS 'age_min for growth chart entry in months';
+
+DECLARE
+    e_col_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_col_exists, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE graphic ADD (age_max number(12))';
+EXCEPTION
+    WHEN e_col_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+END;
+/
+COMMENT ON column graphic.age_max IS 'age_max for growth chart entry in months';
+-- CHANGE END: Paulo Teixeira

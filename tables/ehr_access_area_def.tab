@@ -1,0 +1,60 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 30/03/2009 17:24
+-- CHANGE REASON: [ALERT-21092] 
+CREATE TABLE EHR_ACCESS_AREA_DEF
+ (AREA VARCHAR2(30) NOT NULL
+ ,DESCRIPTION VARCHAR2(200)
+ ,SCHED_CREATE_PERM_SC VARCHAR2(200) NOT NULL
+ ,EHR_CREATE_PERM_SC VARCHAR2(200) NOT NULL
+ ,INACTIVE_CREATE_PERM_SC VARCHAR2(200) NOT NULL
+ );
+
+COMMENT ON TABLE EHR_ACCESS_AREA_DEF IS 'EHR access areas definitions';
+COMMENT ON COLUMN EHR_ACCESS_AREA_DEF.AREA IS 'Alert area identifier';
+COMMENT ON COLUMN EHR_ACCESS_AREA_DEF.DESCRIPTION IS 'Area description';
+COMMENT ON COLUMN EHR_ACCESS_AREA_DEF.SCHED_CREATE_PERM_SC IS 'Schedule episodes create permission sys_config id';
+COMMENT ON COLUMN EHR_ACCESS_AREA_DEF.EHR_CREATE_PERM_SC IS 'EHR episodes create permission sys_config id';
+COMMENT ON COLUMN EHR_ACCESS_AREA_DEF.INACTIVE_CREATE_PERM_SC IS 'Inactive episodes create permission sys_config id';
+-- CHANGE END
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 09/06/2011 11:58
+-- CHANGE REASON: [ALERT-181316] Consultants Access Configuration
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    BEGIN
+        ALTER TABLE ehr_access_area_def add(cons_create_perm_sc VARCHAR2(200 CHAR));
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('Column Already There');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 15/06/2011 17:57
+-- CHANGE REASON: [ALERT-181316] coment on new column
+ BEGIN
+     EXECUTE IMMEDIATE 'COMMENT ON column ehr_access_area_def.cons_create_perm_sc IS ''Consultant episodes create permission sys_config id''';
+ END;
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 16/06/2011 17:11
+-- CHANGE REASON: [ALERT-181316] Consultants Access Configuration
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    BEGIN
+        execute immediate 'ALTER TABLE ehr_access_area_def add(cons_create_perm_sc VARCHAR2(200 CHAR))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('Column Already There');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

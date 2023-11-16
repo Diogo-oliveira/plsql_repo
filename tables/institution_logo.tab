@@ -1,0 +1,217 @@
+CREATE TABLE INSTITUTION_LOGO
+ (ID_INSTITUTION_LOGO  NUMBER(24) NOT NULL
+ ,ID_INSTITUTION  NUMBER(12) NOT NULL
+ ,IMG_LOGO  BLOB NOT NULL
+ );
+
+COMMENT ON TABLE INSTITUTION_LOGO IS 'Logotipo da instituição';
+
+COMMENT ON COLUMN INSTITUTION_LOGO.ID_INSTITUTION_LOGO IS 'Chave primária';
+
+COMMENT ON COLUMN INSTITUTION_LOGO.ID_INSTITUTION IS 'ID da instituição';
+
+COMMENT ON COLUMN INSTITUTION_LOGO.IMG_LOGO IS 'Logotipo da instituição';
+
+
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 15/12/2009 15:00
+-- CHANGE REASON: [ALERT-62650] 
+alter table INSTITUTION_LOGO add IMG_LOGO_SMALL BLOB;
+comment on column INSTITUTION_LOGO.IMG_LOGO_SMALL is 'Insitution logo for other pages';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 29/03/2010 12:21
+-- CHANGE REASON: [ALERT-84593] 
+declare
+ l_count pls_integer;
+begin
+
+  select count(1)
+  into l_count
+  from all_tab_columns 
+  where owner = 'ALERT' and table_name = 'INSTITUTION_LOGO' and column_name = 'IMG_BANNER_SMALL';
+
+  if l_count = 0 then
+    execute immediate ( 'alter table INSTITUTION_LOGO modify IMG_LOGO null');
+    execute immediate ( 'alter table INSTITUTION_LOGO rename column IMG_LOGO to IMG_BANNER');
+    execute immediate ( 'alter table INSTITUTION_LOGO rename column IMG_LOGO_SMALL to IMG_BANNER_SMALL');
+    execute immediate ( 'alter table INSTITUTION_LOGO add IMG_LOGO BLOB null');
+    execute immediate ( 'alter table INSTITUTION_LOGO add IMG_LOGO BLOB null');
+    execute immediate ( 'alter table INSTITUTION_LOGO add IMG_LOGO BLOB null');
+    execute immediate ( 'alter table INSTITUTION_LOGO add IMG_LOGO BLOB null');
+        
+  end if;
+
+end;
+/
+
+comment on column INSTITUTION_LOGO.IMG_BANNER is 'Banner da instituição';
+comment on column INSTITUTION_LOGO.IMG_LOGO is 'Logotipo da instituição';
+comment on column INSTITUTION_LOGO.IMG_BANNER_SMALL is 'Insitution banner for other pages';
+
+------------------------------------------------
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 29/03/2010 15:21
+-- CHANGE REASON: [ALERT-84593] 
+declare
+ l_count pls_integer;
+begin
+
+  select count(1)
+  into l_count
+  from all_tab_columns 
+  where owner = 'ALERT' and table_name = 'INSTITUTION_LOGO' and column_name = 'IMG_BANNER_SMALL';
+
+  if l_count = 0 then
+    execute immediate ( 'alter table INSTITUTION_LOGO modify IMG_LOGO null');
+    execute immediate ( 'alter table INSTITUTION_LOGO rename column IMG_LOGO to IMG_BANNER');
+    execute immediate ( 'alter table INSTITUTION_LOGO rename column IMG_LOGO_SMALL to IMG_BANNER_SMALL');
+    execute immediate ( 'alter table INSTITUTION_LOGO add IMG_LOGO BLOB null');
+    execute immediate ( 'alter table INSTITUTION_LOGO add IMG_LOGO BLOB null');
+    execute immediate ( 'alter table INSTITUTION_LOGO add IMG_LOGO BLOB null');
+    execute immediate ( 'alter table INSTITUTION_LOGO add IMG_LOGO BLOB null');
+        
+  end if;
+
+end;
+/
+
+comment on column INSTITUTION_LOGO.IMG_BANNER is 'Banner da instituição';
+comment on column INSTITUTION_LOGO.IMG_LOGO is 'Logotipo da instituição';
+comment on column INSTITUTION_LOGO.IMG_BANNER_SMALL is 'Insitution banner for other pages';
+
+------------------------------------------------
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 29/03/2010 15:29
+-- CHANGE REASON: [ALERT-84593] 
+declare
+ l_count pls_integer;
+begin
+
+  select count(1)
+  into l_count
+  from all_tab_columns 
+  where owner = 'ALERT' and table_name = 'INSTITUTION_LOGO' and column_name = 'IMG_BANNER_SMALL';
+
+  if l_count = 0 then
+    execute immediate ( 'alter table INSTITUTION_LOGO modify IMG_LOGO null');
+    execute immediate ( 'alter table INSTITUTION_LOGO rename column IMG_LOGO to IMG_BANNER');
+    execute immediate ( 'alter table INSTITUTION_LOGO rename column IMG_LOGO_SMALL to IMG_BANNER_SMALL');
+    execute immediate ( 'alter table INSTITUTION_LOGO add IMG_LOGO BLOB null');
+    execute immediate ( 'alter table INSTITUTION_LOGO add IMG_LOGO BLOB null');
+    execute immediate ( 'alter table INSTITUTION_LOGO add IMG_LOGO BLOB null');
+    execute immediate ( 'alter table INSTITUTION_LOGO add IMG_LOGO BLOB null');
+        
+  end if;
+
+end;
+/
+
+comment on column INSTITUTION_LOGO.IMG_BANNER is 'Banner da instituição';
+comment on column INSTITUTION_LOGO.IMG_LOGO is 'Logotipo da instituição';
+comment on column INSTITUTION_LOGO.IMG_BANNER_SMALL is 'Insitution banner for other pages';
+
+------------------------------------------------
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 05/04/2010 11:10
+-- CHANGE REASON: [ALERT-84593] 
+declare
+ l_count pls_integer;
+begin
+
+  select count(1)
+  into l_count
+  from all_tab_columns 
+  where owner = 'ALERT' and table_name = 'INSTITUTION_LOGO' and column_name = 'IMG_BANNER_SMALL';
+
+  if l_count = 0 then
+    execute immediate ( 'alter table INSTITUTION_LOGO modify IMG_LOGO null');
+    execute immediate ( 'alter table INSTITUTION_LOGO rename column IMG_LOGO to IMG_BANNER');
+    execute immediate ( 'alter table INSTITUTION_LOGO rename column IMG_LOGO_SMALL to IMG_BANNER_SMALL');
+    execute immediate ( 'alter table INSTITUTION_LOGO add IMG_LOGO BLOB null');
+        
+  end if;
+
+end;
+/
+
+comment on column INSTITUTION_LOGO.IMG_BANNER is 'Banner da instituição';
+comment on column INSTITUTION_LOGO.IMG_LOGO is 'Logotipo da instituição';
+comment on column INSTITUTION_LOGO.IMG_BANNER_SMALL is 'Insitution banner for other pages';
+
+------------------------------------------------
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 17-Fev-2011
+-- CHANGE REASON: ALERT-162194
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE institution_logo add id_dep_clin_serv NUMBER(24) DEFAULT NULL';
+   
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 17-Fev-2011
+-- CHANGE REASON: ALERT-162194
+COMMENT ON column institution_logo.id_dep_clin_serv IS 'Clinical service department';
+-- CHANGE END
+
+
+
+
+
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE 
+	l_sql VARCHAR2(1000 CHAR);
+	l_sql_1 VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.institution_logo move lob(img_logo) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+	l_sql_1 := 'ALTER TABLE alert.institution_logo move lob(img_banner_small) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql_1);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 05/03/2021 10:11
+-- CHANGE REASON: [EMR-42659] - Create the possibility to configure a specific logo for the video conference waiting room.	
+ALTER TABLE institution_logo add IMG_LOGO_TELEMEDICINE BLOB;
+
+COMMENT ON column institution_logo.img_logo_telemedicine IS 'Institution logo to be used in telemedicine';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 15/03/2021 11:28
+-- CHANGE REASON: [EMR-42659] - Create the possibility to configure a specific logo for the video conference waiting room
+BEGIN
+pk_versioning.run('ALTER TABLE institution_logo add IMG_LOGO_TELEMEDICINE BLOB');
+END;
+/
+
+COMMENT ON column institution_logo.img_logo_telemedicine IS 'Institution logo to be used in telemedicine';
+-- CHANGE END: Diogo Oliveira

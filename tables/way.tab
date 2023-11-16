@@ -1,0 +1,62 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 20:41
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+CREATE TABLE WAY
+(
+   ID_WAY   NUMBER(24) NOT NULL,
+   CODE_WAY VARCHAR2(200 CHAR) NOT NULL,
+   CODE             VARCHAR2(200 CHAR),
+   FLG_AVAILABLE    VARCHAR2(1 CHAR) NOT NULL,
+   ID_CONTENT       VARCHAR2(200 CHAR),   
+   FLG_TYPE         VARCHAR2(1 CHAR) NOT NULL,
+   CREATE_USER             VARCHAR2(24),
+   CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   CREATE_INSTITUTION      NUMBER(24),
+   UPDATE_USER             VARCHAR2(24),
+   UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   UPDATE_INSTITUTION      NUMBER(24)
+);
+
+ALTER TABLE WAY MOVE TABLESPACE TABLE_S;
+
+comment on table WAY is 'Hidrics way';
+
+comment on column WAY.ID_WAY is 'Primary key';
+comment on column WAY.CODE_WAY is 'Translation code';
+comment on column WAY.CODE is 'Code';
+comment on column WAY.FLG_AVAILABLE is 'Record availability. Y - Yes; N - No';
+comment on column WAY.ID_CONTENT is 'Content ID';
+comment on column WAY.FLG_TYPE is 'Way type. P - IV solution (Parentérica); E - Enteral solution (Entérica); O - Other; N - Not defined';
+comment on column WAY.CREATE_USER is 'Creation User';
+comment on column WAY.CREATE_TIME is 'Creation Time';
+comment on column WAY.CREATE_INSTITUTION is 'Creation Institution';
+comment on column WAY.UPDATE_USER is 'Update User';
+comment on column WAY.UPDATE_TIME is 'Update Time';
+comment on column WAY.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 19/11/2010 14:55
+-- CHANGE REASON: [ALERT-142990] Problem type:Bug Area: Patient Grid/Intakes & Outputs Expected Be (truncated)
+alter table way rename column flg_type to flg_way_type;
+
+comment on column WAY.flg_way_type is 'Way type. P - IV solution (Parentérica); E - Enteral solution (Entérica); O - Other; N - Not defined';
+
+alter table way add flg_type varchar2(1);
+
+COMMENT ON COLUMN WAY.flg_type IS 'Type. A - Administration; E - Elimination' ;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:46
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+alter table WAY modify ( create_user  varchar2(24 char));
+alter table WAY modify ( update_user  varchar2(24 char));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/03/2011 09:01
+-- CHANGE REASON: [ALERT-168813 ] Intake and Outputs: the locations are not being displayed
+alter table way modify (flg_type varchar2(1 char) not null novalidate);
+alter table way modify (flg_way_type varchar2(1 char) not null novalidate);
+-- CHANGE END: Sofia Mendes

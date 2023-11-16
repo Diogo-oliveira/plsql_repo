@@ -1,0 +1,134 @@
+
+
+  CREATE TABLE EPIS_ANAMNESIS
+   (	ID_EPIS_ANAMNESIS NUMBER(24,0) NOT NULL ENABLE,
+	DT_EPIS_ANAMNESIS DATE NOT NULL ENABLE,
+	DESC_EPIS_ANAMNESIS VARCHAR2(4000) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0),
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_TEMP VARCHAR2(1) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	ID_DIAGNOSIS NUMBER(24,0),
+	FLG_CLASS VARCHAR2(1),
+
+	ID_PATIENT NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE epis_anamnesis IS 'Queixa + anamnese' ;
+
+COMMENT ON COLUMN epis_anamnesis.id_epis_anamnesis IS 'Chave primária' ;
+COMMENT ON COLUMN epis_anamnesis.dt_epis_anamnesis IS 'Data de registo' ;
+COMMENT ON COLUMN epis_anamnesis.desc_epis_anamnesis IS 'Queixa do paciente' ;
+COMMENT ON COLUMN epis_anamnesis.id_episode IS 'Chave primaria' ;
+COMMENT ON COLUMN epis_anamnesis.flg_type IS 'Tipo: C - queixa, A - anamnese' ;
+COMMENT ON COLUMN epis_anamnesis.flg_temp IS 'Indica se o registo é: H - histórico, T - temporário (temporariamente gravado(Auto Save)); D - definitivo' ;
+COMMENT ON COLUMN epis_anamnesis.id_institution IS 'Instituição onde foi registado.' ;
+COMMENT ON COLUMN epis_anamnesis.id_software IS 'Software onde foi registado.' ;
+COMMENT ON COLUMN epis_anamnesis.id_diagnosis IS 'Diagnóstico correspondente ao texto mais frequente seleccionado para registo da queixa / história' ;
+COMMENT ON COLUMN epis_anamnesis.flg_class IS 'A - motivo administrativo de consulta (CARE: texto + frequente do ICPC2)' ;
+COMMENT ON COLUMN epis_anamnesis.id_patient IS 'ID do paciente' ;
+
+alter table epis_anamnesis 
+add (dt_epis_anamnesis_tstz timestamp with local time zone); 
+
+
+--Emilia Taborda 2007/09/17
+alter table epis_anamnesis add (id_epis_anamnesis_parent number(24));
+comment on column epis_anamnesis.id_epis_anamnesis_parent
+  is 'epis_anamnesis base/original ';
+--Changed end
+
+--Emilia Taborda 2007/09/17
+alter table epis_anamnesis add flg_status varchar2(1);
+comment on column epis_anamnesis.flg_status
+  is 'estado: a - activo; o - outdated';
+--Changed end
+
+--Ariel Machado 2008/05/08
+ALTER TABLE EPIS_ANAMNESIS 
+ ADD (FLG_EDITION_TYPE VARCHAR2(1)) ;
+COMMENT ON COLUMN EPIS_ANAMNESIS.FLG_EDITION_TYPE IS 'Flag to indicate the type of edition that originate this record: ''N'' - New; ''E'' - Edit; ''A'' - Agree; ''U'' - Update; ''O'' - No changes; ''X'' - Exchange;' ;
+--Changed end
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-AGO-01
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15281
+
+
+COMMENT ON COLUMN  EPIS_ANAMNESIS.ID_PROFESSIONAL IS 'Professional ID'; 
+COMMENT ON COLUMN  EPIS_ANAMNESIS.DT_EPIS_ANAMNESIS_TSTZ IS 'Anamnsis episode date';
+
+-- CHANGED END: Nuno Ferreira
+
+ALTER TABLE EPIS_ANAMNESIS DROP COLUMN DT_EPIS_ANAMNESIS;
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 02/12/2010 16:15
+-- CHANGE REASON: [ALERT-146429] ddl.sql
+alter table epis_anamnesis add
+(
+  id_cancel_info_det number(24),
+  flg_reported_by    varchar2(1 char)
+)
+;
+
+comment on column epis_anamnesis.flg_status
+  is 'Record status: (A)ctive, (O)utdated, (C)ancelled.';
+comment on column epis_anamnesis.id_cancel_info_det
+  is 'Cancel information detail identifier.';
+comment on column epis_anamnesis.flg_reported_by
+  is 'Complaint reported by: (S)pouse, (P)atient, (F)amily, (R)egistrar, (O)ther.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:17
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EPIS_ANAMNESIS
+  is 'Complaint and anamnesis';
+-- Add comments to the columns 
+comment on column EPIS_ANAMNESIS.id_epis_anamnesis
+  is 'Primary keY';
+comment on column EPIS_ANAMNESIS.desc_epis_anamnesis_bck
+  is 'Patient complaint (DEPRECATED)';
+comment on column EPIS_ANAMNESIS.id_episode
+  is 'Episode ID';
+comment on column EPIS_ANAMNESIS.flg_type
+  is 'Type: C - Chief Complaint, A - Assessment';
+comment on column EPIS_ANAMNESIS.flg_temp
+  is 'Type of record: H - History, T - Temporary; D - Final';
+comment on column EPIS_ANAMNESIS.id_institution
+  is 'Institution where the record was made';
+comment on column EPIS_ANAMNESIS.id_software
+  is 'Software where the record was made';
+comment on column EPIS_ANAMNESIS.id_diagnosis
+  is 'Diagnosis associated to the chief complaint';
+comment on column EPIS_ANAMNESIS.flg_class
+  is 'A - Administrative reason for visit (CARE: Most frequent text +  ICPC2)';
+comment on column EPIS_ANAMNESIS.id_patient
+  is 'Patient ID';
+comment on column EPIS_ANAMNESIS.dt_epis_anamnesis_tstz
+  is 'Record date ';
+comment on column EPIS_ANAMNESIS.desc_epis_anamnesis
+  is 'Patient complaint';  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:30
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.epis_anamnesis move lob(desc_epis_anamnesis) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

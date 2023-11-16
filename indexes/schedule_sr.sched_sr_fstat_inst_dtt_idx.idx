@@ -1,0 +1,25 @@
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/12/2011 17:40
+-- CHANGE REASON: [ALERT-210634] Fix performance error - Issue Replication: [2.6.2] [PERFORMANCE] - SR_SearchActivePatientsResult01.swf
+
+BEGIN
+    EXECUTE IMMEDIATE 'create index SCHED_SR_FSTAT_INST_DTT_IDX on schedule_sr (FLG_STATUS, ID_INSTITUTION, DT_TARGET_TSTZ)
+  tablespace INDEX_L
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 2M
+    next 2M
+    minextents 1
+    maxextents unlimited
+    pctincrease 0
+  )';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+
+
+-- CHANGE END: António Neto

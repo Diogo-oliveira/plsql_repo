@@ -1,0 +1,17 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 02/12/2013 09:32
+-- CHANGE REASON: [ALERT-270040] 
+DECLARE e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX vsa_vs_IDX
+  ON VS_ATTRIBUTE_SOFT_INST (id_vital_sign)
+  TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

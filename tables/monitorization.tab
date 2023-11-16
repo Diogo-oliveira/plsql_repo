@@ -1,0 +1,165 @@
+
+
+  CREATE TABLE MONITORIZATION
+   (	ID_MONITORIZATION NUMBER(24,0) NOT NULL ENABLE,
+	DT_MONITORIZATION DATE NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	DT_BEGIN DATE,
+	FLG_TIME VARCHAR2(1) NOT NULL ENABLE,
+	DT_END DATE,
+	INTERVAL NUMBER(12,4),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_CANCEL DATE,
+
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	ID_EPISODE_ORIGIN NUMBER(24,0),
+	ID_EPISODE_DESTINATION NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE monitorization IS 'Monitorização ou requisição de leitura de SVs.' ;
+
+COMMENT ON COLUMN monitorization.flg_status IS 'Estado: A - em curso, F - terminado, C - cancelado, D - pendente' ;
+COMMENT ON COLUMN monitorization.id_episode_origin IS 'ID do episódio em que foi registada a req. inicialmente (se FLG_TIME = ''N'')' ;
+COMMENT ON COLUMN monitorization.id_episode_destination IS 'ID do episódio em que foi registada a req. destino (se FLG_TIME = ''N'')' ;
+COMMENT ON COLUMN monitorization.dt_monitorization IS 'Data do registo' ;
+COMMENT ON COLUMN monitorization.dt_begin IS 'Data pretendida para início da execução do exame (ie, ñ imediata)' ;
+COMMENT ON COLUMN monitorization.flg_time IS 'Realização: E - neste episódio; N - próximo episódio; B - entre episódios' ;
+COMMENT ON COLUMN monitorization.dt_end IS 'Data de fim, caso se tenha estabelecido intervalo de tempo entre leituras' ;
+COMMENT ON COLUMN monitorization.interval IS 'intervalo de tempo entre leituras' ;
+
+alter table MONITORIZATION add ID_PREV_EPISODE NUMBER(24);
+alter table monitorization 
+add (dt_monitorization_tstz timestamp with local time zone,
+     dt_begin_tstz timestamp with local time zone,
+     dt_end_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone);
+
+
+ALTER TABLE MONITORIZATION ADD (ID_PATIENT NUMBER(24));
+COMMENT ON COLUMN MONITORIZATION.ID_PATIENT IS 'Patient identifier';
+
+
+alter table monitorization drop column dt_monitorization;
+alter table monitorization drop column dt_begin;
+alter table monitorization drop column dt_cancel;
+
+
+
+alter table monitorization drop column DT_END;
+
+-- CHANGED BY: Hugo Vieira
+-- CHANGE DATE: 16/06/2010
+-- CHANGE REASON: 
+ALTER TABLE MONITORIZATION ADD (FLG_STATUS_PREV VARCHAR2(1 CHAR));
+-- CHANGE END: Hugo Vieira
+
+-- CHANGED BY: Hugo Vieira
+-- CHANGE DATE: 29/06/2010
+-- CHANGE REASON: [ALERT-104064]
+COMMENT ON COLUMN  MONITORIZATION.FLG_STATUS_PREV IS 'Previous Status'; 
+-- CHANGE END: Hugo Vieira
+
+-- CHANGED BY:  Vanessa Barsottelli
+-- CHANGE DATE: 06/06/2014 10:21
+-- CHANGE REASON: [ALERT-286893] DB Development - Monitoring add high number of characteres in the Notes field
+DECLARE
+    l_sql VARCHAR2(4000);
+BEGIN
+    l_sql := 'ALTER TABLE MONITORIZATION ADD CODE_NOTES VARCHAR2(200 CHAR)GENERATED ALWAYS AS (''ALERT.MONITORIZATION.NOTES.''|| TO_CHAR(ID_MONITORIZATION)) VIRTUAL';
+    pk_versioning.run(l_sql);
+END;
+
+COMMENT ON COLUMN monitorization.code_notes IS 'Monitorization notes';
+-- CHANGE END:  Vanessa Barsottelli
+
+-- CHANGED BY:  Vanessa Barsottelli
+-- CHANGE DATE: 06/06/2014 10:21
+-- CHANGE REASON: [ALERT-286893] DB Development - Monitoring add high number of characteres in the Notes field
+DECLARE
+    l_sql VARCHAR2(4000);
+BEGIN
+    l_sql := 'ALTER TABLE MONITORIZATION ADD CODE_NOTES VARCHAR2(200 CHAR)GENERATED ALWAYS AS (''ALERT.MONITORIZATION.NOTES.''|| TO_CHAR(ID_MONITORIZATION)) VIRTUAL';
+    pk_versioning.run(l_sql);
+END;
+/
+
+COMMENT ON COLUMN monitorization.code_notes IS 'Monitorization notes';
+-- CHANGE END:  Vanessa Barsottelli
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/04/2015 16:17
+-- CHANGE REASON: [ALERT-31026901] CO-SIGN  - Database model Versioning
+BEGIN
+pk_versioning.run(i_sql => 'ALTER TABLE MONITORIZATION ADD ID_CO_SIGN_ORDER NUMBER(24)');
+pk_versioning.run(i_sql => 'ALTER TABLE MONITORIZATION ADD ID_CO_SIGN_CANCEL NUMBER(24)');
+END;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model -cdoc - monitorizations, bedmanagement, hidrics
+-- Add comments to the table 
+comment on table MONITORIZATION
+  is 'Monitorization or Requisition of vital signs readings.';
+-- Add comments to the columns 
+comment on column MONITORIZATION.id_monitorization
+  is ' Monitorization request''''s ID;';
+comment on column MONITORIZATION.id_episode
+  is 'Episode IID';
+comment on column MONITORIZATION.id_professional
+  is 'Professional ID';
+comment on column MONITORIZATION.notes
+  is 'Monitorization Notes';
+comment on column MONITORIZATION.flg_time
+  is 'Execution type: in this (E)pisode, (B)etween episodes, (N)ext episode.';
+comment on column MONITORIZATION.interval
+  is 'Interval between readings';
+comment on column MONITORIZATION.flg_status
+  is 'Request''s status: A - In progress; C - Cancelled; D - Pending; F - Complete; I - Interrupted;R- Draft; E - Expired; ';
+comment on column MONITORIZATION.id_prof_cancel
+  is 'Professional Identifier that cancel the request';
+comment on column MONITORIZATION.notes_cancel
+  is 'Cancelation request notes';
+comment on column MONITORIZATION.id_episode_origin
+  is 'When the patient has an episode with an intervention request with FLG_TIME = ''N'', then the patient comes to another appointment and that request is duplicated to this new episode. In this new request, this column is filled with the episode ID of the first request.';
+comment on column MONITORIZATION.id_episode_destination
+  is 'Episode number where the destination requisiton was registred. Is filled only FLG_TIME = N ';
+comment on column MONITORIZATION.id_prev_episode
+  is 'Previous episode ID';
+comment on column MONITORIZATION.dt_monitorization_tstz
+  is 'Request''s monitorization date';
+comment on column MONITORIZATION.dt_begin_tstz
+  is 'Request''s begin date';
+comment on column MONITORIZATION.dt_end_tstz
+  is 'Request''s end date';
+comment on column MONITORIZATION.dt_cancel_tstz
+  is 'Request''s cancel date';
+comment on column MONITORIZATION.id_patient
+  is 'Patient identifier';
+comment on column MONITORIZATION.create_user
+  is 'Creation User';
+comment on column MONITORIZATION.create_time
+  is 'Creation Time';
+comment on column MONITORIZATION.create_institution
+  is 'Creation Institution';
+comment on column MONITORIZATION.update_user
+  is 'Update User';
+comment on column MONITORIZATION.update_time
+  is 'Update Time';
+comment on column MONITORIZATION.update_institution
+  is 'Update Institution';
+comment on column MONITORIZATION.flg_status_prev
+  is 'Previous Status';
+comment on column MONITORIZATION.code_notes
+  is 'Monitorization notes';
+comment on column MONITORIZATION.id_co_sign_order
+  is 'CoSign order identifier';
+comment on column MONITORIZATION.id_co_sign_cancel
+  is 'CoSign order cancelation';
+  
+-- CHANGE END: Pedro Fernandes

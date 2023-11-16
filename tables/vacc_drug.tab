@@ -1,0 +1,13 @@
+-- CHANGED BY:  NELSON CANASTRO
+-- CHANGE DATE: 01/09/2010 10:50
+-- CHANGE REASON: [ALERT-121259] Convert all ID_Drug columns to varchar2(255)
+    ALTER TABLE VACC_DRUG add id_drug_new VARCHAR2(255);
+
+    UPDATE VACC_DRUG
+       SET id_drug_new = to_char(id_drug);
+
+    ALTER TABLE VACC_DRUG drop CONSTRAINT VACC_DRUG_drug_fk;
+    ALTER TABLE VACC_DRUG drop column id_drug;
+    ALTER TABLE VACC_DRUG rename column id_drug_new TO id_drug;
+    ALTER TABLE VACC_DRUG modify id_drug VARCHAR2(255) NOT NULL;
+-- CHANGE END:  NELSON CANASTRO

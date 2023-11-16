@@ -1,0 +1,45 @@
+
+  ALTER TABLE P1_DETAIL ADD CONSTRAINT PEL_ERTX_FK FOREIGN KEY (ID_EXTERNAL_REQUEST)
+	  REFERENCES P1_EXTERNAL_REQUEST (ID_EXTERNAL_REQUEST) ENABLE;
+
+  ALTER TABLE P1_DETAIL ADD CONSTRAINT PEL_ERT_FK FOREIGN KEY (ID_TRACKING)
+	  REFERENCES P1_TRACKING (ID_TRACKING) ENABLE;
+
+  ALTER TABLE P1_DETAIL ADD CONSTRAINT PEL_INST_FK FOREIGN KEY (ID_INSTITUTION)
+	  REFERENCES INSTITUTION (ID_INSTITUTION) ENABLE;
+
+  ALTER TABLE P1_DETAIL ADD CONSTRAINT PEL_PROF_FK FOREIGN KEY (ID_PROFESSIONAL)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+
+
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/11/2010 14:20
+-- CHANGE REASON: [ALERT-137811] ALERT_75390 Possibilidade do médico hospital encaminhar o pedido para o administrativo hospital
+alter table P1_DETAIL drop constraint PEL_FLG_TYPE_CHK;
+alter table P1_DETAIL add constraint PEL_FLG_TYPE_CHK
+  check (FLG_TYPE IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,22,23 ,24, 25, 26, 27, 28, 29));
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/11/2010 15:52
+-- CHANGE REASON: [ALERT-137811] ALERT_75390 Possibilidade do médico hospital encaminhar o pedido para o administrativo hospital
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'PEL_FLG_TYPE_CHK'
+       AND u.table_name = 'P1_DETAIL';
+
+    IF l_count > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table P1_DETAIL drop constraint PEL_FLG_TYPE_CHK';
+    END IF;
+
+    EXECUTE IMMEDIATE 'ALTER TABLE p1_detail add CONSTRAINT pel_flg_type_chk CHECK(flg_type IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 29, 30))';
+END;
+/
+-- CHANGE END: Ana Monteiro

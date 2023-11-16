@@ -1,0 +1,106 @@
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:11
+-- CHANGE REASON: [ALERT-246248] 
+CREATE TABLE ANALYSIS_MIG_BCK AS
+SELECT s.name software_name,
+       (SELECT t.desc_lang_1 || ';' || t.desc_lang_2 || ';' || t.desc_lang_3 || ';' || t.desc_lang_4 || ';' ||
+               t.desc_lang_5 || ';' || t.desc_lang_6 || ';' || t.desc_lang_7 || ';' || t.desc_lang_11 || ';' ||
+               t.desc_lang_16 || ';' || t.desc_lang_17
+          FROM translation t
+         WHERE t.code_translation = a.code_analysis) analysis,
+       a.id_content id_content_analysis,
+       a.id_analysis,
+       a.barcode,
+       (SELECT t.desc_lang_1 || ';' || t.desc_lang_2 || ';' || t.desc_lang_3 || ';' || t.desc_lang_4 || ';' ||
+               t.desc_lang_5 || ';' || t.desc_lang_6 || ';' || t.desc_lang_7 || ';' || t.desc_lang_11 || ';' ||
+               t.desc_lang_16 || ';' || t.desc_lang_17
+          FROM translation t
+         WHERE t.code_translation = apt.code_analysis_parameter) parameter,
+       apt.id_content id_content_parameter,
+       a.flg_available,
+       a.gender,
+       (SELECT t.desc_lang_1 || ';' || t.desc_lang_2 || ';' || t.desc_lang_3 || ';' || t.desc_lang_4 || ';' ||
+               t.desc_lang_5 || ';' || t.desc_lang_6 || ';' || t.desc_lang_7 || ';' || t.desc_lang_11 || ';' ||
+               t.desc_lang_16 || ';' || t.desc_lang_17
+          FROM translation t
+         WHERE t.code_translation = st.code_sample_type) sample_type,
+       st.id_content id_content_sample_type,
+       (SELECT t.desc_lang_1 || ';' || t.desc_lang_2 || ';' || t.desc_lang_3 || ';' || t.desc_lang_4 || ';' ||
+               t.desc_lang_5 || ';' || t.desc_lang_6 || ';' || t.desc_lang_7 || ';' || t.desc_lang_11 || ';' ||
+               t.desc_lang_16 || ';' || t.desc_lang_17
+          FROM translation t
+         WHERE t.code_translation = sr.code_sample_recipient) sample_recipient,
+       sr.id_content id_content_sample_recipient,
+       (SELECT t.desc_lang_1 || ';' || t.desc_lang_2 || ';' || t.desc_lang_3 || ';' || t.desc_lang_4 || ';' ||
+               t.desc_lang_5 || ';' || t.desc_lang_6 || ';' || t.desc_lang_7 || ';' || t.desc_lang_11 || ';' ||
+               t.desc_lang_16 || ';' || t.desc_lang_17
+          FROM translation t
+         WHERE t.code_translation = ec.code_exam_cat) exam_cat,
+       ec.id_content id_content_exam_cat,
+       (SELECT t.desc_lang_1 || ';' || t.desc_lang_2 || ';' || t.desc_lang_3 || ';' || t.desc_lang_4 || ';' ||
+               t.desc_lang_5 || ';' || t.desc_lang_6 || ';' || t.desc_lang_7 || ';' || t.desc_lang_11 || ';' ||
+               t.desc_lang_16 || ';' || t.desc_lang_17
+          FROM translation t
+         WHERE t.code_translation = 'EXAM_CAT.CODE_EXAM_CAT.' || ec.parent_id) exam_cat_parent,
+       (SELECT ec2.id_content
+          FROM exam_cat ec2
+         WHERE ec2.id_exam_cat = ec.parent_id
+           AND ec.flg_available = 'Y'
+           AND ec2.flg_available = 'Y') id_content_parent_exam_cat,
+       ap.flg_fill_type flg_fill_type_ap,
+       (SELECT t.desc_lang_1 || ';' || t.desc_lang_2 || ';' || t.desc_lang_3 || ';' || t.desc_lang_4 || ';' ||
+               t.desc_lang_5 || ';' || t.desc_lang_6 || ';' || t.desc_lang_7 || ';' || t.desc_lang_11 || ';' ||
+               t.desc_lang_16 || ';' || t.desc_lang_17
+          FROM translation t
+         WHERE t.code_translation = um.code_unit_measure) unit_measure,
+       um.id_content id_content_unit_measure,
+       (SELECT t.desc_lang_1 || ';' || t.desc_lang_2 || ';' || t.desc_lang_3 || ';' || t.desc_lang_4 || ';' ||
+               t.desc_lang_5 || ';' || t.desc_lang_6 || ';' || t.desc_lang_7 || ';' || t.desc_lang_11 || ';' ||
+               t.desc_lang_16 || ';' || t.desc_lang_17
+          FROM translation t
+         WHERE t.code_translation = ad.code_analysis_desc) multichoice_options,
+       ad.id_content id_content_multichoice_options,
+       decode(ais.id_software, NULL, '-', 'X') pesq,
+       decode((SELECT apf.flg_type
+                FROM analysis_param_funcionality apf
+               WHERE apf.id_analysis_param = ap.id_analysis_param
+                 AND apf.flg_type = 'M'),
+              'M',
+              'X',
+              '-') gravida,
+       decode((SELECT apf.flg_type
+                FROM analysis_param_funcionality apf
+               WHERE apf.id_analysis_param = ap.id_analysis_param
+                 AND apf.flg_type = 'S'),
+              'S',
+              'X',
+              '-') historico
+  FROM analysis a
+  LEFT OUTER JOIN analysis_instit_soft ais
+    ON (ais.id_analysis = a.id_analysis AND ais.flg_available = 'Y')
+  JOIN software s
+    ON (s.id_software = ais.id_software)
+  LEFT OUTER JOIN analysis_param ap
+    ON (ap.id_analysis = a.id_analysis AND ap.flg_available = 'Y' AND ap.id_software = s.id_software)
+  LEFT OUTER JOIN analysis_parameter apt
+    ON (apt.id_analysis_parameter = ap.id_analysis_parameter AND apt.flg_available = 'Y')
+  LEFT OUTER JOIN sample_type st
+    ON (st.id_sample_type = a.id_sample_type AND st.flg_available = 'Y')
+  LEFT OUTER JOIN analysis_instit_recipient air
+    ON (air.id_analysis_instit_soft = ais.id_analysis_instit_soft AND air.flg_default = 'Y')
+  LEFT OUTER JOIN sample_recipient sr
+    ON (sr.id_sample_recipient = air.id_sample_recipient AND sr.flg_available = 'Y')
+  LEFT OUTER JOIN exam_cat ec
+    ON (ec.id_exam_cat = ais.id_exam_cat AND ec.flg_available = 'Y')
+  LEFT OUTER JOIN analysis_unit_measure aum
+    ON (aum.id_analysis = a.id_analysis AND aum.id_software = s.id_software AND
+       aum.id_analysis_parameter = ap.id_analysis_parameter AND aum.flg_default = 'Y')
+  LEFT OUTER JOIN unit_measure um
+    ON (um.id_unit_measure = aum.id_unit_measure AND um.flg_available = 'Y')
+  LEFT OUTER JOIN analysis_desc ad
+    ON (ad.id_analysis = a.id_analysis AND ad.id_analysis_parameter = apt.id_analysis_parameter AND
+       ad.flg_available = 'Y')
+ WHERE a.flg_available = 'Y'
+   AND s.id_software IN (1, 2, 3, 4, 8, 11, 12, 16)
+ ORDER BY 1, 2, 4;
+-- CHANGE END: Ana Matos

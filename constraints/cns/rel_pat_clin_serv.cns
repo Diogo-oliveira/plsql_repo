@@ -1,0 +1,15 @@
+-- Ana COELHO 26-05-2009                                                                                                                                                                                                 
+ALTER TABLE REL_PAT_CLIN_SERV ADD CONSTRAINT RPCS_UK UNIQUE (ID_CLINICAL_SERVICE, ID_SOFTWARE, ID_PATIENT);                                                                                                                                                                      
+ALTER TABLE REL_PAT_CLIN_SERV MODIFY (ID_PATIENT NOT NULL);                                                                                                                                                                                                                            
+ALTER TABLE REL_PAT_CLIN_SERV MODIFY (ID_CLINICAL_SERVICE" NOT NULL);                                                                                                                                                                                                                   
+ALTER TABLE REL_PAT_CLIN_SERV MODIFY (ID_SOFTWARE NOT NULL);                                                                                                                                                                                                                                                                                                                                                                                                                                            
+alter table rel_pat_clin_serv add constraint rpcs_fcrtvs_chk check(flg_create_visit in ('Y','N'));
+alter table rel_pat_clin_serv add constraint rpcs_pk primary key (id_patient,id_clinical_service,id_software,id_institution);
+alter table rel_pat_clin_serv drop constraint rpcs_uk;
+alter table rel_pat_clin_serv drop constraint RPCS_PK;
+alter table rel_pat_clin_serv modify(id_clinical_service null);
+alter table rel_pat_clin_serv add constraint rpcs_pat_cs_chk check((id_patient is not null and (id_clinical_service is not null or id_software=2)) or id_patient is null);
+alter table rel_pat_clin_serv modify(id_patient null);
+alter table rel_pat_clin_serv modify(id_institution not null);
+alter table rel_pat_clin_serv add constraint rpcs_pk primary key (id_patient,id_clinical_service,id_software,id_institution);
+--alter table rel_pat_clin_serv add constraint rpcs_pk primary key (id_patient,id_clinical_service,id_software,id_institution);

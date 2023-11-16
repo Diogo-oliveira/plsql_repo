@@ -1,0 +1,18 @@
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 14/10/2010
+-- CHANGE REASON: ALERT-130838
+DECLARE
+    e_pk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_exists, -02260);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_unit_measure_inst ADD CONSTRAINT vumi_pk PRIMARY KEY (id_institution, id_vital_sign)';
+    EXECUTE IMMEDIATE 'ALTER INDEX vumi_pk REBUILD TABLESPACE index_m';
+
+EXCEPTION
+    WHEN e_pk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+-- CHANGE END: Paulo Fonseca

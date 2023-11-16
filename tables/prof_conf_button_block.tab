@@ -1,0 +1,171 @@
+-- CHANGED BY: Teresa Coutinho
+-- CHANGE DATE: 28/04/2009 ALERT-1575
+create table PROF_CONF_BUTTON_BLOCK
+(
+  ID_CONF_BUTTON_BLOCK NUMBER(24) not null,
+  ID_PROFILE_TEMPLATE  NUMBER(12) not null,
+  CREATE_USER          VARCHAR2(24),
+  CREATE_TIME          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION   NUMBER(24),
+  UPDATE_USER          VARCHAR2(24),
+  UPDATE_TIME          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION   NUMBER(24)
+)
+;
+-- Add comments to the table 
+comment on table PROF_CONF_BUTTON_BLOCK
+  is 'This table stores the access of the profile to the conf_button_block';
+-- Add comments to the columns 
+comment on column PROF_CONF_BUTTON_BLOCK.ID_CONF_BUTTON_BLOCK
+  is 'Id CONF_BUTTON_BLOCK';
+comment on column PROF_CONF_BUTTON_BLOCK.ID_PROFILE_TEMPLATE
+  is 'Id PROFILE_TEMPLATE';
+comment on column PROF_CONF_BUTTON_BLOCK.CREATE_USER
+  is 'Creation User';
+comment on column PROF_CONF_BUTTON_BLOCK.CREATE_TIME
+  is 'Creation Time';
+comment on column PROF_CONF_BUTTON_BLOCK.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column PROF_CONF_BUTTON_BLOCK.UPDATE_USER
+  is 'Update User';
+comment on column PROF_CONF_BUTTON_BLOCK.UPDATE_TIME
+  is 'Update Time';
+comment on column PROF_CONF_BUTTON_BLOCK.UPDATE_INSTITUTION
+  is 'Update Institution';
+
+--CHANGE END
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 11:49
+-- CHANGE REASON: [ALERT-164552] soap blocks existing model changes
+declare
+  column_exists exception;
+  pragma exception_init(column_exists, -01430);
+begin
+  execute immediate '
+alter table prof_conf_button_block add (
+  id_market number(24)
+)
+';
+exception
+  when column_exists then dbms_output.put_line('columns ID_MARKET already exist');
+end;
+/
+
+comment on column prof_conf_button_block.id_market
+  is 'Market identifier.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 13:13
+-- CHANGE REASON: [ALERT-206287 ] H&P phase 2
+alter table prof_conf_button_block drop primary key drop index;
+
+alter table PROF_CONF_BUTTON_BLOCK
+  add constraint PCBB_PK primary key (ID_CONF_BUTTON_BLOCK, ID_PROFILE_TEMPLATE, id_market) novalidate;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('COMMENT ON COLUMN PROF_CONF_BUTTON_BLOCK.ID_CONF_BUTTON_BLOCK IS ''Button Block Configuration Identifier''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('COMMENT ON COLUMN PROF_CONF_BUTTON_BLOCK.ID_PROFILE_TEMPLATE IS ''Profile template identifier''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table PROF_CONF_BUTTON_BLOCK modify CREATE_USER varchar2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table PROF_CONF_BUTTON_BLOCK modify UPDATE_USER varchar2(0024 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table PROF_CONF_BUTTON_BLOCK modify ID_PROFILE_TEMPLATE number(24)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:45
+-- CHANGE REASON: [ALERT-226174] 
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    EXECUTE IMMEDIATE 'alter table prof_conf_button_block add id_category number(24) default -1 not null';
+EXCEPTION
+    WHEN e_column_already_there THEN
+      dbms_output.put_line('AVISO: Operação já executada anteriormente.');   
+END;
+/
+
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    EXECUTE IMMEDIATE 'alter table prof_conf_button_block add id_software number(24) default 0 not null';
+EXCEPTION
+    WHEN e_column_already_there THEN
+      dbms_output.put_line('AVISO: Operação já executada anteriormente.');   
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    EXECUTE IMMEDIATE 'alter table prof_conf_button_block add flg_config_type varchar2(1 char) default ''P'' not null';
+EXCEPTION
+    WHEN e_column_already_there THEN
+      dbms_output.put_line('AVISO: Operação já executada anteriormente.');   
+END;
+/
+
+COMMENT ON column prof_conf_button_block.id_software IS 'Software identifier.';
+COMMENT ON column prof_conf_button_block.id_category IS 'Category identifier.';
+COMMENT ON column prof_conf_button_block.flg_config_type IS 'Indicates the scope of the configuration. S - by Software: id_software<>0, id_category=-1 and id_profile_template=0; C - by category: id_software=0, id_category<>-1 and id_profile_template=0; P - by profile_template: id_software=0, id_category=-1 and id_profile_template<>0';
+-- CHANGE END: Luís Maia

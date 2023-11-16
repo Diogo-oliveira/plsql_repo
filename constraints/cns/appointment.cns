@@ -1,0 +1,29 @@
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 12-03-2010
+-- CHANGE REASON: SCH-386
+alter table APPOINTMENT add constraint APO_PK primary key (ID_CONTENT);
+alter table APPOINTMENT add constraint APO_FLG_AVA_UK check (flg_available in ('Y','N'));
+alter table APPOINTMENT add constraint APO_CS_EVE_UK unique (ID_CLINICAL_SERVICE, ID_SCH_EVENT);
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 31-03-2010
+-- CHANGE REASON: SCH-496
+alter table APPOINTMENT drop constraint APO_PK;
+alter table APPOINTMENT drop constraint APO_CS_EVE_UK;
+alter table APPOINTMENT add constraint APO_PK primary key (ID_CLINICAL_SERVICE, ID_SCH_EVENT);
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 14-04-2010
+-- CHANGE REASON: SCH-529
+ALTER TABLE APPOINTMENT DROP CONSTRAINT APO_FLG_AVA_UK;
+
+ALTER TABLE APPOINTMENT ADD CONSTRAINT APO_FLG_AVAIL_CHK check (flg_available in ('Y','N'));
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 19-10-2010
+-- CHANGE REASON: ALERT-104816
+ALTER TABLE APPOINTMENT ADD (CONSTRAINT APT_ID_APPOINT_UK UNIQUE (ID_APPOINTMENT));
+-- CHANGE END: Telmo Castro

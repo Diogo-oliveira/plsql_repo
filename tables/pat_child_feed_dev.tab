@@ -1,0 +1,71 @@
+
+
+  CREATE TABLE PAT_CHILD_FEED_DEV
+   (	ID_PAT_CHILD_FEED_DEV NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_CHILD_FEED_DEV DATE NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_CHILD_FEED_DEV NUMBER(12,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	CHILD_AGE NUMBER(2,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE pat_child_feed_dev IS 'Alimentação durante o1º ano de vida e desenvolvimento psicomotor' ;
+
+COMMENT ON COLUMN pat_child_feed_dev.dt_pat_child_feed_dev IS 'Data do registo' ;
+COMMENT ON COLUMN pat_child_feed_dev.child_age IS 'Idade da criança em meses' ;
+
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE REASON: Acrescentar campos à tabela
+-- CHANGE DATE: 2007/09/06
+-- Add/modify columns 
+alter table PAT_CHILD_FEED_DEV add   DT_CANCEL TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table PAT_CHILD_FEED_DEV add ID_PROF_CANCEL    NUMBER(24);
+alter table PAT_CHILD_FEED_DEV add FLG_STATUS        VARCHAR2(1) not null;
+alter table pat_child_feed_dev 
+ modify dt_pat_child_feed_dev TIMESTAMP(6) WITH LOCAL TIME ZONE;
+-- Add comments to the columns 
+comment on column PAT_CHILD_FEED_DEV.DT_CANCEL
+  is 'Data de cancelamento';
+comment on column PAT_CHILD_FEED_DEV.ID_PROF_CANCEL
+  is 'Profissional que fez o cancelamento';
+comment on column PAT_CHILD_FEED_DEV.FLG_STATUS
+  is 'Estado do registo.';
+
+-- CHANGE END
+
+--CHANGED BY:Teresa Coutinho
+--CHANGE DATE:2008-SEP-25
+--CHANGE REASON:Addition of column ID_EPISODE
+ALTER TABLE PAT_CHILD_FEED_DEV ADD ID_EPISODE NUMBER(24,0);	
+COMMENT ON COLUMN "ALERT"."PAT_CHILD_FEED_DEV"."ID_EPISODE" IS 'Episode ID';
+--CHANGE END
+
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 20/01/2016 11:20
+-- CHANGE REASON: [ALERT-317944 ] 
+-- Add comments to the table 
+comment on table PAT_CHILD_FEED_DEV
+  is 'Food during the first year of life and analysis psychomotor development parameters for a given patient';
+-- Add comments to the columns 
+comment on column PAT_CHILD_FEED_DEV.Id_Pat_Child_Feed_Dev
+  is 'Primary Key identifier';
+comment on column PAT_CHILD_FEED_DEV.dt_pat_child_feed_dev
+  is 'Registration date';
+comment on column PAT_CHILD_FEED_DEV.ID_PATIENT
+  is 'Patient Id';  
+comment on column PAT_CHILD_FEED_DEV.ID_CHILD_FEED_DEV
+  is 'Child feed development Id';  
+comment on column PAT_CHILD_FEED_DEV.Id_Professional
+  is 'Professional who made the registration';    
+comment on column PAT_CHILD_FEED_DEV.child_age
+  is 'Child age in months';
+comment on column PAT_CHILD_FEED_DEV.dt_cancel
+  is 'Date of cancellation';
+comment on column PAT_CHILD_FEED_DEV.id_prof_cancel
+  is 'Professional who made the cancellation';
+comment on column PAT_CHILD_FEED_DEV.flg_status
+  is 'Registration status';
+-- CHANGE END: cristina.oliveira

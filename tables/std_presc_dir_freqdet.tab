@@ -1,0 +1,80 @@
+-- Create table
+create table STD_PRESC_DIR_FREQDET
+(
+  ID_PRESC_DIR_FREQDET   NUMBER(24) not null,
+  ID_PRESC_DIR_DOSEFREQ  NUMBER(24) not null,
+  RANK                   NUMBER(6),
+  EDF_M_ID_PD_FREQUENCY  NUMBER(24),
+  EDF_MP_ID_PD_FREQUENCY NUMBER(24),
+  DF_WD_ID_PD_FREQUENCY  NUMBER(24),
+  DF_MD_ID_PD_FREQUENCY  NUMBER(24),
+  FREQDET_HOUR           INTERVAL DAY(3) TO SECOND(3),
+  FREQ_BEFORE_MEAL_DELAY INTERVAL DAY(3) TO SECOND(3),
+  FREQ_AFTER_MEAL_DELAY  INTERVAL DAY(3) TO SECOND(3),
+  CREATE_USER            VARCHAR2(24 CHAR),
+  CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION     NUMBER(24),
+  UPDATE_USER            VARCHAR2(24 CHAR),
+  UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION     NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table STD_PRESC_DIR_FREQDET
+  is 'Prescription directions frequency details';
+-- Add comments to the columns 
+comment on column STD_PRESC_DIR_FREQDET.ID_PRESC_DIR_FREQDET
+  is 'Prescription directions frequency detail ID';
+comment on column STD_PRESC_DIR_FREQDET.ID_PRESC_DIR_DOSEFREQ
+  is 'Prescription directions dose and frequency ID';
+comment on column STD_PRESC_DIR_FREQDET.RANK
+  is 'Rank detail';
+comment on column STD_PRESC_DIR_FREQDET.EDF_M_ID_PD_FREQUENCY
+  is 'Each day - Meal Frequency ID';
+comment on column STD_PRESC_DIR_FREQDET.EDF_MP_ID_PD_FREQUENCY
+  is 'Each day - Meal Period Frequency ID';
+comment on column STD_PRESC_DIR_FREQDET.DF_WD_ID_PD_FREQUENCY
+  is 'Week day Frequency ID';
+comment on column STD_PRESC_DIR_FREQDET.DF_MD_ID_PD_FREQUENCY
+  is 'Month day Frequency ID';
+comment on column STD_PRESC_DIR_FREQDET.FREQDET_HOUR
+  is 'Frequency hour - for date computations';
+comment on column STD_PRESC_DIR_FREQDET.FREQ_BEFORE_MEAL_DELAY
+  is 'Frequency delay - BEFORE meal - for date computations';
+comment on column STD_PRESC_DIR_FREQDET.FREQ_AFTER_MEAL_DELAY
+  is 'Frequency delay - AFTER meal - for date computations';
+comment on column STD_PRESC_DIR_FREQDET.CREATE_USER
+  is 'Creation User';
+comment on column STD_PRESC_DIR_FREQDET.CREATE_TIME
+  is 'Creation Time';
+comment on column STD_PRESC_DIR_FREQDET.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column STD_PRESC_DIR_FREQDET.UPDATE_USER
+  is 'Update User';
+comment on column STD_PRESC_DIR_FREQDET.UPDATE_TIME
+  is 'Update Time';
+comment on column STD_PRESC_DIR_FREQDET.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table STD_PRESC_DIR_FREQDET
+  add constraint SPD_FREQDET_PK primary key (ID_PRESC_DIR_FREQDET)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );

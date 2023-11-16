@@ -1,0 +1,28 @@
+-- ADDED BY: Jose Castro
+-- ADDED DATE: 25/05/2010
+-- ADDED REASON: ALERT-14487
+-- Create/Recreate primary, unique and foreign key constraints   
+alter table BODY_STRUCTURE_REL
+  add constraint BSP_BSE_FK foreign key (ID_BODY_STRUCTURE)
+  references BODY_STRUCTURE (ID_BODY_STRUCTURE);
+
+alter table BODY_STRUCTURE_REL
+  add constraint BSP_BSE_ID_FK foreign key (ID_MCS_CONCEPT)
+  references BODY_STRUCTURE (ID_MCS_CONCEPT);
+
+alter table BODY_STRUCTURE_REL
+  add constraint BSP_BSE_PRNT_FK foreign key (ID_MCS_CONCEPT_PARENT)
+  references BODY_STRUCTURE (ID_MCS_CONCEPT);
+
+alter table BODY_STRUCTURE_REL
+  add constraint BSP_INN_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION);
+-- ADDED END
+
+-- CHANGED BY: Jose Castro
+-- CHANGE DATE: 12/07/2010
+-- CHANGE REASON: ALERT-111130
+-- Enable/Disable primary, unique and foreign key constraints 
+alter table BODY_STRUCTURE_REL
+  disable constraint BSP_BSE_PRNT_FK;
+-- CHANGE END: Jose Castro

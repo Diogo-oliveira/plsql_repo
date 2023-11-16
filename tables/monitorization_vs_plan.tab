@@ -1,0 +1,135 @@
+
+
+  CREATE TABLE MONITORIZATION_VS_PLAN
+   (	ID_MONITORIZATION_VS_PLAN NUMBER(24,0) NOT NULL ENABLE,
+	DT_PLAN DATE NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_MONITORIZATION_VS NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE monitorization_vs_plan IS 'Contém as repetições de monitorizações pedidas.O nº de registos nesta tabela que estão associados à mesma monitorização correspondem ao nº de repetições de monitorizações pedidas.O intervalo de tempo entre cada monitorização é dado pelas datas planeadas.' ;
+
+COMMENT ON COLUMN monitorization_vs_plan.dt_plan IS 'Data planeada' ;
+COMMENT ON COLUMN monitorization_vs_plan.flg_status IS 'Estado: A - em curso, F - terminado, C - cancelado, D - pendente' ;
+
+alter table monitorization_vs_plan 
+add (dt_plan_tstz timestamp with local time zone);
+
+
+
+--Emilia Taborda 2007/10/16
+--Novas colunas:id_prof_performed;start_time;end_time
+alter table monitorization_vs_plan add (id_prof_performed  NUMBER(24),
+start_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+end_time TIMESTAMP(6) WITH LOCAL TIME ZONE);
+
+
+comment on column monitorization_vs_plan.id_prof_performed
+  is 'Profissional que executou a monitorização';
+  
+comment on column monitorization_vs_plan.start_time
+  is 'Inicio da execução da monitorização';
+  
+comment on column monitorization_vs_plan.end_time
+  is 'Fim da execução da monitorização';  
+  
+-- CHANGED BY: THIAGO BRITO
+-- CHANGE DATE: 06-JAN-2009
+-- CHANGE REASON: ALERT-12547
+
+ALTER TABLE monitorization_vs_plan drop column dt_plan;
+
+-- CHANGE END
+
+-- CHANGED BY: Hugo Vieira
+-- CHANGE DATE: 16/06/2010
+-- CHANGE REASON: 
+ALTER TABLE MONITORIZATION_VS_PLAN ADD (FLG_STATUS_PREV VARCHAR2(1 CHAR));
+-- CHANGE END: Hugo Vieira
+
+-- CHANGED BY: Hugo Vieira
+-- CHANGE DATE: 29/06/2010
+-- CHANGE REASON: [ALERT-104064]
+COMMENT ON COLUMN  MONITORIZATION_VS_PLAN.FLG_STATUS_PREV IS 'Previous Status'; 
+-- CHANGE END: Hugo Vieira
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 21/01/2016 11:18
+-- CHANGE REASON: [ALERT-318028] ALERT-318028  CDOC Functionalities V7
+-- Add comments to the table 
+comment on table MONITORIZATION_VS_PLAN
+  is 'Table with monitorizations occurrences ordered.
+The record number on this table that were associated to a single monitorization is related to the occurrences number of monitorizations ordered. 
+The interrval time between each monitorization is given by the planned dates
+';
+-- Add comments to the columns 
+comment on column MONITORIZATION_VS_PLAN.id_monitorization_vs_plan
+  is 'Monitorization Plan identifier';
+comment on column MONITORIZATION_VS_PLAN.flg_status
+  is ' Request''s status: A - In progress; C - Cancelled; D - Pending; F - Complete; I - Interrupted;R- Draft; E - Expired;  ';
+comment on column MONITORIZATION_VS_PLAN.id_monitorization_vs
+  is 'Monitorization vital sgin identifier';
+comment on column MONITORIZATION_VS_PLAN.dt_plan_tstz
+  is 'Register plan date';
+comment on column MONITORIZATION_VS_PLAN.id_prof_performed
+  is 'Profissional que executou a monitorização';
+comment on column MONITORIZATION_VS_PLAN.start_time
+  is 'Inicio da execução da monitorização';
+comment on column MONITORIZATION_VS_PLAN.end_time
+  is 'Fim da execução da monitorização';
+comment on column MONITORIZATION_VS_PLAN.create_user
+  is 'Creation User';
+comment on column MONITORIZATION_VS_PLAN.create_time
+  is 'Creation Time';
+comment on column MONITORIZATION_VS_PLAN.create_institution
+  is 'Creation Institution';
+comment on column MONITORIZATION_VS_PLAN.update_user
+  is 'Update User';
+comment on column MONITORIZATION_VS_PLAN.update_time
+  is 'Update Time';
+comment on column MONITORIZATION_VS_PLAN.update_institution
+  is 'Update Institution';
+comment on column MONITORIZATION_VS_PLAN.flg_status_prev
+  is 'Previous Status';
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 25/01/2016 09:12
+-- CHANGE REASON: [ALERT-318078] CDOC Functionalities V8
+-- Add comments to the table 
+comment on table MONITORIZATION_VS_PLAN
+  is 'Table with monitorizations occurrences ordered.
+The record number on this table that were associated to a single monitorization is related to the occurrences number of monitorizations ordered. 
+The interrval time between each monitorization is given by the planned dates
+';
+-- Add comments to the columns 
+comment on column MONITORIZATION_VS_PLAN.id_monitorization_vs_plan
+  is 'Monitorization Plan identifier';
+comment on column MONITORIZATION_VS_PLAN.flg_status
+  is ' Request''s status: A - In progress; C - Cancelled; D - Pending; F - Complete; I - Interrupted;R- Draft; E - Expired;  ';
+comment on column MONITORIZATION_VS_PLAN.id_monitorization_vs
+  is 'Monitorization vital sgin identifier';
+comment on column MONITORIZATION_VS_PLAN.dt_plan_tstz
+  is 'Register plan date';
+comment on column MONITORIZATION_VS_PLAN.id_prof_performed
+  is 'Profissional que executou a monitorização';
+comment on column MONITORIZATION_VS_PLAN.start_time
+  is 'Inicio da execução da monitorização';
+comment on column MONITORIZATION_VS_PLAN.end_time
+  is 'Fim da execução da monitorização';
+comment on column MONITORIZATION_VS_PLAN.create_user
+  is 'Creation User';
+comment on column MONITORIZATION_VS_PLAN.create_time
+  is 'Creation Time';
+comment on column MONITORIZATION_VS_PLAN.create_institution
+  is 'Creation Institution';
+comment on column MONITORIZATION_VS_PLAN.update_user
+  is 'Update User';
+comment on column MONITORIZATION_VS_PLAN.update_time
+  is 'Update Time';
+comment on column MONITORIZATION_VS_PLAN.update_institution
+  is 'Update Institution';
+comment on column MONITORIZATION_VS_PLAN.flg_status_prev
+  is 'Previous Status';
+-- CHANGE END: Pedro Fernandes

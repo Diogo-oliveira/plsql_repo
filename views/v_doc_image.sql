@@ -1,0 +1,20 @@
+CREATE OR REPLACE VIEW v_doc_image AS 
+SELECT id_doc_image,
+       id_doc_external,
+       rank,
+       file_name,
+       doc_img,
+       doc_img_thumbnail,
+       flg_import,
+       server_file_name,
+       flg_status,
+       id_professional,
+       flg_img_thumbnail,
+       dt_img_tstz,
+       dt_import_tstz,
+       dt_cancel,
+       id_prof_cancel,
+       title,
+       img_size,
+	   mime_type
+  FROM doc_image;

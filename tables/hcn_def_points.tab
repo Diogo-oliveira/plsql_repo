@@ -1,0 +1,33 @@
+	
+-- Create table
+create table HCN_DEF_POINTS
+(
+	ID_HCN_DEF_POINTS NUMBER(3) not null,
+	ID_DEPARTMENT NUMBER(24) not null,
+	POINTS_MIN_VALUE NUMBER(6,3) not null,
+	POINTS_MAX_VALUE NUMBER(6,3) not null,
+	NUM_HCN NUMBER(6,3) not null,
+	ID_INSTITUTION NUMBER(12) not null,
+	ID_SOFTWARE NUMBER(24) not null,
+	ADW_LAST_UPDATE DATE not null
+);
+
+-- Add comments to the table
+comment on table HCN_DEF_POINTS	is 'Esta tabela contém a parametrização da relação entre os pontos e as horas de cuidados de enfermagem';
+
+-- Add comments to the columns
+comment on column HCN_DEF_POINTS.ID_HCN_DEF_POINTS	is 'Chave primária';
+comment on column HCN_DEF_POINTS.ID_DEPARTMENT	is 'ID do serviço';
+comment on column HCN_DEF_POINTS.POINTS_MIN_VALUE	is 'Limite inferior da gama de pontos';
+comment on column HCN_DEF_POINTS.POINTS_MAX_VALUE	is 'Limite superior da gama de pontos';
+comment on column HCN_DEF_POINTS.NUM_HCN	is 'Número de horas de cuidados de enfermagem correspondentes';
+comment on column HCN_DEF_POINTS.ID_INSTITUTION	is 'ID da instituição (0 para todas)';
+comment on column HCN_DEF_POINTS.ID_SOFTWARE	is 'ID do software';
+comment on column HCN_DEF_POINTS.ADW_LAST_UPDATE	is 'Data da última alteração';
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 27/10/2010 12:14
+-- CHANGE REASON: [ALERT-135618] 
+ALTER TABLE HCN_DEF_POINTS
+enable CONSTRAINT HCN_DEF_POINTS_DEP_FK;
+-- CHANGE END: Luís Maia

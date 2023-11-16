@@ -1,0 +1,143 @@
+
+
+  ALTER TABLE SCHEDULE ADD CONSTRAINT SCHD_PK PRIMARY KEY (ID_SCHEDULE) ENABLE;
+
+  ALTER TABLE SCHEDULE MODIFY (ID_SCHEDULE NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE MODIFY (ID_INSTIT_REQUESTS NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE MODIFY (ID_INSTIT_REQUESTED NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE MODIFY (ID_DCS_REQUESTED NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE MODIFY (ID_PROF_SCHEDULES NOT NULL ENABLE);
+
+
+  ALTER TABLE SCHEDULE MODIFY (FLG_URGENCY NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE MODIFY (DT_SCHEDULE NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE MODIFY (FLG_STATUS NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE MODIFY (FLG_NOTIFICATION NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE ADD CONSTRAINT SCH_FLGVACANCY_C CHECK (FLG_VACANCY IN ('V', 'R', 'U')) ENABLE;
+
+ALTER TABLE schedule MODIFY (flg_sch_type DEFAULT 'C');
+ALTER TABLE schedule ADD CONSTRAINT sch_flgschtype_ck CHECK (flg_sch_type IN ('C', 'S', 'E', 'A')) ENABLE;
+
+ALTER TABLE schedule DROP CONSTRAINT sch_flgnotif_ck;
+ALTER TABLE schedule ADD CONSTRAINT sch_flgnotif_ck CHECK (flg_notification IN ('P','N','C'));
+
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 05-06-2008
+-- CHANGE REASON: a flg_sch_type passa a ser restringida por foreign key (para a sch_dep_type) em vez desta CK
+alter table SCHEDULE drop constraint SCH_FLGSCHTYPE_CK;
+--END
+
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 09-02-2009
+-- CHANGE REASON: alert-1031
+-- Create/Recreate check constraints 
+alter table schedule_outp
+drop constraint SOP_FLGSTATE_CK;
+
+alter table SCHEDULE_OUTP
+  add constraint SOP_FLGSTATE_CK
+  check (flg_state IN ('A', 'R', 'E', 'D', 'M', 'C', 'N', 'P', 'T', 'W'));
+--END
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 18/06/2009
+-- CHANGE REASON: [ALERT-32069] 
+alter table SCHEDULE
+  add constraint SCH_FLGPRESENT_CK
+  check (flg_present IN ('Y', 'N'));
+-- CHANGE END: Nuno Ferreira
+
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 13-10-2010
+-- CHANGE REASON: ALERT-148846
+begin
+  execute immediate 'alter table alert.schedule add constraint SCH_FLG_STATUS_CHK check (flg_status IN (''D'',''O'',''P'',''W'',''A'',''C'',''F'',''T'',''B'',''S''))';
+exception
+when others then null;
+end;
+/
+
+begin
+  execute immediate 'alter table alert.schedule add constraint SCH_FLG_SCH_VIA_CHK check (flg_schedule_via IN (''P'', ''T'', ''O'', ''N'', ''E'', ''F'', ''S'', ''M''))';
+exception
+when others then null;
+end;
+/
+
+begin
+  execute immediate 'alter table alert.schedule add constraint SCH_FLG_INST_CHK check (flg_instructions IN (''F'', ''N''))';
+exception
+when others then null;
+end;
+/
+
+begin
+  execute immediate 'alter table alert.schedule add constraint SCH_FLG_NOTIF_VIA_CHK check (flg_notification_via IN (''P'', ''T'', ''C'', ''E'', ''S''))';
+exception
+when others then null;
+end;
+/
+
+begin
+  execute immediate 'alter table alert.schedule add constraint SCH_FLG_REQ_TYPE_CHK check (flg_request_type IN (''E'', ''H'', ''M'', ''O'', ''U'', ''P''))';
+exception
+when others then null;
+end;
+/
+-- CHANGE END: Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 27-06-2013
+-- CHANGE REASON: ALERT-260738
+alter table SCHEDULE  add constraint SCH_FLG_R_TYPE_CHK check (flg_reason_type IN ('R', 'RP', 'C', 'RQ', 'RE'));
+-- CHANGE END: Telmo
+
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := 'alter table SCHEDULE drop constraint SCH_FLG_STATUS_CHK';
+	pk_versioning.run(l_sql);
+end;
+/
+	
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := q'[alter table SCHEDULE add constraint SCH_FLG_STATUS_CHK check (flg_status IN ('D','O','P','W','A','C','F','T','B','S','V'))]';
+	pk_versioning.run(l_sql);
+end;
+/
+
+
+
+
+
+-- CHANGED BY: Ana Moita
+-- CHANGE DATE: 07/08/2020 15:39
+-- CHANGE REASON: [EMR-33597] - [DB] New contact type in grids, save videoconf link
+DECLARE
+already_done EXCEPTION;
+PRAGMA EXCEPTION_INIT(already_done, -02264);
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE "SCH_GROUP" DROP CONSTRAINT "SGP_FLG_CON_TYPE_CHK"';
+EXECUTE IMMEDIATE 'ALTER TABLE "SCH_GROUP" ADD CONSTRAINT "SGP_FLG_CON_TYPE_CHK" CHECK (FLG_CONTACT_TYPE in (''I'', ''D'', ''P'', ''V'')) ENABLE';
+EXCEPTION
+WHEN already_done THEN
+dbms_output.put_line('Already done.');
+END;
+/
+-- CHANGE END: Ana Moita

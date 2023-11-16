@@ -1,0 +1,87 @@
+
+
+CREATE TABLE TI_LOG
+(
+ID_TI_LOG 	NUMBER(24)  NOT NULL ,
+ID_EPISODE	NUMBER(24)  NOT NULL ,
+ID_PROFESSIONAL NUMBER(24)  NOT NULL ,
+FLG_STATUS      VARCHAR2(0010) NOT NULL,
+ID_RECORD	NUMBER(24)  NOT NULL,
+FLG_TYPE        VARCHAR2(1) NOT NULL,
+RANK		NUMBER(6),
+DT_CREATION_TSTZ TIMESTAMP WITH LOCAL TIME ZONE
+);
+
+
+COMMENT ON COLUMN TI_LOG.ID_TI_LOG        IS 'Chave primária' ;
+COMMENT ON COLUMN TI_LOG.ID_EPISODE       IS 'id do episode' ;
+COMMENT ON COLUMN TI_LOG.ID_PROFESSIONAL  IS 'id do professional que provocou a inserçao' ;
+COMMENT ON COLUMN TI_LOG.FLG_STATUS       IS 'Novo estado na altura do save' ;
+COMMENT ON COLUMN TI_LOG.ID_RECORD        IS 'id do registo alterado ou criado' ;
+COMMENT ON COLUMN TI_LOG.FLG_TYPE         IS 'Tipo do record: I-Imagem; A-Analise; O-Outros exames;D-Drugs' ;
+COMMENT ON COLUMN TI_LOG.RANK             IS 'Rank 0-registo inicial' ;
+COMMENT ON COLUMN TI_LOG.DT_CREATION_TSTZ IS 'Data da criação do texto' ;
+
+
+alter table TI_LOG modify FLG_TYPE VARCHAR2(2);
+comment on column TI_LOG.FLG_TYPE  is 'Tipo do record: I-Imagem; AR-Analise Requisiçao; AH-Analise Colheita; O-Outros exames; D-Drugs';
+
+comment on column TI_LOG.FLG_TYPE is 'Tipo do record: I-Imagem; AR-Analise Requisiçao; AD-Analise Requisiçao Det.; AH-Analise Colheita; O-Outros exames; D-Drugs';
+
+comment on column TI_LOG.FLG_TYPE is 'Tipo do record: I-Imagem; AR-Analise Requisiçao; AD-Analise Requisiçao Det.; AH-Analise Colheita; O-Outros exames; D-Drugs; VS-Vital Signs';
+
+-- inpatient 28-05-2008
+comment on column TI_LOG.FLG_TYPE is 'Tipo do record: I-Imagem; AR-Analise Requisiçao; AD-Analise Requisiçao Det.; AH-Analise Colheita; O-Outros exames; D-Drugs; VS-Vital Signs; MN-Monitorization';
+--
+-- inpatient 28-05-2008
+comment on column TI_LOG.FLG_TYPE is 'Tipo do record: I-Imagem; AR-Analise Requisiçao; AD-Analise Requisiçao Det.; AH-Analise Colheita; O-Outros exames; D-Drugs; VS-Vital Signs; MN-Monitorization; PR-Procedures';
+--
+
+-- INPATIENT LMAIA 14-01-2009
+comment on column TI_LOG.FLG_TYPE is 'Tipo do record: I-Imagem; AR-Analise Requisiçao; AD-Analise Requisiçao Det.; AH-Analise Colheita; O-Outros exames; D-Drugs; VS-Vital Signs; MN-Monitorization; PR-Procedures;BH-Balanço hídrico; RD-Registo de diurese';
+-- END
+
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 19/02/2009 18:15
+-- CHANGE REASON: [ALERT-18070] Body Diagrams TI
+comment on column TI_LOG.FLG_TYPE is 'Tipo do record: I-Imagem; AR-Analise Requisiçao; AD-Analise Requisiçao Det.; AH-Analise Colheita; O-Outros exames; D-Drugs; VS-Vital Signs; MN-Monitorization; PR-Procedures;BH-Balanço hídrico; RD-Registo de diurese; BD-Body Diagram';
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 27-04-2009
+-- CHANGE REASON: ALERT-25403
+comment on column TI_LOG.FLG_TYPE
+  is 'Tipo do record: I-Imagem; ME-Receitas para o exterior; ML-Medicação para o local; MH-Receitas para a farmácia da instituição; MR-Relatos; AR-Analise Requisiçao; AD-Analise Requisiçao Det.; AH-Analise Colheita; O-Outros exames; D-Drugs; VS-Vital Signs; MN-Monitorization; PR-Procedures;BH-Balanço hídrico; RD-Registo de diurese; BD-Body Diagram';
+-- CHANGE END
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 28/10/2009 19:27
+-- CHANGE REASON: [ALERT-52602] Desenvolvimentos Director Clinico ALERT_34026
+comment on column TI_LOG.FLG_TYPE
+  is 'Tipo do record: I-Imagem; ME-Receitas para o exterior; ML-Medicação para o local; MH-Receitas para a farmácia da instituição; MR-Relatos; AR-Analise Requisiçao; AD-Analise Requisiçao Det.; AH-Analise Colheita; O-Outros exames; D-Drugs; VS-Vital Signs; MN-Monitorization; PR-Procedures;BH-Balanço hídrico; RD-Registo de diurese; BD-Body Diagram; SR - Surgery process';
+--END CHANGE: Filipe Silva
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 20:55
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+comment on column TI_LOG.FLG_TYPE
+  is 'Tipo do record: I-Imagem; ME-Receitas para o exterior; ML-Medicação para o local; MH-Receitas para a farmácia da instituição; MR-Relatos; AR-Analise Requisiçao; AD-Analise Requisiçao Det.; AH-Analise Colheita; O-Outros exames; D-Drugs; VS-Vital Signs; MN-Monitorization; PR-Procedures;BH-Balanço hídrico; RD-Registo de diurese; BD-Body Diagram; SR - Surgery process; HI - Hidrics intake';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/04/2014 10:47
+-- CHANGE REASON: [ALERT-275664] 
+comment on column TI_LOG.flg_type
+  is 'Tipo do record: I-Imagem; ME-Receitas para o exterior; ML-Medicação para o local; MH-Receitas para a farmácia da instituição; MR-Relatos; AR-Analise Requisiçao; AD-Analise Requisiçao Det.; AH-Analise Colheita; O-Outros exames; D-Drugs; VS-Vital Signs; MN-Monitorization; PR-Procedures;BH-Balanço hídrico; RD-Registo de diurese; BD-Body Diagram; SR - Surgery process; HI - Hidrics intake; CO - Communication order';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 07/03/2017 16:02
+-- CHANGE REASON: [ALERT-329008] Enable logging of ID_PROFESSIONAL, DT_REGISTER of who registers the admission
+comment on column ti_log.flg_type
+  IS 'Tipo do record: I-Imagem; ME-Receitas para o exterior; ML-Medicação para o local; MH-Receitas para a farmácia da instituição; MR-Relatos; AR-Analise Requisiçao; AD-Analise Requisiçao Det.; AH-Analise Colheita; O-Outros exames; D-Drugs; VS-Vital Signs; MN-Monitorization; PR-Procedures;BH-Balanço hídrico; RD-Registo de diurese; BD-Body Diagram; SR - Surgery process; HI - Hidrics intake; CO - Communication order; SH - Schedule OUTP';
+-- CHANGE END: Vanessa Barsottelli

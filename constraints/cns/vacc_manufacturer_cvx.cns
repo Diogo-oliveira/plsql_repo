@@ -1,0 +1,13 @@
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 04/06/2014 08:55
+-- CHANGE REASON: [ALERT-286877] 
+declare
+  others exception;
+  pragma exception_init(others, -02260);
+begin
+  execute immediate 'alter TABLE vacc_manufacturer_cvx ADD CONSTRAINT  vmc_cons unique (id_vacc_manufacturer, cvx_code)';
+exception when others then
+  dbms_output.put_line('constraint key vmc_cons exists!');
+end;
+/
+-- CHANGE END: Jorge Silva

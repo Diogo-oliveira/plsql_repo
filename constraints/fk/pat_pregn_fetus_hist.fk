@@ -1,0 +1,17 @@
+ALTER TABLE pat_pregn_fetus_hist ADD CONSTRAINT PPFH_PPYH_FK FOREIGN KEY (id_pat_pregnancy_hist)
+  REFERENCES pat_pregnancy_hist (id_pat_pregnancy_hist) ENABLE;
+  
+ALTER TABLE pat_pregn_fetus_hist ADD CONSTRAINT PPFH_PPF_FK FOREIGN KEY (id_pat_pregn_fetus)
+  REFERENCES pat_pregn_fetus (id_pat_pregn_fetus) ENABLE;
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 19/02/2010 11:04
+-- CHANGE REASON: [ALERT-75562] Developments on Partogram templates
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE pat_pregn_fetus_hist ADD CONSTRAINT PPFH_UNITM_FK FOREIGN KEY (ID_UNIT_MEASURE) REFERENCES UNIT_MEASURE (ID_UNIT_MEASURE) ENABLE';
+EXCEPTION
+WHEN OTHERS THEN
+  NULL;
+END;
+/
+-- CHANGE END: José Silva

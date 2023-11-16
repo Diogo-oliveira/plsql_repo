@@ -1,0 +1,19 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 11/07/2016 11:01
+-- CHANGE REASON: [ALERT-323088] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX edl_epis_diagram_idx
+  ON epis_diagram_layout (ID_epis_diagram)
+  TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

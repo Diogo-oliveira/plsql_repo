@@ -1,0 +1,2 @@
+GRANT EXECUTE ON ALERT.t_table_dialysis TO ALERT_DATA_ACCESS;
+/

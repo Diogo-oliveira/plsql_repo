@@ -1,0 +1,30 @@
+
+create table AUDIT_CRITERIA
+(
+	ID_AUDIT_CRITERIA NUMBER,
+	ID_AUDIT_TYPE NUMBER,
+	CODE_AUDIT_CRITERIA VARCHAR2(200),
+	FLG_FOR VARCHAR2(1),
+	FLG_ANS_TYPE VARCHAR2(1),
+	FLG_REQUIRED VARCHAR2(1),
+	FLG_ANS_CRITERIA VARCHAR2(1),
+	ADW_LAST_UPDATE DATE DEFAULT SYSDATE
+);
+
+comment on table AUDIT_CRITERIA
+	is 'Pergunta efectuada numa auditoria';
+comment on column AUDIT_CRITERIA.ID_AUDIT_CRITERIA
+	is 'chave primária';
+comment on column AUDIT_CRITERIA.CODE_AUDIT_CRITERIA
+	is 'código para a tabela translation';
+comment on column AUDIT_CRITERIA.FLG_FOR
+	is 'E - pergunta por episódio, P - pergunta por profissional (tipo retrospectiva), A - pergunta por auditoria';
+comment on column AUDIT_CRITERIA.ID_AUDIT_TYPE
+	is 'tipo de auditoria associada';
+comment on column AUDIT_CRITERIA.FLG_ANS_TYPE
+	is 'B - resposta booleana (yes/no), T - resposta em texto, Q - resposta quantitativa (calculada automaticamente, com respostas com o mesmo critério)';
+comment on column AUDIT_CRITERIA.FLG_REQUIRED
+	is 'Y - resposta obrigatória, N - resposta opcional';
+comment on column AUDIT_CRITERIA.FLG_ANS_CRITERIA
+	is 'Tipo de critério, para contagem de respostas correctas: F - fluxogramas; D - discriminadores; P - prioridades; R - régua da dor; L - documentação legível';
+

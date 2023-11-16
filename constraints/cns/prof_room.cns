@@ -1,0 +1,74 @@
+
+
+  ALTER TABLE PROF_ROOM ADD CONSTRAINT SPR_PK PRIMARY KEY (ID_PROF_ROOM) ENABLE;
+
+  ALTER TABLE PROF_ROOM MODIFY (ID_PROF_ROOM NOT NULL ENABLE);
+
+  ALTER TABLE PROF_ROOM MODIFY (ID_PROFESSIONAL NOT NULL ENABLE);
+
+  ALTER TABLE PROF_ROOM MODIFY (ID_ROOM NOT NULL ENABLE);
+
+  ALTER TABLE PROF_ROOM MODIFY (FLG_PREF NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:43
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_ROOM add constraint PROF_ROOM_FLG_PREF_CHK check ( FLG_PREF in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 11/07/2011 17:45
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_ROOM add constraint PROF_ROOM_FLG_PREF_CHK check ( FLG_PREF in (''N'',''Y'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/07/2011 12:02
+-- CHANGE REASON: [ALERT-187577] grouping changes with novalidate
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_ROOM add constraint PROF_ROOM_FLG_PREF_CHK check ( FLG_PREF in (''N'',''Y'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

@@ -1,0 +1,198 @@
+-- ADDED BY: Jose Castro
+-- ADDED DATE: 17/02/2011
+-- ADDED REASON: ALERT-842
+-- Create table
+create table HARVEST_HIST
+(
+  dt_harvest_hist       TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  id_harvest            NUMBER(24) not null,
+  id_episode            NUMBER(24),
+  id_prof_harvest       NUMBER(24),
+  flg_status            VARCHAR2(1 CHAR) not null,
+  num_recipient         NUMBER(6) not null,
+  notes                 VARCHAR2(4000),
+  id_body_part          NUMBER(12),
+  id_prof_mov_tube      NUMBER(24),
+  id_prof_receive_tube  NUMBER(24),
+  id_room_harvest       NUMBER(24),
+  id_room_receive_tube  NUMBER(24),
+  id_prof_cancels       NUMBER(24),
+  notes_cancel          VARCHAR2(4000),
+  barcode               VARCHAR2(30 CHAR),
+  id_institution        NUMBER(24),
+  id_episode_write      NUMBER(24),
+  dt_harvest_tstz       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_mov_begin_tstz     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_lab_reception_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_cancel_tstz        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  flg_chargeable        VARCHAR2(1 CHAR),
+  id_visit              NUMBER(24),
+  id_patient            NUMBER(24) not null,
+  flg_print             VARCHAR2(1 CHAR) not null,
+  create_user           VARCHAR2(24 CHAR),
+  create_time           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution    NUMBER(24),
+  update_user           VARCHAR2(24 CHAR),
+  update_time           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution    NUMBER(24),
+  id_cancel_reason      NUMBER(24),
+  flg_orig_harvest      VARCHAR2(1 CHAR),
+  dt_harvest_reg_tstz   TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  id_rep_coll_reason number(24),
+  id_group_harvest number(24)
+);
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 01/09/2011 17:25
+-- CHANGE REASON: [ALERT-193514] 
+alter table harvest_hist add (dt_begin_harvest TIMESTAMP WITH LOCAL TIME ZONE);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 27/03/2013 15:51
+-- CHANGE REASON: [ALERT-254656] 
+begin
+pk_versioning.run(i_sql => 'ALTER TABLE HARVEST_HIST ADD (FLG_COL_INST VARCHAR2(1 CHAR))');
+end;
+/
+
+COMMENT ON COLUMN HARVEST_HIST.FLG_COL_INST IS 'Flag that indicates if the collection is outside the institution';
+
+COMMENT ON COLUMN HARVEST_HIST.ID_INSTITUTION IS 'Instituion that receives the harvest for analysis';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/09/2013 09:09
+-- CHANGE REASON: [ALERT-264901] 
+ALTER TABLE HARVEST_HIST DROP COLUMN ID_GROUP_HARVEST;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/09/2013 09:09
+-- CHANGE REASON: [ALERT-264901] 
+ALTER TABLE HARVEST_HIST ADD (ID_HARVEST_GROUP NUMBER(24), PROF_DEP_CLIN_SERV NUMBER(24));
+
+COMMENT ON TABLE HARVEST_HIST IS 'Harvest history table';
+
+COMMENT ON COLUMN HARVEST_HIST.DT_HARVEST_HIST IS 'Date when the register was made';
+COMMENT ON COLUMN HARVEST_HIST.ID_HARVEST IS 'Harvest ID';
+COMMENT ON COLUMN HARVEST_HIST.ID_HARVEST_GROUP IS 'Harvest group ID';
+COMMENT ON COLUMN HARVEST_HIST.ID_PATIENT IS 'Pacient ID';
+COMMENT ON COLUMN HARVEST_HIST.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN HARVEST_HIST.ID_VISIT IS 'Visit ID';
+COMMENT ON COLUMN HARVEST_HIST.FLG_STATUS IS 'Flag that indicates the harvest status';
+COMMENT ON COLUMN HARVEST_HIST.ID_PROF_HARVEST IS 'Professional that registers the harvest';
+COMMENT ON COLUMN HARVEST_HIST.PROF_DEP_CLIN_SERV IS 'Professional''s clinical service ID';
+COMMENT ON COLUMN HARVEST_HIST.DT_HARVEST_REG_TSTZ IS 'Date that indicates when the harvest was registered';
+COMMENT ON COLUMN HARVEST_HIST.DT_HARVEST_TSTZ IS 'Date for which the harvest is to be performed';
+COMMENT ON COLUMN HARVEST_HIST.DT_BEGIN_HARVEST IS 'Date for which the harvest is planned';
+COMMENT ON COLUMN HARVEST_HIST.NUM_RECIPIENT IS 'Number of recipients';
+COMMENT ON COLUMN HARVEST_HIST.BARCODE IS 'Harvest barcode';
+COMMENT ON COLUMN HARVEST_HIST.ID_BODY_PART IS 'Body part ID';
+COMMENT ON COLUMN HARVEST_HIST.NOTES IS 'Notes';
+COMMENT ON COLUMN HARVEST_HIST.FLG_COL_INST IS 'Flag that indicates if the lab tests will be collected in the institution or not';
+COMMENT ON COLUMN HARVEST_HIST.ID_ROOM_HARVEST IS 'Harvest room ID';
+COMMENT ON COLUMN HARVEST_HIST.ID_INSTITUTION IS 'Instituion ID that receives the harvest for analysis';
+COMMENT ON COLUMN HARVEST_HIST.ID_EPISODE_WRITE IS 'Episode ID where the transportation was finished';
+COMMENT ON COLUMN HARVEST_HIST.ID_PROF_MOV_TUBE IS 'Professional ID that begins the transportation';
+COMMENT ON COLUMN HARVEST_HIST.DT_MOV_BEGIN_TSTZ IS 'Date that indicates the transportation beginning';
+COMMENT ON COLUMN HARVEST_HIST.DT_LAB_RECEPTION_TSTZ IS 'Date that indicates when the laboratory received the tube';
+COMMENT ON COLUMN HARVEST_HIST.ID_PROF_RECEIVE_TUBE IS 'Professional ID that received the tube';
+COMMENT ON COLUMN HARVEST_HIST.ID_ROOM_RECEIVE_TUBE IS 'Room ID that indicated the location where the tube was received';
+COMMENT ON COLUMN HARVEST_HIST.FLG_PRINT IS 'Flag that indicates the Insurance Covering verification';
+COMMENT ON COLUMN HARVEST_HIST.FLG_CHARGEABLE IS 'Flag that indicates if the harvest is to be charged by the external system';
+COMMENT ON COLUMN HARVEST_HIST.FLG_ORIG_HARVEST IS 'Flag that indicates the harvest origin';
+COMMENT ON COLUMN HARVEST_HIST.ID_REP_COLL_REASON IS 'Repeat harvest reason ID';
+COMMENT ON COLUMN HARVEST_HIST.ID_PROF_CANCELS IS 'Professional that cancels the harvest';
+COMMENT ON COLUMN HARVEST_HIST.DT_CANCEL_TSTZ IS 'Date that indicates when the harvest was cancelled';
+COMMENT ON COLUMN HARVEST_HIST.ID_CANCEL_REASON IS 'Cancel reason ID';
+COMMENT ON COLUMN HARVEST_HIST.NOTES_CANCEL IS 'Cancelation notes';
+COMMENT ON COLUMN HARVEST_HIST.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN HARVEST_HIST.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN HARVEST_HIST.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN HARVEST_HIST.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN HARVEST_HIST.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN HARVEST_HIST.UPDATE_INSTITUTION IS 'Update Institution';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 25/09/2013 09:48
+-- CHANGE REASON: [ALERT-265699] 
+ALTER TABLE HARVEST_HIST 
+ ADD (FLG_MOV_TUBE VARCHAR2(1));
+
+COMMENT ON COLUMN HARVEST_HIST.FLG_MOV_TUBE IS 'Flag that indicates the specimen transportation mode';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/05/2014 15:11
+-- CHANGE REASON: [ ALERT-285475] 
+ALTER TABLE HARVEST_HIST ADD (FLG_LATERALITY VARCHAR2(1 CHAR), FLG_COLLECTION_METHOD VARCHAR2(1 CHAR), ID_SPECIMEN_CONDITION NUMBER(24));
+
+COMMENT ON COLUMN HARVEST_HIST.FLG_LATERALITY IS 'Flag that indicates the laterality';
+
+COMMENT ON COLUMN HARVEST_HIST.FLG_COLLECTION_METHOD IS 'Flag that indicates the collection method';
+
+COMMENT ON COLUMN HARVEST.ID_SPECIMEN_CONDITION IS 'Specimen condition ID';
+
+
+ALTER TABLE HARVEST_HIST MODIFY BARCODE VARCHAR2(30 CHAR);
+ALTER TABLE HARVEST_HIST MODIFY CREATE_USER VARCHAR2(24 CHAR);
+ALTER TABLE HARVEST_HIST MODIFY FLG_CHARGEABLE VARCHAR2(1 CHAR);
+ALTER TABLE HARVEST_HIST MODIFY FLG_COL_INST VARCHAR2(1 CHAR);
+ALTER TABLE HARVEST_HIST MODIFY FLG_MOV_TUBE VARCHAR2(1 CHAR);
+ALTER TABLE HARVEST_HIST MODIFY FLG_ORIG_HARVEST VARCHAR2(1 CHAR);
+ALTER TABLE HARVEST_HIST MODIFY FLG_PRINT VARCHAR2(1 CHAR);
+ALTER TABLE HARVEST_HIST MODIFY FLG_STATUS VARCHAR2(1 CHAR);
+ALTER TABLE HARVEST_HIST MODIFY NOTES VARCHAR2(1000 CHAR);
+ALTER TABLE HARVEST_HIST MODIFY NOTES_CANCEL VARCHAR2(1000 CHAR);
+ALTER TABLE HARVEST_HIST MODIFY UPDATE_USER VARCHAR2(24 CHAR);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 07/07/2014 10:51
+-- CHANGE REASON: [ALERT-289537 ] 
+DECLARE e_column_already_there EXCEPTION;
+e_invalid_identifier EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE HARVEST_HIST ADD (AMOUNT VARCHAR2(30 CHAR))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN HARVEST_HIST.AMOUNT IS ''Specimen collection amount''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:01
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON COLUMN HARVEST_HIST.ID_SPECIMEN_CONDITION IS 'Specimen condition ID';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/10/2018 09:57
+-- CHANGE REASON: [EMR-7619] 
+ALTER TABLE HARVEST_HIST ADD ID_REVISED_BY NUMBER(24);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 09/09/2019 11:27
+-- CHANGE REASON: [EMR-19877]
+ALTER TABLE harvest_hist ADD HARVEST_INSTRUCTIONS VARCHAR2(1000 CHAR);
+
+COMMENT ON COLUMN harvest_hist.id_revised_by IS 'Professional ID that revises the collection';
+COMMENT ON COLUMN harvest_hist.harvest_instructions IS 'Instructions for collection';
+-- CHANGE END: Ana Matos

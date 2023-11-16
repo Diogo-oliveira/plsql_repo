@@ -1,0 +1,27 @@
+
+
+  ALTER TABLE EPIS_RECOMEND ADD CONSTRAINT ERND_EPIS_FK FOREIGN KEY (ID_EPISODE)
+	  REFERENCES EPISODE (ID_EPISODE) ENABLE;
+
+  ALTER TABLE EPIS_RECOMEND ADD CONSTRAINT ERND_PROF_FK FOREIGN KEY (ID_PROFESSIONAL)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+ALTER TABLE EPIS_RECOMEND ADD CONSTRAINT ERND_NOTES_CFG_FK FOREIGN KEY (ID_NOTES_CONFIG) REFERENCES NOTES_CONFIG (ID_NOTES_CONFIG);
+
+
+--CHANGED BY: Ariel Geraldo Machado
+--CHANGE DATE: 2008-SEP-16
+--CHANGE REASON: Database denormalization
+ALTER TABLE epis_recomend add CONSTRAINT ernd_pat_fk foreign key(id_patient) references patient(id_patient) enable;
+--CHANGE END
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 02/12/2010 16:15
+-- CHANGE REASON: [ALERT-146429] ddl.sql
+alter table epis_recomend
+  add constraint ernd_ernd_fk foreign key (id_epis_recomend_parent)
+  references epis_recomend (id_epis_recomend);
+alter table epis_recomend
+  add constraint ernd_cid_fk foreign key (id_cancel_info_det)
+  references cancel_info_det (id_cancel_info_det);
+-- CHANGE END: Pedro Carneiro

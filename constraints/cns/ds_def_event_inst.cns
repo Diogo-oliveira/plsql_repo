@@ -1,0 +1,21 @@
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 16:06
+-- CHANGE REASON: [ARCH-7603] - Changes on DB Model
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_DEF_EVENT_INST  add constraint DSDE_ISNT_PK primary key (id_def_event_inst)  using index tablespace ALERT_IDX';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_DEF_EVENT_INST  add constraint DSDE_I_DSDE_I_UK unique (id_ds_cmpt_inst_rel, id_ds_cmpt_mkt_rel, id_action) using index tablespace ALERT_IDX';
+pk_versioning.run( l_sql );
+end;
+/
+-- CHANGE END: Elisabete Bugalho

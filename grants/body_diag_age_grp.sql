@@ -1,0 +1,18 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 29/05/2009 09:02
+-- CHANGE REASON: [ALERT-19154] Body diagram - Filter images by age
+GRANT SELECT ON BODY_DIAG_AGE_GRP TO alert_viewer;
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 08/03/2010 18:35
+-- CHANGE REASON: [ALERT-80012] 
+grant select, references on BODY_DIAG_AGE_GRP to ALERT_DEFAULT;
+-- CHANGE END: Susana Silva
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2017-1-03
+-- CHANGED REASON: ALERT-327486
+grant SELECT on ALERT.BODY_DIAG_AGE_GRP to ALERT_APEX_TOOLS;
+-- CHANGE END: Humberto Cardoso

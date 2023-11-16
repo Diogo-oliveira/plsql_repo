@@ -1,0 +1,26 @@
+create table epis_supplies
+(id_epis_supplies  number(24,0) not null enable,
+id_episode number(24,0) not null enable,
+id_epis_context number(24),	
+flg_type varchar2(2) not null enable,
+dt_creation TIMESTAMP(6) WITH LOCAL TIME ZONE not null enable,
+id_professional number(24,0)not null enable,
+dt_cancel TIMESTAMP(6) WITH LOCAL TIME ZONE,
+id_prof_cancel    number(24,0),   		 
+adw_last_update date not null enable );
+
+
+COMMENT ON COLUMN epis_supplies.id_epis_supplies IS 'Chave primária' ;
+COMMENT ON COLUMN epis_supplies.id_episode IS 'Episódio' ;
+COMMENT ON COLUMN epis_supplies.id_epis_context IS 'ID do episódio de contexto';
+COMMENT ON COLUMN epis_supplies.flg_type IS 'Tipo de identificador: I-Intervention; E-Exam, D-Drug, A - Analysis, O - Other';
+COMMENT ON COLUMN epis_supplies.dt_creation IS 'Data de criação';
+COMMENT ON COLUMN epis_supplies.id_professional IS 'Profissional' ;
+COMMENT ON COLUMN epis_supplies.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN epis_supplies.id_prof_cancel IS 'Profissional que cancelou' ;
+COMMENT ON COLUMN epis_supplies.adw_last_update IS 'Data da última alteração' ;
+
+
+alter table epis_supplies add flg_status varchar2(1);
+
+COMMENT ON COLUMN epis_supplies.flg_status IS 'Estado.A - Activo; C- Cancelado' ;

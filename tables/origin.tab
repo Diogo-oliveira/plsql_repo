@@ -1,0 +1,36 @@
+
+
+  CREATE TABLE ORIGIN
+   (	ID_ORIGIN NUMBER(24,0) NOT NULL ENABLE,
+	CODE_ORIGIN VARCHAR2(200) NOT NULL ENABLE,
+	RANK NUMBER(24,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE origin IS 'Instituição ou serviço da própria instituição de onde é proveniente o doente' ;
+
+ALTER TABLE ORIGIN 
+ ADD (FLG_AVAILABLE  VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ );
+
+COMMENT ON COLUMN ORIGIN.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD';
+
+ALTER TABLE ORIGIN MODIFY FLG_AVAILABLE default null;
+
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2020 18:02
+-- CHANGE REASON: [EMR-40083]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00942);
+BEGIN
+EXECUTE IMMEDIATE 'DROP TABLE origin_old';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos

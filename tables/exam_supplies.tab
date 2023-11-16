@@ -1,0 +1,40 @@
+-- CHANGED BY: Ana Matos
+-- CHANGED DATE: 2009-JUL-28
+-- CHANGED REASON: ALERT-16811
+
+  CREATE TABLE EXAM_SUPPLIES
+   (	ID_EPIS_SUPPLIES NUMBER(24,0),
+	ID_EXAM_REQ_DET NUMBER(24,0),
+	ID_EXAM_RESULT NUMBER(24,0),
+	CREATE_USER VARCHAR2(24),
+	CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	CREATE_INSTITUTION NUMBER(24,0),
+	UPDATE_USER VARCHAR2(24),
+	UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	UPDATE_INSTITUTION NUMBER(24,0)
+   ) ;
+
+-- CHANGED END: Ana Matos
+
+
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 19/01/2015 15:48
+-- CHANGE REASON: [ALERT-306445] Drop EXAM_SUPPLIES and refactor its dependencies
+DECLARE
+    e_table_not_exist EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_table_not_exist, -942);
+BEGIN
+    pk_frmw_objects.set_category_dpc(i_owner => 'ALERT', i_obj_name => 'EXAM_SUPPLIES');
+    pk_frmw_objects.delete_columns(i_owner => 'ALERT', i_obj_name => 'EXAM_SUPPLIES');
+    pk_versioning.run(i_sql => 'DROP TABLE ALERT.EXAM_SUPPLIES');
+    pk_frmw_objects.delete_record(i_owner => 'ALERT', i_obj_name => 'EXAM_SUPPLIES');
+    COMMIT;
+EXCEPTION
+    WHEN e_table_not_exist THEN
+        NULL; -- Just ignore
+END;
+/
+
+-- CHANGE END: Ariel Machado

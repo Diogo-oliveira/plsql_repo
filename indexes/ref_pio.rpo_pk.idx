@@ -1,0 +1,56 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/01/2010 12:06
+-- CHANGE REASON: [ALERT-31116] 
+CREATE UNIQUE INDEX RPO_PK ON REF_PIO (ID_EXTERNAL_REQUEST);
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/01/2010 18:00
+-- CHANGE REASON: [ALERT-58261] 
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_indexes u
+     WHERE u.index_name = 'RPO_PK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := q'[CREATE UNIQUE INDEX RPO_PK ON REF_PIO (ID_EXTERNAL_REQUEST)]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+
+
+------------------
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/03/2010 14:06
+-- CHANGE REASON: [ALERT-79864] 
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_indexes u
+     WHERE u.index_name = 'RPO_PK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := q'[CREATE UNIQUE INDEX RPO_PK ON REF_PIO (ID_EXTERNAL_REQUEST)]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro

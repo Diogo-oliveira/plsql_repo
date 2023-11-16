@@ -1,0 +1,132 @@
+
+
+  ALTER TABLE PROFILE_TEMPLATE ADD CONSTRAINT SPT_PK PRIMARY KEY (ID_PROFILE_TEMPLATE) ENABLE;
+
+  ALTER TABLE PROFILE_TEMPLATE MODIFY (ID_PROFILE_TEMPLATE NOT NULL ENABLE);
+
+  ALTER TABLE PROFILE_TEMPLATE MODIFY (INTERN_NAME_TEMPL NOT NULL ENABLE);
+
+  ALTER TABLE PROFILE_TEMPLATE MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE PROFILE_TEMPLATE MODIFY (ID_SOFTWARE NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 28/10/2009 19:29
+-- CHANGE REASON: [ALERT-52603] Taking responsibility over episode by multiple professionals
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE profile_template drop CONSTRAINT PT_FLG_PROFILE_CHK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+ALTER TABLE profile_template ADD CONSTRAINT PT_FLG_PROFILE_CHK CHECK(flg_profile IN ('S', 'R', 'I', 'N'));
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 11/11/2009 15:52
+-- CHANGE REASON: [ALERT-41420] Approach switching functionality
+ALTER TABLE profile_template
+ ADD (CONSTRAINT SPT_FLG_APPROACH_CHK CHECK (FLG_APPROACH in ('D', 'S')));
+ 
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 12-03-2010
+-- CHANGE REASON: SCH-386
+alter table PROFILE_TEMPLATE add constraint SPT_UK check (flg_schedulable in ('Y','N'));
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 14-04-2010
+-- CHANGE REASON: SCH-529
+ALTER TABLE profile_template drop CONSTRAINT SPT_UK;
+
+ALTER TABLE PROFILE_TEMPLATE ADD CONSTRAINT PT_FLG_SCHED_CHK CHECK (flg_schedulable in ('Y','N'));
+-- CHANGE END: Telmo Castro
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:37
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROFILE_TEMPLATE add constraint PT_FLG_AVAILABLE_CHK check ( FLG_AVAILABLE in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:38
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROFILE_TEMPLATE add constraint PT_FLG_TYPE_CHK check ( FLG_TYPE in (''A'',''D'',''I'',''N'',''P'',''S'',''T'',''U'',''X''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 09/10/2012 10:47
+-- CHANGE REASON: [ALERT-241721] 
+alter table PROFILE_TEMPLATE
+  drop constraint PT_FLG_PROFILE_CHK;
+
+alter table PROFILE_TEMPLATE
+  add constraint PT_FLG_PROFILE_CHK
+  check (flg_profile IN ('S', 'R', 'I', 'N', 'T'));
+-- CHANGE END:  sergio.dias
+
+declare
+l_sql       varchar2(4000);
+begin
+L_SQL := 'ALTER TABLE PROFILE_TEMPLATE ADD CONSTRAINT PRF_TEMPLATE_SOFTWARE_UK UNIQUE (ID_SOFTWARE, ID_PROFILE_TEMPLATE)';
+pk_versioning.run(l_sql);
+end;
+/
+
+declare
+l_sql    varchar2(1000 char);
+begin
+l_sql := 'ALTER TABLE PROFILE_TEMPLATE ADD CONSTRAINT PROFILE_TEMPLATE_SOFT_UK UNIQUE ( ID_PROFILE_TEMPLATE, ID_SOFTWARE ) USING INDEX TABLESPACE ALERT_IDX';
+pk_versioning.run( l_sql );
+end;
+/
+
+-- CHANGED BY: Cristina Oliveira
+-- CHANGE DATE: 08/04/2020 08:33
+-- CHANGE REASON: [EMR-29659] - HHC appointment > take over responsability > error
+alter table PROFILE_TEMPLATE
+drop constraint PT_FLG_PROFILE_CHK;
+-- CHANGE END: Cristina Oliveira
+
+-- CHANGED BY: Cristina Oliveira
+-- CHANGE DATE: 08/04/2020 08:34
+-- CHANGE REASON: [EMR-29659] - HHC appointment > take over responsability > error
+alter table PROFILE_TEMPLATE
+add constraint PT_FLG_PROFILE_CHK
+check (flg_profile IN ('S', 'R', 'I', 'N', 'T', 'E'));
+-- CHANGE END: Cristina Oliveira

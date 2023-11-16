@@ -1,0 +1,66 @@
+
+
+ALTER TABLE prof_team_hist ADD CONSTRAINT PROF_TEAMH_PK PRIMARY KEY (ID_PROF_TEAM_HIST) ENABLE;
+
+
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:44
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_TEAM_HIST add constraint PROF_TH_FLG_TYPE_REGISTER_CHK check ( FLG_TYPE_REGISTER in (''C'',''E''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 11/07/2011 17:46
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_TEAM_HIST add constraint PROF_TH_FLG_TYPE_REGISTER_CHK check ( FLG_TYPE_REGISTER in (''C'',''E'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/07/2011 12:02
+-- CHANGE REASON: [ALERT-187577] grouping changes with novalidate
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_TEAM_HIST add constraint PROF_TH_FLG_TYPE_REGISTER_CHK check ( FLG_TYPE_REGISTER in (''C'',''E'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

@@ -1,0 +1,1 @@
+GRANT EXECUTE ON pk_ref_core TO alert_inter;

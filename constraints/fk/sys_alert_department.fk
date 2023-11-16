@@ -1,0 +1,42 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/12/2012 15:55
+-- CHANGE REASON: [ALERT-243533] new config table
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table sys_alert_department
+  add constraint SADEP_SA_FK foreign key (id_sys_alert)
+  references sys_alert (id_sys_alert)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table sys_alert_department
+  add constraint SADEP_PROFTEMP_FK foreign key (id_profile_template)
+  references profile_template (id_profile_template)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table sys_alert_department
+  add constraint SADEP_INST_FK foreign key (id_institution)
+  references institution (id_institution)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table sys_alert_department
+  add constraint SADEP_SERV_FK foreign key (id_department)
+  references department (id_department)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

@@ -1,0 +1,53 @@
+
+
+  CREATE TABLE HABIT
+   (	ID_HABIT NUMBER(24,0) NOT NULL ENABLE,
+	CODE_HABIT VARCHAR2(200) NOT NULL ENABLE,
+	RANK NUMBER(3,0),
+	FLG_AVAILABLE VARCHAR2(1)
+   );
+
+
+COMMENT ON COLUMN habit.id_habit IS 'ID do hábito' ;
+COMMENT ON COLUMN habit.code_habit IS 'Código do hábito a ler na tabela TRANSLATION' ;
+COMMENT ON COLUMN habit.rank IS 'Ordem da ordenação' ;
+COMMENT ON COLUMN habit.flg_available IS 'Disponível Y/N?' ;
+
+ALTER TABLE HABIT ADD (ID_CONTENT VARCHAR2(200));
+comment on column HABIT.ID_CONTENT is 'Identificador único de conteúdo';
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:25
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.HABIT MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 25/08/2010 17:28
+-- CHANGE REASON: [ALERT-119839] Issue Replication: [Habits] - habits aren'r configurable by institution (v2.6.0.3.2)
+comment ON TABLE HABIT IS 'This is a configurable table that holds the content of the habits used to filling out the keypad';
+
+ALTER TABLE HABIT ADD ID_INSTITUTION NUMBER(24) DEFAULT 0 NOT NULL;
+ALTER TABLE HABIT ADD ID_MARKET NUMBER(24) DEFAULT 0 NOT NULL;
+ 
+COMMENT ON COLUMN HABIT.ID_INSTITUTION is 'Institution id (FK)';
+COMMENT ON COLUMN HABIT.ID_MARKET is 'market id (FK)';
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column HABIT.id_habit
+  is 'Habit identifier';
+comment on column HABIT.code_habit
+  is 'Code for translation';
+comment on column HABIT.rank
+  is 'Rank for order';
+comment on column HABIT.flg_available
+  is 'Flag that indicates the availability (Y/N)';
+comment on column HABIT.id_content
+  is 'Content unique ID';
+  
+-- CHANGE END: Elisabete Bugalho

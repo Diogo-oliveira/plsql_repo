@@ -1,0 +1,266 @@
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 06/12/2011 10:16
+-- CHANGE REASON: [ALERT-208518] 
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -00955);
+
+BEGIN
+   BEGIN
+
+EXECUTE IMMEDIATE 'create table SR_EPIS_INTERV_HIST
+(
+  id_sr_epis_interv_hist NUMBER(24) not null,
+  id_sr_epis_interv    NUMBER(24) not null,
+  flg_status_hist      VARCHAR2(1) not null,
+  id_episode           NUMBER(24) not null,
+  id_sr_intervention   NUMBER(24),
+  id_prof_req          NUMBER(24) not null,
+  flg_type             VARCHAR2(1),
+  flg_status           VARCHAR2(1),
+  notes_cancel         VARCHAR2(4000),
+  id_prof_cancel       NUMBER(24),
+  id_sr_cancel_reason  NUMBER(24),
+  dt_req_tstz          TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  dt_interv_start_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_interv_end_tstz   TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_cancel_tstz       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  id_episode_context   NUMBER(24),
+  name_interv          VARCHAR2(4000),
+  id_prof_req_unc      NUMBER(24),
+  dt_req_unc_tstz      TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  flg_code_type        VARCHAR2(1),
+  laterality           VARCHAR2(1),
+  create_user          VARCHAR2(24),
+  create_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution   NUMBER(24),
+  update_user          VARCHAR2(24),
+  update_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution   NUMBER(24),
+  flg_surg_request     VARCHAR2(1),
+  id_diagnosis         NUMBER(24),
+  notes                VARCHAR2(2000 CHAR)
+)';
+
+ EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+-- Add comments to the table 
+comment on table SR_EPIS_INTERV_HIST
+  is 'Histórico de intervenções cirúrgicas por episódio';
+-- Add comments to the columns 
+comment on column SR_EPIS_INTERV_HIST.id_sr_epis_interv_hist
+  is 'ID único';
+comment on column SR_EPIS_INTERV_HIST.id_sr_epis_interv
+  is 'ID intervenção no episódio';
+comment on column SR_EPIS_INTERV_HIST.flg_status_hist
+  is 'Estado do registo no historico: A - activo; O - Outdated';
+comment on column SR_EPIS_INTERV_HIST.id_episode
+  is 'ID do episódio';
+comment on column SR_EPIS_INTERV_HIST.id_sr_intervention
+  is 'ID da intervenção';
+comment on column SR_EPIS_INTERV_HIST.id_prof_req
+  is 'ID do profissional que requisitou a intervenção';
+comment on column SR_EPIS_INTERV_HIST.flg_type
+  is 'Tipo de intervenção. Valores possíveis: P- Principal, S- Secundária';
+comment on column SR_EPIS_INTERV_HIST.flg_status
+  is 'Estado da intervenção. Valores possíveis: R- Requisitada, E- Em execução, F- Concluída, C- Cancelada, T- Temporária';
+comment on column SR_EPIS_INTERV_HIST.notes_cancel
+  is 'Notas de cancelamento';
+comment on column SR_EPIS_INTERV_HIST.id_prof_cancel
+  is 'ID do profissional que cancelou';
+comment on column SR_EPIS_INTERV_HIST.id_sr_cancel_reason
+  is 'ID do motivo de cancelamento';
+comment on column SR_EPIS_INTERV_HIST.dt_req_tstz
+  is 'Data da requisição';
+comment on column SR_EPIS_INTERV_HIST.dt_interv_start_tstz
+  is 'Data de início da intervenção';
+comment on column SR_EPIS_INTERV_HIST.dt_interv_end_tstz
+  is 'Data de fim da intervenção';
+comment on column SR_EPIS_INTERV_HIST.dt_cancel_tstz
+  is 'Data de cancelamento';
+comment on column SR_EPIS_INTERV_HIST.id_episode_context
+  is 'ID do episódio de destino onde poderá ser consultada esta informação (TI)';
+comment on column SR_EPIS_INTERV_HIST.name_interv
+  is 'Uncoded surgical procedure inserted through text field';
+comment on column SR_EPIS_INTERV_HIST.id_prof_req_unc
+  is 'Professional ID - professional who inserted the uncoded surgical procedure';
+comment on column SR_EPIS_INTERV_HIST.dt_req_unc_tstz
+  is 'Date when uncoded surgical procedure was inserted';
+comment on column SR_EPIS_INTERV_HIST.flg_code_type
+  is 'Indicates the kind of surgical procedure Possible Values: C - coded U - uncoded';
+comment on column SR_EPIS_INTERV_HIST.laterality
+  is 'Laterality associated with this surgical procedure, available values are: L - left; R - right; B - Bilateral; I - irrelevant';
+comment on column SR_EPIS_INTERV_HIST.create_user
+  is 'Creation User';
+comment on column SR_EPIS_INTERV_HIST.create_time
+  is 'Creation Time';
+comment on column SR_EPIS_INTERV_HIST.create_institution
+  is 'Creation Institution';
+comment on column SR_EPIS_INTERV_HIST.update_user
+  is 'Update User';
+comment on column SR_EPIS_INTERV_HIST.update_time
+  is 'Update Time';
+comment on column SR_EPIS_INTERV_HIST.update_institution
+  is 'Update Institution';
+comment on column SR_EPIS_INTERV_HIST.flg_surg_request
+  is 'Indicates if this surgical procedure was requested as part of the surgery/admission requests (Yes) or as part of proposed surgery (No)';
+comment on column SR_EPIS_INTERV_HIST.id_diagnosis
+  is 'Diagnosis associated with this surgical procedure';
+comment on column SR_EPIS_INTERV_HIST.notes
+  is 'Surgical process notes';
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/12/2011 16:34
+-- CHANGE REASON: [ALERT-210978 ] DEMOS MX - OUT - Admission request- se preenche as áreas de Dx e lateralidade no pedido do procedimento cirúrgico dá erro.
+DECLARE
+    e_column_already_there EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table sr_epis_interv_hist add id_epis_diagnosis number(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/12/2011 16:49
+-- CHANGE REASON: [ALERT-210984 ] DEMOS MX - OUT - Admission request- se preenche as áreas de Dx e lateralidade no pedido do procedimento cirúrgico dá erro.
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904); -- drop column/comment on column
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE sr_epis_interv_hist drop column id_diagnosis';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 28/05/2014 10:26
+-- CHANGE REASON: [ALERT-283085] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table sr_epis_interv_hist add id_not_order_reason NUMBER(24)';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+COMMENT ON column sr_epis_interv_hist.id_not_order_reason IS 'Reason not order identifier';
+COMMENT ON column sr_epis_interv_hist.flg_status IS 'Estado da intervenção. Valores possíveis: R- Requisitada, E- Em execução, F- Concluída, C- Cancelada, T- Temporária, N- Not order';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 21/01/2016 11:18
+-- CHANGE REASON: [ALERT-318028] ALERT-318028 CDOC Functionalities V7
+-- Add comments to the table 
+comment on table SR_EPIS_INTERV_HIST
+  is 'History table of surgical interventions by episode';
+-- Add comments to the columns 
+comment on column SR_EPIS_INTERV_HIST.id_sr_epis_interv_hist
+  is 'Surgical episode intervention history identifier';
+comment on column SR_EPIS_INTERV_HIST.id_sr_epis_interv
+  is 'Surgical epis intervention identifier';
+comment on column SR_EPIS_INTERV_HIST.flg_status_hist
+  is 'History record Status.Values: A - acrive, O - Outdated.  ';
+comment on column SR_EPIS_INTERV_HIST.id_episode
+  is 'Episode identifier';
+comment on column SR_EPIS_INTERV_HIST.id_sr_intervention
+  is 'Surgicval intervention identifier';
+comment on column SR_EPIS_INTERV_HIST.id_prof_req
+  is 'Requested professional identifier';
+comment on column SR_EPIS_INTERV_HIST.flg_type
+  is 'Type of intervention: Values P - Primary, S -Secundary.';
+comment on column SR_EPIS_INTERV_HIST.flg_status
+  is 'Record Intervention Status: Values: R - Requested, E - In execution, F - Fininshed C - Cancelled, Temporary, N - Not Order.
+';
+comment on column SR_EPIS_INTERV_HIST.notes_cancel
+  is 'Cancellation Notes';
+comment on column SR_EPIS_INTERV_HIST.id_prof_cancel
+  is 'Cancellation professional identifier';
+comment on column SR_EPIS_INTERV_HIST.id_sr_cancel_reason
+  is 'Cancel reason identifier';
+comment on column SR_EPIS_INTERV_HIST.dt_req_tstz
+  is 'Requisition date';
+comment on column SR_EPIS_INTERV_HIST.dt_interv_start_tstz
+  is 'Intervention date begin';
+comment on column SR_EPIS_INTERV_HIST.dt_interv_end_tstz
+  is 'Intervention end begin';
+comment on column SR_EPIS_INTERV_HIST.dt_cancel_tstz
+  is 'Cancellation Date';
+comment on column SR_EPIS_INTERV_HIST.id_episode_context
+  is 'Episode context identifier, where the information can be consulted (TI)';
+comment on column SR_EPIS_INTERV_HIST.name_interv
+  is 'Uncoded surgical procedure inserted through text field';
+comment on column SR_EPIS_INTERV_HIST.id_prof_req_unc
+  is 'Professional ID - professional who inserted the uncoded surgical procedure';
+comment on column SR_EPIS_INTERV_HIST.dt_req_unc_tstz
+  is 'Date when uncoded surgical procedure was inserted';
+comment on column SR_EPIS_INTERV_HIST.flg_code_type
+  is 'Indicates the kind of surgical procedure Possible Values: C - coded U - uncoded';
+comment on column SR_EPIS_INTERV_HIST.laterality
+  is 'Laterality associated with this surgical procedure, available values are: L - left; R - right; B - Bilateral; I - irrelevant';
+comment on column SR_EPIS_INTERV_HIST.create_user
+  is 'Creation User';
+comment on column SR_EPIS_INTERV_HIST.create_time
+  is 'Creation Time';
+comment on column SR_EPIS_INTERV_HIST.create_institution
+  is 'Creation Institution';
+comment on column SR_EPIS_INTERV_HIST.update_user
+  is 'Update User';
+comment on column SR_EPIS_INTERV_HIST.update_time
+  is 'Update Time';
+comment on column SR_EPIS_INTERV_HIST.update_institution
+  is 'Update Institution';
+comment on column SR_EPIS_INTERV_HIST.flg_surg_request
+  is 'Indicates if this surgical procedure was requested as part of the surgery/admission requests (Yes) or as part of proposed surgery (No)';
+comment on column SR_EPIS_INTERV_HIST.notes
+  is 'Surgical process notes';
+comment on column SR_EPIS_INTERV_HIST.id_epis_diagnosis
+  is 'Episode diagnosis identifier';
+comment on column SR_EPIS_INTERV_HIST.id_not_order_reason
+  is 'Reason not order identifier';
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/07/2017 14:08
+-- CHANGE REASON: [ALERT-331061]
+ALTER TABLE SR_EPIS_INTERV_HIST DROP CONSTRAINT SEVH_SIN_FK;
+ALTER TABLE SR_EPIS_INTERV_HIST ADD CONSTRAINT SEVH_SIN_FK FOREIGN KEY (ID_SR_INTERVENTION) REFERENCES INTERVENTION (ID_INTERVENTION);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 30/08/2018 11:41
+-- CHANGE REASON: [EMR-5186] 
+ALTER TABLE sr_epis_interv_hist ADD surgical_site VARCHAR2(4000);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 24/05/2022 18:27
+-- CHANGE REASON: [EMR-53318]
+begin
+pk_versioning.run('ALTER TABLE sr_epis_interv_hist ADD id_interv_codification NUMBER(24)');
+end;
+/
+
+COMMENT ON COLUMN sr_epis_interv_hist.id_interv_codification IS 'Surgical procedure codification ID';
+-- CHANGE END: Ana Matos

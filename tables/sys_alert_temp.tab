@@ -1,0 +1,108 @@
+--Rui Batista 2007/07/10
+--Reestrutração dos Alertas
+
+
+--Cria tabela temporária para gestão dos alertas a disponibilizar
+CREATE global temporary TABLE sys_alert_temp(id_sys_alert_det number(24),
+                                          id_reg NUMBER(24),
+                                          id_episode NUMBER(24),
+                                          id_institution NUMBER(24),
+                                          id_prof NUMBER(24),
+                                          dt_req VARCHAR2(50),
+                                          TIME VARCHAR2(50),
+                                          message VARCHAR2(4000),
+                                          id_room NUMBER(24),
+                                          id_patient NUMBER(24),
+                                          name_pat VARCHAR2(500),
+                                          photo VARCHAR2(500),
+                                          gender VARCHAR2(50),
+                                          pat_age VARCHAR2(50),
+                                          desc_room VARCHAR2(500),
+                                          date_send VARCHAR2(50),
+                                          desc_epis_anamnesis VARCHAR2(4000),
+                                          acuity VARCHAR2(50),
+                                          rank_acuity NUMBER(24),
+                                          dt_first_obs DATE,
+                                          id_schedule NUMBER(24),
+                                          id_sys_shortcut NUMBER(24),
+                                          id_reg_det NUMBER(24),
+                                          id_sys_alert NUMBER(24)) ON COMMIT preserve rows;
+										  
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE SYS_ALERT_TEMP ADD DT_FIRST_OBS_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+
+--2008/08/05 Rui Batista
+--Alerta de interfaces
+alter table sys_alert_temp add (flg_detail varchar2(1) null);
+
+
+ALTER TABLE SYS_ALERT_TEMP DROP COLUMN DT_FIRST_OBS;
+
+ALTER TABLE SYS_aLERT_TEMP MODIFY acuity   VARCHAR2(200);
+
+-- FIX 2.4.2 13-02-2009
+alter table sys_alert_temp add (id_software_origin NUMBER(24) null);
+-- END
+
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 08/03/2010 12:22
+-- CHANGE REASON: [ALERT-77137] 
+alter table sys_alert_temp add (pat_ndo varchar2(500) null);
+alter table sys_alert_temp add (pat_nd_icon varchar2(500) null);
+alter table sys_alert_temp add (fast_track_icon varchar2(200) null);
+alter table sys_alert_temp add (fast_track_color varchar2(200) null);
+alter table sys_alert_temp add (fast_track_status varchar2(1) null);
+alter table sys_alert_temp add (esi_level varchar2(200) null);
+-- CHANGE END: Sérgio Santos
+
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 10/11/2010 09:03
+-- CHANGE REASON: [ALERT-135547] Development DB - change PK_ALERTS and sys_alert_temp (v2.6.0.4) 
+
+alter table SYS_ALERT_TEMP add NAME_PAT_SORT varchar2(300);
+alter table SYS_ALERT_TEMP add resp_icons varchar2(300);
+
+-- CHANGED END: Filipe Machado
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 12/10/2016 14:52
+-- CHANGE REASON: [ALERT-325095 ] New column in the Alerts grid to identify the Clinical service and Ordering professional
+--                
+BEGIN
+pk_versioning.run('alter table SYS_ALERT_TEMP add id_prof_order number(24)');
+END;
+/
+-- CHANGE END: Elisabete Bugalho
+
+comment on table ALERT.sys_alert_temp is 'Temporary table, for alerts processing';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.ACUITY is 'Acuity';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.DATE_SEND is 'Sending Date';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.DESC_EPIS_ANAMNESIS is 'Description of anamnesis';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.DESC_ROOM is 'Description of Room';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.DT_FIRST_OBS_TSTZ is 'Date of First Observation';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.DT_REQ is 'Date of requisition';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.ESI_LEVEL is 'ESI Level';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.FAST_TRACK_COLOR is 'Fast Track Color';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.FAST_TRACK_ICON is 'Fast Track Icon';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.FAST_TRACK_STATUS is 'Fast Track Status';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.GENDER is 'Gender';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.ID_EPISODE is 'Episode Identifier';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.ID_INSTITUTION is 'Institution Identifier';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.ID_PATIENT is 'Patient Identifier';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.ID_PROF is 'Profesisonal Identifier';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.ID_ROOM is 'Room Identifier';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.ID_SCHEDULE is 'Schedule Identifier';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.ID_SOFTWARE_ORIGIN is 'Origin Software';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.ID_SYS_ALERT is 'Id of ALERT';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.ID_SYS_ALERT_DET is 'Identifier of Alert Detail';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.ID_SYS_SHORTCUT is 'Id of Shortcut';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.MESSAGE is 'Message';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.NAME_PAT is 'Name of Patient';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.NAME_PAT_SORT is 'Name of Patient for Sorting purpose';
+COMMENT ON COLUMN ALERT.SYS_ALERT_TEMP.PAT_AGE is 'Age of Patient';
+
+

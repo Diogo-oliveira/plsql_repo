@@ -1,0 +1,241 @@
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 05/12/2012 09:11
+-- CHANGE REASON: [ALERT-245999] 
+DECLARE
+    e_object_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955); -- indexes/sequences/tables
+BEGIN
+    EXECUTE IMMEDIATE 'create table MCDT_DIAGNOSIS
+(
+  id_alert_diagnosis       NUMBER(12) not null,
+  id_mcdt            NUMBER(24) not null,
+  flg_type           VARCHAR2(1) not null,
+  flg_available      VARCHAR2(1) not null,
+  create_user        VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+) tablespace TABLE_M';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 05/12/2012 09:11
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.id_alert_diagnosis
+  is 'Id Alert Diagnosis';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 05/12/2012 09:11
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.id_mcdt
+  is 'Id MCDT';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 05/12/2012 09:11
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.flg_type
+  is 'I - Interventions, A - Analysis, E - Exams, O - Other Exams';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 05/12/2012 09:11
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 05/12/2012 09:11
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.create_user
+  is 'Creation User';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 05/12/2012 09:11
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.create_time
+  is 'Create Time';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 05/12/2012 09:11
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.create_institution
+  is 'Create Institution';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 05/12/2012 09:11
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.update_user
+  is 'Update User';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 05/12/2012 09:11
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.update_time
+  is 'Update Time';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 05/12/2012 09:11
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.update_institution
+  is 'Update Institution';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 05/12/2012 09:11
+-- CHANGE REASON: [ALERT-245999] 
+comment on column EPIS_DIAGNOSIS.id_diag_inst_owner
+  is 'Institution owner of the concept. Default 0 - ALERT';
+  
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 05/12/2012 09:11
+-- CHANGE REASON: [ALERT-245999] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430); 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE MCDT_DIAGNOSIS ADD id_diag_inst_owner NUMBER(24) default 0 not null';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('AVISO: coluna a ser acrescentada já existe na tabela');
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 06/12/2012 10:49
+-- CHANGE REASON: [ALERT-245999] 
+DECLARE
+    e_object_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955); -- indexes/sequences/tables
+BEGIN
+    EXECUTE IMMEDIATE 'create table MCDT_DIAGNOSIS
+(
+  id_alert_diagnosis       NUMBER(12) not null,
+  id_mcdt            NUMBER(24) not null,
+  flg_type           VARCHAR2(1) not null,
+  flg_available      VARCHAR2(1) not null,
+  create_user        VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+) tablespace TABLE_M';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 06/12/2012 10:49
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.id_alert_diagnosis
+  is 'Id Alert Diagnosis';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 06/12/2012 10:49
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.id_mcdt
+  is 'Id MCDT';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 06/12/2012 10:49
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.flg_type
+  is 'I - Interventions, A - Analysis, E - Exams, O - Other Exams';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 06/12/2012 10:49
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 06/12/2012 10:49
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.create_user
+  is 'Creation User';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 06/12/2012 10:49
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.create_time
+  is 'Create Time';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 06/12/2012 10:49
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.create_institution
+  is 'Create Institution';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 06/12/2012 10:49
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.update_user
+  is 'Update User';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 06/12/2012 10:49
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.update_time
+  is 'Update Time';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 06/12/2012 10:49
+-- CHANGE REASON: [ALERT-245999] 
+comment on column MCDT_DIAGNOSIS.update_institution
+  is 'Update Institution';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 06/12/2012 10:49
+-- CHANGE REASON: [ALERT-245999] 
+comment on column EPIS_DIAGNOSIS.id_diag_inst_owner
+  is 'Institution owner of the concept. Default 0 - ALERT';
+  
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 06/12/2012 10:49
+-- CHANGE REASON: [ALERT-245999] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430); 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE MCDT_DIAGNOSIS ADD id_diag_inst_owner NUMBER(24) default 0 not null';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('AVISO: coluna a ser acrescentada já existe na tabela');
+end;
+/
+-- CHANGE END:  Nuno Neves

@@ -1,0 +1,4 @@
+CREATE OR REPLACE FUNCTION concatenate_clob(input CLOB) RETURN CLOB
+    PARALLEL_ENABLE
+    AGGREGATE USING aggr_clob_concat;
+/

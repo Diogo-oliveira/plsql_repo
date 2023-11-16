@@ -1,0 +1,75 @@
+CREATE TABLE EPIS_SIGN_OFF (
+	ID_EPIS_SIGN_OFF NUMBER(24) NOT NULL,
+	ID_EPISODE NUMBER(24) NOT NULL,
+	ID_PROFESSIONAL_EVENT NUMBER(24) NOT NULL,
+	ID_PROFESSIONAL_DEST NUMBER(24),
+	DT_EVENT TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
+	FLG_EVENT_TYPE VARCHAR2(5) NOT NULL,
+	FLG_STATE VARCHAR2(5) NOT NULL,
+	NOTES VARCHAR2(4000)
+);
+
+COMMENT ON COLUMN EPIS_SIGN_OFF.ID_EPIS_SIGN_OFF IS 'Primary key';
+COMMENT ON COLUMN EPIS_SIGN_OFF.ID_EPISODE IS 'Episode identifier';
+COMMENT ON COLUMN EPIS_SIGN_OFF.ID_PROFESSIONAL_EVENT IS 'Professional identifier';
+COMMENT ON COLUMN EPIS_SIGN_OFF.ID_PROFESSIONAL_DEST IS 'Identifier for the professional responsible for co-sign';
+COMMENT ON COLUMN EPIS_SIGN_OFF.DT_EVENT IS 'Event date';
+COMMENT ON COLUMN EPIS_SIGN_OFF.FLG_EVENT_TYPE IS 'Event type: SOCS - Sign-off and submit for Co-sign, CS - Co-Sign, SO - Sign-Off, CSOCS - Cancel sign-off and submission for Co-sign, CCS - Cancel co-Sign, CSO - Cancel sign-Off';
+COMMENT ON COLUMN EPIS_SIGN_OFF.FLG_STATE IS 'Current state: SC - Signed-off and submitted for Co-sign, CS - Co-signed, SO - Signed-off, C - Canceled';
+COMMENT ON COLUMN EPIS_SIGN_OFF.NOTES IS 'Additional notes';
+
+ALTER TABLE EPIS_SIGN_OFF ADD (FLG_REAL VARCHAR2(1));
+COMMENT ON COLUMN EPIS_SIGN_OFF.FLG_REAL IS 'Y - If it was a real action. N - If it was a cancelation';
+
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_SIGN_OFF modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_SIGN_OFF modify NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_SIGN_OFF modify FLG_STATE varchar2(5 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_SIGN_OFF modify FLG_REAL varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_SIGN_OFF modify FLG_EVENT_TYPE varchar2(5 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_SIGN_OFF modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:34
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EPIS_SIGN_OFF
+  is 'Table with all episode sign-off';
+  
+-- CHANGE END: Elisabete Bugalho

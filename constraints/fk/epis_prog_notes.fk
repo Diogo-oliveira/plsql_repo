@@ -1,0 +1,22 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 02/12/2010 16:15
+-- CHANGE REASON: [ALERT-146429] ddl.sql
+alter table epis_prog_notes
+  add constraint epn_epis_fk foreign key (id_episode)
+  references episode (id_episode);
+alter table epis_prog_notes
+  add constraint epn_pnsb_fk foreign key (id_pn_soap_block)
+  references pn_soap_block (id_pn_soap_block);
+alter table epis_prog_notes
+  add constraint epn_prof_created_fk foreign key (id_prof_created)
+  references professional (id_professional);
+alter table epis_prog_notes
+  add constraint epn_prof_last_upd_fk foreign key (id_prof_last_update)
+  references professional (id_professional);
+alter table epis_prog_notes
+  add constraint epn_cid_fk foreign key (id_cancel_info_det)
+  references cancel_info_det (id_cancel_info_det);
+alter table epis_prog_notes
+  add constraint epn_epn_fk foreign key (id_epn_parent)
+  references epis_prog_notes (id_epis_prog_notes);
+-- CHANGE END: Pedro Carneiro

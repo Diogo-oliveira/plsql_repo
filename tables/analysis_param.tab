@@ -1,0 +1,107 @@
+
+
+  CREATE TABLE ANALYSIS_PARAM
+   (	ID_ANALYSIS_PARAM NUMBER(12,0) NOT NULL ENABLE,
+	ID_ANALYSIS NUMBER(12,0) NOT NULL ENABLE,
+	ID_PARAMETER_ANALYSIS NUMBER(12,0) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE analysis_param IS 'Associação dos parâmetros às análises' ;
+
+COMMENT ON COLUMN analysis_param.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+
+-- CHANGED BY: Rui Spratley
+-- CHANGED DATE: 2007-OUT-10
+-- CHANGED REASON: Reformulação das análises
+
+-- Add/modify columns 
+alter table ANALYSIS_PARAM add ID_ANALYSIS_PARAMETER NUMBER(12);
+-- Add comments to the columns 
+comment on column ANALYSIS_PARAM.ID_ANALYSIS_PARAMETER
+  is 'Parâmetro';
+
+-- CHANGE END: Rui Spratley
+
+
+COMMENT ON COLUMN ANALYSIS_PARAM.ID_ANALYSIS_PARAM IS 'Chave primária';
+COMMENT ON COLUMN ANALYSIS_PARAM.ID_ANALYSIS IS 'Id da análise';
+COMMENT ON COLUMN ANALYSIS_PARAM.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD: Y / N';
+COMMENT ON COLUMN ANALYSIS_PARAM.ID_ANALYSIS_PARAMETER IS 'Id do parâmetro';
+COMMENT ON COLUMN ANALYSIS_PARAM.ID_INSTITUTION IS 'Id da instituição';
+COMMENT ON COLUMN ANALYSIS_PARAM.ID_SOFTWARE IS 'Id do software';
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 2009-04-07
+-- CHANGE REASON: ALERT-18421
+ALTER TABLE ANALYSIS_PARAM 
+ ADD (RANK NUMBER(6)
+ );
+ 
+COMMENT ON COLUMN ANALYSIS_PARAM.RANK IS 'Associated rank';
+-- CHANGE END
+
+-- CHANGED BY: Pedro Maia
+-- CHANGE DATE: 2010-06-29
+-- CHANGE REASON: ALERT-94678
+
+-- Add/modify columns 
+alter table ANALYSIS_PARAM add COLOR_GRAPH VARCHAR2(200 CHAR);
+-- Add comments to the columns 
+comment on column ANALYSIS_PARAM.COLOR_GRAPH
+  is 'Color to lab tests graph';
+ 
+-- CHANGE END 
+
+-- CHANGED BY: José Castro
+-- CHANGE DATE: 2010-07-13
+-- CHANGE REASON: ALERT-103913
+-- Add/modify columns 
+alter table ANALYSIS_PARAM add FLG_FILL_TYPE VARCHAR2(2 CHAR);
+-- Add comments to the columns 
+comment on column ANALYSIS_PARAM.FLG_FILL_TYPE
+  is 'How the parameter value should be filled: (N) Keypad, (V) Multichoice, (T) Text, (D) Data Keypad ';
+-- CHANGE END: José Castro
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 14:57
+-- CHANGE REASON: [ALERT-246252] 
+ALTER TABLE analysis_param MODIFY (ID_SAMPLE_TYPE NUMBER(12) NOT NULL);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:11
+-- CHANGE REASON: [ALERT-246248] 
+ALTER TABLE ANALYSIS_PARAM ADD (ID_SAMPLE_TYPE NUMBER(12));
+
+COMMENT ON COLUMN ANALYSIS_PARAM.ID_SAMPLE_TYPE IS 'Sample type id';
+
+COMMENT ON COLUMN ANALYSIS_PARAM.FLG_FILL_TYPE IS 'How the parameter value should be filled: (N) Keypad, (V) Multichoice, (T) Text, (D) Data Keypad';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/11/2021 16:47
+-- CHANGE REASON: [EMR-49440]
+ALTER TABLE analysis_param MODIFY FLG_AVAILABLE VARCHAR2(1 CHAR);
+ALTER TABLE analysis_param MODIFY CREATE_USER VARCHAR2(24 CHAR);
+ALTER TABLE analysis_param MODIFY UPDATE_USER VARCHAR2(24 CHAR);
+
+COMMENT ON TABLE analysis_param IS 'Lab tests'' parameter configuration';
+
+COMMENT ON COLUMN analysis_param.id_analysis_param IS 'Primary key';
+COMMENT ON COLUMN analysis_param.id_analysis IS 'Lab test ID';
+COMMENT ON COLUMN analysis_param.id_institution IS 'Institution ID';
+COMMENT ON COLUMN analysis_param.id_software IS 'Software ID';
+COMMENT ON COLUMN analysis_param.id_analysis_parameter IS 'Lab test parameter ID';
+COMMENT ON COLUMN analysis_param.rank IS 'Rank';
+COMMENT ON COLUMN analysis_param.color_graph IS 'Lab test parameter results'' color (graph view)';
+COMMENT ON COLUMN analysis_param.flg_fill_type IS 'How the parameter value should be filled: N - Keypad; V - Multichoice; T - Text';
+COMMENT ON COLUMN analysis_param.id_sample_type IS 'Sample type ID';
+COMMENT ON COLUMN analysis_param.flg_available IS 'Flag that indicates if the record is available or not (Y/N)';
+COMMENT ON COLUMN analysis_param.adw_last_update IS 'Update date';
+-- CHANGE END: Ana Matos

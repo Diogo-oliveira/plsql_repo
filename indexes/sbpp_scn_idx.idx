@@ -1,0 +1,16 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 02/05/2016 09:18
+-- CHANGE REASON: [ALERT-320563] 
+DECLARE
+    e_unique_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX SBPP_SCN_IDX ON SYS_BUTTON_PROP (SCREEN_NAME)';
+    EXCEPTION
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Key already there');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

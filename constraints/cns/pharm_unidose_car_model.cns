@@ -1,0 +1,21 @@
+
+--PK
+alter table pharm_unidose_car_model
+add constraint pharm_unidose_car_model_pk primary key (id_unidose_car_model)
+using index tablespace INDEX_M;
+
+--CHKs
+alter table pharm_unidose_car_model
+add constraint pharm_ucm_slots_chk 
+check (number_of_slots > 0);
+
+alter table pharm_unidose_car_model
+add constraint pharm_ucm_active_chk 
+check (flg_active in ('Y','N'));
+
+alter table pharm_unidose_car_model
+drop constraint pharm_ucm_active_chk;
+
+alter table pharm_unidose_car_model
+add constraint pharm_ucm_active_chk
+check (flg_active in ('Y','N','D'));

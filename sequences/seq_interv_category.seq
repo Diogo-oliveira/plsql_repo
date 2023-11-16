@@ -1,0 +1,47 @@
+
+
+   CREATE SEQUENCE  SEQ_INTERV_CATEGORY  MINVALUE 1 MAXVALUE 999999999999 INCREMENT BY 1 START WITH 1 NOCACHE  NOORDER  NOCYCLE ;
+
+
+
+alter sequence SEQ_INTERV_CATEGORY noorder cache 500;
+
+-- CHANGED BY: Ana Moita
+-- CHANGED DATE: 2016-12-28
+-- CHANGED REASON: ALERT-327327
+
+DECLARE
+    e_sequence_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_sequence_not_exists, -02289);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE sequence seq_interv_category minvalue 100000 maxvalue 99999999999999999999 START
+        WITH 1 increment BY 1 cache 500';
+    EXCEPTION
+        WHEN e_sequence_not_exists THEN
+            dbms_output.put_line('Sequence already exists');
+    END;
+END;
+/
+
+-- CHANGE END: Ana Moita
+
+-- CHANGED BY: Ana Moita
+-- CHANGED DATE: 2016-12-28
+-- CHANGED REASON: ALERT-327327
+
+DECLARE
+    e_sequence_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_sequence_not_exists, -02289);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE sequence seq_interv_category minvalue 100000 maxvalue 99999999999999999999 START
+        WITH 100000 increment BY 1 cache 500';
+    EXCEPTION
+        WHEN e_sequence_not_exists THEN
+            dbms_output.put_line('Sequence already exists');
+    END;
+END;
+/
+
+-- CHANGE END: Ana Moita

@@ -1,0 +1,79 @@
+
+
+  ALTER TABLE PROF_SOFT_INST ADD CONSTRAINT PSIT_PK PRIMARY KEY (ID_PROF_SOFT_INST) ENABLE;
+
+  ALTER TABLE PROF_SOFT_INST ADD CONSTRAINT PSIT_UK UNIQUE (ID_INSTITUTION, ID_SOFTWARE, ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE PROF_SOFT_INST MODIFY (ID_PROF_SOFT_INST NOT NULL ENABLE);
+
+  ALTER TABLE PROF_SOFT_INST MODIFY (ID_PROFESSIONAL NOT NULL ENABLE);
+
+  ALTER TABLE PROF_SOFT_INST MODIFY (ID_SOFTWARE NOT NULL ENABLE);
+
+  ALTER TABLE PROF_SOFT_INST MODIFY (ID_INSTITUTION NOT NULL ENABLE);
+
+
+  ALTER TABLE PROF_SOFT_INST MODIFY (FLG_LOG NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:43
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_SOFT_INST add constraint PROF_SI_FLG_LOG_CHK check ( FLG_LOG in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 12/07/2011 12:24
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_SOFT_INST add constraint PROF_SI_FLG_LOG_CHK check ( FLG_LOG in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/07/2011 12:02
+-- CHANGE REASON: [ALERT-187577] grouping changes with novalidate
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_SOFT_INST add constraint PROF_SI_FLG_LOG_CHK check ( FLG_LOG in (''N'',''Y'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

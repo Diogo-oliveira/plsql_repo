@@ -1,0 +1,27 @@
+
+
+  CREATE TABLE EPIS_EXT_SYS
+   (	ID_EPIS_EXT_SYS NUMBER(24,0) NOT NULL ENABLE,
+	ID_EXTERNAL_SYS NUMBER(12,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	VALUE VARCHAR2(30) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPIS_TYPE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE epis_ext_sys IS 'Correspondência dos identificadores únicos dos episódios, no Alert e nos sistemas externos' ;
+
+COMMENT ON COLUMN epis_ext_sys.value IS 'Identificador único do episódio, no sistema externo indicado' ;
+COMMENT ON COLUMN epis_ext_sys.id_epis_type IS 'Tipo de episódio' ;
+
+
+
+-- CRS 2007-05-31 Nova coluna para código Sonho do tipo de episódio
+ALTER TABLE EPIS_EXT_SYS 
+ ADD (COD_EPIS_TYPE_EXT  VARCHAR2(6) DEFAULT 'CON' NOT NULL
+ )
+/
+
+alter table epis_ext_sys
+modify (value varchar2(40));

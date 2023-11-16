@@ -1,0 +1,206 @@
+
+
+  CREATE TABLE DOCUMENTATION
+   (	ID_DOCUMENTATION NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOCUMENTATION_PARENT NUMBER(24,0),
+	ID_DOC_TEMPLATE NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOC_AREA NUMBER NOT NULL ENABLE,
+	ID_DOC_COMPONENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOC_DIMENSION NUMBER(24,0) NOT NULL ENABLE,
+	VALUE_DOCUMENT_TYPE NUMBER(24,0),
+	INTERNAL_NAME VARCHAR2(200),
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	RANK NUMBER(24,0) NOT NULL ENABLE,
+
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN documentation.id_documentation IS 'Chave primária' ;
+COMMENT ON COLUMN documentation.id_documentation_parent IS 'Pai' ;
+COMMENT ON COLUMN documentation.id_doc_template IS 'Código do template' ;
+COMMENT ON COLUMN documentation.id_doc_area IS 'Código da área' ;
+COMMENT ON COLUMN documentation.id_doc_component IS 'Código do componente' ;
+COMMENT ON COLUMN documentation.id_doc_dimension IS 'Código da dimensão' ;
+COMMENT ON COLUMN documentation.value_document_type IS 'Valor associado ao tipo de Documentation' ;
+COMMENT ON COLUMN documentation.internal_name IS 'Nome interno' ;
+COMMENT ON COLUMN documentation.id_institution IS 'Instituição' ;
+COMMENT ON COLUMN documentation.id_software IS 'Software' ;
+COMMENT ON COLUMN documentation.rank IS 'Ordenação' ;
+COMMENT ON COLUMN documentation.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN documentation.adw_last_update IS 'Data da última alteração' ;
+
+alter table documentation modify id_software null; 
+alter table documentation modify id_institution null;
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-MAR-23
+-- CHANGED REASON: ALERT-11985 - Changes on Touch-Option database model to include id content
+ALTER TABLE DOCUMENTATION ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN DOCUMENTATION.ID_CONTENT  IS 'Content identifier';
+--CHANGE END Ariel Machado
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-APR-20
+-- CHANGED REASON: ALERT-10398 - New flag on epis_documentation for enable/disable component at startup
+ALTER TABLE documentation ADD (flg_enabled VARCHAR(1) DEFAULT 'Y');
+COMMENT ON COLUMN documentation.flg_enabled IS 'By default component state is enabled (Y/N)';
+COMMENT ON TABLE documentation IS 'Component instance used in a template and area';
+-- CHANGE END Ariel Machado
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 08/02/2011 17:57
+-- CHANGE REASON: [ALERT-160863] Switch between Templates and Viewer calculators - Association between template's component and calculator
+DECLARE
+    l_exists PLS_INTEGER;
+    l_table  VARCHAR2(30) := 'DOCUMENTATION';
+    l_col    VARCHAR2(30) := 'VIEWER_SCREEN';
+
+    l_ddl_lst table_varchar2 := table_varchar2(
+'ALTER TABLE DOCUMENTATION ADD (
+           VIEWER_SCREEN VARCHAR2(200 CHAR),
+           LEAF_SYS_BUTTON NUMBER(24))',
+  'COMMENT ON COLUMN documentation.viewer_screen is ''Screen Viewer that includes a calculator that is used in this component''',
+  'COMMENT ON COLUMN documentation.leaf_sys_button is ''ID_SYS_BUTTON of the Viewer calculator that is used in this component''');
+BEGIN
+    SELECT count(1)
+      INTO l_exists
+      FROM user_tab_cols utc
+     WHERE utc.table_name = l_table
+       AND utc.column_name = l_col;
+
+    IF l_exists = 0
+    THEN
+        FOR i IN l_ddl_lst.FIRST .. l_ddl_lst.LAST
+        LOOP
+            EXECUTE IMMEDIATE l_ddl_lst(i);
+        END LOOP;
+    ELSE
+        dbms_output.put_line('Info: Table DOCUMENTATION already updated for calculators');
+    END IF;
+END;
+/ 
+ 
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 19/12/2011 14:55
+-- CHANGE REASON: [ALERT-207801] Reusability of documentation components in Touch-option templates
+-- Removes not null contraints in order to be able reuse the DOCUMENTATION entries throught DOC_TEMPLATE_AREA_DOC table.
+-- A documentation with ID_DOC_AREA / ID_DOC_TEMPLATE not null is not reusable.
+
+DECLARE
+    l_allow_null VARCHAR2(1 CHAR);
+BEGIN
+    -- Does column ID_DOC_AREA allow NULL values?
+    SELECT ut.nullable
+      INTO l_allow_null
+      FROM user_tab_cols ut
+     WHERE ut.table_name = 'DOCUMENTATION'
+       AND ut.column_name = 'ID_DOC_AREA';
+    IF l_allow_null = 'N'
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE DOCUMENTATION MODIFY (ID_DOC_AREA NULL)';
+    END IF;
+
+    -- Does column ID_DOC_TEMPLATE allow NULL values?
+    SELECT ut.nullable
+      INTO l_allow_null
+      FROM user_tab_cols ut
+     WHERE ut.table_name = 'DOCUMENTATION'
+       AND ut.column_name = 'ID_DOC_TEMPLATE';
+    IF l_allow_null = 'N'
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE DOCUMENTATION MODIFY (ID_DOC_TEMPLATE NULL)';
+    END IF;
+
+    -- Does column RANK allow NULL values?
+    SELECT ut.nullable
+      INTO l_allow_null
+      FROM user_tab_cols ut
+     WHERE ut.table_name = 'DOCUMENTATION'
+       AND ut.column_name = 'RANK';
+    IF l_allow_null = 'N'
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE DOCUMENTATION MODIFY (RANK NULL)';
+    END IF;
+END;
+/
+
+comment on column documentation.id_doc_template
+  is '(Deprecated) Template ID. NULL for a shared documentation component. In joins, use DOC_TEMPLATE_AREA_DOC instead';
+comment on column documentation.id_doc_area
+  is '(Deprecated) DocArea ID. NULL for a shared documentation component. In joins, use DOC_TEMPLATE_AREA_DOC instead';
+comment on column documentation.rank 
+  is '(Deprecated) Rank of documentation component. Use DOC_TEMPLATE_AREA_DOC instead';
+
+/*
+id_doc_template IS NULL     and id_doc_area IS NULL     => A fully shared documentation component
+id_doc_template IS NULL     and id_doc_area IS NOT NULL => A shared documentation component within an specific area
+id_doc_template IS NOT NULL and id_doc_area IS NULL     => A shared documentation component within an specific template
+id_doc_template IS NOT NULL and id_doc_area IS NOT NULL => A not-shared documentation component
+*/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 26/12/2011 11:53
+-- CHANGE REASON: [ALERT-207801] Columns ID_INSTITUTION/ID_SOFTWARE in DOCUMENTATION are deprecated and need to be removed from the data model. 
+--                Refactory to remove references to these columns.
+alter table documentation drop (id_institution, id_software);
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/01/2016 14:58
+-- CHANGE REASON: [ALERT-317702] 
+comment on table DOCUMENTATION
+  is 'Component instance used in a template and area';
+-- Add comments to the columns 
+comment on column DOCUMENTATION.id_documentation
+  is 'Documentation ID';
+comment on column DOCUMENTATION.id_documentation_parent
+  is 'Documentation parent ID';
+comment on column DOCUMENTATION.id_doc_template
+  is '(Deprecated) Template ID. NULL for a shared documentation component. In joins, use DOC_TEMPLATE_AREA_DOC instead';
+comment on column DOCUMENTATION.id_doc_area
+  is '(Deprecated) DocArea ID. NULL for a shared documentation component. In joins, use DOC_TEMPLATE_AREA_DOC instead';
+comment on column DOCUMENTATION.id_doc_component
+  is 'Documentation component ID';
+comment on column DOCUMENTATION.id_doc_dimension
+  is 'Documentation dimension ID';
+comment on column DOCUMENTATION.value_document_type
+  is 'Documentation type value';
+comment on column DOCUMENTATION.internal_name
+  is 'Internal description';
+comment on column DOCUMENTATION.rank
+  is '(Deprecated) Rank of documentation component. Use DOC_TEMPLATE_AREA_DOC instead';
+comment on column DOCUMENTATION.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column DOCUMENTATION.adw_last_update
+  is 'Update date';
+comment on column DOCUMENTATION.id_content
+  is 'Content unique ID';
+comment on column DOCUMENTATION.create_user
+  is 'Creation User';
+comment on column DOCUMENTATION.create_time
+  is 'Creation Time';
+comment on column DOCUMENTATION.create_institution
+  is 'Creation Institution';
+comment on column DOCUMENTATION.update_user
+  is 'Update User';
+comment on column DOCUMENTATION.update_time
+  is 'Update Time';
+comment on column DOCUMENTATION.update_institution
+  is 'Update Institution';
+comment on column DOCUMENTATION.flg_enabled
+  is 'By default component state is enabled (Y/N)';
+comment on column DOCUMENTATION.viewer_screen
+  is 'Screen Viewer that includes a calculator that is used in this component';
+comment on column DOCUMENTATION.leaf_sys_button
+  is 'ID_SYS_BUTTON of the Viewer calculator that is used in this component';
+  
+  
+  
+-- CHANGE END: Ana Matos

@@ -1,0 +1,19 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/02/2013 12:19
+-- CHANGE REASON: [ALERT-251048] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_ind_columns i
+     WHERE i.table_name = 'REF_TRANS_RESP_HIST'
+       AND i.column_name = 'ID_TRANS_RESP';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'create index RTRH_RTR_FK_IDX on REF_TRANS_RESP_HIST (ID_TRANS_RESP)';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro

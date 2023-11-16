@@ -1,0 +1,46 @@
+
+create table drug_req_supply_dev
+(
+	id_drug_req_supply_dev	number(24) not null,
+	id_drug_req_supply		number(24) not null,
+	qty_dev					number(6) not null,
+	package_number			varchar2(100),
+	dt_package_expire		timestamp(6) with local time zone,
+	id_note_justif			varchar2(30),
+	notes_dev_justif		varchar2(4000),
+	qty_for_stock			number(6) default 0 not null,
+	qty_for_trash			number(6) default 0 not null,
+	id_state				number(5) not null
+) tablespace TABLE_M;
+
+
+comment on table drug_req_supply_dev
+	is 'Table of medication returned to the pharmacy';
+
+comment on column drug_req_supply_dev.id_drug_req_supply_dev
+	is 'PK';
+comment on column drug_req_supply_dev.id_drug_req_supply
+	is 'FK to drug_req_supply';
+comment on column drug_req_supply_dev.qty_dev
+	is 'quantity being returned';
+comment on column drug_req_supply_dev.package_number
+	is 'package number';
+comment on column drug_req_supply_dev.dt_package_expire
+	is 'package expire date';
+comment on column drug_req_supply_dev.id_note_justif 
+	is 'id of the devolution motive';
+comment on column drug_req_supply_dev.notes_dev_justif
+	is 'justification notes';
+comment on column drug_req_supply_dev.qty_for_stock
+	is 'quantity being put on stock';
+comment on column drug_req_supply_dev.qty_for_trash
+	is 'quantity being disposed';
+comment on column drug_req_supply_dev.id_state
+	is 'id of the state (wfl_state)';
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:36
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_REQ_SUPPLY_DEV IS 'Table of medication returned to the pharmacy [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

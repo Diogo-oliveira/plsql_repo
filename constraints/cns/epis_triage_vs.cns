@@ -1,0 +1,33 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 19/07/2013 09:21
+-- CHANGE REASON: [ALERT-262175] EST: the system is not displaying the vital signs as defining criteria when these are the ones that define the urgency level
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE_VS ADD CONSTRAINT EPIS_TRI_VS_PK PRIMARY KEY (ID_EPIS_TRIAGE, ID_VITAL_SIGN) USING INDEX TABLESPACE ALERT_IDX ');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 05/06/2014 21:50
+-- CHANGE REASON: [ALERT-287241] EST New requirement: The system must provide the ability to ignore the urgency level obtained by the index the choc whenever required
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE_VS ADD CONSTRAINT ETVS_FLG_IGN_RES_CHK CHECK (FLG_IGNORE_RESULT IN (''Y'',''N''))');
+END;
+/
+-- CHANGE END: Alexandre Santos

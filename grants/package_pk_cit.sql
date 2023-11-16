@@ -1,0 +1,1 @@
+GRANT execute ON alert.pk_cit TO alert_viewer;

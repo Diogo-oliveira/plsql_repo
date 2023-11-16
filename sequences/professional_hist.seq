@@ -1,0 +1,20 @@
+-- CHANGED BY: Nuno Alves
+-- CHANGE DATE: 06/07/2015 10:14
+-- CHANGE REASON: [ALERT-313314] ALERT-313314 Issue Replication: The system must provide the ability to alert the users to update/confirm the bleep number when trying to add one medication order and display prescriber contact details in the prescription detail
+DECLARE
+
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || REPLACE(srcstr => SQLERRM, oldsub => 'ORA-', newsub => '') || '; ' ||
+                                 i_sql || ';');
+    END run_ddl;
+
+BEGIN
+    run_ddl('CREATE sequence seq_PROFESSIONAL_HIST minvalue 0 maxvalue 99999999999999999999 START
+        WITH 1 increment BY 1 cache 500');
+END;
+/
+-- CHANGE END: Nuno Alves

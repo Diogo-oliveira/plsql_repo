@@ -1,0 +1,83 @@
+
+
+  CREATE TABLE HIDRICS_INTERVAL
+   (	ID_HIDRICS_INTERVAL NUMBER(24,0) NOT NULL ENABLE,
+	CODE_HIDRICS_INTERVAL VARCHAR2(200) NOT NULL ENABLE,
+	RANK NUMBER(24,0),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	INTERVAL_VALUE VARCHAR2(24)
+   );
+
+
+COMMENT ON TABLE hidrics_interval IS 'Registo dos vários intervalos possiveis para o registo dos hidricos' ;
+
+COMMENT ON COLUMN hidrics_interval.id_hidrics_interval IS 'Chave primária' ;
+COMMENT ON COLUMN hidrics_interval.code_hidrics_interval IS 'Código para obter os intervalos dos hidricos por língua' ;
+COMMENT ON COLUMN hidrics_interval.rank IS 'Ordenação' ;
+COMMENT ON COLUMN hidrics_interval.flg_available IS 'Disponibilidade do registo' ;
+COMMENT ON COLUMN hidrics_interval.adw_last_update IS 'Data da última alteração' ;
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 20:41
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+alter table HIDRICS_INTERVAL add ID_DEPARTMENT number(24);
+alter table HIDRICS_INTERVAL add ID_DEPT number(24);
+alter table HIDRICS_INTERVAL add FLG_TYPE varchar2(1 char) default 'A' not null;
+
+comment on column HIDRICS_INTERVAL.ID_DEPARTMENT is 'Department ID';
+comment on column HIDRICS_INTERVAL.ID_DEPT is 'Dept ID';
+comment on column HIDRICS_INTERVAL.FLG_TYPE is 'A - Interval hour; N - Not applicable; O - Other interval hour';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 09:53
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+ALTER TABLE HIDRICS_INTERVAL ADD INTERVAL_MINUTES NUMBER(12);
+COMMENT ON COLUMN HIDRICS_INTERVAL.INTERVAL_MINUTES IS 'Nr of minutes of the interval';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:44
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+COMMENT ON TABLE hidrics_interval IS 'Different possible interval values to the intakes and output.' ;
+
+COMMENT ON COLUMN hidrics_interval.id_hidrics_interval IS 'Primary key ID' ;
+COMMENT ON COLUMN hidrics_interval.code_hidrics_interval IS 'Code to get the hidrics description by language.' ;
+COMMENT ON COLUMN hidrics_interval.rank IS 'Rank to be used in sorting' ;
+COMMENT ON COLUMN hidrics_interval.flg_available IS 'Registry availability: Y - Available; N - Not available.' ;
+COMMENT ON COLUMN hidrics_interval.adw_last_update IS 'Date of the last change.' ;
+COMMENT ON COLUMN hidrics_interval.interval_value IS 'Interval value descriptor.' ;
+
+alter table hidrics_interval modify ( code_hidrics_interval  varchar2(200 char));
+alter table hidrics_interval modify ( flg_available  varchar2(1 char));
+alter table hidrics_interval modify ( interval_value  varchar2(24 char));
+alter table hidrics_interval modify ( create_user  varchar2(24 char));
+alter table hidrics_interval modify ( update_user  varchar2(24 char));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 22/03/2011 14:47
+-- CHANGE REASON: [ALERT-168659 ] Tempos de contagem dos balanços hídricos
+alter table hidrics_interval drop column interval_value;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 05/04/2011 08:29
+-- CHANGE REASON: [ALERT-171131 ] Tempos de contagem dos balanços hídricos
+DECLARE
+    e_invalid_identifier EXCEPTION;
+   
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904); -- drop column/comment on column    
+BEGIN
+  ----------------------------------    
+BEGIN
+        EXECUTE IMMEDIATE 'alter table hidrics_interval drop column interval_value';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente: alter table hidrics_interval drop column interval_value.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes

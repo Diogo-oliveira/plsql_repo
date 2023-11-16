@@ -1,0 +1,138 @@
+
+
+  CREATE TABLE WL_WAITING_LINE
+   (	ID_WL_WAITING_LINE NUMBER(24,0) NOT NULL ENABLE,
+	DT_BEGIN DATE,
+	DT_CALL DATE,
+	DT_END DATE,
+	DT_CONSULT DATE,
+	FLG_TYPE_QUEUE VARCHAR2(1),
+	NUMBER_QUEUE NUMBER(6,0),
+	ID_WL_STATUS NUMBER(24,0) NOT NULL ENABLE,
+	ID_CLINICAL_SERVICE NUMBER(12,0),
+	ID_PROFESSIONAL NUMBER(24,0),
+	ID_WL_QUEUE NUMBER(24,0),
+
+	ID_PATIENT NUMBER(24,0),
+	ID_ROOM NUMBER(24,0),
+	ID_WL_WAITING_LINE_PARENT NUMBER(24,0),
+	ID_EPISODE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE wl_waiting_line IS 'Gestão dos tempos de espera dos utentes' ;
+
+COMMENT ON COLUMN wl_waiting_line.id_wl_waiting_line IS 'Chave primária' ;
+COMMENT ON COLUMN wl_waiting_line.dt_begin IS 'Data de inicio de espera' ;
+COMMENT ON COLUMN wl_waiting_line.dt_call IS 'Data de atendimento' ;
+COMMENT ON COLUMN wl_waiting_line.dt_end IS 'Data de fim de atendimento' ;
+COMMENT ON COLUMN wl_waiting_line.dt_consult IS 'Data marcada para consulta' ;
+COMMENT ON COLUMN wl_waiting_line.flg_type_queue IS 'Tipo de atendimento ( = WL_QUEUE.FLG_TYPE)' ;
+COMMENT ON COLUMN wl_waiting_line.number_queue IS 'Nº de senha do utente' ;
+COMMENT ON COLUMN wl_waiting_line.id_wl_queue IS 'Chave primária' ;
+COMMENT ON COLUMN wl_waiting_line.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN wl_waiting_line.id_room IS 'Sala de espera' ;
+COMMENT ON COLUMN wl_waiting_line.id_wl_waiting_line_parent IS 'Id do registo da fila de espera anterior, para guardar a ligação entre as filas.Por ex., qd o utente efectiva consulta (termina a 1ª fila de espera) e passa automaticamente para a fila de espera para atendimento médico, o registo criado para a 2ª fila guarda o Id da 1ª fila.' ;
+
+
+
+
+ALTER TABLE WL_WAITING_LINE ADD DT_BEGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN WL_WAITING_LINE.DT_BEGIN_TSTZ IS 'Data de inicio de espera'; 
+
+
+
+
+ALTER TABLE WL_WAITING_LINE ADD DT_CALL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN WL_WAITING_LINE.DT_CALL_TSTZ IS 'Data de atendimento'; 
+
+
+
+
+ALTER TABLE WL_WAITING_LINE ADD DT_CONSULT_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN WL_WAITING_LINE.DT_CONSULT_TSTZ IS 'Data marcada para consulta'; 
+
+
+
+
+ALTER TABLE WL_WAITING_LINE ADD DT_END_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN WL_WAITING_LINE.DT_END_TSTZ IS 'Data de fim de atendimento'; 
+
+
+
+-- INPATIENT Ricardo Nuno Almeida 2008/09/22
+-- Drop às colunas DATE
+ALTER TABLE WL_WAITING_LINE DROP (DT_BEGIN, DT_CALL, DT_END, DT_CONSULT);
+-- END;
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 30/11/2010 13:46
+-- CHANGE REASON: [ALERT-145880 ] Botão para efectivar pacientes
+ALTER TABLE WL_WAITING_LINE ADD id_prof_call NUMBER(24); 
+COMMENT ON COLUMN WL_WAITING_LINE.id_prof_call IS 'Professional that calls the ticket.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table WL_WAITING_LINE
+  is 'Table used to manage the patient wainting times
+';
+-- Add comments to the columns 
+comment on column WL_WAITING_LINE.id_wl_waiting_line
+  is 'Primary key.';
+comment on column WL_WAITING_LINE.char_queue
+  is 'The letter that identifies the ticket''s queue. Same as defined in the corresponding WL_QUEUE.CHAR_QUEUE';
+comment on column WL_WAITING_LINE.number_queue
+  is 'Ticket number, as it is printed and displayed on screen. The Nurse and Doctor queues may not have a number, since there are no physical tickets.';
+comment on column WL_WAITING_LINE.id_clinical_service
+  is 'For Doctor and Nurse''s tickets only, else NULL. Clinical service of the corresponding queue.';
+comment on column WL_WAITING_LINE.id_professional
+  is 'Professional to be consulted.';
+comment on column WL_WAITING_LINE.id_wl_queue
+  is 'ID of the ticket''s corresponding queue';
+comment on column WL_WAITING_LINE.id_patient
+  is 'The patient who has been admitted (and is therefore associated to this ticket)';
+comment on column WL_WAITING_LINE.id_room
+  is 'For Doctor and Nurse''s tickets only, else NULL. Indicates this ticket''s waiting room';
+comment on column WL_WAITING_LINE.id_wl_waiting_line_parent
+  is 'For Doctor and Nurse''s tickets only, else NULL. Indicates this ticket''s parent ticket (the one taken in the kiosk, for instance)';
+comment on column WL_WAITING_LINE.id_episode
+  is 'The corresponding episode of the patient who has been admitted (and is therefore associated to this ticket)';
+comment on column WL_WAITING_LINE.dt_begin_tstz
+  is 'Date of the start of the waiting period.';
+comment on column WL_WAITING_LINE.dt_call_tstz
+  is 'Date of the first call for the ticket.';
+comment on column WL_WAITING_LINE.dt_consult_tstz
+  is 'Scheduled date for the consult';
+comment on column WL_WAITING_LINE.dt_end_tstz
+  is 'Date of the end of the waiting period. If there is a subsequent ticket in another waiting line, it will have the same value for its Start date.';
+comment on column WL_WAITING_LINE.flg_wl_status
+  is 'Identification of the ticket''s status: X - Called; A - Admitted; E - Waiting (Clinical); H - Discharged; N - Waiting (Nurse)';
+comment on column WL_WAITING_LINE.create_user
+  is 'Creation User';
+comment on column WL_WAITING_LINE.create_time
+  is 'Creation Time';
+comment on column WL_WAITING_LINE.create_institution
+  is 'Creation Institution';
+comment on column WL_WAITING_LINE.update_user
+  is 'Update User';
+comment on column WL_WAITING_LINE.update_time
+  is 'Update Time';
+comment on column WL_WAITING_LINE.update_institution
+  is 'Update Institution';
+comment on column WL_WAITING_LINE.id_prof_call
+  is 'Professional that calls the ticket.';
+ 
+-- CHANGE END: Pedro Fernandes
+
+---
+
+declare
+       l_sql  varchar2(4000);
+begin
+       l_sql := q'[alter table wl_waiting_line modify char_queue varchar2(0010 char)]';
+       pk_versioning.run( l_sql );
+end;
+/

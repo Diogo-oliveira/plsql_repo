@@ -1,0 +1,83 @@
+
+
+  CREATE TABLE ISENCAO
+   (	ID_ISENCAO NUMBER(24,0) NOT NULL ENABLE,
+	CODE_ISENCAO VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(3,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	GENDER VARCHAR2(1),
+	AGE_MIN NUMBER(3,0),
+	AGE_MAX NUMBER(3,0)
+   );
+
+
+COMMENT ON TABLE isencao IS 'Tipos de isenção' ;
+
+COMMENT ON COLUMN isencao.code_isencao IS 'Código para tradução' ;
+COMMENT ON COLUMN isencao.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN isencao.gender IS 'Género ao qual se aplica' ;
+COMMENT ON COLUMN isencao.age_min IS 'Idade mínima à qual se aplica' ;
+COMMENT ON COLUMN isencao.age_max IS 'Idade máxima à qual se aplica' ;
+
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 05/03/2010 16:58
+-- CHANGE REASON: 
+begin
+DROP TABLE ISENCAO;
+
+-- Create table
+create table ISENCAO
+(
+  ID_ISENCAO        NUMBER(24) not null,
+  CODE_ISENCAO      VARCHAR2(200) not null,
+  FLG_AVAILABLE     VARCHAR2(1) not null,
+  RANK              NUMBER(3) not null,
+  GENDER            VARCHAR2(1),
+  AGE_MIN           NUMBER(3),
+  AGE_MAX           NUMBER(3),
+  ID_CONTENT        VARCHAR2(200),
+  RECORD_STATUS     VARCHAR2(1),
+  IMPORT_CODE       VARCHAR2(30),
+  CONTENT_DATE_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE
+)
+tablespace ALERT_ADTCOD_DATA
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table ISENCAO
+  is 'Types of exemption';
+-- Add comments to the columns 
+comment on column ISENCAO.ID_ISENCAO
+  is 'Record unique identifier';
+comment on column ISENCAO.CODE_ISENCAO
+  is 'Exemption code';
+comment on column ISENCAO.FLG_AVAILABLE
+  is 'Availability of the record in the institution';
+comment on column ISENCAO.RANK
+  is 'Ranking order';
+comment on column ISENCAO.GENDER
+  is 'Gender to which the exemption applies';
+comment on column ISENCAO.AGE_MIN
+  is 'Minimum age criteria';
+comment on column ISENCAO.AGE_MAX
+  is 'Maximum age criteria';
+comment on column ISENCAO.ID_CONTENT
+  is 'Content identifier';
+comment on column ISENCAO.RECORD_STATUS
+  is 'Status of the record';
+comment on column ISENCAO.IMPORT_CODE
+  is 'Code to identify the record between migrations';
+comment on column ISENCAO.CONTENT_DATE_TSTZ
+  is 'Date tstz';
+end;
+/
+-- CHANGE END: Susana Silva

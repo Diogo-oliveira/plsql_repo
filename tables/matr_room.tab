@@ -1,0 +1,22 @@
+
+
+  CREATE TABLE MATR_ROOM
+   (	ID_MATR_ROOM NUMBER(24,0) NOT NULL ENABLE,
+	ID_MATERIAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_ROOM NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE matr_room IS 'Alocação de salas aos equipamentos (não móveis)' ;
+
+--29/10/2010 Rui Batista
+--[ALERT-136492] Database object Cleaning
+begin
+
+  execute immediate 'drop table MATR_ROOM';
+--	
+	exception
+	when others then --ORA-00942 Table or view does not exists
+	     null;
+end;
+

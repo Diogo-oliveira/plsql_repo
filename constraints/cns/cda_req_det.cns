@@ -1,0 +1,41 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/05/2014 11:59
+-- CHANGE REASON: [ALERT-282042] data export detail
+DECLARE
+    e_pk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+    e_unique_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table CDA_REQ_det add constraint CDARD_PK primary key (id_cda_req_det) using index tablespace alert_idx';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already exists');
+    END;
+    
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table CDA_REQ_det add constraint CDARD_UK unique (id_cda_req,flg_status) using index tablespace alert_idx';
+    EXCEPTION
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('UK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table CDA_REQ_det add constraint CDARD_STATUS_CHK check (FLG_STATUS IN (''P'',''R'',''F'',''C''))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('CK already exists');
+    END;  
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table CDA_REQ_DET add constraint CDARD_DTSTATUS_CHK check (dt_status_end >= dt_status_start)';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('CK already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

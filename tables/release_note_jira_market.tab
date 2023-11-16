@@ -1,0 +1,44 @@
+-- CHANGED BY:  Álvaro Vasconcelos
+-- CHANGE DATE: 12/04/2011 17:27
+-- CHANGE REASON: [ALERT-171272] Release notes automatic classification - profile_template_market
+CREATE TABLE RELEASE_NOTE_JIRA_MARKET (
+       ID_JIRA_MAKET              NUMBER(24) NOT NULL,
+   ID_MARKET                  NUMBER(24) NOT NULL,
+ --
+       CREATE_USER                  VARCHAR2(24 CHAR),
+       CREATE_TIME                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       CREATE_INSTITUTION           NUMBER(24),
+       UPDATE_USER                  VARCHAR2(24 CHAR),
+       UPDATE_TIME                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       UPDATE_INSTITUTION           NUMBER(24)
+);
+
+COMMENT ON TABLE RELEASE_NOTE_JIRA_MARKET IS 'Jira mapping table for markets';
+
+COMMENT ON COLUMN RELEASE_NOTE_JIRA_MARKET.ID_JIRA_MAKET     IS 'Jira id market';
+COMMENT ON COLUMN RELEASE_NOTE_JIRA_MARKET.ID_MARKET         IS 'Alert id market';
+--
+COMMENT ON COLUMN RELEASE_NOTE_JIRA_MARKET.create_user             IS 'Professional that created the registry';
+COMMENT ON COLUMN RELEASE_NOTE_JIRA_MARKET.create_time             IS 'Date of the registry creation';
+COMMENT ON COLUMN RELEASE_NOTE_JIRA_MARKET.create_institution      IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN RELEASE_NOTE_JIRA_MARKET.update_user             IS 'Last professional that updated the registry';
+COMMENT ON COLUMN RELEASE_NOTE_JIRA_MARKET.update_time             IS 'Date of the last update to the registry';
+COMMENT ON COLUMN RELEASE_NOTE_JIRA_MARKET.update_institution      IS 'Id of the last institution where the registry was updated';
+-- CHANGE END:  Álvaro Vasconcelos
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 14/07/2014 16:37
+-- CHANGE REASON: [ALERT-290420] 
+DECLARE
+    e_invalid_ident EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_ident, -00904);
+BEGIN
+    BEGIN
+        pk_versioning.run(i_sql => 'alter table RELEASE_NOTE_JIRA_MARKET rename column ID_JIRA_MAKET to ID_JIRA_MARKET');
+    EXCEPTION
+        WHEN e_invalid_ident THEN
+            dbms_output.put_line('Invalid identifier');
+    END;
+END;
+/
+-- CHANGE END: Gustavo Serrano

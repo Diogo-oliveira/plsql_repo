@@ -1,0 +1,146 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:22
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE ds_event_target ADD CONSTRAINT dset_pk PRIMARY KEY(id_ds_event, id_ds_cmpt_mkt_rel, flg_event_type);
+--
+ALTER TABLE ds_event_target ADD CONSTRAINT dset_dset_uk UNIQUE(id_ds_event_target);
+--
+ALTER TABLE ds_event_target ADD CONSTRAINT dset_et_chk CHECK(flg_event_type IN ('I', 'A', 'M', 'E'));
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:22
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER INDEX dset_pk          REBUILD TABLESPACE index_m;
+--
+ALTER INDEX dset_dset_uk     REBUILD TABLESPACE index_m;
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 24/07/2019 16:35
+-- CHANGE REASON: [ARCH-7603] Changes on DB Model
+--                
+declare
+	l_sql varchar2(1000 char);
+begin
+	l_sql := 'alter table DS_EVENT_TARGET  drop constraint DSET_ET_CHK';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_sql	varchar2(1000 char);
+begin
+	l_sql := q'[alter table DS_EVENT_TARGET add constraint DSET_ET_CHK check (flg_event_type IN ('I', 'A', 'M', 'R','C'))]';
+  pk_versioning.run(l_sql);
+end;
+/
+
+declare
+  l_sql varchar2(1000 char);
+  l_flag  varchar2(1000 char);
+  pl    varchar2(0010 char) := '''';
+begin
+
+  l_flag:= pl||'R'||pl;
+  l_Sql := 'alter table DS_EVENT_TARGET  add constraint DSET_FLD_MSK_CHK check ((flg_event_type = '||l_flag||' and field_mask is not null ) or ( flg_event_type !=';
+  l_sql := l_sql|| l_flag|| ' and field_mask is null ) )';
+
+  pk_versioning.run( l_sql );
+end;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 17:04
+-- CHANGE REASON: [ARCH-7603] Changes on DB Model
+--                
+declare
+	l_sql varchar2(1000 char);
+begin
+	l_sql := 'alter table DS_EVENT_TARGET  drop constraint DSET_ET_CHK';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_sql	varchar2(1000 char);
+begin
+	l_sql := q'[alter table DS_EVENT_TARGET add constraint DSET_ET_CHK check (flg_event_type IN ('I', 'A', 'M', 'R','C','E'))]';
+  pk_versioning.run(l_sql);
+end;
+/
+
+declare
+  l_sql varchar2(1000 char);
+  l_flag  varchar2(1000 char);
+  pl    varchar2(0010 char) := '''';
+begin
+
+  l_flag:= pl||'R'||pl;
+  l_Sql := 'alter table DS_EVENT_TARGET  add constraint DSET_FLD_MSK_CHK check ((flg_event_type = '||l_flag||' and field_mask is not null ) or ( flg_event_type !=';
+  l_sql := l_sql|| l_flag|| ' and field_mask is null ) )';
+
+  pk_versioning.run( l_sql );
+end;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- cmf 02-08-2019
+declare
+	l_sql varchar2(1000 char);
+begin
+	l_sql := 'alter table DS_EVENT_TARGET  drop constraint DSET_FLD_MSK_CHK';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+  l_sql varchar2(1000 char);
+  l_flag  varchar2(1000 char);
+  pl    varchar2(0010 char) := '''';
+begin
+
+  l_flag:= pl||'X'||pl;
+  l_Sql := 'alter table DS_EVENT_TARGET  add constraint DSET_FLD_MSK_CHK check ((flg_event_type = '||l_flag||' and field_mask is not null ) or ( flg_event_type !=';
+  l_sql := l_sql|| l_flag|| ' and field_mask is null ) )';
+
+  pk_versioning.run( l_sql );
+end;
+/
+
+declare
+	l_sql varchar2(1000 char);
+begin
+	l_sql := 'alter table DS_EVENT_TARGET  drop constraint DSET_ET_CHK';
+	pk_versioning.run(l_sql);
+end;
+/
+
+
+declare
+	l_sql	varchar2(1000 char);
+begin
+	l_sql := q'[alter table DS_EVENT_TARGET add constraint DSET_ET_CHK check (flg_event_type IN ('I', 'A', 'M', 'R','C','X'))]';
+  pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_sql varchar2(1000 char);
+begin
+	l_sql := 'alter table DS_EVENT_TARGET  drop constraint DSET_ET_CHK';
+	pk_versioning.run(l_sql);
+end;
+/
+
+
+declare
+	l_sql	varchar2(1000 char);
+begin
+	l_sql := q'[alter table DS_EVENT_TARGET add constraint DSET_ET_CHK check (flg_event_type IN ('I', 'A', 'M', 'R','C','E','X'))]';
+  pk_versioning.run(l_sql);
+end;
+/

@@ -1,0 +1,54 @@
+
+
+  ALTER TABLE DOC_EXTERNAL ADD CONSTRAINT DEL_PK PRIMARY KEY (ID_DOC_EXTERNAL) ENABLE;
+
+  ALTER TABLE DOC_EXTERNAL MODIFY (ID_DOC_EXTERNAL NOT NULL ENABLE);
+
+  ALTER TABLE DOC_EXTERNAL MODIFY (ID_DOC_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE DOC_EXTERNAL MODIFY (ID_DOC_ORI_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE DOC_EXTERNAL MODIFY (ID_DOC_DESTINATION NOT NULL ENABLE);
+
+
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 2011-07-04
+-- CHANGE REASON: ALERT-187083
+
+DECLARE
+   e_object_exists EXCEPTION;
+                                 
+   PRAGMA EXCEPTION_INIT(e_object_exists, -02264);
+BEGIN
+                                 
+   BEGIN
+       EXECUTE IMMEDIATE 'alter table DOC_EXTERNAL
+  add constraint DEL_FLG_STATUS_CHK
+  check (FLG_STATUS in (''A'', ''P'', ''I'', ''O'', ''C''))';
+   EXCEPTION
+       WHEN e_object_exists THEN
+           dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+   END;
+                                 
+END;
+/
+
+DECLARE
+   e_object_exists EXCEPTION;
+                                 
+   PRAGMA EXCEPTION_INIT(e_object_exists, -02264);
+BEGIN
+                                 
+   BEGIN
+       EXECUTE IMMEDIATE 'alter table DOC_EXTERNAL
+  add constraint DEL_FLG_RECEIVED_CHK
+  check (FLG_RECEIVED in (''Y'', ''N''))';
+   EXCEPTION
+       WHEN e_object_exists THEN
+           dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+   END;
+                                 
+END;
+/
+
+-- CHANGED END: Bruno Martins

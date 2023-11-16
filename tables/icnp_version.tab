@@ -1,0 +1,56 @@
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/10/2010 16:20
+-- CHANGE REASON: [ALERT-129405] ICNP Choice Version
+create table icnp_version
+ (id_icnp_version number(24) not null,
+  code_icnp_version varchar2(200 char) not null,
+  flg_available varchar2(1 char) default 'Y' not null,
+  flg_action varchar2(1 char) not null,
+  flg_focus varchar2(1 char) not null,
+  flg_judgement varchar2(1 char) not null,
+  create_user number(24),
+  create_time timestamp(6) with local time zone,
+  create_institution number(24),
+  update_user number(24),
+  update_time timestamp(6) with local time zone,
+  update_institution number(24));
+comment on table icnp_version is 'ICNP versions';
+comment on column icnp_version.id_icnp_version is 'ICNP version ID';
+comment on column icnp_version.code_icnp_version is 'Translation code';
+comment on column icnp_version.flg_available is 'Available? (Y/N)';
+comment on column icnp_version.flg_action is 'Flag for action';
+comment on column icnp_version.flg_focus is 'Flag for focus';
+comment on column icnp_version.flg_judgement is 'Flag for judgement';
+comment on column icnp_version.create_user is 'Create user';
+comment on column icnp_version.create_time is 'Create time';
+comment on column icnp_version.create_institution is 'Create institution';
+comment on column icnp_version.update_user is 'Update user';
+comment on column icnp_version.update_time is 'Update time';
+comment on column icnp_version.update_institution is 'Update institution';
+
+alter table icnp_version add constraint ivn_pk primary key (id_icnp_version);
+-- CHANGE END: João Martins
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 21/10/2010 15:08
+-- CHANGE REASON: [ALERT-129405] 
+alter table icnp_version modify flg_action varchar2(3) not null;
+alter table icnp_version modify flg_focus varchar2(3) not null;
+alter table icnp_version modify flg_judgement varchar2(3) not null;
+-- CHANGE END: João Martins
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 22/10/2010 15:06
+-- CHANGE REASON: [ALERT-129405] 
+alter table icnp_version modify flg_action varchar2(3);
+alter table icnp_version modify flg_focus varchar2(3);
+alter table icnp_version modify flg_judgement varchar2(3);
+-- CHANGE END: João Martins
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 23/10/2013 11:46
+-- CHANGE REASON: [ALERT-267654] 
+alter table icnp_version modify FLG_ACTION VARCHAR2(10 CHAR); 
+alter table icnp_version modify FLG_FOCUS VARCHAR2(10 CHAR);
+alter table icnp_version modify FLG_JUDGEMENT VARCHAR2(10 CHAR);
+-- CHANGE END: cristina.oliveira

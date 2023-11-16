@@ -1,0 +1,69 @@
+  CREATE TABLE "SR_DANGER_CONT"
+(  
+  "ID_SR_DANGER_CONT" NUMBER(24,0) NOT NULL,
+  "ID_EPISODE" NUMBER(24,0),
+  "ID_PATIENT" NUMBER(24,0),
+  "ID_DIAGNOSIS" NUMBER(24,0),
+  "ID_SCHEDULE_SR" NUMBER(24,0),
+  "ID_PROF_REG" NUMBER(24,0),
+  "DT_REG"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+	"FLG_STATUS" VARCHAR2(1),
+  "CREATE_USER"  VARCHAR2(24),
+  "CREATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  "CREATE_INSTITUTION"  NUMBER(24),                         
+  "UPDATE_USER"  VARCHAR2(24),                       
+  "UPDATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,  
+  "UPDATE_INSTITUTION"  NUMBER(24)                  
+);
+
+COMMENT ON TABLE "SR_DANGER_CONT"  IS 'For a certain surgery episode, this table stores the diagnosis that may present risk of contamination';
+COMMENT ON COLUMN "SR_DANGER_CONT"."ID_SR_DANGER_CONT" IS 'Primary Key';
+COMMENT ON COLUMN "SR_DANGER_CONT"."ID_EPISODE"  IS 'surgical procedure ID';
+COMMENT ON COLUMN "SR_DANGER_CONT"."ID_PATIENT"  IS 'patient ID';
+COMMENT ON COLUMN "SR_DANGER_CONT"."ID_DIAGNOSIS"  IS 'diagnosis ID that may present danger of contamination';
+COMMENT ON COLUMN "SR_DANGER_CONT"."FLG_STATUS" IS 'Indicates record status, available values: A - Active; C - Cancelled; O - Outdated ';
+COMMENT ON COLUMN "SR_DANGER_CONT"."ID_SCHEDULE_SR"  IS 'Id of the scheduled procedure';
+COMMENT ON COLUMN "SR_DANGER_CONT"."ID_PROF_REG" IS 'Professional ID - person who inserted data';
+COMMENT ON COLUMN "SR_DANGER_CONT"."DT_REG" IS 'Date of insertion/update';
+COMMENT ON COLUMN "SR_DANGER_CONT"."CREATE_USER" IS 'ID of the professional who created the record';
+COMMENT ON COLUMN "SR_DANGER_CONT"."CREATE_TIME" IS 'Date of record creation';
+COMMENT ON COLUMN "SR_DANGER_CONT"."CREATE_INSTITUTION" IS 'ID of institution where record was created'; 
+COMMENT ON COLUMN "SR_DANGER_CONT"."UPDATE_USER" IS 'ID of the professional who last updated the record';
+COMMENT ON COLUMN "SR_DANGER_CONT"."UPDATE_TIME" IS 'Date when record was last updated';
+COMMENT ON COLUMN "SR_DANGER_CONT"."UPDATE_INSTITUTION" IS 'ID of the institution where record was last updated'; 
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/12/2011 16:34
+-- CHANGE REASON: [ALERT-210978 ] DEMOS MX - OUT - Admission request- se preenche as áreas de Dx e lateralidade no pedido do procedimento cirúrgico dá erro.
+DECLARE
+    e_column_already_there EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table sr_danger_cont add id_epis_diagnosis number(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/12/2011 16:49
+-- CHANGE REASON: [ALERT-210984 ] DEMOS MX - OUT - Admission request- se preenche as áreas de Dx e lateralidade no pedido do procedimento cirúrgico dá erro.
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904); -- drop column/comment on column
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE sr_danger_cont drop column id_diagnosis';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,2 @@
+GRANT EXECUTE ON ALERT.t_table_laboratory TO ALERT_DATA_ACCESS;
+/

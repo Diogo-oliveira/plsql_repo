@@ -1,0 +1,64 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 10/12/2013 15:53
+-- CHANGE REASON: [ALERT-271758] 
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create table CDR_EXTERNAL
+(
+  ID_CDR_EXTERNAL   NUMBER(24) not null,
+  ID_CDR_CALL       NUMBER(24) not null,
+  ID_CDR_TYPE         NUMBER(24) not null,
+  ID_CDR_SEVERITY       NUMBER(24) not null,
+  
+  id_product VARCHAR2(30 CHAR) not null,
+  ID_PRODUCT_SUPPLIER VARCHAR2(30 CHAR) not null,
+  id_PRODUCT_LEVEL  VARCHAR2(30 CHAR),
+
+  TITLE             VARCHAR2(2000 CHAR),
+  COMMENT_DESC                   clob,
+  
+  create_user         VARCHAR2(24 CHAR),
+  create_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution  NUMBER(24),
+  update_user         VARCHAR2(24 CHAR),
+  update_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution  NUMBER(24)
+)';
+exception when e_obj_exists then
+  dbms_output.put_line('table CDR_EXTERNAL exists!');
+end;
+/
+
+comment on table CDR_EXTERNAL  is 'CDR External Rule Decisions (like VIDAL)';
+comment on column CDR_EXTERNAL.ID_CDR_EXTERNAL  is 'Primary key.';
+comment on column CDR_EXTERNAL.ID_CDR_CALL  is 'Rule engine call identifier.';
+comment on column CDR_EXTERNAL.ID_CDR_TYPE  is 'Rule type identifier.';
+comment on column CDR_EXTERNAL.ID_CDR_SEVERITY  is 'Rule severity identifier.';
+comment on column CDR_EXTERNAL.id_product  is 'Product ID.';
+comment on column CDR_EXTERNAL.id_PRODUCT_LEVEL is 'Product level ID';
+comment on column CDR_EXTERNAL.ID_PRODUCT_SUPPLIER is 'Product supplier ID';
+comment on column CDR_EXTERNAL.TITLE  is 'Exernal Title to present.';
+comment on column CDR_EXTERNAL.COMMENT_DESC  is 'External Comment to present';
+comment on column CDR_EXTERNAL.create_user  is 'Creation User';
+comment on column CDR_EXTERNAL.create_time  is 'Creation Time';
+comment on column CDR_EXTERNAL.create_institution  is 'Creation Institution';
+comment on column CDR_EXTERNAL.update_user  is 'Update User';
+comment on column CDR_EXTERNAL.update_time  is 'Update Time';
+comment on column CDR_EXTERNAL.update_institution  is 'Update Institution';
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:33
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.cdr_external move lob(comment_desc) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

@@ -1,0 +1,22 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/04/2015 16:17
+-- CHANGE REASON: [ALERT-31026901] CO-SIGN  - Database model Versioning
+BEGIN
+pk_versioning.run(i_sql => q'[CREATE UNIQUE INDEX cs_pk_idx ON co_sign(id_task ASC, id_task_type ASC, id_action ASC, id_co_sign ASC)]');
+pk_versioning.run(i_sql => q'[CREATE INDEX cs_id_episode_idx ON co_sign(id_episode ASC) tablespace ALERT_IDX]');
+pk_versioning.run(i_sql => q'[CREATE INDEX cs_id_prof_created_idx ON co_sign(id_prof_created ASC) tablespace ALERT_IDX]');
+    pk_versioning.run(i_sql => q'[CREATE INDEX cs_id_prof_co_signed_idx ON co_sign(id_prof_co_signed ASC) tablespace ALERT_IDX]');
+pk_versioning.run(i_sql => q'[CREATE INDEX cs_id_prof_ordered_by_idx ON co_sign(id_prof_ordered_by ASC) tablespace ALERT_IDX]');
+pk_versioning.run(i_sql => q'[CREATE INDEX cs_id_task_group_idx ON co_sign(id_task_group ASC) tablespace ALERT_IDX]');
+    
+END;
+/    
+-- CHANGE END: Elisabete Bugalho
+
+-- cmf  22-03-2017
+BEGIN
+pk_versioning.run(i_sql => q'[CREATE INDEX CS_ORDER_TYPE_IDX ON CO_SIGN( id_order_type )]');
+pk_versioning.run(i_sql => q'[CREATE INDEX CS_TASK_TYPE_IDX ON CO_SIGN( id_task_type )]');
+end;
+/
+

@@ -1,0 +1,45 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:20
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+CREATE TABLE donor_cont_disease_hist (
+       id_donor_cont_disease_hist NUMBER(24) NOT NULL,
+       id_organ_donor_hist        NUMBER(24) NOT NULL,
+       --
+       id_donor_contag_disease    NUMBER(24) NOT NULL,
+       id_organ_donor             NUMBER(24) NOT NULL,
+       id_pat_history_diagnosis   NUMBER(24) NOT NULL,
+       --
+       create_user                VARCHAR2(24 CHAR),
+       create_time                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution         NUMBER(24),
+       update_user                VARCHAR2(24 CHAR),
+       update_time                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution         NUMBER(24)
+);
+
+--
+
+COMMENT ON TABLE donor_cont_disease_hist IS 'Table for the donors contagious diseases history';
+--
+COMMENT ON COLUMN donor_cont_disease_hist.id_donor_cont_disease_hist IS 'Donor contagious disease history Id';
+COMMENT ON COLUMN donor_cont_disease_hist.id_organ_donor_hist        IS 'Organ donor history Id';
+--
+COMMENT ON COLUMN donor_cont_disease_hist.id_donor_contag_disease    IS 'Donor contagious disease Id';
+COMMENT ON COLUMN donor_cont_disease_hist.id_organ_donor             IS 'Organ donor Id';
+COMMENT ON COLUMN donor_cont_disease_hist.id_pat_history_diagnosis   IS 'Id of the contagious disease diagnosis registry';
+--
+COMMENT ON COLUMN donor_cont_disease_hist.create_user                IS 'Professional that created the registry';
+COMMENT ON COLUMN donor_cont_disease_hist.create_time                IS 'Date of the registry creation';
+COMMENT ON COLUMN donor_cont_disease_hist.create_institution         IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN donor_cont_disease_hist.update_user                IS 'Last professional that updated the registry';
+COMMENT ON COLUMN donor_cont_disease_hist.update_time                IS 'Date of the last update to the registry';
+COMMENT ON COLUMN donor_cont_disease_hist.update_institution         IS 'Id of the last institution where the registry was updated';
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:21
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE donor_cont_disease_hist MOVE TABLESPACE table_m;
+--
+-- CHANGE END: Filipe Machado

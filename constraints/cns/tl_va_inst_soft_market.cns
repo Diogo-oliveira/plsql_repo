@@ -1,0 +1,44 @@
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 30/11/2010 11:16
+-- CHANGE REASON: [ALERT-145613] Issue Replication: Scale of imeline view configurable(v2.6.0.4) 
+DECLARE
+    e_primary_key EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_primary_key, -02260);
+    l_table_name VARCHAR2(30) := 'tl_va_inst_soft_market';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT tl_va_ism_pk PRIMARY KEY (id_tl_va_inst_soft_market)';
+EXCEPTION
+    WHEN e_primary_key THEN
+        dbms_output.put_line('WARNING - Primary key in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+
+DECLARE
+    e_name_already_used_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_name_already_used_constraint, -02264);
+    l_table_name VARCHAR2(30) := 'tl_va_inst_soft_market';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name ||
+                      ' ADD CONSTRAINT tl_va_ism_fa_chk CHECK (flg_available in (''Y'',''N''))';
+EXCEPTION
+    WHEN e_name_already_used_constraint THEN
+        dbms_output.put_line('WARNING - Check constraint in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END: Rui Duarte
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 11/02/2021 08:48
+-- CHANGE REASON: [EMR-41846] - Reorganize the episode time line by software
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -02261);
+l_sql varchar2(4000);
+BEGIN
+EXECUTE IMMEDIATE ' alter table TL_VA_INST_SOFT_MARKET   add constraint TL_VA_ISM_TL_UK unique (ID_INSTITUTION,ID_SOFTWARE,ID_TL_SOFTWARE,ID_MARKET)';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Elisabete Bugalho

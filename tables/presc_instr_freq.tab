@@ -1,0 +1,99 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 11:32
+-- CHANGE REASON: [ALERT-38908] Versionamento.
+-- Create table
+create table PRESC_INSTR_FREQ
+(
+  ID_PRESC_INSTR_FREQ         NUMBER(24) not null,
+  ID_PRESC_INSTR_DET          NUMBER(24) not null,
+  FREQ_DESCR                  VARCHAR2(240),
+  ID_PRESCRIPTION_FIELD_DET   NUMBER(24),
+  ID_PRESC_DOSE               NUMBER(24),
+  ID_PRESC_DURATION           NUMBER(24),
+  DATE_REG                    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  PRESCRIPTION_FIELD_DET_RANK NUMBER(24),
+  ID_IRREGULAR_DIRECTIONS     NUMBER(24),
+  FREQ_TYPE                   VARCHAR2(2)
+)
+tablespace TABLE_M;
+-- Add comments to the table
+comment on table PRESC_INSTR_FREQ
+  is 'Tabela onde irão ser guardadas as relações entre as prescrições e as frequências associadas.';
+-- Add comments to the columns 
+comment on column PRESC_INSTR_FREQ.ID_PRESC_INSTR_FREQ
+  is 'primary key';
+comment on column PRESC_INSTR_FREQ.ID_PRESC_INSTR_DET
+  is 'id das instruções';
+comment on column PRESC_INSTR_FREQ.FREQ_DESCR
+  is 'descrição da frequência';
+comment on column PRESC_INSTR_FREQ.ID_PRESCRIPTION_FIELD_DET
+  is 'id do campo';
+comment on column PRESC_INSTR_FREQ.ID_PRESC_DOSE
+  is 'id da dose';
+comment on column PRESC_INSTR_FREQ.ID_PRESC_DURATION
+  is 'id da duração';
+comment on column PRESC_INSTR_FREQ.DATE_REG
+  is 'data de registo';
+comment on column PRESC_INSTR_FREQ.PRESCRIPTION_FIELD_DET_RANK
+  is 'ordenação dos campos';
+comment on column PRESC_INSTR_FREQ.ID_IRREGULAR_DIRECTIONS
+  is 'id dos intervalos pré-definidos';
+comment on column PRESC_INSTR_FREQ.FREQ_TYPE
+  is 'tipo de frequência escolhida. (MF) - mais frequentes; (OF) - popup das outras frequências';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 15:19
+-- CHANGE REASON: [ALERT-38908] add audit columns
+-- Create table
+create table PRESC_INSTR_FREQ
+(
+  ID_PRESC_INSTR_FREQ         NUMBER(24) not null,
+  ID_PRESC_INSTR_DET          NUMBER(24) not null,
+  FREQ_DESCR                  VARCHAR2(240),
+  ID_PRESCRIPTION_FIELD_DET   NUMBER(24),
+  ID_PRESC_DOSE               NUMBER(24),
+  ID_PRESC_DURATION           NUMBER(24),
+  DATE_REG                    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  PRESCRIPTION_FIELD_DET_RANK NUMBER(24),
+  ID_IRREGULAR_DIRECTIONS     NUMBER(24),
+  FREQ_TYPE                   VARCHAR2(2),
+  CREATE_USER           VARCHAR2(24),
+  CREATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24),
+  UPDATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+)
+tablespace TABLE_M;
+-- Add comments to the table
+comment on table PRESC_INSTR_FREQ
+  is 'Tabela onde irão ser guardadas as relações entre as prescrições e as frequências associadas.';
+-- Add comments to the columns 
+comment on column PRESC_INSTR_FREQ.ID_PRESC_INSTR_FREQ
+  is 'primary key';
+comment on column PRESC_INSTR_FREQ.ID_PRESC_INSTR_DET
+  is 'id das instruções';
+comment on column PRESC_INSTR_FREQ.FREQ_DESCR
+  is 'descrição da frequência';
+comment on column PRESC_INSTR_FREQ.ID_PRESCRIPTION_FIELD_DET
+  is 'id do campo';
+comment on column PRESC_INSTR_FREQ.ID_PRESC_DOSE
+  is 'id da dose';
+comment on column PRESC_INSTR_FREQ.ID_PRESC_DURATION
+  is 'id da duração';
+comment on column PRESC_INSTR_FREQ.DATE_REG
+  is 'data de registo';
+comment on column PRESC_INSTR_FREQ.PRESCRIPTION_FIELD_DET_RANK
+  is 'ordenação dos campos';
+comment on column PRESC_INSTR_FREQ.ID_IRREGULAR_DIRECTIONS
+  is 'id dos intervalos pré-definidos';
+comment on column PRESC_INSTR_FREQ.FREQ_TYPE
+  is 'tipo de frequência escolhida. (MF) - mais frequentes; (OF) - popup das outras frequências';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_INSTR_FREQ IS 'Tabela onde irão ser guardadas as relações entre as prescrições e as frequências associadas. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,77 @@
+create table NCH_ESTIMATED_INST_INTERV
+(
+  ID_NCH_ESTIMATED_INST    NUMBER(24) not null,
+  ID_COMPOSITION           NUMBER(24) not null
+);
+
+-- Add comments to the table 
+comment on table NCH_ESTIMATED_INST_INTERV
+  is 'Keeps the connection between the estimated NCH hours and the type of the intervention';
+-- Add comments to the columns 
+comment on column NCH_ESTIMATED_INST_INTERV.ID_NCH_ESTIMATED_INST
+  is 'ID of NCH Effectve';
+comment on column NCH_ESTIMATED_INST_INTERV.ID_COMPOSITION
+  is 'ID of ICNP_COMPOSITION';
+
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:42
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table NCH_ESTIMATED_INST_INTERV
+  is 'Keeps the connection between the estimated NCH hours and the type of the intervention';
+-- Add comments to the columns 
+comment on column NCH_ESTIMATED_INST_INTERV.id_nch_estimated_inst
+  is 'Identifier of nursing care hours (NCH) Effectve';
+comment on column NCH_ESTIMATED_INST_INTERV.id_composition
+  is 'Identifier  of ICNP_COMPOSITION (ICNP- International classification for nursing practice)';
+  
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table NCH_ESTIMATED_INST_INTERV add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column nch_estimated_inst_interv.create_user IS 'Creation User';
+COMMENT ON column nch_estimated_inst_interv.create_time IS 'Creation Time';
+COMMENT ON column nch_estimated_inst_interv.create_institution IS 'Creation Institution';
+COMMENT ON column nch_estimated_inst_interv.update_user IS 'Update User';
+COMMENT ON column nch_estimated_inst_interv.update_time IS 'Update Time';
+COMMENT ON column nch_estimated_inst_interv.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table nch_estimated_inst_interv add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column nch_estimated_inst_interv.create_user IS 'Creation User';
+COMMENT ON column nch_estimated_inst_interv.create_time IS 'Creation Time';
+COMMENT ON column nch_estimated_inst_interv.create_institution IS 'Creation Institution';
+COMMENT ON column nch_estimated_inst_interv.update_user IS 'Update User';
+COMMENT ON column nch_estimated_inst_interv.update_time IS 'Update Time';
+COMMENT ON column nch_estimated_inst_interv.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

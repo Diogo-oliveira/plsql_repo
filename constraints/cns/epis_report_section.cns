@@ -1,0 +1,30 @@
+
+
+  ALTER TABLE EPIS_REPORT_SECTION ADD CONSTRAINT ERNS_PK PRIMARY KEY (ID_EPIS_REPORT_SECTION) ENABLE;
+
+  ALTER TABLE EPIS_REPORT_SECTION MODIFY (ID_EPIS_REPORT_SECTION NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_REPORT_SECTION MODIFY (ID_EPIS_REPORT NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_REPORT_SECTION MODIFY (ID_REP_SECTION_DET NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_REPORT_SECTION MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 27-Jun-2011
+-- CHANGE REASON: ALERT-185735 - COLUMN FLG_SCOPE
+DECLARE
+    e_name_already_used_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_name_already_used_constraint, -02264);
+    l_table_name VARCHAR2(30) := 'EPIS_REPORT_SECTION';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name ||
+                      ' ADD CONSTRAINT epis_report_section_scope_chk CHECK (flg_scope in (''E'',''P'',''V''))';
+EXCEPTION
+    WHEN e_name_already_used_constraint THEN
+        dbms_output.put_line('WARNING - Check constraint in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END

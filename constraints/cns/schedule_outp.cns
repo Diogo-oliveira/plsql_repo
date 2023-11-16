@@ -1,0 +1,312 @@
+
+
+  ALTER TABLE SCHEDULE_OUTP ADD CONSTRAINT SOP_PK PRIMARY KEY (ID_SCHEDULE_OUTP) ENABLE;
+
+  ALTER TABLE SCHEDULE_OUTP MODIFY (ID_SCHEDULE_OUTP NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE_OUTP MODIFY (ID_SCHEDULE NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE_OUTP MODIFY (FLG_STATE NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE_OUTP MODIFY (ID_SOFTWARE NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE_OUTP MODIFY (ID_EPIS_TYPE NOT NULL ENABLE);
+
+
+  ALTER TABLE SCHEDULE_OUTP MODIFY (FLG_VACANCY NOT NULL ENABLE);
+
+  ALTER TABLE schedule_OUTP MODIFY flg_vacancy VARCHAR2(1);
+
+  
+alter table SCHEDULE_OUTP
+  drop constraint SOP_FLGSTATE_CK;
+  
+alter table SCHEDULE_OUTP
+  add constraint SOP_FLGSTATE_CK
+  check (flg_state IN ('A', 'R', 'E', 'D', 'M', 'C', 'N', 'P', 'T', 'W', 'G', 'K', 'F'));
+
+
+DECLARE
+    n_exists NUMBER := 0;
+BEGIN
+
+    SELECT COUNT(*)
+      INTO n_exists
+      FROM all_constraints
+     WHERE constraint_name = 'SOP_FLGSTATE_CK';
+
+    IF n_exists > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table schedule_outp drop constraint SOP_FLGSTATE_CK';
+        --DBMS_OUTPUT.PUT_LINE('TESTE');
+    END IF;
+
+    EXECUTE IMMEDIATE '
+      alter table SCHEDULE_OUTP
+  add constraint SOP_FLGSTATE_CK
+  check (flg_state IN (''A'',''D'',''E'',''G'',''M'',''N'',''P'',''T'',''W''))';
+
+END;
+/
+
+DECLARE
+    n_exists NUMBER := 0;
+BEGIN
+
+    SELECT COUNT(*)
+      INTO n_exists
+      FROM all_constraints
+     WHERE constraint_name = 'SOP_FLGSTATE_CK';
+
+    IF n_exists > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table schedule_outp drop constraint SOP_FLGSTATE_CK';
+        --DBMS_OUTPUT.PUT_LINE('TESTE');
+    END IF;
+
+    EXECUTE IMMEDIATE '
+      alter table SCHEDULE_OUTP
+  add constraint SOP_FLGSTATE_CK
+  check (flg_state IN (''A'',''D'',''E'',''G'',''M'',''N'',''P'',''T'',''R'',''W''))';
+
+END;
+/
+
+DECLARE
+    n_exists NUMBER := 0;
+BEGIN
+
+    SELECT COUNT(*)
+      INTO n_exists
+      FROM all_constraints
+     WHERE constraint_name = 'SOP_FLGSTATE_CK';
+
+    IF n_exists > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table schedule_outp drop constraint SOP_FLGSTATE_CK';
+        --DBMS_OUTPUT.PUT_LINE('TESTE');
+    END IF;
+
+    EXECUTE IMMEDIATE '
+      alter table SCHEDULE_OUTP
+  add constraint SOP_FLGSTATE_CK
+  check (flg_state IN (''A'',''D'',''E'',''G'',''M'',''N'',''P'',''T'',''R'',''W'', ''K'', ''F''))';
+END;
+/
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 01/06/2009 14:58
+-- CHANGE REASON: [ALERT-889] Perfil nutricionista
+BEGIN
+
+    SELECT COUNT(*)
+      INTO n_exists
+      FROM all_constraints
+     WHERE constraint_name = 'SOP_FLGSTATE_CK';
+
+    IF n_exists > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table schedule_outp drop constraint SOP_FLGSTATE_CK';
+        --DBMS_OUTPUT.PUT_LINE('TESTE');
+    END IF;
+
+    EXECUTE IMMEDIATE '
+      alter table SCHEDULE_OUTP
+  add constraint SOP_FLGSTATE_CK
+  check (flg_state IN (''A'',''D'',''E'',''G'',''M'',''N'',''P'',''T'',''R'',''W'', ''K'', ''F'',''U''))';
+END;
+/
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 13-10-2010
+-- CHANGE REASON: ALERT-148846
+begin
+  execute immediate 'alter table alert.schedule_outp add constraint SOP_FLG_SCHED_CHK check (flg_sched IN (''A'', ''B'', ''C'', ''D'', ''F'', ''H'', ''I'', ''J'', ''L'', ''M'', ''N'', ''O'', ''P'', ''Q'', ''R'', ''S'', ''T'', ''U'', ''V'',''X'',''Z''))';
+exception
+when others then null;
+end;
+/
+
+begin
+  execute immediate 'alter table alert.schedule_outp add constraint SOP_FLG_TYPE_CHK check (flg_type IN (''P'', ''S''))';
+exception
+when others then null;
+end;
+/
+
+begin
+  execute immediate 'alter table alert.schedule_outp add constraint SOP_FLG_SCH_TYPE_CHK check (flg_sched_type IN (''D'', ''S'', ''V'', ''C''))';
+exception
+when others then null;
+end;
+/
+-- CHANGE END: Telmo
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 21/12/2010 12:35
+-- CHANGE REASON: [ALERT-139534] 
+DECLARE
+    n_exists NUMBER := 0;
+BEGIN
+
+    SELECT COUNT(*)
+      INTO n_exists
+      FROM all_constraints
+     WHERE constraint_name = 'SOP_FLGSTATE_CK';
+
+    IF n_exists > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table schedule_outp drop constraint SOP_FLGSTATE_CK';
+        --DBMS_OUTPUT.PUT_LINE('TESTE');
+    END IF;
+
+    EXECUTE IMMEDIATE '
+      alter table SCHEDULE_OUTP
+  add constraint SOP_FLGSTATE_CK
+  check (flg_state IN (''A'',''D'',''E'',''G'',''M'',''N'',''P'',''T'',''R'',''W'', ''K'', ''F'',''U'',''S''))';
+END;
+/
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 28/02/2011 09:50
+-- CHANGE REASON: [ALERT-161542] 
+DECLARE
+    n_exists NUMBER := 0;
+BEGIN
+
+    SELECT COUNT(*)
+      INTO n_exists
+      FROM all_constraints
+     WHERE constraint_name = 'SOP_FLGSTATE_CK';
+
+    IF n_exists > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table schedule_outp drop constraint SOP_FLGSTATE_CK';
+        --DBMS_OUTPUT.PUT_LINE('TESTE');
+    END IF;
+
+    EXECUTE IMMEDIATE '
+      alter table SCHEDULE_OUTP
+  add constraint SOP_FLGSTATE_CK
+  check (flg_state IN (''A'',''D'',''E'',''G'',''M'',''N'',''P'',''T'',''R'',''W'', ''K'', ''F'',''U'',''S'', ''B''))';
+END;
+/
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 16-08-2011
+-- CHANGE REASON: ALERT-189396
+begin
+  EXECUTE IMMEDIATE 'alter table SCHEDULE_OUTP drop constraint SOP_FLG_SCHED_CHK';
+exception
+  when others then
+	null;
+end;
+/
+
+begin
+  EXECUTE IMMEDIATE 'alter table SCHEDULE_OUTP ' ||
+                    'add constraint SOP_FLG_SCHED_CHK ' ||
+                    'check (flg_sched IN (''A'',''B'',''C'',''D'',''F'',''H'',''I'',''J''' ||
+					',''L'',''M'',''N'',''O'',''P'',''Q'',''R'',''S'',''T'',''U'',''V'',''X'',''Z'',''W''))';
+exception
+  when others then
+    dbms_output.put_line('alter table SCHEDULE_OUTP add constraint SOP_FLG_SCHED_CHK error - ' || SQLERRM);
+end;
+/
+-- CHANGE END: Telmo
+
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 26/06/2014 10:58
+-- CHANGE REASON: [ALERT-288350] 
+DECLARE
+    n_exists NUMBER := 0;
+BEGIN
+
+    SELECT COUNT(*)
+      INTO n_exists
+      FROM all_constraints
+     WHERE constraint_name = 'SOP_FLG_SCHED_CHK';
+
+    IF n_exists > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table schedule_outp drop constraint SOP_FLG_SCHED_CHK';
+        --DBMS_OUTPUT.PUT_LINE('TESTE');
+    END IF;
+
+    EXECUTE IMMEDIATE '
+      alter table SCHEDULE_OUTP
+  add constraint SOP_FLG_SCHED_CHK
+  check (flg_sched IN (''A'',''B'',''C'',''D'',''E'',''F'',''H'',''I'',''J'',''L'',''M'',''N'',''O'',''P'',''Q'',''R'',''S'',''T'',''U'',''V'',''X'',''Z'',''W''))';
+END;
+/
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 01/07/2014 15:01
+-- CHANGE REASON: [ALERT-288625] 
+DECLARE
+    n_exists NUMBER := 0;
+BEGIN
+
+    SELECT COUNT(*)
+      INTO n_exists
+      FROM all_constraints
+     WHERE constraint_name = 'SOP_FLG_SCHED_CHK';
+
+    IF n_exists > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table schedule_outp drop constraint SOP_FLG_SCHED_CHK';
+        --DBMS_OUTPUT.PUT_LINE('TESTE');
+    END IF;
+
+    EXECUTE IMMEDIATE '
+      alter table SCHEDULE_OUTP
+  add constraint SOP_FLG_SCHED_CHK
+  check (flg_sched IN (''A'',''B'',''C'',''D'',''E'',''F'',''H'',''I'',''J'',''L'',''M'',''N'',''O'',''P'',''Q'',''R'',''S'',''T'',''U'',''V'',''X'',''Z'',''W''))';
+END;
+/
+-- CHANGE END: Jorge Silva
+
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 10/04/2017 15:01
+-- CHANGE REASON: [ALERT-330181] 
+	ALTER TABLE schedule_outp DROP CONSTRAINT SOP_FLGSTATE_CK;
+	ALTER TABLE schedule_outp ADD  CONSTRAINT SOP_FLGSTATE_CK CHECK (flg_state IN ('A','D','E','G','M','N','P','T','R','W', 'K', 'F','U','S', 'B','C','I'));
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 10/04/2017 15:01
+-- CHANGE REASON: [ALERT-330181] 
+	ALTER TABLE schedule_outp DROP CONSTRAINT SOP_FLGSTATE_CK;
+	ALTER TABLE schedule_outp ADD  CONSTRAINT SOP_FLGSTATE_CK CHECK (flg_state IN ('A','D','E','G','M','N','P','T','R','W', 'K', 'F','U','S', 'B','C','I'));
+-- CHANGE END: Pedro Henriques
+
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 29/08/2018 17:56
+-- CHANGE REASON: [EMR-5114] New status for OUTP grids
+alter table SCHEDULE_OUTP
+  drop constraint SOP_FLGSTATE_CK;
+alter table SCHEDULE_OUTP
+  add constraint SOP_FLGSTATE_CK
+  check (flg_state IN ('A','D','E','G','M','N','P','T','R','W', 'K', 'F','U','S', 'B','C','I','H','V'));
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 05/09/2019 12:25
+-- CHANGE REASON: [EMR-19562] - Wrong columns are displayed in the "My appointments" and "All appointments" grids
+alter table SCHEDULE_OUTP
+drop constraint SOP_FLGSTATE_CK;
+alter table SCHEDULE_OUTP
+add constraint SOP_FLGSTATE_CK
+check (flg_state IN ('A','D','E','G','M','N','P','T','R','W', 'K', 'F','U','S', 'B','C','I','H','V','X'));
+-- CHANGE END: Elisabete Bugalho

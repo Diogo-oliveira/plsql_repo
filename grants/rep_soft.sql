@@ -1,0 +1,1 @@
+grant select on REP_SOFT to ALERT_VIEWER;

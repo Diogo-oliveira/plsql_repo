@@ -1,0 +1,87 @@
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 11/01/2012 19:20
+-- CHANGE REASON: [OPSDEV-285] 
+--PROCEDURE create_tmp_tbl IS
+DECLARE
+    e_obj_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_obj_exists, -00955);
+
+    SUBTYPE t_stmt IS VARCHAR2(32000 CHAR);
+    stmt t_stmt;
+BEGIN
+    -- Creating temporary table
+    stmt := 'CREATE TABLE vs_ea_tmp(' || --
+            '       id_vital_sign_read      NUMBER(24),' || --
+            '       id_vital_sign           NUMBER(12),' || --
+            '       value                   NUMBER(10, 3),' || --
+            '       id_unit_measure         NUMBER(24),' || --
+            '       id_vital_sign_scales    NUMBER(24),' || --
+            '       id_patient              NUMBER(24),' || --
+            '       id_visit                NUMBER(24),' || --
+            '       id_episode              NUMBER(24),' || --
+            '       id_institution_read     NUMBER(12),' || --
+            '       dt_vital_sign_read_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE' || --
+            ') NOLOGGING TABLESPACE table_m';
+
+    EXECUTE IMMEDIATE stmt;
+
+EXCEPTION
+    WHEN e_obj_exists THEN
+        -- Table already exists
+        -- Delete temporary table content
+        stmt := 'DELETE FROM vs_ea_tmp';
+        EXECUTE IMMEDIATE stmt;
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 13/01/2014 11:58
+-- CHANGE REASON: [ALERT-273602] 
+DECLARE
+    e_column_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_exists, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_ea_tmp ADD ID_SOFTWARE_READ NUMBER(24)';
+EXCEPTION
+    WHEN e_column_already_exists THEN
+        dbms_output.put_line('WARNING - Column id_vital_sign_desc already created in previous version.');
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 23/05/2018 14:55
+-- CHANGE REASON: [EMR-3221] Error when performing episode match
+DECLARE
+    e_obj_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_obj_exists, -00955);
+
+    SUBTYPE t_stmt IS VARCHAR2(32000 CHAR);
+    stmt t_stmt;
+BEGIN
+    -- Creating temporary table
+    stmt := 'CREATE TABLE vs_ea_tmp(' || --
+            '       id_vital_sign_read      NUMBER(24),' || --
+            '       id_vital_sign           NUMBER(12),' || --
+            '       value                   NUMBER(10, 3),' || --
+            '       id_unit_measure         NUMBER(24),' || --
+            '       id_vital_sign_scales    NUMBER(24),' || --
+            '       id_patient              NUMBER(24),' || --
+            '       id_visit                NUMBER(24),' || --
+            '       id_episode              NUMBER(24),' || --
+            '       id_institution_read     NUMBER(12),' || --
+            '       dt_vital_sign_read_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE,' || 
+            '       ID_SOFTWARE_READ NUMBER(24)' || --
+            ') NOLOGGING TABLESPACE table_m';
+
+    EXECUTE IMMEDIATE stmt;
+
+EXCEPTION
+    WHEN e_obj_exists THEN
+        -- Table already exists
+        -- Delete temporary table content
+           dbms_output.put_line('WARNING - Table already exists.');
+END;
+/
+-- CHANGE END: Elisabete Bugalho

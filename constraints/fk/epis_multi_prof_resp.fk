@@ -1,0 +1,40 @@
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 28/10/2009 19:29
+-- CHANGE REASON: [ALERT-52603] Taking responsibility over episode by multiple professionals
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_multi_prof_resp drop CONSTRAINT EMPR_EPIS_FK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_multi_prof_resp drop CONSTRAINT EMPR_PROF_FK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_multi_prof_resp drop CONSTRAINT EMPR_EPR_FK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+ALTER TABLE epis_multi_prof_resp ADD CONSTRAINT EMPR_EPIS_FK FOREIGN KEY (id_episode) REFERENCES episode (id_episode) ENABLE;
+ALTER TABLE epis_multi_prof_resp ADD CONSTRAINT EMPR_PROF_FK FOREIGN KEY (id_professional) REFERENCES professional ENABLE;
+ALTER TABLE epis_multi_prof_resp ADD CONSTRAINT EMPR_EPR_FK FOREIGN KEY (id_epis_prof_resp) REFERENCES epis_prof_resp ENABLE;
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 18/11/2010 14:16
+-- CHANGE REASON: [ALERT-142370] Hand-off NL refactoring - replication to 2.6.0.4
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_multi_prof_resp ADD CONSTRAINT EMPR_SPY_FK FOREIGN KEY (id_speciality) REFERENCES speciality ENABLE';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: José Brito

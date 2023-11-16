@@ -1,0 +1,329 @@
+  CREATE TABLE ADM_REQUEST
+   (	ID_ADM_REQUEST NUMBER(24),
+	ID_ADM_INDICATION NUMBER(24),
+	ID_DEST_EPISODE NUMBER(24),
+	ID_DEST_PROF NUMBER(24),
+	ID_DEST_INST NUMBER(24),
+	ID_DEPARTMENT NUMBER(24),
+	ID_DEP_CLIN_SERV NUMBER(24),
+	ID_ROOM_TYPE NUMBER(24),
+	ID_PREF_ROOM NUMBER(24),
+	ID_ADMISSION_TYPE NUMBER(24),
+	EXPECTED_DURATION NUMBER(3),
+	ID_ADM_PREPARATION NUMBER(24),
+	FLG_MIXED_NURSING VARCHAR2(1),
+	ID_BED_TYPE NUMBER(24),
+	DT_ADMISSION TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	NIT_FLG VARCHAR2(1),
+	NIT_DT_SUGGESTED TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	NIT_DCS NUMBER(24),
+	NIT_REQ NUMBER(24),
+	NOTES VARCHAR2(4000),
+	FLG_STATUS VARCHAR2(1),
+	ID_REQ_EPISODE NUMBER(24),
+	ID_REQ_PROF NUMBER(24),
+	ID_REQ_INST NUMBER(24),
+	DT_REQ TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	ID_UPD_EPISODE NUMBER(24),
+	ID_UPD_PROF NUMBER(24),
+	ID_UPD_INST NUMBER(24),
+	DT_UPD TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	CREATE_USER VARCHAR2(24),
+	CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	CREATE_INSTITUTION NUMBER(24),
+	UPDATE_USER VARCHAR2(24),
+	UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	UPDATE_INSTITUTION NUMBER(24)
+   ) ;
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_ADM_REQUEST IS 'Admission request primary key';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_ADM_INDICATION IS 'Indication for admission for this request';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_DEST_EPISODE IS 'Destination admission episode';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_DEST_PROF IS 'Professional to take responsability of the requested admission';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_DEST_INST IS 'Institution to which the request was made';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_DEPARTMENT IS 'Department to which the request was made';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_DEP_CLIN_SERV IS 'Requested admission specialty';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_ROOM_TYPE IS 'Room type to which the request was made';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_PREF_ROOM IS 'Preferred room to which the request was made';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_ADMISSION_TYPE IS 'Type of the requested admission';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.EXPECTED_DURATION IS 'Expected duration for the requested admission';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_ADM_PREPARATION IS 'Requested admission preparation';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.FLG_MIXED_NURSING IS 'Flag indicating mixed nursing preference (Yes ''Y'' / No ''N'' / No preference
+''I'')';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_BED_TYPE IS 'Requested admission type of bed';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.DT_ADMISSION IS 'Scheduled admission date';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.NIT_FLG IS 'Flag indicating if a nurse intake is needed';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.NIT_DT_SUGGESTED IS 'Suggested nurse intake date';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.NIT_DCS IS 'Department and specialty where the nurse intake is to take place';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.NIT_REQ IS 'Nurse intake consult request ID';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.NOTES IS 'Notes';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.FLG_STATUS IS 'Request status';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_REQ_EPISODE IS 'Episone in which the request was made';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_REQ_PROF IS 'Professional that made the request';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_REQ_INST IS 'Institution in which the request was made';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.DT_REQ IS 'Date and time when the request was made';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_UPD_EPISODE IS 'Episode in which the request was updated';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_UPD_PROF IS 'Professional that updated the request';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.ID_UPD_INST IS 'Institution where the request was updated';
+
+
+
+   COMMENT ON COLUMN ADM_REQUEST.DT_UPD IS 'Date and time when the request was updated';
+
+
+
+   COMMENT ON TABLE ADM_REQUEST  IS 'Table that contains admission request data';
+	 
+	 ALTER TABLE adm_request rename column nit_flg TO flg_nit;
+   ALTER TABLE adm_request rename column nit_dt_suggested TO dt_nit_suggested;
+   ALTER TABLE adm_request rename column nit_dcs TO id_nit_dcs;
+   ALTER TABLE adm_request rename column nit_req TO id_nit_req;
+		
+	 alter table adm_request drop column id_req_episode;
+	 alter table adm_request drop column id_req_prof;
+	 alter table adm_request drop column id_req_inst; 
+	 alter table adm_request drop column dt_req;
+
+    ALTER TABLE adm_request MODIFY EXPECTED_DURATION NUMBER(24);
+    ALTER TABLE adm_request_hist MODIFY EXPECTED_DURATION NUMBER(24);
+
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 23/08/2010 11:50
+-- CHANGE REASON: [ALERT-118878] 
+ALTER TABLE ADM_REQUEST MODIFY expected_duration NUMBER(24);
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table ADM_REQUEST
+  is 'Table that contains admission request data';
+-- Add comments to the columns 
+comment on column ADM_REQUEST.id_adm_request
+  is 'Admission request primary key';
+comment on column ADM_REQUEST.id_adm_indication
+  is 'Indication for admission for this request';
+comment on column ADM_REQUEST.id_dest_episode
+  is 'Destination admission episode';
+comment on column ADM_REQUEST.id_dest_prof
+  is 'Professional to take responsability of the requested admission';
+comment on column ADM_REQUEST.id_dest_inst
+  is 'Institution to which the request was made';
+comment on column ADM_REQUEST.id_department
+  is 'Department to which the request was made';
+comment on column ADM_REQUEST.id_dep_clin_serv
+  is 'Requested admission specialty';
+comment on column ADM_REQUEST.id_room_type
+  is 'Room type to which the request was made';
+comment on column ADM_REQUEST.id_pref_room
+  is 'Preferred room to which the request was made';
+comment on column ADM_REQUEST.id_admission_type
+  is 'Type of the requested admission';
+comment on column ADM_REQUEST.expected_duration
+  is 'Expected duration for the requested admission';
+comment on column ADM_REQUEST.id_adm_preparation
+  is 'Requested admission preparation';
+comment on column ADM_REQUEST.flg_mixed_nursing
+  is 'Flag indicating mixed nursing preference (Yes ''Y'' / No ''N'' / No preference
+''I'')';
+comment on column ADM_REQUEST.id_bed_type
+  is 'Requested admission type of bed';
+comment on column ADM_REQUEST.dt_admission
+  is 'Scheduled admission date';
+comment on column ADM_REQUEST.flg_nit
+  is 'Flag indicating if a nurse intake is needed';
+comment on column ADM_REQUEST.dt_nit_suggested
+  is 'Suggested nurse intake date';
+comment on column ADM_REQUEST.id_nit_dcs
+  is 'Department and specialty where the nurse intake is to take place';
+comment on column ADM_REQUEST.id_nit_req
+  is 'Nurse intake consult request ID';
+comment on column ADM_REQUEST.notes
+  is 'Notes';
+comment on column ADM_REQUEST.flg_status
+  is 'Request status';
+comment on column ADM_REQUEST.id_upd_episode
+  is 'Episode in which the request was updated';
+comment on column ADM_REQUEST.id_upd_prof
+  is 'Professional that updated the request';
+comment on column ADM_REQUEST.id_upd_inst
+  is 'Institution where the request was updated';
+comment on column ADM_REQUEST.dt_upd
+  is 'Date and time when the request was updated';
+comment on column ADM_REQUEST.create_user
+  is 'Create User';
+comment on column ADM_REQUEST.create_time
+  is 'Create Time';
+comment on column ADM_REQUEST.create_institution
+  is 'Create Institution';
+comment on column ADM_REQUEST.update_user
+  is 'Update User';
+comment on column ADM_REQUEST.update_time
+  is 'Update Time';
+comment on column ADM_REQUEST.update_institution
+  is 'Update Institution';
+  
+-- CHANGE END: Pedro Fernandes
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/07/2017 14:08
+-- CHANGE REASON: [ALERT-331061]
+ALTER TABLE ADM_REQUEST ADD FLG_REGIM VARCHAR(2 CHAR);
+ALTER TABLE ADM_REQUEST ADD FLG_BENEFI VARCHAR(2 CHAR);
+ALTER TABLE ADM_REQUEST ADD FLG_PRECAUC VARCHAR(2 CHAR);
+ALTER TABLE ADM_REQUEST ADD FLG_CONTACT VARCHAR(2 CHAR);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 12/10/2017 09:51
+-- CHANGE REASON: [ALERT-333489] 
+COMMENT ON COLUMN ADM_REQUEST.FLG_REGIM IS 'Selection list SYS_DOMAIN (ADM_REQUEST.REGIMEN)';
+COMMENT ON COLUMN ADM_REQUEST.FLG_CONTACT IS 'Selection list SYS_DOMAIN (ADM_REQUEST.CONTACTADO)';
+COMMENT ON COLUMN ADM_REQUEST.FLG_PRECAUC IS 'Selection list SYS_DOMAIN (ADM_REQUEST.PRECAUCIONES)';
+COMMENT ON COLUMN ADM_REQUEST.FLG_BENEFI IS 'Selection list SYS_DOMAIN (ADM_REQUEST.BENEFICIARIO)';
+COMMENT ON COLUMN ADM_REQUEST.FLG_REGIM IS 'Selection list SYS_DOMAIN (ADM_REQUEST_HIST.REGIMEN)';
+COMMENT ON COLUMN ADM_REQUEST.FLG_CONTACT IS 'Selection list SYS_DOMAIN (ADM_REQUEST_HIST.CONTACTADO)';
+COMMENT ON COLUMN ADM_REQUEST.FLG_PRECAUC IS 'Selection list SYS_DOMAIN (ADM_REQUEST_HIST.PRECAUCIONES)';
+COMMENT ON COLUMN ADM_REQUEST.FLG_BENEFI IS 'Selection list SYS_DOMAIN (ADM_REQUEST_HIST.BENEFICIARIO)';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 06/03/2018 09:27
+-- CHANGE REASON: 
+ALTER TABLE adm_request MODIFY FLG_STATUS VARCHAR2(2 CHAR);
+ALTER TABLE adm_request MODIFY ID_DEST_EPISODE NULL;
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/03/2018 10:43
+-- CHANGE REASON: [EMR-1983] 
+ALTER TABLE adm_request MODIFY FLG_STATUS VARCHAR2(2 CHAR);
+ALTER TABLE adm_request MODIFY ID_DEST_EPISODE NULL;
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 30/08/2018 11:41
+-- CHANGE REASON: [EMR-5186] 
+ALTER TABLE adm_request MODIFY ID_ADM_INDICATION NUMBER(24);
+ALTER TABLE adm_request ADD ADM_INDICATION_FT VARCHAR2(500 CHAR);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 30/08/2018 11:41
+-- CHANGE REASON: [EMR-5186] 
+ALTER TABLE ADM_REQUEST ADD ID_CO_SIGN_ORDER NUMBER(24);
+ALTER TABLE ADM_REQUEST ADD ID_CO_SIGN_CANCEL NUMBER(24);
+ALTER TABLE ADM_REQUEST ADD ID_MRP NUMBER(24);
+ALTER TABLE ADM_REQUEST ADD ID_WRITTEN_BY NUMBER(24);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 12/09/2018 14:26
+-- CHANGE REASON: [EMR-6383] 
+ALTER TABLE adm_request ADD ID_PROF_SPECIALITY_ADM NUMBER(24);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 04/12/2018 08:29
+-- CHANGE REASON: [EMR-8662] 
+ALTER TABLE ADM_REQUEST ADD FLG_COMPULSORY VARCHAR2(1 CHAR);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 26/04/2019 15:21
+-- CHANGE REASON: [EMR-15303] - Reason for Compulsory admission
+alter table adm_request
+add id_compulsory_reason  NUMBER(24);
+
+alter table adm_request
+add compulsory_reason  VARCHAR2(4000);
+
+comment on column adm_request.flg_compulsory is 'Compulsory admission? Y - yes; N - no';
+comment on column adm_request.compulsory_reason is 'Compulsory reason notes';
+-- CHANGE END: Diogo Oliveira

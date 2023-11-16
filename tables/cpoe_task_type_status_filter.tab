@@ -1,0 +1,106 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 29/10/2009 04:37
+-- CHANGE REASON: [ALERT-51207] 
+CREATE TABLE CPOE_TASK_TYPE_STATUS_FILTER
+(
+  ID_TASK_TYPE          NUMBER(24) NOT NULL,
+FLG_STATUS            VARCHAR2(10 CHAR) NOT NULL,
+STATUS_INTERNAL_CODE  VARCHAR2(30 CHAR),
+  FLG_FILTER_TAB        VARCHAR2(1 CHAR) NOT NULL,
+  CREATE_USER           VARCHAR2(24 CHAR),
+  CREATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24 CHAR),
+  UPDATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+);  
+comment on table  CPOE_TASK_TYPE_STATUS_FILTER is                      'Computerized Physician Order Entry (CPOE) task status/filter reference table';
+comment on column CPOE_TASK_TYPE_STATUS_FILTER.ID_TASK_TYPE is         'CPOE task type ID';
+comment on column CPOE_TASK_TYPE_STATUS_FILTER.FLG_STATUS is           'CPOE task flag status';
+comment on column CPOE_TASK_TYPE_STATUS_FILTER.STATUS_INTERNAL_CODE is 'CPOE task flag status internal description/code';
+comment on column CPOE_TASK_TYPE_STATUS_FILTER.FLG_FILTER_TAB is       'CPOE task filter: (A)ctive, (I)nactive, (D)raft';
+comment on column CPOE_TASK_TYPE_STATUS_FILTER.CREATE_USER is          'Creation user';
+comment on column CPOE_TASK_TYPE_STATUS_FILTER.CREATE_TIME is          'Creation time';
+comment on column CPOE_TASK_TYPE_STATUS_FILTER.CREATE_INSTITUTION is   'Creation institution';
+comment on column CPOE_TASK_TYPE_STATUS_FILTER.UPDATE_USER is          'Update user';
+comment on column CPOE_TASK_TYPE_STATUS_FILTER.UPDATE_TIME is          'Update time';
+comment on column CPOE_TASK_TYPE_STATUS_FILTER.UPDATE_INSTITUTION is   'Update institution';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 11/12/2009 01:04
+-- CHANGE REASON: [ALERT-61939] CPOE 2nd phase: versioning of CPOE feature for Diets and Hidrics
+alter table CPOE_TASK_TYPE_STATUS_FILTER modify FLG_FILTER_TAB VARCHAR2(1 CHAR);
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 15/07/2010 14:46
+-- CHANGE REASON: [ALERT-112079] 
+comment on column CPOE_TASK_TYPE_STATUS_FILTER.FLG_FILTER_TAB is 'Cpoe task filter: (A)ctive, (I)nactive, (D)raft, (X)canceled';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 12/10/2010 10:06
+-- CHANGE REASON: [ALERT-128784] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_TASK_TYPE_STATUS_FILTER add FLG_CPOE_PROC_REFRESH varchar2(1 char) default ''N'' not null';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/    
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_TASK_TYPE_STATUS_FILTER add FLG_CPOE_PROC_NEW varchar2(1 char) default ''N'' not null';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/    
+comment on column CPOE_TASK_TYPE_STATUS_FILTER.FLG_CPOE_PROC_REFRESH is 'Flag that indicates if copy2draft or refresh action should occur or not for this record task type status';
+comment on column CPOE_TASK_TYPE_STATUS_FILTER.FLG_CPOE_PROC_NEW is 'Flag that indicates if task should be considered in the new prescription for this record task type status';
+comment on table CPOE_TASK_TYPE_STATUS_FILTER is 'Computerized Prescription Order Entry (CPOE) task status/filter reference table [CPOESF]';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 21/01/2011 16:26
+-- CHANGE REASON: [ALERT-156855] CPOE monitoring task type expire
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01442); -- column to be modified to NOT NULL is already NOT NULL
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_TASK_TYPE_STATUS_FILTER modify status_internal_code not null';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/    
+-- CHANGE END: Carlos Loureiro
+
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 19/12/2016 09:41
+-- CHANGE REASON: [ALERT-325129]
+
+INSERT INTO cpoe_task_type_status_filter (ID_TASK_TYPE,FLG_STATUS, STATUS_INTERNAL_CODE, FLG_FILTER_TAB)
+SELECT 33 AS ID_TASK_TYPE,FLG_STATUS, STATUS_INTERNAL_CODE, FLG_FILTER_TAB FROM cpoe_task_type_status_filter where id_task_type = 31;
+
+INSERT INTO cpoe_task_type_status_filter (ID_TASK_TYPE,FLG_STATUS, STATUS_INTERNAL_CODE, FLG_FILTER_TAB)
+SELECT 34 AS ID_TASK_TYPE,FLG_STATUS, STATUS_INTERNAL_CODE, FLG_FILTER_TAB FROM cpoe_task_type_status_filter where id_task_type = 33;
+
+INSERT INTO cpoe_task_type_status_filter (ID_TASK_TYPE,FLG_STATUS, STATUS_INTERNAL_CODE, FLG_FILTER_TAB)
+SELECT 35 AS ID_TASK_TYPE,FLG_STATUS, STATUS_INTERNAL_CODE, FLG_FILTER_TAB FROM cpoe_task_type_status_filter where id_task_type = 33;
+
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 19/07/2021 17:39
+-- CHANGE REASON: [EMR-47331]
+ALTER TABLE cpoe_task_type_status_filter ADD FLG_FINAL_STATUS VARCHAR2(1 CHAR) DEFAULT 'N';
+-- CHANGE END: Pedro Henriques

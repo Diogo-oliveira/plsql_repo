@@ -1,0 +1,52 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE l_var PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tables
+     WHERE table_name = 'INTF_TYPE';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'create table INTF_TYPE (
+  id_intf_type       NUMBER(6) not null,
+  code_intf_type     VARCHAR2(200) not null,
+  intern_name        VARCHAR2(200),
+  flg_available      VARCHAR2(1) not null,
+  create_user        VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(200),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+)';
+    END IF;
+END;
+/
+
+-- Add comments to the table
+comment on table INTF_TYPE
+  is 'Interfaces type';
+-- Add comments to the columns
+comment on column INTF_TYPE.id_intf_type
+  is 'Id Interfaces type';
+comment on column INTF_TYPE.code_intf_type
+  is 'code Interfaces type';
+comment on column INTF_TYPE.intern_name
+  is 'Internal name';
+comment on column INTF_TYPE.create_user
+  is 'Creation User';
+comment on column INTF_TYPE.create_time
+  is 'Creation Time';
+comment on column INTF_TYPE.create_institution
+  is 'Creation Institution';
+comment on column INTF_TYPE.update_user
+  is 'Update User';
+comment on column INTF_TYPE.update_time
+  is 'Update Time';
+comment on column INTF_TYPE.update_institution
+  is 'Update Institution';
+-- CHANGE END: Joana Barroso

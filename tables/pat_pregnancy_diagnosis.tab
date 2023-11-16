@@ -1,0 +1,50 @@
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 06/06/2011 11:19
+-- CHANGE REASON: [ALERT-183624] Pregnancy developments
+BEGIN
+pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'PAT_PREGNANCY_DIAGNOSIS', i_obj_type => 'TABLE', i_flg_category => 'TRS', i_flg_nzd => 'Y');
+END;
+/
+
+BEGIN
+EXECUTE IMMEDIATE 'create table PAT_PREGNANCY_DIAGNOSIS
+(
+  ID_PAT_PREGNANCY      NUMBER(24) NOT NULL,
+  ID_ALERT_DIAGNOSIS    NUMBER(24) NOT NULL,
+  CREATE_USER           VARCHAR2(24 CHAR),
+  CREATE_TIME           TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24 CHAR),
+  UPDATE_TIME           TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+)';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/ 
+COMMENT ON TABLE PAT_PREGNANCY_DIAGNOSIS IS 'Diagnosis associated with a pregnancy record (registered in the complications field)';
+
+COMMENT ON COLUMN PAT_PREGNANCY_DIAGNOSIS.ID_PAT_PREGNANCY IS 'Pregnancy ID';
+COMMENT ON COLUMN PAT_PREGNANCY_DIAGNOSIS.ID_ALERT_DIAGNOSIS IS 'Diagnosis ID (codified or a specific synonym)';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column PAT_PREGNANCY_DIAGNOSIS.create_user
+  is 'Creation User';
+comment on column PAT_PREGNANCY_DIAGNOSIS.create_time
+  is 'Creation Time';
+comment on column PAT_PREGNANCY_DIAGNOSIS.create_institution
+  is 'Creation Institution';
+comment on column PAT_PREGNANCY_DIAGNOSIS.update_user
+  is 'Update User';
+comment on column PAT_PREGNANCY_DIAGNOSIS.update_time
+  is 'Update Time';
+comment on column PAT_PREGNANCY_DIAGNOSIS.update_institution
+  is 'Update Institution';  
+  
+-- CHANGE END: Elisabete Bugalho

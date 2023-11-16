@@ -1,0 +1,57 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/06/2013 17:03
+-- CHANGE REASON: [ALERT-260856] Ability to perform triage based on EST (Échelle Suisse de Tri) (ALERT_188926) - VERSIONING DB DDL
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    --i_flg_category
+    --DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'TRIAGE_VS_AREA',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'CNT',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+
+    run_ddl(i_sql => '
+CREATE TABLE TRIAGE_VS_AREA
+(
+  ID_TRIAGE_VS_AREA        NUMBER(24) NOT NULL,
+  ID_TRIAGE_TYPE_VS        NUMBER(24) NOT NULL,
+  ID_CONTEXT               NUMBER(24),
+  ID_MARKET                NUMBER(24),
+  RANK                     NUMBER(6),
+  FLG_MANDATORY            VARCHAR2(1 CHAR),
+  FLG_CONTEXT              VARCHAR2(1 CHAR) NOT NULL,
+  CREATE_USER VARCHAR2(24 CHAR),
+  CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER VARCHAR2(24 CHAR),
+  UPDATE_TIME TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+) TABLESPACE ALERT_DATA');
+
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE TRIAGE_VS_AREA IS ''Has the vital signs shown in each of triage areas, i.e., triage form, triage board and triage discriminator''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_VS_AREA.ID_TRIAGE_VS_AREA IS ''Primary key''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_VS_AREA.ID_TRIAGE_TYPE_VS IS ''Triage type vs id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_VS_AREA.ID_CONTEXT IS ''Depends on the FLG_CONTEXT value and can represent one of the following columns: ID_TRIAGE_BOARD, ID_TRIAGE_DISCRIMINATOR, ID_DS_COMPONENT (with the root type ie the triage form area)''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_VS_AREA.ID_MARKET IS ''Market id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_VS_AREA.RANK IS ''Order of this vital sign''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_VS_AREA.FLG_MANDATORY IS ''Is a mandatory vital sign? Y - yes; N - Otherwise''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_VS_AREA.FLG_CONTEXT IS ''Identifies the triage area. Possivel values are: B - Triage Board, D - Triage Discriminator and F - Triage Form''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_VS_AREA.CREATE_USER is ''Professional ID which created the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_VS_AREA.CREATE_TIME is ''Date of record creation''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_VS_AREA.CREATE_INSTITUTION is ''Institution ID where record was created''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_VS_AREA.UPDATE_USER is ''Professional ID who last updated the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_VS_AREA.UPDATE_TIME is ''Date when record was last updated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_VS_AREA.UPDATE_INSTITUTION is ''Institution ID where record was last updated''';
+END;
+/
+-- CHANGE END: Alexandre Santos

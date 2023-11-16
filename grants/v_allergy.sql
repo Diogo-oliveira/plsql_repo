@@ -1,0 +1,7 @@
+
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 02/02/2021 08:18
+-- CHANGE REASON: [EMR-41455] - V_ALLERGY > Create grant for alert_inter
+GRANT SELECT ON V_ALLERGY TO ALERT_INTER;
+-- CHANGE END: Diogo Oliveira

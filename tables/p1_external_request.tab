@@ -1,0 +1,640 @@
+  CREATE TABLE P1_EXTERNAL_REQUEST
+   (	ID_EXTERNAL_REQUEST NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_DEP_CLIN_SERV NUMBER(24,0),
+	ID_SCHEDULE NUMBER(24,0),
+	ID_PROF_REQUESTED NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_REDIRECTED NUMBER(24,0),
+	NUM_REQ VARCHAR2(50) NOT NULL ENABLE,
+	CLIN_NOTES VARCHAR2(4000),
+	FLG_STATUS VARCHAR2(1),
+	JUSTIFICATION VARCHAR2(4000),
+	ADM_NOTES VARCHAR2(4000),
+
+	DT_REQUESTED DATE NOT NULL ENABLE,
+	DT_SCHEDULE DATE,
+	DT_TRIAGE DATE,
+	FLG_DIGITAL_DOC VARCHAR2(1),
+	FLG_MAIL VARCHAR2(240) NOT NULL ENABLE,
+	FLG_PAPER_DOC VARCHAR2(1),
+	FLG_PRIORITY VARCHAR2(1) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	HISTORY VARCHAR2(4000),
+	ID_INST_DEST NUMBER(24,0),
+	ID_INST_ORIG NUMBER(24,0) NOT NULL ENABLE,
+	REQ_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	DT_SCHEDULING DATE,
+
+	SYNC NUMBER(24,0),
+	OLD_SYNC NUMBER(24,0)
+   );
+
+
+COMMENT ON COLUMN p1_external_request.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN p1_external_request.num_req IS 'Nº do pedido (documento)' ;
+COMMENT ON COLUMN p1_external_request.clin_notes IS 'Notas clínicas enviadas pelo prof. requisitante' ;
+COMMENT ON COLUMN p1_external_request.flg_status IS 'N - New; A - Append docs; I - Issued; F - Filtered; R - Redirected; S - Scheduled; W - Waiting; D - Declined' ;
+COMMENT ON COLUMN p1_external_request.justification IS 'Justificação caso o pedido seja rejeitado' ;
+COMMENT ON COLUMN p1_external_request.adm_notes IS 'Notas para administrativo' ;
+COMMENT ON COLUMN p1_external_request.dt_requested IS 'Data do pedido' ;
+COMMENT ON COLUMN p1_external_request.dt_schedule IS 'data de agendamento' ;
+COMMENT ON COLUMN p1_external_request.dt_triage IS 'Data da triagem' ;
+COMMENT ON COLUMN p1_external_request.flg_digital_doc IS 'Necessita Documentos Digitais? NULL: não há; N-em trânsito; Y-Completo' ;
+COMMENT ON COLUMN p1_external_request.flg_mail IS '(Y/N)Indica se a carta para o utente foi enviada' ;
+COMMENT ON COLUMN p1_external_request.flg_paper_doc IS 'Necessita documentoção não electrónica?NULL: não há; N-em trânsito; Y-Completo' ;
+COMMENT ON COLUMN p1_external_request.flg_priority IS 'Y/N - Indica se o pedido é Urgente ou não' ;
+
+COMMENT ON COLUMN p1_external_request.flg_type IS 'Tipo de pedido C-Consulta; A-Análise; I-Imagiologia; etc....' ;
+COMMENT ON COLUMN p1_external_request.req_type IS 'Tipo de P1 P-Protocolado; M-Manual' ;
+
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE P1_EXTERNAL_REQUEST ADD DT_EFECTIV_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN P1_EXTERNAL_REQUEST.DT_EFECTIV_TSTZ IS 'Data de realiza‡Æo da consulta'; 
+ALTER TABLE P1_EXTERNAL_REQUEST ADD DT_LAST_INTERACTION_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+ALTER TABLE P1_EXTERNAL_REQUEST ADD DT_PROBL_BEGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN P1_EXTERNAL_REQUEST.DT_PROBL_BEGIN_TSTZ IS 'Data de in¡cio do problema'; 
+ALTER TABLE P1_EXTERNAL_REQUEST ADD DT_SCHEDULE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN P1_EXTERNAL_REQUEST.DT_SCHEDULE_TSTZ IS 'Data de agendamento'; 
+ALTER TABLE P1_EXTERNAL_REQUEST ADD DT_STATUS_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN P1_EXTERNAL_REQUEST.DT_STATUS_TSTZ IS 'Data da passagem ao estado actual'; 
+
+ALTER TABLE P1_EXTERNAL_REQUEST ADD DT_REQUESTED TIMESTAMP(6) WITH LOCAL TIME ZONE ;
+COMMENT ON COLUMN "ALERT"."P1_EXTERNAL_REQUEST"."DT_REQUESTED" IS 'Creation date';
+
+comment on column P1_EXTERNAL_REQUEST.ID_PROF_REDIRECTED
+  is 'Pedidos por triar: Profissional de triagem para o qual foi encaminhado o pedido; Pedidos triados: Profissional que fez a triagem;';
+
+ALTER TABLE P1_EXTERNAL_REQUEST ADD (ID_PROF_SCHEDULE NUMBER(24));
+
+COMMENT ON COLUMN P1_EXTERNAL_REQUEST.ID_PROF_REDIRECTED IS 'Pedidos por triar: Profissional de triagem para o qual foi reencaminhado o pedido; Pedidos triados: Profissional que fez a triagem;';
+
+COMMENT ON COLUMN P1_EXTERNAL_REQUEST.ID_PROF_SCHEDULE IS 'Scheduled consultation professional';
+
+COMMENT ON COLUMN p1_external_request.flg_status IS '(N)ew; (I)ssued (Emitido); (C)anceled; (B)ureaucratic Decline (Recusa administrativa); (T)riage (Em triagem); (A)ccepted (Aceite, para agendar); (R)edirected (Reencaminhado); (S)cheduled (Marcado); (D)eclined (Recusado); (X) Refused ; (M)ailed; (E)xecuted (Consulta efectivada); Ans(w)ered; Answer A(k)nowledge';
+
+alter table P1_EXTERNAL_REQUEST modify ID_INST_DEST null;
+
+alter table P1_EXTERNAL_REQUEST modify NUM_REQ null;
+
+ALTER TABLE P1_EXTERNAL_REQUEST ADD (FLG_INTERFACE VARCHAR2(1));
+COMMENT ON COLUMN P1_EXTERNAL_REQUEST.FLG_INTERFACE IS 'Indicates if the request was sent to the referral system. (S)ent: the data was transfered; (C)onfirmed the referral was issued.';
+
+
+alter table P1_EXTERNAL_REQUEST modify ID_SPECIALITY null;
+
+
+-- CHANGED BY: Joana Barroso  
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização P1 - eliminação de colunas
+
+alter table P1_EXTERNAL_REQUEST drop column DT_EFECTIV;
+alter table P1_EXTERNAL_REQUEST drop column DT_LAST_INTERACTION;
+alter table P1_EXTERNAL_REQUEST drop column DT_STATUS;
+
+-- CHANGE END
+
+
+-- CHANGED BY: Joana Barroso  
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização P1 - eliminação de colunas
+alter table P1_EXTERNAL_REQUEST drop column DT_SCHEDULE;
+alter table P1_EXTERNAL_REQUEST drop column DT_PROBL_BEGIN;
+
+-- CHANGE END
+
+
+--CHANGED BY:Pedro Santos
+--CHANGE DATE:2008-SEP-24
+--CHANGE REASON:Addition of column ID_EPISODE
+ALTER TABLE P1_EXTERNAL_REQUEST ADD ID_EPISODE NUMBER(24,0);	
+COMMENT ON COLUMN "ALERT"."P1_EXTERNAL_REQUEST"."ID_EPISODE" IS 'Episode ID';
+--CHANGE END
+
+
+-- CHANGED BY: Joao Sa 
+-- CHANGE DATE: 2008-10-22
+-- CHANGE REASON: Status is mandatory
+ALTER TABLE P1_EXTERNAL_REQUEST MODIFY (FLG_STATUS VARCHAR2(1) NOT NULL);
+
+
+
+-- CHANGED BY: Pedro Santos 
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE P1_EXTERNAL_REQUEST ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN P1_EXTERNAL_REQUEST.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+
+-- CHANGED BY: Joao Sa 
+-- CHANGE DATE: 2008-DEC-04
+-- CHANGE REASON: CODE REVIEW - CODEREVIEW-34 
+comment on table P1_EXTERNAL_REQUEST is 'Referrals table';
+
+comment on column P1_EXTERNAL_REQUEST.ID_SCHEDULE is 'Schedule linked to the referral';
+comment on column P1_EXTERNAL_REQUEST.ID_SPECIALITY is 'Referral speciality';
+comment on column P1_EXTERNAL_REQUEST.DT_LAST_INTERACTION_TSTZ is 'Referral last modification (data or status) date';
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGED DATE: 2009-APR-22
+-- CHANGED REASON: ALERT-24874
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN    
+		SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns c
+     WHERE c.table_name = 'P1_EXTERNAL_REQUEST'
+       AND c.column_name = 'ID_PROF_TRIAGE';
+
+    IF l_var > 0
+    THEN
+        -- apenas faz drop à coluna se esta existir
+		EXECUTE IMMEDIATE 'ALTER TABLE P1_EXTERNAL_REQUEST DROP COLUMN ID_PROF_TRIAGE';
+    END IF;
+END;
+-- CHANGE END: Ana Monteiro
+
+
+
+
+-- CHANGED BY: Joana Barroso
+-- CHANGED DATE: 2009-MAI-21
+-- CHANGED REASON: ALERT-29134
+
+
+DECLARE
+
+    l_aux VARCHAR2(20);
+
+BEGIN
+
+    BEGIN
+        SELECT table_name
+          INTO l_aux
+          FROM user_tab_columns
+         WHERE table_name = 'P1_EXTERNAL_REQUEST'
+           AND column_name = 'FLG_FORWARD_DCS';
+    
+        IF l_aux IS NOT NULL
+        THEN
+            dbms_output.put_line('Column already added');
+        END IF;
+    
+    EXCEPTION
+        WHEN no_data_found THEN
+            dbms_output.put_line('Add column');
+            EXECUTE IMMEDIATE ('ALTER TABLE p1_external_request add flg_forward_dcs VARCHAR2(1)');
+            dbms_output.put_line('Add comment to column');
+            EXECUTE IMMEDIATE ('COMMENT ON column p1_external_request.flg_forward_dcs IS ''(Y/N) Para verificar se já foi utilizada a configuração ADM_FORWARD_DCS ''');
+        
+    END;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('TABCOUNT ERROR: ' || dbms_utility.format_error_stack);
+END;
+-- CHANGE END: Joana Barroso
+
+
+-- CHANGED BY: João Almeida
+-- CHANGED DATE: 2009-SET-22
+-- CHANGED REASON: ALERT-45152
+alter TABLE p1_external_request
+modify id_workflow NUMBER(24);
+-- CHANGE END: João Almeida
+/
+-- CHANGE END
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGED DATE: 2009-APR-22
+-- CHANGED REASON: ALERT-24829
+-- ignorado script anterior
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN    
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns c
+     WHERE c.table_name = 'P1_EXTERNAL_REQUEST'
+       AND c.column_name = 'EXT_REFERENCE';
+                         
+    IF l_var = 0
+    THEN
+        -- apenas faz add à coluna se esta nao existir: para nao dar erro no referral (ja foi executado)
+                                EXECUTE IMMEDIATE 'alter table P1_EXTERNAL_REQUEST add EXT_REFERENCE varchar2(30)';
+                                EXECUTE IMMEDIATE 'COMMENT ON COLUMN "P1_EXTERNAL_REQUEST"."EXT_REFERENCE" IS ''External reference''';                           
+    END IF;
+END;
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGED DATE: 2009-JUN-18
+-- CHANGED REASON: ALERT-18963
+alter table P1_EXTERNAL_REQUEST add ID_WORKFLOW number (12);
+alter table P1_EXTERNAL_REQUEST add ID_PROF_REDIRECTED NUMBER(24);
+
+comment on column P1_EXTERNAL_REQUEST.ID_WORKFLOW is 'Referral workflow';
+comment on column P1_EXTERNAL_REQUEST.ID_PROF_REDIRECTED  is 'Professional identifier to whom the referral was forwarded to';
+
+-- CHANGE END: Ana Monteiro
+-- CHANGED BY: João Almeida
+-- CHANGED DATE: 2009-SET-22
+-- CHANGED REASON: ALERT-45152
+
+alter TABLE p1_external_request
+modify id_workflow NUMBER(24);
+
+-- CHANGE END: João Almeida
+
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 30/10/2009 02:36
+-- CHANGE REASON: [ALERT-52665] 
+ALTER TABLE P1_EXTERNAL_REQUEST ADD (ID_EXTERNAL_SYS NUMBER(12),ID_REF_EXT_SYS VARCHAR(50 CHAR));
+
+COMMENT ON COLUMN P1_EXTERNAL_REQUEST.FLG_HOME IS 'Home health appointment (Y/N)';
+COMMENT ON COLUMN P1_EXTERNAL_REQUEST.ID_EXTERNAL_SYS IS 'External system identifier';
+COMMENT ON COLUMN P1_EXTERNAL_REQUEST.ID_REF_EXT_SYS IS 'Referral external system identifier';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 04/11/2009 18:49
+-- CHANGE REASON: [ALERT-53723] 
+comment on column P1_EXTERNAL_REQUEST.FLG_TYPE is 'Referral type: C-Visits; A-Lab tests; I-Imaging exams; E-Other exams; P-Procedures; F-PMR procedures; N-Inpatient requests; S-Surgery requests';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 06/11/2009 16:03
+-- CHANGE REASON: [ALERT-55025] 
+alter table P1_EXTERNAL_REQUEST drop column ID_REF_EXT_SYS;
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 06/11/2009 22:54
+-- CHANGE REASON: [ALERT-55140] 
+comment on column P1_EXTERNAL_REQUEST.FLG_STATUS
+  is '(O)Being created; (N)ew; (I)ssued; (C)anceled; (B)ureaucratic Decline; (T)riage; (A)ccepted; (R)edirected; (S)cheduled; (D)eclined; (X)Refused ; (M)ailed; (E)xecuted; Ans(w)ered; Answer A(k)nowledge; (P) Delivered to patient; (F)ailed; B(L)ocked; (J) Redirected (Clinical Director); (H) Refused (Clinical Director); (U) Awaiting Acceptance; (Q)Provisionally Accepted; (G)Specimen collection in progress';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/03/2010 14:06
+-- CHANGE REASON: [ALERT-79864] 
+comment on column P1_EXTERNAL_REQUEST.FLG_HOME is 'Home health appointment (Y/N)';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/03/2010 14:07
+-- CHANGE REASON: [ALERT-79864] 
+comment on column P1_EXTERNAL_REQUEST.FLG_STATUS
+  is '(O)Being created; (N)ew; (I)ssued; (C)anceled; (B)ureaucratic Decline; (T)riage; (A)ccepted; (R)edirected; (S)cheduled; (D)eclined; (X)Refused ; (M)ailed; (E)xecuted; Ans(w)ered; Answer A(k)nowledge; (P) Delivered to patient; (F)ailed; B(L)ocked; (J) For approval by Clinical Director; (H) Refused by Clinical Director; (U) Awaiting Acceptance; (Q)Provisionally Accepted; (G)Specimen collection in progress; (V) Approved by Clinical Director';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 31/03/2010 14:59
+-- CHANGE REASON: [ALERT-85573] 
+comment on column P1_EXTERNAL_REQUEST.FLG_FORWARD_DCS
+  is 'The request had been forward to a diferent DCS';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 17/09/2010 21:55
+-- CHANGE REASON: [ALERT-125735] 
+ALTER TABLE P1_EXTERNAL_REQUEST 
+ADD (ID_PROF_CREATED NUMBER(24) DEFAULT 1 NOT NULL);
+/
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 06/10/2010 09:27
+-- CHANGE REASON: [ALERT-129275] 
+comment on column P1_EXTERNAL_REQUEST.FLG_STATUS
+  is '(O)Being created; (N)ew; (I)ssued; (C)anceled; (B)ureaucratic Decline; (T)riage; (A)ccepted; (R)edirected; (S)cheduled; (D)eclined; (X)Refused ; (M)ailed; (E)xecuted; Ans(w)ered; Answer A(k)nowledge; (P) Delivered to patient; (F)ailed; B(L)ocked; (J) For approval by Clinical Director; (H) Refused by Clinical Director; (U) Awaiting Acceptance; (Q)Provisionally Accepted; (G)Specimen collection in progress; (V) Approved by Clinical Director; (Z) Request cancellation';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 20/04/2011 09:54
+-- CHANGE REASON: [ALERT-169416] 
+alter table  P1_EXTERNAL_REQUEST
+drop constraint ERTX_FLG_STATUS_CHK;
+
+alter table P1_EXTERNAL_REQUEST
+  add constraint ERTX_FLG_STATUS_CHK
+  check (flg_status IN ('O', 'N', 'I', 'B', 'T', 'D', 'R', 'A', 'S', 'M', 'E', 'F', 'W', 'K', 'X', 'C', 'L', 'P', 'J', 'H', 'G', 'Q', 'U', 'V','Z', 'Y'));
+
+comment on column P1_EXTERNAL_REQUEST.flg_status
+  is '(O)Being created; (N)ew; (I)ssued; (C)anceled; (B)ureaucratic Decline; (T)riage; (A)ccepted; (R)edirected; (S)cheduled; (D)eclined;(Y)Declined Clinical Director; (X)Refused ; (M)ailed; (E)xecuted; Ans(w)ered; Answer A(k)nowledge; (P) Delivered to patient; (F)ailed; B(L)ocked; (J) For approval by Clinical Director; (H) Refused by Clinical Director; (U) Awaiting Acceptance; (Q)Provisionally Accepted; (G)Specimen collection in progress; (V) Approved by Clinical Director; (Z) Request cancellation';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 12/09/2011 16:35
+-- CHANGE REASON: [ALERT-194915 ] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns
+     WHERE table_name = 'P1_EXTERNAL_REQUEST'
+       AND column_name = 'FLG_MIGRATED';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_external_request add(flg_migrated VARCHAR2(1))';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN p1_external_request.flg_migrated IS ''Referral Migrated to external system ex. BDNP Y - Yes, N - No';
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 13/09/2011 09:54
+-- CHANGE REASON: [ALERT-195015 ] 
+COMMENT ON column p1_external_request.flg_migrated IS 'Referral Migrated to external system ex. BDNP Y - Yes, N - No';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns
+     WHERE table_name = 'P1_EXTERNAL_REQUEST'
+       AND column_name = 'FLG_MIGRATED';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_external_request add(flg_migrated VARCHAR2(1))';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN p1_external_request.flg_migrated IS ''Referral Migrated to external system ex. BDNP Y - Yes, N - No';
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 21/12/2012 16:39
+-- CHANGE REASON: [ALERT-248066 ] 
+comment on column P1_EXTERNAL_REQUEST.flg_priority
+  is 'Y-Urgent,  N-Not urgent, 0-Priority zero, 1-Priority one, 2-Priority two, 3-Priority tree';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/02/2013 14:42
+-- CHANGE REASON: [ALERT-248636] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'P1_EXTERNAL_REQUEST'
+       AND c.column_name = 'YEAR_BEGIN';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table p1_external_request add year_begin NUMBER(4)';
+        EXECUTE IMMEDIATE 'alter table p1_external_request add month_begin NUMBER(2)';
+        EXECUTE IMMEDIATE 'alter table p1_external_request add day_begin NUMBER(2)';
+    
+        EXECUTE IMMEDIATE 'comment on column p1_external_request.year_begin is ''Problem begin Year (for problems only)''';
+        EXECUTE IMMEDIATE 'comment on column p1_external_request.month_begin is ''Problem begin Month (for problems only)''';
+        EXECUTE IMMEDIATE 'comment on column p1_external_request.day_begin is ''Problem begin Day (for problems only)''';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 11/02/2013 16:11
+-- CHANGE REASON: [ALERT-248636] 
+COMMENT ON column p1_external_request.flg_migrated IS 'Referral Migrated to external system ex. BDNP Y - Yes, N - No';
+comment on column P1_EXTERNAL_REQUEST.print_nr
+  is 'Number of prints of the request';
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+
+    EXECUTE IMMEDIATE 'ALTER TABLE p1_external_request add (print_nr NUMBER(2) default 0, id_bdnp_message NUMBER(24))';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 11/02/2013 16:51
+-- CHANGE REASON: [ALERT-248636] 
+
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+
+    EXECUTE IMMEDIATE 'ALTER TABLE p1_external_request add (print_nr NUMBER(2) default 0, id_bdnp_message NUMBER(24))';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    
+END;
+/
+
+COMMENT ON column p1_external_request.flg_migrated IS 'Referral Migrated to external system ex. BDNP Y - Yes, N - No';
+comment on column P1_EXTERNAL_REQUEST.print_nr
+  is 'Number of prints of the request';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 13/08/2013 16:21
+-- CHANGE REASON: [ALERT-263123] 
+comment on column P1_EXTERNAL_REQUEST.flg_priority
+  is 'Y-Urgent, N-Routine, W-2WW, U-urgent, R-Routine, 0-Priority zero, 1-Priority one, 2-Priority two, 3-Priority tree';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 16/09/2013 17:02
+-- CHANGE REASON: [ALERT-265105 ] 
+comment on column P1_EXTERNAL_REQUEST.flg_priority
+  is 'Y-Urgent, N-Routine, W-2WW, U-urgent, R-Routine, 0-Priority zero, 1-Priority one, 2-Priority two, 3-Priority tree, , X-RTT - 62 day , Z - RTT - 18 week';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 29/08/2014 09:13
+-- CHANGE REASON: [ALERT-293830] 
+-- nao foi reposto na revisao #1440682 (versionado no issue ALERT-194568)
+ALTER TABLE P1_EXTERNAL_REQUEST PARALLEL (DEGREE 1);
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/01/2015 14:36
+-- CHANGE REASON: [ALERT-280039] 
+BEGIN
+    pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify create_user VARCHAR2(30 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify EXT_REFERENCE VARCHAR2(30 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify FLG_DIGITAL_DOC VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify FLG_FORWARD_DCS  VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify FLG_HOME  VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify FLG_IMPORT  VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify FLG_INTERFACE  VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify FLG_MIGRATED  VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify FLG_PAPER_DOC  VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify FLG_PRIORITY  VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify FLG_STATUS  VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify FLG_TYPE  VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify NUM_REQ  VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify REQ_TYPE  VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify UPDATE_USER  VARCHAR2(30 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify DAY_BEGIN number(24)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify ID_EXTERNAL_SYS number(24)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify ID_SPECIALITY number(24)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify MONTH_BEGIN number(24)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify PRINT_NR number(24)]');
+pk_versioning.run(i_sql => q'[alter table P1_EXTERNAL_REQUEST modify YEAR_BEGIN number(24)]');
+END;
+/
+
+COMMENT ON column P1_EXTERNAL_REQUEST.ID_BDNP_MESSAGE IS 'BDNP message identifier';
+comment on column P1_EXTERNAL_REQUEST.DT_LAST_INTERACTION_TSTZ is 'Date pof professional last interaction';
+comment on column P1_EXTERNAL_REQUEST.ID_PROF_CREATED is 'Professional that created the referral';
+comment on column P1_EXTERNAL_REQUEST.ID_SCHEDULE is 'Referral schedule identifier';
+comment on column P1_EXTERNAL_REQUEST.ID_SPECIALITY is 'Referral speciality identifier';
+comment on table P1_EXTERNAL_REQUEST is 'Referral requests data';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on column P1_EXTERNAL_REQUEST.id_external_request
+  is 'Referral internal id';
+comment on column P1_EXTERNAL_REQUEST.id_patient
+  is 'Patiente';
+comment on column P1_EXTERNAL_REQUEST.id_dep_clin_serv
+  is 'Destiny Service / Specialty for the request';
+comment on column P1_EXTERNAL_REQUEST.id_prof_requested
+  is 'Requester professional';
+comment on column P1_EXTERNAL_REQUEST.num_req
+  is 'Referral identifier';
+comment on column P1_EXTERNAL_REQUEST.flg_status
+  is '(O)Being created; (N)ew; (I)ssued; (C)anceled; (B)ureaucratic Decline; (T)riage; (A)ccepted; (R)edirected; (S)cheduled; (D)eclined; (Y)Declined Clinical Director; (X)Refused ; (M)ailed; (E)xecuted; Ans(w)ered; Answer A(k)nowledge; (P) Delivered to patient; (F)ailed; B(L)ocked; (J) For approval by Clinical Director; (H) Refused by Clinical Director; (U) Awaiting Acceptance; (Q)Provisionally Accepted; (G)Specimen collection in progress; (V) Approved by Clinical Director; (Z) Request cancellation';
+comment on column P1_EXTERNAL_REQUEST.flg_digital_doc
+  is 'Requires digital documents? NULL: not applicable; N-in transit; Y-Done';
+comment on column P1_EXTERNAL_REQUEST.flg_mail
+  is 'Letter to patient was sent? Y/N';
+comment on column P1_EXTERNAL_REQUEST.flg_paper_doc
+  is 'Requires non-digital documents? NULL: not applicable; N- in transit; Y-Done';
+comment on column P1_EXTERNAL_REQUEST.flg_priority
+  is 'Y-Urgent; N-Routine; W-2WW; U-urgent; R-Routine; 0-Priority zero; 1-Priority one; 2-Priority two; 3-Priority tree; X-RTT - 62 day; Z - RTT - 18 week';
+comment on column P1_EXTERNAL_REQUEST.id_inst_dest
+  is 'Destination institution';
+comment on column P1_EXTERNAL_REQUEST.id_inst_orig
+  is 'Origin institution';
+comment on column P1_EXTERNAL_REQUEST.req_type
+  is 'Referral type. (P)rotocol; (M)anual';
+comment on column P1_EXTERNAL_REQUEST.flg_home
+  is 'Is home health appointment Y/N';
+comment on column P1_EXTERNAL_REQUEST.decision_urg_level
+  is 'Priority set during the triage';
+comment on column P1_EXTERNAL_REQUEST.id_prof_status
+  is 'Professional responsible by the last status update';
+comment on column P1_EXTERNAL_REQUEST.flg_import
+  is 'Is paper request imported from Sonho? Y/N';
+comment on column P1_EXTERNAL_REQUEST.dt_last_interaction_tstz
+  is 'Date of professional last interaction';
+comment on column P1_EXTERNAL_REQUEST.dt_probl_begin_tstz
+  is 'Problem begin date';
+comment on column P1_EXTERNAL_REQUEST.dt_status_tstz
+  is 'Date of last status update';
+
+  
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2016 09:13
+-- CHANGE REASON: [ALERT-326665] 
+ALTER TABLE p1_external_request ADD prof_certificate VARCHAR2(30 CHAR);
+ALTER TABLE p1_external_request ADD prof_name VARCHAR2(200 CHAR);
+ALTER TABLE p1_external_request ADD prof_surname VARCHAR2(200 CHAR);
+ALTER TABLE p1_external_request ADD prof_phone VARCHAR2(30 CHAR);
+-- CHANGE END: Pedro Henriques 
+  
+  
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 12/12/2016 09:13
+-- CHANGE REASON: [ALERT-327027]   
+COMMENT ON COLUMN p1_external_request.prof_certificate IS 'Receiving physician data - Professional license number';
+COMMENT ON COLUMN p1_external_request.prof_name IS 'Receiving physician data - Name';
+COMMENT ON COLUMN p1_external_request.prof_surname IS 'Receiving physician data - Last name';
+COMMENT ON COLUMN p1_external_request.prof_phone IS 'Receiving physician data - Phone';  
+-- CHANGE END: Pedro Henriques 
+
+
+
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 18/04/2017 09:13
+-- CHANGE REASON: [ALERT-330282]   
+ALTER TABLE p1_external_request ADD ID_FAM_REL NUMBER(24);
+ALTER TABLE p1_external_request ADD NAME_FIRST_REL VARCHAR2(100 CHAR);
+ALTER TABLE p1_external_request ADD NAME_MIDDLE_REL VARCHAR2(300 CHAR);
+ALTER TABLE p1_external_request ADD NAME_LAST_REL VARCHAR2(100 CHAR);
+COMMENT ON COLUMN p1_external_request.ID_FAM_REL IS 'parentesc relationship';
+COMMENT ON COLUMN p1_external_request.NAME_FIRST_REL IS 'First Name Parentesc';
+COMMENT ON COLUMN p1_external_request.NAME_MIDDLE_REL IS 'Middle Name Parentesc';
+COMMENT ON COLUMN p1_external_request.NAME_LAST_REL IS 'Last Name Parentesc';  
+-- CHANGE END: Pedro Henriques 
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/10/2020 14:40
+-- CHANGE REASON: [EMR-36650]
+begin
+pk_versioning.run('ALTER TABLE p1_external_request ADD consent VARCHAR2(1 CHAR)');
+end;
+/
+
+COMMENT ON COLUMN p1_external_request.consent IS 'Patient consent';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/01/2021 12:05
+-- CHANGE REASON: [EMR-40577]
+ALTER TABLE p1_external_Request DROP CONSTRAInt ERTX_FLG_MIGRATED_CHK;
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 16/03/2021 16:50
+-- CHANGE REASON: [EMR-39019] - HTML Migration - External referrals
+BEGIN
+pk_versioning.run('alter table p1_external_request add id_pat_health_plan       NUMBER(24)');
+END;
+/
+
+BEGIN
+pk_versioning.run('alter table p1_external_request add id_pat_exemption         NUMBER(24)');
+END;
+/
+
+comment on column P1_EXTERNAL_REQUEST.id_pat_health_plan
+is 'Healthcare insurance plan ID used';
+
+comment on column P1_EXTERNAL_REQUEST.id_pat_exemption
+is 'Exemption ID used';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 18/05/2021 17:01
+-- CHANGE REASON: [EMR-45209] - MX / SA > MCDT > missing fields + labels is different
+alter table p1_external_request
+add family_relationship_notes varchar2(1000 char);
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 01/07/2021 10:09
+-- CHANGE REASON: [EMR-46812]
+ALTER TABLE p1_external_request ADD id_p1_ext_req_parent NUMBER(24);
+-- CHANGE END: Pedro Henriques

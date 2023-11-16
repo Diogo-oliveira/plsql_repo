@@ -1,0 +1,7 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 14/03/2011 15:24
+-- CHANGE REASON: [ALERT-167210 ] H&P: the search is not considering the template texts
+CREATE INDEX PN_NOTE_TEMPL_LIDX on EPIS_PN_DET_TEMPL(PN_NOTE) indextype is lucene.luceneindex parameters('LockMasterTable:false;LogLevel:INFO;FormatCols:dictionary(ANALYZED_WITH_POSITIONS_OFFSETS);PerFieldAnalyzer:PN_NOTE(org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords),dictionary(org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords);ExtraCols:pn_note "dictionary";Analyzer:org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords;MergeFactor:20;AutoTuneMemory:true;RewriteScore:true;SimilarityMethod:org.apache.lucene.search.WildcardSimilarity;DefaultOperator:AND;NormalizeScore:false;LobStorageParameters:TABLESPACE LUCENE_IDX PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS NOLOGGING;');
+
+ALTER INDEX PN_NOTE_TEMPL_LIDX parameters('SyncMode:OnLine;');
+-- CHANGE END: Sofia Mendes

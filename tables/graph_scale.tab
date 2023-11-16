@@ -1,0 +1,47 @@
+create table graph_scale
+(
+  id_graph_scale   NUMBER(24) NOT NULL,
+	id_vital_sign    NUMBER(24),
+  code_graph_scale VARCHAR2(200) NOT NULL,
+  rank             NUMBER(6) NOT NULL,
+  flg_type         VARCHAR2(1) NOT NULL,
+	id_institution   NUMBER(24) NOT NULL,
+  flg_available    VARCHAR2(1) NOT NULL,
+	val_min          NUMBER(8,3),
+	val_max          NUMBER(8,3));
+
+COMMENT ON TABLE graph_scale IS 'Inclusion of different visual scales in a graph';
+
+COMMENT ON COLUMN graph_scale.id_graph_scale IS 'Scale ID';
+COMMENT ON COLUMN graph_scale.id_vital_sign IS 'Vital sign ID';
+COMMENT ON COLUMN graph_scale.code_graph_scale IS 'Translation code';
+COMMENT ON COLUMN graph_scale.rank IS 'Rank used to order the different scales';
+COMMENT ON COLUMN graph_scale.flg_type IS 'Type of graph where the scales are used: P - partogram, D - partogram (not visible)';
+COMMENT ON COLUMN graph_scale.id_institution IS 'Institution ID';
+COMMENT ON COLUMN graph_scale.flg_available IS 'Availability of the record in the institution DB';
+
+
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 11/01/2010 15:49
+-- CHANGE REASON: [ALERT-66010] Partogram configurations
+BEGIN
+EXECUTE IMMEDIATE
+'ALTER TABLE graph_scale DROP COLUMN id_institution';
+EXCEPTION
+WHEN OTHERS THEN
+  NULL;
+END;
+/
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column GRAPH_SCALE.val_min
+  is 'Min value';
+comment on column GRAPH_SCALE.val_max
+  is 'Max value';  
+-- CHANGE END: Elisabete Bugalho

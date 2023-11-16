@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_table_data_child_birth AS TABLE OF t_rec_data_child_birth;

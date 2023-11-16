@@ -1,0 +1,79 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 10:10
+-- CHANGE REASON: [ALERT-164483] soap note blocks configuration data model
+alter table pn_free_text_mkt
+  add constraint pnft_pk primary key (id_market, id_profile_template, id_pn_data_block);
+alter table pn_free_text_mkt
+  add constraint pnft_flg_write_chk
+  check (flg_write in ('Y', 'N'));
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:49
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_free_text_mkt ADD CONSTRAINT PFTM_FLG_CFG_TYPE_CHK CHECK(FLG_CONFIG_TYPE IN (''S'', ''C'',''P''))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_free_text_mkt drop primary key drop index';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_free_text_mkt
+  add constraint PNFT_PK primary key (ID_MARKET, ID_PROFILE_TEMPLATE, ID_PN_DATA_BLOCK, id_software, id_category, flg_config_type)';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_free_text_mkt ADD CONSTRAINT PNFTM_CFG_TYPE_CHK CHECK(case when FLG_CONFIG_TYPE = ''S'' and id_software<>0 and id_category=-1 and id_profile_template=0 then 1 when
+FLG_CONFIG_TYPE = ''C'' and id_software=0 and id_category<>-1 and id_profile_template=0 then 1 
+when FLG_CONFIG_TYPE = ''P'' and id_software=0 and id_category=-1 and id_profile_template<>0 then 1 else null end 
+is not null)';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 05/04/2012 10:03
+-- CHANGE REASON: [ALERT-226388] Allow software = 0 for note type and free texts configurations - EDIS restructuring - Present Illness / Current visit
+begin
+execute immediate('alter table PN_FREE_TEXT_MKT
+  drop constraint PNFTM_CFG_TYPE_CHK');
+exception
+when others then
+     dbms_output.put_line('Script already executed');
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 05/04/2012 10:07
+-- CHANGE REASON: [ALERT-226388] Allow software = 0 for note type and free texts configurations - EDIS restructuring - Present Illness / Current visit
+begin
+execute immediate('alter table PN_FREE_TEXT_MKT
+  add constraint PNFTM_CFG_TYPE_CHK
+  check (case when FLG_CONFIG_TYPE = ''S'' and id_software<>-1 and id_category=-1 and id_profile_template=0 then 1 when
+FLG_CONFIG_TYPE = ''C'' and id_software=-1 and id_category<>-1 and id_profile_template=0 then 1
+when FLG_CONFIG_TYPE = ''P'' and id_software=-1 and id_category=-1 and id_profile_template<>0 then 1 else null end
+is not null)');
+exception
+when others then
+     dbms_output.put_line('Script already executed');
+end;
+/
+-- CHANGE END: António Neto

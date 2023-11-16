@@ -1,0 +1,14 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 30/04/2011 18:05
+-- CHANGE REASON: [ALERT-173229] Order recurrence core development
+DECLARE
+    e_pk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_exists, -02260); -- table can have only one primary key
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ORDER_RECURR_AREA ADD CONSTRAINT ORCA_PK primary key (ID_ORDER_RECURR_AREA)';
+EXCEPTION
+    WHEN e_pk_already_exists THEN
+        dbms_output.put_line('primary key already exists');
+END;
+/
+-- CHANGE END: Carlos Loureiro

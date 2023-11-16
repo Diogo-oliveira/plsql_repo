@@ -1,0 +1,36 @@
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 15-10-2010
+-- CHANGE REASON: ALERT-126053
+begin
+  execute immediate 'CREATE TABLE SCH_RESCHED_REASON 
+                         (
+                          ID_RESCHED_REASON NUMBER(24) NOT NULL
+                         ,CODE_RESCHED_REASON VARCHAR2(200 CHAR) NOT NULL
+                         ,ID_CONTENT VARCHAR2(200 CHAR) NOT NULL
+                         ,FLG_AVAILABLE VARCHAR2(1 CHAR) DEFAULT ''Y'' NOT NULL
+                         ,CREATE_USER VARCHAR2(24 CHAR)
+                         ,CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+                         ,CREATE_INSTITUTION NUMBER(24)
+                         ,UPDATE_USER VARCHAR2(24 CHAR)
+                         ,UPDATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+                         ,UPDATE_INSTITUTION NUMBER(24)
+                         )';
+exception 
+  when others then
+   dbms_output.put_line('tabela já existe');
+end;
+/
+
+COMMENT ON TABLE SCH_RESCHED_REASON IS 'Reasons for the Scheduler reschedule operation';
+COMMENT ON COLUMN SCH_RESCHED_REASON.ID_RESCHED_REASON IS 'Primary key';
+COMMENT ON COLUMN SCH_RESCHED_REASON.CODE_RESCHED_REASON IS 'translation id code';
+COMMENT ON COLUMN SCH_RESCHED_REASON.ID_CONTENT IS 'unique content id';
+COMMENT ON COLUMN SCH_RESCHED_REASON.FLG_AVAILABLE IS 'Y= this record is available  N= this record is not available throughout Alert';
+COMMENT ON COLUMN SCH_RESCHED_REASON.CREATE_USER IS 'Creaction user';
+COMMENT ON COLUMN SCH_RESCHED_REASON.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN SCH_RESCHED_REASON.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN SCH_RESCHED_REASON.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN SCH_RESCHED_REASON.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN SCH_RESCHED_REASON.UPDATE_INSTITUTION IS 'Update Institution';
+
+--CHANGE END: Telmo

@@ -1,0 +1,19 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 21/05/2012 15:00
+-- CHANGE REASON: [ALERT-230623 ] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints uc
+     WHERE uc.table_name = 'P1_WORKFLOW'
+       AND uc.constraint_name = 'PWW_PK';
+
+    IF l_var != 1
+    THEN
+        EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX "PWW_PK" ON "P1_WORKFLOW" ("CODE_WORKFLOW")';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso

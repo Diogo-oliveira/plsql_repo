@@ -1,0 +1,235 @@
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 23/10/2009 08:26
+-- CHANGE REASON: New developments,  provide the ability to document that the information was reviewed in the current visit or episode (v2.5.0.7)
+create table review_detail (
+	id_record_area 	number(24,0) not null,
+	flg_context 	varchar2(2) not null,
+	id_professional	number(24,0) not null,
+	review_notes    varchar2(1000 char),
+	dt_review      	timestamp with local time zone not null
+) tablespace table_l;
+
+comment on table review_detail is 'Table of reviews for Problems, Allergies, Habits, Medication, Blood type, Advanced directives or Past history' ;
+comment on column review_detail.id_record_area is 'Id of record of each area (id_pat_problem, id_pat_allergy, etc)' ;
+comment on column review_detail.flg_context is 'Record context flag (PR, AL, HA, ME, BT, AD, PH)' ;
+comment on column review_detail.id_professional is 'Id of professional who made this review' ;
+comment on column review_detail.review_notes is 'Notes for this review' ;
+comment on column review_detail.dt_review is 'Timestamp of this review' ;
+-- CHANGE END: Rui Duarte
+
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 28/10/2009
+-- CHANGE REASON: ALERT-51470
+ALTER TABLE REVIEW_DETAIL MODIFY FLG_CONTEXT VARCHAR2(2 CHAR);
+-- CHANGE END
+
+
+-- change by: rui.baeta
+-- change date: 23/10/2009 08:26
+-- change reason: ALERT-870: provide the ability to document that the information was reviewed in the current visit or episode
+create table review_detail (
+	id_record_area 	   number(24,0) not null,
+	flg_context 	   varchar2(2 char) not null,
+	id_professional	   number(24,0) not null,
+	review_notes       varchar2(1000 char),
+	dt_review      	   timestamp with local time zone not null,
+    create_user        varchar2(24 char),
+    create_time        timestamp (6) with local time zone,
+    create_institution number(24,0),
+    update_user        varchar2(24 char),
+    update_time        timestamp (6) with local time zone,
+    update_institution number(24,0)
+) tablespace table_l;
+
+comment on table review_detail is 'Table of reviews for Problems, Allergies, Habits, Medication, Blood type, Advanced directives or Past history' ;
+comment on column review_detail.id_record_area is 'Id of record of each area (id_pat_problem, id_pat_allergy, etc)' ;
+comment on column review_detail.flg_context is 'Record context flag (PR, AL, HA, ME, BT, AD, PH)' ;
+comment on column review_detail.id_professional is 'Id of professional who made this review' ;
+comment on column review_detail.review_notes is 'Notes for this review' ;
+comment on column review_detail.dt_review is 'Timestamp of this review' ;
+comment on column review_detail.create_user is 'Creation User';
+comment on column review_detail.create_time is 'Creation Time';
+comment on column review_detail.create_institution IS 'Creation Institution';
+comment on column review_detail.update_user is 'Update User';
+comment on column review_detail.update_time is 'Update Time';
+comment on column review_detail.update_institution IS 'Update Institution';
+-- change end: rui.baeta
+
+
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 22/11/2010 10:39
+-- CHANGE REASON: [ALERT-139330] 
+DECLARE
+    e_already_not_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE review_detail add flg_problem_review VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'COMMENT ON column review_detail.flg_problem_review IS ''(Y) -  problem review; (N) - not a problem review''';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/11/2010 11:54
+-- CHANGE REASON: [ALERT-71181] 
+DECLARE
+    e_already_not_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE review_detail add flg_problem_review VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'alter table REVIEW_DETAIL add ID_EPISODE NUMBER(24)';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER table REVIEW_DETAIL add FLG_AUTO VARCHAR2(1)';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table REVIEW_DETAIL add REVISION NUMBER(24)';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table REVIEW_DETAIL modify REVIEW_NOTES VARCHAR2(4000 CHAR)';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column review_detail.flg_problem_review IS ''(Y) -  problem review; (N) - not a problem review''';
+        EXECUTE IMMEDIATE 'COMMENT on column REVIEW_DETAIL.ID_EPISODE is ''id episode''';
+        EXECUTE IMMEDIATE 'COMMENT on column REVIEW_DETAIL.FLG_AUTO is ''(Y) -  automatic review; (N) - manual review''';
+        EXECUTE IMMEDIATE 'comment on column REVIEW_DETAIL.REVISION  is ''Revision of the register''';
+    
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/11/2010 12:07
+-- CHANGE REASON: [ALERT-71181] 
+DECLARE
+    e_already_not_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE review_detail add flg_problem_review VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table REVIEW_DETAIL add ID_EPISODE NUMBER(24)';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER table REVIEW_DETAIL add FLG_AUTO VARCHAR2(1)';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table REVIEW_DETAIL add REVISION NUMBER(24)';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table REVIEW_DETAIL modify REVIEW_NOTES VARCHAR2(4000 CHAR)';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column review_detail.flg_problem_review IS ''(Y) -  problem review; (N) - not a problem review''';
+        EXECUTE IMMEDIATE 'COMMENT on column REVIEW_DETAIL.ID_EPISODE is ''id episode''';
+        EXECUTE IMMEDIATE 'COMMENT on column REVIEW_DETAIL.FLG_AUTO is ''(Y) -  automatic review; (N) - manual review''';
+        EXECUTE IMMEDIATE 'comment on column REVIEW_DETAIL.REVISION  is ''Revision of the register''';
+    
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 24/01/2011 14:50
+-- CHANGE REASON: [ALERT-157301] New developments in PastHistory, free text values added(DML STEP 1)(v.2.6.0.5)
+--                
+comment on column review_detail.flg_context is 'Record context flag (PR, AL, HA, ME, BT, AD, PH)';
+-- CHANGE END: Rui Duarte
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 28/04/2011 14:33
+-- CHANGE REASON: [ALERT-174861] Corrections to table REVIEW_DETAIL
+-- change to CHAR semantic and sets default value
+ALTER table REVIEW_DETAIL MODIFY flg_auto VARCHAR2(1 CHAR) default 'N';
+ALTER table REVIEW_DETAIL MODIFY FLG_PROBLEM_REVIEW VARCHAR2(1 CHAR) default 'N';
+-- add revision_tmp column
+ALTER table REVIEW_DETAIL add revision_tmp NUMBER(6);
+-- CHANGE END:  Pedro Morais
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 28/04/2011 14:38
+-- CHANGE REASON: [ALERT-174861] Corrections to table REVIEW_DETAIL
+-- define as not nullable
+ALTER table REVIEW_DETAIL modify flg_auto not null;
+ALTER table REVIEW_DETAIL modify FLG_PROBLEM_REVIEW not null;
+
+-- modify from NUMBER(24) to NUMBER(6)
+ALTER table REVIEW_DETAIL modify revision NUMBER(6);
+-- CHANGE END:  Pedro Morais
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 28/04/2011 14:38
+-- CHANGE REASON: [ALERT-174861] Corrections to table REVIEW_DETAIL
+-- drop revision_tmp column
+alter table REVIEW_DETAIL drop column revision_tmp;
+-- CHANGE END:  Pedro Morais
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 17/08/2011 18:47
+-- CHANGE REASON: [ALERT-190780] 
+comment on column REVIEW_DETAIL.flg_context
+  is 'Record context flag (PR, AL, HA, ME, BT, AD, PH, VS, RM, MR, PT, TM)';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:34
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+comment on column REVIEW_DETAIL.flg_context
+  is 'Record context flag (PR - Problems, AL - allergies, HA - Habits, ME - Medication, BT - Blood type, AD - advance directives, PH - Past history, VS - Vital sign, RM - Reported medication, MR - Medication reconciliation, PT - Past history in free text, TM - Template)';
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,74 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 11:30
+-- CHANGE REASON: [ALERT-12334 ] 
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_PK primary key (ID_SUPPLY_WORKFLOW_HIST)
+  using index 
+  tablespace INDEX_L
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 22/07/2010 09:44
+-- CHANGE REASON: [ALERT-113837] Activity Therapist
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPH_FLG_OUTDATED_CHK
+  check (FLG_OUTDATED IN ('A','O','E'));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 02/12/2010 16:48
+-- CHANGE REASON: [ALERT-146441] Associate a surgical procedure to supplies
+ALTER TABLE supply_workflow_hist
+  DROP CONSTRAINT SPFH_FLG_CONTEXT_CHK;  
+
+ALTER TABLE supply_workflow_hist
+  ADD CONSTRAINT SPFH_FLG_CONTEXT_CHK
+  CHECK (FLG_CONTEXT IN ('M','P','F','I','A','E','O','Q','L','S'));
+
+ALTER TABLE SUPPLY_WORKFLOW_HIST
+DROP CONSTRAINT SPFH_FLG_STATUS_CHK;
+
+ALTER TABLE SUPPLY_WORKFLOW_HIST
+ADD CONSTRAINT SPFH_FLG_STATUS_CHK 
+CHECK (FLG_STATUS IN ('A','S','J','H','V','E','Y','T','P','L','O','N','I','F','C','D','G','Q','B','K'));
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 09/04/2012 16:56
+-- CHANGE REASON: [ALERT-226633 ] 
+alter table SUPPLY_WORKFLOW_HIST
+  drop constraint SPFH_FLG_STATUS_CHK;
+
+
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_FLG_STATUS_CHK
+  check (FLG_STATUS IN ('A','S','J','H','V','E','Y','T','P','L','O','N','I','F','C','D','G','Q','B','K','Z','W'));
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 18/08/2014 15:51
+-- CHANGE REASON: [ALERT-292781] 
+alter table SUPPLY_WORKFLOW_HIST drop constraint SPFH_FLG_STATUS_CHK;
+alter table SUPPLY_WORKFLOW_HIST add constraint SPFH_FLG_STATUS_CHK check (FLG_STATUS IN ('A','S','J','H','V','E','Y','T','P','L','O','N','I','F','C','D','G','Q','B','K','Z','W','R'));
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 30/03/2017 11:58
+-- CHANGE REASON: [ALERT-329913] 
+ALTER TABLE SUPPLY_WORKFLOW_HIST DROP CONSTRAINT SPFH_FLG_STATUS_CHK;
+
+ALTER TABLE SUPPLY_WORKFLOW_HIST
+  ADD CONSTRAINT SPFH_FLG_STATUS_CHK
+  CHECK (FLG_STATUS IN ('A', 'S', 'J', 'H', 'V', 'E', 'Y', 'T', 'P', 'L', 'O', 'N', 'I', 'F', 'C', 'D', 'G', 'Q', 'B', 'K', 'Z', 'W', 'R', 'U'));
+	
+	
+-- CHANGE END: Ana Matos

@@ -1,0 +1,498 @@
+CREATE TABLE PAT_CIT 
+   (	ID_PAT_CIT NUMBER(24,0) NOT NULL ENABLE, 
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE, 
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE, 
+	FLG_PAT_DISEASE_STATE VARCHAR2(1), 
+	FLG_PROF_HEALTH_SUBSYS VARCHAR2(1), 
+	BENEFICIARY_NUM NUMBER(24,0), 
+	ILL_PARENT_NAME VARCHAR2(200), 
+	FLG_ILL_AFFINITY VARCHAR2(1), 
+	ILL_ID_CARD NUMBER(24,0), 
+	FLG_BENEF_HEALTH_SUBSYS VARCHAR2(1), 
+	FLG_CIT_CLASSIFICATION_SS VARCHAR2(1), 
+	FLG_CIT_CLASSIFICATION_FP VARCHAR2(1), 
+	FLG_INTERNMENT VARCHAR2(1), 
+	FLG_INCAPACITY_PERIOD VARCHAR2(1), 
+	DT_START_PERIOD_TSTZ TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+	DT_END_PERIOD_TSTZ TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+	FLG_HOME_ABSENCE VARCHAR2(1), 
+	HOME_AUTHORIZATION VARCHAR2(4000), 
+	FLG_STATUS VARCHAR2(1), 
+	FLG_TYPE VARCHAR2(1), 
+	ID_PROF_WRITES NUMBER(24,0), 
+	ID_PROF_CANCEL NUMBER(24,0), 
+	DT_WRITES_TSTZ TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+	DT_CANCEL_TSTZ TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+	ID_CANCEL_REASON NUMBER(24,0), 
+	CANCEL_NOTES VARCHAR2(4000), 
+	CREATE_USER VARCHAR2(24), 
+	CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+	CREATE_INSTITUTION NUMBER(24,0), 
+	UPDATE_USER VARCHAR2(24), 
+	UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+	UPDATE_INSTITUTION NUMBER(24,0)
+   );
+ 
+ 
+   COMMENT ON COLUMN PAT_CIT.ID_PAT_CIT IS 'Id único de identificação de registo (por sequência)';
+   COMMENT ON COLUMN PAT_CIT.ID_PATIENT IS 'Id do paciente';
+   COMMENT ON COLUMN PAT_CIT.ID_EPISODE IS 'Id do episódio';
+   COMMENT ON COLUMN PAT_CIT.FLG_PAT_DISEASE_STATE IS 'Estado de doença do paciente: ''I''-incapacitante para actividade profissional, ''E''-exige cuidados inadiáveis';
+   COMMENT ON COLUMN PAT_CIT.FLG_PROF_HEALTH_SUBSYS IS 'Sub. Saúde Médico convencionado: ''E''-ADSE, ''M''-ADM, ''J''-SSMJ, ''P''-SADPSP, ''R''-SADGNR';
+   COMMENT ON COLUMN PAT_CIT.BENEFICIARY_NUM IS 'Nº de identificação da Função Pública/Segurança Social';
+   COMMENT ON COLUMN PAT_CIT.ILL_PARENT_NAME IS 'Nome do familiar doente';
+   COMMENT ON COLUMN PAT_CIT.FLG_ILL_AFFINITY IS 'Afinidade do paciente - ''F''-Filho(a) ou equiparado, ''C''-Cônjuge ou equiparado, ''P''-Pai/Mãe ou equiparado, ''A''-Avô/Avó ou equiparado, ''N''-Neto(a) ou equiparado, ''O''-Outro';
+   COMMENT ON COLUMN PAT_CIT.ILL_ID_CARD IS 'Nº de BI do doente';
+   COMMENT ON COLUMN PAT_CIT.FLG_BENEF_HEALTH_SUBSYS IS 'Sub. Saúde Funcionário / agente: ''E''-ADSE, ''M''-ADM, ''J''-SSMJ, ''P''-SADPSP, ''R''-SADGNR';
+   COMMENT ON COLUMN PAT_CIT.FLG_CIT_CLASSIFICATION_SS IS 'Classificação da situação – Segurança Social: ''N''-doença natural, ''D''-doença directa, ''A''-assistência a familiares, ''P''-doença profissional, ''T''-acidente de trabalho';
+   COMMENT ON COLUMN PAT_CIT.FLG_CIT_CLASSIFICATION_FP IS 'Classificação da situação – Função Pública: ''N''-doença natural, ''D''-doença directa, ''A''-assistência a familiares, ''P''-doença prolongada, ''F''-assistência a filhos menores de 10 anos';
+   COMMENT ON COLUMN PAT_CIT.FLG_INTERNMENT IS 'Internamento -– ‘Y’ sim, ‘N’ não';
+   COMMENT ON COLUMN PAT_CIT.FLG_INCAPACITY_PERIOD IS 'Período de incapacidade: ''I''-inicial, ''P''-prorrogação';
+   COMMENT ON COLUMN PAT_CIT.DT_START_PERIOD_TSTZ IS 'Data de início do período de incapacidade';
+   COMMENT ON COLUMN PAT_CIT.DT_END_PERIOD_TSTZ IS 'Data de termo do período de incapacidade';
+   COMMENT ON COLUMN PAT_CIT.FLG_HOME_ABSENCE IS 'Ausência do domicílio – ‘Y’ sim, ‘N’ não';
+   COMMENT ON COLUMN PAT_CIT.HOME_AUTHORIZATION IS 'Autorização para sair do domicílio';
+   COMMENT ON COLUMN PAT_CIT.FLG_STATUS IS 'Status – ''P''-Impresso, ''I''-Construção, ''E''-Editado, ''C''-Cancelado';
+   COMMENT ON COLUMN PAT_CIT.FLG_TYPE IS 'Tipo de certificado – ''S''-Segurança social, ''P''-Função pública';
+   COMMENT ON COLUMN PAT_CIT.ID_PROF_WRITES IS 'Id do profissional que faz o registo (seja criação, impressão, edição ou cancelamento)';
+   COMMENT ON COLUMN PAT_CIT.DT_WRITES_TSTZ IS 'Data de registo (seja criação, impressão, edição ou cancelamento)';
+   COMMENT ON COLUMN PAT_CIT.ID_CANCEL_REASON IS 'Razões de cancelamento com ligação a tabela CANCEL_REASON';
+   COMMENT ON COLUMN PAT_CIT.CANCEL_NOTES IS 'Notas de cancelamento';
+   COMMENT ON COLUMN PAT_CIT.CREATE_USER IS 'Creation User';
+   COMMENT ON COLUMN PAT_CIT.CREATE_TIME IS 'Creation Time';
+   COMMENT ON COLUMN PAT_CIT.CREATE_INSTITUTION IS 'Creation Institution';
+   COMMENT ON COLUMN PAT_CIT.UPDATE_USER IS 'Update User';
+   COMMENT ON COLUMN PAT_CIT.UPDATE_TIME IS 'Update Time';
+   COMMENT ON COLUMN PAT_CIT.UPDATE_INSTITUTION IS 'Update Institution';
+
+
+---------------------------------------------------------------
+CREATE TABLE PAT_CIT 
+   (	ID_PAT_CIT NUMBER(24,0) NOT NULL ENABLE, 
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE, 
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE, 
+	FLG_PAT_DISEASE_STATE VARCHAR2(1), 
+	FLG_PROF_HEALTH_SUBSYS VARCHAR2(1), 
+	BENEFICIARY_NUM NUMBER(24,0), 
+	ILL_PARENT_NAME VARCHAR2(200), 
+	FLG_ILL_AFFINITY VARCHAR2(1), 
+	ILL_ID_CARD NUMBER(24,0), 
+	FLG_BENEF_HEALTH_SUBSYS VARCHAR2(1), 
+	FLG_CIT_CLASSIFICATION_SS VARCHAR2(1), 
+	FLG_CIT_CLASSIFICATION_FP VARCHAR2(1), 
+	FLG_INTERNMENT VARCHAR2(1), 
+	FLG_INCAPACITY_PERIOD VARCHAR2(1), 
+	DT_START_PERIOD_TSTZ TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+	DT_END_PERIOD_TSTZ TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+	FLG_HOME_ABSENCE VARCHAR2(1), 
+	HOME_AUTHORIZATION VARCHAR2(4000), 
+	FLG_STATUS VARCHAR2(1), 
+	FLG_TYPE VARCHAR2(1), 
+	ID_PROF_WRITES NUMBER(24,0), 
+	ID_PROF_CANCEL NUMBER(24,0), 
+	DT_WRITES_TSTZ TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+	DT_CANCEL_TSTZ TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+	ID_CANCEL_REASON NUMBER(24,0), 
+	CANCEL_NOTES VARCHAR2(4000), 
+	CREATE_USER VARCHAR2(24), 
+	CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+	CREATE_INSTITUTION NUMBER(24,0), 
+	UPDATE_USER VARCHAR2(24), 
+	UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+	UPDATE_INSTITUTION NUMBER(24,0)
+   );
+ 
+ 
+   COMMENT ON COLUMN PAT_CIT.ID_PAT_CIT IS 'Id único de identificação de registo (por sequência)';
+   COMMENT ON COLUMN PAT_CIT.ID_PATIENT IS 'Id do paciente';
+   COMMENT ON COLUMN PAT_CIT.ID_EPISODE IS 'Id do episódio';
+   COMMENT ON COLUMN PAT_CIT.FLG_PAT_DISEASE_STATE IS 'Estado de doença do paciente: ''I''-incapacitante para actividade profissional, ''E''-exige cuidados inadiáveis';
+   COMMENT ON COLUMN PAT_CIT.FLG_PROF_HEALTH_SUBSYS IS 'Sub. Saúde Médico convencionado: ''E''-ADSE, ''M''-ADM, ''J''-SSMJ, ''P''-SADPSP, ''R''-SADGNR';
+   COMMENT ON COLUMN PAT_CIT.BENEFICIARY_NUM IS 'Nº de identificação da Função Pública/Segurança Social';
+   COMMENT ON COLUMN PAT_CIT.ILL_PARENT_NAME IS 'Nome do familiar doente';
+   COMMENT ON COLUMN PAT_CIT.FLG_ILL_AFFINITY IS 'Afinidade do paciente - ''F''-Filho(a) ou equiparado, ''C''-Cônjuge ou equiparado, ''P''-Pai/Mãe ou equiparado, ''A''-Avô/Avó ou equiparado, ''N''-Neto(a) ou equiparado, ''O''-Outro';
+   COMMENT ON COLUMN PAT_CIT.ILL_ID_CARD IS 'Nº de BI do doente';
+   COMMENT ON COLUMN PAT_CIT.FLG_BENEF_HEALTH_SUBSYS IS 'Sub. Saúde Funcionário / agente: ''E''-ADSE, ''M''-ADM, ''J''-SSMJ, ''P''-SADPSP, ''R''-SADGNR';
+   COMMENT ON COLUMN PAT_CIT.FLG_CIT_CLASSIFICATION_SS IS 'Classificação da situação – Segurança Social: ''N''-doença natural, ''D''-doença directa, ''A''-assistência a familiares, ''P''-doença profissional, ''T''-acidente de trabalho';
+   COMMENT ON COLUMN PAT_CIT.FLG_CIT_CLASSIFICATION_FP IS 'Classificação da situação – Função Pública: ''N''-doença natural, ''D''-doença directa, ''A''-assistência a familiares, ''P''-doença prolongada, ''F''-assistência a filhos menores de 10 anos';
+   COMMENT ON COLUMN PAT_CIT.FLG_INTERNMENT IS 'Internamento -– ‘Y’ sim, ‘N’ não';
+   COMMENT ON COLUMN PAT_CIT.FLG_INCAPACITY_PERIOD IS 'Período de incapacidade: ''I''-inicial, ''P''-prorrogação';
+   COMMENT ON COLUMN PAT_CIT.DT_START_PERIOD_TSTZ IS 'Data de início do período de incapacidade';
+   COMMENT ON COLUMN PAT_CIT.DT_END_PERIOD_TSTZ IS 'Data de termo do período de incapacidade';
+   COMMENT ON COLUMN PAT_CIT.FLG_HOME_ABSENCE IS 'Ausência do domicílio – ‘Y’ sim, ‘N’ não';
+   COMMENT ON COLUMN PAT_CIT.HOME_AUTHORIZATION IS 'Autorização para sair do domicílio';
+   COMMENT ON COLUMN PAT_CIT.FLG_STATUS IS 'Status – ''P''-Impresso, ''I''-Construção, ''E''-Editado, ''C''-Cancelado';
+   COMMENT ON COLUMN PAT_CIT.FLG_TYPE IS 'Tipo de certificado – ''S''-Segurança social, ''P''-Função pública';
+   COMMENT ON COLUMN PAT_CIT.ID_PROF_WRITES IS 'Id do profissional que faz o registo (seja criação, impressão, edição ou cancelamento)';
+   COMMENT ON COLUMN PAT_CIT.DT_WRITES_TSTZ IS 'Data de registo (seja criação, impressão, edição ou cancelamento)';
+   COMMENT ON COLUMN PAT_CIT.ID_CANCEL_REASON IS 'Razões de cancelamento com ligação a tabela CANCEL_REASON';
+   COMMENT ON COLUMN PAT_CIT.CANCEL_NOTES IS 'Notas de cancelamento';
+   COMMENT ON COLUMN PAT_CIT.CREATE_USER IS 'Creation User';
+   COMMENT ON COLUMN PAT_CIT.CREATE_TIME IS 'Creation Time';
+   COMMENT ON COLUMN PAT_CIT.CREATE_INSTITUTION IS 'Creation Institution';
+   COMMENT ON COLUMN PAT_CIT.UPDATE_USER IS 'Update User';
+   COMMENT ON COLUMN PAT_CIT.UPDATE_TIME IS 'Update Time';
+   COMMENT ON COLUMN PAT_CIT.UPDATE_INSTITUTION IS 'Update Institution';
+
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 12/01/2011 09:54
+-- CHANGE REASON: [ALERT-154804] 
+ALTER TABLE pat_cit ADD accident_cause CLOB;
+ALTER TABLE pat_cit ADD flg_cit_type varchar2(1 char) ;
+ALTER TABLE pat_cit ADD flg_prognosis_type varchar2(1 char) ;
+ALTER TABLE pat_cit ADD flg_permanent_disability varchar2(1 char) ;
+ALTER TABLE pat_cit ADD flg_life_danger varchar2(1 char) ;
+ALTER TABLE pat_cit ADD dt_event_tstz TIMESTAMP (6) WITH LOCAL TIME ZONE;
+ALTER TABLE pat_cit ADD dt_stop_work_tstz TIMESTAMP (6) WITH LOCAL TIME ZONE;
+ALTER TABLE pat_cit ADD flg_accident_type varchar2(1 char) ;
+ALTER TABLE pat_cit ADD id_county_accident NUMBER(24);
+
+
+comment on table pat_cit is 'Patient work disability certificates';
+comment on column pat_cit.accident_cause is 'Accident causes and circumstances';
+comment on column pat_cit.flg_cit_type is 'Type of certificate: P - New, C - Continued, D - Definite';
+comment on column pat_cit.flg_prognosis_type is 'Type of prognosis: S - No prognosis, R - Reserved prognosis, N - Normal prognosis';
+comment on column pat_cit.flg_permanent_disability is 'Work disability: Y - Permanent, N - Non permanent';
+comment on column pat_cit.flg_life_danger is 'Life danger: Y - Yes, N - No';
+comment on column pat_cit.dt_event_tstz is 'Date of event that caused the work the disability';
+comment on column pat_cit.dt_stop_work_tstz is 'Last day of work due to work disability';
+comment on column pat_cit.id_county_accident is 'City code where the accident occurred';
+comment on column pat_cit.flg_accident_type is 'Type of Acident: A - Agriculture, I - Industry, P - Public administration, T - Handicraft, S - Services, O - Other';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 28/05/2012 11:05
+-- CHANGE REASON: [ALERT-230979] 
+DECLARE
+    e_expt EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_expt, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pat_cit add landline_prefix VARCHAR2(30 CHAR)';
+    EXCEPTION
+        WHEN e_expt THEN
+            dbms_output.put_line('already executed');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pat_cit add landline_number VARCHAR2(30 CHAR)';
+    EXCEPTION
+        WHEN e_expt THEN
+            dbms_output.put_line('already executed');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pat_cit add mobile_prefix VARCHAR2(30 CHAR)';
+    EXCEPTION
+        WHEN e_expt THEN
+            dbms_output.put_line('already executed');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pat_cit add mobile_number VARCHAR2(30 CHAR)';
+    EXCEPTION
+        WHEN e_expt THEN
+            dbms_output.put_line('already executed');
+    END;
+EXECUTE IMMEDIATE 'COMMENT ON column pat_cit.landline_prefix IS ''Landline phone prefix''';
+EXECUTE IMMEDIATE 'COMMENT ON column pat_cit.landline_number IS ''Landline phone number''';
+EXECUTE IMMEDIATE 'COMMENT ON column pat_cit.mobile_prefix IS ''Mobile phone prefix''';
+EXECUTE IMMEDIATE 'COMMENT ON column pat_cit.mobile_number IS ''Mobile phone number''';
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 27/12/2012 11:25
+-- CHANGE REASON: [ALERT-247816] 
+ALTER TABLE pat_cit ADD FLG_ZERO_CAPAC_END VARCHAR2(1 CHAR);
+ALTER TABLE pat_cit ADD DT_ZERO_CAPAC_END TIMESTAMP (6) WITH LOCAL TIME ZONE;
+ALTER TABLE pat_cit ADD ZERO_CAPAC_END_NUM NUMBER(24);
+ALTER TABLE pat_cit ADD ZERO_CAPAC_END_UNIT NUMBER(24);
+ALTER TABLE pat_cit ADD OTHER_PERCENTAGE_NUM NUMBER(24);
+ALTER TABLE pat_cit ADD DT_OTHER_CAPAC_START  TIMESTAMP (6) WITH LOCAL TIME ZONE;
+ALTER TABLE pat_cit ADD FLG_OTHER_CAPAC VARCHAR2(1 CHAR);
+ALTER TABLE pat_cit ADD DT_OTHER_CAPAC_END TIMESTAMP (6) WITH LOCAL TIME ZONE;
+ALTER TABLE pat_cit ADD OTHER_CAPAC_END_NUM NUMBER(24);
+ALTER TABLE pat_cit ADD OTHER_CAPAC_END_UNIT NUMBER(24);
+ALTER TABLE pat_cit ADD FLG_REASON VARCHAR2(1 CHAR);
+ALTER TABLE pat_cit ADD NOTES_DESC CLOB;
+ALTER TABLE pat_cit ADD DT_TREATMENT_END TIMESTAMP (6) WITH LOCAL TIME ZONE;
+ALTER TABLE pat_cit ADD DT_INTERNMENT_PAT_BEGIN TIMESTAMP (6) WITH LOCAL TIME ZONE;
+ALTER TABLE pat_cit ADD DT_INTERNMENT_PAT_END TIMESTAMP (6) WITH LOCAL TIME ZONE;
+ALTER TABLE pat_cit ADD DT_CERTIFICATE_RENEW TIMESTAMP (6) WITH LOCAL TIME ZONE;
+
+comment on column pat_cit.FLG_ZERO_CAPAC_END is 'Flag that identifies the selected option working capacity from 0% ''D''-Date, ''P'' - Period Time  e ''I'' - Indefined';
+comment on column pat_cit.DT_ZERO_CAPAC_END is 'Final Date of working capacity from 0%';
+comment on column pat_cit.ZERO_CAPAC_END_NUM is 'Value final time of working capacity from 0%';
+comment on column pat_cit.ZERO_CAPAC_END_UNIT is 'Unit final time value of working capacity from 0%';
+comment on column pat_cit.OTHER_PERCENTAGE_NUM is 'Percentage of work capacity through';
+comment on column pat_cit.DT_OTHER_CAPAC_START is 'Inicial Date of work capacity through';
+comment on column pat_cit.FLG_OTHER_CAPAC is 'Flag that identifies the selected option working capacity through ''D''-Date, ''P'' - Period Time  e ''I'' - Indefined';
+comment on column pat_cit.DT_OTHER_CAPAC_END is 'Final Date of working capacity through';
+comment on column pat_cit.OTHER_CAPAC_END_NUM is 'Value final time of working capacity through';
+comment on column pat_cit.OTHER_CAPAC_END_UNIT is 'Unit final time value of working capacity through';
+comment on column pat_cit.FLG_REASON is 'Reason';
+comment on column pat_cit.NOTES_DESC is 'Notes';
+comment on column pat_cit.DT_TREATMENT_END is 'Treatment final date';
+comment on column pat_cit.DT_INTERNMENT_PAT_BEGIN is 'Internment begin date';
+comment on column pat_cit.DT_INTERNMENT_PAT_END is 'Internment end date';
+comment on column pat_cit.FLG_STATUS IS 'Status ? ''P''-Print, ''I''- Construction or Construção or waiting print, ''E''- Edit, ''C''-Canceled, ''O''-Ongoing, ''F''-Finished, ''X''-Expired, ''R''- Renew';
+comment on column pat_cit.DT_CERTIFICATE_RENEW IS 'Renovation date';
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 11:01
+-- CHANGE REASON: [ALERT-154361] 
+COMMENT ON COLUMN PAT_CIT.ID_PROF_CANCEL IS 'Professional that cancels';
+COMMENT ON COLUMN PAT_CIT.DT_CANCEL_TSTZ IS 'Cancellation date';
+
+alter   TABLE PAT_CIT MOVE TABLESPACE ALERT_DATA;
+ALTER INDEX PCIT_PK REBUILD;
+ALTER INDEX PCIT_COUNTY_FK_IDX REBUILD;
+ALTER INDEX PCIT_PROF_WRITES_FK_IDX REBUILD;
+ALTER INDEX PCIT_EPIS_FK_IDX REBUILD;
+ALTER INDEX PCIT_PAT_FK_IDX REBUILD;
+
+alter table PAT_CIT modify CANCEL_NOTES varchar2(4000 CHAR);
+alter table PAT_CIT modify CREATE_USER varchar2(30 CHAR);
+
+alter table PAT_CIT modify FLG_BENEF_HEALTH_SUBSYS varchar2(1 CHAR);
+alter table PAT_CIT modify FLG_CIT_CLASSIFICATION_FP varchar2(1 CHAR);
+alter table PAT_CIT modify FLG_CIT_CLASSIFICATION_SS varchar2(1 CHAR);
+alter table PAT_CIT modify FLG_HOME_ABSENCE varchar2(1 CHAR);
+alter table PAT_CIT modify FLG_ILL_AFFINITY varchar2(1 CHAR);
+alter table PAT_CIT modify FLG_INCAPACITY_PERIOD varchar2(1 CHAR);
+alter table PAT_CIT modify FLG_INTERNMENT varchar2(1 CHAR);
+alter table PAT_CIT modify FLG_PAT_DISEASE_STATE varchar2(1 CHAR);
+alter table PAT_CIT modify FLG_PROF_HEALTH_SUBSYS varchar2(1 CHAR);
+alter table PAT_CIT modify FLG_STATUS varchar2(1 CHAR);
+alter table PAT_CIT modify FLG_TYPE varchar2(1 CHAR);
+
+alter table PAT_CIT modify HOME_AUTHORIZATION varchar2(4000 CHAR);
+alter table PAT_CIT modify ILL_PARENT_NAME varchar2(200 CHAR);
+alter table PAT_CIT modify UPDATE_USER varchar2(30 CHAR);
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 11:06
+-- CHANGE REASON: [ALERT-154361] 
+COMMENT ON COLUMN PAT_CIT.ID_PROF_CANCEL IS 'Professional that cancels';
+/
+COMMENT ON COLUMN PAT_CIT.DT_CANCEL_TSTZ IS 'Cancellation date';
+/
+alter   TABLE PAT_CIT MOVE TABLESPACE ALERT_DATA;
+/
+ALTER INDEX PCIT_PK REBUILD;
+/
+ALTER INDEX PCIT_COUNTY_FK_IDX REBUILD;
+/
+ALTER INDEX PCIT_PROF_WRITES_FK_IDX REBUILD;
+/
+ALTER INDEX PCIT_EPIS_FK_IDX REBUILD;
+/
+ALTER INDEX PCIT_PAT_FK_IDX REBUILD;
+/
+alter table PAT_CIT modify CANCEL_NOTES varchar2(4000 CHAR);
+/
+alter table PAT_CIT modify CREATE_USER varchar2(30 CHAR);
+/
+alter table PAT_CIT modify FLG_BENEF_HEALTH_SUBSYS varchar2(1 CHAR);
+/
+alter table PAT_CIT modify FLG_CIT_CLASSIFICATION_FP varchar2(1 CHAR);
+/
+alter table PAT_CIT modify FLG_CIT_CLASSIFICATION_SS varchar2(1 CHAR);
+/
+alter table PAT_CIT modify FLG_HOME_ABSENCE varchar2(1 CHAR);
+/
+alter table PAT_CIT modify FLG_ILL_AFFINITY varchar2(1 CHAR);
+/
+alter table PAT_CIT modify FLG_INCAPACITY_PERIOD varchar2(1 CHAR);
+/
+alter table PAT_CIT modify FLG_INTERNMENT varchar2(1 CHAR);
+/
+alter table PAT_CIT modify FLG_PAT_DISEASE_STATE varchar2(1 CHAR);
+/
+alter table PAT_CIT modify FLG_PROF_HEALTH_SUBSYS varchar2(1 CHAR);
+/
+alter table PAT_CIT modify FLG_STATUS varchar2(1 CHAR);
+/
+alter table PAT_CIT modify FLG_TYPE varchar2(1 CHAR);
+/
+alter table PAT_CIT modify HOME_AUTHORIZATION varchar2(4000 CHAR);
+/
+alter table PAT_CIT modify ILL_PARENT_NAME varchar2(200 CHAR);
+/
+alter table PAT_CIT modify UPDATE_USER varchar2(30 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify ILL_PARENT_NAME varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify HOME_AUTHORIZATION varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify FLG_TYPE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify FLG_STATUS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify FLG_PROF_HEALTH_SUBSYS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify FLG_PAT_DISEASE_STATE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify FLG_INTERNMENT varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify FLG_INCAPACITY_PERIOD varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify FLG_ILL_AFFINITY varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify FLG_HOME_ABSENCE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify FLG_CIT_CLASSIFICATION_SS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify FLG_CIT_CLASSIFICATION_FP varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify FLG_BENEF_HEALTH_SUBSYS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_CIT modify CANCEL_NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:49
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column PAT_CIT.id_pat_cit
+  is 'Primary Key';
+comment on column PAT_CIT.id_patient
+  is 'Patient ID';
+comment on column PAT_CIT.id_episode
+  is 'Episode ID';
+comment on column PAT_CIT.flg_pat_disease_state
+  is 'Patient disease status ''I''-Work disability, ''E''-Urgent care needed';
+comment on column PAT_CIT.flg_prof_health_subsys
+  is 'Medical Associate (Protocols):  (SYS_DOMAIN PAT_CIT.FLG_PROF_HEALTH_SUBSYS)';
+comment on column PAT_CIT.ill_parent_name
+  is 'Relative''s name';
+comment on column PAT_CIT.flg_ill_affinity
+  is 'Next of kin  (SYS_DOMAIN PAT_CIT.FLG_ILL_AFFINITY)';
+comment on column PAT_CIT.ill_id_card
+  is 'Patient ID card';
+comment on column PAT_CIT.flg_benef_health_subsys
+  is 'Servant / Agent''s Health Sub:   (SYS_DOMAIN PAT_CIT.FLG_BENEF_HEALTH_SUBSYS)';
+comment on column PAT_CIT.flg_cit_classification_ss
+  is 'Situation on Social Security (SYS_DOMAIN - PAT_CIT.FLG_CIT_CLASSIFICATION_SS)';
+comment on column PAT_CIT.flg_cit_classification_fp
+  is 'Situation ? Public function: (SYS_DOMAIN - PAT_CIT.PAT_CIT.FLG_CIT_CLASSIFICATION_FP)';
+comment on column PAT_CIT.flg_internment
+  is 'Internment -? ?Y? Yes, ?N? No';
+comment on column PAT_CIT.flg_incapacity_period
+  is 'Incapacity period: ''I''-Initial, ''P''-Prorogation';
+comment on column PAT_CIT.dt_start_period_tstz
+  is 'Incapacity perior starting date';
+comment on column PAT_CIT.dt_end_period_tstz
+  is 'Incapacity period ending date';
+comment on column PAT_CIT.flg_home_absence
+  is 'Illness requires patient to stay at home ? ?Y? Yes, ?N? No';
+comment on column PAT_CIT.home_authorization
+  is 'Authorized to leave the house (Description)';
+comment on column PAT_CIT.flg_type
+  is 'Certificate type (SYS_DOMAIN PAT_CIT.FLG_TYPE)';
+comment on column PAT_CIT.id_prof_writes
+  is 'Professional ID who makes the registration (either creation, printing, editing or canceling)';
+comment on column PAT_CIT.dt_writes_tstz
+  is 'registry date(either creation, printing, editing or canceling)';
+comment on column PAT_CIT.id_cancel_reason
+  is 'Cancel Reason ID';
+comment on column PAT_CIT.cancel_notes
+  is 'Cancellation notes';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 16/11/2018 09:00
+-- CHANGE REASON: [EMR-4868]
+alter table pat_cit
+add id_epis_documentation number(24);
+
+comment on column pat_cit.id_epis_documentation is 'ID_EPIS_DOCUMENTATION from epis_documentation for which the present records has been migrated to. (pat_cit is to be discontinued and its records are to be migrated to the medico-legal summary_page area)';
+-- CHANGE END: Diogo Oliveira

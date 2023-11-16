@@ -1,0 +1,23 @@
+-- CHANGED BY:  Gisela Couto
+-- CHANGE DATE: 31/07/2014 16:44
+-- CHANGE REASON: [ALERT-292155] Dev DB - Multichoice domain tables implementation - New grants - alert
+DECLARE
+    l_seq_code    VARCHAR2(4000 CHAR);
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || REPLACE(srcstr => SQLERRM, oldsub => 'ORA-', newsub => '') || '; ' ||
+                                 i_sql || ';');
+    END run_ddl;
+
+    
+BEGIN
+    run_ddl(i_sql => 'DROP SYNONYM PK_MULTICHOICE');
+
+    run_ddl(i_sql => 'CREATE OR REPLACE SYNONYM PK_MULTICHOICE FOR ALERT_CORE_FUNC.PK_MULTICHOICE');
+
+END;
+/
+-- CHANGE END:  Gisela Couto

@@ -1,0 +1,1 @@
+drop trigger B_IUD_RELIGION;

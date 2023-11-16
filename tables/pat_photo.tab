@@ -1,0 +1,48 @@
+
+
+  CREATE TABLE PAT_PHOTO
+   (	ID_PAT_PHOTO NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	DT_PHOTO DATE NOT NULL ENABLE,
+	IMG_PHOTO BLOB NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE pat_photo IS 'Esta tabela contem as fotos dos pacientes.É um detail de PATIENT, mas por questões técnicas esta tabela contém unicamente 1 foto para cada doente.' ;
+
+COMMENT ON COLUMN pat_photo.id_pat_photo IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_photo.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_photo.dt_photo IS 'Data da foto' ;
+COMMENT ON COLUMN pat_photo.img_photo IS 'Foto do paciente' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_PHOTO ADD DT_PHOTO_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_PHOTO.DT_PHOTO_TSTZ IS 'Data da foto'; 
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table PAT_PHOTO drop (DT_PHOTO);
+-- CHANGE END
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table PAT_PHOTO drop (DT_PHOTO);
+-- CHANGE END
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2020 18:02
+-- CHANGE REASON: [EMR-40083]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00942);
+BEGIN
+EXECUTE IMMEDIATE 'DROP TABLE pat_photo_old';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos

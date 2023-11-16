@@ -1,0 +1,357 @@
+--26/01/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+CREATE TABLE EPIS_PN_HIST
+ (ID_EPIS_PN NUMBER(24) NOT NULL
+ ,DT_EPIS_PN_HIST TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ ,ID_EPISODE NUMBER(24) NOT NULL
+ ,FLG_STATUS VARCHAR2(1 CHAR) NOT NULL
+ ,FLG_TYPE VARCHAR2(3 CHAR) NOT NULL
+ ,ID_DEP_CLIN_SERV NUMBER(24)
+ ,PN_DATE TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ ,ID_PROF_CREATE NUMBER(24) NOT NULL
+ ,DT_CREATE TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ ,DT_LAST_UPDATE TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_PROF_LAST_UPDATE NUMBER(24)
+ ,DT_SIGNOFF TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_PROF_SIGNOFF NUMBER(24) 
+ ,ID_PROF_CANCEL NUMBER(24)
+ ,DT_CANCEL TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_CANCEL_REASON NUMBER
+ ,NOTES_CANCEL VARCHAR2(1000 CHAR)
+ ,ID_DICTATION_REPORT NUMBER(24)
+ ,CREATE_USER VARCHAR2(30 CHAR)
+ ,CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,CREATE_INSTITUTION NUMBER(24)
+ ,UPDATE_USER VARCHAR2(30 CHAR)
+ ,UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ )
+/
+
+COMMENT ON TABLE EPIS_PN_HIST IS 'Progress notes history.'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.ID_EPIS_PN IS 'Progress notes ID'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.DT_EPIS_PN_HIST IS 'Update date'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.ID_EPISODE IS 'Episode ID'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.FLG_STATUS IS 'Progress note Status. D-draft; S-signed-off; C-Cancelled'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.FLG_TYPE IS 'Note type. PN-Progress Note; PPN-Prolonged Progress Note; ICN-Intensive Care Note; HPN-History and Physician Note'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.ID_DEP_CLIN_SERV IS 'Dep_clin_serv ID.'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.PN_DATE IS 'Date of the progress note.'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.ID_PROF_CREATE IS 'Professional that created the progress note.'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.DT_CREATE IS 'Progress note creation date.'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.DT_LAST_UPDATE IS 'Date of the last update.'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.ID_PROF_LAST_UPDATE IS 'Professional that performed the last update of the note.'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.DT_SIGNOFF IS 'Sign-off Date'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.ID_PROF_SIGNOFF IS 'Sign-off professional ID'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.ID_PROF_CANCEL IS 'Professional that cancelled the progress note.'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.DT_CANCEL IS 'Cancellation date.'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.ID_CANCEL_REASON IS 'Cancel reason ID'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.NOTES_CANCEL IS 'Cancellation free text cancel notes.'
+/
+COMMENT ON COLUMN EPIS_PN.ID_DICTATION_REPORT IS 'Dictation Report ID'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.CREATE_USER IS 'Professional ID that creates the registry'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.CREATE_TIME IS 'Date of registry creation'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.CREATE_INSTITUTION IS 'Institution ID where registry was created'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.UPDATE_USER IS 'Professional ID that last updates the registry'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.UPDATE_TIME IS 'Date of registry last update'
+/
+COMMENT ON COLUMN EPIS_PN_HIST.UPDATE_INSTITUTION IS 'Institution ID where registry was last updated'
+/
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/10/2011 10:26
+-- CHANGE REASON: [ALERT-199727] H&P phase 2
+alter table epis_pn_hist drop column flg_type;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:31
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table epis_pn_hist add (id_pn_note_type number(24));
+
+COMMENT ON column epis_pn_hist.id_pn_note_type IS 'Note type id.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table epis_pn_hist add (id_pn_note_type number(24));
+
+COMMENT ON column epis_pn_hist.id_pn_note_type IS 'Note type id.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 12:59
+-- CHANGE REASON: [ALERT-206417] H&P phase 2
+alter table epis_pn_hist drop column flg_type;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table EPIS_PN_HIST modify ID_CANCEL_REASON number(24)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('COMMENT ON COLUMN EPIS_PN_HIST.ID_DICTATION_REPORT IS ''Dictation Report ID''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table EPIS_PN_HIST modify ID_CANCEL_REASON number(24)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:23
+-- CHANGE REASON: [ALERT-212623] Fix findings based on the Arch script H&P v.1 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER table EPIS_PN_HIST modify (DT_PN_DATE not null)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:23
+-- CHANGE REASON: [ALERT-212623] Fix findings based on the Arch script H&P v.1 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER table EPIS_PN_HIST modify (DT_PN_DATE not null)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:23
+-- CHANGE REASON: [ALERT-212623] Fix findings based on the Arch script H&P v.1 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER table EPIS_PN_HIST drop column PN_DATE');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:44
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    execute immediate 'alter table epis_pn_hist add (id_pn_area NUMBER(24) NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:44
+-- CHANGE REASON: [ALERT-226174] 
+begin
+execute immediate ('COMMENT ON COLUMN epis_pn_hist.id_pn_area IS ''Area Identifier''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/04/2012 11:51
+-- CHANGE REASON: [ALERT-226245] BD - Versioning DDL (Migrations) after migrate - EDIS restructuring - Present Illness / Current visit
+BEGIN
+    execute immediate 'alter table epis_pn_hist modify (ID_PN_AREA NOT NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 27/07/2012 13:57
+-- CHANGE REASON: [ALERT-237533 ] The system must be able to autosave user notes as a draft during the note creation
+BEGIN
+    execute immediate 'alter table epis_pn_hist add (flg_auto_saved VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('operacao ja executada anteriormente');
+END;
+/
+
+begin
+execute immediate ('COMMENT ON COLUMN epis_pn_hist.flg_auto_saved IS ''Y-The note was automatically saved before the user goes to an external area. N-the note was saved through the ok button in the single note.''');
+exception
+when others then
+dbms_output.put_line('operacao ja executada anteriormente');
+end;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY:  Anna Kurowska
+-- CHANGE DATE: 08/02/2013 14:32
+-- CHANGE REASON: [ALERT-251303] A physician suggested to add the option "Anamnesi Fisiologica"
+begin
+execute immediate ('ALTER table epis_pn_hist add (ID_SOFTWARE NUMBER(24)) ');
+exception
+when others then
+dbms_output.put_line('operacao ja executada anteriormente');
+end;
+/
+
+begin
+execute immediate ('COMMENT ON COLUMN epis_pn_hist.ID_SOFTWARE IS ''Software identifier''');
+exception
+when others then
+dbms_output.put_line('operacao ja executada anteriormente');
+end;
+/
+-- CHANGE END:  Anna Kurowska
+
+-- CHANGED BY:  Anna Kurowska
+-- CHANGE DATE: 08/02/2013 14:41
+-- CHANGE REASON: [ALERT-251306] A physician suggested to add the option "Anamnesi Fisiologica"
+--                
+BEGIN
+    execute immediate 'alter table epis_pn_hist modify (ID_SOFTWARE NOT NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operacao ja executada anteriormente');
+END;
+/
+-- CHANGE END:  Anna Kurowska
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 11/12/2017
+-- CHANGE REASON: CALERT-35
+BEGIN
+    execute immediate 'ALTER TABLE EPIS_PN_HIST ADD ID_SUBMIT_REASON NUMBER(24)';
+    execute immediate 'ALTER TABLE EPIS_PN_HIST ADD NOTES_SUBMIT VARCHAR2(1000 CHAR)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON column EPIS_PN_HIST.ID_SUBMIT_REASON IS 'Submit reason ID';
+COMMENT ON column EPIS_PN_HIST.NOTES_SUBMIT IS 'Submission notes';
+-- CHANGE END: Pedro Teixeira
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 21/1/2018
+-- CHANGE REASON: [CALERT-1265] Progress notes Calendar view - Phase 2
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE EPIS_PN_HIST ADD DT_PROPOSED TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'COMMENT ON column EPIS_PN_HIST.DT_PROPOSED IS ''Proposed date''';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+-- CHANGE END: Amanda Lee
+
+
+-- CHANGED BY: Anna Kurowska
+-- CHANGE DATE: 22/1/2018
+-- CHANGE REASON: [CALERT-1265] Progress notes Calendar view - Phase 2 - missing some columns
+declare
+	l_Sql  varchar2(4000);
+begin
+	l_sql := 'alter table EPIS_PN_HIST add id_prof_submit number(24)';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_Sql  varchar2(4000);
+begin
+	l_sql := 'alter table EPIS_PN_HIST add dt_submit TIMESTAMP(6) WITH LOCAL TIME ZONE';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_Sql  varchar2(4000);
+begin
+	l_sql := 'alter table EPIS_PN_HIST add id_prof_reviewed number(24)';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_Sql  varchar2(4000);
+begin
+	l_sql := 'alter table EPIS_PN_HIST add dt_reviewed TIMESTAMP(6) WITH LOCAL TIME ZONE';
+	pk_versioning.run(l_sql);
+end;
+/
+
+comment on column EPIS_PN_HIST.flg_status
+  is 'Progress note Status. D-draft; S-signed-off; C-Cancelled.; M-Migrated; F-Finished, T-Temporay Save, V-Submit for review, B-SUBMITED, W-Draft for submit';
+  
+comment on column EPIS_PN_HIST.id_prof_submit is 'professional that performed the submission for review';
+comment on column EPIS_PN_HIST.dt_submit is 'Date of submission for review';
+comment on column EPIS_PN_HIST.id_prof_reviewed is 'professional that performed the review';
+comment on column EPIS_PN_HIST.dt_reviewed is 'Date of review';
+-- CHANGE END: Anna Kurowska

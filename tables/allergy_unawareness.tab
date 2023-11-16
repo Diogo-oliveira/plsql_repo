@@ -1,0 +1,18 @@
+CREATE TABLE allergy_unawareness 
+(
+    id_allergy_unawareness   NUMBER(24) NOT NULL,
+    code_allergy_unawareness VARCHAR2(200) NOT NULL,
+		code_unawareness_type    VARCHAR2(200) NOT NULL,
+    flg_status               VARCHAR2(1)
+);
+
+-- COMMENTS
+COMMENT ON TABLE allergy_unawareness IS 'This table holds the types of unawareness';
+COMMENT ON COLUMN allergy_unawareness.id_allergy_unawareness IS 'Primary key';
+COMMENT ON COLUMN allergy_unawareness.code_allergy_unawareness IS 'Code for translation';
+COMMENT ON COLUMN allergy_unawareness.code_unawareness_type IS 'Code for translation';
+COMMENT ON COLUMN allergy_unawareness.flg_status IS 'A: Active - I: Inactive';
+
+-- CONSTRAINTS
+ALTER TABLE allergy_unawareness ADD CONSTRAINT AU_ID_AU_PK PRIMARY KEY (id_allergy_unawareness);
+ALTER TABLE allergy_unawareness ADD CONSTRAINT AU_FLG_STATUS_CHK CHECK (flg_status IN ('A', 'I'));

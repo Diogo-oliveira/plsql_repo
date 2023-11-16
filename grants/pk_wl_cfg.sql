@@ -1,0 +1,1 @@
+grant execute on pk_wl_cfg to alert_apex_tools;

@@ -1,0 +1,155 @@
+
+  ALTER TABLE P1_DETAIL ADD CONSTRAINT PEL_PK PRIMARY KEY (ID_DETAIL) ENABLE;
+
+  ALTER TABLE P1_DETAIL MODIFY (ID_DETAIL NOT NULL ENABLE);
+
+  ALTER TABLE P1_DETAIL MODIFY (ID_EXTERNAL_REQUEST NOT NULL ENABLE);
+
+  ALTER TABLE P1_DETAIL MODIFY (ID_PROFESSIONAL NOT NULL ENABLE);
+
+  ALTER TABLE P1_DETAIL MODIFY (ID_INSTITUTION NOT NULL ENABLE);
+
+
+-- CHANGED BY: Ana Monteiro	
+-- CHANGE DATE: 2009-JAN-09
+-- CHANGE REASON: ALERT-827
+
+ALTER TABLE P1_DETAIL ADD (CONSTRAINT PEL_FLG_STATUS_CHK CHECK (FLG_STATUS in ('A', 'C', 'O')));
+
+-- CHANGE END
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/01/2010 12:06
+-- CHANGE REASON: [ALERT-31116] 
+alter table P1_DETAIL add constraint PEL_FLG_TYPE_CHK check (FLG_TYPE in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20));
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/01/2010 18:00
+-- CHANGE REASON: [ALERT-58261] 
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'PEL_FLG_TYPE_CHK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+l_sql := q'[alter table P1_DETAIL add constraint PEL_FLG_TYPE_CHK check (FLG_TYPE in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+
+
+------------------
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/03/2010 14:06
+-- CHANGE REASON: [ALERT-79864] 
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'PEL_FLG_TYPE_CHK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := q'[alter table P1_DETAIL add constraint PEL_FLG_TYPE_CHK check (FLG_TYPE in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/03/2010 16:08
+-- CHANGE REASON: [ALERT-83788] 
+alter table P1_DETAIL
+  drop constraint PEL_FLG_TYPE_CHK;
+
+alter table P1_DETAIL
+  add constraint PEL_FLG_TYPE_CHK
+  check (FLG_TYPE in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20, 21));
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 21/06/2010 17:57
+-- CHANGE REASON: [ALERT-103305] FERTIS (2.6.0.3)
+ALTER TABLE p1_detail drop CONSTRAINT pel_flg_type_chk;
+ALTER TABLE p1_detail add CONSTRAINT pel_flg_type_chk CHECK(flg_type IN
+                                                            (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24));
+                                                            
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 17/09/2010 21:56
+-- CHANGE REASON: [ALERT-125735] 
+ALTER TABLE P1_DETAIL 
+DROP CONSTRAINT PEL_FLG_TYPE_CHK;
+
+ALTER TABLE P1_DETAIL
+ADD CONSTRAINT PEL_FLG_TYPE_CHK CHECK 
+(FLG_TYPE IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25))
+ENABLE;
+/
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 06/10/2010 09:27
+-- CHANGE REASON: [ALERT-129275] 
+alter table P1_DETAIL drop constraint PEL_FLG_TYPE_CHK;
+alter table P1_DETAIL add constraint PEL_FLG_TYPE_CHK
+  check (FLG_TYPE IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27));
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 25/06/2012 17:09
+-- CHANGE REASON: [ALERT-233961] 
+alter table P1_DETAIL drop constraint PEL_FLG_TYPE_CHK;
+alter table P1_DETAIL add constraint PEL_FLG_TYPE_CHK check (flg_type IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27,28, 29, 30, 31,32, 33, 34, 35,36,37,38,39,40));
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 15/02/2013 10:11
+-- CHANGE REASON: [ALERT-251629 ] 
+alter table P1_DETAIL drop constraint PEL_FLG_TYPE_CHK;
+alter table P1_DETAIL
+  add constraint PEL_FLG_TYPE_CHK
+  check (flg_type IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27,28, 29, 30, 31,32, 33, 34, 35,36,37,38,39,40,41, 42));
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 27/02/2013 12:23
+-- CHANGE REASON: [ALERT-251633 ] 
+alter table P1_DETAIL drop constraint PEL_FLG_TYPE_CHK;
+alter table P1_DETAIL
+  add constraint PEL_FLG_TYPE_CHK
+  check (flg_type IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27,28, 29, 30, 31,32, 33, 34, 35,36,37,38,39,40,41, 42));
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 21/10/2013 14:52
+-- CHANGE REASON: [ALERT-267460 ] 
+alter table P1_DETAIL drop constraint PEL_FLG_TYPE_CHK;
+alter table P1_DETAIL
+  add constraint PEL_FLG_TYPE_CHK
+  check (flg_type IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 
+                      10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 
+                      20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 
+                      30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+                      40, 41, 42, 43, 44, 45));
+-- CHANGE END: Joana Barroso

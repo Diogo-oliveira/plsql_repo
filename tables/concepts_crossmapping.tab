@@ -1,0 +1,67 @@
+-- Created by    : Carlos Mota Silva
+-- Creation Date : 2009/07/16
+CREATE TABLE CONCEPTS_CROSSMAPPING
+ (ID_MAPPING_SETS VARCHAR2(30) NOT NULL
+ ,ID_CONTENT VARCHAR2(30) NOT NULL
+ ,ID_MAPPING_CONCEPTS VARCHAR2(30) NOT NULL
+ ,CATHEGORY VARCHAR2(30) NOT NULL
+ ,MAPPING_OPTION NUMBER(6)
+ ,PRIORITY NUMBER(6)
+ ,STATUS VARCHAR2(30)
+ ,CREATE_USER VARCHAR2(30) NOT NULL
+ ,CREATE_TIME_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL
+ ,UPDATE_USER VARCHAR2(30)
+ ,UPDATE_TIME_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ ,CREATE_INSTITUTION NUMBER(24)
+ )
+;
+
+COMMENT ON TABLE CONCEPTS_CROSSMAPPING IS 'This table contains the mapping relationships between a single ALERT Concept and the Target Concept in a Set of Standards'
+;
+
+COMMENT ON COLUMN CONCEPTS_CROSSMAPPING.ID_MAPPING_SETS IS 'The unique identifier of the Mapping Set, generated automatically;'
+;
+
+COMMENT ON COLUMN CONCEPTS_CROSSMAPPING.ID_CONTENT IS 'The Concept on the ALERT internal standard; FK to the Concepts table;'
+;
+
+COMMENT ON COLUMN CONCEPTS_CROSSMAPPING.ID_MAPPING_CONCEPTS IS 'The identifier of the Target that connects to the Code on the Mapping Set that will be part of this Concept;'
+;
+
+COMMENT ON COLUMN CONCEPTS_CROSSMAPPING.CATHEGORY IS 'The Cathegory of the way the mapping was established'
+;
+
+COMMENT ON COLUMN CONCEPTS_CROSSMAPPING.MAPPING_OPTION IS 'The way to distinguish between alternative mappings, when more than one is possible; if two or more Concept mapping can be used together, without the need to establish an explicit relationship, the value of Option should be the same in both Concept mappings;'
+;
+
+COMMENT ON COLUMN CONCEPTS_CROSSMAPPING.PRIORITY IS 'The way to present the alternative mappings, when more than one option is possible; the first priority is the default mapping for the ALERT Concept; rows with the same Option can have different Priorities;'
+;
+
+COMMENT ON COLUMN CONCEPTS_CROSSMAPPING.CREATE_USER IS 'User who created the record'
+;
+
+COMMENT ON COLUMN CONCEPTS_CROSSMAPPING.CREATE_TIME_TSTZ IS 'Date of creation of the record'
+;
+
+COMMENT ON COLUMN CONCEPTS_CROSSMAPPING.UPDATE_USER IS 'User who changed the record last'
+;
+
+COMMENT ON COLUMN CONCEPTS_CROSSMAPPING.UPDATE_TIME_TSTZ IS 'Date of last change of the record'
+;
+
+COMMENT ON COLUMN CONCEPTS_CROSSMAPPING.STATUS IS 'The Status of the Mapping'
+;
+
+
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 15/10/2009 17:18
+-- CHANGE REASON: [ALERT-49804] 
+alter table CONCEPTS_CROSSMAPPING modify CATHEGORY null;
+alter table CONCEPTS_CROSSMAPPING add CODIFICATION_QUALITY number(24);
+ 
+comment on column CONCEPTS_CROSSMAPPING.UPDATE_INSTITUTION is 'Institution of User who changed the record';
+comment on column CONCEPTS_CROSSMAPPING.CREATE_INSTITUTION is 'Institution of User who created the record';
+comment on column CONCEPTS_CROSSMAPPING.CODIFICATION_QUALITY is 'Quality qualifier to be filled by the author of the mapping; free value';
+-- CHANGE END: Tiago Silva

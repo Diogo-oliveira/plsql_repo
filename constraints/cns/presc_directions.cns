@@ -1,0 +1,63 @@
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195]
+declare
+  l_count pls_integer;
+	l_sql_stat varchar2(4000):='ALTER TABLE ALERT.PRESC_DIRECTIONS ADD CONSTRAINT PRESC_DIR_PK PRIMARY KEY (ID_PRESC_DIRECTIONS) ENABLE';
+begin
+  select count(1)
+  into l_count
+  from all_constraints where owner = 'ALERT' and constraint_name = 'PRESC_DIR_PK';
+
+  if l_count = 0 then
+	  execute immediate (l_sql_stat);
+	end if;
+
+end;
+/
+-- CHANGE END: Nuno Ferreira
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2010-MAR-19
+-- CHANGE REASON: Directions Free Text
+declare
+  l_count pls_integer;
+	l_sql_stat varchar2(4000):='ALTER TABLE ALERT.PRESC_DIRECTIONS ADD CONSTRAINT PDIR_FLG_FREE_TEXT check (flg_free_text in (''Y'', ''N''))';
+begin
+  select count(1)
+  into l_count
+  from all_constraints where owner = 'ALERT' and constraint_name = 'PDIR_FLG_FREE_TEXT';
+
+  if l_count = 0 then
+	  execute immediate (l_sql_stat);
+	end if;
+
+end;
+/
+-- CHANGED END: Nuno Ferreira
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

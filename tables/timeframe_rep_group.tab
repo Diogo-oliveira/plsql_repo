@@ -1,0 +1,88 @@
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 25/02/2011 17:31
+-- CHANGE REASON: [ALERT-164703] DDL Reports - H & P reformulation in INPATIENT
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE TIMEFRAME_REP_GROUP
+ (ID_TIMEFRAME_REP NUMBER(24) NOT NULL
+ ,ID_TIMEFRAME_GROUP NUMBER(24) NOT NULL
+ ,ID_MARKET NUMBER(24) NOT NULL
+ ,FLG_AVAILABLE VARCHAR2(1 CHAR) DEFAULT ''Y'' NOT NULL
+ ,CREATE_USER VARCHAR2(24)
+ ,CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,CREATE_INSTITUTION NUMBER(24)
+ ,UPDATE_USER VARCHAR2(24)
+ ,UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ )';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON TABLE timeframe_rep_group IS 'Table that associates groups of options to one specific report';
+/
+
+COMMENT ON column timeframe_rep_group.id_timeframe_rep IS 'Id of the timeframe report';
+/
+
+COMMENT ON column timeframe_rep_group.id_timeframe_group IS 'Id of the timeframe group';
+/
+
+COMMENT ON column timeframe_rep_group.id_market IS 'Id market for this association';
+/
+
+COMMENT ON column timeframe_rep_group.flg_available IS 'Flag that indicates if this association is valid (''Y'' - yes; ''N'' - no)';
+/
+
+COMMENT ON column timeframe_rep_group.create_user IS 'Creation User';
+/
+
+COMMENT ON column timeframe_rep_group.create_time IS 'Creation Time';
+/
+
+COMMENT ON column timeframe_rep_group.create_institution IS 'Creation Institution';
+/
+
+COMMENT ON column timeframe_rep_group.update_user IS 'Update User';
+/
+
+COMMENT ON column timeframe_rep_group.update_time IS 'Update Time';
+/
+
+COMMENT ON column timeframe_rep_group.update_institution IS 'Update Institution';
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/03/2011 14:13
+-- CHANGE REASON: [ALERT-170459 ] Review H&P database dvelopment with notes of DB Arch.
+drop table TIMEFRAME_REP_GROUP;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 04/04/2011 11:48
+-- CHANGE REASON: Review database dvelopment with notes of DB Arch.
+BEGIN
+    EXECUTE IMMEDIATE 'drop table TIMEFRAME_REP_GROUP';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 04/04/2011 12:19
+-- CHANGE REASON: [ALERT-170459 ] Review database dvelopment with notes of DB Arch.
+BEGIN
+    EXECUTE IMMEDIATE 'drop table TIMEFRAME_REP_GROUP';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

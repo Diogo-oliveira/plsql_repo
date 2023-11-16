@@ -1,0 +1,36 @@
+
+  CREATE TABLE SYS_REQUEST_ATOMIC
+   (	ID_SYS_REQUEST NUMBER(24,0) NOT NULL ENABLE,
+	ID_SYS_SESSION NUMBER(24,0) NOT NULL ENABLE,
+	METHOD VARCHAR2(2000) NOT NULL ENABLE,
+	REQ_VALUES VARCHAR2(4000) NOT NULL ENABLE,
+	DT_REQUEST DATE NOT NULL ENABLE,
+	DT_REQ_DAY DATE,
+	POSITION NUMBER NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE sys_request_atomic IS 'Pedidos efectuados durante uma sessão' ;
+
+COMMENT ON COLUMN sys_request_atomic.method IS 'Método pedido' ;
+COMMENT ON COLUMN sys_request_atomic.req_values IS 'parâmetros necessários ao pedido' ;
+COMMENT ON COLUMN sys_request_atomic.dt_request IS 'Data / hora do pedido' ;
+
+
+
+
+
+ALTER TABLE SYS_REQUEST_ATOMIC ADD DT_REQUEST_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN SYS_REQUEST_ATOMIC.DT_REQUEST_TSTZ IS 'Data / hora do pedido'; 
+
+
+
+
+ALTER TABLE SYS_REQUEST_ATOMIC ADD DT_REQ_DAY_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+
+--CHANGED BY: Rui Spratley
+--CHANGE DATE: 2008/09/22
+--CHANGE REASON: Drop colunas DATE
+alter table sys_request_atomic drop column dt_request;
+alter table sys_request_atomic drop column dt_req_day;
+-- CHANGE END

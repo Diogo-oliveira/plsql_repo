@@ -1,0 +1,34 @@
+-- CHANGED BY:  Álvaro Vasconcelos
+-- CHANGE DATE: 16/06/2011 14:48
+-- CHANGE REASON: [ALERT-184978] Sis Pre Natal
+DECLARE
+    e_pk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE SERIES
+ ADD (CONSTRAINT SR_PK PRIMARY KEY 
+  (ID_SERIES,ID_INSTITUTION))';
+
+EXCEPTION
+    WHEN e_pk_already_there THEN
+        dbms_output.put_line('PK already exists');
+END;
+/
+
+
+DECLARE
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table SERIES
+  add constraint SR_FLG_ST_CHK
+  check (FLG_STATUS IN (''P'',''A'',''F'',''C'',''D'',''S''))';
+
+EXCEPTION
+    WHEN e_check_already_there THEN
+        dbms_output.put_line('Check already exists');
+END;
+/
+-- CHANGE END:  Álvaro Vasconcelos

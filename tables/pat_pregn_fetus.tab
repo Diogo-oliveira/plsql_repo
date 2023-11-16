@@ -1,0 +1,103 @@
+
+
+  CREATE TABLE PAT_PREGN_FETUS
+   (	ID_PAT_PREGN_FETUS NUMBER(24,0) NOT NULL ENABLE,
+	ID_PAT_PREGNANCY NUMBER(24,0) NOT NULL ENABLE,
+	FLG_GENDER VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE pat_pregn_fetus IS 'Registos associados aos fetos. Um registo por feto' ;
+
+COMMENT ON COLUMN pat_pregn_fetus.flg_gender IS 'Sexo: M-  masculino; F - feminino' ;
+
+
+alter TABLE PAT_PREGN_FETUS ADD FETUS_NUMBER number(6);
+COMMENT ON COLUMN pat_pregn_fetus.FETUS_NUMBER IS 'Identificador/Número do Fetus para o User' ;
+
+alter table pat_pregn_fetus add flg_childbirth_type VARCHAR2(2);
+COMMENT ON COLUMN pat_pregn_fetus.flg_childbirth_type IS 'Child birth type';
+
+alter table pat_pregn_fetus add flg_status VARCHAR2(1);
+COMMENT ON COLUMN pat_pregn_fetus.flg_status IS 'Fetus status: D - dead; A - alive; C - cancelled';
+
+alter table pat_pregn_fetus add weight NUMBER(10, 3);
+COMMENT ON COLUMN pat_pregn_fetus.flg_status IS 'Fetus weight';
+
+
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 19/02/2010 11:04
+-- CHANGE REASON: [ALERT-75562] Developments on Partogram templates
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE pat_pregn_fetus ADD id_unit_measure NUMBER(24)';
+EXCEPTION
+WHEN OTHERS THEN
+  NULL;
+END;
+/
+
+COMMENT ON COLUMN pat_pregn_fetus.id_unit_measure IS 'Unit measure that was used to register the fetus weight.';
+COMMENT ON COLUMN pat_pregn_fetus.flg_status IS 'Fetus status: U - unknown, A - alive, D - dead, C - cancelled';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 06/06/2011 11:16
+-- CHANGE REASON: [ALERT-183624] Pregnancy developments
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregn_fetus ADD PRESENT_HEALTH VARCHAR2(1000 CHAR)';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+COMMENT ON COLUMN pat_pregn_fetus.PRESENT_HEALTH IS 'Fetus present health';
+
+ALTER TABLE pat_pregn_fetus MODIFY flg_status VARCHAR2(2 CHAR);
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table PAT_PREGN_FETUS
+  is 'Table for records associated to fetus';
+-- Add comments to the columns 
+comment on column PAT_PREGN_FETUS.id_pat_pregn_fetus
+  is 'Primary key';
+comment on column PAT_PREGN_FETUS.id_pat_pregnancy
+  is 'Pat pregnancy ID';
+comment on column PAT_PREGN_FETUS.flg_gender
+  is 'Sex: M-  Male; F -Female; I - Undetermined , N- Not specified; U - Not known';
+comment on column PAT_PREGN_FETUS.fetus_number
+  is 'Fetus number';
+comment on column PAT_PREGN_FETUS.weight
+  is 'Fetus weight';  
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:49
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+comment on column PAT_PREGN_FETUS.flg_gender
+  is 'Gender: M-  Male; F -Female; I - Undetermined , N- Not specified; U - Not known';
+-- CHANGE END: Elisabete Bugalho
+
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/11/2016 16:41
+-- CHANGE REASON: [ALERT-326382]
+ALTER TABLE pat_pregn_fetus ADD FLG_PRESENT_HEALTH VARCHAR2(1 CHAR);
+COMMENT ON COLUMN pat_pregn_fetus.flg_present_health IS 'Current Present Health based on sys_domain PAT_PREGNANCY.CURRENT_STATUS';
+
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 23/12/2016 11:26
+-- CHANGE REASON: [ALERT-326777] Ability to document details regarding the newborn and the birth certificate
+COMMENT ON COLUMN pat_pregn_fetus.flg_status IS 'Fetus status: D - dead; A - alive; C - cancelled; SI - se ignora';
+-- CHANGE END: Vanessa Barsottelli

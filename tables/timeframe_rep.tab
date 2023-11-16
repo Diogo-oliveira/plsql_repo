@@ -1,0 +1,57 @@
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 25/02/2011 17:31
+-- CHANGE REASON: [ALERT-164703] DDL Reports - H & P reformulation in INPATIENT
+DECLARE e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE TIMEFRAME_REP
+ (ID_TIMEFRAME_REP NUMBER(24) NOT NULL
+ ,ID_REPORT NUMBER(24) NOT NULL
+ ,FLG_AVAILABLE VARCHAR2(1) DEFAULT ''Y'' NOT NULL
+ ,CODE_TIMEFRAME_TITLE VARCHAR2(200 CHAR) NOT NULL
+ ,CREATE_USER VARCHAR2(24)
+ ,CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,CREATE_INSTITUTION NUMBER(24)
+ ,UPDATE_USER VARCHAR2(24)
+ ,UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ )';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON TABLE timeframe_rep IS 'Table with all timeframe report screen';
+/
+
+COMMENT ON column timeframe_rep.id_timeframe_rep IS 'Id of the timeframe report screen';
+/
+
+COMMENT ON column timeframe_rep.id_report IS 'Id of the report associated with this timeframe options';
+/
+
+COMMENT ON column timeframe_rep.flg_available IS 'Indicates if this timeframe report is available  (''Y'' - Yes; ''N'' - No)';
+/
+
+COMMENT ON column timeframe_rep.code_timeframe_title IS 'Code for the title of this timeframe screen';
+/
+
+COMMENT ON column timeframe_rep.create_user IS 'Creation User';
+/
+
+COMMENT ON column timeframe_rep.create_time IS 'Creation Time';
+/
+
+COMMENT ON column timeframe_rep.create_institution IS 'Creation Institution';
+/
+
+COMMENT ON column timeframe_rep.update_user IS 'Update User';
+/
+
+COMMENT ON column timeframe_rep.update_time IS 'Update Time';
+/
+
+COMMENT ON column timeframe_rep.update_institution IS 'Update Institution';
+/
+-- CHANGE END: António Neto

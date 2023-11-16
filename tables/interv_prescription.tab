@@ -1,0 +1,172 @@
+  CREATE TABLE INTERV_PRESCRIPTION
+   (	ID_INTERV_PRESCRIPTION NUMBER(24,0) NOT NULL ENABLE,
+	DT_INTERV_PRESCRIPTION DATE NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0),
+	FLG_TIME VARCHAR2(1) NOT NULL ENABLE,
+	DT_BEGIN DATE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+
+	NOTES VARCHAR2(4000),
+	ID_EPISODE_ORIGIN NUMBER(24,0),
+	ID_EPISODE_DESTINATION NUMBER(24,0),
+	ID_PROTOCOLS NUMBER(24,0),
+	ID_PREV_EPISODE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE interv_prescription IS 'Prescrição de procedimentos' ;
+
+COMMENT ON COLUMN interv_prescription.id_interv_prescription IS 'Chave primaria' ;
+COMMENT ON COLUMN interv_prescription.dt_interv_prescription IS 'Data de prescição' ;
+COMMENT ON COLUMN interv_prescription.flg_time IS 'Realização: E - neste episódio; N - próximo episódio' ;
+COMMENT ON COLUMN interv_prescription.dt_begin IS 'Data pretendida para início da execução do exame (ie, ñ imediata)' ;
+COMMENT ON COLUMN interv_prescription.flg_status IS 'F - concluído; R - requisitado; C - cancelado; E - em execução; D - pendente; P - parcial' ;
+COMMENT ON COLUMN interv_prescription.id_episode_origin IS 'ID do episódio em que foi registada a req. inicialmente (se FLG_TIME = ''N'')' ;
+COMMENT ON COLUMN interv_prescription.id_episode_destination IS 'ID do episódio em que foi registada a req. destino (se FLG_TIME = ''N'')' ;
+COMMENT ON COLUMN interv_prescription.id_protocols IS 'ID do protocolo, caso tenha sido requesitado através de um protocolo.' ;
+COMMENT ON COLUMN interv_prescription.id_prev_episode IS 'ID do episódio em que foi registada a req. inicialmente' ;
+
+alter table interv_prescription 
+add (dt_interv_prescription_tstz timestamp with local time zone,
+     dt_begin_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+alter table interv_prescription add (dt_pend_req date, dt_pend_req_tstz timestamp(6) with local time zone);
+
+alter table interv_prescription add id_patient number(24);
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 2008-06-11
+-- CHANGE REASON: Columns must be relative to each intervention execution, not to the prescription
+alter table interv_prescription drop (dt_pend_req, dt_pend_req_tstz);
+-- CHANGE END
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 2008/09/19
+-- CHANGE REASON: Drop obsolete columns of type DATE
+alter table interv_prescription drop column dt_interv_prescription;
+alter table interv_prescription drop column dt_begin;
+alter table interv_prescription drop column dt_cancel;
+-- CHANGE END
+
+alter table INTERV_PRESCRIPTION modify ID_EPISODE null;
+
+
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 08/09/2011 11:25
+-- CHANGE REASON: [ALERT-193954] 
+alter table
+   interv_prescription
+drop column
+   id_protocols;
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 17/06/2015 16:58
+-- CHANGE REASON: [ALERT-312712] 
+ALTER TABLE INTERV_PRESCRIPTION 
+ ADD (ID_PROF_LAST_UPDATE NUMBER(24)
+ ,DT_LAST_UPDATE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE)
+ MODIFY (ID_INSTITUTION NUMBER(12) NOT NULL
+ ,DT_INTERV_PRESCRIPTION_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL);
+
+COMMENT ON COLUMN INTERV_PRESCRIPTION.ID_PROF_LAST_UPDATE IS 'Last update professional ID';
+COMMENT ON COLUMN INTERV_PRESCRIPTION.DT_LAST_UPDATE_TSTZ IS 'Last update date';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 17/06/2015 17:27
+-- CHANGE REASON: [ALERT-312712] 
+ALTER TABLE INTERV_PRESCRIPTION 
+ ADD (ID_PROF_LAST_UPDATE NUMBER(24)
+ ,DT_LAST_UPDATE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE);
+
+COMMENT ON COLUMN INTERV_PRESCRIPTION.ID_PROF_LAST_UPDATE IS 'Last update professional ID';
+COMMENT ON COLUMN INTERV_PRESCRIPTION.DT_LAST_UPDATE_TSTZ IS 'Last update date';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 11/01/2016 16:36
+-- CHANGE REASON: [ALERT-317702] 
+comment on table INTERV_PRESCRIPTION
+  is 'Procedures'' orders table';
+-- Add comments to the columns 
+comment on column INTERV_PRESCRIPTION.id_interv_prescription
+  is 'Order''s ID';
+comment on column INTERV_PRESCRIPTION.id_episode
+  is 'Episode ID';
+comment on column INTERV_PRESCRIPTION.id_professional
+  is 'Professional ID';
+comment on column INTERV_PRESCRIPTION.id_institution
+  is 'Institution ID';
+comment on column INTERV_PRESCRIPTION.flg_time
+  is 'To be performed: E - this episode; B - between episodes; N - next episode';
+comment on column INTERV_PRESCRIPTION.flg_status
+  is 'Flag that indicates the order''s status';
+comment on column INTERV_PRESCRIPTION.id_prof_cancel
+  is 'Professional that cancels the order';
+comment on column INTERV_PRESCRIPTION.notes_cancel
+  is 'Cancelation notes';
+comment on column INTERV_PRESCRIPTION.notes
+  is 'Notes';
+comment on column INTERV_PRESCRIPTION.id_episode_origin
+  is 'Episode ID where the order was registered';
+comment on column INTERV_PRESCRIPTION.id_episode_destination
+  is 'Episode ID where the order is going to be performed';
+comment on column INTERV_PRESCRIPTION.id_prev_episode
+  is 'Episode ID where the order was registered (when the visit has more than one episode)';
+comment on column INTERV_PRESCRIPTION.dt_interv_prescription_tstz
+  is 'Date that indicates when the order was registered';
+comment on column INTERV_PRESCRIPTION.dt_begin_tstz
+  is 'Date for which the order is to be performed';
+comment on column INTERV_PRESCRIPTION.dt_cancel_tstz
+  is 'Date that indicates when the order was cancelled';
+comment on column INTERV_PRESCRIPTION.id_patient
+  is 'Patient ID';
+comment on column INTERV_PRESCRIPTION.create_user
+  is 'Creation User';
+comment on column INTERV_PRESCRIPTION.create_time
+  is 'Creation Time';
+comment on column INTERV_PRESCRIPTION.create_institution
+  is 'Creation Institution';
+comment on column INTERV_PRESCRIPTION.update_user
+  is 'Update User';
+comment on column INTERV_PRESCRIPTION.update_time
+  is 'Update Time';
+comment on column INTERV_PRESCRIPTION.update_institution
+  is 'Update Institution';
+comment on column INTERV_PRESCRIPTION.id_prof_last_update
+  is 'Last update professional ID';
+comment on column INTERV_PRESCRIPTION.dt_last_update_tstz
+  is 'Last update date';
+  
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 15/06/2016 11:20
+-- CHANGE REASON: [ALERT-322211] 
+ALTER TABLE INTERV_PRESCRIPTION MODIFY (FLG_STATUS VARCHAR2(2 CHAR));
+
+ALTER TABLE INTERV_PRESCRIPTION ADD CONSTRAINT IP_FLG_STATUS_CHK CHECK (flg_status IN ('PD', 'R', 'D', 'W', 'A', 'S', 'E', 'P', 'F', 'C', 'I', 'O', 'N', 'Z'));
+ 
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/10/2019 15:24
+-- CHANGE REASON: [EMR-21851]
+comment on column interv_prescription.flg_time is 'To be performed: E - this episode; B - between episodes; N - next episode; A - Across care setting';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 06/05/2020 09:34
+-- CHANGE REASON: [EMR-31292] - Possibility to prescribe medication and procedures for Home Health Care
+comment on column interv_prescription.flg_time is 'To be performed: E - this episode; B - between episodes; N - next episode; A - Across care setting; H - Home health care';
+-- CHANGE END: Diogo Oliveira

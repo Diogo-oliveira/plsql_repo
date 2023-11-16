@@ -1,0 +1,22 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 22/08/2012 17:02
+-- CHANGE REASON: [ALERT-238310] Import mechanism for Inactive problems
+BEGIN
+        EXECUTE IMMEDIATE 'alter table task_timeline_ea
+  drop constraint TTEA_FLG_ONGOING_CHK';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table task_timeline_ea
+  add constraint TTEA_FLG_ONGOING_CHK
+  check (FLG_ONGOING IN (''O'', ''F'',''N'',''I''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,15 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 29/02/2012 11:58
+-- CHANGE REASON: [ALERT-219213] add market to cds data model (262)
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table CDR_DEF_MKT
+  add constraint CDRDM_PK primary key (ID_CDR_DEFINITION, ID_CATEGORY, ID_SOFTWARE, ID_MARKET)
+';
+exception when e_pk_exists then
+  dbms_output.put_line('primary key cdrdm_pk already exists!');
+end;
+/
+-- CHANGE END: Pedro Carneiro

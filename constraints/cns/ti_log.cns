@@ -1,0 +1,89 @@
+ALTER TABLE TI_LOG ADD CONSTRAINT TLOG_PK PRIMARY KEY (ID_TI_LOG) ENABLE;
+
+-- INPATIENT LMAIA 06-02-2009
+ALTER TABLE ti_log ADD (CONSTRAINT FLG_TYPE_CC CHECK (flg_type IN ('ER', 'MN', 'VS', 'AD', 'ED', 'PR', 'BH', 'RD', 'AR', 'NT', 'AH','DR')));
+-- END
+
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 19/02/2009 18:15
+-- CHANGE REASON: [ALERT-18070] Body Diagrams TI
+ALTER TABLE ti_log drop CONSTRAINT FLG_TYPE_CC;
+ALTER TABLE ti_log ADD (CONSTRAINT FLG_TYPE_CC CHECK (flg_type IN ('ER', 'MN', 'VS', 'AD', 'ED', 'PR', 'BH', 'RD', 'AR', 'NT', 'AH','DR', 'BD')));
+-- CHANGE END
+
+-- CHANGED BY: Fábio Oliveira
+-- CHANGE DATE: 25/03/2009
+-- CHANGE REASON: [ALERT-18455] Patient tracking development
+ALTER TABLE ti_log drop CONSTRAINT FLG_TYPE_CC;
+ALTER TABLE ti_log ADD (CONSTRAINT FLG_TYPE_CC CHECK (flg_type IN ('ER', 'MN', 'VS', 'AD', 'ED', 'PR', 'BH', 'RD', 'AR', 'NT', 'AH','DR', 'BD', 'CS')));
+-- CHANGE END
+
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 25/04/2009
+-- CHANGE REASON: ALERT-25403
+alter table TI_LOG
+  drop constraint FLG_TYPE_CC;
+
+alter table TI_LOG
+  add constraint FLG_TYPE_CC
+  check (flg_type IN ('ER', 'MN', 'VS', 'AD', 'ED', 'PR', 'BH', 'RD', 'AR', 'NT', 'AH','DR', 'BD', 'CS', 'ME', 'ML', 'MH', 'MR'));
+-- CHANGE END
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 28/10/2009 19:25
+-- CHANGE REASON: [ALERT-52602] Desenvolvimentos Director Clinico ALERT_34026
+alter table TI_LOG
+  drop constraint FLG_TYPE_CC;
+alter table TI_LOG
+  add constraint FLG_TYPE_CC
+  check (flg_type IN ('ER', 'MN', 'VS', 'AD', 'ED', 'PR', 'BH', 'RD', 'AR', 'NT', 'AH','DR', 'BD', 'CS', 'ME', 'ML', 'MH', 'MR', 'SR'));
+--END CHANGE: Filipe Silva
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 22/01/2010 17:18
+-- CHANGE REASON: [ALERT-70076] Constraint
+alter table ti_log drop constraint flg_type_cc;
+alter table ti_log add constraint flg_type_cc check (flg_type IN ('ER', 'MN', 'VS', 'AD', 'ED', 'PR', 'BH', 'RD', 'AR', 'NT', 'AH','DR', 'BD', 'CS', 'ME', 'ML', 'MH', 'MR', 'SR', 'ND', 'NI'));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 20:55
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+BEGIN
+    EXECUTE IMMEDIATE 'alter table TI_LOG drop constraint FLG_TYPE_CC';
+    EXECUTE IMMEDIATE 'alter table TI_LOG add constraint FLG_TYPE_CC
+                       check (flg_type IN (''ER'', ''MN'', ''VS'', ''AD'', ''ED'', ''PR'', ''BH'', ''RD'', ''AR'', ''NT'', ''AH'',''DR'', ''BD'', ''CS'', ''ME'', ''ML'', ''MH'', ''MR'', ''SR'', ''ND'', ''NI'',''HI''))';
+EXCEPTION
+WHEN others THEN
+     dbms_output.put_line('ERRO.');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/04/2014 10:47
+-- CHANGE REASON: [ALERT-275664] 
+alter table TI_LOG drop constraint FLG_TYPE_CC;
+alter table TI_LOG
+  add constraint FLG_TYPE_CC
+  check (flg_type IN ('ER', 'MN', 'VS', 'AD', 'ED', 'PR', 'BH', 'RD', 'AR', 'NT', 'AH','DR', 'BD', 'CS', 'ME', 'ML', 'MH', 'MR', 'SR', 'ND', 'NI','HI', 'CO'));
+  
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 07/03/2017 16:02
+-- CHANGE REASON: [ALERT-329008] Enable logging of ID_PROFESSIONAL, DT_REGISTER of who registers the admission
+alter table ti_log drop constraint flg_type_cc;
+alter table ti_log add constraint flg_type_cc check (flg_type IN ('ER', 'MN', 'VS', 'AD', 'ED', 'PR', 'BH', 'RD', 'AR', 'NT', 'AH','DR', 'BD', 'CS', 'ME', 'ML', 'MH', 'MR', 'SR', 'ND', 'NI','HI', 'CO', 'SH'));
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 09/11/2018 12:28
+-- CHANGE REASON: [EMR-8705] 
+alter table ti_log drop constraint flg_type_cc;
+alter table ti_log add constraint flg_type_cc check (flg_type IN ('ER', 'MN', 'VS', 'AD', 'ED', 'PR', 'BH', 'RD', 'AR', 'NT', 'AH','DR', 'BD', 'CS', 'ME', 'ML', 'MH', 'MR', 'SR', 'ND', 'NI','HI', 'CO', 'SH', 'BP'));
+-- CHANGE END: Ana Matos

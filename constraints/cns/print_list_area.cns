@@ -1,0 +1,14 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/10/2014 13:35
+-- CHANGE REASON: [ALERT-298852] 
+BEGIN
+    pk_versioning.run(i_sql => q'[alter table PRINT_LIST_AREA add constraint PLA_PK primary key (ID_PRINT_LIST_AREA)]');
+    pk_versioning.run(i_sql => q'[alter table PRINT_LIST_AREA add constraint PLA_FUNC_PRINT_JOB_INFO_CHK check (regexp_like(REPLACE(FUNC_PRINT_JOB_INFO, ' '),
+                   '[p|P]{1}[k|K]{1}\_[^\..]+.[^\(.]+\(' || REPLACE(':LANG, profissional\(:PROFESSIONAL,:INSTITUTION,:SOFTWARE\),:ID_PRINT_LIST_JOB',
+                                                                    ' ') || '\)'))]');
+    pk_versioning.run(i_sql => q'[alter table PRINT_LIST_AREA add constraint PLA_FUNC_PRINT_JOB_COMPARE_CHK check (regexp_like(REPLACE(FUNC_PRINT_JOB_COMPARE, ' '),
+                   '[p|P]{1}[k|K]{1}\_[^\..]+.[^\(.]+\(' || REPLACE(':LANG, profissional\(:PROFESSIONAL,:INSTITUTION,:SOFTWARE\),:CONTEXT_DATA, :ARRAY_PRINT_LIST_JOBS',
+                                                                    ' ') || '\)'))]');
+END;
+/
+-- CHANGE END: Ana Monteiro

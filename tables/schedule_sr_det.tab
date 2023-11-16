@@ -1,0 +1,36 @@
+
+
+  CREATE TABLE SCHEDULE_SR_DET
+   (	ID_SCHEDULE_SR_DET NUMBER(24,0) NOT NULL ENABLE,
+	DT_REG DATE NOT NULL ENABLE,
+	ID_PROF_REG NUMBER(24,0) NOT NULL ENABLE,
+	ID_SCHEDULE_SR NUMBER(24,0) NOT NULL ENABLE,
+	ID_SCHEDULE NUMBER(24,0),
+	ID_SCHED_SR_PARENT NUMBER(24,0),
+	ID_EPISODE NUMBER(24,0),
+	DT_TARGET DATE,
+	DT_INTERV_PREVIEW DATE,
+	DURATION NUMBER(6,0),
+	ID_DIAGNOSIS NUMBER(12,0),
+
+	ID_SPECIALITY NUMBER(12,0),
+	FLG_STATUS VARCHAR2(1),
+	ID_DEPT_DEST NUMBER(24,0),
+	PREV_RECOVERY_TIME NUMBER(6,0),
+	ID_SR_CANCEL_REASON NUMBER(24,0),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE schedule_sr_det IS 'Tabela de histório de agendamentos. Guarda um registo (cópia da SCHEDULE_SR) sempre que o agendamento for alterado' ;
+
+COMMENT ON COLUMN schedule_sr_det.id_schedule_sr_det IS 'ID único' ;
+COMMENT ON COLUMN schedule_sr_det.dt_reg IS 'Data em que o agendamento foi alterado' ;
+COMMENT ON COLUMN schedule_sr_det.id_prof_reg IS 'ID do profissional que alterou o agendamento' ;
+
+--Rui Batista 2008/05/16
+--A tabela não está a ser utilizada, por isso, vai ser eliminada
+drop table schedule_sr_det;

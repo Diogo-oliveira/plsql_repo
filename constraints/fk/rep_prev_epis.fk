@@ -1,0 +1,19 @@
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 10/07/2013 09:25
+-- CHANGE REASON: [ALERT-261614] 
+DECLARE
+    e_constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_exists, -02275);
+    l_table_name VARCHAR2(30) := 'REP_PREV_EPIS';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT rep_pre_epi_rep_fk FOREIGN KEY (id_reports) REFERENCES reports (id_reports)';
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT rep_pre_epi_rpt_fk FOREIGN KEY (id_rep_profile_template) REFERENCES rep_profile_template (id_rep_profile_template)';
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT rep_pre_epi_soft_fk FOREIGN KEY (id_software) REFERENCES software (id_software)';
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT rep_pre_epi_inst_fk FOREIGN KEY (id_institution) REFERENCES institution (id_institution)';
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT rep_pre_epi_mark_fk FOREIGN KEY (id_market) REFERENCES market (id_market)';
+EXCEPTION
+    WHEN e_constraint_already_exists THEN
+        dbms_output.put_line('WARNING - Foreign keys in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END: Tércio Soares

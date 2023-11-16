@@ -1,0 +1,59 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 26/08/2013 14:38
+-- CHANGE REASON: [ALERT-263008] 
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create table PO_PARAM_CS
+(
+  id_po_param_cs      NUMBER(24) not null,
+  id_po_param         NUMBER(24) not null,
+  id_inst_owner       NUMBER(24) not null,
+  id_clinical_service NUMBER(12) not null,
+  id_institution      NUMBER(24) not null,
+  id_software         NUMBER(24) not null,
+  flg_available       VARCHAR2(1 CHAR) not null,
+  create_user         VARCHAR2(24 CHAR),
+  create_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution  NUMBER(24),
+  update_user         VARCHAR2(24 CHAR),
+  update_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution  NUMBER(24)
+)
+';
+exception when e_obj_exists then
+  dbms_output.put_line('table PO_PARAM_CS exists!');
+end;
+/
+
+comment on table PO_PARAM_CS
+  is 'Periodic observation parameter clinical services configuration.';
+
+comment on column PO_PARAM_CS.id_po_param_cs
+  is 'Primary key.';
+comment on column PO_PARAM_CS.id_po_param
+  is 'Periodic observation parameter identifier.';
+comment on column PO_PARAM_CS.id_inst_owner
+  is 'Owner institution identifier.';
+comment on column PO_PARAM_CS.id_clinical_service
+  is 'Clinical service identifier.';
+comment on column PO_PARAM_CS.id_institution
+  is 'Institution identifier.';
+comment on column PO_PARAM_CS.id_software
+  is 'Software identifier.';
+comment on column PO_PARAM_CS.flg_available
+  is 'Record availability (Y/N).';
+comment on column PO_PARAM_CS.create_user
+  is 'Creation User';
+comment on column PO_PARAM_CS.create_time
+  is 'Creation Time';
+comment on column PO_PARAM_CS.create_institution
+  is 'Creation Institution';
+comment on column PO_PARAM_CS.update_user
+  is 'Update User';
+comment on column PO_PARAM_CS.update_time
+  is 'Update Time';
+comment on column PO_PARAM_CS.update_institution
+  is 'Update Institution';
+-- CHANGE END: mario.mineiro

@@ -1,0 +1,27 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/04/2015 16:17
+-- CHANGE REASON: [ALERT-31026901] CO-SIGN  - Database model Versioning
+
+BEGIN
+
+pk_versioning.run(i_sql => q'[CREATE UNIQUE INDEX csh_pk_idx ON co_sign_hist(id_co_sign_hist ASC)]');
+pk_versioning.run(i_sql => q'[CREATE INDEX csh_fk_idx ON co_sign_hist(id_co_sign ASC, id_task ASC, id_task_type ASC, id_action ASC) tablespace ALERT_IDX]');
+
+END;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- cmf 22-03-2017
+BEGIN
+pk_versioning.run(i_sql => q'[CREATE INDEX CSH_TASK_TYPE_IDX ON CO_SIGN_HIST( id_task_type )]');
+END;
+/
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 18/01/2019 08:28
+-- CHANGE REASON: [EMR-10918] 
+create index alert.csh_search01_idx on alert.co_sign_hist(id_episode) tablespace alert_idx;
+create index alert.csh_search02_idx on alert.co_sign_hist(id_prof_ordered_by) tablespace alert_idx;
+create index alert.csh_search03_idx on alert.co_sign_hist(id_order_type) tablespace alert_idx;
+-- CHANGE END: Pedro Henriques

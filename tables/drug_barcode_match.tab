@@ -1,0 +1,88 @@
+-- Create table
+create table DRUG_BARCODE_MATCH
+(
+  ID_DBM               NUMBER(24) not null,
+  BARCODE              VARCHAR2(200) not null,
+  ID_INSTITUTION       NUMBER(24) not null,
+  VERS                 VARCHAR2(10) not null,
+  ID_DRUG              VARCHAR2(200),
+  DRUG_NAME            VARCHAR2(200),
+  ID_BRAND             VARCHAR2(200),
+  BRAND_NAME           VARCHAR2(200),
+  ID_DCI               VARCHAR2(200),
+  DCI_NAME             VARCHAR2(200),
+  ID_PHARM_FORM        VARCHAR2(200),
+  PHARM_FORM_NAME      VARCHAR2(200),
+  DOSAGE               VARCHAR2(200),
+  FLG_BLOCKED          VARCHAR2(1),
+  FLG_TYPE             VARCHAR2(1),
+  BATCH                VARCHAR2(200),
+  DT_EXPIRE_DATE       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PATIENT           VARCHAR2(200),
+  DT_TAKE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_DRUG_PRESC_DET    NUMBER(24),
+  ID_DRUG_PRESCRIPTION NUMBER(24)
+)
+tablespace TABLE_L
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table DRUG_BARCODE_MATCH
+  is 'This table stores the information of the drugs barcode for comparison reasons';
+-- Add comments to the columns 
+comment on column DRUG_BARCODE_MATCH.ID_DBM
+  is 'Primary key';
+comment on column DRUG_BARCODE_MATCH.BARCODE
+  is 'The barcode contents';
+comment on column DRUG_BARCODE_MATCH.ID_INSTITUTION
+  is 'FK relation with INSTITUTION';
+comment on column DRUG_BARCODE_MATCH.VERS
+  is 'Version: PT, USA, etc';
+comment on column DRUG_BARCODE_MATCH.ID_DRUG
+  is 'Drug identification';
+comment on column DRUG_BARCODE_MATCH.DRUG_NAME
+  is 'Drug name';
+comment on column DRUG_BARCODE_MATCH.ID_BRAND
+  is 'Drug brand identification';
+comment on column DRUG_BARCODE_MATCH.BRAND_NAME
+  is 'Drug brand name';
+comment on column DRUG_BARCODE_MATCH.ID_DCI
+  is 'DCI identification';
+comment on column DRUG_BARCODE_MATCH.DCI_NAME
+  is 'DCI name';
+comment on column DRUG_BARCODE_MATCH.ID_PHARM_FORM
+  is 'Pharmacology form identification';
+comment on column DRUG_BARCODE_MATCH.PHARM_FORM_NAME
+  is 'Pharmacology form name';
+comment on column DRUG_BARCODE_MATCH.DOSAGE
+  is 'Drug dosage';
+comment on column DRUG_BARCODE_MATCH.FLG_BLOCKED
+  is 'Indicates if the barcode is blocked: Y- Yes, N - No';
+comment on column DRUG_BARCODE_MATCH.FLG_TYPE
+  is 'Indicates the type of drug:';
+comment on column DRUG_BARCODE_MATCH.BATCH
+  is 'Drug batch';
+comment on column DRUG_BARCODE_MATCH.DT_EXPIRE_DATE
+  is 'Drug batch expire date';
+comment on column DRUG_BARCODE_MATCH.ID_PATIENT
+  is 'The patient identification for whom the drug is to be administered';
+comment on column DRUG_BARCODE_MATCH.DT_TAKE_TIME
+  is 'The time of the drug administration';
+comment on column DRUG_BARCODE_MATCH.ID_DRUG_PRESC_DET
+  is 'Assigns a barcode to a specific prescription detail';
+comment on column DRUG_BARCODE_MATCH.ID_DRUG_PRESCRIPTION
+  is 'Assigns a barcode to a specific prescription';
+-- Create/Recreate primary, unique and foreign key constraints 
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:32
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_BARCODE_MATCH IS 'This table stores the information of the drugs barcode for comparison reasons [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

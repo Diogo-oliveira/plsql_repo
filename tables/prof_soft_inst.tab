@@ -1,0 +1,27 @@
+
+
+  CREATE TABLE PROF_SOFT_INST
+   (	ID_PROF_SOFT_INST NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	FLG_LOG VARCHAR2(1) NOT NULL ENABLE,
+	DT_LOG DATE,
+	ID_DEPARTMENT NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE prof_soft_inst IS 'Alocações possíveis dos profissionais às aplicações Alert, em cada instituição.' ;
+
+COMMENT ON COLUMN prof_soft_inst.flg_log IS 'Indicação de que o prof. está logado: Y / N' ;
+COMMENT ON COLUMN prof_soft_inst.dt_log IS 'Data do log + recente do prof., no software e instituição' ;
+
+alter table prof_soft_inst 
+add (dt_log_tstz timestamp with local time zone); 
+
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 2008/09/22
+-- CHANGE REASON: Drop obsolete columns of type DATE
+ALTER TABLE PROF_SOFT_INST DROP COLUMN DT_LOG;
+-- CHANGE END

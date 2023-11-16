@@ -1,0 +1,78 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:28
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+
+ALTER TABLE pn_area_mkt ADD CONSTRAINT PNA_DATA_SORT_SUMMARY_CHK CHECK(DATA_SORT_SUMMARY IN ('ASC', 'DESC'));
+ALTER TABLE pn_area_mkt ADD CONSTRAINT PNAM_FLG_REPORT_TITLE_CHK CHECK(FLG_REPORT_TITLE_TYPE IN ('B', 'T'));
+
+
+alter table pn_area_mkt
+  add constraint pam_pk primary key (id_software, id_market, id_pn_area);
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 09:58
+-- CHANGE REASON: H&P phase2
+
+ALTER TABLE pn_area_mkt ADD CONSTRAINT PNA_DATA_SORT_SUMMARY_CHK CHECK(DATA_SORT_SUMMARY IN ('ASC', 'DESC'));
+ALTER TABLE pn_area_mkt ADD CONSTRAINT PNAM_FLG_REPORT_TITLE_CHK CHECK(FLG_REPORT_TITLE_TYPE IN ('B', 'T'));
+
+
+alter table pn_area_mkt
+  add constraint pam_pk primary key (id_software, id_market, id_pn_area);
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:10
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+
+ALTER TABLE pn_area_mkt ADD CONSTRAINT PNA_DATA_SORT_SUMMARY_CHK CHECK(DATA_SORT_SUMMARY IN ('ASC', 'DESC'));
+ALTER TABLE pn_area_mkt ADD CONSTRAINT PNAM_FLG_REPORT_TITLE_CHK CHECK(FLG_REPORT_TITLE_TYPE IN ('B', 'T'));
+
+
+alter table pn_area_mkt
+  add constraint pam_pk primary key (id_software, id_market, id_pn_area);
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 10/05/2012 15:50
+-- CHANGE REASON: [ALERT-229650 ] Recheck
+DECLARE
+    e_non_existant EXCEPTION;    
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint    
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_area_mkt drop constraint PNA_DATA_SORT_SUMMARY_CHK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+ 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_area_mkt ADD CONSTRAINT PNA_DATA_SORT_SUMMARY_CHK CHECK(DATA_SORT_SUMMARY IN (''ASC'', ''DESC'', null))';
+EXCEPTION
+    WHEN others THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/07/2012 14:13
+-- CHANGE REASON: [ALERT-236679 ] Progress notes - filter by Last X notes
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_area_mkt
+  add constraint PAM_SUM_DEFAULT_FILTER_CHK
+  check (summary_default_filter IN (''N'', ''D''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

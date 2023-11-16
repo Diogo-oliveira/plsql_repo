@@ -1,0 +1,201 @@
+
+
+  CREATE TABLE GRID_TASK
+   (	ID_GRID_TASK NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ANALYSIS_D VARCHAR2(100),
+	ANALYSIS_N VARCHAR2(100),
+	HARVEST VARCHAR2(100),
+	EXAM_D VARCHAR2(100),
+	EXAM_N VARCHAR2(100),
+	DRUG_PRESC VARCHAR2(100),
+	DRUG_REQ VARCHAR2(100),
+	DRUG_TRANSP VARCHAR2(100),
+	INTERVENTION VARCHAR2(100),
+
+	MONITORIZATION VARCHAR2(100),
+	NURSE_ACTIVITY VARCHAR2(100),
+	TEACH_REQ VARCHAR2(100),
+	MOVEMENT VARCHAR2(100),
+	CLIN_REC_REQ VARCHAR2(100),
+	CLIN_REC_TRANSP VARCHAR2(100),
+	VACCINE VARCHAR2(100),
+	HEMO_REQ VARCHAR2(100),
+	MATERIAL_REQ VARCHAR2(100),
+	ICNP_INTERVENTION VARCHAR2(100),
+	POSITIONING VARCHAR2(100),
+	HIDRICS_REG VARCHAR2(100),
+	SCALE_VALUE VARCHAR2(100),
+
+	PRESCRIPTION_N VARCHAR2(100),
+	PRESCRIPTION_P VARCHAR2(100)
+   );
+
+
+COMMENT ON COLUMN grid_task.id_episode IS 'ID do episódio' ;
+COMMENT ON COLUMN grid_task.analysis_d IS 'Informação da tarefa prioritária de análises (médico).' ;
+COMMENT ON COLUMN grid_task.analysis_n IS 'Informação da tarefa prioritária de análises (enfermeiro).' ;
+COMMENT ON COLUMN grid_task.harvest IS 'Informação da tarefa prioritária de colheitas.' ;
+COMMENT ON COLUMN grid_task.exam_d IS 'Informação da tarefa prioritária de exames (médico).' ;
+COMMENT ON COLUMN grid_task.exam_n IS 'Informação da tarefa prioritária de exames (enfermeiro).' ;
+COMMENT ON COLUMN grid_task.drug_presc IS 'Informação da tarefa prioritária de prescrições de medicamentos.' ;
+COMMENT ON COLUMN grid_task.drug_req IS 'Informação da tarefa prioritária de requisições de medicamentos.' ;
+COMMENT ON COLUMN grid_task.drug_transp IS 'Informação da tarefa prioritária de transporte de medicamentos.' ;
+COMMENT ON COLUMN grid_task.intervention IS 'Informação da tarefa prioritária de procedimentos.' ;
+COMMENT ON COLUMN grid_task.monitorization IS 'Informação da tarefa prioritária de monitorizações.' ;
+COMMENT ON COLUMN grid_task.nurse_activity IS 'Informação da tarefa prioritária de pensos.' ;
+COMMENT ON COLUMN grid_task.teach_req IS 'Informação da tarefa prioritária de ensinos de enfermagem.' ;
+
+COMMENT ON COLUMN grid_task.movement IS 'Informação da tarefa prioritária de transportes.' ;
+COMMENT ON COLUMN grid_task.clin_rec_req IS 'Informação da tarefa prioritária de requisições do processo clínico.' ;
+COMMENT ON COLUMN grid_task.clin_rec_transp IS 'Informação da tarefa prioritária de transporte de proecsso clínico.' ;
+COMMENT ON COLUMN grid_task.vaccine IS 'Informação da tarefa prioritária de vacinas.' ;
+COMMENT ON COLUMN grid_task.hemo_req IS 'Informação da tarefa prioritária de requisições de hemoderivados' ;
+COMMENT ON COLUMN grid_task.material_req IS 'Informação da tarefa prioritária de requisições de materiais' ;
+COMMENT ON COLUMN grid_task.icnp_intervention IS 'Informação da tarefa prioritária de intervenções (CIPE).' ;
+COMMENT ON COLUMN grid_task.prescription_n IS 'Informação da tarefa prioritária de prescrição (Administrar neste episódio).' ;
+COMMENT ON COLUMN grid_task.prescription_p IS 'Informação da tarefa prioritária de prescrição (Preparação de soluções e Administrar neste episódio).' ;
+
+
+--Emilia Taborda 2007/11/15
+--Nova coluna DISCHARGE_PEND
+alter table grid_task add (DISCHARGE_PEND VARCHAR2(100));
+
+comment on column GRID_TASK.DISCHARGE_PEND  is 'Informação da tarefa prioritária de altas pendentes.';
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 11:57
+-- CHANGE REASON: [ALERT-12334] 
+alter table GRID_TASK  add SUPPLIES VARCHAR2(100);
+comment on column GRID_TASK.SUPPLIES is 'Informação da tarefa prioritária de materiais.';
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 03/11/2014 09:56
+-- CHANGE REASON: [ALERT-290969] Nursing Care Plan: NANDA, NIC, NOC - Data Model
+ALTER TABLE GRID_TASK ADD 
+  (  
+    NOC_OUTCOME   VARCHAR2(100) ,
+    NOC_INDICATOR VARCHAR2(100) ,
+    NIC_ACTIVITY  VARCHAR2(100)
+  ) ;
+COMMENT ON COLUMN GRID_TASK.NOC_OUTCOME
+IS 
+  'Info priority task of Nursing Outcome (NOC).' ;
+COMMENT ON COLUMN GRID_TASK.NOC_INDICATOR
+IS 
+  'Info priority task of Nursing Indicator (NOC).' ;
+COMMENT ON COLUMN GRID_TASK.NIC_ACTIVITY
+IS 
+  'Info priority task of Nursing Activity (NIC).' ;
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/11/2014 16:08
+-- CHANGE REASON: [ALERT-302718 ] CL Market_Orders button_Medication and other_Record Home Medication_Select All filter_Select a drug_Add Other Information_Error
+BEGIN
+    EXECUTE IMMEDIATE 'alter table grid_task modify drug_presc VARCHAR2(1000 CHAR)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 18/03/2015 11:40
+-- CHANGE REASON: [ALERT-309049] [STABLE] EDIS patient grids changes
+--                
+BEGIN
+pk_versioning.run(i_sql => q'[alter   TABLE GRID_TASK ADD OPINION_STATE  VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter   TABLE GRID_TASK ADD OTH_EXAM_D  VARCHAR2(200 CHAR))]');
+pk_versioning.run(i_sql => q'[alter   TABLE GRID_TASK ADD OTH_EXAM_N  VARCHAR2(200 CHAR))]');
+pk_versioning.run(i_sql => q'[alter   TABLE GRID_TASK ADD IMG_EXAM_D  VARCHAR2(200 CHAR))]');
+pk_versioning.run(i_sql => q'[alter   TABLE GRID_TASK ADD IMG_EXAM_N  VARCHAR2(200 CHAR))]');
+END;
+/
+comment on column GRID_TASK.OPINION_STATE  is 'This is populated by data_Gov_event for OPINION table to show on grid.';
+comment on column GRID_TASK.OTH_EXAM_D  is 'Information of priority task other exams (doctor).';
+comment on column GRID_TASK.OTH_EXAM_N  is 'Information of priority task other exams (nurse).';
+comment on column GRID_TASK.IMG_EXAM_D  is 'Information of priority task imaging exams (doctor).';
+comment on column GRID_TASK.IMG_EXAM_N  is 'Information of priority task imaging exams (nurse).';
+COMMENT ON COLUMN GRID_TASK.HIDRICS_REG IS 'Information of priority task hidrics ';
+COMMENT ON COLUMN GRID_TASK.ID_GRID_TASK IS 'Table identifier';
+COMMENT ON COLUMN GRID_TASK.POSITIONING IS 'Information of priority task positioning';
+COMMENT ON COLUMN GRID_TASK.SCALE_VALUE IS 'Information of evaluation scales';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 20/03/2015 10:50
+-- CHANGE REASON: [ALERT-309049] [STABLE] EDIS patient grids changes
+--                
+BEGIN
+pk_versioning.run(i_sql => q'[alter   TABLE GRID_TASK ADD OPINION_STATE  VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter   TABLE GRID_TASK ADD OTH_EXAM_D  VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter   TABLE GRID_TASK ADD OTH_EXAM_N  VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter   TABLE GRID_TASK ADD IMG_EXAM_D  VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter   TABLE GRID_TASK ADD IMG_EXAM_N  VARCHAR2(200 CHAR)]');
+END;
+/
+comment on column GRID_TASK.OPINION_STATE  is 'This is populated by data_Gov_event for OPINION table to show on grid.';
+comment on column GRID_TASK.OTH_EXAM_D  is 'Information of priority task other exams (doctor).';
+comment on column GRID_TASK.OTH_EXAM_N  is 'Information of priority task other exams (nurse).';
+comment on column GRID_TASK.IMG_EXAM_D  is 'Information of priority task imaging exams (doctor).';
+comment on column GRID_TASK.IMG_EXAM_N  is 'Information of priority task imaging exams (nurse).';
+COMMENT ON COLUMN GRID_TASK.HIDRICS_REG IS 'Information of priority task hidrics ';
+COMMENT ON COLUMN GRID_TASK.ID_GRID_TASK IS 'Table identifier';
+COMMENT ON COLUMN GRID_TASK.POSITIONING IS 'Information of priority task positioning';
+COMMENT ON COLUMN GRID_TASK.SCALE_VALUE IS 'Information of evaluation scales';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 06/11/2015 09:31
+-- CHANGE REASON: [ALERT-316241] 
+alter table GRID_TASK modify analysis_d VARCHAR2(200 CHAR);
+alter table GRID_TASK modify analysis_n VARCHAR2(200 CHAR);
+alter table GRID_TASK modify harvest VARCHAR2(200 CHAR);
+alter table GRID_TASK modify exam_d VARCHAR2(200 CHAR);
+alter table GRID_TASK modify exam_n VARCHAR2(200 CHAR);
+alter table GRID_TASK modify drug_req VARCHAR2(200 CHAR);
+alter table GRID_TASK modify drug_transp VARCHAR2(200 CHAR);
+alter table GRID_TASK modify intervention VARCHAR2(200 CHAR);
+alter table GRID_TASK modify monitorization VARCHAR2(200 CHAR);
+alter table GRID_TASK modify nurse_activity VARCHAR2(200 CHAR);
+alter table GRID_TASK modify teach_req VARCHAR2(200 CHAR);
+alter table GRID_TASK modify movement VARCHAR2(200 CHAR);
+alter table GRID_TASK modify clin_rec_req VARCHAR2(200 CHAR);
+alter table GRID_TASK modify clin_rec_transp VARCHAR2(200 CHAR);
+alter table GRID_TASK modify vaccine VARCHAR2(200 CHAR);
+alter table GRID_TASK modify hemo_req VARCHAR2(200 CHAR);
+alter table GRID_TASK modify material_req VARCHAR2(200 CHAR);
+alter table GRID_TASK modify icnp_intervention VARCHAR2(200 CHAR);
+alter table GRID_TASK modify positioning VARCHAR2(200 CHAR);
+alter table GRID_TASK modify hidrics_reg VARCHAR2(200 CHAR);
+alter table GRID_TASK modify scale_value VARCHAR2(200 CHAR);
+alter table GRID_TASK modify prescription_n VARCHAR2(200 CHAR);
+alter table GRID_TASK modify prescription_p VARCHAR2(200 CHAR);
+alter table GRID_TASK modify discharge_pend VARCHAR2(200 CHAR);
+alter table GRID_TASK modify supplies VARCHAR2(200 CHAR);
+alter table GRID_TASK modify noc_outcome VARCHAR2(200 CHAR);
+alter table GRID_TASK modify noc_indicator VARCHAR2(200 CHAR);
+alter table GRID_TASK modify nic_activity VARCHAR2(200 CHAR);
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 05/02/2019 14:15
+-- CHANGE REASON: [EMR-10952] 
+BEGIN
+pk_versioning.run(i_sql => q'[alter   TABLE GRID_TASK ADD DISP_TASK VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter   TABLE GRID_TASK ADD DISP_IVROOM VARCHAR2(200 CHAR)]');
+END;
+/
+comment on column GRID_TASK.DISP_TASK  is 'Information of priority task dispenses (pharmacy).';
+comment on column GRID_TASK.DISP_IVROOM  is 'Information of priority IV Room/Late mix (pharmacy).';
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 02/12/2019 15:10
+-- CHANGE REASON: [EMR-24029]
+ALTER TABLE grid_task ADD COMMON_ORDER VARCHAR2(200 CHAR);
+ALTER TABLE grid_task ADD MEDICAL_ORDER VARCHAR2(200 CHAR);
+-- CHANGE END: Pedro Henriques

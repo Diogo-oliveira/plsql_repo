@@ -1,0 +1,47 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/05/2014 11:59
+-- CHANGE REASON: [ALERT-282042] data export table
+DECLARE
+    e_pk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+    e_unique_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+BEGIN
+    begin
+      execute immediate 'alter table CDA_REQ add constraint CDAR_PK primary key (id_cda_req) using index tablespace alert_idx';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already exists');
+    end;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table CDA_REQ add constraint CDAR_TYPE_CHK check (FLG_TYPE IN (''P'',''M''))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('CK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table CDA_REQ add constraint CDAR_STATUS_CHK check (FLG_STATUS IN (''P'',''R'',''F'',''C''))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('CK already exists');
+    END;
+        BEGIN
+        EXECUTE IMMEDIATE 'alter table CDA_REQ add constraint CDAR_DT_CHK check (dt_end >= dt_start)';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('CK already exists');
+    END;     
+        BEGIN
+        EXECUTE IMMEDIATE 'alter table CDA_REQ add constraint CDAR_DTRANGE_CHK check (dt_range_end >= dt_range_start)';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('CK already exists');
+    END;          
+END;
+/
+ 
+-- CHANGE END:  Rui Gomes

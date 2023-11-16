@@ -1,0 +1,197 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/04/2014 10:46
+-- CHANGE REASON: [ALERT-275664] 
+BEGIN
+  pk_versioning.run(i_sql => q'[create table COMM_ORDER_EA
+(
+  id_comm_order            NUMBER(24) default 0 not null,
+  id_terminology_version   NUMBER(24) not null,
+  id_terminology           NUMBER(24) not null,
+  version                  VARCHAR2(200 CHAR) not null,
+  dt_version_start         TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  dt_version_end           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  flg_active_term_vers     VARCHAR2(1 CHAR) not null,
+  id_terminology_mkt       NUMBER(24) not null,
+  id_market                NUMBER(24) not null,
+  id_institution_term_vers NUMBER(24) not null,
+  id_institution_conc_term NUMBER(24) not null,
+  id_task_type_term_vers   NUMBER(24) not null,
+  id_task_type_conc_term   NUMBER(24) not null,
+  id_software_term_vers    NUMBER(24) not null,
+  id_software_conc_term    NUMBER(24) not null,
+  id_dep_clin_serv         NUMBER(24) not null,
+  id_category_cncpt_vers   NUMBER(24) not null,
+  id_category_cncpt_term   NUMBER(24) not null,
+  id_professional          NUMBER(24),
+  id_language              NUMBER(24) not null,
+  id_concept_version       NUMBER(24) not null,
+  id_cncpt_vrs_inst_owner  NUMBER(24) not null,
+  id_concept               NUMBER(24) not null,
+  id_concept_inst_owner    NUMBER(24) not null,
+  concept_code             VARCHAR2(200 CHAR) not null,
+  id_concept_term          NUMBER(24) not null,
+  id_cncpt_trm_inst_owner  NUMBER(24) not null,
+  code_concept_term        VARCHAR2(200 CHAR) not null,
+  flg_type_concept_term    VARCHAR2(1 CHAR) not null,
+  rank                     NUMBER(24),
+  internal_name_term_type  VARCHAR2(200 CHAR) not null,
+  id_concept_type          NUMBER(24) not null,
+  code_concept_type_name   VARCHAR2(200 CHAR) not null,
+  cpt_trm_uid              NUMBER(24) default 0 not null,
+  cpt_vrs_uid              NUMBER(24) default 0 not null,
+  cpt_vrs_uid_parent       NUMBER(24),
+CREATE_USER              VARCHAR2(30 CHAR),
+CREATE_TIME              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION       NUMBER(24),
+UPDATE_USER              VARCHAR2(30 CHAR),
+UPDATE_TIME              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION       NUMBER(24)
+)]');
+END;
+/
+
+comment on table COMM_ORDER_EA is 'EA table to support communication orders catalog data [COEA]';
+comment on column COMM_ORDER_EA.id_comm_order is 'communication order Id';
+comment on column COMM_ORDER_EA.id_terminology_version is 'Terminology version identifier';
+comment on column COMM_ORDER_EA.id_terminology is 'Terminology identifier';
+comment on column COMM_ORDER_EA.version is 'Version identifier';
+comment on column COMM_ORDER_EA.dt_version_start is 'Date of terminology version start';
+comment on column COMM_ORDER_EA.dt_version_end is 'Date of terminology version end';
+comment on column COMM_ORDER_EA.flg_active_term_vers is 'Terminology version flg active';
+comment on column COMM_ORDER_EA.id_terminology_mkt is 'Terminology market';
+comment on column COMM_ORDER_EA.id_market is 'Market identifier';
+comment on column COMM_ORDER_EA.id_institution_term_vers is 'Terminology version institution';
+comment on column COMM_ORDER_EA.id_institution_conc_term is 'Concept term institution';
+comment on column COMM_ORDER_EA.id_task_type_term_vers is 'Terminology version task type';
+comment on column COMM_ORDER_EA.id_task_type_conc_term is 'Concept term task type';
+comment on column COMM_ORDER_EA.id_software_term_vers is 'Terminology version software';
+comment on column COMM_ORDER_EA.id_software_conc_term is 'Concept term software';
+comment on column COMM_ORDER_EA.id_dep_clin_serv is 'Dep clin serv (from concept_term)';
+comment on column COMM_ORDER_EA.id_category_cncpt_vers is 'Concept version category';
+comment on column COMM_ORDER_EA.id_category_cncpt_term is 'Concept term category';
+comment on column COMM_ORDER_EA.id_professional is 'Professional identifier';
+comment on column COMM_ORDER_EA.id_language is 'Language identifier';
+comment on column COMM_ORDER_EA.id_concept_version is 'Concept version identifier';
+comment on column COMM_ORDER_EA.id_cncpt_vrs_inst_owner is 'Concept version inst owner';
+comment on column COMM_ORDER_EA.id_concept is 'Concept identifier';
+comment on column COMM_ORDER_EA.id_concept_inst_owner is 'Concept institution owner';
+comment on column COMM_ORDER_EA.concept_code is 'Translation code of concept code';
+comment on column COMM_ORDER_EA.id_concept_term is 'Concept term identifier';
+comment on column COMM_ORDER_EA.id_cncpt_trm_inst_owner is 'Concept term inst owner';
+comment on column COMM_ORDER_EA.code_concept_term is 'Translation code of concept term';
+comment on column COMM_ORDER_EA.flg_type_concept_term is 'Concept term flg type';
+comment on column COMM_ORDER_EA.rank is 'Term Rank';
+comment on column COMM_ORDER_EA.internal_name_term_type is 'Term type internal name';
+comment on column COMM_ORDER_EA.id_concept_type is 'Concept type (STATUS ORDERS/ACTIVITIES/PRECAUTIONS/ISOLATION/RESTRICTIONS/NOTIFICATIONS/MISCELLANEOUS)';
+comment on column COMM_ORDER_EA.code_concept_type_name is 'Translation code of concept type name';
+comment on column COMM_ORDER_EA.cpt_trm_uid is 'concept term unique identifier';
+comment on column COMM_ORDER_EA.cpt_vrs_uid is 'concept version unique identifier';
+comment on column COMM_ORDER_EA.cpt_vrs_uid_parent is 'concept version unique identifier (parent)';
+comment on column COMM_ORDER_EA.CREATE_USER is 'Creation User';
+comment on column COMM_ORDER_EA.CREATE_TIME is 'Creation Time';
+comment on column COMM_ORDER_EA.CREATE_INSTITUTION is 'Creation Institution';
+comment on column COMM_ORDER_EA.UPDATE_USER is 'Update User';
+comment on column COMM_ORDER_EA.UPDATE_TIME is 'Update Time';
+comment on column COMM_ORDER_EA.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/04/2014 18:40
+-- CHANGE REASON: [ALERT-275664] 
+BEGIN
+  pk_versioning.run(i_sql => q'[create table COMM_ORDER_EA
+(
+  id_comm_order            NUMBER(24) default 0 not null,
+  id_terminology_version   NUMBER(24) not null,
+  id_terminology           NUMBER(24) not null,
+  version                  VARCHAR2(200 CHAR) not null,
+  dt_version_start         TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  dt_version_end           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  flg_active_term_vers     VARCHAR2(1 CHAR) not null,
+  id_terminology_mkt       NUMBER(24) not null,
+  id_market                NUMBER(24) not null,
+  id_institution_term_vers NUMBER(24) not null,
+  id_institution_conc_term NUMBER(24) not null,
+  id_task_type_term_vers   NUMBER(24) not null,
+  id_task_type_conc_term   NUMBER(24) not null,
+  id_software_term_vers    NUMBER(24) not null,
+  id_software_conc_term    NUMBER(24) not null,
+  id_dep_clin_serv         NUMBER(24) not null,
+  id_category_cncpt_vers   NUMBER(24) not null,
+  id_category_cncpt_term   NUMBER(24) not null,
+  id_professional          NUMBER(24),
+  id_language              NUMBER(24) not null,
+  id_concept_version       NUMBER(24) not null,
+  id_cncpt_vrs_inst_owner  NUMBER(24) not null,
+  id_concept               NUMBER(24) not null,
+  id_concept_inst_owner    NUMBER(24) not null,
+  concept_code             VARCHAR2(200 CHAR) not null,
+  id_concept_term          NUMBER(24) not null,
+  id_cncpt_trm_inst_owner  NUMBER(24) not null,
+  code_concept_term        VARCHAR2(200 CHAR) not null,
+  flg_type_concept_term    VARCHAR2(1 CHAR) not null,
+  rank                     NUMBER(24),
+  internal_name_term_type  VARCHAR2(200 CHAR) not null,
+  id_concept_type          NUMBER(24) not null,
+  code_concept_type_name   VARCHAR2(200 CHAR) not null,
+  concept_path             varchar2(1000 char),
+  concept_level            number(24) not null,
+  cpt_trm_uid              NUMBER(24) default 0 not null,
+  cpt_vrs_uid              NUMBER(24) default 0 not null,
+  cpt_vrs_uid_parent       NUMBER(24),
+  CREATE_USER              VARCHAR2(30 CHAR),
+  CREATE_TIME              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION       NUMBER(24),
+  UPDATE_USER              VARCHAR2(30 CHAR),
+  UPDATE_TIME              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION       NUMBER(24)
+)]');
+END;
+/
+
+comment on table COMM_ORDER_EA is 'EA table to support communication orders catalog data [COEA]';
+comment on column COMM_ORDER_EA.id_comm_order is 'communication order Id';
+comment on column COMM_ORDER_EA.id_terminology_version is 'Terminology version identifier';
+comment on column COMM_ORDER_EA.id_terminology is 'Terminology identifier';
+comment on column COMM_ORDER_EA.version is 'Version identifier';
+comment on column COMM_ORDER_EA.dt_version_start is 'Date of terminology version start';
+comment on column COMM_ORDER_EA.dt_version_end is 'Date of terminology version end';
+comment on column COMM_ORDER_EA.flg_active_term_vers is 'Terminology version flg active';
+comment on column COMM_ORDER_EA.id_terminology_mkt is 'Terminology market';
+comment on column COMM_ORDER_EA.id_market is 'Market identifier';
+comment on column COMM_ORDER_EA.id_institution_term_vers is 'Terminology version institution';
+comment on column COMM_ORDER_EA.id_institution_conc_term is 'Concept term institution';
+comment on column COMM_ORDER_EA.id_task_type_term_vers is 'Terminology version task type';
+comment on column COMM_ORDER_EA.id_task_type_conc_term is 'Concept term task type';
+comment on column COMM_ORDER_EA.id_software_term_vers is 'Terminology version software';
+comment on column COMM_ORDER_EA.id_software_conc_term is 'Concept term software';
+comment on column COMM_ORDER_EA.id_dep_clin_serv is 'Dep clin serv (from concept_term)';
+comment on column COMM_ORDER_EA.id_category_cncpt_vers is 'Concept version category';
+comment on column COMM_ORDER_EA.id_category_cncpt_term is 'Concept term category';
+comment on column COMM_ORDER_EA.id_professional is 'Professional identifier';
+comment on column COMM_ORDER_EA.id_language is 'Language identifier';
+comment on column COMM_ORDER_EA.id_concept_version is 'Concept version identifier';
+comment on column COMM_ORDER_EA.id_cncpt_vrs_inst_owner is 'Concept version inst owner';
+comment on column COMM_ORDER_EA.id_concept is 'Concept identifier';
+comment on column COMM_ORDER_EA.id_concept_inst_owner is 'Concept institution owner';
+comment on column COMM_ORDER_EA.concept_code is 'Translation code of concept code';
+comment on column COMM_ORDER_EA.id_concept_term is 'Concept term identifier';
+comment on column COMM_ORDER_EA.id_cncpt_trm_inst_owner is 'Concept term inst owner';
+comment on column COMM_ORDER_EA.code_concept_term is 'Translation code of concept term';
+comment on column COMM_ORDER_EA.flg_type_concept_term is 'Concept term flg type';
+comment on column COMM_ORDER_EA.rank is 'Term Rank';
+comment on column COMM_ORDER_EA.internal_name_term_type is 'Term type internal name';
+comment on column COMM_ORDER_EA.id_concept_type is 'Concept type (STATUS ORDERS/ACTIVITIES/PRECAUTIONS/ISOLATION/RESTRICTIONS/NOTIFICATIONS/MISCELLANEOUS)';
+comment on column COMM_ORDER_EA.code_concept_type_name is 'Translation code of concept type name';
+comment on column COMM_ORDER_EA.concept_path is 'Concept path in format cpt_trm_uid > cpt_trm_uid > ...';
+comment on column COMM_ORDER_EA.concept_level is 'Concept hierarchy level';
+comment on column COMM_ORDER_EA.cpt_trm_uid is 'concept term unique identifier';
+comment on column COMM_ORDER_EA.cpt_vrs_uid is 'concept version unique identifier';
+comment on column COMM_ORDER_EA.cpt_vrs_uid_parent is 'concept version unique identifier (parent)';
+comment on column COMM_ORDER_EA.CREATE_USER is 'Creation User';
+comment on column COMM_ORDER_EA.CREATE_TIME is 'Creation Time';
+comment on column COMM_ORDER_EA.CREATE_INSTITUTION is 'Creation Institution';
+comment on column COMM_ORDER_EA.UPDATE_USER is 'Update User';
+comment on column COMM_ORDER_EA.UPDATE_TIME is 'Update Time';
+comment on column COMM_ORDER_EA.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Ana Monteiro

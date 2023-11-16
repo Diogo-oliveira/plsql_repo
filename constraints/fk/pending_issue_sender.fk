@@ -1,0 +1,11 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 22/10/2014 19:48
+-- CHANGE REASON: [ALERT-297786] messaging support table
+DECLARE
+    i_sql VARCHAR2(1000 CHAR);
+BEGIN
+    i_sql := 'ALTER TABLE pending_issue_sender add CONSTRAINT PISDR_PIM_fk foreign key(id_pending_issue_message, id_pending_issue) references pending_issue_message(id_pending_issue_message, id_pending_issue)';
+    pk_versioning.run(i_sql => i_sql);
+END;
+/
+-- CHANGE END:  Rui Gomes

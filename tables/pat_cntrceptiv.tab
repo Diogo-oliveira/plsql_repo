@@ -1,0 +1,40 @@
+
+
+  CREATE TABLE PAT_CNTRCEPTIV
+   (	ID_PAT_CNTRCEPTIV NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_CNTRCEPTIV DATE NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_CONTRACEPTIVE NUMBER(12,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	YEAR_BEGIN NUMBER(4,0) NOT NULL ENABLE,
+	MONTH_BEGIN NUMBER(2,0),
+	DAY_BEGIN NUMBER(2,0),
+	YEAR_END NUMBER(4,0),
+	MONTH_END NUMBER(2,0),
+	DAY_END NUMBER(2,0),
+
+	FLG_INTERRUPT VARCHAR2(1),
+	NOTES VARCHAR2(4000)
+   );
+
+
+COMMENT ON TABLE pat_cntrceptiv IS 'História de contracepção' ;
+
+COMMENT ON COLUMN pat_cntrceptiv.dt_pat_cntrceptiv IS 'Data de registo' ;
+COMMENT ON COLUMN pat_cntrceptiv.year_begin IS 'Ano (aproximando) de início de utilização do métoco contraceptivo' ;
+COMMENT ON COLUMN pat_cntrceptiv.month_begin IS 'Mês (aproximando) de início de utilização do métoco contraceptivo' ;
+COMMENT ON COLUMN pat_cntrceptiv.day_begin IS 'Dia (aproximando) de início de utilização do métoco contraceptivo' ;
+COMMENT ON COLUMN pat_cntrceptiv.year_end IS 'Ano (aproximando) de fim de utilização do métoco contraceptivo' ;
+COMMENT ON COLUMN pat_cntrceptiv.month_end IS 'Mês (aproximando) de fim de utilização do métoco contraceptivo' ;
+COMMENT ON COLUMN pat_cntrceptiv.day_end IS 'Dia (aproximando) de fim de utilização do métoco contraceptivo' ;
+COMMENT ON COLUMN pat_cntrceptiv.flg_interrupt IS 'Motivo da interrupção: M - indicação médica, P - decisão pessoal' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_CNTRCEPTIV ADD DT_PAT_CNTRCEPTIV_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_CNTRCEPTIV.DT_PAT_CNTRCEPTIV_TSTZ IS 'Data de registo'; 
+
+
+
+
+alter table PAT_CNTRCEPTIV drop column DT_PAT_CNTRCEPTIV;

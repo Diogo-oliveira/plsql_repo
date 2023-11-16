@@ -1,0 +1,1 @@
+grant select on v_p1_detail to INTF_ALERT; 

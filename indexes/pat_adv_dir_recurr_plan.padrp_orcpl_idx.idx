@@ -1,0 +1,14 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 06/01/2012 17:53
+-- CHANGE REASON: [ALERT-211493] Index creation for id_order_recurr_plan column
+DECLARE
+    e_idx_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_idx_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'create index PADRP_ORCPL_IDX on PAT_ADV_DIR_RECURR_PLAN (ID_RECURR_PLAN)';
+EXCEPTION
+    WHEN e_idx_already_exists THEN
+        dbms_output.put_line('index PADRP_ORCPL_IDX already exists');
+END;
+/
+-- CHANGE END: Carlos Loureiro

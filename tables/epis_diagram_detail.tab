@@ -1,0 +1,192 @@
+create table EPIS_DIAGRAM_DETAIL
+(
+  ID_EPIS_DIAGRAM_DETAIL NUMBER(24) not null,
+  ID_DIAGRAM_LAY_IMAG    NUMBER(24) not null,
+  ID_DIAGRAM_TOOLS       NUMBER(24) not null,
+  POSITION_X             NUMBER(24,2),
+  POSITION_Y             NUMBER(24,2),
+  VALUE                  NUMBER not null,
+  NOTES_CANCEL           VARCHAR2(240),
+  DT_CANCEL              DATE,
+  ID_PROF_CANCEL         NUMBER(24),
+  ADW_LAST_UPDATE        DATE not null,
+  FLG_STATUS             VARCHAR2(1) not null,
+  ID_PROFESSIONAL        NUMBER(24) not null,
+  DT_DIAGRAM_DETAIL      DATE not null,
+  ID_EPIS_DIAGRAM_LAYOUT NUMBER(24) not null
+);
+
+comment on table EPIS_DIAGRAM_DETAIL
+  is 'Detalhe associado a cada novo diagrama';
+comment on column EPIS_DIAGRAM_DETAIL.ID_EPIS_DIAGRAM_DETAIL
+  is 'Chave primária';
+comment on column EPIS_DIAGRAM_DETAIL.ID_DIAGRAM_LAY_IMAG
+  is 'Id da imagem do layout';
+comment on column EPIS_DIAGRAM_DETAIL.ID_DIAGRAM_TOOLS
+  is 'Id da chave da ferramenta';
+comment on column EPIS_DIAGRAM_DETAIL.POSITION_X
+  is 'Posição X, relativa à imagem do layout';
+comment on column EPIS_DIAGRAM_DETAIL.POSITION_Y
+  is 'Posição Y, relativa à imagem do layout';
+comment on column EPIS_DIAGRAM_DETAIL.VALUE
+  is 'Valor';
+comment on column EPIS_DIAGRAM_DETAIL.NOTES_CANCEL
+  is 'Notas de cancelamento';
+comment on column EPIS_DIAGRAM_DETAIL.DT_CANCEL
+  is 'Data de cancelamento';
+comment on column EPIS_DIAGRAM_DETAIL.ID_PROF_CANCEL
+  is 'Profissional que cancelou';
+comment on column EPIS_DIAGRAM_DETAIL.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+comment on column EPIS_DIAGRAM_DETAIL.FLG_STATUS
+  is 'Estado da linha do diagrama. A- Activo; C-Cancelado';
+comment on column EPIS_DIAGRAM_DETAIL.ID_PROFESSIONAL
+  is 'Profissional que registou';
+comment on column EPIS_DIAGRAM_DETAIL.DT_DIAGRAM_DETAIL
+  is 'Data de registo';
+comment on column EPIS_DIAGRAM_DETAIL.ID_EPIS_DIAGRAM_LAYOUT
+  is 'ID do layout no episódio';
+alter table epis_diagram_detail 
+add (dt_diagram_detail_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+ALTER TABLE EPIS_DIAGRAM_DETAIL DROP (DT_CANCEL, DT_DIAGRAM_DETAIL);
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 26/10/2010 12:30
+-- CHANGE REASON: [ALERT-123818] 
+alter table epis_diagram_detail add (
+  COORDINATES          clob);
+
+
+comment on column EPIS_DIAGRAM_DETAIL.COORDINATES
+  is 'Free drawing coordinates (X and Y coordinates splited by |)';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 24/07/2014 11:47
+-- CHANGE REASON: [ALERT-291332] 
+alter table epis_diagram_detail add (color varchar2(6 char));
+
+comment on column EPIS_DIAGRAM_DETAIL.color
+  is 'Symbol color (used on free pencil symbol)';
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_DIAGRAM_DETAIL modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_DIAGRAM_DETAIL modify NOTES_CANCEL varchar2(240 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_DIAGRAM_DETAIL modify FLG_STATUS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_DIAGRAM_DETAIL modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 10:00
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table EPIS_DIAGRAM_DETAIL
+  is 'Associated detail to each new diagram';
+-- Add comments to the columns 
+comment on column EPIS_DIAGRAM_DETAIL.id_epis_diagram_detail
+  is 'Primary key';
+comment on column EPIS_DIAGRAM_DETAIL.id_diagram_lay_imag
+  is 'Image layout id';
+comment on column EPIS_DIAGRAM_DETAIL.id_diagram_tools
+  is 'Diagram tools id';
+comment on column EPIS_DIAGRAM_DETAIL.position_x
+  is 'X position, on the layout image';
+comment on column EPIS_DIAGRAM_DETAIL.position_y
+  is 'Y position, on the layout image';
+comment on column EPIS_DIAGRAM_DETAIL.value
+  is 'Value';
+comment on column EPIS_DIAGRAM_DETAIL.notes_cancel
+  is 'Cancel notes';
+comment on column EPIS_DIAGRAM_DETAIL.id_prof_cancel
+  is 'Professional that cancel the note';
+comment on column EPIS_DIAGRAM_DETAIL.adw_last_update
+  is 'Date of last change';
+comment on column EPIS_DIAGRAM_DETAIL.flg_status
+  is 'State. A- Active; C-Canceled';
+comment on column EPIS_DIAGRAM_DETAIL.id_professional
+  is 'Professional that register the record';
+comment on column EPIS_DIAGRAM_DETAIL.id_epis_diagram_layout
+  is 'Layout id in episode';
+comment on column EPIS_DIAGRAM_DETAIL.dt_diagram_detail_tstz
+  is 'Diagram detail date';
+comment on column EPIS_DIAGRAM_DETAIL.dt_cancel_tstz
+  is 'Diagram detail cancel date';
+comment on column EPIS_DIAGRAM_DETAIL.create_user
+  is 'Creation User';
+comment on column EPIS_DIAGRAM_DETAIL.create_time
+  is 'Creation Time';
+comment on column EPIS_DIAGRAM_DETAIL.create_institution
+  is 'Creation Institution';
+comment on column EPIS_DIAGRAM_DETAIL.update_user
+  is 'Update User';
+comment on column EPIS_DIAGRAM_DETAIL.update_time
+  is 'Update Time';
+comment on column EPIS_DIAGRAM_DETAIL.update_institution
+  is 'Update Institution';
+comment on column EPIS_DIAGRAM_DETAIL.coordinates
+  is 'Free drawing coordinates (X and Y coordinates splited by |)';
+comment on column EPIS_DIAGRAM_DETAIL.color
+  is 'Symbol color (used on free pencil symbol)';
+-- CHANGE END: Renato Nunes
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:30
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.epis_diagram_detail move lob(coordinates) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 30/12/2019 14:03
+-- CHANGE REASON: [EMR-24848]
+begin
+pk_versioning.run('ALTER TABLE EPIS_DIAGRAM_DETAIL MODIFY NOTES_CANCEL VARCHAR2(1000 CHAR)');
+end;
+/
+
+begin
+pk_versioning.run('ALTER TABLE EPIS_DIAGRAM_DETAIL MODIFY COLOR VARCHAR2(30 CHAR)');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 09/12/2021 15:22
+-- CHANGE REASON: [EMR-49800]
+ALTER TABLE EPIS_DIAGRAM_DETAIL ADD (ID_CANCEL_REASON NUMBER(24));
+
+COMMENT ON COLUMN EPIS_DIAGRAM_DETAIL.ID_CANCEL_REASON IS 'Cancel reason id';
+COMMENT ON COLUMN EPIS_DIAGRAM_DETAIL.NOTES_CANCEL IS 'Cancellation notes';
+-- CHANGE END: Ana Matos

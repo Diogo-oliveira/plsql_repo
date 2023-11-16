@@ -1,0 +1,43 @@
+
+
+  ALTER TABLE EPIS_REPORT_SECTION ADD CONSTRAINT ERN_ERT_FK FOREIGN KEY (ID_EPIS_REPORT)
+	  REFERENCES EPIS_REPORT (ID_EPIS_REPORT) ENABLE;
+
+
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 16/05/2011 15:12
+-- CHANGE REASON: [ALERT-179113] Print tool - Episode archive - Detail area - Taking into account reports printed for disclosure purposes, the report sections are not being displayed.
+DECLARE 
+l_already_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(l_already_exists, -2275);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table EPIS_REPORT_SECTION add constraint ERN_RS foreign key (ID_REP_SECTION) references rep_section (ID_REP_SECTION)';
+EXCEPTION
+    WHEN l_already_exists THEN
+        dbms_output.put_line('FK already exists.');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 27-Jun-2011
+-- CHANGE REASON: ALERT-185735 - COLUMN ID_REP_LAYOUT
+DECLARE
+    e_name_already_used_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_name_already_used_constraint, -2275);
+    l_table_name VARCHAR2(30) := 'EPIS_REPORT_SECTION';
+BEGIN
+
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name ||
+                      ' ADD CONSTRAINT ERS_RL_FK FOREIGN KEY (ID_REP_LAYOUT) REFERENCES REP_LAYOUT (ID_REP_LAYOUT) ENABLE';
+
+EXCEPTION
+    WHEN e_name_already_used_constraint THEN
+        dbms_output.put_line('WARNING - Check constraint in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END
+

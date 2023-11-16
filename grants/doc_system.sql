@@ -1,0 +1,5 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 07/04/2011 11:33
+-- CHANGE REASON: [ALERT-159798] E/M documentation guidelines
+GRANT SELECT ON DOC_SYSTEM TO ALERT_VIEWER;
+-- CHANGE END: Gustavo Serrano

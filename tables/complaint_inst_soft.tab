@@ -1,0 +1,65 @@
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 16/10/2020 16:28
+-- CHANGE REASON: [EMR-34344] - Change complaints database model
+BEGIN
+pk_frmw_objects.insert_into_frmw_objects(
+i_owner            => 'ALERT',
+i_obj_name         => 'COMPLAINT_INST_SOFT',
+i_obj_type         => 'TABLE',
+i_flg_category     => 'PRM',
+i_delete_script    => '',
+i_responsible_team => 'CDOC',-- ARCH
+i_flg_nzd          => 'Y',
+i_flg_alert_default => 'N');
+END;
+/
+
+-- Create table
+create table COMPLAINT_INST_SOFT
+(
+id_complaint            NUMBER(24),
+id_institution          NUMBER(24),
+id_software             NUMBER(24),
+rank                    NUMBER(6) DEFAULT 10 NOT NULL,
+flg_available           VARCHAR2(1 CHAR) DEFAULT 'Y' NOT NULL,
+flg_gender              VARCHAR2(1 char),
+age_max                 NUMBER(6,2),
+age_min                 NUMBER(6,2),
+create_user             VARCHAR2(24 CHAR),
+create_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+create_institution      NUMBER(24),
+update_user             VARCHAR2(24 CHAR),
+update_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+update_institution      NUMBER(24))
+tablespace ALERT_DATA;
+-- Add comments to the table
+comment on table COMPLAINT_INST_SOFT
+is 'Available complaints on institution';
+
+comment on column COMPLAINT_INST_SOFT.id_complaint is 'Complaint ID';
+comment on column COMPLAINT_INST_SOFT.id_institution is 'Institution ID';
+comment on column COMPLAINT_INST_SOFT.id_software is 'Software ID';
+comment on column COMPLAINT_INST_SOFT.rank is 'Rank order';
+comment on column COMPLAINT_INST_SOFT.flg_available
+is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column COMPLAINT_INST_SOFT.flg_gender is 'Gender: F - Female ;M-Male;';
+comment on column COMPLAINT_INST_SOFT.age_max is 'Maximum age';
+comment on column COMPLAINT_INST_SOFT.age_min is 'Minimum age';
+comment on column COMPLAINT_INST_SOFT.create_user  is 'Creation User';
+comment on column COMPLAINT_INST_SOFT.create_time is 'Creation Time';
+comment on column COMPLAINT_INST_SOFT.create_institution  is 'Creation Institution';
+comment on column COMPLAINT_INST_SOFT.update_user is 'Update User';
+comment on column COMPLAINT_INST_SOFT.update_time is 'Update Time';
+comment on column COMPLAINT_INST_SOFT.update_institution is 'Update Institution';
+
+-- Add/modify columns
+alter table COMPLAINT_INST_SOFT modify id_complaint not null;
+alter table COMPLAINT_INST_SOFT modify id_institution not null;
+alter table COMPLAINT_INST_SOFT modify id_software not null;
+alter table COMPLAINT_INST_SOFT add id_complaint_alias NUMBER(24);
+-- Add comments to the columns
+comment on column COMPLAINT_INST_SOFT.id_complaint_alias
+is 'synonym for complaint';
+-- CHANGE END: Elisabete Bugalho

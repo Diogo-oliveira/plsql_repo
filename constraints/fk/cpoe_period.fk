@@ -1,0 +1,21 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 11/12/2009 00:23
+-- CHANGE REASON: [ALERT-61939] CPOE 2nd phase: versioning of CPOE feature for Diets and Hidrics
+alter table CPOE_PERIOD add constraint CPOEPR_INST_FK foreign key (ID_INSTITUTION) references INSTITUTION (ID_INSTITUTION);
+alter table CPOE_PERIOD add constraint CPOEPR_SOFT_FK foreign key (ID_SOFTWARE) references SOFTWARE (ID_SOFTWARE);
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 27/09/2011 12:10
+-- CHANGE REASON: [ALERT-185453] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -02275); -- when ORA-02275: such a referential constraint already exists in the table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_PERIOD add constraint CPOEPR_DEP_CLIN_FK foreign key (ID_DEP_CLIN_SERV) references DEP_CLIN_SERV (ID_DEP_CLIN_SERV)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+-- CHANGE END: Tiago Silva

@@ -1,0 +1,28 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 31/01/2013 12:32
+-- CHANGE REASON: [ALERT-250699] Migration of order sets with lab tests and exams tasks to the new architecture of predefined tasks
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE '
+create table ORDER_SET_TASK_MIGRATION
+(
+  ID_ORDER_SET          number(24)    not null,
+  ID_ORDER_SET_TASK     number(24)    not null,
+  ID_TASK_TYPE          number(24)    not null,
+  TASK_LINK_TYPE        varchar2(1)   not null,
+  ID_TASK_LINK          varchar2(200)
+)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('ORDER_SET_TASK_MIGRATION table already exists');
+END;
+/
+comment on table  ORDER_SET_TASK_MIGRATION is 'Order Set task migration table [ODSM]';
+comment on column ORDER_SET_TASK_MIGRATION.ID_ORDER_SET is 'Order set ID';
+comment on column ORDER_SET_TASK_MIGRATION.ID_ORDER_SET_TASK is 'Order set task ID';
+comment on column ORDER_SET_TASK_MIGRATION.ID_TASK_TYPE is 'Task type ID';
+comment on column ORDER_SET_TASK_MIGRATION.TASK_LINK_TYPE is 'Task link type flag';
+comment on column ORDER_SET_TASK_MIGRATION.ID_TASK_LINK is 'Task link ID';
+-- CHANGE END: Tiago Silva

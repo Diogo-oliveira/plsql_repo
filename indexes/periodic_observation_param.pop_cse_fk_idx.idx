@@ -1,0 +1,12 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 22/07/2011 17:52
+-- CHANGE REASON: [ALERT-189801] added clinical service index
+declare
+obj_exists exception;
+pragma exception_init(obj_exists, -00955);
+begin
+execute immediate 'create index pop_cse_fk_idx on periodic_observation_param (id_clinical_service)';
+exception when obj_exists then dbms_output.put_line('index pop_cse_fk_idx already exists!');
+end;
+/
+-- CHANGE END: Pedro Carneiro

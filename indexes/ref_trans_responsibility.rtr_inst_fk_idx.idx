@@ -1,0 +1,19 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/02/2013 12:19
+-- CHANGE REASON: [ALERT-251048] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_ind_columns i
+     WHERE i.table_name = 'REF_TRANS_RESPONSIBILITY'
+       AND i.column_name = 'ID_INSTITUTION';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'create index RTR_INST_FK_IDX on REF_TRANS_RESPONSIBILITY (ID_INSTITUTION)';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro

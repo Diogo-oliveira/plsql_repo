@@ -1,0 +1,38 @@
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 16:06
+-- CHANGE REASON: [ARCH-7603] - Changes on DB Model
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_CMPT_INST_REL add constraint DS_CMPT_INST_INST_FK foreign key ( id_INSTITUTION ) references alert_core_data.AB_institution ( id_ab_institution )';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_CMPT_INST_REL add constraint DS_CMPT_INST_SOFT_FK foreign key ( id_software ) references alert_core_data.AB_SOFTWARE( ID_AB_SOFTWARE )';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_CMPT_INST_REL add constraint DS_CMPT_INST_PRFT_FK foreign key ( id_profile_template ) references profile_template( id_profile_template )';
+pk_versioning.run( l_sql );
+end;
+/
+
+
+declare
+l_sql varchar2(1000 char);
+begin
+L_SQL := 'alter table DS_CMPT_INST_REL add constraint DS_CMPT_I_CMPT_MKT_FK foreign key ( id_ds_cmpt_mkt_rel, ID_DS_COMPONENT_PARENT, ID_DS_COMPONENT_CHILD ) references DS_CMPT_MKT_REL (id_ds_cmpt_mkt_rel, ID_DS_COMPONENT_PARENT, ID_DS_COMPONENT_CHILD)';
+pk_versioning.run( l_sql );
+end;
+/
+-- CHANGE END: Elisabete Bugalho

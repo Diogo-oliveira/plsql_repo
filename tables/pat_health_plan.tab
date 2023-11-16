@@ -1,0 +1,61 @@
+
+
+  CREATE TABLE PAT_HEALTH_PLAN
+   (	ID_PAT_HEALTH_PLAN NUMBER(24,0) NOT NULL ENABLE,
+	DT_HEALTH_PLAN DATE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_HEALTH_PLAN NUMBER(12,0) NOT NULL ENABLE,
+	NUM_HEALTH_PLAN VARCHAR2(30),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	BARCODE VARCHAR2(30),
+	FLG_DEFAULT VARCHAR2(1) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE pat_health_plan IS 'Serviços ou seguros de saúde de que usufrui o utente' ;
+
+COMMENT ON COLUMN pat_health_plan.dt_health_plan IS 'Data de validade do plano de saúde' ;
+COMMENT ON COLUMN pat_health_plan.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_health_plan.num_health_plan IS 'Nº do plano de saúde' ;
+COMMENT ON COLUMN pat_health_plan.flg_status IS 'Estado: A - activo, I - inactivo' ;
+COMMENT ON COLUMN pat_health_plan.barcode IS 'Código de barras' ;
+COMMENT ON COLUMN pat_health_plan.flg_default IS 'Plano escolhido por defeito' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_HEALTH_PLAN ADD DT_HEALTH_PLAN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_HEALTH_PLAN.DT_HEALTH_PLAN_TSTZ IS 'Data de validade do plano de sa£de'; 
+
+--coluna desnecessária
+alter table pat_health_plan drop column dt_health_plan_tstz;
+
+-- DDL - Adicionar coluna DESC_HEALTH_PLAN a PAT_HEALTH_PLAN 
+ALTER TABLE PAT_HEALTH_PLAN ADD (DESC_HEALTH_PLAN VARCHAR2(2000));
+
+COMMENT ON COLUMN PAT_HEALTH_PLAN.DESC_HEALTH_PLAN IS '"Other" health plan description';
+
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE PAT_HEALTH_PLAN ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN PAT_HEALTH_PLAN.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2020 18:02
+-- CHANGE REASON: [EMR-40083]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00942);
+BEGIN
+EXECUTE IMMEDIATE 'DROP TABLE pat_health_plan_old';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos

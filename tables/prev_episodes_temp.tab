@@ -1,0 +1,76 @@
+
+
+  CREATE TABLE PREV_EPISODES_TEMP
+   (	ID_EPISODE NUMBER(24,0),
+	SPEC_PROF VARCHAR2(200),
+	DT_BEGIN DATE,
+	DATE_TARGET VARCHAR2(200),
+	HOUR_TARGET VARCHAR2(200),
+	DISCH_TYPE VARCHAR2(200),
+	DIAG VARCHAR2(200),
+	CLIN_SERV VARCHAR2(200),
+	FLG_TYPE VARCHAR2(200),
+	DT_ORD1 VARCHAR2(200),
+	NUM_SESSION NUMBER
+
+   );
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PREV_EPISODES_TEMP ADD DT_BEGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+
+
+
+ALTER TABLE PREV_EPISODES_TEMP DROP COLUMN DT_BEGIN;
+
+
+
+
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PREV_EPISODES_TEMP add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column prev_episodes_temp.create_user IS 'Creation User';
+COMMENT ON column prev_episodes_temp.create_time IS 'Creation Time';
+COMMENT ON column prev_episodes_temp.create_institution IS 'Creation Institution';
+COMMENT ON column prev_episodes_temp.update_user IS 'Update User';
+COMMENT ON column prev_episodes_temp.update_time IS 'Update Time';
+COMMENT ON column prev_episodes_temp.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table prev_episodes_temp add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column prev_episodes_temp.create_user IS 'Creation User';
+COMMENT ON column prev_episodes_temp.create_time IS 'Creation Time';
+COMMENT ON column prev_episodes_temp.create_institution IS 'Creation Institution';
+COMMENT ON column prev_episodes_temp.update_user IS 'Update User';
+COMMENT ON column prev_episodes_temp.update_time IS 'Update Time';
+COMMENT ON column prev_episodes_temp.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

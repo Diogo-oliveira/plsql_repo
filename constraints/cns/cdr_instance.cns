@@ -1,0 +1,20 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:26
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+alter table CDR_INSTANCE
+  add constraint CDRI_PK primary key (ID_CDR_INSTANCE);
+alter table CDR_INSTANCE
+  add constraint CDRI_FLG_ORIGIN_CHK
+  check (FLG_ORIGIN in ('L', 'D'));
+alter table CDR_INSTANCE
+  add constraint CDRI_FLG_STATUS_CHK
+  check (FLG_STATUS in ('A', 'E', 'I', 'C'));
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 07/10/2011 15:22
+-- CHANGE REASON: [ALERT-198677] changes_ddl
+alter table CDR_INSTANCE
+  add constraint CDRI_FLG_AVAILABLE_CHK
+  check (FLG_AVAILABLE in ('Y', 'N'));
+-- CHANGE END: Pedro Carneiro

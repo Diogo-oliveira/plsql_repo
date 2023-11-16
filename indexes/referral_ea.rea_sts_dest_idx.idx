@@ -1,0 +1,21 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/09/2010 17:52
+-- CHANGE REASON: [ALERT-123405] Performance issue (replication)
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(4000);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_ind_columns
+     WHERE table_name = 'REFERRAL_EA'
+       AND index_name = 'REA_STS_DEST_IDX';
+
+    IF l_count = 0
+    THEN
+        l_sql := 'CREATE INDEX rea_sts_dest_idx ON referral_ea(flg_status, id_inst_dest)';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro

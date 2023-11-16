@@ -1,0 +1,67 @@
+
+
+  ALTER TABLE SYS_BUTTON_PROP ADD CONSTRAINT SBPP_PK PRIMARY KEY (ID_SYS_BUTTON_PROP) ENABLE;
+
+  ALTER TABLE SYS_BUTTON_PROP MODIFY (ID_SYS_BUTTON_PROP NOT NULL ENABLE);
+
+  ALTER TABLE SYS_BUTTON_PROP MODIFY (ID_SYS_BUTTON NOT NULL ENABLE);
+
+  ALTER TABLE SYS_BUTTON_PROP MODIFY (ID_SYS_APPLICATION_AREA NOT NULL ENABLE);
+
+  ALTER TABLE SYS_BUTTON_PROP MODIFY (ID_SYS_SCREEN_AREA NOT NULL ENABLE);
+
+  ALTER TABLE SYS_BUTTON_PROP MODIFY (FLG_VISIBLE NOT NULL ENABLE);
+
+
+  ALTER TABLE SYS_BUTTON_PROP MODIFY (RANK NOT NULL ENABLE);
+
+  ALTER TABLE SYS_BUTTON_PROP MODIFY (ID_SYS_APPLICATION_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE SYS_BUTTON_PROP MODIFY (FLG_ENABLED NOT NULL ENABLE);
+
+
+declare
+l_sql varchar2(4000);
+k_pl  VARCHAR2(0050 CHAR) := '''';
+begin
+
+l_sql := k_pl||'LEXT0054'||k_pl||','||k_pl||'LEXT0053'||k_pl||','||k_pl||'NXTLEVEL'||k_pl||','||k_pl||'LEXT0301'||k_pl||','||k_pl||'TV'||k_pl;
+l_sql := 'ALTER TABLE sys_button_prop ADD CONSTRAINT SBP_ACTION_CHK CHECK ( action IN ( '||l_sql||' ) )';
+pk_versioning.run(l_sql);
+end;
+/
+
+declare
+l_sql varchar2(4000);
+k_pl  VARCHAR2(0050 CHAR) := '''';
+begin
+
+l_sql := k_pl||'LEXT0054'||k_pl||','||k_pl||'LEXT0053'||k_pl||','||k_pl||'NXTLEVEL'||k_pl||','||k_pl||'LEXT0301'||k_pl||','||k_pl||'TV'||k_pl;
+l_sql := 'ALTER TABLE sys_button_prop ADD CONSTRAINT SBP_ACTION_CHK CHECK ( action IN ( '||l_sql||' ) ) NOVALIDATE';
+pk_versioning.run(l_sql);
+end;
+/
+
+
+begin
+pk_versioning.run('ALTER TABLE sys_button_prop DROP CONSTRAINT SBP_ACTION_CHK');
+end;
+/
+begin
+pk_versioning.run('ALTER TABLE sys_button_prop ADD CONSTRAINT SBP_ACTION_CHK CHECK (action IN (''LEXT0054'', ''LEXT0053'', ''NXTLEVEL'', ''LEXT0301'', ''LEXT0314'', ''TV''))');
+end;
+/
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 31/03/2021 09:44
+-- CHANGE REASON: [EMR-43558]
+begin
+pk_versioning.run('ALTER TABLE sys_button_prop DROP CONSTRAINT SBP_ACTION_CHK');
+end;
+/
+begin
+pk_versioning.run('ALTER TABLE sys_button_prop ADD CONSTRAINT SBP_ACTION_CHK CHECK (action IN (''LEXT0054'', ''LEXT0053'', ''NXTLEVEL'', ''LEXT0301'', ''LEXT0314'', ''LEXTURL'', ''TV''))');
+end;
+/
+-- CHANGE END: Ana Matos

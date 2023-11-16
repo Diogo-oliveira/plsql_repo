@@ -1,0 +1,45 @@
+create table FAST_TRACK_INSTITUTION
+(
+  ID_FAST_TRACK  NUMBER(24) NOT NULL,
+  ID_TRIAGE      NUMBER(24) NOT NULL,
+	ID_INSTITUTION NUMBER(24) NOT NULL
+);
+
+COMMENT ON TABLE FAST_TRACK_INSTITUTION IS 'Parametrization of fast tracks inside a given institution';
+
+COMMENT ON COLUMN FAST_TRACK_INSTITUTION.ID_FAST_TRACK IS 'Fast track ID';
+COMMENT ON COLUMN FAST_TRACK_INSTITUTION.ID_TRIAGE IS 'Triage ID';
+COMMENT ON COLUMN FAST_TRACK_INSTITUTION.ID_INSTITUTION IS 'Institution ID';
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 13/06/2016 15:37
+-- CHANGE REASON: [ALERT-322139] Issue Replication: Fast Tracks Manual Activation
+--                
+BEGIN
+  
+pk_versioning.run('ALTER TABLE ALERT.FAST_TRACK_INSTITUTION ADD FLG_ACTIVATION_TYPE VARCHAR2(1)');
+pk_versioning.run('ALTER TABLE ALERT.FAST_TRACK_INSTITUTION ADD RANK NUMBER(6)');
+pk_versioning.run('ALTER TABLE ALERT.FAST_TRACK_INSTITUTION ADD FLG_AVAILABLE VARCHAR2(1)');
+pk_versioning.run('ALTER TABLE ALERT.FAST_TRACK_INSTITUTION ADD FLG_PERMISSION VARCHAR2(1)');
+pk_versioning.run('ALTER TABLE ALERT.FAST_TRACK_INSTITUTION ADD CONSTRAINT FTI_FLG_ACTIVATION_TYPE_CHK CHECK (FLG_ACTIVATION_TYPE IN (''T'', ''M'')) ENABLE');
+pk_versioning.run('ALTER TABLE ALERT.FAST_TRACK_INSTITUTION ADD CONSTRAINT FTI_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N'')) ENABLE');
+pk_versioning.run('ALTER TABLE ALERT.FAST_TRACK_INSTITUTION ADD CONSTRAINT FTI_FLG_ACT_TYPE_ID_TRIAGE_CHK CHECK (CASE 
+  WHEN flg_activation_type = ''M'' AND id_triage = -1 THEN 1
+  WHEN flg_activation_type = ''T'' AND id_triage <> -1 THEN 1
+END = 1) ENABLE');
+END;
+/
+COMMENT ON COLUMN ALERT.FAST_TRACK_INSTITUTION.ID_TRIAGE IS 'Triage ID for triggering the fast track, -1 for manual activation (depends on FLG_ACTIVATION_TYPE)';
+COMMENT ON COLUMN ALERT.FAST_TRACK_INSTITUTION.FLG_ACTIVATION_TYPE IS 'Type of activation: ''M'' - manual, ''T'' - automatically triggered';
+COMMENT ON COLUMN ALERT.FAST_TRACK_INSTITUTION.RANK IS 'Rank for priority reasons, if none is defined the rank from the fast_track table will be assumed';
+COMMENT ON COLUMN ALERT.FAST_TRACK_INSTITUTION.FLG_AVAILABLE IS 'Availability of the record in the institution DB';
+COMMENT ON COLUMN ALERT.FAST_TRACK_INSTITUTION.FLG_PERMISSION IS 'Professional categories that can disable the fast track.';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 23/06/2016 14:48
+-- CHANGE REASON: [ALERT-322461 ] Fast track Manual activation - change column size
+alter table FAST_TRACK_INSTITUTION modify flg_permission VARCHAR2(10);
+-- CHANGE END: Elisabete Bugalho

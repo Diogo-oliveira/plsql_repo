@@ -1,0 +1,156 @@
+CREATE TABLE "ALERT"."REL_PAT_CLIN_SERV"                                                                                                                                                                                                                                                                  
+   (	"ID_PATIENT" NUMBER(24,0),                                                                                                                                                                                                                                                                             
+	"ID_CLINICAL_SERVICE" NUMBER(12,0),                                                                                                                                                                                                                                                                        
+	"ID_SOFTWARE" NUMBER(24,0),                                                                                                                                                                                                                                                                                
+	"ID_REL_PAT_CLIN_SERV" NUMBER(24,0)                                                                                                                                                                                                                                                                        
+   ) ;                                                                                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+-- Para adicionar colunas pode ser usado código comentado                                                                                                                                                                                                                                                   
+-- De momento só são suportados os tipos de dados mais comuns.                                                                                                                                                                                                                                              
+-- ALTER TABLE REL_PAT_CLIN_SERV ADD ID_PATIENT NUMBER(24,0) NOT NULL;                                                                                                                                                                                                                                      
+-- ALTER TABLE REL_PAT_CLIN_SERV ADD ID_CLINICAL_SERVICE NUMBER(12,0) NOT NULL;                                                                                                                                                                                                                             
+-- ALTER TABLE REL_PAT_CLIN_SERV ADD ID_SOFTWARE NUMBER(24,0) NOT NULL;                                                                                                                                                                                                                                     
+-- ALTER TABLE REL_PAT_CLIN_SERV ADD ID_REL_PAT_CLIN_SERV NUMBER(24,0) NOT NULL;                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                            
+   COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."ID_PATIENT" IS 'Patient';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+   COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."ID_CLINICAL_SERVICE" IS 'Clinical Service';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+   COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."ID_SOFTWARE" IS 'Software';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+   COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."ID_REL_PAT_CLIN_SERV" IS 'Chave';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+   COMMENT ON TABLE "ALERT"."REL_PAT_CLIN_SERV"  IS 'Relation Between Patient and Clinical Service';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+   COMMENT ON TABLE REL_PAT_CLIN_SERV  IS 'Relação entre paciente e serviço clínico para utilização no reset durante a criação de consultas';
+                
+alter table rel_pat_clin_serv add id_professional number;
+COMMENT ON COLUMN REL_PAT_CLIN_SERV.id_professional IS 'id do professional que realiza a consulta';
+
+alter table rel_pat_clin_serv add flg_create_visit varchar2(1);
+COMMENT ON COLUMN REL_PAT_CLIN_SERV.id_professional IS 'indica se uma visita para este paciente deve ser criada pelo reset';
+
+alter table rel_pat_clin_serv add rank number default 0 not null;
+COMMENT ON COLUMN REL_PAT_CLIN_SERV.id_professional IS 'ordem pela qual a tabela ser lida, que define a ordem pela qual as consultas são criadas';
+
+alter table rel_pat_clin_serv add reason_notes varchar2(2000);
+COMMENT ON COLUMN REL_PAT_CLIN_SERV.id_professional IS 'razão da consulta';
+
+alter table rel_pat_clin_serv drop column id_rel_pat_clin_serv;
+
+alter table rel_pat_clin_serv add id_institution number;
+comment on column rel_pat_clin_serv.id_institution is 'id da instituição de destino do episódio';
+  
+alter table rel_pat_clin_serv add id_department number;
+comment on column rel_pat_clin_serv.id_department is 'id do departamento de destino do episódio';
+  
+alter table rel_pat_clin_serv add id_sch_event number;
+comment on column rel_pat_clin_serv.id_department is 'tipo de evento da agenda';
+  
+alter table rel_pat_clin_serv add id_room number;
+comment on column rel_pat_clin_serv.id_department is 'sala de destino do episódio';
+  
+alter table reset_epis_preserve add lock_reason varchar2(200);
+comment on column rel_pat_clin_serv.id_department is 'string de uso interno que indica como este episódio foi bloqueado';
+
+alter table rel_pat_clin_serv add id_sr_intervention number;
+comment on column rel_pat_clin_serv.id_sr_intervention is 'Id da cirurgia no caso do ORIS - opcional';
+
+---- ANA COELHO 26/05/2009
+drop table REL_PAT_CLIN_SERV;
+
+CREATE TABLE "ALERT"."REL_PAT_CLIN_SERV" 
+   (	"ID_PATIENT" NUMBER(24,0), 
+	"ID_CLINICAL_SERVICE" NUMBER(12,0), 
+	"ID_SOFTWARE" NUMBER(24,0) NOT NULL ENABLE, 
+	"ID_PROFESSIONAL" NUMBER, 
+	"FLG_CREATE_VISIT" VARCHAR2(1) DEFAULT 'Y' NOT NULL ENABLE, 
+	"RANK" NUMBER DEFAULT 0 NOT NULL ENABLE, 
+	"REASON_NOTES" VARCHAR2(2000), 
+	"ID_INSTITUTION" NUMBER NOT NULL ENABLE, 
+	"ID_DEPARTMENT" NUMBER, 
+	"ID_SCH_EVENT" NUMBER, 
+	"ID_ROOM" NUMBER, 
+	"ID_SR_INTERVENTION" NUMBER, 
+	"CREATE_USER" VARCHAR2(24), 
+	"CREATE_TIME" TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+	"CREATE_INSTITUTION" NUMBER(24,0), 
+	"UPDATE_USER" VARCHAR2(24), 
+	"UPDATE_TIME" TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+	"UPDATE_INSTITUTION" NUMBER(24,0), 
+	"GENDER" VARCHAR2(1), 
+	"DT_BIRTH" DATE, 
+	"POSTAL_CODE" VARCHAR2(8), 
+	"CITY" VARCHAR2(200), 
+	"NUM_CLIN_RECORD" VARCHAR2(200), 
+	"FIRST_NAME" VARCHAR2(200), 
+	"FLG_CREATE_PATIENT" VARCHAR2(1) DEFAULT 'Y', 
+	"ID_COUNTRY_NATION" VARCHAR2(19), 
+	"ID_LANGUAGE" VARCHAR2(1) DEFAULT 2, 
+	"MIDDLE_NAME" VARCHAR2(200), 
+	"LAST_NAME" VARCHAR2(200), 
+	"INITIALS" VARCHAR2(30), 
+	"TITLE" VARCHAR2(10), 
+	"SUFFIX" VARCHAR2(10) 
+   ); 
+
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."ID_PATIENT" IS 'Patient';
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."ID_CLINICAL_SERVICE" IS 'Clinical Service';
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."ID_SOFTWARE" IS 'Software';
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."ID_PROFESSIONAL" IS 'razão da consulta';
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."ID_INSTITUTION" IS 'id da instituição de destino do episódio';
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."ID_DEPARTMENT" IS 'string de uso interno que indica como este episódio foi bloqueado';
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."ID_SR_INTERVENTION" IS 'Id da cirurgia no caso do ORIS - opcional';
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."CREATE_USER" IS 'Creation User';
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."CREATE_TIME" IS 'Creation Time';
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."CREATE_INSTITUTION" IS 'Creation Institution';
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."UPDATE_USER" IS 'Update User';
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."UPDATE_TIME" IS 'Update Time';
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."UPDATE_INSTITUTION" IS 'Update Institution';
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."GENDER" IS 'Gender: F - Female; M - Male; I - Undetermined';
+COMMENT ON COLUMN "ALERT"."REL_PAT_CLIN_SERV"."FLG_CREATE_PATIENT" IS 'FLG_CREATE_PATIENT: Y - Create this patient; N - Don''t create this patient';
+COMMENT ON TABLE "ALERT"."REL_PAT_CLIN_SERV"  IS 'Relação entre paciente e serviço clínico para utilização no reset durante a criação de consultas';
+
+
+--- ANA COELHO 30/07/2009
+alter table rel_pat_clin_serv drop column ID_LANGUAGE;
+alter table rel_pat_clin_serv add ID_LANGUAGE number(6);
+
+-- CHANGED BY: Ana Coelho
+-- CHANGED DATE: 2009-09-14
+-- CHANGED REASON: ALERT-43002
+
+ALTER TABLE REL_PAT_CLIN_SERV MODIFY 
+   ( 
+   ID_DEPARTMENT NUMBER not null,
+   GENDER VARCHAR2(1) not  null,
+   DT_BIRTH DATE not null,
+   NUM_CLIN_RECORD VARCHAR2(200) not null,
+   FIRST_NAME VARCHAR2(200) not null,
+   LAST_NAME VARCHAR2(200) not null,
+   FLG_CREATE_PATIENT VARCHAR2(1) not null
+   )
+;
+
+-- CHANGED END: Ana Coelho
+
+
+-- CHANGED BY: Ana Coelho
+-- CHANGED DATE: 2009-10-06
+alter table rel_pat_clin_serv add (account_number varchar2(30));
+-- CHANGED END: Ana Coelho
+
+
+-- CHANGED BY: Ana Coelho
+-- CHANGED DATE: 2009-10-28
+alter table rel_pat_clin_serv
+drop column city;
+
+alter table rel_pat_clin_serv
+drop column postal_code;
+
+alter table rel_pat_clin_serv
+drop column id_country_nation;
+-- CHANGED END: Ana Coelho
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/07/2017 14:08
+-- CHANGE REASON: [ALERT-331061]
+ALTER TABLE REL_PAT_CLIN_SERV DROP CONSTRAINT RPCS_SR_INTERV_FK;
+ALTER TABLE REL_PAT_CLIN_SERV ADD CONSTRAINT RPCS_SR_INTERV_FK FOREIGN KEY (ID_SR_INTERVENTION) REFERENCES INTERVENTION (ID_INTERVENTION);
+-- CHANGE END: Pedro Henriques

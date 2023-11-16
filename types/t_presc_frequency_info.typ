@@ -1,0 +1,21 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGED DATE: 2009-JUL-27
+-- CHANGING REASON: posologias irregulares
+CREATE OR REPLACE TYPE t_presc_frequency_info AS OBJECT
+(
+  ID_PRESC_FREQUENCY      NUMBER(24),
+  ID_PRESC_FREQUENCY_TYPE NUMBER(24),
+  CODE_PRESC_FREQUENCY    VARCHAR2(50),
+  INTERNAL_NAME           VARCHAR2(255),
+  NTAKE_VALUE             NUMBER(24,4),
+  NTAKE_VALUE_UNIT        NUMBER(24),
+  NTAKE_PER_UNIT          VARCHAR2(1),
+  NTAKE_DENOMINATOR_VALUE NUMBER(24,4),
+  EXACT_TIME              NUMBER(24,4),
+  EXACT_TIME_UNIT         NUMBER(24),
+  EXACT_VALUE             NUMBER(24),
+  ID_PARENT				  number(24),
+  PARITY				  varchar2(1),
+  FLG_MEAL				  varchar2(1)
+);
+-- CHANGE END Pedro Albuquerque

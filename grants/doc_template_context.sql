@@ -1,0 +1,24 @@
+-- CHANGED BY:  luis.r.silva
+-- CHANGE DATE: 28/05/2014 10:54
+-- CHANGE REASON: [ALERT-281087] 
+grant select,insert,update,delete on doc_template_context to alert_apex_tools;
+-- CHANGE END:  luis.r.silva
+
+-- CHANGED BY: luis.fernandes
+-- CHANGE DATE: 29/06/2017 15:05
+-- CHANGE REASON: [ALERT-331729] 
+grant select, insert, delete on alert.doc_template_context to alert_apex_tools_content;
+-- CHANGE END: luis.fernandes
+
+
+-- CHANGED BY: Ana Moita
+-- CHANGED DATE: 2018-7-26
+-- CHANGED REASON: CEMR-1903
+
+-- CHANGED BY: Kelsey Lai
+-- CHANGE DATE: 2018-06-01
+-- CHANGE REASON: [CEMR-1632] [Subtask] [CNT] DB alert_core_cnt.doc_template and alert_core_cnt_api.pk_cnt_doc_template
+grant select, insert, update on alert.doc_template_context to alert_core_cnt with grant option;
+-- CHANGE END: Kelsey Lai
+
+-- CHANGE END: Ana Moita

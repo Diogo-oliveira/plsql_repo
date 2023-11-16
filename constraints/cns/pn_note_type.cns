@@ -1,0 +1,207 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:28
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table pn_note_type
+  add constraint pnnt_pk primary key (id_pn_note_type);
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 09:58
+-- CHANGE REASON: H&P phase2
+alter table pn_note_type
+  add constraint pnnt_pk primary key (id_pn_note_type);
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:10
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table pn_note_type
+  add constraint pnnt_pk primary key (id_pn_note_type);
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/05/2012 15:09
+-- CHANGE REASON: [ALERT-230524 ] Recheck
+DECLARE
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint    
+BEGIN
+    ----------------------------------    
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type drop constraint PNT_FLG_TASK_CHK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/05/2012 15:09
+-- CHANGE REASON: [ALERT-230524 ] Recheck
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_note_type
+  add constraint PNT_FLG_TASK_CHK
+  check (FLG_TASK IN (''HP'', ''PN'', ''DS''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 04/07/2013 17:04
+-- CHANGE REASON: [ALERT-259145 ] EDIS nurse single page
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists1, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type  add constraint pnt_flg_viewer_type_chk  check (flg_viewer_type IN (''M'',''N''))';
+    EXCEPTION
+        WHEN e_object_exists1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 22/01/2014 16:28
+-- CHANGE REASON: [ALERT-274395] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists1, -02264);
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists 
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type drop constraint pnt_flg_viewer_type_chk';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type  add constraint pnt_flg_viewer_type_chk  check (flg_viewer_type IN (''M'',''N'',''U'',''T''))';
+    EXCEPTION
+        WHEN e_object_exists1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 09/09/2014 14:04
+-- CHANGE REASON: [ALERT-294812] Single Page note for Ambulatory - versioning DML
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists1, -02264);
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists 
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type drop constraint pnt_flg_viewer_type_chk';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type  add constraint pnt_flg_viewer_type_chk  check (flg_viewer_type IN (''M'',''N'',''U'',''T'',''G''))';
+    EXCEPTION
+        WHEN e_object_exists1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY:  
+-- CHANGE DATE: 06/11/2014 15:45
+-- CHANGE REASON: [ALERT-300994] ALERT-300994 versioning ddl
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists1, -02264);
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists 
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type drop constraint pnt_flg_viewer_type_chk';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type  add constraint pnt_flg_viewer_type_chk  check (flg_viewer_type IN (''M'',''N'',''U'',''T'',''G'',''P''))';
+    EXCEPTION
+        WHEN e_object_exists1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+-- CHANGE END:
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 19/05/2016 11:16
+-- CHANGE REASON: [ALERT-321433] 
+DECLARE
+    e_object_exists3 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists3, -02264);
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_note_type
+  add constraint pnt_flg_type_chk
+  check (flg_type IN (''S'',''F''))';
+    EXCEPTION
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 29/11/2019 11:02
+-- CHANGE REASON: [EMR-23911] - MHH | Religious Councelor profile
+alter table PN_NOTE_TYPE
+drop constraint PNT_FLG_VIEWER_TYPE_CHK;
+
+alter table PN_NOTE_TYPE
+add constraint PNT_FLG_VIEWER_TYPE_CHK
+check (flg_viewer_type IN ('M','N','U','T','G','P','S','H','F','E','I'));
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 13/12/2019 08:42
+-- CHANGE REASON: [EMR-24295] - MHH | Mental Rehabilitation Therapist profile
+alter table PN_NOTE_TYPE
+drop constraint PNT_FLG_VIEWER_TYPE_CHK;
+
+alter table PN_NOTE_TYPE
+add constraint PNT_FLG_VIEWER_TYPE_CHK
+check (flg_viewer_type IN ('M','N','U','T','G','P','S','H','F','E','I','B'));
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/07/2022 12:38
+-- CHANGE REASON: [EMR-53889] -  [Subtask] New single page "Follow-up request"
+alter table PN_NOTE_TYPE
+drop constraint PNT_FLG_VIEWER_TYPE_CHK;
+alter table PN_NOTE_TYPE
+add constraint PNT_FLG_VIEWER_TYPE_CHK
+check (flg_viewer_type IN ('M','N','U','T','G','P','S','H','F','E','I','B','R'));
+-- CHANGE END: Elisabete Bugalho

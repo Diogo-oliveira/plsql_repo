@@ -1,0 +1,79 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 15:06
+-- CHANGE REASON: [ARCH-7603] Changes on DB Model
+--                
+BEGIN
+pk_frmw_objects.insert_into_frmw_objects(
+     i_owner            => 'ALERT',
+     i_obj_name         => 'DS_DEF_EVENT_INST',
+     i_obj_type         => 'TABLE',
+     i_flg_category     => 'PRM', --dsv
+     i_delete_script    => '',
+     i_responsible_team => 'CDOC',-- ARCH
+     i_flg_nzd          => 'N');
+END;
+/  
+
+-- Create table
+create table DS_DEF_EVENT_INST
+  (
+  id_def_event_inst  NUMBER(24) not null,
+  id_ds_cmpt_inst_rel NUMBER(24) not null,
+  id_ds_cmpt_mkt_rel NUMBER(24) not null,
+  flg_event_type     VARCHAR2(1 CHAR) not null,
+  id_action          NUMBER(24) not null,
+  create_user        VARCHAR2(30 CHAR),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(30 CHAR),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+  ) tablespace ALERT_DATA;
+  
+-- Add comments to the table 
+comment on table  DS_DEF_EVENT_INST                      is 'Table for dynamic screens components default properties';
+comment on column DS_DEF_EVENT_INST.id_def_event_inst    is 'Dynamic screens components default properties Id';
+comment on column DS_DEF_EVENT_INST.id_ds_cmpt_inst_rel  is 'Dynamic screens components relation Id';
+comment on column DS_DEF_EVENT_INST.flg_event_type       is 'Type of event (I - Inactivate / A - Activate / M - Activate and set to Mandatory / E - Exclusive - context defined in sys_domain)';
+comment on column DS_DEF_EVENT_INST.id_action            is 'Action associated by default';
+comment on column DS_DEF_EVENT_INST.create_user          is 'Professional that created the registry';
+comment on column DS_DEF_EVENT_INST.create_time          is 'Date of the registry creation';
+comment on column DS_DEF_EVENT_INST.create_institution   is 'Id of the institution where the registry was created';
+comment on column DS_DEF_EVENT_INST.update_user          is 'Last professional that updated the registry';
+comment on column DS_DEF_EVENT_INST.update_time          is 'Date of the last update to the registry';
+comment on column DS_DEF_EVENT_INST.update_institution   is 'Id of the last institution where the registry was updated';
+-- Create/Recreate primary, unique and foreign key constraints 
+
+
+declare
+  l_sql varchar2(1000 char);
+begin
+  l_sql := 'alter table DS_DEF_EVENT_INST  add constraint DSDE_ISNT_PK primary key (id_def_event_inst)  using index tablespace ALERT_IDX';
+  pk_versioning.run( l_sql );
+end;
+/
+
+declare
+  l_sql varchar2(1000 char);
+begin
+  l_sql := 'alter table DS_DEF_EVENT_INST  add constraint DSDE_I_DSDE_I_UK unique (id_ds_cmpt_inst_rel, id_ds_cmpt_mkt_rel, id_action) using index tablespace ALERT_IDX';
+  pk_versioning.run( l_sql );
+end;
+/
+  
+declare
+  l_sql varchar2(1000 char);
+begin
+  l_sql := 'alter table DS_DEF_EVENT_INST add constraint DSDE_I_DS_CMPT_I_FK foreign key ( ID_DS_CMPT_INST_REL ) references DS_CMPT_INST_REL (ID_DS_CMPT_INST_REL)';
+  pk_versioning.run( l_sql );
+end;
+/
+
+declare
+  l_sql varchar2(1000 char);
+begin
+  l_sql := 'alter table DS_DEF_EVENT_INST add constraint DSDE_I_DS_EVT_ACT_FK foreign key ( ID_DS_CMPT_MKT_REL, id_action ) references DS_DEF_EVENT (ID_DS_CMPT_MKT_REL, id_action)';
+  pk_versioning.run( l_sql );
+end;
+/
+-- CHANGE END: Elisabete Bugalho

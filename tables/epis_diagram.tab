@@ -1,0 +1,81 @@
+create table EPIS_DIAGRAM
+(
+  ID_EPIS_DIAGRAM NUMBER(24) not null,
+  FLG_STATUS      VARCHAR2(1) not null,
+  DT_CREATION     DATE not null,
+  ADW_LAST_UPDATE DATE not null,
+  ID_EPISODE      NUMBER(24) not null,
+  DIAGRAM_ORDER   NUMBER(24) not null
+);
+  
+comment on table EPIS_DIAGRAM
+  is 'Diagramas dos episódios';
+comment on column EPIS_DIAGRAM.ID_EPIS_DIAGRAM
+  is 'Chave primária';
+comment on column EPIS_DIAGRAM.FLG_STATUS
+  is 'Status do diagrama:O - Open; C -Close';
+comment on column EPIS_DIAGRAM.DT_CREATION
+  is 'Data da criação do diagrama';
+comment on column EPIS_DIAGRAM.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+comment on column EPIS_DIAGRAM.ID_EPISODE
+  is 'Episódio';
+comment on column EPIS_DIAGRAM.DIAGRAM_ORDER
+  is 'Número de sequência do diagrama no episódio.';
+alter table epis_diagram 
+add (dt_creation_tstz timestamp with local time zone); 
+
+--CHANGED BY: Ariel Geraldo Machado
+--CHANGE DATE: 2008-SEP-16
+--CHANGE REASON: Database denormalization
+ALTER TABLE epis_diagram add id_patient NUMBER(24);
+COMMENT ON column epis_diagram.id_patient IS 'Patient ID';
+--CHANGE END
+
+ALTER TABLE EPIS_DIAGRAM DROP COLUMN DT_CREATION;
+
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 10:00
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table EPIS_DIAGRAM
+  is 'Episode''s diagrams';
+-- Add comments to the columns 
+comment on column EPIS_DIAGRAM.id_epis_diagram
+  is 'Primary key';
+comment on column EPIS_DIAGRAM.flg_status
+  is 'Diagram status: O - Open; C -Close';
+comment on column EPIS_DIAGRAM.adw_last_update
+  is 'Date of last change';
+comment on column EPIS_DIAGRAM.id_episode
+  is 'Id episode';
+comment on column EPIS_DIAGRAM.diagram_order
+  is 'Sequence number of diagram in the episode';
+comment on column EPIS_DIAGRAM.dt_creation_tstz
+  is 'Date of register creation';
+comment on column EPIS_DIAGRAM.id_patient
+  is 'Patient ID';
+comment on column EPIS_DIAGRAM.create_user
+  is 'Creation User';
+comment on column EPIS_DIAGRAM.create_time
+  is 'Creation Time';
+comment on column EPIS_DIAGRAM.create_institution
+  is 'Creation Institution';
+comment on column EPIS_DIAGRAM.update_user
+  is 'Update User';
+comment on column EPIS_DIAGRAM.update_time
+  is 'Update Time';
+comment on column EPIS_DIAGRAM.update_institution
+  is 'Update Institution';
+-- CHANGE END: Renato Nunes
+
+-- CHANGED BY: rui.mendonca
+-- CHANGE DATE: 11/11/2017 15:30
+-- CHANGE REASON: [CALERT-712] Body diagrams improvements
+BEGIN
+    pk_versioning.run('ALTER TABLE epis_diagram ADD dt_last_update_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE');
+END;
+/
+COMMENT ON COLUMN epis_diagram.dt_last_update_tstz IS 'Last update date';
+-- CHANGE END: rui.mendonca

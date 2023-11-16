@@ -1,0 +1,31 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 02/10/2013 15:31
+-- CHANGE REASON: [ALERT-266183 ] Intake and output improvements
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE epis_hd_line_group
+ ADD (CONSTRAINT EHLG_PK PRIMARY KEY 
+  (ID_EPIS_HD_LINE_GROUP))';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE epis_hd_line_group
+ADD (CONSTRAINT EHLG_FLG_SHOW_PARAM_GRID_CHK CHECK (FLG_SHOW_PARAMETERS_GRID in (''Y'', ''N'')))';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE epis_hd_line_group
+ADD (CONSTRAINT EHLG_FLG_STATUS_CHK CHECK (FLG_STATUS in (''A'', ''C'')))';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

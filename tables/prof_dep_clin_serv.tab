@@ -1,0 +1,49 @@
+
+
+  CREATE TABLE PROF_DEP_CLIN_SERV
+   (	ID_PROF_DEP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_DEP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	FLG_DEFAULT VARCHAR2(1) DEFAULT 'N'
+   );
+
+
+COMMENT ON COLUMN prof_dep_clin_serv.flg_status IS 'S (selected) - seleccionado pelo user no Tools. D - não seleccionado, mas disponível para selecção' ;
+
+ALTER TABLE PROF_DEP_CLIN_SERV 
+ ADD (ID_INSTITUTION NUMBER(24)
+ );
+
+COMMENT ON COLUMN PROF_DEP_CLIN_SERV.ID_INSTITUTION IS 'Instituion''s ID';
+
+alter table prof_dep_clin_serv add DT_CREATION  timestamp with local time zone;
+COMMENT ON COLUMN prof_dep_clin_serv.DT_CREATION IS 'Creation date';
+
+
+
+ALTER TABLE Prof_Dep_Clin_Serv ADD (ID_SOFTWARE NUMBER(24));
+comment on column Prof_Dep_Clin_Serv.ID_SOFTWARE is 'ID do software'; 
+
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 2008/10/20
+-- CHANGE REASON: Revert denormalization task
+ALTER TABLE prof_dep_clin_serv DROP COLUMN id_software;
+-- CHANGE END
+
+-- cmf 18-01-2016
+COMMENT ON TABLE  ALERT.PROF_DEP_CLIN_SERV 						IS 'Services where professionals are allocated' ;
+COMMENT ON COLUMN ALERT.PROF_DEP_CLIN_SERV.ID_PROF_DEP_CLIN_SERV IS 'Primary Key' ;
+COMMENT ON COLUMN ALERT.PROF_DEP_CLIN_SERV.ID_PROFESSIONAL   	IS 'S (selected) - seleccionado pelo user no Tools. D - não seleccionado, mas disponível para selecção' ;
+COMMENT ON COLUMN ALERT.PROF_DEP_CLIN_SERV.ID_DEP_CLIN_SERV   	IS 'Dep_clin_serv id' ;
+COMMENT ON COLUMN ALERT.PROF_DEP_CLIN_SERV.FLG_DEFAULT   		IS 'Service allocated to professional is default service' ;
+COMMENT ON COLUMN ALERT.PROF_DEP_CLIN_SERV.FLG_STATUS   		IS 'S (selected) - selected by user in "Tools". D - not selected, but available for selection' ;
+
+
+COMMENT ON TABLE  ALERT.PROF_DEP_CLIN_SERV                         IS 'Services where professionals are allocated' ;
+COMMENT ON COLUMN ALERT.PROF_DEP_CLIN_SERV.ID_PROF_DEP_CLIN_SERV IS 'Primary Key' ;
+COMMENT ON COLUMN ALERT.PROF_DEP_CLIN_SERV.ID_PROFESSIONAL       IS 'Allocated Professional id' ;
+COMMENT ON COLUMN ALERT.PROF_DEP_CLIN_SERV.ID_DEP_CLIN_SERV       IS 'Dep_clin_serv id' ;
+COMMENT ON COLUMN ALERT.PROF_DEP_CLIN_SERV.FLG_DEFAULT           IS 'Service allocated to professional is default service' ;
+COMMENT ON COLUMN ALERT.PROF_DEP_CLIN_SERV.FLG_STATUS           IS 'S (selected) - selected by user in "Tools". D - not selected, but available for selection' ;

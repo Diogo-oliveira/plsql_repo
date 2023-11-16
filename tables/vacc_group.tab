@@ -1,0 +1,67 @@
+
+create table VACC_GROUP
+(
+  ID_VACC_GROUP   NUMBER(12) not null,
+  ID_VACC         NUMBER(12) not null,
+  CODE_VACC_GROUP VARCHAR2(200),
+  RANK            NUMBER(5),
+  ADW_LAST_UPDATE DATE not null
+);
+
+
+comment on table VACC_GROUP is 'Esta tabela contem os grupos de vacinas';
+
+comment on column VACC_GROUP.ID_VACC_GROUP is 'Chave primária';
+comment on column VACC_GROUP.ID_VACC is 'id_vaccine';
+comment on column VACC_GROUP.CODE_VACC_GROUP is 'Código do Grupo de Vacinas';
+comment on column VACC_GROUP.RANK is 'Ordem do Grupo de Vacinas';
+comment on column VACC_GROUP.ADW_LAST_UPDATE is 'Data da última alteração';
+
+-- CHANGED BY: Teresa Coutinho
+-- CHANGE REASON: Acrescentar ID_VACC_TYPE_GROUP na tabela
+-- CHANGE DATE: 2007/09/14
+-- Add/modify columns 
+alter table VACC_GROUP add ID_VACC_TYPE_GROUP NUMBER(12);
+
+  
+-- Add comments to the columns 
+ comment on column VACC_GROUP.ID_VACC_TYPE_GROUP
+  is 'Id do tipo de grupo (PNV ou outros, etc....)';
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2009-05-04
+-- CHANGE REASON: ALERT-26735
+alter table vacc_group modify (ID_VACC_GROUP NUMBER(24));
+alter table vacc_group modify (ID_VACC NUMBER(24));
+alter table vacc_group modify (ID_VACC_TYPE_GROUP NUMBER(24));
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2009-05-13
+-- CHANGE REASON: ALERT-28196
+alter table vacc_group drop column ADW_LAST_UPDATE;
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2010-10-06
+-- CHANGE REASON: ALERT-129782
+BEGIN
+    EXECUTE IMMEDIATE 'drop TRIGGER b_iud_vacc_group';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table alert.vacc_group drop column code_vacc_group';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END

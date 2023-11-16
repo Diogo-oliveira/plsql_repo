@@ -1,0 +1,103 @@
+
+
+  CREATE TABLE REP_PROF_EXCEPTION
+   (	ID_REP_PROF_EXCEPTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_REPORTS NUMBER(24,0),
+	FLG_AREA_REPORT VARCHAR2(2),
+	ID_REP_PROFILE_TEMPLATE_DET NUMBER(24,0),
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0),
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+
+COMMENT ON TABLE rep_prof_exception IS 'Tabela de excepções dos acessos dos profissionais aos relatórios. Nesta tabela parametrizam-se todas as excepções (adicionar ou remover) de acessos para além dos que constituem os templates atribuídos ao utilizador' ;
+
+COMMENT ON COLUMN rep_prof_exception.flg_area_report IS 'Área na qual será alocado o relatório. R-Reports;OD-Ongoing Documents; C-Consents;CR-Certificates;F-Forms;L-Lables' ;
+COMMENT ON COLUMN rep_prof_exception.id_rep_profile_template_det IS 'Deve ser utilizado em vez do conjunto id_report+flg_area_report para remover acessos a reports' ;
+COMMENT ON COLUMN rep_prof_exception.flg_type IS 'Indica se adiciona ou retira acessos a um determinado report no ecrã. Valores possíveis: A- Adiciona, R- Retira' ;
+COMMENT ON COLUMN rep_prof_exception.rank IS 'Ordem de visualização' ;
+
+
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 2009/06/25 08:49
+-- CHANGE REASON: ALERT-21066 [Nas grelhas de pacientes do INP apenas deveria estar disponível o relatório de dietas]
+--                ALERT-31270 [Adapting source code and configurations of the PK_PRINT_OOL.get_reports_list]
+
+-- Add/modify columns 
+alter table REP_PROF_EXCEPTION add ID_REP_SCREEN NUMBER(24);
+-- Add comments to the columns 
+comment on column REP_PROF_EXCEPTION.ID_REP_SCREEN
+  is 'Foreign Key to REP_SCREEN table';
+
+
+-- CHANGE END: Filipe Machado  
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 2009/06/25 08:49
+-- CHANGE REASON: ALERT-41967
+-- CHANGE VERSION: 2.5.0.6              
+
+
+-- Add/modify columns 
+alter table REP_PROF_EXCEPTION modify ID_PROFESSIONAL  null;
+
+-- CHANGE END: Filipe Machado  
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON TABLE REP_PROF_EXCEPTION IS 'Table exceptions of access for professionals to the reports. This table parameterize all access exceptions (adding or removing) beyond the templates which are assigned to the user';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON COLUMN REP_PROF_EXCEPTION.ID_REP_PROF_EXCEPTION IS 'Primary Key';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.ID_REPORTS IS 'Report Identifier';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.FLG_AREA_REPORT IS 'Area where the report should be allocated. R- Reports, RCM- Reports Crisis, E-Editable reports, OD-Ongoing Documents, C-Consents, CCM-ConsentsCrisis, CR-Certificates, CRCM-Certificates Crisis, F-Forms, L-Lables, DE-Documents produced in this episode, S- Save To';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.ID_REP_PROFILE_TEMPLATE_DET IS 'Must be used insted of the id_report+flg_area_report to remove reports access';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.ID_PROFESSIONAL IS 'Professional Identifier';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.FLG_TYPE IS 'Flag about access permissions on a specific report on a specific screen. Possible values: A- Add, R- Remove';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.RANK IS 'Line-up';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.ID_INSTITUTION IS 'Institution Identifier';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.ID_SOFTWARE IS 'Software Identifier';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.ADW_LAST_UPDATE IS 'ADW Last Episode';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 04/12/2020 16:47
+-- CHANGE REASON: [EMR-39495]
+ALTER TABLE rep_prof_exception ADD FLG_DISCLOSURE VARCHAR2(1 CHAR);
+ALTER TABLE rep_prof_exception MODIFY FLG_DISCLOSURE DEFAULT 'N';
+
+COMMENT ON COLUMN REP_PROF_EXCEPTION.ID_REP_PROF_EXCEPTION IS 'Primary key';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.ID_REPORTS IS 'Report ID';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.FLG_AREA_REPORT IS 'Flag that indicates the report area. R - Reports; RCM - Reports (Crisis machine); E - Editable reports, OD - Ongoing Documents; C - Consents, CCM - Consents (Crisis machine); CR - Certificates; CRCM - Certificates (Crisis machine); F - Forms; L - Labels; DE - Documents produced in this episode; S - Save To';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.ID_REP_PROFILE_TEMPLATE_DET IS 'Report profile template ID (when id_report and flg_area_report = NULL)';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.ID_PROFESSIONAL IS 'Professional Identifier';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.FLG_TYPE IS 'Access type: A - add access; R - remove access';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.RANK IS 'Rank';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.ID_SOFTWARE IS 'Software ID';
+COMMENT ON COLUMN REP_PROF_EXCEPTION.ADW_LAST_UPDATE IS 'Update date';
+COMMENT ON COLUMN rep_prof_exception.FLG_DISCLOSURE IS 'Flag that indicates if the the disclaimer for "Confidential Health Information" is available or not (Y/N)';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/05/2021 12:12
+-- CHANGE REASON: [EMR-45192]
+ALTER TABLE rep_prof_exception ADD id_rep_profile_template NUMBER(12);
+ALTER TABLE rep_prof_exception MODIFY(
+FLG_AREA_REPORT VARCHAR(2 CHAR),
+FLG_TYPE VARCHAR(1 CHAR),
+CREATE_USER VARCHAR(24 CHAR),
+UPDATE_USER VARCHAR(24 CHAR));
+
+COMMENT ON COLUMN rep_prof_exception.id_rep_profile_template IS 'Report profile template ID';
+-- CHANGE END: Ana Matos

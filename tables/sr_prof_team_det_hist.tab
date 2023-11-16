@@ -1,0 +1,152 @@
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 06/12/2011 10:58
+-- CHANGE REASON: [ALERT-208518] 
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -00955);
+
+BEGIN
+   BEGIN
+
+EXECUTE IMMEDIATE 'create table SR_PROF_TEAM_DET_HIST
+(
+  id_sr_prof_team_det_hist NUMBER(24) not null,
+  id_sr_prof_team_det NUMBER(24) not null,
+  flg_status_hist     VARCHAR2(1) not null,
+  id_sr_epis_interv_hist   NUMBER(24) not null,  
+  id_surgery_record   NUMBER(24),
+  id_episode          NUMBER(24) not null,
+  id_prof_team_leader NUMBER(24) not null,
+  id_professional     NUMBER(24) not null,
+  id_category_sub     NUMBER(12) not null,
+  id_prof_team        NUMBER(24),
+  flg_status          VARCHAR2(1),
+  id_prof_reg         NUMBER(24),
+  id_prof_cancel      NUMBER(24),
+  dt_begin_tstz       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_end_tstz         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_reg_tstz         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_cancel_tstz      TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  id_episode_context  NUMBER(24),
+  create_user         VARCHAR2(24),
+  create_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution  NUMBER(24),
+  update_user         VARCHAR2(24),
+  update_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution  NUMBER(24)
+)';
+
+ EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+comment on column SR_PROF_TEAM_DET_HIST.id_sr_prof_team_det_hist
+  is 'ID único';
+comment on column SR_PROF_TEAM_DET_HIST.id_sr_prof_team_det
+  is 'ID do detalhe da equipa';
+comment on column SR_PROF_TEAM_DET_HIST.flg_status_hist
+  is 'Flg status da tabela de historico: A - activo; O - outdated';  
+comment on column SR_PROF_TEAM_DET_HIST.id_sr_epis_interv_hist
+  is 'ID do registo de intervenção';
+comment on column SR_PROF_TEAM_DET_HIST.id_surgery_record
+  is 'ID do registo de intervenção';
+comment on column SR_PROF_TEAM_DET_HIST.id_episode
+  is 'ID do episódio';
+comment on column SR_PROF_TEAM_DET_HIST.id_prof_team_leader
+  is 'ID do responsável de equipa';
+comment on column SR_PROF_TEAM_DET_HIST.id_professional
+  is 'ID do profissional';
+comment on column SR_PROF_TEAM_DET_HIST.id_category_sub
+  is 'Id da sub-categoria do profissional';
+comment on column SR_PROF_TEAM_DET_HIST.id_prof_team
+  is 'ID da equipa de cirurgia';
+comment on column SR_PROF_TEAM_DET_HIST.flg_status
+  is 'Estado do registo (A-Activo, C-Cancelado)';
+comment on column SR_PROF_TEAM_DET_HIST.id_prof_reg
+  is 'ID do último profissional que alterou o registo';
+comment on column SR_PROF_TEAM_DET_HIST.id_prof_cancel
+  is 'ID do profissional que cancelou o registo';
+comment on column SR_PROF_TEAM_DET_HIST.dt_begin_tstz
+  is 'Data de início de participação na intervenção';
+comment on column SR_PROF_TEAM_DET_HIST.dt_end_tstz
+  is 'Data de fim de participação na intervenção';
+comment on column SR_PROF_TEAM_DET_HIST.dt_reg_tstz
+  is 'Data da última alteração no registo';
+comment on column SR_PROF_TEAM_DET_HIST.dt_cancel_tstz
+  is 'Data de cancelamento do registo';
+comment on column SR_PROF_TEAM_DET_HIST.id_episode_context
+  is 'ID do episódio de destino onde poderá ser consultada esta informação (TI)';
+comment on column SR_PROF_TEAM_DET_HIST.create_user
+  is 'Creation User';
+comment on column SR_PROF_TEAM_DET_HIST.create_time
+  is 'Creation Time';
+comment on column SR_PROF_TEAM_DET_HIST.create_institution
+  is 'Creation Institution';
+comment on column SR_PROF_TEAM_DET_HIST.update_user
+  is 'Update User';
+comment on column SR_PROF_TEAM_DET_HIST.update_time
+  is 'Update Time';
+comment on column SR_PROF_TEAM_DET_HIST.update_institution
+  is 'Update Institution';
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 21/01/2016 11:19
+-- CHANGE REASON: [ALERT-318028] ALERT-318028 CDOC Functionalities V7
+-- Add comments to the table 
+comment on table SR_PROF_TEAM_DET_HIST
+  is 'Transactional table with history details of a surgery professional team ';
+-- Add comments to the columns 
+comment on column SR_PROF_TEAM_DET_HIST.id_sr_prof_team_det_hist
+  is 'SR_PROF_TEAM_DET_HIST (Primary Key), used only in Operating room teams ';
+comment on column SR_PROF_TEAM_DET_HIST.id_sr_prof_team_det
+  is 'SR_PROF_TEAM_DET (Primary Key), used only in Operating room teams ';
+comment on column SR_PROF_TEAM_DET_HIST.flg_status_hist
+  is 'Record status: A - active; O - outdated';
+comment on column SR_PROF_TEAM_DET_HIST.id_sr_epis_interv_hist
+  is 'Intervention record history identifier';
+comment on column SR_PROF_TEAM_DET_HIST.id_surgery_record
+  is 'Intervention record identifier';
+comment on column SR_PROF_TEAM_DET_HIST.id_episode
+  is 'Episode identifier';
+comment on column SR_PROF_TEAM_DET_HIST.id_prof_team_leader
+  is 'Professional team leader identifier  ';
+comment on column SR_PROF_TEAM_DET_HIST.id_professional
+  is 'Professional identifer';
+comment on column SR_PROF_TEAM_DET_HIST.id_category_sub
+  is 'Professional sub-category identifier';
+comment on column SR_PROF_TEAM_DET_HIST.id_prof_team
+  is 'Professional team identifer ';
+comment on column SR_PROF_TEAM_DET_HIST.flg_status
+  is 'Record status: A - active, I - inactive, C - cancelled. ';
+comment on column SR_PROF_TEAM_DET_HIST.id_prof_reg
+  is 'Professional identifier of the last professional that made changes. ';
+comment on column SR_PROF_TEAM_DET_HIST.id_prof_cancel
+  is 'Cancellation professional identifier ';
+comment on column SR_PROF_TEAM_DET_HIST.dt_begin_tstz
+  is 'Begin date of participation in intervention ';
+comment on column SR_PROF_TEAM_DET_HIST.dt_end_tstz
+  is 'End date of participation in intervention ';
+comment on column SR_PROF_TEAM_DET_HIST.dt_reg_tstz
+  is 'Date of last change ';
+comment on column SR_PROF_TEAM_DET_HIST.dt_cancel_tstz
+  is 'Cancellation record date';
+comment on column SR_PROF_TEAM_DET_HIST.id_episode_context
+  is 'Episode context identifier, is the episode that can consult the information(TI) ';
+comment on column SR_PROF_TEAM_DET_HIST.create_user
+  is 'Creation User';
+comment on column SR_PROF_TEAM_DET_HIST.create_time
+  is 'Creation Time';
+comment on column SR_PROF_TEAM_DET_HIST.create_institution
+  is 'Creation Institution';
+comment on column SR_PROF_TEAM_DET_HIST.update_user
+  is 'Update User';
+comment on column SR_PROF_TEAM_DET_HIST.update_time
+  is 'Update Time';
+comment on column SR_PROF_TEAM_DET_HIST.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Fernandes

@@ -1,0 +1,24 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 02/12/2013 09:33
+-- CHANGE REASON: [ALERT-270040] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -06512);
+    e_object_exists3 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists3, -02264);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE unit_mea_conv_soft_inst
+  ADD CONSTRAINT umcsi_pk PRIMARY KEY (ID_UNIT_MEASURE_CONVERT,id_vital_sign,id_market,id_institution,id_software)
+  USING INDEX TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

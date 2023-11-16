@@ -1,0 +1,22 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 11/07/2016 16:18
+-- CHANGE REASON: [ALERT-322610 ] Automatic cancellation/discontinuation of active medication order after discharge
+--                
+begin
+pk_versioning.run('alter table PRESC_INTERRUPT_SOFT_INST
+  add constraint PISI_PK primary key (FLG_TYPE_ORIGIN, FLG_TYPE_DEST, ID_SOFTWARE, ID_INSTITUTION, FLG_AVAILABLE)');
+end;
+/
+BEGIN
+  pk_versioning.run('alter table PRESC_INTERRUPT_SOFT_INST add constraint PISI_FLG_AVAILABLE_CHK check (flg_available in(''Y'',''N''))');
+END;
+/
+BEGIN
+pk_versioning.run('alter table PRESC_INTERRUPT_SOFT_INST add constraint PISI_FLG_TYPE_DEST_CHK check (flg_type_dest in (''A'',''C'',''F'',''I'',''IO'',''M'',''P'',''R'',''S'',''T'',''U'',''W'',''MS'',''PC'', ''UC''))');
+END;
+/
+BEGIN
+pk_versioning.run('alter table PRESC_INTERRUPT_SOFT_INST add constraint PISI_FLG_TYPE_ORIGIN_CHK check (flg_type_origin in (''A'',''C'',''F'',''I'',''IO'',''M'',''P'',''R'',''S'',''T'',''U'',''W'',''MS'',''PC'', ''UC''))');
+END;
+/
+-- CHANGE END: Elisabete Bugalho

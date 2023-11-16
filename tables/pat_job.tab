@@ -1,0 +1,68 @@
+
+
+  CREATE TABLE PAT_JOB
+   (	ID_PAT_JOB NUMBER(24,0) NOT NULL ENABLE,
+	LOCATION VARCHAR2(200),
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	YEAR_BEGIN NUMBER(4,0),
+	YEAR_END NUMBER(4,0),
+	ACTIVITY_TYPE VARCHAR2(200),
+	PROF_DISEASE_RISK VARCHAR2(200),
+	NOTES VARCHAR2(4000),
+	NUM_WORKERS NUMBER(6,0),
+	COMPANY VARCHAR2(200),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+
+	ID_OCCUPATION NUMBER(12,0),
+	DT_PAT_JOB DATE NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	OCCUPATION_DESC VARCHAR2(400)
+   );
+
+
+COMMENT ON TABLE pat_job IS 'Historial dos empregos dos pacientes. Se for registado pelo próprio paciente, ID_PROFESSIONAL não está preenchido.' ;
+
+COMMENT ON COLUMN pat_job.id_pat_job IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_job.location IS 'Local' ;
+COMMENT ON COLUMN pat_job.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_job.year_begin IS 'Ano de inicio' ;
+COMMENT ON COLUMN pat_job.year_end IS 'Ano de fim' ;
+COMMENT ON COLUMN pat_job.activity_type IS 'Tipo de actividade' ;
+COMMENT ON COLUMN pat_job.prof_disease_risk IS 'Código de risco de doenças profissionais' ;
+COMMENT ON COLUMN pat_job.notes IS 'Notas sobre o emprego' ;
+COMMENT ON COLUMN pat_job.num_workers IS 'Nº trabalhadores' ;
+COMMENT ON COLUMN pat_job.company IS 'Empresa' ;
+COMMENT ON COLUMN pat_job.flg_status IS 'Estado: A - activo, C - cancelado pelo prof., U - cancelado pelo utente' ;
+COMMENT ON COLUMN pat_job.occupation_desc IS 'Hand written occupation' ;
+
+alter table pat_job 
+add (dt_pat_job_tstz timestamp with local time zone); 
+
+
+
+-- DROP DATE TYPE
+ALTER table PAT_JOB DROP COLUMN DT_PAT_JOB;
+
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE PAT_JOB ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN PAT_JOB.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2020 18:02
+-- CHANGE REASON: [EMR-40083]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00942);
+BEGIN
+EXECUTE IMMEDIATE 'DROP TABLE pat_job_old';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos

@@ -1,0 +1,246 @@
+
+
+  CREATE TABLE ICNP_EPIS_DIAGNOSIS
+   (	ID_ICNP_EPIS_DIAG NUMBER(24,0) NOT NULL ENABLE,
+	DT_ICNP_EPIS_DIAG DATE NOT NULL ENABLE,
+	ID_COMPOSITION NUMBER(12,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	ID_PARENT NUMBER(24,0),
+	DT_CLOSE DATE,
+	ID_PROF_CLOSE NUMBER(24,0),
+	NOTES_CLOSE VARCHAR2(4000),
+
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE icnp_epis_diagnosis IS 'Clinical diagnoses associated with an episode.' ;
+
+COMMENT ON COLUMN icnp_epis_diagnosis.id_icnp_epis_diag IS 'Diagnosis identifier.' ;
+COMMENT ON COLUMN icnp_epis_diagnosis.dt_icnp_epis_diag IS 'Diagnosis creation date' ;
+COMMENT ON COLUMN icnp_epis_diagnosis.id_composition IS 'Diagnosis associated composition' ;
+COMMENT ON COLUMN icnp_epis_diagnosis.id_professional IS 'The health profissional who created this diagnosis' ;
+COMMENT ON COLUMN icnp_epis_diagnosis.flg_status IS 'Diagnosis state. Can be: (F)inished, (A)ctive or (C)anceled' ;
+COMMENT ON COLUMN icnp_epis_diagnosis.id_episode IS 'Associated clinical episode' ;
+COMMENT ON COLUMN icnp_epis_diagnosis.notes IS 'Diagnosis notes' ;
+COMMENT ON COLUMN icnp_epis_diagnosis.id_parent IS 'When diagnoses are revaluations of others, this field identifies the one which originated.' ;
+COMMENT ON COLUMN icnp_epis_diagnosis.dt_close IS 'Diagnosis close date' ;
+COMMENT ON COLUMN icnp_epis_diagnosis.id_prof_close IS 'Health profissional who closed the diagnosis' ;
+COMMENT ON COLUMN icnp_epis_diagnosis.notes_close IS 'Close notes' ;
+
+alter table icnp_epis_diagnosis 
+add (dt_icnp_epis_diag_tstz timestamp with local time zone,
+     dt_close_tstz timestamp with local time zone); 
+
+
+ALTER TABLE ICNP_EPIS_DIAGNOSIS DROP COLUMN DT_ICNP_EPIS_DIAG;
+ALTER TABLE ICNP_EPIS_DIAGNOSIS DROP COLUMN DT_CLOSE;
+
+
+-- INPATIENT LMAIA 29-09-2008
+-- Database denormalization
+alter table icnp_epis_diagnosis add (id_visit NUMBER(24), id_epis_type NUMBER(24), flg_executions VARCHAR2(1));
+COMMENT ON column icnp_epis_diagnosis.id_visit IS 'Visit ID';
+COMMENT ON column icnp_epis_diagnosis.id_patient IS 'Patient ID';
+COMMENT ON column icnp_epis_diagnosis.id_epis_type IS 'Episode Type ID';
+COMMENT ON column icnp_epis_diagnosis.flg_executions IS 'Flag that indicates the existence of executions: Y-yes, N-no';
+-- END
+
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+-----------------------------------------
+--  Changed table icnp_epis_diagnosis  --
+-----------------------------------------
+declare
+   e_already_null EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_already_null, -01451); -- table already there
+ 
+   e_column_already_there EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- table already there 
+begin
+-- Add/modify columns 
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS modify DT_ICNP_EPIS_DIAG_TSTZ null';
+    EXCEPTION
+        WHEN e_already_null THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS modify ID_VISIT null';
+    EXCEPTION
+        WHEN e_already_null THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS add ICNP_COMPO_REEVAL NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS add ID_PROF_LAST_UPDATE NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS add DT_LAST_UPDATE TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS add ID_SUSPEND_REASON NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS add ID_SUSPEND_PROF NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS add SUSPEND_NOTES VARCHAR2(1000 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS add DT_SUSPEND TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS add ID_CANCEL_REASON NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS add ID_CANCEL_PROF NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS add CANCEL_NOTES VARCHAR2(1000 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS add DT_CANCEL TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- Add comments to the columns 
+comment on column ICNP_EPIS_DIAGNOSIS.ICNP_COMPO_REEVAL
+  is 'Expected result composition identifier.';
+comment on column ICNP_EPIS_DIAGNOSIS.ID_PROF_LAST_UPDATE
+  is 'Last update made by (professional identifier).';
+comment on column ICNP_EPIS_DIAGNOSIS.DT_LAST_UPDATE
+  is 'Last update date.';
+comment on column ICNP_EPIS_DIAGNOSIS.ID_SUSPEND_REASON
+  is 'Suspension reason identifier.';
+comment on column ICNP_EPIS_DIAGNOSIS.ID_SUSPEND_PROF
+  is 'Suspended by (professional identifier).';
+comment on column ICNP_EPIS_DIAGNOSIS.SUSPEND_NOTES
+  is 'Suspension notes.';
+comment on column ICNP_EPIS_DIAGNOSIS.DT_SUSPEND
+  is 'Suspension date.';
+comment on column ICNP_EPIS_DIAGNOSIS.ID_CANCEL_REASON
+  is 'Cancellation reason identifier.';
+comment on column ICNP_EPIS_DIAGNOSIS.ID_CANCEL_PROF
+  is 'Cancelled by (professional identifier).';
+comment on column ICNP_EPIS_DIAGNOSIS.CANCEL_NOTES
+  is 'Cancellation notes.';
+comment on column ICNP_EPIS_DIAGNOSIS.DT_CANCEL
+  is 'Cancellation date.';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 10:39
+-- CHANGE REASON: [ALERT-317702] 
+comment on table ICNP_EPIS_DIAGNOSIS
+  is 'Clinical diagnoses associated with an episode.';
+-- Add comments to the columns 
+comment on column ICNP_EPIS_DIAGNOSIS.id_icnp_epis_diag
+  is 'Diagnosis identifier';
+comment on column ICNP_EPIS_DIAGNOSIS.id_composition
+  is 'Diagnosis associated composition';
+comment on column ICNP_EPIS_DIAGNOSIS.id_professional
+  is 'The health profissional who created this diagnosis';
+comment on column ICNP_EPIS_DIAGNOSIS.flg_status
+  is 'Diagnosis state. Can be: (F)inished, (A)ctive or (C)anceled';
+comment on column ICNP_EPIS_DIAGNOSIS.id_episode
+  is 'Associated clinical episode';
+comment on column ICNP_EPIS_DIAGNOSIS.notes
+  is 'Diagnosis notes';
+comment on column ICNP_EPIS_DIAGNOSIS.id_parent
+  is 'When diagnoses are revaluations of others, this field identifies the one which originated';
+comment on column ICNP_EPIS_DIAGNOSIS.id_prof_close
+  is 'Health profissional who closed the diagnosis';
+comment on column ICNP_EPIS_DIAGNOSIS.notes_close
+  is 'Close notes';
+comment on column ICNP_EPIS_DIAGNOSIS.id_patient
+  is 'Patient ID';
+comment on column ICNP_EPIS_DIAGNOSIS.dt_icnp_epis_diag_tstz
+  is 'Date that indicates when the record was registered';
+comment on column ICNP_EPIS_DIAGNOSIS.dt_close_tstz
+  is 'Close date';
+comment on column ICNP_EPIS_DIAGNOSIS.id_visit
+  is 'Visit ID';
+comment on column ICNP_EPIS_DIAGNOSIS.id_epis_type
+  is 'Episode Type ID';
+comment on column ICNP_EPIS_DIAGNOSIS.flg_executions
+  is 'Flag that indicates the existence of executions (Y/N)';
+comment on column ICNP_EPIS_DIAGNOSIS.create_user
+  is 'Creation User';
+comment on column ICNP_EPIS_DIAGNOSIS.create_time
+  is 'Creation Time';
+comment on column ICNP_EPIS_DIAGNOSIS.create_institution
+  is 'Creation Institution';
+comment on column ICNP_EPIS_DIAGNOSIS.update_user
+  is 'Update User';
+comment on column ICNP_EPIS_DIAGNOSIS.update_time
+  is 'Update Time';
+comment on column ICNP_EPIS_DIAGNOSIS.update_institution
+  is 'Update Institution';
+comment on column ICNP_EPIS_DIAGNOSIS.icnp_compo_reeval
+  is 'Expected result composition identifier.';
+comment on column ICNP_EPIS_DIAGNOSIS.id_prof_last_update
+  is 'Last update made by (professional identifier)';
+comment on column ICNP_EPIS_DIAGNOSIS.dt_last_update
+  is 'Last update date';
+comment on column ICNP_EPIS_DIAGNOSIS.id_suspend_reason
+  is 'Suspension reason identifier';
+comment on column ICNP_EPIS_DIAGNOSIS.id_suspend_prof
+  is 'Suspended by (professional identifier)';
+comment on column ICNP_EPIS_DIAGNOSIS.suspend_notes
+  is 'Suspension notes';
+comment on column ICNP_EPIS_DIAGNOSIS.dt_suspend
+  is 'Suspension date';
+comment on column ICNP_EPIS_DIAGNOSIS.id_cancel_reason
+  is 'Cancellation reason identifier';
+comment on column ICNP_EPIS_DIAGNOSIS.id_cancel_prof
+  is 'Cancelled by (professional identifier)';
+comment on column ICNP_EPIS_DIAGNOSIS.cancel_notes
+  is 'Cancellation notes';
+comment on column ICNP_EPIS_DIAGNOSIS.dt_cancel
+  is 'Cancellation date';
+  
+  
+  
+-- CHANGE END: Ana Matos

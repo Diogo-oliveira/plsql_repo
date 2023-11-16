@@ -1,0 +1,7 @@
+-- CHANGED BY: Bruno Martins
+-- CHANGE DATE: 2010-12-17
+-- CHANGE REASON: ADT-3826
+
+grant select, references on V_PHYSICIAN_INSTITUTION_IT to ALERT_ADTCOD;
+
+-- CHANGE END: Bruno Martins

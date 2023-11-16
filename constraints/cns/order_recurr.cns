@@ -1,0 +1,41 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 30/04/2011 18:05
+-- CHANGE REASON: [ALERT-173229] Order recurrence core development
+DECLARE
+    e_pk_already_exists EXCEPTION;
+    e_chk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_exists, -02260); -- table can have only one primary key
+    PRAGMA EXCEPTION_INIT(e_chk_already_exists, -02264); -- name already used by an existing constraint
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ORDER_RECURR add constraint ORC_PK primary key (ID_ORDER_RECURR)';
+    EXCEPTION
+        WHEN e_pk_already_exists THEN
+            dbms_output.put_line('primary key already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ORDER_RECURR add constraint ORC_FLG_REC_PATTERN_CHK CHECK (FLG_RECURR_PATTERN IN (''0'', ''D'', ''W'', ''M'', ''Y''))';
+    EXCEPTION
+        WHEN e_chk_already_exists THEN
+            dbms_output.put_line('constraint already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ORDER_RECURR add constraint ORC_FLG_REPEAT_BY_CHK CHECK (FLG_REPEAT_BY in (''M'', ''W''))';
+    EXCEPTION
+        WHEN e_chk_already_exists THEN
+            dbms_output.put_line('constraint already exists');
+    END;    
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ORDER_RECURR add constraint ORC_FLG_END_BY_CHK CHECK
+(((flg_end_by = ''D'' or flg_end_by = ''W'') and duration is null and id_unit_meas_duration is null and occurrences is null)
+or
+(flg_end_by = ''N'' and duration is null and id_unit_meas_duration is null and occurrences is not null and occurrences > 0)
+or
+(flg_end_by = ''L'' and duration is not null and id_unit_meas_duration is not null and occurrences is null))';
+    EXCEPTION
+        WHEN e_chk_already_exists THEN
+            dbms_output.put_line('constraint already exists');
+    END;
+END;
+/
+-- CHANGE END: Carlos Loureiro

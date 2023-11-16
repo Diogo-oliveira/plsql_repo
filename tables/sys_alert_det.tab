@@ -1,0 +1,111 @@
+  CREATE TABLE SYS_ALERT_DET
+   (	ID_REG NUMBER(24,0),
+	ID_EPISODE NUMBER(24,0),
+	ID_INSTITUTION NUMBER(24,0),
+	ID_PROF NUMBER(24,0),
+	DT_REQ DATE,
+	REPLACE1 VARCHAR2(200),
+	REPLACE2 VARCHAR2(4000),
+	ID_SCHEDULE NUMBER(24,0),
+	FLG_STATUS VARCHAR2(1),
+	ID_SYS_ALERT NUMBER(24,0),
+	ID_REG_DET NUMBER(24,0),
+	FLG_NEW VARCHAR2(1)
+   );
+
+
+COMMENT ON COLUMN sys_alert_det.flg_status IS 'Estado do Alerta: L-Lido, N-Não lido' ;
+COMMENT ON COLUMN sys_alert_det.flg_new IS 'Indica se o registo irá ser eliminado após o próximo refresh. Valores possíveis: N- Novo, D- Apagar' ;
+
+
+--Rui Batista 2007/07/10
+--Reestrutração dos Alertas
+alter table sys_alert_det drop column flg_status;
+alter table sys_alert_det drop column flg_new;
+
+alter table sys_alert_det add 
+(
+id_clinical_service number(12),
+id_room             number(24),
+id_sys_alert_det	number(24)
+);
+
+COMMENT ON column sys_alert_det.id_reg IS 'ID do registo de detalhe do evento que originou o alerta. Ex: Nos alertas de resultados de exames será o id_exam_req_det';
+COMMENT ON column sys_alert_det.id_episode IS 'ID do episódio';
+COMMENT ON column sys_alert_det.id_institution IS 'ID da instituição';
+COMMENT ON column sys_alert_det.id_prof IS 'ID do profissional. Deve estar preenchido se o alerta for destinado a apenas este profissional';
+COMMENT ON column sys_alert_det.dt_req IS 'Data do evento que originou o alerta';
+COMMENT ON column sys_alert_det.replace1 IS 'Coluna de valor a apresentar da descrição do alerta. Ex: código para obtenção da descrição de um exame';
+COMMENT ON column sys_alert_det.replace2 IS 'Coluna de valor a apresentar da descrição do alerta. Ex: número de minutos em atraso';
+COMMENT ON column sys_alert_det.id_schedule IS 'ID do agendamento';
+COMMENT ON column sys_alert_det.id_sys_alert IS 'ID do tipo de alerta';
+COMMENT ON column sys_alert_det.id_reg_det IS 'ID do registo de detalhe do evento que originou o alerta. Ex: Nos alertas de resultados de exames será o id_exam_result';
+COMMENT ON column sys_alert_det.id_clinical_service	is 'ID do Serviço. Deve estar preenchido se o alerta for destinado a todos os profissionais de um serviço';
+COMMENT ON column sys_alert_det.id_room	is 'ID da sala. Deve estar preenchido se o alerta for destinado a todos os profissionais alocados à sala';
+COMMENT ON column sys_alert_det.id_sys_alert_det is 'ID único';
+
+
+
+
+ALTER TABLE SYS_ALERT_DET ADD DT_REQ_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN SYS_ALERT_DET.DT_REQ_TSTZ IS 'Data do evento que originou o alerta'; 
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table SYS_ALERT_DET drop (DT_REQ);
+-- CHANGE END
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table SR_EQUIP_KIT drop (CREATE_DATE);
+-- CHANGE END
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table SYS_ALERT_DET drop (DT_REQ);
+-- CHANGE END
+
+
+-- CHANGED BY: Fábio Oliveira
+-- CHANGE DATE: 2009-09-01
+-- CHANGE REASON: [ALERT-35857] ID Patient column added
+ALTER TABLE SYS_ALERT_DET 
+ ADD (ID_PATIENT NUMBER(24)
+ );
+COMMENT ON COLUMN SYS_ALERT_DET.ID_PATIENT IS 'Patient''s ID';
+-- CHANGE END: Fábio Oliveira
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 14/02/2014 17:05
+-- CHANGE REASON: [ALERT-276532 ] AHP | Bug nos IV Fluids (BMC 329869)
+BEGIN
+    execute immediate 'ALTER TABLE sys_alert_det modify replace1 VARCHAR2(1000 CHAR)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('operacao ja executada anteriormente');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+
+-- CMF 08-01-2016
+COMMENT ON COLUMN ALERT.SYS_ALERT_DET.id_sys_alert_det        is 'Primary key';
+COMMENT ON COLUMN ALERT.SYS_ALERT_DET.id_reg                 IS 'ID of the event record that triggered the alert. Ex: For the result exams alerts, it will be id_exam_req_det';
+COMMENT ON COLUMN ALERT.SYS_ALERT_DET.id_episode             IS 'ID of episode';
+COMMENT ON COLUMN ALERT.SYS_ALERT_DET.id_institution         IS 'ID of institution where alerts apply.';
+COMMENT ON COLUMN ALERT.SYS_ALERT_DET.id_prof                 IS 'ID of professional. Must be filled if it belongs only for a physician in particular';
+COMMENT ON COLUMN ALERT.SYS_ALERT_DET.replace1                 IS 'Value to be represented in the alert description.';
+COMMENT ON COLUMN ALERT.SYS_ALERT_DET.replace2                 IS 'Value to be represented in the alert description.';
+COMMENT ON COLUMN ALERT.SYS_ALERT_DET.id_schedule             IS 'ID of shedule';
+COMMENT ON COLUMN ALERT.SYS_ALERT_DET.id_sys_alert             IS 'ID of alert';
+COMMENT ON COLUMN ALERT.SYS_ALERT_DET.id_reg_det             IS 'ID of the detail event record that triggered the alert. Ex: For the result exams alerts, it will be id_exam_result';
+COMMENT ON COLUMN ALERT.SYS_ALERT_DET.id_clinical_service    is 'Must be filled if alert is for all professionals from a id_clinical_service';
+COMMENT ON COLUMN ALERT.SYS_ALERT_DET.id_room                is 'Must be filled of alert is for all professionals allocated in current id_room';
+COMMENT ON COLUMN ALERT.SYS_ALERT_DET.DT_REQ_TSTZ             IS 'Date of event that triggered the alert'; 
+COMMENT ON COLUMN ALERT.SYS_ALERT_DET.ID_PATIENT             IS 'Patient ID';
+
+COMMENT ON TABLE ALERT.SYS_ALERT_DET IS 'Detail of generated alerts.';

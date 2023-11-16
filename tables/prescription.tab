@@ -1,0 +1,90 @@
+
+
+  CREATE TABLE PRESCRIPTION
+   (	ID_PRESCRIPTION NUMBER(24,0) NOT NULL ENABLE,
+	DT_PRESCRIPTION DATE NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE,
+	NOTES_CANCEL VARCHAR2(4000),
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+
+	ID_INSTITUTION_CANCEL NUMBER(12,0),
+	ID_SOFTWARE_CANCEL NUMBER(24,0),
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_SUB_TYPE VARCHAR2(2),
+	FLG_PRINT_TYPE VARCHAR2(2),
+	ID_PROF_PRINT NUMBER(24,0),
+	DT_PROF_PRINT DATE,
+	ID_PREV_EPISODE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE prescription IS 'Prescrições.' ;
+
+COMMENT ON COLUMN prescription.id_prev_episode IS 'Só é utilizado no EDIS para a passagem de Urgência para OBS. ID do episódio em que foi registada a req. inicialmente (ie, se FLG_TIME = ''N'')' ;
+COMMENT ON COLUMN prescription.id_prescription IS 'ID da prescrição.' ;
+COMMENT ON COLUMN prescription.dt_prescription IS 'Data da prescrição.' ;
+COMMENT ON COLUMN prescription.id_episode IS 'ID do episódio em que foi feita a prescrição.' ;
+COMMENT ON COLUMN prescription.id_patient IS 'ID do paciente.' ;
+COMMENT ON COLUMN prescription.id_professional IS 'Profissional que prescreve.' ;
+COMMENT ON COLUMN prescription.flg_status IS 'Estado da prescrição: P - impressa; C - cancelada; T - temporária' ;
+COMMENT ON COLUMN prescription.id_prof_cancel IS 'Profissional que cancela.' ;
+COMMENT ON COLUMN prescription.dt_cancel IS 'Data de cancelamento.' ;
+COMMENT ON COLUMN prescription.notes_cancel IS 'Notas de cancelamento.' ;
+COMMENT ON COLUMN prescription.id_institution IS 'ID da instituição onde foi feita a prescrição.' ;
+COMMENT ON COLUMN prescription.id_software IS 'ID do software onde foi feita a prescrição.' ;
+COMMENT ON COLUMN prescription.id_institution_cancel IS 'ID da instituição onde foi cancelada a prescrição.' ;
+
+COMMENT ON COLUMN prescription.id_software_cancel IS 'ID do software onde foi cancelada a prescrição.' ;
+COMMENT ON COLUMN prescription.flg_type IS 'Flag que indica se é uma prescrição de um medicamento para o exterior (E), de um manipulado ou dietético (P). -----Para já, tb inclui as prescrições internas (I) mas no futuro não devem ficar nesta tabela.' ;
+COMMENT ON COLUMN prescription.flg_sub_type IS 'Flag que indica se é um dietético para o exterior (DE) ou manipulado para o exterior (ME). Só é preenchida se FLG_TYPE = ''P''.' ;
+COMMENT ON COLUMN prescription.flg_print_type IS 'Flag que indica o tipo de impressão: N - normal; R - receita renovável (3vias); V2 - receita renovável(2vias)' ;
+COMMENT ON COLUMN prescription.id_prof_print IS 'Profissional que imprime' ;
+COMMENT ON COLUMN prescription.dt_prof_print IS 'Data de impressão' ;
+
+alter table prescription 
+add (dt_prescription_tstz timestamp with local time zone,
+dt_cancel_tstz timestamp with local time zone,
+dt_prof_print_tstz timestamp with local time zone);
+
+
+
+ALTER TABLE PRESCRIPTION
+ADD (ID_MEDICATION_DB NUMBER(24));
+
+COMMENT ON COLUMN PRESCRIPTION.ID_MEDICATION_DB IS 'Medication Database used in each prescription';
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-JUN-12
+-- CHANGING REASON: campo do tipo varchar2
+ALTER TABLE prescription
+ MODIFY FLG_PRINT_TYPE VARCHAR2(3);
+-- CHANGE END Patrícia Neto  
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGED DATE: 2008-SEPT-22
+-- CHANGING REASON: Remoção de colunas do tipo DATE que tenham equivalentes do tipo TIMESTAMP WITH LOCAL TIME ZONE
+ALTER TABLE prescription DROP COLUMN dt_cancel;
+ALTER TABLE prescription DROP COLUMN dt_prescription;
+ALTER TABLE prescription DROP COLUMN dt_prof_print;
+-- CHANGE END  
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 30/10/2013
+-- CHANGE REASON: ALERT-268016
+ALTER TABLE PRESCRIPTION DROP CONSTRAINT PRN_EPIS_FK;
+ALTER TABLE PRESCRIPTION DROP CONSTRAINT PRN_EPIS_FK2;
+-- CHANGE END
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:57
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESCRIPTION IS 'Prescrições. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

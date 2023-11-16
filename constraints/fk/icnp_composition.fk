@@ -1,0 +1,46 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 02/12/2011 15:23
+-- CHANGE REASON: [ALERT-208174] 
+alter table ICNP_COMPOSITION
+  add constraint ICN_ID_APPLICATION_AREA_FK foreign key (ID_APPLICATION_AREA)
+  references ICNP_APPLICATION_AREA (ID_APPLICATION_AREA);
+
+alter table ICNP_COMPOSITION
+  add constraint ICN_ID_DOC_TEMPLATE_FK foreign key (ID_DOC_TEMPLATE)
+  references DOC_TEMPLATE (ID_DOC_TEMPLATE);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 22/05/2012 15:10
+-- CHANGE REASON: [ALERT-230953] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -02275);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table icnp_composition
+  add constraint ICN_ID_SOFTWARE_FK foreign key (ID_SOFTWARE)
+  references SOFTWARE (ID_SOFTWARE)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('Such a referential constraint already exists in the table');
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 22/05/2012 15:10
+-- CHANGE REASON: [ALERT-230953] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -02275);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table icnp_composition
+  add constraint ICN_INST_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('Such a referential constraint already exists in the table');
+END;
+/
+------------ 
+-- CHANGE END:  Nuno Neves

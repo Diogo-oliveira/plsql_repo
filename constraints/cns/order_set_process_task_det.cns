@@ -1,0 +1,33 @@
+ALTER TABLE ORDER_SET_PROCESS_TASK_DET ADD CONSTRAINT OSPD_PK PRIMARY KEY 
+  (ID_ORDER_SET_PROCESS_TASK_DET);
+
+ALTER TABLE ORDER_SET_PROCESS_TASK_DET ADD CONSTRAINT OSPD_FLG_VALUE_TYPE_CHK CHECK (FLG_VALUE_TYPE in ('N','D','V'));
+
+ALTER TABLE ORDER_SET_PROCESS_TASK_DET ADD CONSTRAINT OSPD_FLG_DETAIL_TYPE_CHK CHECK (FLG_DETAIL_TYPE in ('A','M','S','N','T','R','D','E','W','V','P','G','C','F','U','I'));
+
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 2009-JUL-29
+-- CHANGE REASON: ALERT-31492 - diet prescriptions for order sets
+alter table ORDER_SET_PROCESS_TASK_DET
+  drop constraint OSPD_FLG_DETAIL_TYPE_CHK;
+alter table ORDER_SET_PROCESS_TASK_DET
+  add constraint OSPD_FLG_DETAIL_TYPE_CHK
+  check (FLG_DETAIL_TYPE in ('A','M','S','N','T','R','D','E','W','V','P','G','C','F','U','I','H','X'));
+-- CHANGE END
+
+
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 16/08/2010 16:45
+-- CHANGE REASON: [ALERT-117300] 
+alter table ORDER_SET_PROCESS_TASK_DET drop constraint OSPD_FLG_DETAIL_TYPE_CHK;
+alter table ORDER_SET_PROCESS_TASK_DET add constraint OSPD_FLG_DETAIL_TYPE_CHK check (FLG_DETAIL_TYPE in ('A','M','S','N','T','R','D','E','W','V','P','G','C','F','U','I','H','X','O','J','L','B'));
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 21/01/2011 09:00
+-- CHANGE REASON: [ALERT-155060] Clinical questions for order sets
+alter table ORDER_SET_PROCESS_TASK_DET drop constraint OSPD_FLG_DETAIL_TYPE_CHK;
+alter table ORDER_SET_PROCESS_TASK_DET add constraint OSPD_FLG_DETAIL_TYPE_CHK check (FLG_DETAIL_TYPE in ('A','M','S','N','T','R','B','L','D','E','W','V','F','U','I','P','G','C','X','H','O','J','K'));
+-- CHANGE END: Carlos Loureiro

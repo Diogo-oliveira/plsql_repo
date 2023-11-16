@@ -1,0 +1,42 @@
+
+
+  CREATE TABLE EPIS_INTERVAL_NOTES
+   (	ID_EPIS_INTERVAL_NOTES NUMBER(24,0) NOT NULL ENABLE,
+	DESC_INTERVAL_NOTES VARCHAR2(4000) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	DT_CREATION DATE NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+comment on table EPIS_INTERVAL_NOTES
+  is 'Notas intercalares de um episódio';
+
+comment on column EPIS_INTERVAL_NOTES.ID_EPIS_INTERVAL_NOTES
+  is 'Chave primária';
+comment on column EPIS_INTERVAL_NOTES.DESC_INTERVAL_NOTES
+  is 'Notas intercalares';
+comment on column EPIS_INTERVAL_NOTES.ID_PROFESSIONAL
+  is 'Profissional';
+comment on column EPIS_INTERVAL_NOTES.ID_EPISODE
+  is 'Episódio';
+comment on column EPIS_INTERVAL_NOTES.DT_CREATION
+  is 'Data de criação da nota intercalar';
+comment on column EPIS_INTERVAL_NOTES.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+
+alter table epis_interval_notes 
+add (dt_creation_tstz timestamp with local time zone); 
+
+
+-- CHANGED BY: Sérgio Santos (sergio.santos)
+-- CHANGE DATE: 03/12/2008 09:16
+-- CHANGE REASON: ALERT-11133 Remoção de colunas com tipo DATE quando existe a equivalente TSTZ
+ALTER TABLE EPIS_INTERVAL_NOTES DROP COLUMN DT_CREATION;
+-- CHANGE END
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 08/11/2010 14:36
+-- CHANGE REASON: [ALERT-138460] Editable areas: Make prioritary areas editable: Progress Notes (EDIS)
+COMMENT ON TABLE EPIS_INTERVAL_NOTES  is 'DEPRECATED TABLE (Notas intercalares de um episódio) Data was migrated to EPIS_DOCUMENTATION';
+-- CHANGE END: Ariel Machado

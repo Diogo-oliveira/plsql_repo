@@ -1,0 +1,32 @@
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 24-01-2011
+-- CHANGE REASON: ALERT-157161
+create table SCH_REHAB_GROUP
+(
+  ID_SCHEDULE            NUMBER(24) not null,
+  ID_REHAB_GROUP         NUMBER(24) not null,
+  CREATE_USER            VARCHAR2(24),
+  CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION     NUMBER(24),
+  UPDATE_USER            VARCHAR2(24),
+  UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION     NUMBER(24)
+);
+
+comment on table SCH_REHAB_GROUP is 'table used only for MFR procedures scheduling. If the human resource is a rehav group it is stored here. Its an alternative to sch_resource';
+  
+comment on column SCH_REHAB_GROUP.ID_SCHEDULE  is 'schedule identifier';
+comment on column SCH_REHAB_GROUP.ID_REHAB_GROUP is 'group id';
+comment on column SCH_REHAB_GROUP.CREATE_USER is 'Creation User';
+comment on column SCH_REHAB_GROUP.CREATE_TIME is 'Creation Time';
+comment on column SCH_REHAB_GROUP.CREATE_INSTITUTION is 'Creation Institution';
+comment on column SCH_REHAB_GROUP.UPDATE_USER is 'Update User';
+comment on column SCH_REHAB_GROUP.UPDATE_TIME is 'Update Time';
+comment on column SCH_REHAB_GROUP.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Telmo
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 24/07/2018
+ALTER TABLE sch_rehab_group add id_rehab_sch_need NUMBER(24);
+ALTER TABLE sch_rehab_group add flg_status varchar2(1) DEFAULT 'A' NOT NULL;
+-- CHANGE END: Diogo Oliveira

@@ -1,0 +1,51 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 11:32
+-- CHANGE REASON: [ALERT-38908] Versionamento.
+-- Create table
+create table PRESC_INSTR_DET
+(
+  ID_PRESC_INSTR_DET NUMBER(24) not null,
+  NOTES              VARCHAR2(4000)
+)
+tablespace TABLE_M;
+-- Add comments to the table 
+comment on table PRESC_INSTR_DET
+  is 'Tabela que relaciona as prescrições com toda a informação inserida aquando dessas prescrições.';
+-- Add comments to the columns 
+comment on column PRESC_INSTR_DET.ID_PRESC_INSTR_DET
+  is 'primary key';
+comment on column PRESC_INSTR_DET.NOTES
+  is 'id da tabela das relações entre prescrições e frequências';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 15:17
+-- CHANGE REASON: [ALERT-38908] add audit columns
+-- Create table
+create table PRESC_INSTR_DET
+(
+  ID_PRESC_INSTR_DET NUMBER(24) not null,
+  NOTES              VARCHAR2(4000),
+  CREATE_USER           VARCHAR2(24),
+  CREATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24),
+  UPDATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+)
+tablespace TABLE_M;
+-- Add comments to the table 
+comment on table PRESC_INSTR_DET
+  is 'Tabela que relaciona as prescrições com toda a informação inserida aquando dessas prescrições.';
+-- Add comments to the columns 
+comment on column PRESC_INSTR_DET.ID_PRESC_INSTR_DET
+  is 'primary key';
+comment on column PRESC_INSTR_DET.NOTES
+  is 'id da tabela das relações entre prescrições e frequências';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_INSTR_DET IS 'Tabela que relaciona as prescrições com toda a informação inserida aquando dessas prescrições. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,16 @@
+-- CHANGED BY:  Pedro Pinheiro
+-- CHANGE DATE: 26/01/2015 
+-- CHANGE REASON: [CODING-2682]
+BEGIN
+    pk_lucene_index_admin.update_register_index(i_index_name       => 'PROFESSIONAL_LIDX',
+                                                i_table_owner      => 'ALERT',
+                                                i_table_name       => 'PROFESSIONAL',
+                                                i_column_name      => 'NAME',
+                                                i_parameters       => 'LockMasterTable:false;LogLevel:INFO;Analyzer:org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords;MergeFactor:20;AutoTuneMemory:true;RewriteScore:true;SimilarityMethod:org.apache.lucene.search.WildcardSimilarity;DefaultOperator:AND;NormalizeScore:false;LobStorageParameters:TABLESPACE LUCENE_IDX PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS;OnLineFields:NAME;',
+                                                i_extra_parameters => 'SyncMode:OnLine;');
+
+    pk_lucene_index_admin.drop_index(i_index_name => 'PROFESSIONAL_LIDX');
+    pk_lucene_index_admin.create_index(i_index_name => 'PROFESSIONAL_LIDX');
+END;
+/
+-- CHANGE END:  Pedro Pinheiro

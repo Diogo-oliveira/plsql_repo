@@ -1,0 +1,44 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 09:46
+-- CHANGE REASON: [ALERT-229216] VERSIONING TERMINOLOGY SERVER - SCHEMA ALERT - DDL (EA Tables)
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -955);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'CREATE INDEX DIAGRELEA_CNCPTTY_IDX ON DIAGNOSIS_RELATIONS_EA (CNCPT_REL_TYPE_INT_NAME, CONCEPT_TYPE_INT_NAME1, CONCEPT_TYPE_INT_NAME2, ID_INSTITUTION, ID_SOFTWARE) TABLESPACE ALERT_IDX';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 26/11/2013 14:33
+-- CHANGE REASON: [ALERT-270407] DEMOS BR - Problemas - PEsquisa de mais frequentes
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'CREATE INDEX DIAGRELEA_CNCPTTY2_IDX ON DIAGNOSIS_RELATIONS_EA(CNCPT_REL_TYPE_INT_NAME,CONCEPT_TYPE_INT_NAME1,CONCEPT_TYPE_INT_NAME2,ID_CONCEPT_VERSION_1,ID_INSTITUTION,ID_SOFTWARE) TABLESPACE ALERT_IDX');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- cmf 
+ALTER INDEX DIAGEA_FLGTRM_IDX REBUILD TABLESPACE alert_idx;
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 17/06/2020 08:32
+-- CHANGE REASON: [EMR-33138] - PT OUTP QC1 Slowness when searching for a diagnose
+create index DIAGRELEA_search01_idx on diagnosis_relations_ea(CNCPT_REL_TYPE_INT_NAME, ID_CONCEPT_VERSION_1, ID_INSTITUTION, ID_SOFTWARE) tablespace alert_idx;
+-- CHANGE END: Elisabete Bugalho

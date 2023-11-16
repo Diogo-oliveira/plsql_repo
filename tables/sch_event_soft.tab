@@ -1,0 +1,28 @@
+CREATE TABLE sch_event_soft
+(
+  id_sch_event_soft NUMBER(24),
+	id_sch_event      NUMBER(24),
+	id_software       NUMBER(24)
+);
+
+COMMENT ON TABLE sch_event_soft IS 'Contains the associations between events and softwares';
+COMMENT ON COLUMN sch_event_soft.id_sch_event_soft IS 'Association key';
+COMMENT ON COLUMN sch_event_soft.id_sch_event IS 'Event identifier';
+COMMENT ON COLUMN sch_event_soft.id_software IS 'Software identifier';
+
+-- Add/modify columns 
+alter table SCH_EVENT_SOFT add ID_EPIS_TYPE number(12);
+-- Add comments to the columns 
+comment on column SCH_EVENT_SOFT.ID_EPIS_TYPE
+  is 'Episode type';
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 17-01-2012
+-- CHANGE REASON: ALERT-214482
+begin
+execute immediate 'alter table SCH_EVENT_SOFT add id_software_dest number(24)';
+execute immediate 'comment on column SCH_EVENT_SOFT.id_software_dest is ''software id that will be saved in schedule_outp.id_software. ''';
+exception
+  when others then null;
+end;
+-- CHANGE END: Telmo

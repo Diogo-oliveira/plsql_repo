@@ -1,0 +1,22 @@
+
+
+  CREATE TABLE TRANSP_ENT_INST
+   (	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_TRANSP_ENT_INST NUMBER(24,0) NOT NULL ENABLE,
+	ID_TRANSP_ENTITY NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE transp_ent_inst IS 'Entidades responsáveis pelo transporte em cada instituição.' ;
+
+ALTER TABLE TRANSP_ENT_INST 
+ ADD (FLG_AVAILABLE  VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ );
+
+COMMENT ON COLUMN TRANSP_ENT_INST.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD';
+
+ALTER TABLE TRANSP_ENT_INST MODIFY FLG_AVAILABLE default null;
+
+ALTER TABLE transp_ent_inst ADD flg_type VARCHAR2(1);
+COMMENT ON COLUMN transp_ent_inst.flg_type IS 'Context in which the transport is available: D - discharge; T - institution transfer; A - all';
+

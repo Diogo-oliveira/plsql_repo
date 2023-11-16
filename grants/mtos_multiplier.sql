@@ -1,0 +1,2 @@
+GRANT SELECT ON ALERT.mtos_multiplier TO ALERT_VIEWER;
+

@@ -1,0 +1,83 @@
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 28/10/2009 19:29
+-- CHANGE REASON: [ALERT-52603] Taking responsibility over episode by multiple professionals
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE epis_multi_prof_resp ( ' || --
+                      '       id_epis_multi_prof_resp NUMBER(24) NOT NULL,  ' || --
+                      ' id_episode NUMBER(24) NOT NULL, ' || --
+                      ' flg_status VARCHAR2(1) NOT NULL, ' || --
+                      ' id_professional NUMBER(24) NOT NULL, ' || --
+                      ' flg_profile VARCHAR2(1) NOT NULL, ' || --
+                      ' dt_create TIMESTAMP WITH LOCAL TIME ZONE NOT NULL, ' || --
+                      ' id_epis_prof_resp NUMBER(24) NOT NULL, ' || --
+                      ' create_user VARCHAR2(24), ' || --
+                      ' create_time TIMESTAMP(6) WITH LOCAL TIME ZONE, ' || --
+                      ' create_institution NUMBER(24), ' || --
+                      ' update_user VARCHAR2(24), ' || --
+                      ' update_time TIMESTAMP(6) WITH LOCAL TIME ZONE, ' || --
+                      ' update_institution NUMBER(24) ' || --
+                      ') TABLESPACE TABLE_L ';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+COMMENT ON TABLE epis_multi_prof_resp IS 'Stores the multiple responsible for a patient';
+COMMENT ON COLUMN epis_multi_prof_resp.id_epis_multi_prof_resp IS 'Transfer identifier';
+COMMENT ON COLUMN epis_multi_prof_resp.id_episode IS 'Episode ID';
+COMMENT ON COLUMN epis_multi_prof_resp.flg_status IS 'Status of the responsibility over the episode: (A) Active (H) On hold (O) Outdated';
+COMMENT ON COLUMN epis_multi_prof_resp.id_professional IS 'ID of the professional responsible for the episode';
+COMMENT ON COLUMN epis_multi_prof_resp.flg_profile IS 'Type of profile: (S) Specialist physician (R) Resident physician (I) Intern physician (N) Nurse';
+COMMENT ON COLUMN epis_multi_prof_resp.dt_create IS 'Record creation date. Used for sorting.';
+COMMENT ON COLUMN epis_multi_prof_resp.id_epis_prof_resp IS 'Identifier of the hand-off request';
+COMMENT ON COLUMN epis_multi_prof_resp.create_user IS 'Creation user';
+COMMENT ON COLUMN epis_multi_prof_resp.create_time IS 'Creation date / time';
+COMMENT ON COLUMN epis_multi_prof_resp.create_institution IS 'Creation institution';
+COMMENT ON COLUMN epis_multi_prof_resp.update_user IS 'Update user';
+COMMENT ON COLUMN epis_multi_prof_resp.update_time IS 'Update date / time';
+COMMENT ON COLUMN epis_multi_prof_resp.update_institution IS 'Update institution';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 18/11/2010 14:16
+-- CHANGE REASON: [ALERT-142370] Hand-off NL refactoring - replication to 2.6.0.4
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_multi_prof_resp ADD flg_main_responsible VARCHAR2(1 CHAR)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_multi_prof_resp ADD id_speciality NUMBER(24)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_multi_prof_resp ADD flg_resp_type VARCHAR2(1 CHAR) DEFAULT ''E''';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+
+COMMENT ON COLUMN epis_multi_prof_resp.flg_main_responsible IS 'Indicates if the professional is the overall main responsible: (Y) Yes (N) No';
+COMMENT ON COLUMN epis_multi_prof_resp.id_speciality IS 'The corresponding speciality, for the medical responsability.';
+COMMENT ON COLUMN epis_multi_prof_resp.flg_resp_type IS 'Type of responsability: (E - default) Episode (O) overall - patient responsability';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2018 16:22
+-- CHANGE REASON: [CALERT-1846] Discharge summary (Transfer block)
+alter table EPIS_MULTI_PROF_RESP add priority number(24);
+alter table EPIS_MULTI_PROF_RESP add dt_update TIMESTAMP(6) WITH LOCAL TIME ZONE;
+
+comment on column EPIS_MULTI_PROF_RESP.priority
+  is 'Priority number';
+
+comment on column EPIS_MULTI_PROF_RESP.dt_update
+  is 'Record update date. ';
+-- CHANGE END: Elisabete Bugalho

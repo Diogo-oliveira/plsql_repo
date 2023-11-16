@@ -1,0 +1,188 @@
+
+
+  CREATE TABLE SR_SURGERY_RECORD
+   (	ID_SURGERY_RECORD NUMBER(24,0) NOT NULL ENABLE,
+	ID_SCHEDULE_SR NUMBER(24,0) NOT NULL ENABLE,
+	ID_SR_INTERVENTION NUMBER(24,0),
+	ID_PROF_TEAM NUMBER(24,0),
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	FLG_PAT_STATUS VARCHAR2(1),
+	FLG_STATE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_SURG_NAT VARCHAR2(1),
+	FLG_SURG_TYPE VARCHAR2(1),
+	FLG_URGENCY VARCHAR2(1),
+	ID_ANESTHESIA_TYPE NUMBER(24,0),
+
+	ID_CLINICAL_SERVICE NUMBER(12,0),
+	NOTES VARCHAR2(2000),
+	DT_ANEST_START DATE,
+	DT_ANEST_END DATE,
+	DT_SR_ENTRY DATE,
+	DT_SR_EXIT DATE,
+	DT_ROOM_ENTRY DATE,
+	DT_ROOM_EXIT DATE,
+	DT_RCV_ENTRY DATE,
+	DT_RCV_EXIT DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE,
+	NOTES_CANCEL VARCHAR2(2000),
+
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN sr_surgery_record.id_surgery_record IS 'ID único' ;
+COMMENT ON COLUMN sr_surgery_record.id_schedule_sr IS 'ID do agendamento' ;
+COMMENT ON COLUMN sr_surgery_record.id_prof_team IS 'ID da equipa de profissionais' ;
+COMMENT ON COLUMN sr_surgery_record.id_patient IS 'ID do paciente' ;
+COMMENT ON COLUMN sr_surgery_record.flg_pat_status IS 'Estado do paciente. Valores possíveis: A-Ausente, W- Em espera, L- Pedido de transporte para o bloco, T- Em transporte para o bloco, V- Acolhido no bloco, P- Em preparação, R- Preparado para a cirurgia, S- Em cirurgia, F- Terminou a cirurgia, Y- No recobro, D- Alta do Recobro, O- Em transporte para outro local no hospital ou noutra instituição' ;
+COMMENT ON COLUMN sr_surgery_record.flg_state IS 'Estado da cirurgia. Estados possíveis: T- Por Agendar A- Agendado V- Avaliação pré-operatória, P- Preparação cirúrgica, S- Em Cirurgia, O- Avaliação Pós-operatória - R- Recobro, F- Terminado, C - Cancelado' ;
+COMMENT ON COLUMN sr_surgery_record.flg_surg_nat IS 'Natureza da cirurgia. Valores possíveis: C- Convencional, A- Ambulatória' ;
+COMMENT ON COLUMN sr_surgery_record.flg_surg_type IS 'Tipo de cirurgia. Valores possíveis: I- Limpa, L- Limpa-contaminada, C- Contaminada, P- Conspurcada' ;
+COMMENT ON COLUMN sr_surgery_record.flg_urgency IS 'Indica tipo de urgência: U- Urgente, P- Programada' ;
+COMMENT ON COLUMN sr_surgery_record.id_anesthesia_type IS 'ID do tipo de anestesia' ;
+COMMENT ON COLUMN sr_surgery_record.id_clinical_service IS 'ID do serviço clínico' ;
+COMMENT ON COLUMN sr_surgery_record.notes IS 'Notas da cirurgia' ;
+COMMENT ON COLUMN sr_surgery_record.dt_anest_start IS 'Data / hora de início da anestesia' ;
+
+COMMENT ON COLUMN sr_surgery_record.dt_anest_end IS 'Data / hora do fim da anestesia' ;
+COMMENT ON COLUMN sr_surgery_record.dt_sr_entry IS 'Data / hora de entrada do paciente no Bloco Operatório' ;
+COMMENT ON COLUMN sr_surgery_record.dt_sr_exit IS 'Data / hora de saída do paciente do Bloco Operatório' ;
+COMMENT ON COLUMN sr_surgery_record.dt_room_entry IS 'Data / hora de entrada do paciente na sala operatória' ;
+COMMENT ON COLUMN sr_surgery_record.dt_room_exit IS 'Data / hora de saída do paciente da sala operatória' ;
+COMMENT ON COLUMN sr_surgery_record.dt_rcv_entry IS 'Data / hora de entrada do paciente na sala de recobro' ;
+COMMENT ON COLUMN sr_surgery_record.dt_rcv_exit IS 'Data / hora de saída do paciente da sala de recobro' ;
+COMMENT ON COLUMN sr_surgery_record.id_prof_cancel IS 'ID do profissional que efectuou o cancelamento' ;
+COMMENT ON COLUMN sr_surgery_record.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN sr_surgery_record.notes_cancel IS 'Notas de cancelamento' ;
+COMMENT ON COLUMN sr_surgery_record.id_institution IS 'ID da instituição' ;
+COMMENT ON COLUMN sr_surgery_record.adw_last_update IS 'Data da última alteração' ;
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização SR - eliminação de colunas
+ALTER TABLE SR_SURGERY_RECORD drop column DT_ANEST_START;
+ALTER TABLE SR_SURGERY_RECORD drop column DT_ANEST_END;
+ALTER TABLE SR_SURGERY_RECORD drop column DT_SR_ENTRY;
+ALTER TABLE SR_SURGERY_RECORD drop column DT_SR_EXIT;
+ALTER TABLE SR_SURGERY_RECORD drop column DT_ROOM_ENTRY;
+ALTER TABLE SR_SURGERY_RECORD drop column DT_ROOM_EXIT;
+ALTER TABLE SR_SURGERY_RECORD drop column DT_RCV_ENTRY;
+ALTER TABLE SR_SURGERY_RECORD drop column DT_RCV_EXIT;
+ALTER TABLE SR_SURGERY_RECORD drop column DT_CANCEL;
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE SR_SURGERY_RECORD ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN SR_SURGERY_RECORD.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 29/09/2009 16:20
+-- CHANGE REASON: [ALERT-47078] Consulta de Pré-Operatório
+ALTER TABLE SR_SURGERY_RECORD ADD FLG_PRIORITY VARCHAR2(1);
+COMMENT ON COLUMN SR_SURGERY_RECORD.FLG_PRIORITY IS 'Nível de prioridade da cirurgia';
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 28/10/2009 19:07
+-- CHANGE REASON: [ALERT-52602] Desenvolvimentos Director Clinico ALERT_34026
+ALTER TABLE SR_SURGERY_RECORD ADD FLG_SR_PROC VARCHAR2(1);
+COMMENT ON COLUMN SR_SURGERY_RECORD.FLG_SR_PROC IS 'Estado do processo cirúrgico. W - Pendente E - Em preenchimento, N - Pendente de envio de pedido de aprovação, P - Aprovação pendente, A - Aprovação concedida, R- Aprovação rejeitada, S - Cirurgia em curso, F - Concluído, C - Cancelado';
+ALTER TABLE SR_SURGERY_RECORD ADD DT_FLG_SR_PROC TIMESTAMP(6) WITH LOCAL TIME ZONE;
+COMMENT ON COLUMN SR_SURGERY_RECORD.DT_FLG_SR_PROC IS 'Last change date flg_sr_proc';
+--CHANGE END: Filipe Silva
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 21/01/2016 12:05
+-- CHANGE REASON: [ALERT-317983] ALERT-317983 CDOC Functionalities V5 Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table SR_SURGERY_RECORD
+  is 'Table with a surgery record information';
+-- Add comments to the columns 
+comment on column SR_SURGERY_RECORD.id_surgery_record
+  is 'Primary key';
+comment on column SR_SURGERY_RECORD.id_schedule_sr
+  is 'Schedule identifier in SCHEDULE_SR table';
+comment on column SR_SURGERY_RECORD.id_sr_intervention
+  is 'Surgical intervation identifier in SR_INTERVENTION table';
+comment on column SR_SURGERY_RECORD.id_prof_team
+  is 'Professional team identifier in PROF_TEAM table';
+comment on column SR_SURGERY_RECORD.id_patient
+  is 'Patient id';
+comment on column SR_SURGERY_RECORD.flg_pat_status
+  is 'Patient status (code sys_domain in sys_domain table : SR_SURGERY_RECORD.FLG_PAT_STATUS)';
+comment on column SR_SURGERY_RECORD.flg_state
+  is 'Surgical state (code sys_domain in sys_domain table : SR_SURGERY_RECORD.FLG_STATE)';
+comment on column SR_SURGERY_RECORD.flg_surg_nat
+  is 'Surgical nature (code sys_domain in sys_domain table : SR_SURGERY_RECORD.FLG_SURG_NAT)';
+comment on column SR_SURGERY_RECORD.flg_surg_type
+  is 'Surgical type (code sys_domain in sys_domain table : SR_SURGERY_RECORD.FLG_SURG_TYPE)';
+comment on column SR_SURGERY_RECORD.flg_urgency
+  is 'Urgency type (code sys_domain in sys_domain table : SR_SURGERY_RECORD.FLG_URGENCY)';
+comment on column SR_SURGERY_RECORD.id_anesthesia_type
+  is 'Anesthesia type in anesthesia table';
+comment on column SR_SURGERY_RECORD.id_clinical_service
+  is 'Clinical service id';
+comment on column SR_SURGERY_RECORD.notes
+  is 'Surgical notes';
+comment on column SR_SURGERY_RECORD.id_prof_cancel
+  is 'Professional that cancel the note';
+comment on column SR_SURGERY_RECORD.notes_cancel
+  is 'Cancel notes';
+comment on column SR_SURGERY_RECORD.id_institution
+  is 'Institution id';
+comment on column SR_SURGERY_RECORD.adw_last_update
+  is 'Last change update : deprecated';
+comment on column SR_SURGERY_RECORD.dt_anest_start_tstz
+  is 'Start anesthesia date / hour';
+comment on column SR_SURGERY_RECORD.dt_anest_end_tstz
+  is 'End anesthesia date / hour';
+comment on column SR_SURGERY_RECORD.dt_sr_entry_tstz
+  is 'Operating room suite patient entry date / hour';
+comment on column SR_SURGERY_RECORD.dt_sr_exit_tstz
+  is 'Operating room suite patient exit date / hour';
+comment on column SR_SURGERY_RECORD.dt_room_entry_tstz
+  is 'Operating room patient entry date / hour';
+comment on column SR_SURGERY_RECORD.dt_room_exit_tstz
+  is 'Operating room patient exit date / hour';
+comment on column SR_SURGERY_RECORD.dt_rcv_entry_tstz
+  is 'Recovery room patient entry date / hour';
+comment on column SR_SURGERY_RECORD.dt_rcv_exit_tstz
+  is 'Recovery room patient exit date / hour';
+comment on column SR_SURGERY_RECORD.dt_cancel_tstz
+  is 'Cancel date';
+comment on column SR_SURGERY_RECORD.id_episode
+  is 'Episode ID';
+comment on column SR_SURGERY_RECORD.create_user
+  is 'Creation User';
+comment on column SR_SURGERY_RECORD.create_time
+  is 'Creation Time';
+comment on column SR_SURGERY_RECORD.create_institution
+  is 'Creation Institution';
+comment on column SR_SURGERY_RECORD.update_user
+  is 'Update User';
+comment on column SR_SURGERY_RECORD.update_time
+  is 'Update Time';
+comment on column SR_SURGERY_RECORD.update_institution
+  is 'Update Institution';
+comment on column SR_SURGERY_RECORD.flg_priority
+  is 'Surgical record priority level (code sys_domain in sys_domain table : SR_SURGERY_RECORD.FLG_PRIORITY)';
+comment on column SR_SURGERY_RECORD.flg_sr_proc
+  is 'Surgical process state (code sys_domain in sys_domain table : SR_SURGERY_RECORD.FLG_SR_PROC)';
+comment on column SR_SURGERY_RECORD.dt_flg_sr_proc
+  is 'Last change date flg_sr_proc';
+-- CHANGE END: Renato Nunes
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/07/2017 14:08
+-- CHANGE REASON: [ALERT-331061]
+ALTER TABLE SR_SURGERY_RECORD DROP CONSTRAINT SR_REC_SIN_FK;
+ALTER TABLE SR_SURGERY_RECORD ADD CONSTRAINT SR_REC_SIN_FK FOREIGN KEY (ID_SR_INTERVENTION) REFERENCES INTERVENTION (ID_INTERVENTION);
+-- CHANGE END: Pedro Henriques

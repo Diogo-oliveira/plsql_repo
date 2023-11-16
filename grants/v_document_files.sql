@@ -1,0 +1,1 @@
+grant select on alert.v_document_files to alert_viewer;

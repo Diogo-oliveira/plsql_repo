@@ -1,0 +1,182 @@
+CREATE TABLE INTERV_INT_CAT
+(
+  ID_INTERV_CATEGORY  NUMBER(24) NOT NULL,
+  ID_INTERVENTION     NUMBER(24) NOT NULL,
+  RANK                NUMBER(24),
+  ADW_LAST_UPDATE     DATE
+);
+
+COMMENT ON TABLE INTERV_INT_CAT 
+        IS 'Associação dos procedimentos clínicos às respectivas categorias';
+COMMENT ON COLUMN INTERV_INT_CAT.ID_INTERV_CATEGORY 
+        IS 'Identificador da categoria';
+COMMENT ON COLUMN INTERV_INT_CAT.ID_INTERVENTION 
+        IS 'Identificador do procedimento';
+COMMENT ON COLUMN INTERV_INT_CAT.RANK 
+        IS 'Posição para ordenação de resultados';
+COMMENT ON COLUMN INTERV_INT_CAT.ADW_LAST_UPDATE 
+        IS 'Data da última actualização';
+
+comment on table INTERV_INT_CAT is 'Association of interventions to intervention categories';
+comment on column INTERV_INT_CAT.ID_INTERV_CATEGORY is 'Category ID';
+comment on column INTERV_INT_CAT.ID_INTERVENTION is 'Intervention ID';
+comment on column INTERV_INT_CAT.RANK is 'Position for sorting results';
+comment on column INTERV_INT_CAT.ADW_LAST_UPDATE is 'Date of last update';
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 04/04/2011 12:28
+-- CHANGE REASON: [ALERT-170049] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns u
+     WHERE u.table_name = 'INTERV_INT_CAT'
+       AND u.column_name = 'ID_SOFTWARE';
+
+    IF l_var <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE INTERV_INT_CAT ADD ID_SOFTWARE NUMBER(24) DEFAULT 0  NOT NULL';
+    END IF;
+
+END;
+/
+
+COMMENT ON COLUMN INTERV_INT_CAT.ID_SOFTWARE  is 'Software id';
+
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns u
+     WHERE u.table_name = 'INTERV_INT_CAT'
+       AND u.column_name = 'ID_INSTITUTION';
+
+    IF l_var <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE INTERV_INT_CAT ADD ID_INSTITUTION NUMBER(24) DEFAULT 0 NOT NULL';
+    END IF;
+END;
+/
+
+COMMENT ON COLUMN INTERV_INT_CAT.ID_INSTITUTION  is 'Institution id';
+
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns u
+     WHERE u.table_name = 'INTERV_INT_CAT'
+       AND u.column_name = 'FLG_ADD_REMOVE';
+
+    IF l_var <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE INTERV_INT_CAT ADD FLG_ADD_REMOVE VARCHAR2(1) DEFAULT ''A'' NOT NULL';
+        EXECUTE IMMEDIATE 'ALTER TABLE INTERV_INT_CAT ADD CONSTRAINT IIT_FLG_ADD_REMOVE_CHK CHECK (FLG_ADD_REMOVE IN(''A'', ''R''))';
+    END IF;
+END;
+/
+
+COMMENT ON COLUMN INTERV_INT_CAT.FLG_ADD_REMOVE  is 'A- Add R-Remove configuration';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 14/04/2011 09:49
+-- CHANGE REASON: [ALERT-170786 ] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns u
+     WHERE u.table_name = 'INTERV_INT_CAT'
+       AND u.column_name = 'ID_SOFTWARE';
+
+    IF l_var <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE INTERV_INT_CAT ADD ID_SOFTWARE NUMBER(24) DEFAULT 0  NOT NULL';
+    END IF;
+
+END;
+/
+
+comment on column INTERV_INT_CAT.ID_SOFTWARE  is 'Software id';
+
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns u
+     WHERE u.table_name = 'INTERV_INT_CAT'
+       AND u.column_name = 'ID_INSTITUTION';
+
+    IF l_var <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE INTERV_INT_CAT ADD ID_INSTITUTION NUMBER(24) DEFAULT 0 NOT NULL';
+    END IF;
+END;
+/
+
+comment on column INTERV_INT_CAT.ID_INSTITUTION  is 'Institution id';
+
+
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns u
+     WHERE u.table_name = 'INTERV_INT_CAT'
+       AND u.column_name = 'FLG_ADD_REMOVE';
+
+    IF l_var <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE INTERV_INT_CAT ADD FLG_ADD_REMOVE VARCHAR2(1) DEFAULT ''A'' NOT NULL';
+        EXECUTE IMMEDIATE 'ALTER TABLE INTERV_INT_CAT ADD CONSTRAINT IIT_FLG_ADD_REMOVE_CHK CHECK (FLG_ADD_REMOVE IN(''A'', ''R''))';
+    END IF;
+END;
+/
+
+comment on column INTERV_INT_CAT.FLG_ADD_REMOVE  is 'A- Add R- Remove configuration';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 11/01/2016 16:36
+-- CHANGE REASON: [ALERT-317702] 
+comment on table INTERV_INT_CAT
+  is 'Procedure association to a category';
+-- Add comments to the columns 
+comment on column INTERV_INT_CAT.id_interv_category
+  is 'Category ID';
+comment on column INTERV_INT_CAT.id_intervention
+  is 'Procedure ID';
+comment on column INTERV_INT_CAT.rank
+  is 'Rank';
+comment on column INTERV_INT_CAT.adw_last_update
+  is 'Update date';
+comment on column INTERV_INT_CAT.create_user
+  is 'Creation User';
+comment on column INTERV_INT_CAT.create_time
+  is 'Creation Time';
+comment on column INTERV_INT_CAT.create_institution
+  is 'Creation Institution';
+comment on column INTERV_INT_CAT.update_user
+  is 'Update User';
+comment on column INTERV_INT_CAT.update_time
+  is 'Update Time';
+comment on column INTERV_INT_CAT.update_institution
+  is 'Update Institution';
+comment on column INTERV_INT_CAT.id_software
+  is 'Software ID';
+comment on column INTERV_INT_CAT.id_institution
+  is 'Institution ID';
+comment on column INTERV_INT_CAT.flg_add_remove
+  is 'Flag that indicates the association type: A - add, R - remove';
+
+  
+  
+-- CHANGE END: Ana Matos

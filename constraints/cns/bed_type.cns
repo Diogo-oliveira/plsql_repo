@@ -1,0 +1,59 @@
+ALTER TABLE BED_TYPE ADD CONSTRAINT BTY_FAVAI_CHK CHECK (flg_available in ('Y', 'N')) ENABLE;
+
+
+
+ALTER TABLE BED_TYPE ADD CONSTRAINT BTY_PK PRIMARY KEY (ID_BED_TYPE) ENABLE;
+
+
+
+ALTER TABLE BED_TYPE MODIFY (ID_BED_TYPE NOT NULL ENABLE);
+
+
+
+ALTER TABLE BED_TYPE MODIFY (CODE_BED_TYPE NOT NULL ENABLE);
+
+
+
+ALTER TABLE BED_TYPE MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+ALTER TABLE bed_type modify(id_institution NOT NULL ENABLE);
+
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/06/2010 14:32
+-- CHANGE REASON: [ALERT-105487] 
+ALTER TABLE BED_TYPE 
+ADD CONSTRAINT BT_FLG_STATUS_CHK CHECK (FLG_STATUS IN ('A', 'C', 'E')) ENABLE;
+
+ALTER TABLE BED_TYPE 
+ADD CONSTRAINT BT_FLG_PARAM_TYPE_CHK CHECK (FLG_PARAMETERIZATION_TYPE IN ('B', 'C')) ENABLE;
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 05/12/2013 14:30
+-- CHANGE REASON: [ALERT-271407] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -06512);
+    e_object_exists3 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists3, -02264);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table bed_type
+    add constraint bt_cbt_chk
+    check (case when CODE_BED_TYPE is not null and DESC_BED_TYPE is not null then 0 else 1 end = 1)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

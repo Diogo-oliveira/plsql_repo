@@ -1,0 +1,28 @@
+begin
+  pk_versioning.drop_types( table_varchar('T_TBL_DATA_DEATH', 'T_REC_DATA_DEATH') );
+end;
+/
+
+CREATE OR REPLACE TYPE T_REC_DATA_DEATH FORCE AS OBJECT
+(
+ ID_INSTITUTION      NUMBER,
+ institution      VARCHAR2(4000)
+,MAIN_DEATH_CAUSE    VARCHAR2(4000)
+,DEATH_DATE_TSTZ              timestamp with local time zone
+,DEATH_DATE              VARCHAR2(4000)
+,DEATH_PLACE             VARCHAR2(4000)
+,WARD_CODE               VARCHAR2(0200 char)
+,WARD                    VARCHAR2(4000)
+,FINAL_DIAGNOSIS         VARCHAR2(4000)
+,INITIAL_DIAGNOSIS         VARCHAR2(4000)
+,SECONDARY_DIAGNOSIS         VARCHAR2(4000)
+,PATIENT_FILE_NUMBER     VARCHAR2(4000)
+,DT_LAST_UPDATE_TSTZ   timestamp with local time zone
+,DT_LAST_UPDATE      VARCHAR2(200 char)
+)
+;
+/
+
+CREATE OR REPLACE TYPE T_TBL_DATA_DEATH AS TABLE OF T_REC_DATA_DEATH;
+
+grant execute on T_TBL_DATA_DEATH to alert_data_access;

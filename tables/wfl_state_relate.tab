@@ -1,0 +1,24 @@
+
+create table wfl_state_relate
+(
+	id_state_relation	number(5) not null,
+	state				number(5) null,
+	next_state			number(5) null,
+	flg_active			char(1) default 'Y' not null,
+	rank				number(3) default 0 not null
+) tablespace TABLE_S;
+
+--comments
+comment on table wfl_state_relate
+	is 'Table of related states (transition from state to next_state)';
+
+comment on column wfl_state_relate.id_state_relation
+	is 'id relations (PK)';
+comment on column wfl_state_relate.state
+	is 'id of state - origin';
+comment on column wfl_state_relate.next_state
+	is 'id of state - destination';
+comment on column wfl_state_relate.flg_active
+	is 'state transition is active or not (Y,N)';
+comment on column wfl_state_relate.rank
+	is 'rank of destination state - for ordering purposes only';

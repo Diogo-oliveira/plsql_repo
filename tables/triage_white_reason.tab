@@ -1,0 +1,42 @@
+
+
+  CREATE TABLE TRIAGE_WHITE_REASON
+   (	ID_TRIAGE_WHITE_REASON NUMBER(24,0) NOT NULL ENABLE,
+	CODE_TRIAGE_WHITE_REASON VARCHAR2(200) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE triage_white_reason IS 'Razões da passagem no SU, para doentes não triados ("brancos")' ;
+
+COMMENT ON COLUMN triage_white_reason.id_triage_white_reason IS 'Chave primária' ;
+COMMENT ON COLUMN triage_white_reason.code_triage_white_reason IS 'Código para tradução das razões da passagem no SU, para doentes não triados (brancos)' ;
+COMMENT ON COLUMN triage_white_reason.rank IS 'Ordem de visualização' ;
+COMMENT ON COLUMN triage_white_reason.adw_last_update IS 'Data da última alteração' ;
+
+ALTER TABLE TRIAGE_WHITE_REASON 
+ ADD (FLG_AVAILABLE  VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ );
+
+COMMENT ON COLUMN TRIAGE_WHITE_REASON.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD';
+
+ALTER TABLE TRIAGE_WHITE_REASON MODIFY FLG_AVAILABLE default null;
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:34
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column TRIAGE_WHITE_REASON.id_triage_white_reason
+  is 'Primary key';
+comment on column TRIAGE_WHITE_REASON.code_triage_white_reason
+  is 'Translation code for routine patients ';
+comment on column TRIAGE_WHITE_REASON.rank
+  is 'Rank for ordering';
+comment on column TRIAGE_WHITE_REASON.adw_last_update
+  is 'Date of last change';
+comment on column TRIAGE_WHITE_REASON.flg_available
+  is 'Availability: (Y) Yes (N) No';
+-- CHANGE END: Elisabete Bugalho

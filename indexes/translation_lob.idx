@@ -1,0 +1,33 @@
+CREATE INDEX alert.TL_TABLE_NAME  ON alert.TRANSLATION_LOB(TABLE_NAME) tablespace alert_idx;
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 14/10/2020 15:57
+-- CHANGE REASON: [ARCH-8187]
+begin
+pk_lucene_index_admin.drop_indexes(i_table_owner => 'ALERT', i_table_name => 'TRANSLATION_LOB');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 15/10/2020 10:16
+-- CHANGE REASON: [ARCH-8187]
+DECLARE
+    tbl_lang table_number;
+BEGIN
+
+    SELECT id_language
+      BULK COLLECT
+      INTO tbl_lang
+      FROM LANGUAGE;
+
+    FOR IN IN 1 .. tbl_lang.count
+    LOOP
+        pk_lucene_index_admin.drop_specific_index(i_owner => k_owner, i_table => k_table, i_lang => x.id_language);
+    END LOOP;
+
+END;
+/
+
+-- CHANGE END: Ana Matos

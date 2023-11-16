@@ -1,0 +1,59 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 12/09/2011 17:13
+-- CHANGE REASON: [ALERT-194915 ] 
+ALTER TABLE mcdt_nature add(CONSTRAINT mne_flg_mcdt_chk CHECK(flg_mcdt IN ('A', 'E', 'I', 'P', 'F')));
+
+ALTER TABLE mcdt_nature add(CONSTRAINT mne_flg_nature_chk
+                            CHECK(flg_nature IN ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'L', 'M', 'N', 'O')));
+
+ALTER TABLE mcdt_nature add(CONSTRAINT mne_flg_available_chk CHECK(flg_available IN ('Y', 'N')));
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 12/09/2011 17:51
+-- CHANGE REASON: [ALERT-194915 ] 
+
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'MCDT_NATURE'
+       AND constraint_name = 'MNE_PK';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE mcdt_nature add(CONSTRAINT mne_flg_mcdt_chk CHECK(flg_mcdt IN (''A'', ''E'', ''I'', ''P'', ''F'')))';    
+        EXECUTE IMMEDIATE 'ALTER TABLE mcdt_nature add(CONSTRAINT mne_flg_nature_chk
+                                    CHECK(flg_nature IN
+                                          (''A'', ''B'', ''C'', ''D'', ''E'', ''F'', ''G'', ''H'', ''I'', ''J'', ''L'', ''M'', ''N'', ''O'')))';    
+        EXECUTE IMMEDIATE   'ALTER TABLE mcdt_nature add(CONSTRAINT mne_flg_available_chk CHECK(flg_available IN (''Y'', ''N'')))';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'MCDT_NATURE'
+       AND constraint_name = 'MNE_PK';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE mcdt_nature add(CONSTRAINT mne_flg_mcdt_chk CHECK(flg_mcdt IN (''A'', ''E'', ''I'', ''P'', ''F'')))';
+        EXECUTE IMMEDIATE 'ALTER TABLE mcdt_nature add(CONSTRAINT mne_flg_nature_chk
+                                    CHECK(flg_nature IN
+                                          (''A'', ''B'', ''C'', ''D'', ''E'', ''F'', ''G'', ''H'', ''I'', ''J'', ''L'', ''M'', ''N'', ''O'')))';
+        EXECUTE IMMEDIATE 'ALTER TABLE mcdt_nature add(CONSTRAINT mne_flg_available_chk CHECK(flg_available IN (''Y'', ''N'')))';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso

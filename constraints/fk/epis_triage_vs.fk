@@ -1,0 +1,24 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 19/07/2013 09:21
+-- CHANGE REASON: [ALERT-262175] EST: the system is not displaying the vital signs as defining criteria when these are the ones that define the urgency level
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE_VS ADD CONSTRAINT ETVS_ET_FK FOREIGN KEY(ID_EPIS_TRIAGE) REFERENCES EPIS_TRIAGE(ID_EPIS_TRIAGE)');
+    run_ddl(i_sql => 'ALTER TABLE EPIS_TRIAGE_VS ADD CONSTRAINT ETVS_VS_FK FOREIGN KEY(ID_VITAL_SIGN) REFERENCES VITAL_SIGN(ID_VITAL_SIGN)');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:34
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+ALTER TABLE EPIS_TRIAGE_VS ADD CONSTRAINT ET_VS_ET_FK FOREIGN KEY(ID_EPIS_TRIAGE) REFERENCES EPIS_TRIAGE(ID_EPIS_TRIAGE);    
+-- CHANGE END: Elisabete Bugalho

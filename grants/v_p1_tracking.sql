@@ -1,0 +1,1 @@
+GRANT SELECT ON v_p1_tracking TO INTF_ALERT;

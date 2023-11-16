@@ -1,0 +1,83 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 17/03/2010 10:46
+-- CHANGE REASON: [ALERT-76057 ] SOAP
+-- Creating Table 'TAB_BUTTON_PTM'
+CREATE TABLE TAB_BUTTON_PTM
+ (ID_TAB_BUTTON_PTM NUMBER(24) NOT NULL,
+ ID_TAB_BUTTON NUMBER(24) NOT NULL,
+ ID_PROFILE_TEMPLATE_MARKET NUMBER(24) NOT NULL,
+ CODE_TAB_BUTTON VARCHAR2(200 CHAR),
+ RANK NUMBER(6),
+ FLG_AVAILABLE VARCHAR2(1) DEFAULT 'Y' NOT NULL,
+ FLG_IDENTIFIER VARCHAR2(200 CHAR),
+ FLG_DEFAULT VARCHAR2(1 CHAR) NOT NULL
+ );
+ 
+comment on column TAB_BUTTON_PTM.ID_TAB_BUTTON_PTM
+  is 'ID unique';
+comment on column TAB_BUTTON_PTM.ID_TAB_BUTTON
+  is 'ID Tab BUTTON';
+comment on column TAB_BUTTON_PTM.ID_PROFILE_TEMPLATE_MARKET
+  is 'Id profile template market';
+comment on column TAB_BUTTON_PTM.CODE_TAB_BUTTON
+  is 'Code for translation in case of the translation of the button doesn?t apply for the profile';
+comment on column TAB_BUTTON_PTM.RANK
+  is 'Order of appearance';
+comment on column TAB_BUTTON_PTM.FLG_AVAILABLE
+  is 'If it is available';
+comment on column TAB_BUTTON_PTM.FLG_IDENTIFIER
+  is 'Indicates a codification for this button, to be identified on flash overlaps the FLG_IDENTIFIER on table TAB_BUTTON';
+comment on column TAB_BUTTON_PTM.FLG_DEFAULT
+  is 'If it is the default one';
+ 
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/03/2010 14:06
+-- CHANGE REASON: [ALERT-81866 ] Colunas de auditoria
+ALTER TABLE TAB_BUTTON_PTM ADD (
+   CREATE_USER VARCHAR2(24),
+   CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+   CREATE_INSTITUTION NUMBER(24,0),
+   UPDATE_USER VARCHAR2(24),
+   UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+   UPDATE_INSTITUTION NUMBER(24,0)
+);
+ 
+COMMENT ON COLUMN TAB_BUTTON_PTM.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN TAB_BUTTON_PTM.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN TAB_BUTTON_PTM.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN TAB_BUTTON_PTM.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN TAB_BUTTON_PTM.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN TAB_BUTTON_PTM.UPDATE_INSTITUTION IS 'Update Institution';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table TAB_BUTTON_PTM modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table TAB_BUTTON_PTM modify FLG_AVAILABLE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table TAB_BUTTON_PTM modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table TAB_BUTTON_PTM
+  is 'Tab button configuration for profile';
+-- CHANGE END: Elisabete Bugalho

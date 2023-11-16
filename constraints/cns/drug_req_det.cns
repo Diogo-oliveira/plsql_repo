@@ -1,0 +1,53 @@
+
+
+  ALTER TABLE DRUG_REQ_DET ADD CONSTRAINT DRDT_PK PRIMARY KEY (ID_DRUG_REQ_DET) ENABLE;
+
+  ALTER TABLE DRUG_REQ_DET MODIFY (ID_DRUG_REQ_DET NOT NULL ENABLE);
+
+  ALTER TABLE DRUG_REQ_DET MODIFY (ID_DRUG_REQ NOT NULL ENABLE);
+
+  ALTER TABLE DRUG_REQ_DET MODIFY (ID_DRUG NOT NULL ENABLE);
+
+  ALTER TABLE DRUG_REQ_DET MODIFY (QTY_REQ NOT NULL ENABLE);
+
+  ALTER TABLE DRUG_REQ_DET MODIFY (FLG_STATUS NOT NULL ENABLE);
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-ABR-03
+-- CHANGING REASON: OVREDOSAGE MODULE
+alter table drug_req_det
+  add constraint DRD_FLG_DOSAGE_CHECK_CHK
+  check FLG_DOSAGE_CHECK IN
+      (
+       'Y',
+       'N'
+      ));
+-- CHANGE END Patrícia Neto
+
+-- CHANGED BY: Rui Marante
+-- CHANGED DATE: 2009-07-03
+-- CHANGING REASON: ALERT-31058
+
+alter table drug_req_det
+add constraint drd_home_chk check (req_to_be_delivered_at_home in ('Y','N'));
+
+-- CHANGE END: Rui Marante
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 31/05/2010 10:59
+-- CHANGE REASON: [ALERT-101366] 
+alter table drug_req_det add constraint DRD_FIRST_DOSE_CHK
+  check (FIRST_DOSE IN
+      ('Y','N'));
+-- CHANGE END: Pedro Albuquerque
+
+
+-- CHANGED BY: Pedro Martins Santos
+-- CHANGE DATE: 07/12/2011 
+-- CHANGE REASON: [ALERT-154056] 
+alter table drug_req_det drop constraint DRD_QTYPREP_CHK; 
+
+alter table drug_req_det add constraint DRD_QTYPREP_CHK
+  check (qty_to_prep >= 0);
+-- CHANGE END: Pedro Martins Santos

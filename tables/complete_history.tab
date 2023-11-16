@@ -1,0 +1,120 @@
+
+
+  CREATE TABLE COMPLETE_HISTORY
+   (	ID_COMPLETE_HISTORY NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_CREATION DATE NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1),
+	TEXT VARCHAR2(4000)
+   );
+
+
+COMMENT ON TABLE complete_history IS 'HISTORIA COMPLETA DO PACIENTE' ;
+
+COMMENT ON COLUMN complete_history.id_complete_history IS 'Primary Key' ;
+COMMENT ON COLUMN complete_history.id_episode IS 'Id do Episódio' ;
+COMMENT ON COLUMN complete_history.id_patient IS 'Id do Paciente' ;
+COMMENT ON COLUMN complete_history.id_professional IS 'Id do Profissional' ;
+COMMENT ON COLUMN complete_history.dt_creation IS 'Data de criação' ;
+COMMENT ON COLUMN complete_history.flg_status IS 'A-Activa; I-Inactiva' ;
+COMMENT ON COLUMN complete_history.text IS 'Texto/História' ;
+
+alter table complete_history 
+add (dt_creation_tstz timestamp with local time zone); 
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-JUL-31
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 16299
+COMMENT ON COLUMN  COMPLETE_HISTORY.DT_CREATION_TSTZ IS 'Creation date'; 
+
+-- CHANGED END: Nuno Ferreira
+
+-- INPATIENT LMAIA 22-09-2008
+-- DROP das colunas DT_... que não são Timezone (desnormalização)
+alter table complete_history drop (DT_CREATION);
+-- END
+
+
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 08/02/2011 00:29
+-- CHANGE REASON: [ALERT-160546] 
+BEGIN
+    EXECUTE IMMEDIATE 'alter table complete_history add (flg_action VARCHAR2(1 CHAR) default ''N'' not null)'; 
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+
+--
+BEGIN
+    EXECUTE IMMEDIATE 'alter table complete_history add (id_parent NUMBER(24,0))'; 
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+
+--
+comment on column COMPLETE_HISTORY.FLG_ACTION is 'Flag that indicates what was the origin of thisregistry: N - new registry; E - Edition of one existing registry';
+comment on column COMPLETE_HISTORY.ID_PARENT is 'Complete history identifier that gives origin to current registry';
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 16/05/2011 16:10
+-- CHANGE REASON: [ALERT-179477] Convert varchar2 to clob - Descrição: No perfil Médico, no INP, no botão da História da Doença (truncated)
+BEGIN
+
+    EXECUTE IMMEDIATE 'ALTER TABLE complete_history ADD long_text clob';
+    EXECUTE IMMEDIATE 'comment on column complete_history.long_text is ''Text/History for large descriptions''';
+EXCEPTION
+    WHEN no_data_found THEN    
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 17/05/2011 14:38
+-- CHANGE REASON: [ALERT-179647] Change Details screen to allow clob's - Descrição: No perfil Médico, no INP, no botão da História da Doença (truncated)
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE COMPLETE_HISTORY DROP COLUMN TEXT'; 
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 17/05/2011 14:52
+-- CHANGE REASON: [ALERT-179477] Convert varchar2 to clob - Descrição: No perfil Médico, no INP, no botão da História da Doença (truncated)
+BEGIN
+
+    EXECUTE IMMEDIATE 'ALTER TABLE complete_history ADD long_text clob';
+    EXECUTE IMMEDIATE 'comment on column complete_history.long_text is ''Text/History for large descriptions''';
+EXCEPTION
+    WHEN others THEN    
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.complete_history move lob(long_text) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

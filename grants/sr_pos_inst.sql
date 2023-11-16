@@ -1,0 +1,1 @@
+grant select on SR_POS_INST  to ALERT_VIEWER;

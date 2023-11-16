@@ -1,0 +1,14 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 15/05/2012 15:26
+-- CHANGE REASON: [ALERT-230280] indexed column id_episode_answer
+declare
+  e_idx_exists exception;
+  pragma exception_init(e_idx_exists, -00955);
+begin
+  execute immediate 'create index opn_episa_fk_idx on opinion (id_episode_answer)
+';
+exception when e_idx_exists then
+  dbms_output.put_line('index opn_episa_fk_idx already exists!');
+end;
+/
+-- CHANGE END: Pedro Carneiro

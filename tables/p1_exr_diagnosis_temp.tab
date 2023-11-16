@@ -1,0 +1,57 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/03/2010 14:06
+-- CHANGE REASON: [ALERT-79864] 
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(1000 CHAR);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM all_objects
+     WHERE object_name = 'P1_EXR_DIAGNOSIS_TEMP';
+
+    IF l_count = 0
+    THEN
+        l_sql := 'create global temporary table P1_EXR_DIAGNOSIS_TEMP
+(
+  ID_EXR_DIAGNOSIS    NUMBER(24) not null,
+  ID_EXTERNAL_REQUEST NUMBER(24) not null,
+  ID_DIAGNOSIS        NUMBER(12) not null,  
+  ID_PROFESSIONAL     NUMBER(24) not null,
+  ID_INSTITUTION      NUMBER(12) not null,
+  FLG_TYPE            VARCHAR2(1),
+  FLG_STATUS          VARCHAR2(1),
+  DT_INSERT_TSTZ      TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  DESC_DIAGNOSIS      VARCHAR2(1000 CHAR)  
+)
+on commit preserve rows';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(1000 CHAR);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM all_tab_columns
+     WHERE table_name = 'P1_EXR_DIAGNOSIS_TEMP'
+     and column_name = 'DT_INSERT';
+
+    IF l_count = 1
+    THEN
+        -- drop column of type DATE
+    l_sql := 'alter table P1_EXR_DIAGNOSIS_TEMP drop column DT_INSERT';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 13/04/2011
+-- CHANGE REASON: [ALERT-172741] 
+drop table p1_exr_diagnosis_temp;
+-- CHANGE END: Ana Monteiro

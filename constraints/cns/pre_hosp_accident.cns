@@ -1,0 +1,121 @@
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_PK primary key (ID_PRE_HOSP_ACCIDENT)';
+
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_GENDER_CHK
+					   check (GENDER IN (''F'',''M'', ''I'', ''N''))';
+
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_FLG_M_I_CHK
+					   check (FLG_MECH_INJ IN (''B'', ''P''))';
+
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_FLG_ST_CHK
+					   check (FLG_STATUS IN (''A'', ''I''))';
+EXCEPTION
+WHEN others THEN
+    NULL;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_PK primary key (ID_PRE_HOSP_ACCIDENT)';
+
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_GENDER_CHK
+					   check (GENDER IN (''F'',''M'', ''I'', ''N''))';
+
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_FLG_M_I_CHK
+					   check (FLG_MECH_INJ IN (''B'', ''P''))';
+
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_FLG_ST_CHK
+					   check (FLG_STATUS IN (''A'', ''I'', ''C''))';
+EXCEPTION
+WHEN others THEN
+    NULL;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_PK primary key (ID_PRE_HOSP_ACCIDENT)';
+
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_GENDER_CHK
+					   check (GENDER IN (''F'',''M'', ''I'', ''N''))';
+
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_FLG_M_I_CHK
+					   check (FLG_MECH_INJ IN (''B'', ''P'', ''FT''))';
+
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_FLG_ST_CHK
+					   check (FLG_STATUS IN (''A'', ''I'', ''C''))';
+EXCEPTION
+WHEN others THEN
+    NULL;
+END;
+/
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 28/04/2010 18:08
+-- CHANGE REASON: [ALERT-93542] Remove outdated constraint
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE pre_hosp_accident DROP CONSTRAINT PR_HSP_ACC_GENDER_CHK';
+EXCEPTION
+WHEN OTHERS THEN
+  NULL;
+END;
+/
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 30/09/2011 14:39
+-- CHANGE REASON: [ALERT-197754] Pre-hospital data - Road Traffic Accident (RTA)
+--                DB Versioning - New tables
+DECLARE
+    e_uk1 EXCEPTION;
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_ACCIDENT ADD CONSTRAINT PR_HSP_ACC_FLG_PD_CHK CHECK (FLG_PROT_DEVICE IN (''BS'',''CR'',''H'',''SB'',''N'',''U''))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_ACCIDENT ADD CONSTRAINT PR_HSP_ACC_FLG_RPT_CHK CHECK (FLG_RTA_PAT_TYP IN (''D'',''P'',''C'',''PD'',''O''))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_ACCIDENT ADD CONSTRAINT PR_HSP_ACC_FLG_IDO_CHK CHECK (FLG_IS_DRIV_OWN IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_ACCIDENT ADD CONSTRAINT PR_HSP_ACC_FLG_PI_CHK CHECK (FLG_POLICE_INVOLVED IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

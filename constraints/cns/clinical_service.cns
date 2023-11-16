@@ -1,0 +1,56 @@
+
+
+  ALTER TABLE CLINICAL_SERVICE ADD CONSTRAINT CSE_PK PRIMARY KEY (ID_CLINICAL_SERVICE) ENABLE;
+
+  ALTER TABLE CLINICAL_SERVICE MODIFY (ID_CLINICAL_SERVICE NOT NULL ENABLE);
+
+  ALTER TABLE CLINICAL_SERVICE MODIFY (CODE_CLINICAL_SERVICE NOT NULL ENABLE);
+
+  ALTER TABLE CLINICAL_SERVICE MODIFY (RANK NOT NULL ENABLE);
+
+  ALTER TABLE CLINICAL_SERVICE MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/07/2009 08:59
+-- CHANGE REASON: [ALERT-38601] Modifications to table CLINICAL_SERVICE
+ALTER TABLE CLINICAL_SERVICE ADD CONSTRAINT CSE_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN ('Y', 'N'));
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 20/09/2011 18:06
+-- CHANGE REASON: [ALERT-187042] constraints
+DECLARE
+    e_pk_already_there EXCEPTION;
+    e_unique_already_there EXCEPTION;
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_Default.CLINICAL_SERVICE
+  add constraint CSE_FLG_AVAILABLE_CHK
+  check (FLG_AVAILABLE IN (''Y'', ''N''))';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

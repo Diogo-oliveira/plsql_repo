@@ -1,0 +1,5 @@
+-- CHANGED BY:  Mauro Sousa
+-- CHANGE DATE: 06/08/2010 11:36
+-- CHANGE REASON: [ALERT-111044] 
+grant references on BODY_SIDE to ALERT_DEFAULT;
+-- CHANGE END:  Mauro Sousa

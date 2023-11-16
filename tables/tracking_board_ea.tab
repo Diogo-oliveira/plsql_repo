@@ -1,0 +1,258 @@
+CREATE TABLE TRACKING_BOARD_EA
+ (ID_EPISODE NUMBER(24),
+	ID_PATIENT NUMBER(24),
+	ID_EPIS_TYPE NUMBER(12),
+	ID_TRIAGE_COLOR NUMBER(12),
+	ID_FAST_TRACK NUMBER(24),
+	ID_ROOM NUMBER(24),
+	ID_BED NUMBER(24),
+	DT_BEGIN TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	ID_DIET NUMBER(24),
+	DESC_DIET VARCHAR2(4000),
+	ID_PROF_RESP NUMBER(24),
+	ID_NURSE_RESP NUMBER(24),
+	LAB_COUNT NUMBER DEFAULT 0,
+	LAB_PEND VARCHAR2(240),
+	LAB_REQ VARCHAR2(240),
+	LAB_HARV VARCHAR2(240),
+	LAB_TRANSP VARCHAR2(240),
+	LAB_EXEC VARCHAR2(240),
+	LAB_RESULT VARCHAR2(240),
+	LAB_RESULT_READ VARCHAR2(240),
+	EXAM_COUNT NUMBER DEFAULT 0,
+	EXAM_PEND VARCHAR2(240),
+	EXAM_REQ VARCHAR2(240),
+	EXAM_TRANSP VARCHAR2(240),
+	EXAM_EXEC VARCHAR2(240),
+	EXAM_RESULT VARCHAR2(240),
+	EXAM_RESULT_READ VARCHAR2(240),
+	INTERV_COUNT NUMBER DEFAULT 0,
+	INTERV_PEND VARCHAR2(240),
+	INTERV_SOS VARCHAR2(240),
+	INTERV_REQ VARCHAR2(240),
+	INTERV_EXEC VARCHAR2(240),
+	INTERV_FINISH VARCHAR2(240),
+	MED_COUNT NUMBER DEFAULT 0,
+	MED_PEND VARCHAR2(240),
+	MED_REQ VARCHAR2(240),
+	MED_EXEC VARCHAR2(240),
+	MED_FINISH VARCHAR2(240),
+	MED_SOS VARCHAR2(240),
+	TRANSP_COUNT NUMBER DEFAULT 0,
+	TRANSP_DELAY VARCHAR2(240),
+	TRANSP_ONGOING VARCHAR2(240),
+	MONIT_COUNT NUMBER DEFAULT 0,
+	MONIT_DELAY VARCHAR2(240),
+	MONIT_ONGOING VARCHAR2(240),
+	MONIT_FINISH VARCHAR2(240),
+	DT_DG_LAST_UPDATE TIMESTAMP (6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP) ;
+
+COMMENT ON COLUMN TRACKING_BOARD_EA.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN TRACKING_BOARD_EA.ID_PATIENT IS 'Patient ID';
+COMMENT ON COLUMN TRACKING_BOARD_EA.ID_TRIAGE_COLOR IS 'Triage Color ID';
+COMMENT ON COLUMN TRACKING_BOARD_EA.ID_FAST_TRACK IS 'Fast Track ID';
+COMMENT ON COLUMN TRACKING_BOARD_EA.ID_ROOM IS 'Room ID';
+COMMENT ON COLUMN TRACKING_BOARD_EA.ID_BED IS 'Bed ID';
+COMMENT ON COLUMN TRACKING_BOARD_EA.DT_BEGIN IS 'Episode''s begin date';
+COMMENT ON COLUMN TRACKING_BOARD_EA.ID_DIET IS 'Requested diet ID';
+COMMENT ON COLUMN TRACKING_BOARD_EA.DESC_DIET IS 'Requested diet description. If ID_DIET is not NULL this field has an associated code_translation. If ID_DIET is NULL then this field has a free-text description';
+COMMENT ON COLUMN TRACKING_BOARD_EA.ID_PROF_RESP IS 'Responsible physician''s ID';
+COMMENT ON COLUMN TRACKING_BOARD_EA.ID_NURSE_RESP IS 'Responsible nurse''s ID';
+COMMENT ON COLUMN TRACKING_BOARD_EA.LAB_COUNT IS 'Number of different statuses of lab tests'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.LAB_PEND IS 'Status (in a specific format) of the prioritary task of pending lab tests'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.LAB_REQ IS 'Status (in a specific format) of the prioritary task of requested lab tests'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.LAB_HARV IS 'Status (in a specific format) of the prioritary task of harvested lab tests'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.LAB_TRANSP IS 'Status (in a specific format) of the prioritary task of lab tests'' harvests that are in transport';
+COMMENT ON COLUMN TRACKING_BOARD_EA.LAB_EXEC IS 'Status (in a specific format) of the prioritary task of lab tests'' requests that are being executed';
+COMMENT ON COLUMN TRACKING_BOARD_EA.LAB_RESULT IS 'Status (in a specific format) of the prioritary task of lab tests'' requests that have unread results';
+COMMENT ON COLUMN TRACKING_BOARD_EA.LAB_RESULT_READ IS 'Status (in a specific format) of the prioritary task of lab tests'' requests that have read results';
+COMMENT ON COLUMN TRACKING_BOARD_EA.EXAM_COUNT IS 'Number of different statuses of exams'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.EXAM_PEND IS 'Status (in a specific format) of the prioritary task of pending exams'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.EXAM_REQ IS 'Status (in a specific format) of the prioritary task of requested exams'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.EXAM_EXEC IS 'Status (in a specific format) of the prioritary task of exams'' requests that are being executed';
+COMMENT ON COLUMN TRACKING_BOARD_EA.EXAM_RESULT IS 'Status (in a specific format) of the prioritary task of exams'' requests that have unread results';
+COMMENT ON COLUMN TRACKING_BOARD_EA.EXAM_RESULT_READ IS 'Status (in a specific format) of the prioritary task of exams'' requests that have read results';
+COMMENT ON COLUMN TRACKING_BOARD_EA.INTERV_COUNT IS 'Number of different statuses of interventions and dressings'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.INTERV_PEND IS 'Status (in a specific format) of the prioritary task of pending interventions and dressings'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.INTERV_SOS IS 'Status (in a specific format) of the prioritary task of interventions and dressings'' requests with PRN instructions';
+COMMENT ON COLUMN TRACKING_BOARD_EA.INTERV_REQ IS 'Status (in a specific format) of the prioritary task of requested interventions and dressings'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.INTERV_EXEC IS 'Status (in a specific format) of the prioritary task of interventions and dressings'' requests that are being executed';
+COMMENT ON COLUMN TRACKING_BOARD_EA.INTERV_FINISH IS 'Status (in a specific format) of the prioritary task of finished interventions and dressings'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.MED_COUNT IS 'Number of different statuses of medication''s prescriptions';
+COMMENT ON COLUMN TRACKING_BOARD_EA.MED_PEND IS 'Status (in a specific format) of the prioritary task of pending medication prescriptions';
+COMMENT ON COLUMN TRACKING_BOARD_EA.MED_REQ IS 'Status (in a specific format) of the prioritary task of requested medication';
+COMMENT ON COLUMN TRACKING_BOARD_EA.MED_EXEC IS 'Status (in a specific format) of the prioritary task of undergoing medications';
+COMMENT ON COLUMN TRACKING_BOARD_EA.MED_FINISH IS 'Status (in a specific format) of the prioritary task of finished medication';
+COMMENT ON COLUMN TRACKING_BOARD_EA.MED_SOS IS 'Status (in a specific format) of the prioritary task of medication prescriptions with PRN instructions';
+COMMENT ON COLUMN TRACKING_BOARD_EA.TRANSP_COUNT IS 'Number of different statuses of transportation'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.TRANSP_DELAY IS 'Status (in a specific format) of the prioritary task of delayed transportation requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.TRANSP_ONGOING IS 'Status (in a specific format) of the prioritary task of ongoing transportation requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.MONIT_COUNT IS 'Number of different statuses of monitorizations'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.MONIT_DELAY IS 'Status (in a specific format) of the prioritary task of delayed monitorizations'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.MONIT_ONGOING IS 'Status (in a specific format) of the prioritary task of ongoing monitorizations'' requests';
+COMMENT ON COLUMN TRACKING_BOARD_EA.MONIT_FINISH IS 'Status (in a specific format) of the prioritary task of finished monitorizations'' requests';
+COMMENT ON TABLE TRACKING_BOARD_EA  IS 'Esta tabela contempla a informação necessária no tracking board.';
+
+-- CHANGED BY: Fábio Oliveira
+-- CHANGE DATE: 26/11/2008
+-- CHANGE REASON: ALERT-10616 Alterações à tabela tracking_board_ea derivadas do code review
+COMMENT ON TABLE TRACKING_BOARD_EA IS 'This table has the information needed for the tracking board.';
+COMMENT ON COLUMN TRACKING_BOARD_EA.ID_EPIS_TYPE IS 'Episode''s type ID';
+COMMENT ON COLUMN TRACKING_BOARD_EA.DESC_DIET IS 'Requested diet';
+COMMENT ON COLUMN TRACKING_BOARD_EA.EXAM_TRANSP IS 'Status (in a specific format) of the prioritary task of exams'' requests that are in transport';
+COMMENT ON COLUMN TRACKING_BOARD_EA.DT_DG_LAST_UPDATE IS 'Date of the table''s last update';
+-- CHANGE END
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/11/2009 18:09
+-- CHANGE REASON: [ALERT-53639] New status missing on Tracking view
+BEGIN
+    --New columns
+    EXECUTE IMMEDIATE 'ALTER TABLE tracking_board_ea add lab_ext VARCHAR2(240)';
+    EXECUTE IMMEDIATE 'ALTER TABLE tracking_board_ea add exam_ext VARCHAR2(240)';
+    EXECUTE IMMEDIATE 'ALTER TABLE tracking_board_ea add exam_perf VARCHAR2(240)';
+    --New columns comments
+    EXECUTE IMMEDIATE 'COMMENT ON column tracking_board_ea.lab_ext IS ''Status (in a specific format) of the prioritary task of exterior lab tests requests''';
+    EXECUTE IMMEDIATE 'COMMENT ON column tracking_board_ea.exam_ext IS ''Status (in a specific format) of the prioritary task of exterior exams requests''';
+    EXECUTE IMMEDIATE 'COMMENT ON column tracking_board_ea.exam_perf IS ''Status (in a specific format) of the prioritary task of performed exams requests''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 07/07/2010 15:50
+-- CHANGE REASON: [ALERT-110074] Order sets - TDE
+ALTER TABLE TRACKING_BOARD_EA ADD (
+    EXAM_WTG VARCHAR2(240 CHAR),
+    LAB_WTG VARCHAR2(240 CHAR));
+
+COMMENT ON COLUMN TRACKING_BOARD_EA.EXAM_WTG IS 'Status (in a specific format) of the prioritary task of pending exams'' waiting';
+COMMENT ON COLUMN TRACKING_BOARD_EA.LAB_WTG IS 'Status (in a specific format) of the prioritary task of requested lab tests'' waiting';
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 06/06/2011 09:58
+-- CHANGE REASON: [ALERT-181883] First observation date in facility transfers
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE tracking_board_ea ADD flg_has_stripes VARCHAR2(1 CHAR)';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+COMMENT ON COLUMN tracking_board_ea.flg_has_stripes IS 'Indicates if the triage color column (patient grids) should have stripes (Y), indicating status of first observation by the physician.';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 14/09/2011 15:50
+-- CHANGE REASON: [ALERT-128866] Tasks missing on Tracking view screen
+--                ALERT_189902 - PRN status not available on Tracking view
+--                
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE TRACKING_BOARD_EA ADD LAB_CC VARCHAR2(240 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE TRACKING_BOARD_EA ADD LAB_SOS VARCHAR2(240 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE TRACKING_BOARD_EA ADD EXAM_SOS VARCHAR2(240 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRACKING_BOARD_EA.LAB_CC IS ''Status (in a specific format) of the prioritary task of Specimen collection in progress lab tests''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRACKING_BOARD_EA.LAB_SOS IS ''Status (in a specific format) of the prioritary task of PRN lab tests''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRACKING_BOARD_EA.EXAM_SOS IS ''Status (in a specific format) of the prioritary task of PRN exams requests''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 18/03/2015 10:06
+-- CHANGE REASON: [ALERT-309049] [STABLE] EDIS patient grids changes
+--                
+-- Add/modify columns 
+BEGIN
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA add oth_exam_count number default 0]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA add oth_exam_pend VARCHAR2(240 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA add oth_exam_req VARCHAR2(240 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA add oth_exam_transp VARCHAR2(240 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA add oth_exam_exec VARCHAR2(240 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA add oth_exam_result VARCHAR2(240 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA add oth_exam_result_read VARCHAR2(240 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA add oth_exam_ext VARCHAR2(240 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA add oth_exam_perf VARCHAR2(240 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA add oth_exam_wtg VARCHAR2(240 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA add oth_exam_sos VARCHAR2(240 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA add opinion_count number(24) default 0]');
+pk_versioning.run(i_sql => q'[alter table TRACKING_BOARD_EA add opinion_state VARCHAR2(4000)]');
+
+END;
+/
+-- Add comments to the columns 
+comment on column TRACKING_BOARD_EA.oth_exam_count
+  is 'Number of different statuses of other exams'' requests';
+comment on column TRACKING_BOARD_EA.oth_exam_pend
+  is 'Status (in a specific format) of the prioritary task of pending other exams'' requests';
+comment on column TRACKING_BOARD_EA.oth_exam_req
+  is 'Status (in a specific format) of the prioritary task of requested other exams'' requests';
+comment on column TRACKING_BOARD_EA.oth_exam_transp
+  is 'Status (in a specific format) of the prioritary task of other exams'' requests that are in transport';
+comment on column TRACKING_BOARD_EA.oth_exam_exec
+  is 'Status (in a specific format) of the prioritary task of other exams'' requests that are being executed';
+comment on column TRACKING_BOARD_EA.oth_exam_result
+  is 'Status (in a specific format) of the prioritary task of other exams'' requests that have unread results';
+comment on column TRACKING_BOARD_EA.oth_exam_result_read
+  is 'Status (in a specific format) of the prioritary task of other exams'' requests that have read results';
+comment on column TRACKING_BOARD_EA.oth_exam_ext
+  is 'Status (in a specific format) of the prioritary task of exterior other exams requests';
+comment on column TRACKING_BOARD_EA.oth_exam_perf
+  is 'Status (in a specific format) of the prioritary task of performed other exams requests';
+comment on column TRACKING_BOARD_EA.oth_exam_wtg
+  is 'Status (in a specific format) of the prioritary task of pending other exams'' waiting';
+comment on column TRACKING_BOARD_EA.oth_exam_sos
+  is 'Status (in a specific format) of the prioritary task of PRN oth exams requests';
+comment on column TRACKING_BOARD_EA.exam_count
+  is 'Number of different statuses of image exams'' requests';
+comment on column TRACKING_BOARD_EA.exam_pend
+  is 'Status (in a specific format) of the prioritary task of pending image exams'' requests';
+comment on column TRACKING_BOARD_EA.exam_req
+  is 'Status (in a specific format) of the prioritary task of requested image exams'' requests';
+comment on column TRACKING_BOARD_EA.exam_transp
+  is 'Status (in a specific format) of the prioritary task of  image exams'' requests that are in transport';
+comment on column TRACKING_BOARD_EA.exam_exec
+  is 'Status (in a specific format) of the prioritary task of  image exams'' requests that are being executed';
+comment on column TRACKING_BOARD_EA.exam_result
+  is 'Status (in a specific format) of the prioritary task of  image exams'' requests that have unread results';
+comment on column TRACKING_BOARD_EA.exam_result_read
+  is 'Status (in a specific format) of the prioritary task of  image exams'' requests that have read results';
+comment on column TRACKING_BOARD_EA.exam_ext
+  is 'Status (in a specific format) of the prioritary task of exterior  image exams requests';
+comment on column TRACKING_BOARD_EA.exam_perf
+  is 'Status (in a specific format) of the prioritary task of performed image exams requests';
+comment on column TRACKING_BOARD_EA.exam_wtg
+  is 'Status (in a specific format) of the prioritary task of pending image exams'' waiting';
+comment on column TRACKING_BOARD_EA.exam_sos
+  is 'Status (in a specific format) of the prioritary task of PRN image exams requests';
+comment on column TRACKING_BOARD_EA.opinion_count
+  is 'Number of Consultation Requests';
+comment on column TRACKING_BOARD_EA.opinion_state
+  is 'Status (in a specific format) of the consultation request (only if exists one)';
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,36 @@
+CREATE TABLE EVAL_MNG (
+	ID_EVAL_MNG NUMBER(24) NOT NULL,
+	ID_CPT_CODE NUMBER(24) NOT NULL,
+	ID_INSTITUTION NUMBER(12) NOT NULL,
+	ID_SOFTWARE NUMBER(24) NOT NULL,
+	FLG_TYPE VARCHAR2(1),
+	RANK NUMBER(6) NOT NULL,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+);
+
+COMMENT ON TABLE EVAL_MNG IS 'Evaluation and Management. Parameterization. Defines which CPT Codes are available for each Institution and Software';
+
+COMMENT ON COLUMN EVAL_MNG.ID_EVAL_MNG IS 'Primary key';
+COMMENT ON COLUMN EVAL_MNG.ID_CPT_CODE IS 'CPT Code identifier';
+COMMENT ON COLUMN EVAL_MNG.ID_INSTITUTION IS 'Institution identifier';
+COMMENT ON COLUMN EVAL_MNG.ID_SOFTWARE IS 'Software identifier';
+COMMENT ON COLUMN EVAL_MNG.FLG_TYPE IS 'Type associated to this CPT Code: N - New Patient; E - Established Patient/Follow up; C - Consultation';
+COMMENT ON COLUMN EVAL_MNG.RANK IS 'Rank for sorting reasons';
+COMMENT ON COLUMN EVAL_MNG.FLG_AVAILABLE IS 'Y - Available; N - Not available';
+COMMENT ON COLUMN EVAL_MNG.ADW_LAST_UPDATE IS 'Date of last update';
+
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 02/03/2011 09:09
+-- CHANGE REASON: [ALERT-165016] Filter CPT codes by market
+ALTER TABLE eval_mng ADD id_market NUMBER(24);
+COMMENT ON COLUMN eval_mng.id_market IS 'Market associated with this CPT CODE';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Alexander Camilo
+-- CHANGE DATE: 08/03/2018 16:14
+-- CHANGE REASON: [EMR-1557] Create the default configuration 
+ALTER TABLE ALERT.EVAL_MNG ADD flg_default VARCHAR2(1) DEFAULT('N');
+COMMENT ON COLUMN eval_mng.flg_default IS 'Y/N - Define the record to be used as default for the institution/software';
+-- CHANGE END: Alexander Camilo

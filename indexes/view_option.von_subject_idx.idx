@@ -1,0 +1,16 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+declare
+   e_obj_already_there EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_obj_already_there, -00955); -- table already there
+begin
+    BEGIN
+        EXECUTE IMMEDIATE 'create index von_subject_idx on view_option (subject)';
+    EXCEPTION
+        WHEN e_obj_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

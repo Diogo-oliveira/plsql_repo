@@ -1,0 +1,57 @@
+
+alter table drug_req_det_hist_modif
+add constraint pharm_drdhm_drd_fk foreign key (id_drug_req_det)
+references drug_req_det (id_drug_req_det);
+
+alter table drug_req_det_hist_modif
+add constraint pharm_drdhm_presc_dir_fk foreign key (id_presc_directions)
+references presc_directions (id_presc_directions);
+
+alter table drug_req_det_hist_modif
+add constraint pharm_drdhm_unitm_fk foreign key (id_unit_measure)
+references unit_measure (id_unit_measure);
+
+-- CHANGED BY: Pedro Martins Santos
+-- CHANGE DATE: 2011-APR-11
+-- CHANGE REASON: ALERT-158742
+declare
+	e_fk_already_there EXCEPTION;
+	PRAGMA EXCEPTION_INIT(e_fk_already_there,-02275);
+begin
+    execute immediate 'alter table drug_req_det_hist_modif
+    add constraint pharm_drdhm_drd_fk foreign key (id_drug_req_det)
+    references drug_req_det (id_drug_req_det)';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('NOTE: pharm_drdhm_drd_fk foreign was already created');
+END;
+/
+
+declare
+	e_fk_already_there EXCEPTION;
+	PRAGMA EXCEPTION_INIT(e_fk_already_there,-02275);
+begin        
+    execute immediate 'alter table drug_req_det_hist_modif
+    add constraint pharm_drdhm_presc_dir_fk foreign key (id_presc_directions)
+    references presc_directions (id_presc_directions)';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('NOTE: pharm_drdhm_presc_dir_fk was already created');
+END;
+/
+
+
+
+declare
+	e_fk_already_there EXCEPTION;
+	PRAGMA EXCEPTION_INIT(e_fk_already_there,-02275);
+begin        
+    execute immediate 'alter table drug_req_det_hist_modif
+	add constraint pharm_drdhm_unitm_fk foreign key (id_unit_measure)
+	references unit_measure (id_unit_measure)';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('NOTE: pharm_drdhm_unitm_fk foreign was already created');
+END;
+/
+--CHANGE END

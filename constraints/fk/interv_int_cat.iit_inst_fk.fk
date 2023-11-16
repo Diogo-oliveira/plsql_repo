@@ -1,0 +1,20 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 14/04/2011 09:50
+-- CHANGE REASON: [ALERT-170786 ] 
+
+
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints u
+     WHERE u.constraint_name = 'IIT_INST_FK';
+
+    IF l_var <> 1
+    THEN
+        EXECUTE IMMEDIATE 'alter table INTERV_INT_CAT  add constraint IIT_INST_FK foreign key (ID_INSTITUTION) references INSTITUTION (ID_INSTITUTION)';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso

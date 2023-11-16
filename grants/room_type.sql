@@ -1,0 +1,17 @@
+grant select on room_type to ALERT_VIEWER;
+
+
+-- CHANGED BY:  Mauro Sousa
+-- CHANGE DATE: 10/11/2010 14:32
+-- CHANGE REASON: [ALERT-101505] 
+grant references on ROOM_TYPE to ALERT_DEFAULT;
+-- CHANGE END:  Mauro Sousa
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2017-1-03
+-- CHANGED REASON: ALERT-327486
+grant INSERT on ALERT.ROOM_TYPE to ALERT_APEX_TOOLS;
+grant SELECT on ALERT.ROOM_TYPE to ALERT_APEX_TOOLS;
+grant UPDATE on ALERT.ROOM_TYPE to ALERT_APEX_TOOLS;
+-- CHANGE END: Humberto Cardoso

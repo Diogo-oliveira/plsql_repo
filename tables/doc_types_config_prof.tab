@@ -1,0 +1,48 @@
+create table DOC_TYPES_CONFIG_PROF
+(
+  ID_DOC_TYPES_CONFIG number(24) not null,
+  ID_PROFESSIONAL     number(24) not null,
+  FLG_VIEW            varchar2(1) default 'Y' not null
+)
+tablespace TABLE_S
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table DOC_TYPES_CONFIG_PROF
+  is 'preferencias do profissional relativas aos ori_types';
+-- Add comments to the columns 
+comment on column DOC_TYPES_CONFIG_PROF.ID_DOC_TYPES_CONFIG
+  is 'id da config com o template deste prof.';
+comment on column DOC_TYPES_CONFIG_PROF.ID_PROFESSIONAL
+  is 'id do profissional';
+comment on column DOC_TYPES_CONFIG_PROF.FLG_VIEW
+  is 'prof. tem preferencia por esta config';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table DOC_TYPES_CONFIG_PROF
+  add constraint DTCP_PK primary key (ID_DOC_TYPES_CONFIG, ID_PROFESSIONAL);
+alter table DOC_TYPES_CONFIG_PROF
+  add constraint DTCP_DTC_FK foreign key (ID_DOC_TYPES_CONFIG)
+  references doc_types_config (ID_DOC_TYPES_CONFIG) on delete cascade;
+alter table DOC_TYPES_CONFIG_PROF
+  add constraint DTCP_PROF_FK foreign key (ID_PROFESSIONAL)
+  references professional (ID_PROFESSIONAL) on delete cascade;
+-- Check constraints
+alter table DOC_TYPES_CONFIG_PROF
+ add constraint DTCP_CK
+ check (FLG_VIEW IN ('Y', 'N'));
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on DOC_TYPES_CONFIG_PROF to alert_viewer;
+grant select, insert, update, delete, references, alter, index on DOC_TYPES_CONFIG_PROF to inter_alert_v2;
+grant select, insert, update, delete, references on DOC_TYPES_CONFIG_PROF to pix;
+grant select, insert, update, delete, references on DOC_TYPES_CONFIG_PROF to xds_reg;
+grant select, insert, update, delete, references on DOC_TYPES_CONFIG_PROF to xds_rep;
+
+-- cmf 14-01-2016
+comment on table  alert.DOC_TYPES_CONFIG_PROF  						is 'Professional preferences relative to ORI_TYPES';
+comment on column alert.DOC_TYPES_CONFIG_PROF.ID_DOC_TYPES_CONFIG	is 'Primary key';
+comment on column alert.DOC_TYPES_CONFIG_PROF.ID_PROFESSIONAL 		is 'profissional id';
+comment on column alert.DOC_TYPES_CONFIG_PROF.FLG_VIEW				is 'prof. has preference for this config';

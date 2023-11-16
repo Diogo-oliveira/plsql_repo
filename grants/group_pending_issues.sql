@@ -1,0 +1,1 @@
+grant select, insert, update, delete, references, alter, index on GROUP_PENDING_ISSUES to ALERT_VIEWER;

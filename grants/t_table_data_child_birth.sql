@@ -1,0 +1,8 @@
+GRANT EXECUTE ON ALERT.t_table_data_child_birth TO ALERT_DATA_ACCESS;
+/
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 22/07/2020 14:36
+-- CHANGE REASON: [EMR-34465]
+GRANT EXECUTE ON t_table_data_child_birth TO ALERT_DATA_ACCESS;
+-- CHANGE END: Ana Matos

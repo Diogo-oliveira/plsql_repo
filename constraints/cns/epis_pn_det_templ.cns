@@ -1,0 +1,42 @@
+ALTER TABLE EPIS_PN_DET_TEMPL
+ ADD (CONSTRAINT EPDT_PK PRIMARY KEY 
+  (ID_EPIS_PN_DET_TEMPL))
+/
+
+ALTER TABLE EPIS_PN_DET_TEMPL
+ ADD (CONSTRAINT EPDT_STATUS_CHK CHECK (FLG_STATUS in ('A', 'R')))
+/
+
+CREATE UNIQUE INDEX EPDT_UK ON EPIS_PN_DET_TEMPL
+(id_epis_pn_det, id_epis_documentation );
+ 
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/03/2011 14:13
+-- CHANGE REASON: [ALERT-170459 ] Review H&P database dvelopment with notes of DB Arch.
+ALTER TABLE epis_pn_det_templ ADD CONSTRAINT EPDT_FLG_TORIG_CHK CHECK (FLG_TABLE_ORIGIN IN ('D','A','S','O','F','R'));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 04/04/2011 12:02
+-- CHANGE REASON: Review database dvelopment with notes of DB Arch.
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_pn_det_templ ADD CONSTRAINT EPDT_FLG_TORIG_CHK CHECK (FLG_TABLE_ORIGIN IN (''D'',''A'',''S'',''O'',''F'',''R''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 04/04/2011 12:19
+-- CHANGE REASON: [ALERT-170459 ] Review database dvelopment with notes of DB Arch.
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_pn_det_templ ADD CONSTRAINT EPDT_FLG_TORIG_CHK CHECK (FLG_TABLE_ORIGIN IN (''D'',''A'',''S'',''O'',''F'',''R''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

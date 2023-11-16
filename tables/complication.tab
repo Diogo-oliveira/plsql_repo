@@ -1,0 +1,90 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 25/03/2010 14:08
+-- CHANGE REASON: [ALERT-63591] Registration of complications through templates in use at JBZ (JBZ will provide the templates).
+CREATE TABLE COMPLICATION 
+(
+  ID_COMPLICATION        NUMBER(24) NOT NULL,  
+  CODE_COMPLICATION      VARCHAR2(200 CHAR) NOT NULL,
+  CODE                   VARCHAR2(200 CHAR),
+  FLG_AVAILABLE          VARCHAR2(1 CHAR) NOT NULL,
+  ID_CONTENT             VARCHAR2(200 CHAR),
+  ID_COMP_AXE            NUMBER(24),
+  CREATE_USER            VARCHAR2(24 CHAR),
+  CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION     NUMBER(24),
+  UPDATE_USER            VARCHAR2(24 CHAR),
+  UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION     NUMBER(24)
+);
+
+ALTER TABLE COMPLICATION MOVE TABLESPACE TABLE_S;
+
+COMMENT ON TABLE COMPLICATION IS 'Content table for complications.';
+COMMENT ON COLUMN COMPLICATION.ID_COMPLICATION IS 'Primary key.';
+COMMENT ON COLUMN COMPLICATION.CODE_COMPLICATION IS 'Translation code.';
+COMMENT ON COLUMN COMPLICATION.CODE IS 'Column used for codification purposes.';
+COMMENT ON COLUMN COMPLICATION.FLG_AVAILABLE IS 'Availability if the record.';
+COMMENT ON COLUMN COMPLICATION.ID_CONTENT IS 'Content unique ID.';
+COMMENT ON COLUMN COMPLICATION.ID_COMP_AXE IS 'Category ID';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 10:27
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table COMPLICATION
+  is 'Content table for complications.';
+-- Add comments to the columns 
+comment on column COMPLICATION.id_complication
+  is 'Primary key.';
+comment on column COMPLICATION.code_complication
+  is 'Translation code.';
+comment on column COMPLICATION.code
+  is 'Column used for codification purposes.';
+comment on column COMPLICATION.flg_available
+  is 'Availability if the record.';
+comment on column COMPLICATION.id_content
+  is 'Content unique ID.';
+comment on column COMPLICATION.id_comp_axe
+  is 'Category ID';
+comment on column COMPLICATION.create_user
+  is 'Creation User';
+comment on column COMPLICATION.create_time
+  is 'Creation Time';
+comment on column COMPLICATION.create_institution
+  is 'Creation Institution';
+comment on column COMPLICATION.update_user
+  is 'Update User';
+comment on column COMPLICATION.update_time
+  is 'Update Time';
+comment on column COMPLICATION.update_institution
+  is 'Update Institution';-->COMP_COLS_VISIBILITY|table
+-- Add comments to the table 
+comment on table COMP_COLS_VISIBILITY
+  is 'Visibility of complications screen columns.';
+-- Add comments to the columns 
+comment on column COMP_COLS_VISIBILITY.id_comp_cols_visibility
+  is 'Primary key.';
+comment on column COMP_COLS_VISIBILITY.id_sys_list
+  is 'Column type; The id_sys_list must belong to one of the following sys_list_group: COMPLICATION_COLUMNS_VISIBILITY or COMPLICATION_REQUEST_COLUMNS_VISIBILITY';
+comment on column COMP_COLS_VISIBILITY.flg_visible
+  is 'Columns is visible? Y - Yes, otherwise N.';
+comment on column COMP_COLS_VISIBILITY.id_institution
+  is 'Institution ID.';
+comment on column COMP_COLS_VISIBILITY.id_software
+  is 'Software ID.';
+comment on column COMP_COLS_VISIBILITY.flg_available
+  is 'Availability of the record.';
+comment on column COMP_COLS_VISIBILITY.create_user
+  is 'Creation User';
+comment on column COMP_COLS_VISIBILITY.create_time
+  is 'Creation Time';
+comment on column COMP_COLS_VISIBILITY.create_institution
+  is 'Creation Institution';
+comment on column COMP_COLS_VISIBILITY.update_user
+  is 'Update User';
+comment on column COMP_COLS_VISIBILITY.update_time
+  is 'Update Time';
+comment on column COMP_COLS_VISIBILITY.update_institution
+  is 'Update Institution';
+-- CHANGE END: Renato Nunes

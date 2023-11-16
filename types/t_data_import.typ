@@ -1,0 +1,60 @@
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 11/10/2016
+-- CHANGE REASON: CALERT-174
+
+CREATE OR REPLACE TYPE t_data_import FORCE AS OBJECT
+(
+    id_pn_soap_block    NUMBER(24),
+    id_pn_data_block    NUMBER(24),
+    task_description    CLOB,
+    task                CLOB,
+    dt_reg              VARCHAR2(200 CHAR),
+    dt_register         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    id_professional     NUMBER(24),
+    id_task             NUMBER(24),
+    id_task_type        NUMBER(24),
+    table_origin        VARCHAR2(2 CHAR),
+    rank                NUMBER(24),
+    id_episode          NUMBER(24),
+    id_task_aggregator  NUMBER(24),
+    dt_record           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    flg_ongoing         VARCHAR2(1 CHAR),
+    flg_normal          VARCHAR2(1 CHAR),
+    id_prof_exec        NUMBER(24),
+    dt_last_update      TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    id_parent_comments  NUMBER(24),
+    flg_has_notes       VARCHAR2(1 CHAR),
+    dt_task             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    flg_show_sub_title  VARCHAR2(1 CHAR),
+    flg_group_on_import VARCHAR2(1 CHAR),
+    dt_group_import       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    id_group_import       NUMBER(24),
+    code_desc_group       VARCHAR2(200 CHAR),
+    desc_group            VARCHAR2(200 CHAR),
+    id_sub_group_import   NUMBER(24),
+    code_desc_sub_group   VARCHAR2(200 CHAR),
+    separator             VARCHAR2(3 CHAR),
+    id_group_table        NUMBER(24),
+    table_position        NUMBER(24),
+    code_description      VARCHAR2(200 CHAR),
+    universal_description CLOB,
+    flg_sos               VARCHAR2(1 CHAR),
+    dt_begin              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    id_doc_area           NUMBER(24),
+    id_prof_review        NUMBER(24),
+    dt_review             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    code_status           VARCHAR2(200 CHAR),
+    dt_end                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    id_task_notes         NUMBER(24),
+    flg_status            VARCHAR2(24 CHAR),
+    id_sample_type        NUMBER(24),
+    code_desc_sample_type VARCHAR2(200 CHAR),
+    flg_description       VARCHAR2(24 CHAR),
+    description_condition  VARCHAR2(1000 CHAR),
+    code_desc_group_parent VARCHAR2(200 CHAR),
+    instructions_hash      VARCHAR2(200 CHAR),
+    flg_group_type         VARCHAR2(1 CHAR)
+)
+;
+/
+--CHANGE END: Pedro Teixeira

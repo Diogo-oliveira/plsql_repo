@@ -1,0 +1,119 @@
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 06/12/2011 10:25
+-- CHANGE REASON: [ALERT-208518] 
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02260);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_PK primary key (ID_SR_EPIS_INTERV_HIST)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02264);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_FLG_STATUS_H_CHK check (FLG_STATUS_HIST in (''A'',''O''))';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02264);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_FLG_CODE_TYPE_CHK check (FLG_CODE_TYPE in (''C'',''U''))';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02264);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_FLG_STATUS_CHK check (FLG_STATUS in (''C'',''E'',''F'',''R'',''T''))';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02264);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_FLG_SURG_REQUEST_CHK check (FLG_SURG_REQUEST IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02264);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_LATERALITY_CHK check (LATERALITY IN (''B'', ''I'', ''L'',''R''))';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 28/05/2014 10:26
+-- CHANGE REASON: [ALERT-283085] 
+DECLARE
+    e_object_nexists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_nexists, -02443);
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table sr_epis_interv_hist drop constraint SEVH_FLG_STATUS_CHK';
+    EXCEPTION
+        WHEN e_object_nexists THEN
+            dbms_output.put_line('AVISO: cns nao existe');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table sr_epis_interv_hist add constraint SEVH_FLG_STATUS_CHK check (flg_status in (''C'',''E'',''F'',''R'',''T'',''N''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: cns nao existe');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

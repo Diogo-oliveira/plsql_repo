@@ -1,0 +1,29 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGED DATE: 2009-ABR-02
+-- CHANGING REASON: create table
+create table IRREGULAR_DIRECTIONS_TIME
+(
+  ID_IRREGULAR_DIRECTIONS_TIME   NUMBER(12),
+  VALUE                          INTERVAL DAY(3) TO SECOND(3)
+)
+tablespace TABLE_S
+  pctfree 10
+  pctused 40
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+  
+alter table IRREGULAR_DIRECTIONS_TIME
+  add constraint IDTE_PK primary key (ID_IRREGULAR_DIRECTIONS_TIME)
+  using index 
+  tablespace TABLE_S;
+
+comment on table IRREGULAR_DIRECTIONS_TIME is 'Tabela que indica qual a hora de administração para cada ID_IRREGULAR_DIRECTIONS_TIME';  
+comment on column IRREGULAR_DIRECTIONS_TIME.ID_IRREGULAR_DIRECTIONS_TIME is 'ID da hora de administração definida em cada posologia irregular';
+comment on column IRREGULAR_DIRECTIONS_TIME.VALUE is 'Hora para administração definida em cada posologia irregular';
+-- CHANGE END Pedro Albuquerque

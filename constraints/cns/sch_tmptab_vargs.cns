@@ -1,0 +1,15 @@
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 21-08-2008
+-- CHANGE REASON: tabela temporaria para performance improvements
+declare dummy number(1);
+begin
+  select 1 into dummy 
+  from all_constraints 
+  where owner = 'ALERT' and constraint_name = 'STVA_PK';
+
+exception
+  when no_data_found then
+    execute immediate 'ALTER TABLE SCH_TMPTAB_VARGS ADD (CONSTRAINT STVA_PK PRIMARY KEY (argtype, id))';
+end;
+/
+--END

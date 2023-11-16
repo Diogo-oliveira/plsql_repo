@@ -1,0 +1,153 @@
+
+
+  CREATE TABLE TRIAGE_BOARD
+   (	ID_TRIAGE_BOARD NUMBER(12,0) NOT NULL ENABLE,
+	CODE_TRIAGE_BOARD VARCHAR2(200) NOT NULL ENABLE,
+	PAGE NUMBER(6,0),
+	SEX VARCHAR2(1),
+	AGE_MIN NUMBER(3,0),
+	AGE_MAX NUMBER(3,0),
+	CODE_HELP_TRIAGE_BOARD VARCHAR2(4000),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE triage_board IS 'Fluxogramas de Manchester' ;
+
+COMMENT ON COLUMN triage_board.id_triage_board IS 'Chave primária' ;
+COMMENT ON COLUMN triage_board.code_triage_board IS 'Código para tradução dos nomes dos fluxogramas' ;
+COMMENT ON COLUMN triage_board.page IS 'Página' ;
+COMMENT ON COLUMN triage_board.sex IS 'Sexo do doente para que se possa seleccionar este fluxograma' ;
+COMMENT ON COLUMN triage_board.age_min IS 'Idade mínima do doente para que se possa seleccionar este fluxograma' ;
+COMMENT ON COLUMN triage_board.age_max IS 'Idade máxima do doente para que se possa seleccionar este fluxograma' ;
+COMMENT ON COLUMN triage_board.code_help_triage_board IS 'Código para tradução da explicação dos fluxogramas de acordo com o manual de triagem de Manchester' ;
+COMMENT ON COLUMN triage_board.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN triage_board.adw_last_update IS 'Data da última alteração' ;
+
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 24/01/2010 19:50
+-- CHANGE REASON: [ALERT-70160] Triage refactoring
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_BOARD ADD BOARD_NUMBER NUMBER(24)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+
+COMMENT ON COLUMN TRIAGE_BOARD.BOARD_NUMBER IS 'Number shown next to the name of the flowchart';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 12/02/2010 10:00
+-- CHANGE REASON: [ALERT-74106] TRIAGE: configuration to check age limits in Manchester Triage flowcharts (except for "Crying baby")
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE triage_board ADD flg_override_config VARCHAR2(1 CHAR)';
+EXCEPTION
+      WHEN OTHERS THEN
+     dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+COMMENT ON COLUMN triage_board.flg_override_config IS 'Indicates which records should ALWAYS ignore the configurations for checking age or gender restrictions.';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 03/05/2012 18:42
+-- CHANGE REASON: [ALERT-229201] EST simplified triage
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_BOARD ADD FLG_DIRECT_CONFIRM VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL';
+EXCEPTION
+    WHEN OTHERS THEN
+      dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_BOARD ADD FLG_INITIAL_SCREEN_BOARD VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL';
+EXCEPTION
+    WHEN OTHERS THEN
+      dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+
+COMMENT ON COLUMN TRIAGE_BOARD.FLG_DIRECT_CONFIRM IS 'Flowchart can be selected directly and advance to the confirmation screen: (Y) Yes (N) No';
+COMMENT ON COLUMN TRIAGE_BOARD.FLG_INITIAL_SCREEN_BOARD IS 'Indicates a flowchart as the group of vital signs displayed in the triage initial screen. Used in EST triage protocol. (Y) Yes, recommended vital signs (N) No, normal flowchart';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 08/10/2013 16:33
+-- CHANGE REASON: [ALERT-266469] EST: for the triage complaint 1903 it is requested to have an warning when it is selected (ALERT_262192)
+DECLARE
+    e_col_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_col_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_BOARD ADD FLG_SHOW_WARNING VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column FLG_SHOW_WARNING already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_BOARD ADD CODE_WARNING_TITLE VARCHAR2(200 CHAR)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column CODE_WARNING_TITLE already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_BOARD ADD CODE_WARNING_MSG VARCHAR2(200 CHAR)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column CODE_WARNING_MSG already created.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_BOARD.FLG_SHOW_WARNING IS ''Is to show a warning to the user? Y - yes; N - otherwise''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_BOARD.CODE_WARNING_TITLE IS ''Translation code of warning title''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_BOARD.CODE_WARNING_MSG IS ''Translation code of warning message''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 22/05/2014 10:20
+-- CHANGE REASON: [ALERT-285605] EST: whenever the user denies the first two criteria for the motif 1105 the last one must be answered positively
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'ALTER TABLE TRIAGE_BOARD ADD FLG_REQ_YES_DISCRIM VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL');
+    run_ddl(i_sql => 'COMMENT ON COLUMN TRIAGE_BOARD.FLG_REQ_YES_DISCRIM IS ''Is required a yes answer to the discriminator?''');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:34
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+comment on column TRIAGE_BOARD.id_triage_board
+  is 'Primary Key';
+comment on column TRIAGE_BOARD.code_triage_board
+  is 'Code for triage protocol (flowchart)';
+comment on column TRIAGE_BOARD.page
+  is 'Page';
+comment on column TRIAGE_BOARD.sex
+  is 'Flag that indicates the patient sex for selecting this flowchart';
+comment on column TRIAGE_BOARD.age_min
+  is 'Minimum age for selecting this flowchart';
+comment on column TRIAGE_BOARD.age_max
+  is 'Max age for selecting this flowchart';
+comment on column TRIAGE_BOARD.code_help_triage_board
+  is 'Code for translating the explanation of this flowchart.';
+comment on column TRIAGE_BOARD.flg_available
+  is 'Availabitily (Y/N)';
+comment on column TRIAGE_BOARD.adw_last_update
+  is 'Date of last change';  
+  
+-- CHANGE END: Elisabete Bugalho

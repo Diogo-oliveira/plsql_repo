@@ -1,0 +1,26 @@
+-- CHANGED BY:  Mauro Sousa
+-- CHANGE DATE: 26/01/2011 11:49
+-- CHANGE REASON: [ALERT-157923] 
+grant references on ME_MANIP to ALERT_DEFAULT;
+-- CHANGE END:  Mauro Sousa
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 04/07/2011 16:59
+-- CHANGE REASON: [ALERT-157923] grants needed to FK references
+grant references on ME_MANIP to ALERT_DEFAULT;
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 20/09/2011 18:02
+-- CHANGE REASON: [ALERT-157923] grants
+grant references on ME_MANIP to ALERT_DEFAULT;
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 27/01/2012 17:16
+-- CHANGE REASON: [ALERT-216286] 
+grant references on ME_MANIP to ALERT_DEFAULT;
+-- CHANGE END:  Rui Gomes
+
+
+GRANT SELECT ON ALERT.ME_MANIP TO ALERT_PRODUCT_TR;

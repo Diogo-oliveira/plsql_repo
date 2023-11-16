@@ -1,0 +1,39 @@
+
+
+  CREATE TABLE DRUG_DESPACHOS_SOFT_INST
+   (	ID_DRUG_DESPACHOS_SOFT_INST NUMBER(24,0) NOT NULL ENABLE,
+	ID_DRUG_DESPACHOS NUMBER(24,0) NOT NULL ENABLE,
+	ID_DRUG NUMBER(12,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE drug_despachos_soft_inst IS 'Associaçãod e despachos a medicamentos por instituição e software (requisições internas de medicamentos)' ;
+
+COMMENT ON COLUMN drug_despachos_soft_inst.id_drug_despachos_soft_inst IS 'Chave primária.' ;
+COMMENT ON COLUMN drug_despachos_soft_inst.id_drug_despachos IS 'ID do despacho.' ;
+COMMENT ON COLUMN drug_despachos_soft_inst.id_drug IS 'ID do medicamento a que o despacho está associado.' ;
+COMMENT ON COLUMN drug_despachos_soft_inst.id_institution IS 'ID da instituição onde esta associada é válida.' ;
+COMMENT ON COLUMN drug_despachos_soft_inst.id_software IS 'ID do software onde esta associada é válida.' ;
+
+
+-- CHANGED BY:  NELSON CANASTRO
+-- CHANGE DATE: 01/09/2010 10:50
+-- CHANGE REASON: [ALERT-121259] Convert all ID_Drug columns to varchar2(255)
+    ALTER TABLE drug_despachos_soft_inst add id_drug_new VARCHAR2(255);
+
+    UPDATE drug_despachos_soft_inst
+       SET id_drug_new = to_char(id_drug);
+
+    ALTER TABLE drug_despachos_soft_inst drop CONSTRAINT ddsi_drug_fk;
+    ALTER TABLE drug_despachos_soft_inst drop column id_drug;
+    ALTER TABLE drug_despachos_soft_inst rename column id_drug_new TO id_drug;
+    ALTER TABLE drug_despachos_soft_inst modify id_drug VARCHAR2(255) NOT NULL;
+-- CHANGE END:  NELSON CANASTRO
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:32
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_DESPACHOS_SOFT_INST IS 'Associaçãod e despachos a medicamentos por instituição e software (requisições internas de medicamentos) [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

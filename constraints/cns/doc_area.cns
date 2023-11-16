@@ -1,0 +1,80 @@
+
+
+  ALTER TABLE DOC_AREA ADD CONSTRAINT DOCAREA_PK PRIMARY KEY (ID_DOC_AREA) ENABLE;
+
+  ALTER TABLE DOC_AREA MODIFY (ID_DOC_AREA NOT NULL ENABLE);
+
+  ALTER TABLE DOC_AREA MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE DOC_AREA MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 15/02/2011 15:43
+-- CHANGE REASON: [ALERT-162460] Insert constraints in FLG_STATUS columns
+DECLARE
+    constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(constraint_already_exists, -02264);
+    l_constraint_name VARCHAR2(30) := 'DOCAREA_FLG_AVAILABLE_CHK';
+    l_ddl             VARCHAR(32767) := 'ALTER TABLE DOC_AREA ADD CONSTRAINT DOCAREA_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N''))';
+BEGIN
+    EXECUTE IMMEDIATE l_ddl;
+EXCEPTION
+    WHEN constraint_already_exists THEN
+        NULL;
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error creating constraint ' || l_constraint_name || ': ' || SQLERRM);
+END;
+/
+
+
+
+DECLARE
+    constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(constraint_already_exists, -02264);
+    l_constraint_name VARCHAR2(30) := 'DOCAREA_FLG_SCORE_CHK';
+    l_ddl             VARCHAR(32767) := 'ALTER TABLE DOC_AREA ADD CONSTRAINT DOCAREA_FLG_SCORE_CHK CHECK (FLG_SCORE IN (''Y'', ''N'') OR FLG_SCORE IS NULL)';
+BEGIN
+    EXECUTE IMMEDIATE l_ddl;
+EXCEPTION
+    WHEN constraint_already_exists THEN
+        NULL;
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error creating constraint ' || l_constraint_name || ': ' || SQLERRM);
+END;
+/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 30/05/2011 09:54
+-- CHANGE REASON: [ALERT-182023 ] New doc_area creation: ECOG Scale
+DECLARE    
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint    
+BEGIN 
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table doc_area drop constraint DOCAREA_FLG_SCORE_CHK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente. constraint: DOCAREA_FLG_SCORE_CHK');
+    END;
+END;
+/
+
+DECLARE
+    constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(constraint_already_exists, -02264);
+    l_constraint_name VARCHAR2(30) := 'DOCAREA_FLG_SCORE_CHK';
+    l_ddl             VARCHAR(32767) := 'ALTER TABLE DOC_AREA ADD CONSTRAINT DOCAREA_FLG_SCORE_CHK CHECK (FLG_SCORE IN (''Y'', ''N'', ''P'') OR FLG_SCORE IS NULL)';
+BEGIN
+    EXECUTE IMMEDIATE l_ddl;
+EXCEPTION
+    WHEN constraint_already_exists THEN
+        NULL;
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error creating constraint ' || l_constraint_name || ': ' || SQLERRM);
+END;
+/
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,19 @@
+--Rui Batista 2008/01/30
+--Melhoria de performance do alerta de Resultados de análises por ler
+create index ARES_IDX_alerts on ANALYSIS_RESULT (id_analysis_req_det, dt_analysis_result, dt_analysis_result_tstz)
+  tablespace TABLE_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  ) compute statistics;
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:31
+-- CHANGE REASON: [ALERT-246248] 
+CREATE INDEX ARES_IDX_ALERTS ON ANALYSIS_RESULT (ID_ANALYSIS_REQ_DET, DT_ANALYSIS_RESULT_TSTZ);
+-- CHANGE END: Ana Matos

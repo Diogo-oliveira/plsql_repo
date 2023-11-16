@@ -1,0 +1,35 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 20/04/2011 20:05
+-- CHANGE REASON: [ALERT-174306] PFSH (Past Family Social History) reformulation (v2.6.1.0.1)
+alter table PAST_HISTORY_MODE add constraint PHM_PK primary key (id_doc_area, id_institution, id_software);
+ALTER table PAST_HISTORY_MODE add constraint PHM_DAA_FK foreign key (id_doc_area) REFERENCES doc_area (id_doc_area);
+
+alter table PAST_HISTORY_MODE add constraint PHM_FLG_CODIFIED_CHK   check (flg_codified in ('Y', 'N'));
+alter table PAST_HISTORY_MODE add constraint PHM_FLG_TEMPLATE_CHK   check (flg_template in ('Y', 'N'));
+alter table PAST_HISTORY_MODE add constraint PHM_FLG_FREE_TEXT_CHK   check (flg_free_text in ('Y', 'N'));
+alter table PAST_HISTORY_MODE add constraint PHM_FLG_AVAILABLE_CHK   check (flg_available in ('Y', 'N'));
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 30/04/2011 15:45
+-- CHANGE REASON: [ALERT-172825] PFSH (Past Family Social History) reformulation (v2.6.1.0.1)
+alter table PAST_HISTORY_MODE add constraint PHM_PK primary key (id_doc_area, id_institution, id_software);
+ALTER table PAST_HISTORY_MODE add constraint PHM_DAA_FK foreign key (id_doc_area) REFERENCES doc_area (id_doc_area);
+
+ALTER table PAST_HISTORY_MODE add constraint PHM_INST_FK foreign key (id_institution) REFERENCES institution (id_institution);
+ALTER table PAST_HISTORY_MODE add constraint PHM_SOFT_FK foreign key (id_software) REFERENCES software (id_software);
+
+alter table PAST_HISTORY_MODE add constraint PHM_FLG_CODIFIED_CHK   check (flg_codified in ('Y', 'N'));
+alter table PAST_HISTORY_MODE add constraint PHM_FLG_TEMPLATE_CHK   check (flg_template in ('Y', 'N'));
+alter table PAST_HISTORY_MODE add constraint PHM_FLG_FREE_TEXT_CHK   check (flg_free_text in ('Y', 'N'));
+alter table PAST_HISTORY_MODE add constraint PHM_FLG_AVAILABLE_CHK   check (flg_available in ('Y', 'N'));
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 02/03/2021 12:22
+-- CHANGE REASON: [EMR-40282] -   Improvements in some areas of the "History" functionality
+-- Create/Recreate check constraints
+alter table PAST_HISTORY_MODE
+add constraint PHM_FLG_DEFAULT_CHK
+check (FLG_DEFAULT IN ('C','T','F'));
+-- CHANGE END: Elisabete Bugalho

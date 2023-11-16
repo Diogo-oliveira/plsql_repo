@@ -1,0 +1,19 @@
+-- CHANGED BY: Bruno Martins
+-- CHANGE DATE: 2010-11-16
+-- CHANGE REASON: ALERT-141589
+
+grant execute on PK_ADT_API_UI to alert_viewer;
+
+-- CHANGE END: Bruno Martins
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 29/04/2022 05:29
+-- CHANGE REASON: [EMR-52356]
+gRANT ALL ON PK_ADT_API_UI TO ALERT_VIEWER;
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 18/05/2022 15:43
+-- CHANGE REASON: [EMR-53212]
+GRANT ALL ON PK_ADT_API_UI TO ALERT_ADTCOD;
+-- CHANGE END: Pedro Henriques

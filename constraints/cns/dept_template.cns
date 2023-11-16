@@ -1,0 +1,57 @@
+
+
+  ALTER TABLE DEPT_TEMPLATE MODIFY (ID_DEPT_TEMPLATE NOT NULL ENABLE);
+
+  ALTER TABLE DEPT_TEMPLATE MODIFY (ID_DOC_TEMPLATE NOT NULL ENABLE);
+
+  ALTER TABLE DEPT_TEMPLATE MODIFY (ID_DEPARTMENT NOT NULL ENABLE);
+
+  ALTER TABLE DEPT_TEMPLATE MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+  ALTER TABLE DEPT_TEMPLATE MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+alter table DEPT_TEMPLATE
+  add constraint DPT_TMPL_PK primary key (ID_DEPT_TEMPLATE);
+
+
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:31
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table DEPT_TEMPLATE add constraint DEPTTEMPL_FLG_AVAILABLE_CHK check ( ( FLG_AVAILABLE in (''N'',''Y'')))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:31
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table DEPT_TEMPLATE add constraint DEPT_TEMPLATE_FLG_GENDER_CHK check ( ( FLG_GENDER in (''F'',''G'',''M'')))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

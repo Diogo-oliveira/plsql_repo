@@ -1,0 +1,1 @@
+GRANT SELECT ON v_institution_field_data TO intf_alert;

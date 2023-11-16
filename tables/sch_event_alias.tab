@@ -1,0 +1,53 @@
+-- CHANGED BY: Telmo
+-- CHANGED DATE: 15-09-2014
+-- CHANGED REASON: alert-293762
+begin
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT',
+                                           i_obj_name => 'SCH_EVENT_ALIAS',
+                                           i_obj_type => 'TABLE',
+                                           i_flg_category => 'PRM',
+                                           i_flg_nzd => 'Y',
+                                           i_responsible_team => 'SCH');
+end;
+/
+
+
+create table ALERT.SCH_EVENT_ALIAS
+(
+  id_sch_event_alias   VARCHAR2(200 CHAR) not null,
+  id_sch_event         NUMBER(24) not null,
+  id_institution       NUMBER(12) not null,
+  code_sch_event_alias VARCHAR2(200) not null,
+  create_user          VARCHAR2(24),
+  create_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution   NUMBER(24),
+  update_user          VARCHAR2(24),
+  update_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution   NUMBER(24)
+);
+
+
+-- Add comments to the table 
+comment on table ALERT.SCH_EVENT_ALIAS is 'Descritivos alternativos para os eventos da agenda';
+comment on column ALERT.SCH_EVENT_ALIAS.id_sch_event_alias is 'id na forma SEA_<id_sch_event>_<id_institution>';
+comment on column ALERT.SCH_EVENT_ALIAS.id_sch_event is 'Id do evento que terá alias';
+comment on column ALERT.SCH_EVENT_ALIAS.id_institution is 'Instituição para a qual é válido o registo, ou 0 para todas.';
+comment on column ALERT.SCH_EVENT_ALIAS.code_sch_event_alias is 'código da tradução';
+comment on column ALERT.SCH_EVENT_ALIAS.create_user is 'Creation User';
+comment on column ALERT.SCH_EVENT_ALIAS.create_time is 'Creation Time';
+comment on column ALERT.SCH_EVENT_ALIAS.create_institution is 'Creation Institution';
+comment on column ALERT.SCH_EVENT_ALIAS.update_user is 'Update User';
+comment on column ALERT.SCH_EVENT_ALIAS.update_time is 'Update Time';
+comment on column ALERT.SCH_EVENT_ALIAS.update_institution is 'Update Institution';
+-- CHANGE END: Telmo
+
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 15/01/2016 17:24
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON TABLE SCH_EVENT_ALIAS IS 'Alternative descriptions for scheduler events';
+COMMENT ON COLUMN SCH_EVENT_ALIAS.ID_SCH_EVENT IS 'Schedule event ID';
+COMMENT ON COLUMN SCH_EVENT_ALIAS.ID_SCH_EVENT_ALIAS IS 'Primary key';
+COMMENT ON COLUMN SCH_EVENT_ALIAS.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN SCH_EVENT_ALIAS.CODE_SCH_EVENT_ALIAS IS 'Code for translation';
+-- CHANGE END:  jose.m.silva

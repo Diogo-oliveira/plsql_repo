@@ -1,0 +1,63 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/07/2011 15:01
+-- CHANGE REASON: [ALERT-188174] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects('ALERT', 'PED_AREA_SOFT_INST', 'TABLE', 'PRM', 'N', '', 'N');
+
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE TABLE ped_area_soft_inst (
+  id_ped_area_add            number(24,0)                      not null,
+  id_institution             NUMBER(24,0)                      NOT NULL,
+  id_software                NUMBER(24,0)                      NOT NULL,
+  id_market                  NUMBER(24,0)                      NOT NULL,
+  flg_available              varchar2(1 char)                  not null,
+  rank                       NUMBER(6)                       NULL,
+  create_user            varchar2(24 char)                      null,
+  create_time            timestamp(6) with local time zone null,
+  create_institution     number(24,0)                      null,
+  update_user            varchar2(24 char)                      null,
+  update_time            timestamp(6) with local time zone null,
+  update_institution     NUMBER(24,0)                      NULL)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+COMMENT ON TABLE ped_area_soft_inst IS 'pediatric areas inst soft';
+COMMENT ON COLUMN ped_area_soft_inst.id_ped_area_add IS 'pediatric area add identifier';
+COMMENT ON COLUMN ped_area_soft_inst.id_institution  IS 'pediatric area institution ';
+COMMENT ON COLUMN ped_area_soft_inst.id_software     IS 'pediatric area software    ';
+COMMENT ON COLUMN ped_area_soft_inst.id_market       IS 'pediatric area market      ';
+COMMENT ON COLUMN ped_area_soft_inst.flg_available   IS 'flg_available Y/N';
+COMMENT ON COLUMN ped_area_soft_inst.create_user IS 'Creation User';
+COMMENT ON COLUMN ped_area_soft_inst.create_time IS 'Creation Time';
+COMMENT ON COLUMN ped_area_soft_inst.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN ped_area_soft_inst.update_user IS 'Update User';
+COMMENT ON COLUMN ped_area_soft_inst.update_time IS 'Update Time';
+COMMENT ON COLUMN ped_area_soft_inst.update_institution IS 'Update Institution';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 20/01/2016 11:29
+-- CHANGE REASON: [ALERT-317944 ] 
+comment on table PED_AREA_SOFT_INST
+  is 'Pediatric areas by institution and software';
+-- Add comments to the columns 
+comment on column PED_AREA_SOFT_INST.id_ped_area_add
+  is 'Pediatric area add identifier';
+comment on column PED_AREA_SOFT_INST.id_institution
+  is 'Institution Id';
+comment on column PED_AREA_SOFT_INST.id_software
+  is 'Software Id';
+comment on column PED_AREA_SOFT_INST.id_market
+  is 'Market Id';
+comment on column PED_AREA_SOFT_INST.flg_available
+  is 'Availability in the Backoffce. Y-Yes N-No';
+comment on column PED_AREA_SOFT_INST.Rank
+  is 'Rank'; 
+-- CHANGE END: cristina.oliveira

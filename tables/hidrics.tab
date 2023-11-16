@@ -1,0 +1,207 @@
+
+
+  CREATE TABLE HIDRICS
+   (	ID_HIDRICS NUMBER(24,0) NOT NULL ENABLE,
+	CODE_HIDRICS VARCHAR2(200) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(24,0),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_UNIT_MEASURE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE hidrics IS 'Hidricos (Administração / eliminação)' ;
+
+COMMENT ON COLUMN hidrics.id_hidrics IS 'Chave primária' ;
+COMMENT ON COLUMN hidrics.code_hidrics IS 'Código para obter os hidricos por língua' ;
+COMMENT ON COLUMN hidrics.flg_type IS 'Tipo de hidrico. A - Administration; E - Elimination' ;
+COMMENT ON COLUMN hidrics.rank IS 'Ordenação' ;
+COMMENT ON COLUMN hidrics.flg_available IS 'Disponibilidade do registo' ;
+COMMENT ON COLUMN hidrics.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN hidrics.id_unit_measure IS 'Unidade de medida' ;
+
+
+
+ALTER TABLE HIDRICS ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN HIDRICS.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:25
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.HIDRICS MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/11/2009 13:08
+-- CHANGE REASON: [ALERT-56932] 
+alter table
+   hidrics
+drop column
+   ADW_LAST_UPDATE;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 20:41
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+alter table HIDRICS add FLG_GENDER varchar2(1 char);
+alter table HIDRICS add AGE_MIN number(6);
+alter table HIDRICS add AGE_MAX number(6);
+alter table HIDRICS add FLG_FREE_TXT varchar2(1 char);
+
+comment on column HIDRICS.FLG_GENDER is 'Gender';
+comment on column HIDRICS.AGE_MIN is 'Minimum age';
+comment on column HIDRICS.AGE_MAX is 'Maximum age';
+comment on column HIDRICS.FLG_FREE_TXT is 'Y - is a free text value; N - otherwise;';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 13/07/2010 15:49
+-- CHANGE REASON: [ALERT-110865] Corrections of flash and DB erros in Intake and Output
+alter table HIDRICS modify flg_free_txt default 'N';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 08:37
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+ALTER TABLE HIDRICS ADD FLG_NR_TIMES VARCHAR2(1 CHAR);
+COMMENT ON COLUMN HIDRICS.FLG_NR_TIMES IS 'Y - the nr of occurrences should be monitored. N - Otherwise';
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table hidrics modify (flg_nr_times default ''N'')'; 
+
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Coluna já existe');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table hidrics modify (flg_nr_times not null)'; 
+
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Coluna já existe');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table hidrics modify (flg_free_txt default ''N'')'; 
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Coluna já existe');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table hidrics modify (flg_free_txt not null)'; 
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Coluna já existe');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:43
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+COMMENT ON TABLE hidrics IS 'Hidrics (Administration / Elimination)' ;
+
+COMMENT ON COLUMN hidrics.id_hidrics IS 'Primary Key ID' ;
+COMMENT ON COLUMN hidrics.code_hidrics IS 'Code to get the hidrics description by language.' ;
+COMMENT ON COLUMN hidrics.flg_type IS 'A - Administration; E - Elimination' ;
+COMMENT ON COLUMN hidrics.rank IS 'Rank to be used in sorting' ;
+COMMENT ON COLUMN hidrics.flg_available IS 'Registry availability: Y - Available; N - Not available.' ;
+COMMENT ON COLUMN hidrics.id_unit_measure IS 'Unit Measure ID.' ;
+COMMENT ON COLUMN hidrics.id_content IS 'Content Unique ID.' ;
+
+alter table hidrics modify ( code_hidrics  varchar2(200 char));
+alter table hidrics modify ( flg_type  varchar2(1 char));
+alter table hidrics modify ( flg_available  varchar2(1 char));
+alter table hidrics modify ( id_content  varchar2(200 char));
+alter table hidrics modify ( create_user  varchar2(24 char));
+alter table hidrics modify ( update_user  varchar2(24 char));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/02/2011 15:21
+-- CHANGE REASON: [ALERT-153427 ] Bowel movements
+drop index HIDRICS_CNT_UK;
+
+alter table hidrics modify ( flg_available  varchar2(1 char));
+
+CREATE UNIQUE INDEX HIDRICS_CNT_UK ON ALERT.HIDRICS (CASE WHEN ID_CONTENT IS NOT NULL AND nvl(FLG_AVAILABLE, 'Y') <> 'N'
+ THEN ID_CONTENT END,
+CASE WHEN ID_CONTENT IS NOT NULL AND nvl(FLG_AVAILABLE, 'Y') <> 'N'
+ THEN FLG_AVAILABLE END);
+
+alter table hidrics modify ( id_content  varchar2(200 char));
+alter table hidrics modify ( create_user  varchar2(24 char));
+alter table hidrics modify ( update_user  varchar2(24 char));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/02/2011 16:02
+-- CHANGE REASON: [ALERT-153427 ] Bowel movements
+drop index HIDRICS_CNT_UK;
+
+alter table hidrics modify ( flg_available  varchar2(1 char));
+alter table hidrics modify ( id_content  varchar2(200 char));
+
+CREATE UNIQUE INDEX HIDRICS_CNT_UK ON ALERT.HIDRICS (CASE WHEN ID_CONTENT IS NOT NULL AND nvl(FLG_AVAILABLE, 'Y') <> 'N'
+ THEN ID_CONTENT END,
+CASE WHEN ID_CONTENT IS NOT NULL AND nvl(FLG_AVAILABLE, 'Y') <> 'N'
+ THEN FLG_AVAILABLE END);
+
+
+alter table hidrics modify ( create_user  varchar2(24 char));
+alter table hidrics modify ( update_user  varchar2(24 char));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model -cdoc - monitorizations, bedmanagement, hidrics
+-- Add comments to the table 
+comment on table HIDRICS
+  is 'Content table with Hidrics (Administration / Elimination)';
+-- Add comments to the columns 
+comment on column HIDRICS.id_hidrics
+  is 'Hidrics identifier ';
+comment on column HIDRICS.code_hidrics
+  is 'Code to get the hidrics description by language.';
+comment on column HIDRICS.flg_type
+  is 'A - Administration; E - Elimination';
+comment on column HIDRICS.rank
+  is 'Rank to be used in sorting';
+comment on column HIDRICS.flg_available
+  is 'Registry availability: Y - Available; N - Not available.';
+comment on column HIDRICS.id_unit_measure
+  is 'Unit Measure ID.';
+comment on column HIDRICS.id_content
+  is 'Content Unique ID.';
+comment on column HIDRICS.create_user
+  is 'Creation User';
+comment on column HIDRICS.create_time
+  is 'Creation Time';
+comment on column HIDRICS.create_institution
+  is 'Creation Institution';
+comment on column HIDRICS.update_user
+  is 'Update User';
+comment on column HIDRICS.update_time
+  is 'Update Time';
+comment on column HIDRICS.update_institution
+  is 'Update Institution';
+comment on column HIDRICS.flg_gender
+  is 'Gender';
+comment on column HIDRICS.age_min
+  is 'Minimum age';
+comment on column HIDRICS.age_max
+  is 'Maximum age';
+comment on column HIDRICS.flg_free_txt
+  is 'Y - is a free text value; N - otherwise;';
+  
+-- CHANGE END: Pedro Fernandes

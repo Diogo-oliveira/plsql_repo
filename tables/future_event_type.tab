@@ -1,0 +1,107 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 03/07/2010 20:30
+-- CHANGE REASON: [ALERT-109286] 
+CREATE TABLE future_event_type (
+  id_future_event_type    NUMBER(24,0)  NOT NULL,
+  code_future_event_type  VARCHAR2(200 char) NOT NULL,
+  code_future_event_title VARCHAR2(200 char) NOT NULL,
+  flg_type                VARCHAR2(2 char)   NULL,
+  action                  VARCHAR2(50 char) NULL,
+  id_epis_type            NUMBER(12,0)  NULL,
+  id_parent               NUMBER        NULL,
+  "RANK"                  NUMBER(2,0)   NULL,
+  icon                    VARCHAR2(50 char) NULL,
+  flg_available           VARCHAR2(1 char)   NULL,
+  id_task_type            NUMBER(24,0)  NULL
+);
+
+COMMENT ON COLUMN future_event_type.id_future_event_type IS 'future event type identifier';
+COMMENT ON COLUMN future_event_type.code_future_event_type IS 'code future event type';
+COMMENT ON COLUMN future_event_type.code_future_event_title IS 'code future event title';
+COMMENT ON COLUMN future_event_type.flg_type IS 'flag type';
+COMMENT ON COLUMN future_event_type.action IS 'action';
+COMMENT ON COLUMN future_event_type.id_epis_type IS 'epis type identifier';
+COMMENT ON COLUMN future_event_type.id_parent IS 'parent identifier';
+COMMENT ON COLUMN future_event_type."RANK" IS 'RANK';
+COMMENT ON COLUMN future_event_type.icon IS 'icon';
+COMMENT ON COLUMN future_event_type.flg_available IS 'flag available';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 20/01/2016 14:40
+-- CHANGE REASON: [ALERT-317983] ALERT-317983 CDOC Functionalities V5 Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table FUTURE_EVENT_TYPE
+  is 'Future event type identification';
+-- Add comments to the columns 
+comment on column FUTURE_EVENT_TYPE.id_future_event_type
+  is 'future event type identifier';
+comment on column FUTURE_EVENT_TYPE.code_future_event_type
+  is 'code future event type';
+comment on column FUTURE_EVENT_TYPE.code_future_event_title
+  is 'code future event title';
+comment on column FUTURE_EVENT_TYPE.flg_type
+  is 'flag type';
+comment on column FUTURE_EVENT_TYPE.action
+  is 'action';
+comment on column FUTURE_EVENT_TYPE.id_epis_type
+  is 'epis type identifier';
+comment on column FUTURE_EVENT_TYPE.id_parent
+  is 'parent identifier';
+comment on column FUTURE_EVENT_TYPE.rank
+  is 'relevance order';
+comment on column FUTURE_EVENT_TYPE.icon
+  is 'icon';
+comment on column FUTURE_EVENT_TYPE.flg_available
+  is 'flag available';
+comment on column FUTURE_EVENT_TYPE.id_task_type
+  is 'task type id in task_type table';
+-- CHANGE END: Renato Nunes
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table FUTURE_EVENT_TYPE add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column future_event_type.create_user IS 'Creation User';
+COMMENT ON column future_event_type.create_time IS 'Creation Time';
+COMMENT ON column future_event_type.create_institution IS 'Creation Institution';
+COMMENT ON column future_event_type.update_user IS 'Update User';
+COMMENT ON column future_event_type.update_time IS 'Update Time';
+COMMENT ON column future_event_type.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table future_event_type add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column future_event_type.create_user IS 'Creation User';
+COMMENT ON column future_event_type.create_time IS 'Creation Time';
+COMMENT ON column future_event_type.create_institution IS 'Creation Institution';
+COMMENT ON column future_event_type.update_user IS 'Update User';
+COMMENT ON column future_event_type.update_time IS 'Update Time';
+COMMENT ON column future_event_type.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

@@ -1,0 +1,106 @@
+
+
+  ALTER TABLE EXAM ADD CONSTRAINT EXAM_PK PRIMARY KEY (ID_EXAM) ENABLE;
+
+  ALTER TABLE EXAM MODIFY (ID_EXAM NOT NULL ENABLE);
+
+  ALTER TABLE EXAM MODIFY (CODE_EXAM NOT NULL ENABLE);
+
+  ALTER TABLE EXAM MODIFY (FLG_PAT_RESP NOT NULL ENABLE);
+
+  ALTER TABLE EXAM MODIFY (FLG_PAT_PREP NOT NULL ENABLE);
+
+  ALTER TABLE EXAM MODIFY (FLG_MOV_PAT NOT NULL ENABLE);
+
+
+  ALTER TABLE EXAM MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE EXAM MODIFY (RANK NOT NULL ENABLE);
+
+  ALTER TABLE EXAM MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+  ALTER TABLE EXAM MODIFY (FLG_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE EXAM MODIFY (ID_EXAM_CAT NOT NULL ENABLE);
+
+
+ALTER TABLE EXAM
+ ADD (CONSTRAINT EXAM_FLGFYPE_CHK CHECK (FLG_TYPE IN ('I', 'E')))
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 17/01/2011 14:57
+-- CHANGE REASON: [ALERT-155887] 
+ALTER TABLE EXAM ADD (CONSTRAINT EXAM_FLG_AVAILABLE_CHK CHECK (flg_available IN ('Y', 'N')));
+ALTER TABLE EXAM ADD (CONSTRAINT EXAM_FLG_MOV_PAT_CHK CHECK (flg_mov_pat IN ('Y', 'N')));
+ALTER TABLE EXAM ADD (CONSTRAINT EXAM_FLG_PAT_PREP_CHK CHECK (flg_pat_prep IN ('Y', 'N')));
+ALTER TABLE EXAM ADD (CONSTRAINT EXAM_FLG_PAT_RESP_CHK CHECK (flg_pat_resp IN ('Y', 'N')));
+ALTER TABLE EXAM ADD (CONSTRAINT EXAM_FLG_TYPE_CHK CHECK (flg_type IN ('I', 'E')));
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 20/09/2011 18:06
+-- CHANGE REASON: [ALERT-187042] constraints
+DECLARE
+e_pk_already_there EXCEPTION;
+    e_unique_already_there EXCEPTION;
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_Default.EXAM
+  add constraint EXAM_FLG_TYPE_CHK
+  check (flg_type IN (''I'', ''E''))';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_Default.EXAM
+  add constraint EXAM_FLG_AVAILABLE_CHK
+  check (flg_available IN (''Y'', ''N''))';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_Default.EXAM
+  add constraint EXAM_FLG_MOV_PAT_CHK
+  check (flg_mov_pat IN (''Y'', ''N''))';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

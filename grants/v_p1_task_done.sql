@@ -1,0 +1,1 @@
+GRANT SELECT ON v_p1_task_done TO INTF_ALERT;

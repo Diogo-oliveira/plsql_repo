@@ -1,0 +1,92 @@
+
+
+  ALTER TABLE DEPARTMENT ADD CONSTRAINT DEP_PK PRIMARY KEY (ID_DEPARTMENT) ENABLE;
+
+  ALTER TABLE DEPARTMENT MODIFY (ID_DEPARTMENT NOT NULL ENABLE);
+
+  ALTER TABLE DEPARTMENT MODIFY (ID_INSTITUTION NOT NULL ENABLE);
+
+  ALTER TABLE DEPARTMENT MODIFY (CODE_DEPARTMENT NOT NULL ENABLE);
+
+  ALTER TABLE DEPARTMENT MODIFY (RANK NOT NULL ENABLE);
+
+  ALTER TABLE DEPARTMENT MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+
+
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:30
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table DEPARTMENT add constraint DEP_FLG_AVAILABLE_CHK check ( ( FLG_AVAILABLE in (''N'',''Y'')))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:30
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table DEPARTMENT add constraint DEP_FLG_DEFAULT_CHK check ( ( FLG_DEFAULT in (''N'',''Y'')))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:31
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table DEPARTMENT add constraint DEP_FLG_UNIDOSE_CHK check ( ( FLG_UNIDOSE in (''N'',''Y'')))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/01/2015 14:37
+-- CHANGE REASON: [ALERT-280039] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -02261);
+BEGIN
+    EXECUTE IMMEDIATE q'[alter table DEPARTMENT add constraint DEP_UK unique (ID_DEPARTMENT, ID_INSTITUTION)]';
+EXCEPTION
+    WHEN e_exception THEN
+        dbms_output.put_line('UK ja existente');
+END;
+/
+-- CHANGE END: Ana Monteiro

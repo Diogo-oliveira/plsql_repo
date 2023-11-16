@@ -1,0 +1,262 @@
+/*-- Last Change Revision: $Rev: 2050144 $*/
+/*-- Last Change by: $Author: diogo.oliveira $*/
+/*-- Date of last change: $Date: 2022-11-14 15:37:35 +0000 (seg, 14 nov 2022) $*/
+
+CREATE OR REPLACE PACKAGE pk_ux_inp_positioning IS
+
+    -- Author  : GUSTAVO.SERRANO
+    -- Created : 13-11-2009 12:23:20
+    -- Purpose : API functions for User Interface module
+
+    FUNCTION create_epis_positioning
+    (
+        i_lang                 IN language.id_language%TYPE,
+        i_prof                 IN profissional,
+        i_episode              IN episode.id_episode%TYPE,
+        i_id_rot_interv        IN rotation_interval.id_rotation_interval%TYPE,
+        i_id_epis_positioning  IN epis_positioning.id_epis_positioning%TYPE DEFAULT NULL,
+        i_tbl_ds_internal_name IN table_varchar DEFAULT NULL,
+        i_tbl_val              IN table_table_varchar DEFAULT NULL,
+        i_tbl_real_val         IN table_table_varchar DEFAULT NULL,
+        i_origin               IN VARCHAR2,
+        i_id_episode_sr        IN episode.id_episode%TYPE DEFAULT NULL,
+        i_filter_tab           IN VARCHAR2,
+        o_error                OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION set_epis_pos_status
+    (
+        i_lang             IN language.id_language%TYPE,
+        i_prof             IN profissional,
+        i_epis_pos         IN epis_positioning.id_epis_positioning%TYPE,
+        i_flg_status       IN epis_positioning.flg_status%TYPE,
+        i_notes            IN epis_positioning.notes%TYPE,
+        i_id_cancel_reason IN epis_positioning.id_cancel_reason%TYPE,
+        o_error            OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION get_epis_positioning_det
+    (
+        i_lang       IN language.id_language%TYPE,
+        i_prof       IN profissional,
+        i_epis_pos   IN epis_positioning.id_epis_positioning%TYPE,
+        o_epis_pos_d OUT pk_types.cursor_type,
+        o_error      OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION get_epis_posit_plan_det
+    (
+        i_lang          IN language.id_language%TYPE,
+        i_prof          IN profissional,
+        i_epis_pos      IN epis_positioning.id_epis_positioning%TYPE,
+        i_epis_pos_plan IN epis_positioning_plan.id_epis_positioning_plan%TYPE,
+        o_epis_pos_pdet OUT pk_types.cursor_type,
+        o_error         OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION set_epis_positioning
+    (
+        i_lang        IN language.id_language%TYPE,
+        i_prof        IN profissional,
+        i_epis_pos    IN epis_positioning.id_epis_positioning%TYPE,
+        i_dt_exec_str IN VARCHAR2,
+        i_notes       IN epis_positioning.notes%TYPE,
+        i_rot_interv  IN epis_positioning.rot_interval%TYPE,
+        o_error       OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION set_epis_pos_execution
+    (
+        i_lang         IN language.id_language%TYPE,
+        i_prof         IN profissional,
+        i_epis_pos     IN epis_positioning.id_epis_positioning%TYPE,
+        i_dt_exec_str  IN VARCHAR2,
+        i_dt_next_exec IN VARCHAR2 DEFAULT NULL,
+        i_notes        IN epis_positioning.notes%TYPE DEFAULT NULL,
+        o_error        OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION get_epis_positioning
+    (
+        i_lang     IN language.id_language%TYPE,
+        i_prof     IN profissional,
+        i_episode  IN episode.id_episode%TYPE,
+        o_epis_pos OUT pk_types.cursor_type,
+        o_error    OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION get_epis_posit_plan
+    (
+        i_lang          IN language.id_language%TYPE,
+        i_prof          IN profissional,
+        i_epis_pos      IN epis_positioning.id_epis_positioning%TYPE,
+        o_epis_pos_plan OUT pk_types.cursor_type,
+        o_error         OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION edit_epis_positioning
+    (
+        i_lang             IN language.id_language%TYPE,
+        i_prof             IN profissional,
+        i_episode          IN episode.id_episode%TYPE,
+        i_epis_positioning IN epis_positioning.id_epis_positioning%TYPE,
+        i_posit            IN table_number,
+        i_rot_interv       IN rotation_interval.interval%TYPE,
+        i_id_rot_interv    IN rotation_interval.id_rotation_interval%TYPE,
+        i_flg_massage      IN epis_positioning.flg_massage%TYPE,
+        i_notes            IN epis_positioning.notes%TYPE,
+        i_pos_type         IN positioning_type.id_positioning_type%TYPE,
+        o_error            OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION create_draft
+    (
+        i_lang          IN language.id_language%TYPE,
+        i_prof          IN profissional,
+        i_episode       IN episode.id_episode%TYPE,
+        i_posit         IN table_number,
+        i_rot_interv    IN rotation_interval.interval%TYPE,
+        i_id_rot_interv IN rotation_interval.id_rotation_interval%TYPE,
+        i_flg_massage   IN epis_positioning.flg_massage%TYPE,
+        i_notes         IN epis_positioning.notes%TYPE,
+        i_pos_type      IN positioning_type.id_positioning_type%TYPE,
+        o_draft         OUT table_number,
+        o_error         OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    /********************************************************************************************
+    * Get the positioning plan detail and history data.
+    *
+    * @param   I_LANG                      language associated to the professional executing the request
+    * @param   i_prof                      professional
+    * @param   i_id_epis_positioning_plan  Epis_positioning_plan Id
+    * @param   i_flg_screen                D-detail; H-history    
+    * @param   o_data                      Output data    
+    * @param   o_error                     Error message
+    *                        
+    * @return  true or false on success or error
+    * 
+    * @author                         Filipe Silva
+    * @version                        2.6.1
+    * @since                          13-Apr-2011
+    **********************************************************************************************/
+    FUNCTION get_epis_positioning_plan_hist
+    (
+        i_lang                     IN language.id_language%TYPE,
+        i_prof                     IN profissional,
+        i_id_episode               IN episode.id_episode%TYPE,
+        i_id_epis_positioning_plan IN epis_positioning_plan.id_epis_positioning_plan%TYPE,
+        i_flg_screen               IN VARCHAR2,
+        o_hist                     OUT pk_types.cursor_type,
+        o_error                    OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    /********************************************************************************************
+    * Gets the positionings list for reports with timeframe and scope
+    *
+    * @param   I_LANG                      Language associated to the professional executing the request
+    * @param   I_PROF                      Professional Identification
+    * @param   I_SCOPE                     Scope ID
+    * @param   I_FLG_SCOPE                 Scope type
+    * @param   I_START_DATE                Start date for temporal filtering
+    * @param   I_END_DATE                  End date for temporal filtering
+    * @param   I_CANCELLED                 Indicates whether the records should be returned canceled ('Y' - Yes, 'N' - No)
+    * @param   I_CRIT_TYPE                 Flag that indicates if the filter time to consider all records or only during the executions ('A' - All, 'E' - Executions, ...)
+    * @param   I_FLG_REPORT                Flag used to remove formatting ('Y' - Yes, 'N' - No)
+    * @param   O_POS                       Positioning list
+    * @param   O_POS_EXEC                  Executions for Positioning list
+    * @param   O_ERROR                     Error message
+    *
+    * @value   I_SCOPE                     {*} 'E' Episode ID {*} 'V' Visit ID {*} 'P' Patient ID
+    * @value   I_FLG_SCOPE                 {*} 'E' Episode {*} 'V' Visit {*} 'P' Patient
+    * @value   I_CANCELLED                 {*} 'Y' Yes {*} 'N' No
+    * @value   I_CRIT_TYPE                 {*} 'A' All {*} 'E' Executions {*} 'R' requests
+    * @value   I_FLG_REPORT                {*} 'Y' Yes {*} 'N' No
+    *                        
+    * @return                              true or false on success or error
+    * 
+    * @author                              António Neto
+    * @version                             2.5.1.8.1
+    * @since                               29-Sep-2011
+    **********************************************************************************************/
+    FUNCTION get_positioning_rep
+    (
+        i_lang       IN language.id_language%TYPE,
+        i_prof       IN profissional,
+        i_scope      IN NUMBER,
+        i_flg_scope  IN VARCHAR2,
+        i_start_date IN VARCHAR2,
+        i_end_date   IN VARCHAR2,
+        i_cancelled  IN VARCHAR2,
+        i_crit_type  IN VARCHAR2,
+        i_flg_report IN VARCHAR2,
+        o_pos        OUT NOCOPY pk_types.cursor_type,
+        o_pos_exec   OUT NOCOPY pk_types.cursor_type,
+        o_error      OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION get_epis_posit_actions
+    (
+        i_lang              IN language.id_language%TYPE,
+        i_prof              IN profissional,
+        i_subject           IN action.subject%TYPE,
+        i_from_state        IN action.from_state%TYPE,
+        id_epis_positioning IN epis_positioning.id_epis_positioning%TYPE,
+        o_actions           OUT pk_types.cursor_type,
+        o_error             OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION get_epis_positioning_detail
+    (
+        i_lang                IN language.id_language%TYPE,
+        i_prof                IN profissional,
+        i_id_epis_positioning IN epis_positioning.id_epis_positioning%TYPE,
+        o_hist                OUT pk_types.cursor_type,
+        o_error               OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION get_epis_positioning_detail_hist
+    (
+        i_lang                IN language.id_language%TYPE,
+        i_prof                IN profissional,
+        i_id_epis_positioning IN epis_positioning.id_epis_positioning%TYPE,
+        o_hist                OUT pk_types.cursor_type,
+        o_error               OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION get_epis_posit_plan_detail
+    (
+        i_lang                     IN language.id_language%TYPE,
+        i_prof                     IN profissional,
+        i_id_epis_positioning_plan IN epis_positioning_plan.id_epis_positioning_plan%TYPE,
+        i_flg_screen               IN VARCHAR2,
+        o_hist                     OUT pk_types.cursor_type,
+        o_error                    OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION check_cancel_interrupt_posit
+    (
+        i_lang       IN language.id_language%TYPE,
+        i_prof       IN profissional,
+        i_id_episode IN epis_positioning.id_episode%TYPE,
+        o_action     OUT VARCHAR2,
+        o_error      OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION get_positioning_rel
+    (
+        i_lang       IN language.id_language%TYPE,
+        i_prof       IN profissional,
+        i_posit_type IN positioning_instit_soft.posit_type%TYPE,
+        o_data       OUT pk_types.cursor_type,
+        o_error      OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    --
+    g_package_owner VARCHAR2(50);
+    g_package_name  VARCHAR2(50);
+    --    
+    g_error VARCHAR2(2000);
+
+END pk_ux_inp_positioning;
+/

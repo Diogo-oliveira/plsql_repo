@@ -1,0 +1,85 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 30/04/2011 18:02
+-- CHANGE REASON: [ALERT-173229] Order recurrence core development
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE ORDER_RECURR_PLAN
+(
+  ID_ORDER_RECURR_PLAN            NUMBER(24) NOT NULL,
+  ID_ORDER_RECURR_OPTION          NUMBER(24) NOT NULL,
+  REGULAR_INTERVAL                NUMBER(6),
+  ID_UNIT_MEAS_REGULAR_INTERVAL   NUMBER(24),
+  DAILY_EXECUTIONS                NUMBER(6),
+  FLG_RECURR_PATTERN              VARCHAR2(1 CHAR) NOT NULL,
+  REPEAT_EVERY                    NUMBER (6),
+  FLG_REPEAT_BY                   VARCHAR2(1 CHAR),
+  START_DATE                      TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+  FLG_END_BY                      VARCHAR2(1 CHAR),
+  OCCURRENCES                     NUMBER(6),
+  DURATION                        NUMBER(6),
+  ID_UNIT_MEAS_DURATION           NUMBER(24),
+  END_DATE                        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  FLG_STATUS                      VARCHAR2(1 CHAR) NOT NULL,
+  ID_INSTITUTION                  NUMBER(24) NOT NULL,
+  ID_PROFESSIONAL                 NUMBER(24) NOT NULL,
+  ID_ORDER_RECURR_AREA            NUMBER(24) NOT NULL,  
+  CREATE_USER                     VARCHAR2(24 CHAR),
+  CREATE_TIME                     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION              NUMBER(24),
+  UPDATE_USER                     VARCHAR2(24 CHAR),
+  UPDATE_TIME                     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION              NUMBER(24)  
+)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('ORDER_RECURR_PLAN table already exists');
+END;
+/
+comment on table  ORDER_RECURR_PLAN is 'Order recurrence plan table [ORCPL]';
+comment on column ORDER_RECURR_PLAN.ID_ORDER_RECURR_PLAN          is 'Order recurrence plan ID';
+comment on column ORDER_RECURR_PLAN.ID_ORDER_RECURR_OPTION        is 'Order recurrence option ID';
+comment on column ORDER_RECURR_PLAN.REGULAR_INTERVAL              is 'Regular interval';
+comment on column ORDER_RECURR_PLAN.ID_UNIT_MEAS_REGULAR_INTERVAL is 'Regular interval unit measure';
+comment on column ORDER_RECURR_PLAN.DAILY_EXECUTIONS              is 'Number of daily executions';
+comment on column ORDER_RECURR_PLAN.FLG_RECURR_PATTERN            is 'Recurrence pattern (0 - without recurrence; D - daily; W - weekly; M - monthly; Y - yearly)';
+comment on column ORDER_RECURR_PLAN.REPEAT_EVERY                  is 'Recurrence frequency';
+comment on column ORDER_RECURR_PLAN.FLG_REPEAT_BY                 is 'Repeat by (M - month days; W - week days)';
+comment on column ORDER_RECURR_PLAN.START_DATE                    is 'Order start date';
+comment on column ORDER_RECURR_PLAN.FLG_END_BY                    is 'End by (D - date; W - without end date; N - number of executions; L - duration)';
+comment on column ORDER_RECURR_PLAN.OCCURRENCES                   is 'Number of occurrences';
+comment on column ORDER_RECURR_PLAN.DURATION                      is 'Duration';
+comment on column ORDER_RECURR_PLAN.ID_UNIT_MEAS_DURATION         is 'Duration unit measure';
+comment on column ORDER_RECURR_PLAN.END_DATE                      is 'Order end date';
+comment on column ORDER_RECURR_PLAN.FLG_STATUS                    is 'Order recurrence plan status (T - temporay plan; F - final plan)';
+comment on column ORDER_RECURR_PLAN.ID_INSTITUTION                is 'Institution ID';
+comment on column ORDER_RECURR_PLAN.ID_PROFESSIONAL               is 'Professional ID';
+comment on column ORDER_RECURR_PLAN.ID_ORDER_RECURR_AREA          is 'Order recurrence area ID';
+comment on column ORDER_RECURR_PLAN.CREATE_USER                   is 'Creation User';
+comment on column ORDER_RECURR_PLAN.CREATE_TIME                   is 'Creation Time';
+comment on column ORDER_RECURR_PLAN.CREATE_INSTITUTION            is 'Creation Institution';
+comment on column ORDER_RECURR_PLAN.UPDATE_USER                   is 'Update User';
+comment on column ORDER_RECURR_PLAN.UPDATE_TIME                   is 'Update Time';
+comment on column ORDER_RECURR_PLAN.UPDATE_INSTITUTION            is 'Update Institution';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 21/01/2014 16:02
+-- CHANGE REASON: [ALERT-274170] 
+alter table ORDER_RECURR_PLAN add FLG_INCLUDE_START_DATE_IN_PLAN varchar2(1 CHAR) DEFAULT 'N';
+comment on column ORDER_RECURR_PLAN.FLG_INCLUDE_START_DATE_IN_PLAN is 'Flag that indicates if start date must be included in the execution plan or not (Y - include; N - not include)';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 22/01/2014 19:17
+-- CHANGE REASON: [ALERT-274170] 
+ALTER TABLE order_recurr_plan modify flg_include_start_date_in_plan DEFAULT 'N' NOT NULL;
+comment on column ORDER_RECURR_PLAN.FLG_INCLUDE_START_DATE_IN_PLAN is 'Flag that indicates if start date must be included in the execution plan or not (Y - include; N - not include)';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 19/06/2014 11:14
+-- CHANGE REASON: [ALERT-286984] 
+comment on column ORDER_RECURR_PLAN.flg_status is 'Order recurrence plan status (T - temporay plan; F - final plan; P - predefined)';
+-- CHANGE END: Ana Monteiro

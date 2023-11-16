@@ -1,0 +1,121 @@
+
+
+  CREATE TABLE PAT_SICK_LEAVE
+   (	ID_PAT_SICK_LEAVE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_SICK_LEAVE DATE NOT NULL ENABLE,
+	FLG_FAMILY_PROBLEM VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AUTHORIZATION VARCHAR2(1),
+	FLG_CLASSIFICATION VARCHAR2(1) NOT NULL ENABLE,
+	FLG_HOSPITALIZED VARCHAR2(1) NOT NULL ENABLE,
+	FLG_START VARCHAR2(1) NOT NULL ENABLE,
+	DT_BEGIN DATE NOT NULL ENABLE,
+	DT_END DATE,
+
+	NOTES VARCHAR2(4000),
+	FAMILY_RELATION VARCHAR2(200),
+	FAMILY_NAME VARCHAR2(200),
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN pat_sick_leave.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_sick_leave.dt_pat_sick_leave IS 'Data de registo' ;
+COMMENT ON COLUMN pat_sick_leave.flg_family_problem IS 'S - familiar necessita de cuidados, N - o próprio utente está incapacitado' ;
+COMMENT ON COLUMN pat_sick_leave.flg_authorization IS 'Autorização para ausência do domicílio' ;
+COMMENT ON COLUMN pat_sick_leave.flg_classification IS 'Classificação da situação: N - doença natural, D - doença directa, T -tuberculose, F - assistência a familiares, P - doença profissional, A - acidente trabalho' ;
+COMMENT ON COLUMN pat_sick_leave.flg_hospitalized IS 'S - esteve internado (baixa dá continuidade ao tratamento), N - não esteve internado' ;
+COMMENT ON COLUMN pat_sick_leave.flg_start IS 'S - período inicial de baixa, N - prorrogação' ;
+COMMENT ON COLUMN pat_sick_leave.dt_begin IS 'Data de início da baixa' ;
+COMMENT ON COLUMN pat_sick_leave.dt_end IS 'Data de termo da baixa' ;
+COMMENT ON COLUMN pat_sick_leave.family_relation IS 'Parentesco do familiar doente' ;
+COMMENT ON COLUMN pat_sick_leave.family_name IS 'Nome do familiar doente' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_SICK_LEAVE ADD DT_BEGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_SICK_LEAVE.DT_BEGIN_TSTZ IS 'Data de in¡cio da baixa'; 
+ALTER TABLE PAT_SICK_LEAVE ADD DT_END_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_SICK_LEAVE.DT_END_TSTZ IS 'Data de termo da baixa'; 
+ALTER TABLE PAT_SICK_LEAVE ADD DT_PAT_SICK_LEAVE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_SICK_LEAVE.DT_PAT_SICK_LEAVE_TSTZ IS 'Data de registo'; 
+
+
+
+ALTER TABLE PAT_SICK_LEAVE DROP COLUMN DT_PAT_SICK_LEAVE;
+ALTER TABLE PAT_SICK_LEAVE DROP COLUMN DT_BEGIN;
+ALTER TABLE PAT_SICK_LEAVE DROP COLUMN DT_END;
+
+
+
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_SICK_LEAVE modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_SICK_LEAVE modify NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_SICK_LEAVE modify FLG_START varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_SICK_LEAVE modify FLG_HOSPITALIZED varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_SICK_LEAVE modify FLG_FAMILY_PROBLEM varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_SICK_LEAVE modify FLG_CLASSIFICATION varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_SICK_LEAVE modify FLG_AUTHORIZATION varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_SICK_LEAVE modify FAMILY_RELATION varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_SICK_LEAVE modify FAMILY_NAME varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_SICK_LEAVE modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro

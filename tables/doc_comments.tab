@@ -1,0 +1,90 @@
+-- Create table
+create table DOC_COMMENTS
+(
+  ID_DOC_COMMENT  NUMBER(12) not null,
+  ID_DOC_EXTERNAL NUMBER(12) not null,
+  ID_DOC_IMAGE    NUMBER(24),
+  DESC_COMMENT    VARCHAR2(4000) not null,
+  FLG_TYPE        VARCHAR2(1) not null,
+  DT_COMMENT      TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  ID_PROFESSIONAL NUMBER(24) not null,
+  FLG_CANCEL      VARCHAR2(1) default 'N',
+  DT_CANCEL       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROF_CANCEL  NUMBER(24),
+  ADW_LAST_UPDATE DATE not null
+)
+tablespace TABLE_S
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table DOC_COMMENTS
+  is 'Comentários dos documentos / imagens.';
+-- Add comments to the columns 
+comment on column DOC_COMMENTS.ID_DOC_COMMENT
+  is 'Chave primária';
+comment on column DOC_COMMENTS.ID_DOC_EXTERNAL
+  is 'Ligação à tabela doc_external para referenciar o documento a comentar';
+comment on column DOC_COMMENTS.ID_DOC_IMAGE
+  is 'Ligação à tabela doc_image para referenciar a imagem a comentar. Se FLG_TYPE = D é nulo.';
+comment on column DOC_COMMENTS.DESC_COMMENT
+  is 'Comentários.';
+comment on column DOC_COMMENTS.FLG_TYPE
+  is 'D - se comentario de documento, I - se comentario de imagem.';
+comment on column DOC_COMMENTS.DT_COMMENT
+  is 'Data de registo do comentário';
+comment on column DOC_COMMENTS.ID_PROFESSIONAL
+  is 'Profissional que registou o comentário';
+comment on column DOC_COMMENTS.FLG_CANCEL
+  is 'Imagem cancelada: Y; N';
+comment on column DOC_COMMENTS.DT_CANCEL
+  is 'Data de cancelamento do registo';
+comment on column DOC_COMMENTS.ID_PROF_CANCEL
+  is 'Profissional que cancelou o comentário';
+comment on column DOC_COMMENTS.ADW_LAST_UPDATE
+  is 'Data da última alteração do registo';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table DOC_COMMENTS
+  add constraint DC_PK primary key (ID_DOC_COMMENT)
+  using index 
+  tablespace INDEX_S
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+alter table DOC_COMMENTS
+  add constraint DC_FK foreign key (ID_DOC_EXTERNAL)
+  references DOC_EXTERNAL (ID_DOC_EXTERNAL);
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on DOC_COMMENTS to INTER_ALERT_V2;
+grant select, insert, update, delete, references on DOC_COMMENTS to PIX;
+grant select, insert, update, delete, references on DOC_COMMENTS to XDS_REG;
+grant select, insert, update, delete, references on DOC_COMMENTS to XDS_REP;
+
+alter table DOC_COMMENTS modify ID_DOC_EXTERNAL NUMBER(24);
+
+-- CMF 13-01-2016
+comment on table  ALERT.DOC_COMMENTS  is 'Comments of documentos or images.';
+comment on column ALERT.DOC_COMMENTS.ID_DOC_COMMENT  is 'Primary key';
+comment on column ALERT.DOC_COMMENTS.ID_DOC_EXTERNAL  is 'Doc_external Id';
+comment on column ALERT.DOC_COMMENTS.ID_DOC_IMAGE  is 'Doc_image id. If FLG_TYPE = "D\" then it is null.';
+comment on column ALERT.DOC_COMMENTS.DESC_COMMENT  is 'text/ comment.';
+comment on column ALERT.DOC_COMMENTS.FLG_TYPE  is 'D - document comment, I - image comment.';
+comment on column ALERT.DOC_COMMENTS.DT_COMMENT  is 'date of comment input';
+comment on column ALERT.DOC_COMMENTS.ID_PROFESSIONAL  is 'Professional that create the comment';
+comment on column ALERT.DOC_COMMENTS.FLG_CANCEL  is 'Imagm canceled: Y / N';
+comment on column ALERT.DOC_COMMENTS.DT_CANCEL  is 'Date de record cancelation';
+comment on column ALERT.DOC_COMMENTS.ID_PROF_CANCEL  is 'Professional that canceled the record';
+comment on column ALERT.DOC_COMMENTS.ADW_LAST_UPDATE  is 'DEPRECATED.';
+

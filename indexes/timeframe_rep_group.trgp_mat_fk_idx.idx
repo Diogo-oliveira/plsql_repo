@@ -1,0 +1,14 @@
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 25/02/2011 17:31
+-- CHANGE REASON: [ALERT-164703] DDL Reports - H & P reformulation in INPATIENT
+DECLARE e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE INDEX TRGP_MAT_FK_IDX ON TIMEFRAME_REP_GROUP
+ (ID_MARKET)';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: António Neto

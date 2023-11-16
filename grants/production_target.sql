@@ -1,0 +1,1 @@
+grant select, insert, update, delete, references, alter, index on PRODUCTION_TARGET to ALERT_VIEWER;

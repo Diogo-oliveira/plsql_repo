@@ -1,0 +1,26 @@
+
+
+  CREATE TABLE EPIS_HEALTH_PLAN
+   (	ID_EPIS_HEALTH_PLAN NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PAT_HEALTH_PLAN NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE epis_health_plan IS 'Serviços ou seguros de saúde utilizados pelo utente no episódio' ;
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2020 18:02
+-- CHANGE REASON: [EMR-40083]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00942);
+BEGIN
+EXECUTE IMMEDIATE 'DROP TABLE epis_health_plan_old';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos

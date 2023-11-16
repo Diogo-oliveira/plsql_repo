@@ -1,0 +1,61 @@
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-MAY-08
+-- CHANGING REASON: criação da tabela pml_dep_clin_serv - relatos mais frequentes
+CREATE TABLE PML_DEP_CLIN_SERV
+ (ID_DEP_CLIN_SERV NUMBER(24) NOT NULL
+ ,ID_SOFTWARE NUMBER(24)
+ ,ID_PROFESSIONAL NUMERIC(24)
+ ,ID_INSTITUTION NUMBER(24)
+ ,MED_ID VARCHAR2(11) NOT NULL
+ ,VERS VARCHAR2(255) NOT NULL
+ ,FLG_MED_TYPE VARCHAR2(2) NOT NULL
+ ,FLG_TYPE VARCHAR2(1)
+ );
+
+-- Add comments to the columns 
+comment on column PML_DEP_CLIN_SERV.ID_DEP_CLIN_SERV
+  is 'Id dep_clin_serv';
+comment on column PML_DEP_CLIN_SERV.ID_SOFTWARE
+  is 'ID do software.';
+comment on column PML_DEP_CLIN_SERV.ID_PROFESSIONAL
+  is 'ID do profissional.';
+comment on column PML_DEP_CLIN_SERV.ID_INSTITUTION
+  is 'ID da instituição.';
+comment on column PML_DEP_CLIN_SERV.MED_ID
+  is 'ID do medicamento';
+comment on column PML_DEP_CLIN_SERV.VERS
+  is 'versão do med_id: PT ou USA.';
+comment on column PML_DEP_CLIN_SERV.FLG_MED_TYPE
+  is 'E, medicação externa, I, medicação interna, ME, manipulados exterior, DE, dietéticos exterior';
+comment on column PML_DEP_CLIN_SERV.FLG_TYPE
+  is 'M - mais frequentes';
+-- CHANGE END Patrícia Neto	
+
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-SEP-05
+-- CHANGING REASON:  comentários pml_dep_clin_serv
+-- Add comments to the columns 
+comment on column PML_DEP_CLIN_SERV.ID_DEP_CLIN_SERV
+  is 'clinical service + department that has the medication';
+comment on column PML_DEP_CLIN_SERV.ID_SOFTWARE
+  is 'software ID';
+comment on column PML_DEP_CLIN_SERV.ID_PROFESSIONAL
+  is 'Professional ID';
+comment on column PML_DEP_CLIN_SERV.ID_INSTITUTION
+  is 'institution ID';
+comment on column PML_DEP_CLIN_SERV.MED_ID
+  is 'Medication ID, med_id (me_med)  for flg_med_type E, and id_drug (mi_med) for flg_med_type I';
+comment on column PML_DEP_CLIN_SERV.VERS
+  is 'med_id version, PT, USA, etc. ';
+comment on column PML_DEP_CLIN_SERV.FLG_MED_TYPE
+  is 'I for internal medication, E for external medication';
+comment on column PML_DEP_CLIN_SERV.FLG_TYPE
+  is 'M, for myALert.';
+-- CHANGE END Patrícia Neto	
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 14/03/2011 12:32
+-- CHANGE REASON: [ALERT-167176] Alteração do tipode dados do campo MED_ID na tabela PML_DEP_CLIN_SERV
+alter table PML_DEP_CLIN_SERV modify MED_ID VARCHAR2(255);
+-- CHANGE END:  Pedro Morais

@@ -1,0 +1,525 @@
+
+
+  CREATE TABLE PRESCRIPTION_PHARM
+   (	ID_PRESCRIPTION_PHARM NUMBER(24,0) NOT NULL ENABLE,
+	ID_PRESCRIPTION NUMBER(24,0) NOT NULL ENABLE,
+	EMB_ID NUMBER(10,0),
+	ID_DRUG NUMBER(12,0),
+	QTY NUMBER(2,0) NOT NULL ENABLE,
+	GENERICO VARCHAR2(1),
+	DOSAGE VARCHAR2(1000),
+	JUSTIF VARCHAR2(2000),
+	VIAS_ADMIN_ID NUMBER(3,0),
+	FLG_CI VARCHAR2(1) NOT NULL ENABLE,
+	FLG_CHEAPER VARCHAR2(1) NOT NULL ENABLE,
+
+	FLG_JUSTIF VARCHAR2(1) NOT NULL ENABLE,
+	DIPLOMA_ID NUMBER(2,0),
+	FLG_STATUS VARCHAR2(1),
+	DT_PRESCRIPTION_PHARM DATE NOT NULL ENABLE,
+	DESC_MANIP VARCHAR2(1000),
+	STOCK VARCHAR2(1),
+	NOTES VARCHAR2(173),
+	FLG_ATTENTION VARCHAR2(2),
+	FLG_ATTENTION_PRINT VARCHAR2(1),
+	ID_DIETARY_DRUG NUMBER(24,0),
+	ID_MANIPULATED NUMBER(24,0),
+	DESC_DIETARY VARCHAR2(1000),
+	QTY_MANIP NUMBER(6,2),
+
+	UNIT_MANIP VARCHAR2(4),
+	PVP NUMBER(8,2),
+	P_REF NUMBER(8,2),
+	P_REF_PEN NUMBER(8,2)
+   );
+
+
+COMMENT ON TABLE prescription_pharm IS 'Prescrições para a farmácia enterna e farmácia do hospital.' ;
+
+COMMENT ON COLUMN prescription_pharm.id_prescription_pharm IS 'Chave primária.' ;
+COMMENT ON COLUMN prescription_pharm.id_prescription IS 'ID da prescrição.' ;
+COMMENT ON COLUMN prescription_pharm.emb_id IS 'ID da embalagem.' ;
+COMMENT ON COLUMN prescription_pharm.id_drug IS 'ID do medicamento. Utilizado na prescrição interna; caso contrário preenche-se EMB_ID.' ;
+COMMENT ON COLUMN prescription_pharm.qty IS 'Nº de embalagens.' ;
+COMMENT ON COLUMN prescription_pharm.generico IS 'Autorização de genérico.' ;
+COMMENT ON COLUMN prescription_pharm.dosage IS 'Posologia.' ;
+COMMENT ON COLUMN prescription_pharm.justif IS 'Justificação da prescrição.' ;
+COMMENT ON COLUMN prescription_pharm.vias_admin_id IS 'ID da via de administração.' ;
+COMMENT ON COLUMN prescription_pharm.flg_ci IS 'Chamada de atenção de contra-indicações: Y - sim; N - não; R - lida.' ;
+COMMENT ON COLUMN prescription_pharm.flg_cheaper IS 'Chamada de atenção de medicamentos mais baratos: Y - sim; N - não; R - lida.' ;
+COMMENT ON COLUMN prescription_pharm.flg_justif IS 'Chamada de atenção de justificação de prescrição: Y - sim; N - não; R - lida.' ;
+COMMENT ON COLUMN prescription_pharm.diploma_id IS 'ID do diploma.' ;
+
+COMMENT ON COLUMN prescription_pharm.flg_status IS 'Estado da requisição: D - pendente, R - requisitado, E - em curso, F - concluído, C - anulado, I - interrompido' ;
+COMMENT ON COLUMN prescription_pharm.dt_prescription_pharm IS 'Data em que o medicamento foi prescrito.' ;
+COMMENT ON COLUMN prescription_pharm.desc_manip IS 'Descritivo do manipulado.' ;
+COMMENT ON COLUMN prescription_pharm.stock IS 'Indicação se o medicamento prescrito (Administrar neste episódio) existe em stock (informação dada pela enfermeira).' ;
+COMMENT ON COLUMN prescription_pharm.notes IS 'Notas da requisição. (O nº limite de carateres é 173 pois é o máximo permitido na receita impressa)' ;
+COMMENT ON COLUMN prescription_pharm.flg_attention IS 'Flag que indica a chamada de atenção prioritária: CI - contra-indicações; B - medicamentos mais baratos; J - justificação de prescrição; IM - interacções medicamentosas; IA - interacções entre medicamentos e alergias' ;
+COMMENT ON COLUMN prescription_pharm.flg_attention_print IS 'Flag que indica se o profissional prosseguiu (Y) ou não (N) com a impressão apesar das chamadas de atenção.' ;
+COMMENT ON COLUMN prescription_pharm.id_dietary_drug IS 'ID do dietético.' ;
+COMMENT ON COLUMN prescription_pharm.id_manipulated IS 'ID do manipulado (se a prescrição for feita através dos mais frequentes).' ;
+COMMENT ON COLUMN prescription_pharm.desc_dietary IS 'Descritivo do dietético.' ;
+COMMENT ON COLUMN prescription_pharm.qty_manip IS 'Quantidade a preparar (só existe nos manipulados).' ;
+COMMENT ON COLUMN prescription_pharm.unit_manip IS 'Unidade da quantidade a preparar, QTY_MANIP (só existe para manipulados)' ;
+COMMENT ON COLUMN prescription_pharm.pvp IS 'PVP do medicamento no momento em que foi prescrito (não é utilizado; poderá servir apenas para auditoria).' ;
+
+COMMENT ON COLUMN prescription_pharm.p_ref IS 'Preço de referência do medicamento no momento em que foi prescrito (não é utilizado; poderá servir apenas para auditoria).' ;
+COMMENT ON COLUMN prescription_pharm.p_ref_pen IS 'Preço de referência para pensionistas do medicamento no momento em que foi prescrito (não é utilizado; poderá servir apenas para auditoria).' ;
+
+alter table prescription_pharm 
+add (dt_prescription_pharm_tstz timestamp with local time zone); 
+
+
+	alter table prescription_pharm add (
+  DT_ORDER             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROF_ORDER        NUMBER(24),
+  ID_ORDER_TYPE        NUMBER(24),
+  FLG_CO_SIGN          VARCHAR2(1) default 'N' not null,
+  DT_CO_SIGN           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  NOTES_CO_SIGN        VARCHAR2(4000),
+  ID_PROF_CO_SIGN      NUMBER(24));
+	
+			comment on column prescription_pharm.DT_ORDER
+  is 'Moment when the ordering professional ask the registering professional to request';
+comment on column prescription_pharm.ID_PROF_ORDER
+  is 'Ordering professional';
+comment on column prescription_pharm.ID_ORDER_TYPE
+  is 'Request order type (telephone, verbal, ...)';
+comment on column prescription_pharm.FLG_CO_SIGN
+  is 'Co-sign flag. (Y)-Order co-signed. (N)-Order not co-signed.';
+comment on column prescription_pharm.DT_CO_SIGN
+  is 'Co-sign moment';
+comment on column prescription_pharm.NOTES_CO_SIGN
+  is 'Co-sign notes';
+comment on column prescription_pharm.ID_PROF_CO_SIGN
+  is 'Co-sign professional';
+	
+alter table prescription_pharm  add(
+ID_UNIT_MEASURE     number(24)
+);
+alter table prescription_pharm add(
+duration      number(24)
+);
+alter table prescription_pharm add(
+id_unit_measure_dur      number(24)
+);
+alter table prescription_pharm add(
+Frequency     number(24)
+);                        
+alter table prescription_pharm add(
+id_unit_measure_freq      number(24)
+);   
+alter table prescription_pharm add(
+DT_START_PRESC_TSTZ      TIMESTAMP(6) WITH LOCAL TIME ZONE 
+);
+alter table prescription_pharm add(
+DT_END_PRESC_TSTZ      TIMESTAMP(6) WITH LOCAL TIME ZONE 
+);
+alter table prescription_pharm add (refill    number(24,4));
+alter table prescription_pharm       add (qty_inst  number(24,4));  
+alter table prescription_pharm       add (unit_measure_inst  number(24,4));  
+alter table prescription_pharm add( first_dose  varchar2(1), 
+dt_expire_tstz timestamp(6) with local time zone ,
+package_number varchar2(100) );
+ 
+
+-- Add comments to the columns 
+comment on column prescription_pharm.ID_UNIT_MEASURE
+  is 'Unidade de medida relativa à quantidade';
+comment on column prescription_pharm.FREQUENCY
+  is 'Frequencia (Posologia)';
+comment on column prescription_pharm.ID_UNIT_MEASURE_FREQ
+  is 'Unidade de medida da frequencia';
+comment on column prescription_pharm.DURATION
+  is 'Duração (Posologia)';
+comment on column prescription_pharm.ID_UNIT_MEASURE_DUR
+  is 'Unidade de medida da duração';
+comment on column prescription_pharm.DT_START_PRESC_TSTZ
+  is 'Data inicio do tratamento (Posologia)';
+comment on column prescription_pharm.DT_END_PRESC_TSTZ
+  is 'Data end do tratamento (Posologia)';
+comment on column prescription_pharm.REFILL
+  is 'Reffil';
+comment on column prescription_pharm.QTY_INST
+  is 'Quantidade';
+comment on column prescription_pharm.UNIT_MEASURE_INST
+  is 'Unidade de medida da qty_inst'; 
+comment on column prescription_pharm.PACKAGE_NUMBER
+  is 'Lote';
+comment on column prescription_pharm.DT_EXPIRE_TSTZ
+  is 'Data de validade';
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-NOV-30
+-- CHANGED REASON: Modify Orders/Refills
+-- Add/modify columns 
+alter table PRESCRIPTION_PHARM add ORDER_MODIFIED VARCHAR2(1);
+alter table PRESCRIPTION_PHARM add DT_ORDER_MODIFIED TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table PRESCRIPTION_PHARM add PATIENT_NOTIFIED VARCHAR2(1);
+alter table PRESCRIPTION_PHARM add ID_PROF_LAST_CHANGE NUMBER(24);
+alter table PRESCRIPTION_PHARM add ID_SW_LAST_CHANGE NUMBER(24);
+alter table PRESCRIPTION_PHARM add ID_INST_LAST_CHANGE NUMBER(12);
+alter table PRESCRIPTION_PHARM add ORDER_MODIFIED_ID_ISSUE NUMBER(24);
+alter table PRESCRIPTION_PHARM add ORDER_MODIFIED_MESSAGE VARCHAR2(4000);
+-- Add comments to the columns 
+comment on column PRESCRIPTION_PHARM.ORDER_MODIFIED
+  is '''Y'', se a posologia foi modificada após a prescrição ter sido feita';
+comment on column PRESCRIPTION_PHARM.DT_ORDER_MODIFIED
+  is 'data da alteração da posologia, preencher sempre que ORFDER_MODIFIED estiver a ''Y''';
+comment on column PRESCRIPTION_PHARM.PATIENT_NOTIFIED
+  is 'parâmetro associado ao ORDER_MODIFIED. ''R'', se o paciente já foi notificado da modificação, ''U'', se o paciente ainda não foi notificado da modificação.';
+ comment on column PRESCRIPTION_PHARM.ID_PROF_LAST_CHANGE
+  is 'id do profissional que fez a ultima alteração dos dados desta prescrição';
+comment on column PRESCRIPTION_PHARM.ID_SW_LAST_CHANGE
+  is 'id do software em que o profissional fez a ultima alteração dos dados desta prescrição';
+comment on column PRESCRIPTION_PHARM.ID_INST_LAST_CHANGE
+  is 'id do instituição em que o profissional fez a ultima alteração dos dados desta prescrição'; 
+comment on column PRESCRIPTION_PHARM.ORDER_MODIFIED_ID_ISSUE
+  is 'id_issue.parâmetro associado ao ORDER_MODIFIED.  Quando é criado um pending issue.';
+comment on column PRESCRIPTION_PHARM.ORDER_MODIFIED_MESSAGE
+  is 'mensagem do pending issue, gerada quando é criado um id_issue.';
+--CHANGES END    
+
+
+alter table prescription_pharm
+modify (FLG_CI default 'N',
+				FLG_CHEAPER default 'N',
+				FLG_JUSTIF default 'N',
+				FLG_INTERAC_MED default 'N',
+				FLG_INTERAC_ALLERGY default 'N');
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-DEC-13
+-- CHANGING REASON: nova coluna na tabela prescription_pharm para detectar prescrições que advêm de um --  relato de medicação externa.
+-- Add/modify columns 
+alter table PRESCRIPTION_PHARM add id_pat_medication_list NUMBER(24);
+-- Add comments to the columns 
+comment on column PRESCRIPTION_PHARM.id_pat_medication_list
+  is 'Id do relato. Isto acontece quando se faz uma prescrição a partir de um relato.';
+-- CHANGE END Patrícia Neto				
+				
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-MAY-22
+-- CHANGE REASON: Criação de nova coluna na tabela associar a outros produtos prescritos em texto livre (-1 = texto livre)
+ALTER TABLE PRESCRIPTION_PHARM
+ADD ID_OTHER_PRODUCT NUMBER(24);
+
+ALTER TABLE PRESCRIPTION_PHARM
+ADD DESC_OTHER_PRODUCT VARCHAR2(1000);
+
+-- Add comments to the columns 
+comment on column PRESCRIPTION_PHARM.ID_OTHER_PRODUCT
+  is 'ID for product/drugs prescribed in free text.';
+  
+comment on column PRESCRIPTION_PHARM.DESC_OTHER_PRODUCT
+  is 'Description for product/drugs prescribed in free text.';
+--CHANGE END
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGED DATE: 2008-SEPT-22
+-- CHANGING REASON: Remoção de colunas do tipo DATE que tenham equivalentes do tipo TIMESTAMP WITH LOCAL TIME ZONE
+ALTER TABLE PRESCRIPTION_PHARM DROP COLUMN dt_prescription_pharm; 
+-- CHANGE END
+
+
+
+--
+-- CHANGED BY: Thiago Brito
+-- CHANGE DATE: 2008-OCT-08
+-- CHANGE REASON: In order to perform the denormilization task, for this table, these columns need to be added
+--
+
+ALTER TABLE ALERT.prescription_pharm ADD STATUS_FLG VARCHAR2(100);
+/
+
+ALTER TABLE ALERT.prescription_pharm ADD STATUS_ICON VARCHAR2(100);
+/
+
+ALTER TABLE ALERT.prescription_pharm ADD STATUS_MSG VARCHAR2(100);
+/
+
+ALTER TABLE ALERT.prescription_pharm ADD STATUS_STR VARCHAR2(100);
+/
+
+COMMENT ON COLUMN prescription_pharm.STATUS_FLG IS 'Request''s status flag (udes to return the icon)';
+/
+
+COMMENT ON COLUMN prescription_pharm.STATUS_ICON IS 'Request''s status icon';
+/
+
+COMMENT ON COLUMN prescription_pharm.STATUS_MSG IS 'Request''s status message code';
+/
+
+COMMENT ON COLUMN prescription_pharm.STATUS_STR IS 'Request''s status (in specific format)';
+/
+
+-- CHANGE END
+
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 2009-JAN-06
+-- CHANGE REASON: ALERT-4259
+
+alter table PRESCRIPTION_PHARM modify QTY_MANIP NUMBER(24,4);
+alter table PRESCRIPTION_PHARM modify UNIT_MANIP VARCHAR2(50);
+
+-- CHANGED END
+
+-- CHANGED REASON: New fields for Dispense
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 19/03/2009
+ALTER TABLE ALERT.PRESCRIPTION_PHARM ADD DISPENSE NUMBER(24,4);
+/
+ALTER TABLE ALERT.PRESCRIPTION_PHARM ADD UNIT_MEASURE_DISPENSE NUMBER(24);
+/
+COMMENT ON COLUMN PRESCRIPTION_PHARM.DISPENSE IS 'Dispensed quantity';
+/
+COMMENT ON COLUMN PRESCRIPTION_PHARM.UNIT_MEASURE_DISPENSE IS 'Unit measure for dispense quantity';
+/
+-- CHANGE END
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-MAR-28
+-- CHANGING REASON: OVERDOSAGE MODULE
+alter table PRESCRIPTION_PHARM add FLG_DOSAGE_CHECK VARCHAR2(4);
+-- Add comments to the columns 
+comment on column PRESCRIPTION_PHARM.FLG_DOSAGE_CHECK
+  is 'Indica a presença de alertas de sobredosagem, subdosagem, etc.';
+-- CHANGE END Patrícia Neto
+	
+alter table prescription_pharm
+modify refill varchar2(100);
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 2009-JUL-10
+-- CHANGE REASON: ALERT-35531
+
+alter table PRESCRIPTION_PHARM modify QTY_MANIP number(24,4);
+
+-- CHANGED END
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 29/03/2010 12:21
+-- CHANGE REASON: [ALERT-84593] 
+declare
+ l_count pls_integer;
+begin
+
+  select count(1)
+  into l_count
+  from all_tab_columns 
+  where owner = 'ALERT' and table_name = 'PRESCRIPTION_PHARM' and column_name = 'FLG_FIRST_PRESC';
+
+  if l_count = 0 then
+    execute immediate ( 'alter table PRESCRIPTION_PHARM add FLG_FIRST_PRESC VARCHAR(1 CHAR)');
+  end if;
+
+end;
+/
+
+
+comment on column PRESCRIPTION_PHARM.FLG_FIRST_PRESC
+  is 'Is first prescription ? (Y)es | (N)o';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 29/03/2010 15:21
+-- CHANGE REASON: [ALERT-84593] 
+declare
+ l_count pls_integer;
+begin
+
+  select count(1)
+  into l_count
+  from all_tab_columns 
+  where owner = 'ALERT' and table_name = 'PRESCRIPTION_PHARM' and column_name = 'FLG_FIRST_PRESC';
+
+  if l_count = 0 then
+    execute immediate ( 'alter table PRESCRIPTION_PHARM add FLG_FIRST_PRESC VARCHAR(1 CHAR)');
+  end if;
+
+end;
+/
+
+
+comment on column PRESCRIPTION_PHARM.FLG_FIRST_PRESC
+  is 'Is first prescription ? (Y)es | (N)o';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 29/03/2010 15:29
+-- CHANGE REASON: [ALERT-84593] 
+declare
+ l_count pls_integer;
+begin
+
+  select count(1)
+  into l_count
+  from all_tab_columns 
+  where owner = 'ALERT' and table_name = 'PRESCRIPTION_PHARM' and column_name = 'FLG_FIRST_PRESC';
+
+  if l_count = 0 then
+    execute immediate ( 'alter table PRESCRIPTION_PHARM add FLG_FIRST_PRESC VARCHAR(1 CHAR)');
+  end if;
+
+end;
+/
+
+
+comment on column PRESCRIPTION_PHARM.FLG_FIRST_PRESC
+  is 'Is first prescription ? (Y)es | (N)o';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 20/04/2010 15:52
+-- CHANGE REASON: [ALERT-90671] 
+ALTER TABLE PRESCRIPTION_PHARM DROP COLUMN ID_PRESC_INSTR_DET;
+ALTER TABLE PRESCRIPTION_PHARM ADD ID_PRESC_DIRECTIONS NUMBER(24);
+COMMENT ON COLUMN PRESCRIPTION_PHARM.ID_PRESC_DIRECTIONS IS 'Prescription Directions ID';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 20/04/2010 16:59
+-- CHANGE REASON: [ALERT-90671] 
+ALTER TABLE PRESCRIPTION_PHARM ADD ID_PRESC_DIRECTIONS NUMBER(24);
+COMMENT ON COLUMN PRESCRIPTION_PHARM.ID_PRESC_DIRECTIONS IS 'Prescription Directions ID';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 20/04/2010 17:09
+-- CHANGE REASON: [ALERT-89691] 
+ALTER TABLE PRESCRIPTION_PHARM ADD ID_PRESC_DIRECTIONS NUMBER(24);
+COMMENT ON COLUMN PRESCRIPTION_PHARM.ID_PRESC_DIRECTIONS IS 'Prescription Directions ID';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 04/06/2010 11:28
+-- CHANGE REASON: [ALERT-102389] 
+alter table
+   prescription_pharm
+add
+   (
+   flg_chronic_medication VARCHAR2(1 CHAR) default 'N',   
+   chronic_notes_not_active Varchar2(1000 CHAR), 
+   id_chronic_motive NUMBER(24),
+   id_prof_not_active NUMBER(24),
+   chronic_motive_descr VARCHAR2(1000 CHAR),
+   dt_not_active_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE
+);
+
+comment on column prescription_pharm.flg_chronic_medication is 'Indicates if it''s a chronic medication. Values: Y - Yes; N - No.';
+comment on column prescription_pharm.chronic_notes_not_active is 'Notes for not active state change';
+comment on column prescription_pharm.id_chronic_motive is 'Reason ID for not active state change';
+comment on column prescription_pharm.id_prof_not_active is 'Professional ID';
+comment on column prescription_pharm.chronic_motive_descr is 'Notes for not active chronic medication';
+comment on column prescription_pharm.dt_not_active_tstz is 'Date for not active state change';
+
+alter table prescription_pharm
+  add constraint PP_CANCEL_REASON_CM_FK foreign key (id_chronic_motive)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+
+alter table prescription_pharm
+  add constraint PP_PROF_CM_FK foreign key (id_prof_not_active)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+-- CHANGE END:  NUNO ANTUNES
+
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 17/08/2010 09:27
+-- CHANGE REASON: [ALERT-117299] 
+alter table PRESCRIPTION_PHARM rename column REGIME to ID_REGIME;
+
+alter table PRESCRIPTION_PHARM
+modify
+(
+   ID_REGIME NUMBER(2)
+);
+
+alter table PRESCRIPTION_PHARM
+  add constraint PP_ID_REGIME_FK foreign key (ID_REGIME)
+  references REGIME (ID_REGIME);
+-- CHANGE END:  NUNO ANTUNES
+
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 19/08/2010 10:12
+-- CHANGE REASON: [ALERT-117299] 
+ALTER TABLE prescription_pharm
+ADD
+(
+      PRECO_SNS NUMBER(24,6),
+      PRECO_UTENTE NUMBER(24,6),
+  PRECO_UTENTE_DIFF NUMBER(24,6),
+      COMPART VARCHAR2(4 CHAR),
+      REGIME VARCHAR2(4 CHAR)
+);
+
+comment on column prescription_pharm.PRECO_SNS
+ is 'Custo para o SNS';
+comment on column prescription_pharm.PRECO_UTENTE
+ is 'Custo para o utente';
+comment on column prescription_pharm.PRECO_UTENTE_DIFF
+ is 'Custo para o utente em relação ao medicamento mais barato';
+comment on column prescription_pharm.COMPART
+ is 'Comparticipação do medicamento'; 
+comment on column prescription_pharm.REGIME
+ is 'Regime do paciente (R.G./R.E)';
+-- CHANGE END:  NUNO ANTUNES
+
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 19/08/2010 10:15
+-- CHANGE REASON: [ALERT-117299] 
+ALTER TABLE prescription_pharm
+ADD
+(
+      PRECO_SNS NUMBER(24,6),
+      PRECO_UTENTE NUMBER(24,6),
+      PRECO_UTENTE_DIFF NUMBER(24,6),
+      COMPART VARCHAR2(4 CHAR),
+      ID_REGIME NUMBER(2)
+);
+
+alter table PRESCRIPTION_PHARM
+  add constraint PP_ID_REGIME_FK foreign key (ID_REGIME)
+  references REGIME (ID_REGIME);
+
+comment on column prescription_pharm.PRECO_SNS
+ is 'Custo para o SNS';
+comment on column prescription_pharm.PRECO_UTENTE
+ is 'Custo para o utente';
+comment on column prescription_pharm.PRECO_UTENTE_DIFF
+ is 'Custo para o utente em relação ao medicamento mais barato';
+comment on column prescription_pharm.COMPART
+ is 'Comparticipação do medicamento'; 
+comment on column prescription_pharm.ID_REGIME
+ is 'Regime do paciente (R.G./R.E)';
+-- CHANGE END:  NUNO ANTUNES
+
+-- CHANGED BY: Pedro Quinteiro
+-- CHANGE DATE: 07/09/2010 15:05
+-- CHANGE REASON: [ALERT-122863] 
+comment on column alert.PRESCRIPTION_PHARM.FLG_STATUS
+  is 'Estado da requisição: D - pendente, R - requisitado, E - em curso, F - concluído, C - anulado, I - interrompido, T - temporária, A - medicação crónica activa, Y - medicação crónica não activa';
+-- CHANGE END: Pedro Quinteiro
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 20/05/2011 11:45
+-- CHANGE REASON: [ALERT-180704] CDR: create concepts and conditions for dietaries, compound medications and other products
+-- Add/modify columns 
+alter table prescription_pharm add ID_CDR_CALL number(24);
+-- CHANGE END:  Pedro Morais
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:57
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESCRIPTION_PHARM IS 'Prescrições para a farmácia enterna e farmácia do hospital. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 15/10/2020
+-- CHANGE REASON: EMR-36398
+ALTER TABLE PRESCRIPTION_PHARM ADD FLG_PRINT_STATUS VARCHAR2(1 CHAR);
+COMMENT ON COLUMN PRESCRIPTION_PHARM.FLG_PRINT_STATUS IS 'Estado da linha prescrição associado à receita: P - impressa; T - temporária; I - Inactiva (Processada e duplicada);'; 
+-- CHANGE END: Pedro Teixeira

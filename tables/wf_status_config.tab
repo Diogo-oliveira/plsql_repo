@@ -1,0 +1,96 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 31/07/2009 16:30
+-- CHANGE REASON: [ALERT-18963 ] 
+
+CREATE TABLE "WF_STATUS_CONFIG"(
+ID_WORKFLOW NUMBER(12,0) NOT NULL,
+ID_STATUS NUMBER(24,0) NOT NULL,
+ID_SOFTWARE NUMBER(24,0) NOT NULL,
+ID_INSTITUTION NUMBER(24,0) NOT NULL,
+ID_PROFILE_TEMPLATE NUMBER(12,0) NOT NULL,
+ID_FUNCTIONALITY NUMBER(12,0) NOT NULL,
+ICON VARCHAR2(200) ,
+COLOR VARCHAR2(35) ,
+RANK NUMBER(6,0) NOT NULL,
+FUNCTION VARCHAR2(2000) ,
+FLG_INSERT VARCHAR2(1) NOT NULL,
+FLG_UPDATE VARCHAR2(1) NOT NULL,
+FLG_DELETE VARCHAR2(1) NOT NULL,
+FLG_READ VARCHAR2(1) NOT NULL,
+CREATE_USER VARCHAR2(24) ,
+CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+CREATE_INSTITUTION NUMBER(24,0) ,
+UPDATE_USER VARCHAR2(24) ,
+UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+UPDATE_INSTITUTION NUMBER(24,0) );
+
+   COMMENT ON COLUMN "WF_STATUS_CONFIG"."ID_WORKFLOW" IS 'Workflow identification';
+
+   COMMENT ON COLUMN "WF_STATUS_CONFIG"."ID_STATUS" IS 'Status identification';
+
+   COMMENT ON COLUMN "WF_STATUS_CONFIG"."ID_SOFTWARE" IS 'Software that can perform this action';
+
+   COMMENT ON COLUMN "WF_STATUS_CONFIG"."ID_INSTITUTION" IS 'Institution that can perform this action';
+
+   COMMENT ON COLUMN "WF_STATUS_CONFIG"."ID_PROFILE_TEMPLATE" IS 'Profile that can performe this action';
+
+   COMMENT ON COLUMN "WF_STATUS_CONFIG"."ID_FUNCTIONALITY" IS 'Functionality that can perform this action';
+
+  COMMENT ON COLUMN "WF_STATUS_CONFIG"."ICON" IS 'Status icon. Overrides WF_STATUS.ICON';
+
+  COMMENT ON COLUMN "WF_STATUS_CONFIG"."COLOR" IS 'Hexadecimal color code in the following format: GRID_BG_COLOR:GRID_FG_COLOR:OTHER_BG_COLOR:OTHER_FG_COLOR. For example: 0xC86464:0xFFFFFF:0xC86464:0xFFFFFF. Overrides WF_STATUS.COLOR';
+
+   COMMENT ON COLUMN "WF_STATUS_CONFIG"."RANK" IS 'Status rank. For ordering in status lists. Overrides WF_STATUS.RANK';
+
+   COMMENT ON COLUMN "WF_STATUS_CONFIG"."FUNCTION" IS 'This function returns status info based on other business rules';
+
+   COMMENT ON COLUMN "WF_STATUS_CONFIG"."FLG_INSERT" IS 'Y if has right to insert, N otherwise';
+
+   COMMENT ON COLUMN "WF_STATUS_CONFIG"."FLG_UPDATE" IS 'Y if has right to update, N otherwise';
+
+   COMMENT ON COLUMN "WF_STATUS_CONFIG"."FLG_DELETE" IS 'Y if has right to delete, N otherwise';
+
+   COMMENT ON COLUMN "WF_STATUS_CONFIG"."FLG_READ" IS 'Y if has right to read, N otherwise';
+
+   COMMENT ON TABLE "WF_STATUS_CONFIG"  IS 'Status layout configuration. Overrides configuration in WF_STATUS';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 11/09/2009 12:33
+-- CHANGE REASON: [ALERT-910] 
+comment on column wf_status_config.CREATE_USER is 'Creation User';
+comment on column wf_status_config.CREATE_TIME is 'Creation Time';
+comment on column wf_status_config.CREATE_INSTITUTION is 'Creation Institution';
+comment on column wf_status_config.UPDATE_USER is 'Update User';
+comment on column wf_status_config.UPDATE_TIME is 'Update Time';
+comment on column wf_status_config.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Ana Monteiro
+
+
+-- CHANGED BY: João Almeida
+-- CHANGED DATE: 2009-SET-22
+-- CHANGED REASON: ALERT-45152
+alter TABLE WF_STATUS_CONFIG
+modify id_workflow NUMBER(24);
+-- CHANGE END: João Almeida
+
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 11/12/2009 17:03
+-- CHANGE REASON: [ALERT-61416 ] 
+
+-- Add/modify columns 
+alter table WF_STATUS_CONFIG add ID_CATEGORY number(12) default 0 not null;
+-- Add comments to the columns 
+comment on column WF_STATUS_CONFIG.ID_CATE
+  is 'Professional''s Category';
+
+drop index WSC_PK;
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/08/2010 17:15
+-- CHANGE REASON: [ALERT-103302] ALERT-83871: REFERRAL Integration With OUTPATIENT
+comment on column WF_STATUS_CONFIG.ID_CATEGORY is 'Professional category identifier';
+  
+-- CHANGE END: Ana Monteiro

@@ -1,0 +1,120 @@
+
+
+  CREATE TABLE EPIS_REVIEW_SYSTEMS
+   (	ID_EPIS_REVIEW_SYSTEMS NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DESC_REVIEW_SYSTEMS VARCHAR2(4000),
+	DT_CREATION DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE epis_review_systems IS 'Notas da revisão de sistemas' ;
+
+COMMENT ON COLUMN epis_review_systems.id_epis_review_systems IS 'Chave primária' ;
+COMMENT ON COLUMN epis_review_systems.id_episode IS 'Episódio' ;
+COMMENT ON COLUMN epis_review_systems.id_professional IS 'Profissional' ;
+COMMENT ON COLUMN epis_review_systems.desc_review_systems IS 'Notas da revisão de sistemas' ;
+COMMENT ON COLUMN epis_review_systems.dt_creation IS 'Data de criação' ;
+COMMENT ON COLUMN epis_review_systems.id_prof_cancel IS 'Profissional que cancelou' ;
+COMMENT ON COLUMN epis_review_systems.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN epis_review_systems.flg_status IS 'Estado:A - Activo;C - Cancelado' ;
+COMMENT ON COLUMN epis_review_systems.adw_last_update IS 'Data da última alteração' ;
+
+
+comment on column EPIS_REVIEW_SYSTEMS.FLG_STATUS
+  is 'Estado';
+
+alter table epis_review_systems 
+add (dt_creation_tstz timestamp with local time zone,
+dt_cancel_tstz timestamp with local time zone); 
+
+
+--Emilia Taborda 2007/09/17
+alter table epis_review_systems add (id_epis_review_systems_parent number(24));
+comment on column epis_review_systems.id_epis_review_systems_parent
+  is 'epis_review_systems base/original ';
+
+
+--Emilia Taborda 2007/09/19
+COMMENT ON COLUMN epis_review_systems.flg_status IS 'Estado:A - Activo;C - Cancelado; O- Outdated' ;
+
+--Ariel Machado 2008/05/08
+ALTER TABLE EPIS_REVIEW_SYSTEMS 
+ ADD (FLG_EDITION_TYPE VARCHAR2(1)
+ ) ;
+COMMENT ON COLUMN EPIS_REVIEW_SYSTEMS.FLG_EDITION_TYPE IS 'Flag to indicate the type of edition that originate this record: ''N'' - New; ''E'' - Edit; ''A'' - Agree; ''U'' - Update; ''O'' - No changes; ''X'' - Exchange;' ;
+--Changed End
+
+
+
+-- Alert Data Governance - 22-Sep-2008
+alter table EPIS_REVIEW_SYSTEMS
+drop (DT_CANCEL, DT_CREATION);
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_REVIEW_SYSTEMS modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_REVIEW_SYSTEMS modify FLG_STATUS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_REVIEW_SYSTEMS modify FLG_EDITION_TYPE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_REVIEW_SYSTEMS modify DESC_REVIEW_SYSTEMS varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_REVIEW_SYSTEMS modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EPIS_REVIEW_SYSTEMS
+  is 'Review of systems notes (only used on ORIS and PP)';
+-- Add comments to the columns 
+comment on column EPIS_REVIEW_SYSTEMS.id_epis_review_systems
+  is 'Primary key';
+comment on column EPIS_REVIEW_SYSTEMS.id_episode
+  is 'Episode ID';
+comment on column EPIS_REVIEW_SYSTEMS.id_professional
+  is 'Professional that made the record';
+comment on column EPIS_REVIEW_SYSTEMS.desc_review_systems
+  is 'Review of systems notes';
+comment on column EPIS_REVIEW_SYSTEMS.id_prof_cancel
+  is 'Professional that cancelled';
+comment on column EPIS_REVIEW_SYSTEMS.flg_status
+  is 'Record Status:A - Active;C - Cancelled; O- Outdated';
+comment on column EPIS_REVIEW_SYSTEMS.adw_last_update
+  is 'Date of last change';
+comment on column EPIS_REVIEW_SYSTEMS.dt_creation_tstz
+  is 'Record creation date';
+comment on column EPIS_REVIEW_SYSTEMS.dt_cancel_tstz
+  is 'Cancellation date';  
+-- CHANGE END: Elisabete Bugalho

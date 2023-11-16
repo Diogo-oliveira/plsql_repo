@@ -1,0 +1,29 @@
+
+alter table AUDIT_CRITERIA modify(ID_AUDIT_CRITERIA not null);
+alter table AUDIT_CRITERIA modify(ID_AUDIT_TYPE not null);
+alter table AUDIT_CRITERIA modify(CODE_AUDIT_CRITERIA not null);
+alter table AUDIT_CRITERIA modify(FLG_FOR not null);
+alter table AUDIT_CRITERIA modify(FLG_ANS_TYPE not null);
+alter table AUDIT_CRITERIA modify(FLG_REQUIRED not null);
+alter table AUDIT_CRITERIA modify(FLG_ANS_CRITERIA not null);
+alter table AUDIT_CRITERIA modify(ADW_LAST_UPDATE not null);
+
+alter table AUDIT_CRITERIA
+	add constraint ADT_QUEST_PK primary key (ID_AUDIT_CRITERIA);
+	
+alter table AUDIT_CRITERIA
+   add constraint ADT_QUEST_FLG_FOR_CHK
+   check (FLG_FOR IN ('E', 'P','A'));
+   
+alter table AUDIT_CRITERIA
+   add constraint ADT_QUEST_FLG_ANS_CHK
+   check (FLG_ANS_TYPE IN ('B','T','Q'));
+   
+alter table AUDIT_CRITERIA
+   add constraint ADT_QUEST_FLG_RQR_CHK
+   check (FLG_REQUIRED IN ('Y', 'N'));
+   
+alter table AUDIT_CRITERIA
+   add constraint ADT_QUEST_FLG_ANS_CRIT_CHK
+   check (FLG_ANS_CRITERIA IN ('F','D','P','R','L','O','T'));
+   

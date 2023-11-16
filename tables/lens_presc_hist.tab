@@ -1,0 +1,145 @@
+CREATE TABLE LENS_PRESC_HIST
+ (ID_LENS_PRESC_HIST NUMBER(24) NOT NULL
+ ,ID_LENS_PRESC NUMBER(24) NOT NULL
+ ,ID_LENS NUMBER(24) NOT NULL
+ ,ID_EPISODE NUMBER(24) NOT NULL
+ ,ID_PATIENT NUMBER(24) NOT NULL
+ ,ID_PROF_PRESC NUMBER(24) NOT NULL
+ ,DT_LENS_PRESC_TSTZ TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ ,ID_PROF_CANCEL NUMBER(24)
+ ,DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_PROF_PRINT NUMBER(24)
+ ,DT_PRINT_TSTZ TIMESTAMP WITH LOCAL TIME ZONE
+ ,FLG_STATUS VARCHAR2(1) NOT NULL
+ ,NOTES VARCHAR2(4000)
+ ,NOTES_CANCEL VARCHAR2(4000)
+ ,ID_CANCEL_REASON NUMBER(24)
+ ,CREATE_USER NUMBER(24) NOT NULL
+ ,CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ )
+/
+
+COMMENT ON TABLE LENS_PRESC_HIST IS 'This table stores all the updates done in the lens prescriptions.'
+/
+
+COMMENT ON COLUMN LENS_PRESC_HIST.ID_LENS_PRESC_HIST IS 'Primary key'
+/
+
+COMMENT ON COLUMN LENS_PRESC_HIST.ID_LENS_PRESC IS 'Lens prescription Id'
+/
+
+COMMENT ON COLUMN LENS_PRESC_HIST.ID_LENS IS 'Lens Id'
+/
+
+COMMENT ON COLUMN LENS_PRESC_HIST.ID_EPISODE IS 'Episode Id'
+/
+
+COMMENT ON COLUMN LENS_PRESC_HIST.ID_PATIENT IS 'Patient Id'
+/
+
+COMMENT ON COLUMN LENS_PRESC_HIST.ID_PROF_PRESC IS 'Professional Id responsible for this registry.'
+/
+
+COMMENT ON COLUMN LENS_PRESC_HIST.DT_LENS_PRESC_TSTZ IS 'Registry date.'
+/
+
+COMMENT ON COLUMN LENS_PRESC_HIST.ID_PROF_CANCEL IS 'Professional Id responsible for the cancelation.'
+/
+
+COMMENT ON COLUMN LENS_PRESC_HIST.DT_CANCEL_TSTZ IS 'Cancelation date.'
+/
+
+COMMENT ON COLUMN LENS_PRESC_HIST.ID_PROF_PRINT IS 'Professional Id responsible for the prescription printing.'
+/
+
+COMMENT ON COLUMN LENS_PRESC_HIST.DT_PRINT_TSTZ IS 'Prescription printing date.'
+/
+
+COMMENT ON COLUMN LENS_PRESC_HIST.FLG_STATUS IS 'Lens prescription current status. I-In construction, P-Printed, C-Cancelled'
+/
+
+COMMENT ON COLUMN LENS_PRESC_HIST.NOTES IS 'Registry notes'
+/
+
+COMMENT ON COLUMN LENS_PRESC_HIST.NOTES_CANCEL IS 'Cancelation notes'
+/
+
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table LENS_PRESC_HIST modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table LENS_PRESC_HIST modify NOTES_CANCEL varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table LENS_PRESC_HIST modify NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table LENS_PRESC_HIST modify FLG_STATUS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 20/01/2016 15:11
+-- CHANGE REASON: [ALERT-317983] ALERT-317983 CDOC Functionalities V5 Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table LENS_PRESC_HIST
+  is 'This table stores all the updates done in the lens prescriptions.';
+-- Add comments to the columns 
+comment on column LENS_PRESC_HIST.id_lens_presc_hist
+  is 'Primary key';
+comment on column LENS_PRESC_HIST.id_lens_presc
+  is 'Lens prescription Id';
+comment on column LENS_PRESC_HIST.id_lens
+  is 'Lens Id';
+comment on column LENS_PRESC_HIST.id_episode
+  is 'Episode Id';
+comment on column LENS_PRESC_HIST.id_patient
+  is 'Patient Id';
+comment on column LENS_PRESC_HIST.id_prof_presc
+  is 'Professional Id responsible for this registry.';
+comment on column LENS_PRESC_HIST.dt_lens_presc_tstz
+  is 'Registry date.';
+comment on column LENS_PRESC_HIST.id_prof_cancel
+  is 'Professional Id responsible for the cancelation.';
+comment on column LENS_PRESC_HIST.dt_cancel_tstz
+  is 'Cancelation date.';
+comment on column LENS_PRESC_HIST.id_prof_print
+  is 'Professional Id responsible for the prescription printing.';
+comment on column LENS_PRESC_HIST.dt_print_tstz
+  is 'Prescription printing date.';
+comment on column LENS_PRESC_HIST.flg_status
+  is 'Lens prescription current status. I-In construction, P-Printed, C-Cancelled';
+comment on column LENS_PRESC_HIST.notes
+  is 'Registry notes';
+comment on column LENS_PRESC_HIST.notes_cancel
+  is 'Cancelation notes';
+comment on column LENS_PRESC_HIST.id_cancel_reason
+  is 'Cancel reason id in CANCEL_REASON table';
+comment on column LENS_PRESC_HIST.create_user
+  is 'Creation User';
+comment on column LENS_PRESC_HIST.create_time
+  is 'Creation Time';
+comment on column LENS_PRESC_HIST.create_institution
+  is 'Creation Institution';
+comment on column LENS_PRESC_HIST.update_user
+  is 'Update User';
+comment on column LENS_PRESC_HIST.update_time
+  is 'Update Time';
+comment on column LENS_PRESC_HIST.update_institution
+  is 'Update Institution';
+-- CHANGE END: Renato Nunes

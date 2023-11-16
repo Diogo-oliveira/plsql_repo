@@ -1,0 +1,45 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 15/01/2010 08:22
+-- CHANGE REASON: [ALERT-67475] [REPLICATION]: Suitable report for discharge prescription
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); -- fk
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE rep_section_info ADD CONSTRAINT RSNI_REP_FK FOREIGN KEY (ID_REPORTS) REFERENCES REPORTS (ID_REPORTS) ENABLE';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE rep_section_info ADD CONSTRAINT RSNI_RSN_FK FOREIGN KEY (ID_REP_SECTION) REFERENCES REP_SECTION (ID_REP_SECTION) ENABLE';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE rep_section_info ADD CONSTRAINT RSNI_SOFT_FK FOREIGN KEY (ID_SOFTWARE) REFERENCES SOFTWARE (ID_SOFTWARE) ENABLE';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE rep_section_info ADD CONSTRAINT RSNI_INST_FK FOREIGN KEY (ID_INSTITUTION) REFERENCES INSTITUTION (ID_INSTITUTION) ENABLE';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE rep_section_info ADD CONSTRAINT RSNI_MRK_FK FOREIGN KEY (ID_MARKET) REFERENCES MARKET (ID_MARKET) ENABLE';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+  
+-- CHANGE END: Alexandre Santos

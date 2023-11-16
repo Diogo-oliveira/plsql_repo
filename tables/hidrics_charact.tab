@@ -1,0 +1,41 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 05/07/2010 15:03
+-- CHANGE REASON: [ALERT-109290] DB Versioning - TABLES
+CREATE TABLE HIDRICS_CHARACT
+(
+   ID_HIDRICS_CHARACT   NUMBER(24) NOT NULL,
+   CODE_HIDRICS_CHARACT VARCHAR2(200 CHAR) NOT NULL,
+ CODE                 VARCHAR2(200 CHAR),
+ FLG_AVAILABLE        VARCHAR2(1 CHAR) NOT NULL,
+ ID_CONTENT           VARCHAR2(200 CHAR),
+   CREATE_USER             VARCHAR2(24),
+   CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   CREATE_INSTITUTION      NUMBER(24),
+   UPDATE_USER             VARCHAR2(24),
+   UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   UPDATE_INSTITUTION      NUMBER(24)
+);
+
+ALTER TABLE HIDRICS_CHARACT MOVE TABLESPACE TABLE_S;
+
+comment on table HIDRICS_CHARACT is 'Hidrics characteristics';
+
+comment on column HIDRICS_CHARACT.ID_HIDRICS_CHARACT is 'Primary key';
+comment on column HIDRICS_CHARACT.CODE_HIDRICS_CHARACT is 'Translation code';
+comment on column HIDRICS_CHARACT.CODE is 'Code';
+comment on column HIDRICS_CHARACT.FLG_AVAILABLE is 'Record availability. Y - Yes; N - No';
+comment on column HIDRICS_CHARACT.ID_CONTENT is 'Content ID';
+comment on column HIDRICS_CHARACT.CREATE_USER is 'Creation User';
+comment on column HIDRICS_CHARACT.CREATE_TIME is 'Creation Time';
+comment on column HIDRICS_CHARACT.CREATE_INSTITUTION is 'Creation Institution';
+comment on column HIDRICS_CHARACT.UPDATE_USER is 'Update User';
+comment on column HIDRICS_CHARACT.UPDATE_TIME is 'Update Time';
+comment on column HIDRICS_CHARACT.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:43
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+alter table HIDRICS_CHARACT modify ( create_user  varchar2(24 char));
+alter table HIDRICS_CHARACT modify ( update_user  varchar2(24 char));
+-- CHANGE END: Sofia Mendes

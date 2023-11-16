@@ -1,0 +1,49 @@
+  ALTER TABLE EPIS_REPORT ADD CONSTRAINT EREPT_PROF_FK FOREIGN KEY (ID_PROFESSIONAL)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE EPIS_REPORT ADD CONSTRAINT EREPT_REP_FK FOREIGN KEY (ID_REPORTS)
+	  REFERENCES REPORTS (ID_REPORTS) ENABLE;
+
+	alter table epis_report add constraint erept_epis_fk foreign key (id_episode)
+		references episode(id_episode);
+
+--João Eiras, 26-09-2007
+alter table epis_report add constraint erep_adt_prf_fk foreign key (ID_AUDIT_REQ_PROF) references AUDIT_REQ_PROF(ID_AUDIT_REQ_PROF);
+alter table epis_report add constraint erep_adt_prfep_fk foreign key (ID_AUDIT_REQ_PROF_EPIS) references AUDIT_REQ_PROF_EPIS(ID_AUDIT_REQ_PROF_EPIS);
+alter table epis_report add constraint erep_ctx_null_cns check(coalesce(ID_EPISODE,ID_AUDIT_REQ_PROF_EPIS,ID_AUDIT_REQ_PROF) is not null);
+
+
+--Ricardo Pires, 19-06-2008
+alter table EPIS_REPORT
+  add constraint EREPT_SE_FK foreign key (ID_SOCIAL_EPISODE)
+  references SOCIAL_EPISODE (ID_SOCIAL_EPISODE);
+  
+alter table EPIS_REPORT
+  add constraint EREPT_PAT_FK foreign key (ID_PATIENT)
+  references PATIENT (ID_PATIENT);
+  
+alter table EPIS_REPORT
+  add constraint EREPT_ER_FK foreign key (ID_EXTERNAL_REQUEST)
+  references P1_EXTERNAL_REQUEST (ID_EXTERNAL_REQUEST);
+
+alter table EPIS_REPORT
+  add constraint EREPT_VIS_FK foreign key (ID_VISIT)
+  references VISIT (ID_VISIT);
+
+
+-- José Brito 26/11/2008 ALERT-10540
+ALTER TABLE epis_report
+  ADD CONSTRAINT EREPT_ADT_REQ_FK FOREIGN KEY (ID_AUDIT_REQ)
+  REFERENCES audit_req (ID_AUDIT_REQ);
+-- END
+
+-- CHANGED BY: tiago.pereira
+-- CHANGE DATE: 20/03/2015
+-- CHANGE REASON: ALERT-307854
+
+ALTER TABLE epis_report
+ADD CONSTRAINT fk_id_epis_parent
+  FOREIGN KEY (id_epis_parent)
+  REFERENCES epis_report(id_epis_report);
+  
+--CHANGE END

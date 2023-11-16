@@ -1,0 +1,38 @@
+
+
+  CREATE TABLE ANALY_PARM_LIMIT
+   (	ID_ANALY_PARM_LIMIT NUMBER(24,0) NOT NULL ENABLE,
+	ID_PARAMETER_ANALYSIS NUMBER(12,0) NOT NULL ENABLE,
+	LIM_MIN NUMBER(15,5) NOT NULL ENABLE,
+	LIM_MAX NUMBER(15,5) NOT NULL ENABLE,
+	GENDER VARCHAR2(1),
+	AGE_MIN NUMBER(3,0),
+	AGE_MAX NUMBER(3,0),
+	HEIGHT_MIN NUMBER(3,0),
+	HEIGHT_MAX NUMBER(3,0),
+	WEIGHT_MIN NUMBER(6,3),
+	WEIGHT_MAX NUMBER(6,3)
+
+   );
+
+
+COMMENT ON TABLE analy_parm_limit IS 'Limites normais para os resultados de análises' ;
+
+COMMENT ON COLUMN analy_parm_limit.lim_min IS 'Limite mínimo' ;
+COMMENT ON COLUMN analy_parm_limit.lim_max IS 'Limite máximo' ;
+COMMENT ON COLUMN analy_parm_limit.gender IS 'Sexo para o qual são impostos os limites. Se ñ estiver preenchido, os limites são impostos para ambos os sexos' ;
+COMMENT ON COLUMN analy_parm_limit.age_min IS 'Idade mínima para a qual são impostos os limites. Se ñ estiver preenchida, os limites são impostos para qq idade' ;
+COMMENT ON COLUMN analy_parm_limit.age_max IS 'Idade máxima para a qual são impostos os limites. Se ñ estiver preenchida, os limites são impostos para qq idade' ;
+COMMENT ON COLUMN analy_parm_limit.height_min IS 'Altura mínima (cm) para a qual são impostos os limites. Se ñ estiver preenchida, os limites são impostos para qq altura' ;
+COMMENT ON COLUMN analy_parm_limit.height_max IS 'Altura máxima (cm) para a qual são impostos os limites. Se ñ estiver preenchida, os limites são impostos para qq altura' ;
+COMMENT ON COLUMN analy_parm_limit.weight_min IS 'Peso mínimo (Kg) para a qual são impostos os limites. Se ñ estiver preenchida, os limites são impostos para qq peso' ;
+COMMENT ON COLUMN analy_parm_limit.weight_max IS 'Peso máximo (Kg) para a qual são impostos os limites. Se ñ estiver preenchida, os limites são impostos para qq peso' ;
+
+-- Add/modify columns 
+alter table ANALY_PARM_LIMIT rename column ID_PARAMETER_ANALYSIS to ID_ANALYSIS_PARAMETER;
+alter table ANALY_PARM_LIMIT modify ID_ANALYSIS_PARAMETER NUMBER(24);
+
+-- Add comments to the columns 
+comment on column ANALY_PARM_LIMIT.ID_ANALYSIS_PARAMETER
+  is 'Parametro da análise';
+	

@@ -1,0 +1,1 @@
+create or replace type t_tbl_core_Domain as table of t_row_core_domain;

@@ -1,0 +1,11 @@
+CREATE OR REPLACE TRIGGER B_IU_HEMO_REQ
+ BEFORE INSERT OR UPDATE
+ ON HEMO_REQ
+ REFERENCING OLD AS OLD NEW AS NEW
+ FOR EACH ROW
+
+-- PL/SQL Block
+begin
+    :new.adw_last_update := sysdate;
+end;
+/

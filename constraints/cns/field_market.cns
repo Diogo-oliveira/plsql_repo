@@ -1,0 +1,20 @@
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 05/07/2010 09:50
+-- CHANGE REASON: [ALERT-109173] 
+alter table FIELD_MARKET add constraint FLDMRK_PK primary key (ID_FIELD_MARKET);
+
+alter table FIELD_MARKET add constraint FLDMRK_FILL_CHK check (FILL_TYPE IN ('K', 'M', 'T', 'D'));
+alter table FIELD_MARKET add constraint FLDMRK_FLG_AVL_CHK check (FLG_AVAILABLE IN ('Y', 'N'));
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 08/04/2011 17:34
+-- CHANGE REASON: [ALERT-170057] 
+alter table field_market drop constraint FLDMRK_FILL_CHK;
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 08/04/2011 17:34
+-- CHANGE REASON: [ALERT-170057] 
+alter table field_market add constraint  FLDMRK_FILL_CHK check (FILL_TYPE IN ('K', 'M', 'T', 'D', 'MM'));
+-- CHANGE END:  Rui Gomes

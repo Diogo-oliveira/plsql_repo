@@ -1,0 +1,305 @@
+
+
+  CREATE GLOBAL TEMPORARY TABLE "ALERT"."REFERRAL_EA_TMP"
+   (	"ID_EXTERNAL_REQUEST" NUMBER(24,0),
+	"ID_PATIENT" NUMBER(24,0),
+	"NUM_REQ" VARCHAR2(50),
+	"FLG_TYPE" VARCHAR2(1),
+	"FLG_STATUS" VARCHAR2(1),
+	"ID_PROF_STATUS" NUMBER(24,0),
+	"DT_STATUS" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"FLG_PRIORITY" VARCHAR2(1),
+	"FLG_HOME" VARCHAR2(1),
+	"ID_SPECIALITY" NUMBER(6,0),
+	"DECISION_URG_LEVEL" NUMBER,
+	"ID_INST_ORIG" NUMBER(24,0),
+	"ID_INST_DEST" NUMBER(24,0),
+	"ID_DEP_CLIN_SERV" NUMBER(24,0),
+	"ID_PROF_REDIRECTED" NUMBER(24,0),
+	"ID_MATCH" NUMBER(24,0),
+	"ID_PROF_REQUESTED" NUMBER(24,0),
+	"DT_REQUESTED" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_NEW" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_ISSUED" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"ID_PROF_TRIAGE" NUMBER(24,0),
+	"DT_TRIAGE" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_FORWARDED" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"ID_SCHEDULE" NUMBER(24,0),
+	"ID_PROF_SCHEDULE" NUMBER(24,0),
+	"DT_SCHEDULE" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_EFECTIV" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_ACKNOWLEDGE" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_DG_LAST_UPDATE" TIMESTAMP (6) WITH LOCAL TIME ZONE
+   ) ON COMMIT PRESERVE ROWS ;
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."ID_EXTERNAL_REQUEST" IS 'Referral ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."ID_PATIENT" IS 'Patient Id';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."NUM_REQ" IS 'Referral Visualized ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."FLG_TYPE" IS 'Referral type: (C)onsultation, (A)nalysis, (I)mage, (O)ther Exam, Intervention (P) or Physiatrics (F).';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."FLG_STATUS" IS 'Referral status';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."ID_PROF_STATUS" IS 'Last professional changing the request status.';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."DT_STATUS" IS 'Current status date';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."FLG_PRIORITY" IS 'Urgent (Y), or not Urgent (N).';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."FLG_HOME" IS 'At home (Y). (N) Otherwise .';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."ID_SPECIALITY" IS 'Referral specialty';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."DECISION_URG_LEVEL" IS 'Referral priority set during referral''s triage.';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."ID_INST_ORIG" IS 'Origin institution ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."ID_INST_DEST" IS 'Destination institution ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."ID_DEP_CLIN_SERV" IS 'Referral''s Department/Clinical Service';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."ID_PROF_REDIRECTED" IS 'Professional to which the Referral was forwarded - ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."ID_MATCH" IS 'Match ID (Active P1_MATCH.ID_MATCH) for the patient and institution.';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."ID_PROF_REQUESTED" IS 'Professional that created the referral - ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."DT_REQUESTED" IS 'Referral creation date (First status N).';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."DT_NEW" IS 'Referral recreation date (Last status N).';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."DT_ISSUED" IS 'Referral issue date (Date for status I, when becomes available in destination institution).';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."ID_PROF_TRIAGE" IS 'Triage Professional - ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."DT_TRIAGE" IS 'Sent to triage Date';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."DT_FORWARDED" IS 'Sent to triage professional date';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."ID_SCHEDULE" IS 'Scheduled ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."ID_PROF_SCHEDULE" IS 'Scheduled Professional ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."DT_SCHEDULE" IS 'Scheduled Date';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."DT_EFECTIV" IS 'Referral execution Date';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."DT_ACKNOWLEDGE" IS 'Answer Acknowledge Date';
+
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA_TMP"."DT_DG_LAST_UPDATE" IS 'Date of the last update';
+
+
+
+   COMMENT ON TABLE "ALERT"."REFERRAL_EA_TMP"  IS 'Global Temp table';
+
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGED DATE: 2009-JAN-27
+-- CHANGED REASON: ALERT-13289 Adicionada coluna DT_LAST_INTERACTION_TSTZ
+
+	-- Add/modify columns 
+	alter table REFERRAL_EA_TMP add DT_LAST_INTERACTION_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE;
+	-- Add comments to the columns 
+	comment on column REFERRAL_EA_TMP.DT_LAST_INTERACTION_TSTZ is 'Referral last modification (data or status) date';
+	  
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGED DATE: 2009-JUN-22
+-- CHANGED REASON: ALERT-18963 
+alter table REFERRAL_EA_TMP add ID_WORKFLOW NUMBER(12);
+ 
+comment on column REFERRAL_EA_TMP.ID_WORKFLOW
+  is 'Referral workflow identification';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 30/10/2009 02:57
+-- CHANGE REASON: [ALERT-52665] 
+ALTER TABLE REFERRAL_EA_TMP ADD (ID_EXTERNAL_SYS NUMBER(12),ID_REF_EXT_SYS VARCHAR2(50 CHAR))
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 06/11/2009 16:48
+-- CHANGE REASON: [ALERT-55025] 
+alter table REFERRAL_EA_TMP rename column ID_REF_EXT_SYS to EXT_REFERENCE;
+comment on column REFERRAL_EA_TMP.EXT_REFERENCE is 'Referral Id in the external system ';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: João Almeida
+-- CHANGE DATE: 09/03/2010 10:25
+-- CHANGE REASON: [ALERT-79864] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+into l_count
+      FROM all_tab_columns a
+     WHERE a.table_name = 'REFERRAL_EA_TMP'
+       AND a.column_name = 'ID_PROF_ORIG';
+
+    IF l_count = 0
+    THEN
+    
+        l_sql := q'[ALTER TABLE REFERRAL_EA_TMP ADD (ID_PROF_ORIG NUMBER(24))]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+DECLARE l_sql VARCHAR2(1000 CHAR);
+l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+into l_count
+      FROM all_tab_columns a
+     WHERE a.table_name = 'REFERRAL_EA_TMP'
+       AND a.column_name = 'PROF_NAME_RODA';
+
+    IF l_count = 0
+    THEN
+    
+        l_sql := q'[ALTER TABLE REFERRAL_EA_TMP ADD (PROF_NAME_RODA VARCHAR2(200))]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+DECLARE l_sql VARCHAR2(1000 CHAR);
+l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+into l_count
+      FROM all_tab_columns a
+     WHERE a.table_name = 'REFERRAL_EA_TMP'
+       AND a.column_name = 'INSTITUTION_NAME_RODA';
+
+    IF l_count = 0
+    THEN
+    
+        l_sql := q'[ALTER TABLE REFERRAL_EA_TMP ADD (INSTITUTION_NAME_RODA VARCHAR2(200))]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+DECLARE l_sql VARCHAR2(1000 CHAR);
+l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+into l_count
+      FROM all_tab_columns a
+     WHERE a.table_name = 'REFERRAL_EA_TMP'
+       AND a.column_name = 'ID_INST_ORIG_REQ';
+
+    IF l_count = 0
+    THEN
+    
+        l_sql := q'[ALTER TABLE REFERRAL_EA_TMP ADD (ID_INST_ORIG_REQ NUMBER(24))]';
+        EXECUTE IMMEDIATE l_sql;
+
+    END IF;
+
+END;
+/
+
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    
+  l_sql := q'[comment on column REFERRAL_EA_TMP.INSTITUTION_NAME_RODA is 'Institution name when institution does not have alert registration']';
+EXECUTE IMMEDIATE l_sql;
+l_sql := q'[comment on column REFERRAL_EA_TMP.ID_INST_ORIG_REQ is 'Institution Id when  is a alert institution']';
+EXECUTE IMMEDIATE l_sql;
+l_sql := q'[comment on column REFERRAL_EA_TMP.ID_PROF_ORIG is 'Professional Id if is a alert professional']';
+EXECUTE IMMEDIATE l_sql;
+l_sql := q'[comment on column REFERRAL_EA_TMP.PROF_NAME_RODA is 'Professional name when professional does not have alert registration']';
+EXECUTE IMMEDIATE l_sql;
+
+END;
+/
+-- CHANGE END: João Almeida
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 13/06/2012 11:45
+-- CHANGE REASON: [ALERT-232304] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.column_name = 'ID_PROF_SCH_SUGG'
+       AND c.table_name = 'REFERRAL_EA_TMP';
+
+    IF l_count = 0
+    THEN
+EXECUTE IMMEDIATE 'alter table referral_ea_tmp add id_prof_sch_sugg NUMBER(24)';
+        EXECUTE IMMEDIATE 'comment on column referral_ea_tmp.id_prof_sch_sugg is ''Scheduled professional suggested by triage physician''';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro

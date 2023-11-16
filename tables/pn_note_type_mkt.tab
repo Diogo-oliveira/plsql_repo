@@ -1,0 +1,1425 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:29
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+CREATE TABLE pn_note_type_mkt(id_pn_area NUMBER(24) NOT NULL, 
+                              id_pn_note_type NUMBER(24) NOT NULL, 
+                              id_software NUMBER(24) NOT NULL, 
+                              id_market NUMBER(24) NOT NULL, 
+                              id_category number(24),
+                              id_profile_template NUMBER(24),
+                              flg_config_type varchar2(1 char),
+                              rank NUMBER(6), 
+                          MAX_NR_NOTES number(6), 
+                          MAX_NR_DRAFT_NOTES number(6), 
+                          MAX_NR_DRAFT_ADDENDUMS number(6), 
+                          FLG_ADDEND_OTHER_PROF varchar2(1 char) default 'N', 
+                          FLG_SHOW_EMPTY_BLOCKS varchar2(1 char) default 'Y', 
+                          FLG_IMPORT_AVAILABLE varchar2(1 char) default 'Y', 
+                          FLG_SIGN_OFF_LOGIN_AVAIL varchar2(1 char) default 'Y', 
+                          FLG_LAST_24H varchar2(1 char) default 'Y',
+                          FLG_DICTATION_EDITABLE varchar2(1 char) default 'N',
+                          --new
+                          FLG_AUTO_POPULATED varchar2(1 char) default 'Y',
+                          FLG_CLEAR_INFORMATION varchar2(1 char) default 'Y',
+                          FLG_REVIEW_ALL varchar2(1 char) default 'Y',
+                          FLG_EDITABLE_AFTER_DISCHARGE varchar2(1 char) default 'N',
+                          FLG_IMPORT_FIRST varchar2(1 char) default 'Y',
+                          FLG_SHOW_SCREEN_REVIEW varchar2(1 char) default 'Y',                         
+                          FLG_write                varchar2(1 char) default 'Y',
+                          FLG_COPY_EDIT_REPLACE    varchar2(1 char) default 'Y',
+                          gender                       VARCHAR2(2 char),
+                          age_min                      NUMBER(3),
+                          age_max                      NUMBER(3),
+                          FLG_EXPAND_SBLOCKS           varchar2(1 char) default 'N',
+                          FLG_SYNCHRONIZED           varchar2(1 char) default 'N',
+                          FLG_SHOW_IMPORT_MENU       varchar2(1 char) default 'N',
+create_user VARCHAR2(24), create_time TIMESTAMP(6)
+    WITH LOCAL TIME ZONE,
+    create_institution NUMBER(24),
+    update_user VARCHAR2(24),
+    update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    update_institution NUMBER(24));
+    
+    alter table pn_note_type_mkt add FLG_EDIT_OTHER_PROF varchar2(1 char)  default 'N' not null;
+    alter table pn_note_type_mkt add FLG_CREATE_ON_APP varchar2(1 char)  default 'Y' not null;
+    
+COMMENT ON TABLE pn_note_type_mkt IS 'Relation between areas and note types. Configurations by software and market.';
+COMMENT ON column pn_note_type_mkt.id_pn_area IS 'Area identifier';
+COMMENT ON column pn_note_type_mkt.id_pn_area IS 'Area identifier';
+COMMENT ON column pn_note_type_mkt.id_pn_note_type IS 'Note type identifier';
+COMMENT ON column pn_note_type_mkt.rank IS 'Notes type rank.';
+COMMENT ON column pn_note_type_mkt.id_software IS 'Software identifier.';
+COMMENT ON column pn_note_type_mkt.id_market IS 'Market identifier.';
+COMMENT ON column pn_note_type_mkt.id_category IS 'Category identifier.';
+COMMENT ON column pn_note_type_mkt.id_profile_template IS 'Profile template identifier.';
+COMMENT ON column pn_note_type_mkt.MAX_NR_NOTES IS 'Maximum number of notes of this type. If this column is null the limit is unlimitted';
+COMMENT ON column pn_note_type_mkt.MAX_NR_DRAFT_NOTES IS 'Maximum number of draft notes of this type. If this column is null the limit is unlimitted';
+COMMENT ON column pn_note_type_mkt.MAX_NR_DRAFT_ADDENDUMS IS 'Maximum number of draft addendums in notes of this type. If this column is null the limit is unlimitted';
+COMMENT ON column pn_note_type_mkt.FLG_ADDEND_OTHER_PROF IS 'Indicates if a professional can create an addendum to a note created by other professional';
+COMMENT ON column pn_note_type_mkt.FLG_SHOW_EMPTY_BLOCKS IS 'Indicates if the empty blocks should be shown.';
+COMMENT ON column pn_note_type_mkt.FLG_IMPORT_AVAILABLE IS 'Y - the import option should be available in the edition scree. N -otherwise.';
+COMMENT ON column pn_note_type_mkt.FLG_SIGN_OFF_LOGIN_AVAIL IS 'Should the login screen be available in the progress notes sign off? (Y/N)';
+COMMENT ON column pn_note_type_mkt.FLG_LAST_24H IS 'For this type of Note consider the last 24h (Y) or the time since 0h today (N)'; 
+COMMENT ON column pn_note_type_mkt.FLG_DICTATION_EDITABLE IS 'Are the Dictation Progress Notes editable? (Y/N)';
+COMMENT ON column pn_note_type_mkt.FLG_AUTO_POPULATED IS 'Indicates if the note is auto-populated';
+COMMENT ON column pn_note_type_mkt.FLG_CLEAR_INFORMATION IS 'Indicates if the note allow to clear information';
+COMMENT ON column pn_note_type_mkt.FLG_REVIEW_ALL IS 'Indicates if the note allows to review all the information';
+COMMENT ON column pn_note_type_mkt.FLG_EDITABLE_AFTER_DISCHARGE IS 'Indicates if the note is editable after the discharge';
+COMMENT ON column pn_note_type_mkt.FLG_IMPORT_FIRST IS 'Y - The import screen should be displayed automatically when creating a note. N- otherwise';
+COMMENT ON column pn_note_type_mkt.FLG_EDIT_OTHER_PROF IS 'Y - It is allowed to edit notes created by other professional. N- otherwise';
+COMMENT ON column pn_note_type_mkt.FLG_CREATE_ON_APP IS 'Y - It is possible to create this type of note by Alert application. N- This type of note can only be created by interface';
+comment on column pn_note_type_mkt.gender
+  is 'Gender in which the note type should be shown (M/F)';
+comment on column pn_note_type_mkt.age_min
+  is 'Minimal age in which the note type should be shown';
+comment on column pn_note_type_mkt.age_max
+  is 'Maximum age in which the note type should be shown';
+  
+COMMENT ON column pn_note_type_mkt.FLG_SHOW_SCREEN_REVIEW IS 'Indicates if the review screen is presented when importing data into the note';
+COMMENT ON column pn_note_type_mkt.flg_write IS 'Indicates if the area is writable in a profile.';
+COMMENT ON column pn_note_type_mkt.flg_config_type IS 'Indicates the scope of the configuration. S - by Software: id_software<>0, id_category=-1 and id_profile_template=0; C - by category: id_software=0, id_category<>-1 and id_profile_template=0; P - by profile_template: id_software=0, id_category=-1 and id_profile_template<>0';
+COMMENT ON column pn_note_type_mkt.create_user IS 'Creation user';
+COMMENT ON column pn_note_type_mkt.create_time IS 'Creation date / time';
+COMMENT ON column pn_note_type_mkt.create_institution IS 'Creation institution';
+COMMENT ON column pn_note_type_mkt.update_user IS 'Update user';
+COMMENT ON column pn_note_type_mkt.update_time IS 'Update date / time';
+COMMENT ON column pn_note_type_mkt.update_institution IS 'Update institution';
+COMMENT ON column pn_note_type_mkt.FLG_COPY_EDIT_REPLACE IS 'Y-the copy and edit should replace the previous record. N-otherwise.';
+COMMENT ON column pn_note_type_mkt.FLG_EXPAND_SBLOCKS IS 'Y - SOAP Blocks are expanded not only when selected. N- otherwise';
+COMMENT ON column pn_note_type_mkt.FLG_SYNCHRONIZED IS 'Y - If Data Blocks info is to be synchronized with the direct areas, other than templates. N- otherwise';
+COMMENT ON column pn_note_type_mkt.FLG_SHOW_IMPORT_MENU IS 'Y - If shows the actions menu on the edition screen. N- otherwise goes directly to import screen';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 09:59
+-- CHANGE REASON: H&P phase2
+CREATE TABLE pn_note_type_mkt(id_pn_area NUMBER(24) NOT NULL, 
+                              id_pn_note_type NUMBER(24) NOT NULL, 
+                              id_software NUMBER(24) NOT NULL, 
+                              id_market NUMBER(24) NOT NULL, 
+                              id_category number(24),
+                              id_profile_template NUMBER(24),
+                              flg_config_type varchar2(1 char),
+                              rank NUMBER(6), 
+                          MAX_NR_NOTES number(6), 
+                          MAX_NR_DRAFT_NOTES number(6), 
+                          MAX_NR_DRAFT_ADDENDUMS number(6), 
+                          FLG_ADDEND_OTHER_PROF varchar2(1 char) default 'N', 
+                          FLG_SHOW_EMPTY_BLOCKS varchar2(1 char) default 'Y', 
+                          FLG_IMPORT_AVAILABLE varchar2(1 char) default 'Y', 
+                          FLG_SIGN_OFF_LOGIN_AVAIL varchar2(1 char) default 'Y', 
+                          FLG_LAST_24H varchar2(1 char) default 'Y',
+                          FLG_DICTATION_EDITABLE varchar2(1 char) default 'N',
+                          --new
+                          FLG_AUTO_POPULATED varchar2(1 char) default 'Y',
+                          FLG_CLEAR_INFORMATION varchar2(1 char) default 'Y',
+                          FLG_REVIEW_ALL varchar2(1 char) default 'Y',
+                          FLG_EDITABLE_AFTER_DISCHARGE varchar2(1 char) default 'N',
+                          FLG_IMPORT_FIRST varchar2(1 char) default 'Y',
+                          FLG_SHOW_SCREEN_REVIEW varchar2(1 char) default 'Y',                         
+                          FLG_write                varchar2(1 char) default 'Y',
+                          FLG_COPY_EDIT_REPLACE    varchar2(1 char) default 'Y',
+                          gender                       VARCHAR2(2 char),
+                          age_min                      NUMBER(3),
+                          age_max                      NUMBER(3),
+                          FLG_EXPAND_SBLOCKS           varchar2(1 char) default 'N',
+                          FLG_SYNCHRONIZED           varchar2(1 char) default 'N',
+                          FLG_SHOW_IMPORT_MENU       varchar2(1 char) default 'N',
+create_user VARCHAR2(24), create_time TIMESTAMP(6)
+    WITH LOCAL TIME ZONE,
+    create_institution NUMBER(24),
+    update_user VARCHAR2(24),
+    update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    update_institution NUMBER(24));
+    
+    alter table pn_note_type_mkt add FLG_EDIT_OTHER_PROF varchar2(1 char)  default 'N' not null;
+    alter table pn_note_type_mkt add FLG_CREATE_ON_APP varchar2(1 char)  default 'Y' not null;
+    
+COMMENT ON TABLE pn_note_type_mkt IS 'Relation between areas and note types. Configurations by software and market.';
+COMMENT ON column pn_note_type_mkt.id_pn_area IS 'Area identifier';
+COMMENT ON column pn_note_type_mkt.id_pn_area IS 'Area identifier';
+COMMENT ON column pn_note_type_mkt.id_pn_note_type IS 'Note type identifier';
+COMMENT ON column pn_note_type_mkt.rank IS 'Notes type rank.';
+COMMENT ON column pn_note_type_mkt.id_software IS 'Software identifier.';
+COMMENT ON column pn_note_type_mkt.id_market IS 'Market identifier.';
+COMMENT ON column pn_note_type_mkt.id_category IS 'Category identifier.';
+COMMENT ON column pn_note_type_mkt.id_profile_template IS 'Profile template identifier.';
+COMMENT ON column pn_note_type_mkt.MAX_NR_NOTES IS 'Maximum number of notes of this type. If this column is null the limit is unlimitted';
+COMMENT ON column pn_note_type_mkt.MAX_NR_DRAFT_NOTES IS 'Maximum number of draft notes of this type. If this column is null the limit is unlimitted';
+COMMENT ON column pn_note_type_mkt.MAX_NR_DRAFT_ADDENDUMS IS 'Maximum number of draft addendums in notes of this type. If this column is null the limit is unlimitted';
+COMMENT ON column pn_note_type_mkt.FLG_ADDEND_OTHER_PROF IS 'Indicates if a professional can create an addendum to a note created by other professional';
+COMMENT ON column pn_note_type_mkt.FLG_SHOW_EMPTY_BLOCKS IS 'Indicates if the empty blocks should be shown.';
+COMMENT ON column pn_note_type_mkt.FLG_IMPORT_AVAILABLE IS 'Y - the import option should be available in the edition scree. N -otherwise.';
+COMMENT ON column pn_note_type_mkt.FLG_SIGN_OFF_LOGIN_AVAIL IS 'Should the login screen be available in the progress notes sign off? (Y/N)';
+COMMENT ON column pn_note_type_mkt.FLG_LAST_24H IS 'For this type of Note consider the last 24h (Y) or the time since 0h today (N)'; 
+COMMENT ON column pn_note_type_mkt.FLG_DICTATION_EDITABLE IS 'Are the Dictation Progress Notes editable? (Y/N)';
+COMMENT ON column pn_note_type_mkt.FLG_AUTO_POPULATED IS 'Indicates if the note is auto-populated';
+COMMENT ON column pn_note_type_mkt.FLG_CLEAR_INFORMATION IS 'Indicates if the note allow to clear information';
+COMMENT ON column pn_note_type_mkt.FLG_REVIEW_ALL IS 'Indicates if the note allows to review all the information';
+COMMENT ON column pn_note_type_mkt.FLG_EDITABLE_AFTER_DISCHARGE IS 'Indicates if the note is editable after the discharge';
+COMMENT ON column pn_note_type_mkt.FLG_IMPORT_FIRST IS 'Y - The import screen should be displayed automatically when creating a note. N- otherwise';
+COMMENT ON column pn_note_type_mkt.FLG_EDIT_OTHER_PROF IS 'Y - It is allowed to edit notes created by other professional. N- otherwise';
+COMMENT ON column pn_note_type_mkt.FLG_CREATE_ON_APP IS 'Y - It is possible to create this type of note by Alert application. N- This type of note can only be created by interface';
+comment on column pn_note_type_mkt.gender
+  is 'Gender in which the note type should be shown (M/F)';
+comment on column pn_note_type_mkt.age_min
+  is 'Minimal age in which the note type should be shown';
+comment on column pn_note_type_mkt.age_max
+  is 'Maximum age in which the note type should be shown';
+  
+COMMENT ON column pn_note_type_mkt.FLG_SHOW_SCREEN_REVIEW IS 'Indicates if the review screen is presented when importing data into the note';
+COMMENT ON column pn_note_type_mkt.flg_write IS 'Indicates if the area is writable in a profile.';
+COMMENT ON column pn_note_type_mkt.flg_config_type IS 'Indicates the scope of the configuration. S - by Software: id_software<>0, id_category=-1 and id_profile_template=0; C - by category: id_software=0, id_category<>-1 and id_profile_template=0; P - by profile_template: id_software=0, id_category=-1 and id_profile_template<>0';
+COMMENT ON column pn_note_type_mkt.create_user IS 'Creation user';
+COMMENT ON column pn_note_type_mkt.create_time IS 'Creation date / time';
+COMMENT ON column pn_note_type_mkt.create_institution IS 'Creation institution';
+COMMENT ON column pn_note_type_mkt.update_user IS 'Update user';
+COMMENT ON column pn_note_type_mkt.update_time IS 'Update date / time';
+COMMENT ON column pn_note_type_mkt.update_institution IS 'Update institution';
+COMMENT ON column pn_note_type_mkt.FLG_COPY_EDIT_REPLACE IS 'Y-the copy and edit should replace the previous record. N-otherwise.';
+COMMENT ON column pn_note_type_mkt.FLG_EXPAND_SBLOCKS IS 'Y - SOAP Blocks are expanded not only when selected. N- otherwise';
+COMMENT ON column pn_note_type_mkt.FLG_SYNCHRONIZED IS 'Y - If Data Blocks info is to be synchronized with the direct areas, other than templates. N- otherwise';
+COMMENT ON column pn_note_type_mkt.FLG_SHOW_IMPORT_MENU IS 'Y - If shows the actions menu on the edition screen. N- otherwise goes directly to import screen';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:10
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+CREATE TABLE pn_note_type_mkt(id_pn_area NUMBER(24) NOT NULL, 
+                              id_pn_note_type NUMBER(24) NOT NULL, 
+                              id_software NUMBER(24) NOT NULL, 
+                              id_market NUMBER(24) NOT NULL, 
+                              id_category number(24),
+                              id_profile_template NUMBER(24),
+                              flg_config_type varchar2(1 char),
+                              rank NUMBER(6), 
+                          MAX_NR_NOTES number(6), 
+                          MAX_NR_DRAFT_NOTES number(6), 
+                          MAX_NR_DRAFT_ADDENDUMS number(6), 
+                          FLG_ADDEND_OTHER_PROF varchar2(1 char) default 'N', 
+                          FLG_SHOW_EMPTY_BLOCKS varchar2(1 char) default 'Y', 
+                          FLG_IMPORT_AVAILABLE varchar2(1 char) default 'Y', 
+                          FLG_SIGN_OFF_LOGIN_AVAIL varchar2(1 char) default 'Y', 
+                          FLG_LAST_24H varchar2(1 char) default 'Y',
+                          FLG_DICTATION_EDITABLE varchar2(1 char) default 'N',
+                          --new
+                          FLG_AUTO_POPULATED varchar2(1 char) default 'Y',
+                          FLG_CLEAR_INFORMATION varchar2(1 char) default 'Y',
+                          FLG_REVIEW_ALL varchar2(1 char) default 'Y',
+                          FLG_EDITABLE_AFTER_DISCHARGE varchar2(1 char) default 'N',
+                          FLG_IMPORT_FIRST varchar2(1 char) default 'Y',
+                          FLG_SHOW_SCREEN_REVIEW varchar2(1 char) default 'Y',                         
+                          FLG_write                varchar2(1 char) default 'Y',
+                          FLG_COPY_EDIT_REPLACE    varchar2(1 char) default 'Y',
+                          gender                       VARCHAR2(2 char),
+                          age_min                      NUMBER(3),
+                          age_max                      NUMBER(3),
+                          FLG_EXPAND_SBLOCKS           varchar2(1 char) default 'N',
+                          FLG_SYNCHRONIZED           varchar2(1 char) default 'N',
+                          FLG_SHOW_IMPORT_MENU       varchar2(1 char) default 'N',
+create_user VARCHAR2(24), create_time TIMESTAMP(6)
+    WITH LOCAL TIME ZONE,
+    create_institution NUMBER(24),
+    update_user VARCHAR2(24),
+    update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    update_institution NUMBER(24));
+    
+    alter table pn_note_type_mkt add FLG_EDIT_OTHER_PROF varchar2(1 char)  default 'N' not null;
+    alter table pn_note_type_mkt add FLG_CREATE_ON_APP varchar2(1 char)  default 'Y' not null;
+    
+COMMENT ON TABLE pn_note_type_mkt IS 'Relation between areas and note types. Configurations by software and market.';
+COMMENT ON column pn_note_type_mkt.id_pn_area IS 'Area identifier';
+COMMENT ON column pn_note_type_mkt.id_pn_area IS 'Area identifier';
+COMMENT ON column pn_note_type_mkt.id_pn_note_type IS 'Note type identifier';
+COMMENT ON column pn_note_type_mkt.rank IS 'Notes type rank.';
+COMMENT ON column pn_note_type_mkt.id_software IS 'Software identifier.';
+COMMENT ON column pn_note_type_mkt.id_market IS 'Market identifier.';
+COMMENT ON column pn_note_type_mkt.id_category IS 'Category identifier.';
+COMMENT ON column pn_note_type_mkt.id_profile_template IS 'Profile template identifier.';
+COMMENT ON column pn_note_type_mkt.MAX_NR_NOTES IS 'Maximum number of notes of this type. If this column is null the limit is unlimitted';
+COMMENT ON column pn_note_type_mkt.MAX_NR_DRAFT_NOTES IS 'Maximum number of draft notes of this type. If this column is null the limit is unlimitted';
+COMMENT ON column pn_note_type_mkt.MAX_NR_DRAFT_ADDENDUMS IS 'Maximum number of draft addendums in notes of this type. If this column is null the limit is unlimitted';
+COMMENT ON column pn_note_type_mkt.FLG_ADDEND_OTHER_PROF IS 'Indicates if a professional can create an addendum to a note created by other professional';
+COMMENT ON column pn_note_type_mkt.FLG_SHOW_EMPTY_BLOCKS IS 'Indicates if the empty blocks should be shown.';
+COMMENT ON column pn_note_type_mkt.FLG_IMPORT_AVAILABLE IS 'Y - the import option should be available in the edition scree. N -otherwise.';
+COMMENT ON column pn_note_type_mkt.FLG_SIGN_OFF_LOGIN_AVAIL IS 'Should the login screen be available in the progress notes sign off? (Y/N)';
+COMMENT ON column pn_note_type_mkt.FLG_LAST_24H IS 'For this type of Note consider the last 24h (Y) or the time since 0h today (N)'; 
+COMMENT ON column pn_note_type_mkt.FLG_DICTATION_EDITABLE IS 'Are the Dictation Progress Notes editable? (Y/N)';
+COMMENT ON column pn_note_type_mkt.FLG_AUTO_POPULATED IS 'Indicates if the note is auto-populated';
+COMMENT ON column pn_note_type_mkt.FLG_CLEAR_INFORMATION IS 'Indicates if the note allow to clear information';
+COMMENT ON column pn_note_type_mkt.FLG_REVIEW_ALL IS 'Indicates if the note allows to review all the information';
+COMMENT ON column pn_note_type_mkt.FLG_EDITABLE_AFTER_DISCHARGE IS 'Indicates if the note is editable after the discharge';
+COMMENT ON column pn_note_type_mkt.FLG_IMPORT_FIRST IS 'Y - The import screen should be displayed automatically when creating a note. N- otherwise';
+COMMENT ON column pn_note_type_mkt.FLG_EDIT_OTHER_PROF IS 'Y - It is allowed to edit notes created by other professional. N- otherwise';
+COMMENT ON column pn_note_type_mkt.FLG_CREATE_ON_APP IS 'Y - It is possible to create this type of note by Alert application. N- This type of note can only be created by interface';
+comment on column pn_note_type_mkt.gender
+  is 'Gender in which the note type should be shown (M/F)';
+comment on column pn_note_type_mkt.age_min
+  is 'Minimal age in which the note type should be shown';
+comment on column pn_note_type_mkt.age_max
+  is 'Maximum age in which the note type should be shown';
+  
+COMMENT ON column pn_note_type_mkt.FLG_SHOW_SCREEN_REVIEW IS 'Indicates if the review screen is presented when importing data into the note';
+COMMENT ON column pn_note_type_mkt.flg_write IS 'Indicates if the area is writable in a profile.';
+COMMENT ON column pn_note_type_mkt.flg_config_type IS 'Indicates the scope of the configuration. S - by Software: id_software<>0, id_category=-1 and id_profile_template=0; C - by category: id_software=0, id_category<>-1 and id_profile_template=0; P - by profile_template: id_software=0, id_category=-1 and id_profile_template<>0';
+COMMENT ON column pn_note_type_mkt.create_user IS 'Creation user';
+COMMENT ON column pn_note_type_mkt.create_time IS 'Creation date / time';
+COMMENT ON column pn_note_type_mkt.create_institution IS 'Creation institution';
+COMMENT ON column pn_note_type_mkt.update_user IS 'Update user';
+COMMENT ON column pn_note_type_mkt.update_time IS 'Update date / time';
+COMMENT ON column pn_note_type_mkt.update_institution IS 'Update institution';
+COMMENT ON column pn_note_type_mkt.FLG_COPY_EDIT_REPLACE IS 'Y-the copy and edit should replace the previous record. N-otherwise.';
+COMMENT ON column pn_note_type_mkt.FLG_EXPAND_SBLOCKS IS 'Y - SOAP Blocks are expanded not only when selected. N- otherwise';
+COMMENT ON column pn_note_type_mkt.FLG_SYNCHRONIZED IS 'Y - If Data Blocks info is to be synchronized with the direct areas, other than templates. N- otherwise';
+COMMENT ON column pn_note_type_mkt.FLG_SHOW_IMPORT_MENU IS 'Y - If shows the actions menu on the edition screen. N- otherwise goes directly to import screen';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 13:12
+-- CHANGE REASON: [ALERT-206287 ] H&P phase 2
+alter table pn_note_type_mkt modify FLG_ADDEND_OTHER_PROF varchar2(1 char) default 'N' not null; 
+alter table pn_note_type_mkt modify FLG_SHOW_EMPTY_BLOCKS varchar2(1 char) default 'Y' not null;  
+alter table pn_note_type_mkt modify FLG_IMPORT_AVAILABLE varchar2(1 char) default 'Y'  not null; 
+alter table pn_note_type_mkt modify FLG_SIGN_OFF_LOGIN_AVAIL varchar2(1 char) default 'Y' not null;                           
+alter table pn_note_type_mkt modify FLG_DICTATION_EDITABLE varchar2(1 char) default 'N' not null; 
+alter table pn_note_type_mkt modify FLG_AUTO_POPULATED varchar2(1 char) default 'Y'  not null; 
+alter table pn_note_type_mkt modify FLG_CLEAR_INFORMATION varchar2(1 char) default 'Y'  not null; 
+alter table pn_note_type_mkt modify FLG_REVIEW_ALL varchar2(1 char) default 'Y'  not null; 
+alter table pn_note_type_mkt modify FLG_EDITABLE_AFTER_DISCHARGE varchar2(1 char) default 'N'  not null; 
+alter table pn_note_type_mkt modify FLG_IMPORT_FIRST varchar2(1 char) default 'Y'  not null; 
+alter table pn_note_type_mkt modify FLG_SHOW_SCREEN_REVIEW varchar2(1 char) default 'Y'  not null;                         
+alter table pn_note_type_mkt modify FLG_write                varchar2(1 char) default 'Y'  not null; 
+alter table pn_note_type_mkt modify FLG_COPY_EDIT_REPLACE    varchar2(1 char) default 'Y'  not null;                           
+alter table pn_note_type_mkt modify FLG_EXPAND_SBLOCKS           varchar2(1 char) default 'N'  not null; 
+alter table pn_note_type_mkt modify FLG_SYNCHRONIZED           varchar2(1 char) default 'N'  not null; 
+alter table pn_note_type_mkt modify FLG_SHOW_IMPORT_MENU       varchar2(1 char) default 'N'  not null; 
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:47
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify CREATE_USER varchar2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:47
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify UPDATE_USER varchar2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:47
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify AGE_MIN number(06)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:47
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify AGE_MIN number(24)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:47
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify AGE_MAX number(06)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:47
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify AGE_MAX number(24)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:48
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify GENDER varchar2(0001 char)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:48
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify GENDER varchar2(0024 char)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:48
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify GENDER varchar2(0030 char)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:48
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify GENDER varchar2(0200 char)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:48
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify GENDER varchar2(1000 char)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:48
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('ALTER table PN_NOTE_TYPE_MKT add ( FLG_EDIT_AFTER_DISCH VARCHAR2(0001 CHAR) default ''N'' not null ) ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:48
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('comment on column PN_NOTE_TYPE_MKT.FLG_EDIT_AFTER_DISCH is ''Indicates if the note is editable after the discharge''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:48
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT add constraint PNNTM_EDT_AFT_DISCH_CHK check (FLG_EDIT_AFTER_DISCH IN (''Y'', ''N''))');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:48
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('ALTER TABLE PN_NOTE_TYPE_MKT ADD CONSTRAINT PNNTMKT_CLEAR_INFO CHECK ( FLG_CLEAR_INFORMATION IN (''Y'', ''N''))');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:51
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify CREATE_USER varchar2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:51
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify UPDATE_USER varchar2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:51
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify AGE_MIN number(06)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:51
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify AGE_MAX number(06)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:51
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify GENDER varchar2(0001 char)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:51
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('ALTER table PN_NOTE_TYPE_MKT add ( FLG_EDIT_AFTER_DISCH VARCHAR2(0001 CHAR) default ''N'' not null ) ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:51
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('comment on column PN_NOTE_TYPE_MKT.FLG_EDIT_AFTER_DISCH is ''Indicates if the note is editable after the discharge''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:51
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify CREATE_USER varchar2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:51
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify UPDATE_USER varchar2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:51
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify AGE_MIN number(06)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:51
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify AGE_MAX number(06)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:51
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('alter table PN_NOTE_TYPE_MKT modify GENDER varchar2(0001 char)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:51
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('ALTER table PN_NOTE_TYPE_MKT add ( FLG_EDIT_AFTER_DISCH VARCHAR2(0001 CHAR) null ) ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 15:51
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('comment on column PN_NOTE_TYPE_MKT.FLG_EDIT_AFTER_DISCH is ''Indicates if the note is editable after the discharge''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 03/01/2012 08:30
+-- CHANGE REASON: [ALERT-211833] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('ALTER table PN_NOTE_TYPE_MKT modify ( FLG_EDIT_AFTER_DISCH default ''N'' not null ) ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 15:43
+-- CHANGE REASON: [ALERT-212740] Fix migration of flg_editable_after_discharge - Solve findings identified by Technical Arq. BD for H&P
+begin
+execute immediate ('ALTER table PN_NOTE_TYPE_MKT drop column FLG_EDITABLE_AFTER_DISCHARGE');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:10
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('comment on COLUMN PN_NOTE_TYPE_MKT.FLG_EDIT_AFTER_DISCH is ''Indicates if the note is editable after the discharge''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:19
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER table PN_NOTE_TYPE_MKT modify (FLG_LAST_24H not null)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:19
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER table PN_NOTE_TYPE_MKT modify (RANK default 0 not null)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:19
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER table PN_NOTE_TYPE_SOFT_INST modify (RANK default 0 not null)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 10/01/2012 15:37
+-- CHANGE REASON: [ALERT-213298 ] H&P import: It are only appearing the today's records
+begin
+execute immediate ('COMMENT ON column pn_note_type_mkt.FLG_LAST_24H IS ''For this type of Note consider the last 24h (Y) or the time since 0h today (T). (N) - Not aplicable''');
+exception
+when others then
+dbms_output.put_line('Operacao já executada anteriormente');
+end;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/01/2012 16:29
+-- CHANGE REASON: [ALERT-216664] 
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt add(flg_discharge_warning VARCHAR2(1 CHAR) default ''Y'' not null)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+COMMENT ON column pn_note_type_mkt.flg_discharge_warning IS 'Y - In the discharge should appear an warning indicating the tasks that were not reviewed in the current visit. N - Otherwise.';
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt add(FLG_AUTOPOP_WARNING VARCHAR2(1 CHAR) default ''Y'' not null)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+COMMENT ON column pn_note_type_mkt.FLG_AUTOPOP_WARNING IS 'Y - In the edition screen should appear the warning bar explaning which info is auto-populated. N - Otherwise.';
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt add(FLG_AUTOSAVE_WARNING VARCHAR2(1 CHAR) default ''Y'' not null)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+COMMENT ON column pn_note_type_mkt.FLG_AUTOSAVE_WARNING IS 'Y - In the edition screen should appear a warning when the note is auto-saved. N - Otherwise.';
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt add(FLG_REMOVE_WARNING VARCHAR2(1 CHAR) default ''Y'' not null)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+COMMENT ON column pn_note_type_mkt.FLG_REMOVE_WARNING IS 'Y - In the Remove option shuold appear a warning indicating the data selected to be removed. N - Otherwise.';
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:44
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (flg_disch_warning_option VARCHAR2(1 char) default ''V'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.flg_disch_warning_option IS ''Indicate whether the options are checked with reMove or reView''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (flg_review_warning VARCHAR2(1 char) default ''Y'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.flg_review_warning IS ''Y - In the review functionality should appear a warning indicating the data selected to be reviewd. N - Otherwise.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (flg_review_warn_option VARCHAR2(1 char) default ''V'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.flg_review_warn_option IS ''Indicate whether the options are checked with reMove or reView''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (flg_import_warning VARCHAR2(1 char) default ''Y'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.flg_import_warning IS ''Y - In the import functionality should appear a warning indicating the data to review. N - Otherwise.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.flg_autosave_warning IS ''Y - In the edition screen should appear a warning when the note is auto-saved. N - Otherwise. (NOT USED)''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.flg_remove_warning IS ''Y - In the Remove option shuold appear a warning indicating the data selected to be removed. N - Otherwise. (NOT USED)''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+     EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt drop column flg_show_screen_review';
+EXCEPTION
+     WHEN others THEN
+         dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON column pn_note_type_mkt.FLG_REVIEW_ALL IS 'Indicates if the note allows to review information';
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 18:00
+-- CHANGE REASON: [ALERT-226174] 
+DECLARE
+ e_column_already_there EXCEPTION;
+  
+ PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+ BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt add(flg_help_save VARCHAR2(1 CHAR) default ''N'' not null)';
+ EXCEPTION
+   WHEN e_column_already_there THEN
+     dbms_output.put_line('aviso :operação já executada anteriormente.');
+ END;
+END;
+/
+  
+COMMENT ON column pn_note_type_mkt.flg_help_save IS 'Y - In the edition/import screen should appear a warning when the note is auto-saved. N - Otherwise.';
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 18:02
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt drop column flg_autosave_warning';
+ EXCEPTION
+   WHEN others THEN
+     dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 05/04/2012 10:03
+-- CHANGE REASON: [ALERT-226388] Allow software = 0 for note type and free texts configurations - EDIS restructuring - Present Illness / Current visit
+begin
+execute immediate('comment on column PN_NOTE_TYPE_MKT.flg_config_type
+  is ''Indicates the scope of the configuration. S - by Software: id_software<>-1, id_category=-1 and id_profile_template=0; C - by category: id_software=-1, id_category<>-1 and id_profile_template=0; P - by profile_template: id_software=-1, id_category=-1 and id_profile_template<>0''');
+exception
+when others then
+     dbms_output.put_line('Script already executed');
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:51
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (FLG_EDIT_ONLY_LAST VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.FLG_EDIT_ONLY_LAST IS ''Y-Allows the edition of the most recent not cancelled note. In the previous note it is only allowed the edition of the free text records. N-Othwerwise''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+------
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (FLG_SAVE_ONLY_SCREEN VARCHAR2(1 char) default ''Y'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.FLG_SAVE_ONLY_SCREEN IS ''Y - The Saved Only screen show be shown when perrforming the sign-off action. N-Otherwise.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+-----------
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (FLG_STATUS_AVAILABLE VARCHAR2(1 char) default ''Y'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.FLG_STATUS_AVAILABLE IS ''Y - The note has status that is presented in the summary and detail screens. N- Note without status.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-----------
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (TIME_TO_CLOSE_NOTE NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.TIME_TO_CLOSE_NOTE IS ''Nr of minutes that the professional has to close (sign-off) the note since it is created. If no time is defined no limit is considered.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+-----------
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (TIME_TO_START_DOCUM NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.TIME_TO_START_DOCUM IS ''Nr of minutes that the professional has to start documenting since it is generated a system draft when discharging the patient.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+-----------
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (FLG_PARTIAL_WARNING VARCHAR2(1 CHAR) default ''Y'' not null)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.FLG_PARTIAL_WARNING IS ''Y-Should appear a warning indicating that the information is partial. N-Otherwise.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+-----------
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (FLG_REMOVE_ON_OK VARCHAR2(1 CHAR) default ''N'' not null)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.FLG_REMOVE_ON_OK IS ''Y-When pressing the OK button should appear the remove warning to remove the suggested records. N-Otherwise.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt drop column flg_auto_populated';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (FLG_REMOVE_ON_OK VARCHAR2(1 CHAR) default ''N'' not null)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.FLG_REMOVE_ON_OK IS ''Y-When pressing the OK button should appear the remove warning to remove the suggested records. N-Otherwise.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (EDITABLE_NR_MIN number(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.EDITABLE_NR_MIN IS ''Nr of minutes that the professional has to edit the note after its creation (except free text records)''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/10/2012 16:02
+-- CHANGE REASON: [ALERT-242379 ] Single page note for Discharge Summary
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (FLG_SUGGEST_CONCEPT VARCHAR2(1 CHAR) default ''N'' not null)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.FLG_SUGGEST_CONCEPT IS ''Concept to be applied to show the suggested info (Red records in the creation/edition screen). R- not Reviewed records in the episode. P - records configured as auto-populated, not syncronized and not being text. E - editable info (data block flg_editable is Y. N-no suggested records available)''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (FLG_REVIEW_ON_OK VARCHAR2(1 CHAR) default ''N'' not null)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.FLG_REVIEW_ON_OK IS ''Y-If there is suggested records, when saving the note (ok button), the suggested records are associated to the note. N-otherwise''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add (FLG_PARTIAL_LOAD VARCHAR2(1 CHAR) default ''N'' not null)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.FLG_PARTIAL_LOAD IS ''Y-If the information is loaded partially. N-otherwise''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/10/2012 16:25
+-- CHANGE REASON: [ALERT-242379 ] Single page note for Discharge Summary
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt drop column TIME_TO_CLOSE_NOTE';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt drop column TIME_TO_START_DOCUM';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY:  Vanessa Barsottelli
+-- CHANGE DATE: 31/03/2014 09:53
+-- CHANGE REASON: [ALERT-280545] DB Dev - Sign-off Reformulation
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pn_note_type_mkt ADD flg_sign_off VARCHAR2(1 CHAR) DEFAULT ''Y'' NOT NULL';
+        EXECUTE IMMEDIATE 'COMMENT ON column pn_note_type_mkt.flg_sign_off IS ''Indicates if the note has sign off logic. Y - Notes can be on (D)raft, (S)igned-off, (C)ancelled, (T)emporay Save status. N - Notes can be on (F)inished, (C)ancelled status'' ';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN OTHERS THEN
+            dbms_output.put_line('Algo inesperado aconteceu');
+    END;
+END;
+/
+-- CHANGE END:  Vanessa Barsottelli
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 13/11/2017 08:50
+-- CHANGE REASON: [CALERT-344 ] Ability to copy specific records that require to be edited.
+COMMENT ON COLUMN pn_note_type_mkt.flg_review_warn_option IS 'M-Warning with the possibility to Review and Remove options and the default reMove; V-Warning with the possibility to Review and Remove options and the default reView; W-Warning with no Review and Remove options, just an warning.';
+-- CHANGE END: Sofia Mendes
+
+--
+declare
+	l_sql varchar2(4000);
+	pl varchar2(0010 char) := '''';
+begin
+	l_Sql := 'ALTER TABLE pn_note_type_mkt ADD flg_cancel VARCHAR2( 1 CHAR) DEFAULT '||pl||'Y'||pl||' NOT NULL';
+    pk_versioning.run(l_sql);
+end;
+/
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 2017-12-11
+-- CHANGE REASON: [CALERT-212] Progress notes Calendar view
+BEGIN
+    execute immediate 'ALTER TABLE pn_note_type_mkt MODIFY (CAL_DELAY_TIME NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+-- CHANGE END: Amanda Lee
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 24/11/2012 16:25
+-- CHANGE REASON: [CALERT-212] Progress notes Calendar view
+--alter column FLG_CALENDAR_VIEW
+BEGIN
+    execute immediate 'alter table pn_note_type_mkt add(FLG_CALENDAR_VIEW VARCHAR2(1 CHAR))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_note_type_mkt.FLG_CALENDAR_VIEW IS ''Y-This note type show on calendar view. N-This note type do not show on calendar view''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+comment on column pn_note_type_mkt.FLG_SUBMIT is 'Is the button SUBMIT available? (Y/N)';
+
+
+
+-- CHANGED BY: Vitor Sa
+-- CHANGE DATE: 15/12/2017 16:21
+-- CHANGE REASON: [CALERT-1093] CALERT-1093 Development DB
+alter table pn_note_type_soft_inst add (FLG_SUBMIT VARCHAR2(1 CHAR) default 'N' not null);
+comment on column pn_note_type_soft_inst.Flg_Submit is 'Is the button SUBMIT available? (Y/N)';
+-- CHANGE END: Vitor Sa
+
+-- CHANGED BY: Vitor Sa
+-- CHANGE DATE: 15/12/2017 16:21
+-- CHANGE REASON: [CALERT-1093] CALERT-1093 Development DB
+alter table pn_note_type_mkt add (FLG_SUBMIT VARCHAR2(1 CHAR) default 'N' not null);
+comment on column pn_note_type_mkt.FLG_SUBMIT is 'Is the button SUBMIT available? (Y/N)';
+-- CHANGE END: Vitor Sa
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 24/11/2012 16:25
+-- CHANGE REASON: [CALERT-212] Progress notes Calendar view
+
+--alter column DELAY_TIME
+ALTER TABLE PN_NOTE_TYPE_MKT ADD(CAL_DELAY_TIME NUMBER(24));
+COMMENT ON COLUMN PN_NOTE_TYPE_MKT.CAL_DELAY_TIME IS 'Check note delay status in calendar view';
+
+--alter column CAL_EXPECT_DATE
+ALTER TABLE PN_NOTE_TYPE_MKT ADD(CAL_EXPECT_DATE NUMBER(6));
+COMMENT ON COLUMN PN_NOTE_TYPE_MKT.CAL_EXPECT_DATE IS 'Check note expect date in calendar view';
+
+---alter column CAL_TYPE
+ALTER TABLE PN_NOTE_TYPE_MKT ADD(FLG_CAL_TYPE VARCHAR2(2 CHAR));
+COMMENT ON COLUMN PN_NOTE_TYPE_MKT.FLG_CAL_TYPE IS 'Check note expect date condition in calendar view';
+-- CHANGE END: Amanda Lee
+
+-- CHANGE END: Amanda Lee
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 2018-01-21
+-- CHANGE REASON: [CALERT-1265] Progress notes Calendar view - Phase 2
+--Add FLG_CAL_TIME_FILTER
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE pn_note_type_mkt ADD (FLG_CAL_TIME_FILTER VARCHAR2(2 CHAR))';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'COMMENT ON COLUMN pn_note_type_mkt.FLG_CAL_TIME_FILTER IS ''A-Admission date. C-Current date. EN-Note event date. EC-Note create date''';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+
+--Add CAL_ICU_DELAY_TIME
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE pn_note_type_mkt ADD (CAL_ICU_DELAY_TIME NUMBER(6))';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'COMMENT ON COLUMN pn_note_type_mkt.CAL_ICU_DELAY_TIME IS ''Check note when patient in ICU delay status in calendar view and To-do list''';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+
+--Change FLG_CAL_TYPE length
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE pn_note_type_mkt MODIFY (FLG_CAL_TYPE VARCHAR2(3 CHAR))';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'COMMENT ON COLUMN pn_note_type_mkt.FLG_CAL_TYPE IS ''PN-Progress note. WS-Weekly Summary. HS-Holiday Signature. APL-Admission Problem Listing. APN-Attending Progress Note. PRN-Procedure Note. PN-Progress Note''';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+-- CHANGE END: Amanda Lee
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 2018-01-25
+-- CHANGE REASON: [CALERT-2102]  Calendar starts highlight on Tuesday instead of Monday
+--alter column FLG_CALENDAR_VIEW
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'COMMENT ON COLUMN pn_note_type_mkt.FLG_CALENDAR_VIEW IS ''Y-This note type show on calendar view no matter with record or not(regular progress notes). N or NULL- if pn_area is pn, then show with record(inregular progress note) if pn_area is not pn, do not show on calendar''';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+-- CHANGE END: Amanda Lee
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 15/02/2018 09:37
+-- CHANGE REASON: [CEMR-449] Discharge Summary - Transfer block_ discharge record is not displayed and when recreating note nothing is imported
+-- Add/modify columns 
+alter table PN_NOTE_TYPE_MKT add flg_sync_after_disch VARCHAR2(1 CHAR) default 'N';
+-- Add comments to the columns 
+comment on column PN_NOTE_TYPE_MKT.flg_sync_after_disch
+  is 'Indicates if the note is syncronizable after the discharge
+';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 2018-02-22
+-- CHANGE REASON: [CEMR-614] Future Procedure note should not show
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE pn_note_type_mkt ADD (FLG_EDIT_CONDITION VARCHAR2(1 CHAR))';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+
+COMMENT ON COLUMN pn_note_type_mkt.FLG_EDIT_CONDITION IS 'U-Until now.';
+-- CHANGE END: Amanda Lee
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 28/05/2019 12:16
+-- CHANGE REASON: [EMR-16174] - [DB] Improvements to Psychiatric assessment (SA Market)
+ALTER TABLE pn_note_type_mkt add FLG_PATIENT_ID_WARNING varchar2(1);
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 14/05/2021 15:48
+-- CHANGE REASON: [EMR-44820] - Initial assessment: "Nota de evaluacion inicial de enfermaria" single page review
+-- Add comments to the columns
+comment on column pn_note_type_mkt.age_min
+is 'Minimal age in which the note type should be shown IN MONTHS';
+comment on column pn_note_type_mkt.age_max
+is 'Maximum age in which the note type should be shown IN MONTHS';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 28/07/2021 15:29
+-- CHANGE REASON: [EMR-47618] - Current visit > Remove from Current visit single page header the indication "Created /Ordered by"
+-- Add/modify columns
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[alter table PN_NOTE_TYPE_MKT add flg_show_signature VARCHAR2(1) default 'Y']';
+pk_versioning.run(l_sql);
+end;
+/
+
+-- Add comments to the columns
+comment on column PN_NOTE_TYPE_MKT.flg_show_signature
+is 'Indicates ifthe signature is show on edition/creation Y/N';
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,5 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 25/08/2010 10:41
+-- CHANGE REASON: [ALERT-95691] 
+GRANT EXECUTE ON ALERT.pk_api_dictation TO INTER_ALERT_V2;
+-- CHANGE END: Paulo Teixeira

@@ -1,0 +1,36 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:25
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+alter table CDR_ACTION
+  add constraint CDRA_PK primary key (ID_CDR_ACTION);
+alter table CDR_ACTION
+  add constraint CDRA_FLG_AVAILABLE_CHK
+  check (FLG_AVAILABLE in ('Y', 'N'));
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 11/04/2012 11:30
+-- CHANGE REASON: [ALERT-226949] cds popup improvements (ddl changes)
+declare
+  e_cns_exists exception;
+  pragma exception_init(e_cns_exists, -02264);
+begin
+  begin
+    execute immediate 'alter table CDR_ACTION
+  add constraint CDRA_FLG_WARNING_CHK
+  check (FLG_WARNING in (''Y'', ''N''))
+';
+  exception when e_cns_exists then
+    dbms_output.put_line('constraint cdra_flg_warning_chk already exists!');
+  end;
+  begin
+    execute immediate 'alter table CDR_ACTION
+  add constraint CDRA_FLG_ANSWER_NOTES_CHK
+  check (FLG_ANSWER_NOTES in (''Y'', ''N''))
+';
+  exception when e_cns_exists then
+    dbms_output.put_line('constraint cdra_flg_answer_notes_chk already exists!');
+  end;
+end;
+/
+-- CHANGE END: Pedro Carneiro

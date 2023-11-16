@@ -1,0 +1,42 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 02/12/2013 09:41
+-- CHANGE REASON: [ALERT-270040] 
+DECLARE e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE TABLE VS_ATTRIBUTE_SOFT_INST (
+  id_vs_attribute        number(24,0)                      not null,
+  id_vital_sign          number(24,0)                      not null,
+  id_institution         NUMBER(24,0)                      NOT NULL,
+  id_software            NUMBER(24,0)                      NOT NULL,
+  id_market              NUMBER(24,0)                      NOT NULL,
+  rank                   NUMBER(24,0)                       NULL,
+  create_user            varchar2(24 char)                 null,
+  create_time            timestamp(6) with local time zone null,
+  create_institution     number(24,0)                      null,
+  update_user            varchar2(24 char)                 null,
+  update_time            timestamp(6) with local time zone null,
+  update_institution     NUMBER(24,0)                      NULL
+)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/ COMMENT ON TABLE vs_attribute_soft_inst IS 'VS_ATTRIBUTE configuration table by market inst soft';
+COMMENT ON column vs_attribute_soft_inst.id_vs_attribute IS 'vs_attribute identifier';
+COMMENT ON column vs_attribute_soft_inst.id_vital_sign IS 'vital sign identifier';
+COMMENT ON column vs_attribute_soft_inst.id_institution IS 'institution identifier';
+COMMENT ON column vs_attribute_soft_inst.id_software IS 'software identifier';
+COMMENT ON column vs_attribute_soft_inst.id_market IS 'market identifier';
+COMMENT ON column vs_attribute_soft_inst.rank IS 'rank field';
+COMMENT ON column vs_attribute_soft_inst.create_user IS 'Creation User';
+COMMENT ON column vs_attribute_soft_inst.create_time IS 'Creation Time';
+COMMENT ON column vs_attribute_soft_inst.create_institution IS 'Creation Institution';
+COMMENT ON column vs_attribute_soft_inst.update_user IS 'Update User';
+COMMENT ON column vs_attribute_soft_inst.update_time IS 'Update Time';
+COMMENT ON column vs_attribute_soft_inst.update_institution IS 'Update Institution';
+-- CHANGE END: Paulo Teixeira

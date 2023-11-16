@@ -1,0 +1,34 @@
+
+
+  CREATE TABLE SYS_BUTTON_GROUP
+   (	ID_SYS_BUTTON_GROUP NUMBER(12,0) NOT NULL ENABLE,
+	INTERN_NAME_BUTTON_GROUP VARCHAR2(200) NOT NULL ENABLE,
+	BUTTONS_NUMBER NUMBER(6,0),
+	ID_SYS_TOOLBAR NUMBER(12,0),
+	FLG_MAXIMIZED VARCHAR2(1),
+	ROTATION NUMBER(6,0),
+	SCALE NUMBER(6,0),
+	RANK NUMBER(6,0)
+   );
+
+
+COMMENT ON TABLE sys_button_group IS 'Cada registo inclui um grupo (FK para SYS_BUTTON_GROUP) e as propriedades desse grupo no conjunto indicado por SYS_TOOLBAR.No caso da roda, os registos desta tabela correspondem aos anéis.No caso das opções de menu da aplicação, correspondem aos deep_navs acedidos por um botão + o botão que permite o acesso + os botões de acesso a funcionalidades (de baixo).' ;
+
+COMMENT ON COLUMN sys_button_group.buttons_number IS 'Nº de botões no anel da roda' ;
+COMMENT ON COLUMN sys_button_group.flg_maximized IS 'Aparece maximizado inicialmente: Y / N' ;
+COMMENT ON COLUMN sys_button_group.rotation IS 'Nº de graus de rotação' ;
+COMMENT ON COLUMN sys_button_group.scale IS 'Escala' ;
+COMMENT ON COLUMN sys_button_group.rank IS 'Ordem de apresentação' ;
+
+-- cmf 04-12-2012
+declare
+k_sql constant varchar2(0500 char) := 'DROP TABLE SYS_BUTTON_GROUP';
+begin
+
+execute immediate k_sql;
+
+exception
+when others then null;
+end;
+/
+

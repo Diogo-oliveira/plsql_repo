@@ -1,0 +1,54 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 09:46
+-- CHANGE REASON: [ALERT-229216] VERSIONING TERMINOLOGY SERVER - SCHEMA ALERT - DDL (EA Tables)
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -00955);
+BEGIN
+    --i_flg_category
+    --DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'DIAGNOSIS_RELATIONS_EA',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'CNT',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+
+    BEGIN
+        EXECUTE IMMEDIATE '
+CREATE TABLE DIAGNOSIS_RELATIONS_EA
+(
+ID_CONCEPT_VERSION_1    NUMBER(24) NOT NULL, 
+ID_CNCPT_VRS_INST_OWN1  NUMBER(24) NOT NULL, 
+CONCEPT_TYPE_INT_NAME1  VARCHAR2(200 CHAR) NOT NULL,
+ID_CONCEPT_VERSION_2    NUMBER(24) NOT NULL, 
+ID_CNCPT_VRS_INST_OWN2  NUMBER(24) NOT NULL, 
+CONCEPT_TYPE_INT_NAME2  VARCHAR2(200 CHAR) NOT NULL,
+CNCPT_REL_TYPE_INT_NAME VARCHAR2(200 CHAR) NOT NULL,
+ID_INSTITUTION          NUMBER(24) NOT NULL, 
+ID_SOFTWARE             NUMBER(24) NOT NULL,
+RANK                    NUMBER(24)  NOT NULL,
+FLG_DEFAULT             VARCHAR2(1 CHAR) NOT NULL
+) TABLESPACE ALERT_DATA';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE DIAGNOSIS_RELATIONS_EA IS ''Diagnoses relations easy access table''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_RELATIONS_EA.ID_CONCEPT_VERSION_1 IS ''Concept version 1''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_RELATIONS_EA.ID_CNCPT_VRS_INST_OWN1 IS ''Institution owner of the concept version 1''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_RELATIONS_EA.CONCEPT_TYPE_INT_NAME1 IS ''Concept type internal name 1''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_RELATIONS_EA.ID_CONCEPT_VERSION_2 IS ''Concept version 2''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_RELATIONS_EA.CONCEPT_TYPE_INT_NAME2 IS ''Concept type internal name 2''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_RELATIONS_EA.ID_CNCPT_VRS_INST_OWN2 IS ''Institution owner of the concept version 2''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_RELATIONS_EA.CNCPT_REL_TYPE_INT_NAME IS ''Relation type''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_RELATIONS_EA.ID_INSTITUTION IS ''Institution id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_RELATIONS_EA.ID_SOFTWARE IS ''Software id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_RELATIONS_EA.RANK IS ''Order of this relation in the concept type''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DIAGNOSIS_RELATIONS_EA.FLG_DEFAULT IS ''Default relation Y - yes; N - Otherwise''';
+END;
+/
+-- CHANGE END: Alexandre Santos

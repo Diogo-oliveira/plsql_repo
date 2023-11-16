@@ -1,0 +1,34 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/10/2014 13:35
+-- CHANGE REASON: [ALERT-298852] 
+BEGIN
+  pk_versioning.run(i_sql => q'[create table PRINT_LIST_AREA
+(
+  id_print_list_area      number(24) not null,
+  internal_name           varchar2(200 char) not null,  
+  id_task_type            number(24),
+  func_print_job_info     varchar2(1000 char) not null,
+  func_print_job_compare  varchar2(1000 char) not null,
+  create_user             varchar2(30 char),
+  create_time             timestamp(6) with local time zone,
+  create_institution      number(24),
+  update_user             varchar2(30 char),
+  update_time             timestamp(6) with local time zone,
+  update_institution      number(24)
+)]');
+END;
+/
+
+comment on table PRINT_LIST_AREA is 'Print job area';
+comment on column PRINT_LIST_AREA.id_print_list_area is 'Print area identifier';
+comment on column PRINT_LIST_AREA.internal_name is 'Print area internal name';
+comment on column PRINT_LIST_AREA.id_task_type is 'Task type identifier';
+comment on column PRINT_LIST_AREA.func_print_job_info is 'Function that will return information of this print job';
+comment on column PRINT_LIST_AREA.func_print_job_compare is 'Function that will compare similar print jobs';
+comment on column PRINT_LIST_AREA.create_user is 'Creation User';
+comment on column PRINT_LIST_AREA.create_time is 'Creation Time';
+comment on column PRINT_LIST_AREA.create_institution is 'Creation Institution';
+comment on column PRINT_LIST_AREA.update_user is 'Update User';
+comment on column PRINT_LIST_AREA.update_time is 'Update Time';
+comment on column PRINT_LIST_AREA.update_institution is 'Update Institution';
+-- CHANGE END: Ana Monteiro

@@ -1,0 +1,25 @@
+
+  CREATE TABLE PRESC_PAT_PROBLEM_IT
+   (	ID_PRESC_PAT_PROBLEM NUMBER(24,0) NOT NULL ENABLE,
+	ID_PAT_PROBLEM NUMBER(24,0),
+	ID_PAT_ALLERGY NUMBER(24,0),
+	ID_PRESCRIPTION_PHARM NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_PRESC_PAT_PROBLEM DATE NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE presc_pat_problem_it IS 'Associação de prescrição de farmacos a problemas.' ;
+
+COMMENT ON COLUMN presc_pat_problem_it.flg_type IS 'Flag que indica se é uma contra-indicação (C) ou uma associação de fármacos a problemas (A).' ;
+COMMENT ON COLUMN presc_pat_problem_it.id_presc_pat_problem IS 'Chave primária.' ;
+COMMENT ON COLUMN presc_pat_problem_it.id_pat_problem IS 'Problema a que está a associada a prescrição do fármaco.' ;
+COMMENT ON COLUMN presc_pat_problem_it.id_prescription_pharm IS 'Prescrição associada ao problema.' ;
+COMMENT ON COLUMN presc_pat_problem_it.id_professional IS 'Profissional que regista a associação.' ;
+COMMENT ON COLUMN presc_pat_problem_it.dt_presc_pat_problem IS 'Data de registo da associação da prescrição ao problema.' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PRESC_PAT_PROBLEM_IT ADD DT_PRESC_PAT_PROBLEM_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PRESC_PAT_PROBLEM_IT.DT_PRESC_PAT_PROBLEM_TSTZ IS 'Data de registo da associa‡Æo da prescri‡Æo ao problema.'; 

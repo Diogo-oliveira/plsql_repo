@@ -1,0 +1,39 @@
+
+
+  CREATE TABLE EPIS_DRUG_USAGE
+   (	ID_EPIS_DRUG_USAGE NUMBER(24,0) NOT NULL ENABLE,
+	DT_EPIS_DRUG_USAGE DATE NOT NULL ENABLE,
+	DESC_EPIS_DRUG_USAGE VARCHAR2(4000) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_DRUG NUMBER(12,0),
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_FINISH VARCHAR2(1) NOT NULL ENABLE,
+	FLG_DOCTOR_PRESC VARCHAR2(1) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE epis_drug_usage IS 'Medicação anterior e actual, relativamente ao problema reportado na consulta, quando a prescrição não existe na aplicação' ;
+
+COMMENT ON COLUMN epis_drug_usage.dt_epis_drug_usage IS 'Data de registo' ;
+COMMENT ON COLUMN epis_drug_usage.desc_epis_drug_usage IS 'Modo de utilização dos medicamentos tomados' ;
+COMMENT ON COLUMN epis_drug_usage.flg_finish IS 'Indicação de que já terminou de tomar' ;
+COMMENT ON COLUMN epis_drug_usage.flg_doctor_presc IS 'Indicação de que foi receitada por um médico' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE EPIS_DRUG_USAGE ADD DT_EPIS_DRUG_USAGE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN EPIS_DRUG_USAGE.DT_EPIS_DRUG_USAGE_TSTZ IS 'Data de registo'; 
+
+
+-- CHANGED BY: Sérgio Santos (sergio.santos)
+-- CHANGE DATE: 03/12/2008 09:16
+-- CHANGE REASON: ALERT-11133 Remoção de colunas com tipo DATE quando existe a equivalente TSTZ
+ALTER TABLE EPIS_DRUG_USAGE DROP COLUMN DT_EPIS_DRUG_USAGE;
+-- CHANGE END
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/01/2019 11:24
+-- CHANGE REASON: [EMR-10496] Remove unused code from some packages (old medication packages)
+COMMENT ON table EPIS_DRUG_USAGE IS 'Medicação anterior e actual, relativamente ao problema reportado na consulta, quando a prescrição não existe na aplicação. [DEPRECATED]'
+/
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,188 @@
+
+
+  CREATE TABLE EPIS_RECOMEND
+   (	ID_EPIS_RECOMEND NUMBER(24,0) NOT NULL ENABLE,
+	DT_EPIS_RECOMEND DATE NOT NULL ENABLE,
+	DESC_EPIS_RECOMEND VARCHAR2(4000) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_TEMP VARCHAR2(1) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE epis_recomend IS 'Recomendações pós-alta' ;
+
+COMMENT ON COLUMN epis_recomend.flg_type IS 'Tipo: P - recomendações ao doente, D - recomendações a outro médico, R - receita, N - diário de enfermagem' ;
+COMMENT ON COLUMN epis_recomend.flg_temp IS 'Indica se o registo é: H - histórico, T - temporário (temporariamente gravado(Auto Save)); D - definitivo' ;
+
+comment on column EPIS_RECOMEND.FLG_TYPE
+  is 'Tipo: P - recomendações ao doente, D - recomendações a outro médico, R - receita, N - diário de enfermagem, A - notas de avaliação';
+
+
+COMMENT ON COLUMN EPIS_RECOMEND.FLG_TYPE IS 'Tipo: P - recomendações ao doente, D - recomendações a outro médico, R - receita, N - diário de enfermagem, A - notas de avaliação, L - plano'
+/
+
+alter table epis_recomend 
+add (dt_epis_recomend_tstz timestamp with local time zone); 
+
+ALTER TABLE EPIS_RECOMEND ADD ID_NOTES_CONFIG NUMBER(24);
+ALTER TABLE EPIS_RECOMEND ADD SESSION_ID NUMBER(24);
+
+-- inpatient 04-04-2008
+COMMENT ON COLUMN EPIS_RECOMEND.FLG_TYPE IS 'Tipo: P - recomendações ao doente, D - recomendações a outro médico, R - receita, N - diário de enfermagem, A - notas de avaliação, L - plano, M - Diário Médico';
+--
+
+
+comment on column epis_recomend.flg_type is 'Tipo: P - recomendações ao doente, D - recomendações a outro médico, R - receita, N - diário de enfermagem, A - notas de avaliação, L - plano, M - diário médico; O - notas pós-alta (em episódios migrados)';
+
+-- inpatient 05-06-2008
+alter table epis_recomend   add ID_ITEM NUMBER(24);
+
+comment on column epis_recomend.id_item is 'Identificador de item ( exame, analise, ....) conforme id_notes_config';
+-- end
+
+--CHANGED BY: Ariel Geraldo Machado
+--CHANGE DATE: 2008-SEP-16
+--CHANGE REASON: Database denormalization
+ALTER TABLE epis_recomend add id_patient NUMBER(24);
+COMMENT ON column epis_recomend.id_patient IS 'Patient ID';
+--CHANGE END
+
+
+-- CHANGED BY: Carlos Vieira
+-- CHANGE DATE: 2008-Set-22
+-- CHANGE REASON:date columns, timestamp
+
+alter table EPIS_RECOMEND drop column DT_EPIS_RECOMEND;
+
+--CHANGE END
+
+
+
+-- CHANGED BY: Teresa Coutinho
+-- CHANGE DATE: 28/04/2009 ALERT-1575
+comment on column EPIS_RECOMEND.FLG_TYPE
+  is 'Tipo: P - recomendações ao doente, D - recomendações a outro médico, R - receita, N - diário de enfermagem, A - notas de avaliação, L - plano, M - diário médico; O - notas pós-alta (em episódios migrados); S - Subjectivo (SOAP); B - Objectivo (SOAP)';
+--CHANGE END
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 02/12/2010 16:15
+-- CHANGE REASON: [ALERT-146429] ddl.sql
+alter table epis_recomend add
+(
+  flg_status              varchar2(1 char),
+  id_epis_recomend_parent number(24),
+  id_cancel_info_det      number(24)
+)
+;
+
+comment on column epis_recomend.flg_status
+  is 'Record status: (A)ctive, (O)utdated, (C)ancelled.';
+comment on column epis_recomend.id_epis_recomend_parent
+  is 'Original record identifier.';
+comment on column epis_recomend.id_cancel_info_det
+  is 'Cancel information detail identifier.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 24/10/2011 17:18
+-- CHANGE REASON: [ALERT-201238] Medical/Nursing notes. Remove 4k limitation for free text entries using CLOB.
+DECLARE
+    l_exists PLS_INTEGER;
+    l_table  VARCHAR2(30) := 'EPIS_RECOMEND';
+    l_col    VARCHAR2(30) := 'DESC_EPIS_RECOMEND_CLOB';
+
+    l_ddl_lst table_varchar2 := table_varchar2(
+    'ALTER TABLE EPIS_RECOMEND ADD (
+               DESC_EPIS_RECOMEND_CLOB CLOB)',
+'COMMENT ON COLUMN epis_recomend.DESC_EPIS_RECOMEND_CLOB is ''Large note description''');
+BEGIN
+    SELECT COUNT(1)
+      INTO l_exists
+      FROM user_tab_cols utc
+     WHERE utc.table_name = l_table
+       AND utc.column_name = l_col;
+
+    IF l_exists = 0
+    THEN
+        FOR i IN l_ddl_lst.first .. l_ddl_lst.last
+        LOOP
+            EXECUTE IMMEDIATE l_ddl_lst(i);
+        END LOOP;
+    ELSE
+        dbms_output.put_line('Info: Table EPIS_RECOMEND already updated for CLOB support');
+    END IF;
+END;
+/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 21/01/2016 11:18
+-- CHANGE REASON: [ALERT-318028] ALERT-318028  CDOC Functionalities V7
+-- Add comments to the table 
+comment on table EPIS_RECOMEND
+  is 'Table to store the free text areas of Subjective area, Objective Area, Assessment area and Plan area.(SOAP)
+
+';
+-- Add comments to the columns 
+comment on column EPIS_RECOMEND.id_epis_recomend
+  is 'Episode recomend identifier';
+comment on column EPIS_RECOMEND.flg_type
+  is 'Record type to identify the area where record was made. 
+Values: S - Subjective; O - Objective; A - Assessment; P - Plan; 
+
+Tipo: P - recomendações ao doente, D - recomendações a outro médico, R - receita, 
+N - diário de enfermagem, A - notas de avaliação, L - plano, M - diário médico; 
+O - notas pós-alta (em episódios migrados); S - Subjectivo (SOAP); B - Objectivo (SOAP)';
+comment on column EPIS_RECOMEND.id_episode
+  is 'Episode identifier';
+comment on column EPIS_RECOMEND.id_professional
+  is 'Professional identifier';
+comment on column EPIS_RECOMEND.flg_temp
+  is 'Indicates record status. Values : H -  History; D- Definitive; T - temporary was DEPRECATED, only this type';
+comment on column EPIS_RECOMEND.dt_epis_recomend_tstz
+  is 'Record date';
+comment on column EPIS_RECOMEND.id_notes_config
+  is 'DEPRECATED';
+comment on column EPIS_RECOMEND.session_id
+  is 'DEPRECATED';
+comment on column EPIS_RECOMEND.id_item
+  is 'DEPRECATED';
+comment on column EPIS_RECOMEND.id_patient
+  is 'Patient Identifier';
+comment on column EPIS_RECOMEND.create_user
+  is 'Creation User';
+comment on column EPIS_RECOMEND.create_time
+  is 'Creation Time';
+comment on column EPIS_RECOMEND.create_institution
+  is 'Creation Institution';
+comment on column EPIS_RECOMEND.update_user
+  is 'Update User';
+comment on column EPIS_RECOMEND.update_time
+  is 'Update Time';
+comment on column EPIS_RECOMEND.update_institution
+  is 'Update Institution';
+comment on column EPIS_RECOMEND.flg_status
+  is 'Record status: (A)ctive, (O)utdated, (C)ancelled.';
+comment on column EPIS_RECOMEND.id_epis_recomend_parent
+  is 'Original record identifier.';
+comment on column EPIS_RECOMEND.id_cancel_info_det
+  is 'Cancel information detail identifier.';
+comment on column EPIS_RECOMEND.desc_epis_recomend_clob
+  is 'Large note description';
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.epis_recomend move lob(desc_epis_recomend_clob) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

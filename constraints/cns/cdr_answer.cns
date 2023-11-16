@@ -1,0 +1,38 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 11/04/2012 11:30
+-- CHANGE REASON: [ALERT-226949] cds popup improvements (ddl changes)
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table CDR_ANSWER
+  add constraint CDRAW_PK primary key (ID_CDR_ANSWER)
+';
+exception when e_pk_exists then
+  dbms_output.put_line('primary key cdraw_pk already exists!');
+end;
+/
+
+declare
+  e_cns_exists exception;
+  pragma exception_init(e_cns_exists, -02264);
+begin
+  begin
+    execute immediate 'alter table CDR_ANSWER
+  add constraint CDRAW_FLG_AVAILABLE_CHK
+  check (FLG_AVAILABLE in (''Y'', ''N''))
+';
+  exception when e_cns_exists then
+    dbms_output.put_line('constraint cdraw_flg_available_chk already exists!');
+  end;
+  begin
+    execute immediate 'alter table CDR_ANSWER
+  add constraint CDRAW_FLG_REQ_NOTES_CHK
+  check (FLG_REQ_NOTES in (''Y'', ''N''))
+';
+  exception when e_cns_exists then
+    dbms_output.put_line('constraint cdraw_flg_req_notes_chk already exists!');
+  end;
+end;
+/
+-- CHANGE END: Pedro Carneiro

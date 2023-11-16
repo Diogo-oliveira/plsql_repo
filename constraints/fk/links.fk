@@ -1,0 +1,69 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/08/2011 09:00
+-- CHANGE REASON: [ALERT-190334] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE links
+  ADD CONSTRAINT links_inst_fk FOREIGN KEY (
+    id_institution
+  ) REFERENCES institution (id_institution)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE links
+  ADD CONSTRAINT links_soft_fk FOREIGN KEY (
+    id_software
+  ) REFERENCES software (id_software)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+ BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE links
+  ADD CONSTRAINT links_pt_fk FOREIGN KEY (
+    id_profile_template
+  ) REFERENCES profile_template (id_profile_template)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE links
+  ADD CONSTRAINT links_parent_fk FOREIGN KEY (
+    id_parent
+  ) REFERENCES links (id_links)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+   
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 18/11/2014 15:23
+-- CHANGE REASON: [ALERT-302131] 
+    pk_versioning.run(i_sql => q'[ALTER TABLE links ADD CONSTRAINT L_FLG_LINK_VISIBLE_CHK CHECK ( FLG_LINK_VISIBLE IN ('Y', 'N'))]');
+END;
+/
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 18/11/2014 15:29
+-- CHANGE REASON: [ALERT-302131] 
+begin
+    pk_versioning.run(i_sql => q'[ALTER TABLE links ADD CONSTRAINT L_FLG_LINK_VISIBLE_CHK CHECK ( FLG_LINK_VISIBLE IN ('Y', 'N'))]');
+END;
+/
+
+-- CHANGE END: Jorge Silva

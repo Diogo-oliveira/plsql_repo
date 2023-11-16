@@ -1,0 +1,117 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/12/2012 16:00
+-- CHANGE REASON: [ALERT-243533] stg table
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                                 i_obj_name          => 'STG_SYS_ALERT_DEPARTMENT',
+                                                 i_obj_type          => 'TABLE',
+                                                 i_flg_category      => 'PRM',
+                                                 i_flg_alert_default => 'N',
+                                                 i_delete_script     => NULL,
+                                                 i_flg_default_child => 'N');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE TABLE stg_sys_alert_department(id_stg_sys_alert_depart NUMBER(24) NOT NULL,id_sys_alert NUMBER(24), id_department NUMBER(24) NOT NULL, id_profile_template NUMBER(24) NOT NULL, id_institution NUMBER(24) NOT NULL, flg_no_alert varchar2(1 char) default ''N'' NOT NULL, create_user VARCHAR2(24 CHAR), create_time TIMESTAMP(6)
+    WITH LOCAL TIME ZONE,
+    create_institution NUMBER(24),
+    update_user VARCHAR2(24 CHAR),
+    update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    update_institution NUMBER(24)) tablespace ALERT_DATA';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Table already exists');
+    END;
+END;
+/
+ 
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON TABLE stg_sys_alert_department IS ''Table that stores temporary default service Alerts configuration list.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column stg_sys_alert_department.id_stg_sys_alert_depart IS ''Primary Key Sequence ID.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column stg_sys_alert_department.id_sys_alert IS ''Sys Alert Id.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+        BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column stg_sys_alert_department.id_department IS ''Service Id.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column stg_sys_alert_department.id_profile_template IS ''Profile template id.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column stg_sys_alert_department.id_institution IS ''Institution Id.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+        BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column stg_sys_alert_department.flg_no_alert IS ''Flg that indicate if there are no alert to configure in a profile (N, Y).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column stg_sys_alert_department.create_user IS ''USer that created the record.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column stg_sys_alert_department.create_time IS ''Time when the record was created.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column stg_sys_alert_department.create_institution IS ''Institution that created the record.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column stg_sys_alert_department.update_user IS ''Record Updated by User.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column stg_sys_alert_department.update_time IS ''Record Update time.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column stg_sys_alert_department.update_institution IS ''Record Updated by institution.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;   
+END;
+/                    
+                
+-- CHANGE END:  Rui Gomes

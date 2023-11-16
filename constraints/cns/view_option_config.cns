@@ -1,0 +1,41 @@
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 05/03/2009 19:09
+-- CHANGE REASON: [ALERT-16591] Adicionadas as chaves primárias e constraints para as tabelas view_option e view_option_config
+ALTER TABLE VIEW_OPTION_CONFIG ADD CONSTRAINT VOC_PK PRIMARY KEY (ID_VIEW_OPTION, ID_PROFILE_TEMPLATE, ID_SYS_BUTTON_PROP) ENABLE;
+
+ALTER TABLE VIEW_OPTION_CONFIG ADD CONSTRAINT VOC_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN ( 'Y', 'N'));
+-- CHANGE END
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 07/03/2009 14:27
+-- CHANGE REASON: [ALERT-16591] Actualização do modelo de dados para responder às necessidades do FLASH
+ALTER TABLE VIEW_OPTION_CONFIG DROP CONSTRAINT VOC_PK;
+ALTER TABLE VIEW_OPTION_CONFIG ADD CONSTRAINT VOC_PK PRIMARY KEY (ID_VIEW_OPTION, ID_PROFILE_TEMPLATE, ID_SYS_BUTTON_PROP, ID_SYS_BUTTON_PROP_PARENT) ENABLE;
+-- CHANGE END
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 16/03/2009 17:48
+-- CHANGE REASON: [ALERT-16591] Correcção ao modelo de dados original.
+ALTER TABLE VIEW_OPTION_CONFIG DROP CONSTRAINT VOC_PK;
+ALTER TABLE VIEW_OPTION_CONFIG ADD CONSTRAINT VOC_PK PRIMARY KEY (ID_VIEW_OPTION, ID_PROFILE_TEMPLATE) ENABLE;
+-- CHANGE END
+
+-- CHANGED BY: Fábio Oliveira
+-- CHANGE DATE: 26/02/2010
+-- CHANGE REASON: [ALERT-70302] Possible to specify access to each view
+DECLARE
+    e_constraint_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264); -- check constraint
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table VIEW_OPTION_CONFIG
+  add constraint VOC_FLG_ACCESS_CHK
+  check (FLG_ACCESS IN (''Y'', ''N''))';
+    EXCEPTION
+        WHEN e_constraint_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END

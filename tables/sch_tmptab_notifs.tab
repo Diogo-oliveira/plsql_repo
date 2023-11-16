@@ -1,0 +1,146 @@
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 08/07/2009 17:51
+-- CHANGE REASON: [ALERT-32069] Making appointments
+create global temporary table SCH_TMPTAB_NOTIFS
+(
+  desc_sch_type        VARCHAR2(1000),
+  desc_procedure       VARCHAR2(1000),
+msg_num_sched        VARCHAR2(100),
+num_sched            VARCHAR2(50),
+msg_sched_sess       VARCHAR2(100),
+sched_sess           VARCHAR2(4000),
+msg_consult_type     VARCHAR2(100),
+consult_type         VARCHAR2(100),
+msg_event_type       VARCHAR2(100),
+event_type           VARCHAR2(500),       
+msg_prof             VARCHAR2(50),
+prof                 VARCHAR2(4000),
+msg_instructions     VARCHAR2(100), 
+instructions         VARCHAR2(4000),
+id_not              number(24),
+flg_type            varchar2(1),
+order_nr            number(24),
+) 
+on commit preserve rows;
+
+comment on table SCH_TMPTAB_NOTIFS is 'Temporary table to be used on function get_notifications';
+
+comment on column SCH_TMPTAB_NOTIFS.Desc_Sch_Type is 'Schedule type description.';
+comment on column SCH_TMPTAB_NOTIFS.Desc_Procedure is 'Procedure description.';
+comment on column SCH_TMPTAB_NOTIFS.MSG_NUM_SCHED is 'Number of schedules description.';
+comment on column SCH_TMPTAB_NOTIFS.Num_Sched is 'Number of schedules (confirmed/total).';
+comment on column SCH_TMPTAB_NOTIFS.Msg_Sched_Sess is 'Scheduled sessions description.';
+comment on column SCH_TMPTAB_NOTIFS.Sched_Sess is 'Scheduled sessions.';
+comment on column SCH_TMPTAB_NOTIFS.Msg_Consult_Type is 'Consult type description.';
+comment on column SCH_TMPTAB_NOTIFS.Consult_Type is 'Consult type.';
+comment on column SCH_TMPTAB_NOTIFS.Msg_Event_Type is 'Event type description.';
+comment on column SCH_TMPTAB_NOTIFS.Event_Type is 'Event type.';
+comment on column SCH_TMPTAB_NOTIFS.Msg_Prof is 'Professional(s) description.';
+comment on column SCH_TMPTAB_NOTIFS.Prof is 'Professional(s).';
+comment on column SCH_TMPTAB_NOTIFS.Msg_Instructions is 'Instruction(s) description.';
+comment on column SCH_TMPTAB_NOTIFS.Instructions is 'Instructions(s).';
+comment on column SCH_TMPTAB_NOTIFS.Order_Nr is 'Order number.';
+comment on column SCH_TMPTAB_NOTIFS.Id_Not is 'Id of schedule or id inter_presc_det or id_schedule_recursion';
+comment on column SCH_TMPTAB_NOTIFS.Flg_Type is 'Type of notification: M-MFR; S-series; O-others';
+
+ 
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 09/07/2009 08:51
+-- CHANGE REASON: [ALERT-32069] Making appointments - correcao
+create global temporary table SCH_TMPTAB_NOTIFS
+(
+desc_sch_type        VARCHAR2(1000),
+  desc_procedure       VARCHAR2(1000),
+  msg_num_sched        VARCHAR2(100),
+  num_sched            VARCHAR2(50),
+  msg_sched_sess       VARCHAR2(100),
+  sched_sess           VARCHAR2(4000),
+  msg_consult_type     VARCHAR2(100),
+  consult_type         VARCHAR2(100),
+  msg_event_type       VARCHAR2(100),
+  event_type           VARCHAR2(500),         
+  msg_prof             VARCHAR2(50),
+  prof                 VARCHAR2(4000),
+  msg_instructions     VARCHAR2(100), 
+  instructions         VARCHAR2(4000),  
+  id_not number(24),
+  flg_type varchar2(1),      
+  id_institution number(24),
+  order_nr number(24)  
+
+) 
+on commit preserve rows;
+
+comment on table SCH_TMPTAB_NOTIFS
+  is 'Temporary table to be used on function get_notifications';
+comment on column SCH_TMPTAB_NOTIFS.Desc_Sch_Type
+  is 'Schedule type description.';
+comment on column SCH_TMPTAB_NOTIFS.Desc_Procedure
+  is 'Procedure description.';
+comment on column SCH_TMPTAB_NOTIFS.MSG_NUM_SCHED
+  is 'Number of schedules description.';
+comment on column SCH_TMPTAB_NOTIFS.Num_Sched
+  is 'Number of schedules (confirmed/total).';
+comment on column SCH_TMPTAB_NOTIFS.Msg_Sched_Sess
+  is 'Scheduled sessions description.';
+comment on column SCH_TMPTAB_NOTIFS.Sched_Sess
+  is 'Scheduled sessions.';
+comment on column SCH_TMPTAB_NOTIFS.Msg_Consult_Type
+  is 'Consult type description.';
+comment on column SCH_TMPTAB_NOTIFS.Consult_Type
+  is 'Consult type.';
+comment on column SCH_TMPTAB_NOTIFS.Msg_Event_Type
+  is 'Event type description.';
+comment on column SCH_TMPTAB_NOTIFS.Event_Type
+  is 'Event type.';
+comment on column SCH_TMPTAB_NOTIFS.Msg_Prof
+  is 'Professional(s) description.';
+comment on column SCH_TMPTAB_NOTIFS.Prof
+  is 'Professional(s).';
+comment on column SCH_TMPTAB_NOTIFS.Msg_Instructions
+  is 'Instruction(s) description.';
+comment on column SCH_TMPTAB_NOTIFS.Instructions
+  is 'Instructions(s).';
+comment on column SCH_TMPTAB_NOTIFS.Order_Nr
+  is 'Order number.';
+comment on column SCH_TMPTAB_NOTIFS.Id_Not
+  is 'Id of schedule or id inter_presc_det or id_schedule_recursion';
+comment on column SCH_TMPTAB_NOTIFS.Flg_Type
+  is 'Type of notification: M-MFR; S-series; O-others';
+comment on column SCH_TMPTAB_NOTIFS.Id_Institution
+  is 'Institution Id';
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/07/2009: ALERT-35426
+-- CHANGE REASON: [ALERT_32069] Making appointments - correcao
+alter table SCH_TMPTAB_NOTIFS add (sch_flg_type VARCHAR2(2));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 10/03/2010 10:26
+-- CHANGE REASON: [ALERT-80368] Changes on get_notifications function
+alter table SCH_TMPTAB_NOTIFS add (exams VARCHAR2(4000));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-01-2013
+-- CHANGE REASON: ALERT-246442
+begin
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', 
+                                           i_obj_name => 'SCH_TMPTAB_NOTIFS', 
+                                           i_obj_type => 'TABLE', 
+                                           i_flg_category => 'DSV');
+end;
+/
+--CHANGE END: Telmo
+
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 21/01/2016 10:29
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON COLUMN SCH_TMPTAB_NOTIFS.EXAMS IS 'Exams';
+COMMENT ON COLUMN SCH_TMPTAB_NOTIFS.SCH_FLG_TYPE IS 'Schedule flag type';
+-- CHANGE END:  jose.m.silva

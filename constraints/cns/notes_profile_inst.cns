@@ -1,0 +1,29 @@
+ALTER TABLE NOTES_PROFILE_INST ADD CONSTRAINT NOTES_PI_PK PRIMARY KEY (ID_NOTES_PROFILE_INST) ENABLE;
+
+-- 21-01-2008
+ALTER TABLE NOTES_PROFILE_INST ADD CONSTRAINT FLG_WRITE_CHK check (FLG_WRITE IN ( 'Y', 'N'));
+
+ALTER TABLE NOTES_PROFILE_INST ADD CONSTRAINT FLG_READ_CHK check (FLG_READ IN ( 'Y', 'N'));
+
+ALTER TABLE NOTES_PROFILE_INST ADD CONSTRAINT FLG_AVAILABLE_CHK check (FLG_AVAILABLE IN ( 'Y', 'N'));
+-- END
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 29/01/2010 17:24
+-- CHANGE REASON: [ALERT-71963] 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); -- fk
+    --
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -02264); -- fk
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE NOTES_PROFILE_INST ADD CONSTRAINT FLG_PRINT_CHK check (FLG_AVAILABLE IN ( ''Y'', ''N''))';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+    WHEN e_exception THEN
+        dbms_output.put_line('AVISO :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Luís Maia

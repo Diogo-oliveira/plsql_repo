@@ -1,0 +1,17 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/06/2013 15:41
+-- CHANGE REASON: [ALERT-260856] Ability to perform triage based on EST (Échelle Suisse de Tri) (ALERT_188926) - VERSIONING DB DDL
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -955);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_TRIAGE_CONS_VALUE MINVALUE 1 MAXVALUE 999999999999 INCREMENT BY 1 START WITH 1 CACHE 500 NOORDER NOCYCLE';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

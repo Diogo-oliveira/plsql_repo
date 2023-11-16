@@ -1,0 +1,1 @@
+drop TRIGGER B_IUD_VACC_GROUP;

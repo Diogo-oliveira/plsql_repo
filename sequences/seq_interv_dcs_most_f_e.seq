@@ -1,0 +1,29 @@
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 15/10/2012 17:44
+-- CHANGE REASON: [ALERT-242393] 
+DECLARE
+    e_seq_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_seq_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_interv_dcs_most_f_e 1 MAXVALUE 999999999999999999999999 START WITH 1 INCREMENT BY 1 CACHE 500';
+EXCEPTION
+    WHEN e_seq_already_exists THEN
+        dbms_output.put_line('sequence already exists');
+END;
+/  
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 16/10/2012 09:52
+-- CHANGE REASON: [ALERT-242393] 
+DECLARE
+    e_seq_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_seq_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_interv_dcs_most_f_e MINVALUE 1 MAXVALUE 999999999999999999999999 START WITH 1 INCREMENT BY 1 CACHE 500';
+EXCEPTION
+    WHEN e_seq_already_exists THEN
+        dbms_output.put_line('sequence already exists');
+END;
+/  
+-- CHANGE END:  Nuno Neves

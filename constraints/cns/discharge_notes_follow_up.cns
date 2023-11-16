@@ -1,0 +1,22 @@
+ALTER TABLE discharge_notes_follow_up ADD CONSTRAINT DNU_PK PRIMARY KEY (id_discharge_notes, id_follow_up_with) ENABLE;
+ALTER TABLE discharge_notes_follow_up ADD CONSTRAINT DNU_FLG_FOLLOW_UP_WITH_CHK CHECK(FLG_FOLLOW_UP_WITH IN ('OC', 'PH', 'CL', 'OF', 'O'));
+
+
+-- José Brito 13/03/2009 ALERT-10317 Disposition Management
+ALTER TABLE discharge_notes_follow_up ADD CONSTRAINT dnu_pk PRIMARY KEY (id_discharge_notes, id_follow_up_with, id_follow_up_entity) ENABLE;
+
+ALTER TABLE discharge_notes_follow_up ADD CONSTRAINT dnu_fu_entity_fk FOREIGN KEY (id_follow_up_entity)
+REFERENCES follow_up_entity (id_follow_up_entity) ENABLE;
+
+ALTER TABLE discharge_notes_follow_up ADD CONSTRAINT dnu_prof_create_fk FOREIGN KEY (id_prof_create)
+REFERENCES professional (id_professional) ENABLE;
+-- END
+
+
+
+-- José Brito 13/03/2009 ALERT-10317 Disposition Management
+ALTER TABLE discharge_notes_follow_up ADD CONSTRAINT dnu_pk PRIMARY KEY (id_discharge_notes, id_follow_up_with, id_follow_up_entity) ENABLE;
+-- END
+
+
+

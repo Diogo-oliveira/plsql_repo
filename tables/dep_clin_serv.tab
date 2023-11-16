@@ -1,0 +1,164 @@
+
+
+  CREATE TABLE DEP_CLIN_SERV
+   (	ID_DEP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	ID_CLINICAL_SERVICE NUMBER(12,0) NOT NULL ENABLE,
+	ID_DEPARTMENT NUMBER(24,0) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_NURSE_PRE VARCHAR2(1),
+	FLG_DEFAULT VARCHAR2(240)
+   );
+
+
+COMMENT ON TABLE dep_clin_serv IS 'Departamentos e respectivos serviços clínicos' ;
+
+COMMENT ON COLUMN dep_clin_serv.flg_default IS 'Serviço clínico por defeito para o departamento :Y - Yes; N- No' ;
+
+ALTER TABLE DEP_CLIN_SERV 
+ ADD (FLG_AVAILABLE  VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ );
+
+COMMENT ON COLUMN DEP_CLIN_SERV.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD';
+
+ALTER TABLE DEP_CLIN_SERV MODIFY FLG_AVAILABLE default null;
+
+
+
+alter table dep_clin_serv add (flg_type varchar2(1));
+
+comment on column DEP_CLIN_SERV.FLG_TYPE
+  is 'Tipo de consulta: I-indirecta, D-directa';
+  
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 15/07/2009
+-- CHANGE REASON: ADT-1149
+alter table dep_clin_serv add ADM_AGE_MIN number(3);
+alter table dep_clin_serv add ADM_AGE_MAX number(3);
+
+comment on column dep_clin_serv.ADM_AGE_MIN
+  is 'Patient mininum age for admission purposes';
+comment on column dep_clin_serv.ADM_AGE_MAX
+  is 'Patient maximum age for admission purposes';
+
+-- CHANGE END: Bruno Martins
+
+-- CHANGED BY: Ana Rita Martins
+-- CHANGED DATE: 2009-09-23
+-- CHANGE REASON: CODING-863 
+-- Add/modify columns 
+
+alter table DEP_CLIN_SERV add FLG_CODING VARCHAR2(2) default 'N';
+
+-- Add comments to the columns 
+comment on column DEP_CLIN_SERV.FLG_CODING
+  is 'CODING Status: ''N'' (not applicable) and ''CD'' (create DBC)';
+
+-- CHANGE END: Ana Rita Martins
+
+-- CHANGED BY: Sérgio Cunha
+-- CHANGE DATE: 28/10/2009 22:33
+-- CHANGE REASON: [ALERT-52263] 
+
+alter table DEP_CLIN_SERV add FLG_JUST_POST_PRESC VARCHAR2(1 CHAR) default 'Y' not null;
+alter table DEP_CLIN_SERV add POST_PRESC_NUM_HOURS NUMBER(12);
+-- Add comments to the columns 
+comment on column DEP_CLIN_SERV.FLG_JUST_POST_PRESC
+  is 'Indicates if the justifications is mandatory for posteriory prescription';
+comment on column DEP_CLIN_SERV.POST_PRESC_NUM_HOURS
+  is 'Specifies the limit number of hours in wich you can do an posteriori prescription';
+-- CHANGE END: Sérgio Cunha
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 28/10/2010 14:45
+-- CHANGE REASON: [ALERT-136310]
+ALTER TABLE dep_clin_serv add flg_appointment VARCHAR2(1 CHAR) DEFAULT 'Y' NOT NULL;
+COMMENT ON column dep_clin_serv.flg_appointment IS 'Indicates if this dep_clin_serv is for valid appointment type (available for schedulling).';
+-- CHANGE END: Orlando Antunes
+
+-- CHANGED BY: Joao Sa
+-- CHANGE DATE: 11/01/2016
+-- ISSUE: Refactor: Table comments 
+comment on table DEP_CLIN_SERV
+  is 'Mapping between specialties and services. Defines the set of specialties provided by each service.';
+-- Add comments to the columns 
+comment on column DEP_CLIN_SERV.id_dep_clin_serv
+  is 'Internal id';
+comment on column DEP_CLIN_SERV.id_clinical_service
+  is 'Specialty';
+comment on column DEP_CLIN_SERV.id_department
+  is 'Service';
+comment on column DEP_CLIN_SERV.rank
+  is 'Rank';
+comment on column DEP_CLIN_SERV.adw_last_update
+  is 'Record last update (ADW)';
+comment on column DEP_CLIN_SERV.flg_nurse_pre
+  is 'Requires previous nursing appointment? Y/N';
+comment on column DEP_CLIN_SERV.flg_default
+  is 'Default specialty for this service? Y/N';
+comment on column DEP_CLIN_SERV.flg_available
+  is 'Available in this implementation? Y/N';
+comment on column DEP_CLIN_SERV.flg_type
+  is 'Type of appointment. (D)irect; (I)ndirect';
+comment on column DEP_CLIN_SERV.flg_just_post_presc
+  is 'Justifications is mandatory for posteriory prescription? Y/N';
+comment on column DEP_CLIN_SERV.post_presc_num_hours
+  is 'Number of hours in wich you can do an posteriori prescription';
+comment on column DEP_CLIN_SERV.flg_appointment
+  is 'Valid appointment type? (Available for schedulling) Y/N';
+
+
+  
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE:
+-- CHANGE REASON: ALERT-332197 
+ALTER TABLE DEP_CLIN_SERV ADD GENDER VARCHAR2(1 CHAR);
+COMMENT ON COLUMN DEP_CLIN_SERV.GENDER IS 'return gender by exception';
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 27/08/2018 11:03
+-- CHANGE REASON: EMR_3351
+--                New configuration available to enable the Outpatient appointment report automatic print per clinical service
+
+alter table dep_clin_serv add flg_print_report varchar2(1);
+
+comment on column dep_clin_serv.flg_print_report
+  is 'Print discharge report auto? Y/N;'; 
+  
+  alter table dep_clin_serv add constraint flg_print_report_chk check (flg_print_report in ('Y','N') OR flg_print_report is null);
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 10/04/2019 09:15
+-- CHANGE REASON: [EMR-14841] - Specific message for Service transfer to Rehab
+begin
+   EXECUTE IMMEDIATE 'alter table dep_clin_serv add (flg_show_warning VARCHAR2(1))';
+end;
+/
+
+COMMENT ON column dep_clin_serv.flg_show_warning IS 'show warning on service transfer';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 10/04/2019 10:47
+-- CHANGE REASON: [EMR-14886] - [DB] Specific message for Service transfer to Rehab
+begin
+   EXECUTE IMMEDIATE 'alter alert.table dep_clin_serv add (flg_show_warning VARCHAR2(1 char))';
+end;
+/
+
+COMMENT ON column dep_clin_serv.flg_show_warning IS 'show warning on service transfer';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 10/04/2019 11:04
+-- CHANGE REASON: [EMR-14886] - [DB] Specific message for Service transfer to Rehab
+begin
+   EXECUTE IMMEDIATE 'alter table alert.dep_clin_serv add (flg_show_warning VARCHAR2(1 char))';
+end;
+/
+
+COMMENT ON column alert.dep_clin_serv.flg_show_warning IS 'show warning on service transfer';
+-- CHANGE END: Nuno Coelho

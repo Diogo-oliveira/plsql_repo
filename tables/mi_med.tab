@@ -1,0 +1,176 @@
+
+CREATE TABLE MI_MED
+(
+ID_DRUG VARCHAR2(255),MED_DESCR_FORMATED VARCHAR2(255),MED_DESCR VARCHAR2(255),  
+SHORT_MED_DESCR VARCHAR2(255),FLG_TYPE VARCHAR2(1),FLG_AVAILABLE VARCHAR2(1),FLG_JUSTIFY VARCHAR2(1),
+ID_DRUG_BRAND VARCHAR2(255),DCI_ID VARCHAR2(255),DCI_DESCR VARCHAR2(255), FORM_FARM_ID VARCHAR2(255),
+FORM_FARM_DESCR VARCHAR2(255),ROUTE_ID VARCHAR2(255), ROUTE_DESCR VARCHAR2(255),
+QT_DOS_COMP VARCHAR2(255), UNIT_DOS_COMP VARCHAR2(255),DOSAGEM VARCHAR2(1000),
+GENDER VARCHAR2(1),AGE_MIN VARCHAR2(255),AGE_MAX VARCHAR2(255),
+MDM_CODING VARCHAR2(255),CHNM_ID VARCHAR2(255),
+FLG_MIX_FLUID VARCHAR2(255),ID_UNIT_MEASURE VARCHAR2(255),
+NOTES VARCHAR2(2000),
+VERS VARCHAR2(255)
+);
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-FEB-13
+-- CHANGING REASON:  abreviaturas dos descritivos
+-- Add/modify columns 
+alter table MI_MED add FORM_FARM_ID_ID NUMBER(5);
+alter table MI_MED add FORM_FARM_ABRV VARCHAR2(255);
+alter table MI_MED add ROUTE_ABRV VARCHAR2(255);
+-- CHANGE END Patrícia Neto	
+
+
+
+ALTER TABLE MI_MED ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN MI_MED.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Patricia Neto
+-- CHANGE DATE: 28/10/2009 18:21
+-- CHANGE REASON: [ ALERT-20754  ] medication_uk - witness controlled drugs
+alter table MI_MED add FLG_CONTROLLED_DRUG VARCHAR2(1);
+comment on column MI_MED.FLG_CONTROLLED_DRUG
+  is 'indicates if a drug is or not controlled';
+-- CHANGE END: Patricia Neto
+
+-- CHANGED BY: Patricia Neto
+-- CHANGE DATE: 29/10/2009 10:27
+-- CHANGE REASON: [ALERT-20754] medication_uk - witness controlled drugs
+alter table MI_MED modify FLG_CONTROLLED_DRUG VARCHAR2(1 char);
+-- CHANGE END: Patricia Neto
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 07/02/2011 17:16
+-- CHANGE REASON: [ALERT-160442] Flg_multidose na mi_med
+ALTER TABLE mi_med
+ ADD flg_multidose varchar2(1) DEFAULT 'N';
+
+comment on column MI_MED.flg_multidose
+  is 'Is this a multidose drug (ex. A cream) Values "Y" or "N"';
+
+alter table MI_MED
+  add constraint MI_MED_FM_CHK
+  check (FLG_MULTIDOSE IN ('Y','N'));
+-- CHANGE END:  Pedro Morais
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 04/05/2011 16:31
+-- CHANGE REASON: [ALERT-176261] Exchange Clinical Information - Add MED_BRAND_NAME
+-- Add/modify columns 
+alter table MI_MED add MED_BRAND_NAME varchar2(255);
+-- Add comments to the columns 
+comment on column MI_MED.MED_BRAND_NAME
+  is 'Brand name or Generic name. Dependes on ID_DRUG_BRAND. If Y, this is Brand name, otherwise is Generic name';
+-- CHANGE END:  Pedro Morais
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 12/05/2011 17:02
+-- CHANGE REASON: [ALERT-178804] 
+DECLARE
+e_column_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_column_already_there,-01430);
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE MI_MED ADD CODE_CVX VARCHAR2(200)'; 
+EXCEPTION
+WHEN e_column_already_there THEN
+  dbms_output.put_line('Aviso: coluna anteriormente criada!');
+END;
+/
+
+COMMENT ON COLUMN mi_med.CODE_CVX IS 'code used on vaccionation';
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:22
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON TABLE MI_MED IS 'Table with medication for internal prescription';
+/
+
+COMMENT ON COLUMN MI_MED.ID_DRUG  IS 'Medication ID';
+/
+COMMENT ON COLUMN MI_MED.MED_DESCR_FORMATED    IS 'Formatted medication description. It can have HTML formatting.';
+/
+COMMENT ON COLUMN MI_MED.MED_DESCR     IS 'Medication description (without formatting)';
+/
+COMMENT ON COLUMN MI_MED.SHORT_MED_DESCR  IS 'Medication short description';
+/
+COMMENT ON COLUMN MI_MED.FLG_TYPE  IS 'Type of medication. V - Vacine; M - Medication (the other values are deprecated)';
+/
+COMMENT ON COLUMN MI_MED.FLG_AVAILABLE  IS 'Y-medication available; N- otherwise';
+/
+COMMENT ON COLUMN MI_MED.FLG_JUSTIFY  IS 'The prescription of this medication requires a justification. [Deprecated]';
+/
+COMMENT ON COLUMN MI_MED.ID_DRUG_BRAND  IS 'Brand Id';
+/
+COMMENT ON COLUMN MI_MED.DCI_ID IS 'INN Id';
+/
+COMMENT ON COLUMN MI_MED.DCI_DESCR  IS 'INN description';
+/
+COMMENT ON COLUMN MI_MED.FORM_FARM_ID  IS 'Pharmacological form ID';
+/
+COMMENT ON COLUMN MI_MED.FORM_FARM_DESCR  IS 'Pharmacological form description';
+/
+COMMENT ON COLUMN MI_MED.ROUTE_ID  IS 'Default route Id';
+/
+COMMENT ON COLUMN MI_MED.ROUTE_DESCR   IS 'Default route description';
+/
+COMMENT ON COLUMN MI_MED.QT_DOS_COMP   IS 'Dose quantity';
+/
+COMMENT ON COLUMN MI_MED.UNIT_DOS_COMP   IS 'Dose unit measure';
+/
+COMMENT ON COLUMN MI_MED.DOSAGEM    IS 'Strength';
+/
+COMMENT ON COLUMN MI_MED.GENDER  IS 'Gender [Deprecated]';
+/
+COMMENT ON COLUMN MI_MED.AGE_MIN   IS 'Minimum age';
+/
+COMMENT ON COLUMN MI_MED.AGE_MAX    IS 'Maximum age';
+/
+COMMENT ON COLUMN MI_MED.MDM_CODING IS 'Code MDM [Deprecated]';
+/
+COMMENT ON COLUMN MI_MED.CHNM_ID IS 'Code assigned to medications with marketing authorization [Deprecated]';
+/
+COMMENT ON COLUMN MI_MED.FLG_MIX_FLUID IS 'Identifies if the product can be used in a compound IV admixture created by the user [Deprecated]';
+/
+COMMENT ON COLUMN MI_MED.ID_UNIT_MEASURE IS 'Unit measure identifier';
+/
+COMMENT ON COLUMN MI_MED.NOTES IS 'Free text notes';
+/
+COMMENT ON COLUMN MI_MED.VERS  IS 'Version';
+/
+COMMENT ON COLUMN MI_MED.FORM_FARM_ID_ID   IS 'Pharmacological form ID. [Deprecated]';
+/
+COMMENT ON COLUMN MI_MED.FORM_FARM_ABRV    IS 'Pharmacological form abreviation';
+/
+COMMENT ON COLUMN MI_MED.ROUTE_ABRV    IS 'Route abreviation';
+/
+COMMENT ON COLUMN MI_MED.ID_CONTENT     IS 'Content Identifier';
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 30/12/2020 11:34
+-- CHANGE REASON: [EMR-40091]
+ALTER TABLE MI_MED MODIFY MED_DESCR_FORMATED VARCHAR2(1000 CHAR);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/01/2021 16:12
+-- CHANGE REASON: [EMR-40376]
+ALTER TABLE ALERT.MI_MED MODIFY MED_DESCR VARCHAR2(1000 CHAR);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 16/01/2021 14:08
+-- CHANGE REASON: [EMR-40636]
+ALTER TABLE MI_MED MODIFY SHORT_MED_DESCR VARCHAR2(500 CHAR);
+ALTER TABLE MI_MED MODIFY DCI_DESCR VARCHAR2(500 CHAR);
+ALTER TABLE MI_MED MODIFY FORM_FARM_DESCR VARCHAR2(500 CHAR);
+ALTER TABLE MI_MED MODIFY ROUTE_DESCR VARCHAR2(500 CHAR);
+ALTER TABLE MI_MED MODIFY DOSAGEM VARCHAR2(1000 CHAR);
+ALTER TABLE MI_MED MODIFY FORM_FARM_ABRV VARCHAR2(500 CHAR);
+ALTER TABLE MI_MED MODIFY ROUTE_ABRV VARCHAR2(500 CHAR);
+ALTER TABLE MI_MED MODIFY MED_BRAND_NAME VARCHAR2(500 CHAR);
+-- CHANGE END: Ana Matos

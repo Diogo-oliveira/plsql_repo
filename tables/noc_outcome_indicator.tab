@@ -1,0 +1,60 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 18/07/2014 16:41
+-- CHANGE REASON: [ALERT-290969] Nursing Care Plan: NANDA, NIC, NOC - Data Model
+
+BEGIN
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'NOC_OUTCOME_INDICATOR', i_obj_type => 'TABLE', i_flg_category => 'CNT', i_flg_alert_default => 'N', i_delete_script => '', i_flg_default_child => 'N', i_flg_nzd => 'N', i_responsible_team => 'NURSING');
+END;
+/
+CREATE TABLE NOC_OUTCOME_INDICATOR
+  (
+    ID_NOC_OUTCOME         NUMBER (24) NOT NULL ,
+    ID_NOC_INDICATOR       NUMBER (24) NOT NULL ,
+    ID_NOC_SCALE           NUMBER (24) ,
+    OUTCOME_INDICATOR_CODE NUMBER (24) NOT NULL ,
+    RANK                   NUMBER (6) ,
+    CREATE_USER            VARCHAR2 (30 CHAR) ,
+    CREATE_TIME            TIMESTAMP WITH LOCAL TIME ZONE ,
+    CREATE_INSTITUTION     NUMBER (24) ,
+    UPDATE_USER            VARCHAR2 (30 CHAR) ,
+    UPDATE_TIME            TIMESTAMP WITH LOCAL TIME ZONE ,
+    UPDATE_INSTITUTION     NUMBER (24)
+  )
+  TABLESPACE ALERT_DATA ;
+COMMENT ON TABLE NOC_OUTCOME_INDICATOR
+IS
+  'NOC Relationship between Outcomes and Indicators' ;
+  COMMENT ON COLUMN NOC_OUTCOME_INDICATOR.ID_NOC_OUTCOME
+IS
+  'NOC Outcome ID (surrogate key)' ;
+  COMMENT ON COLUMN NOC_OUTCOME_INDICATOR.ID_NOC_INDICATOR
+IS
+  'NOC Indicator ID (surrogate key)' ;
+  COMMENT ON COLUMN NOC_OUTCOME_INDICATOR.ID_NOC_SCALE
+IS
+  'Indicator''s scale ID. When NULL assumes the Outcome''s scale' ;
+  COMMENT ON COLUMN NOC_OUTCOME_INDICATOR.OUTCOME_INDICATOR_CODE
+IS
+  'NOC Indicator code for an Outcome' ;
+  COMMENT ON COLUMN NOC_OUTCOME_INDICATOR.RANK
+IS
+  'Item order' ;
+  COMMENT ON COLUMN NOC_OUTCOME_INDICATOR.CREATE_USER
+IS
+  'Creation User' ;
+  COMMENT ON COLUMN NOC_OUTCOME_INDICATOR.CREATE_TIME
+IS
+  'Creation Time' ;
+  COMMENT ON COLUMN NOC_OUTCOME_INDICATOR.CREATE_INSTITUTION
+IS
+  'Creation Institution' ;
+  COMMENT ON COLUMN NOC_OUTCOME_INDICATOR.UPDATE_USER
+IS
+  'Update User' ;
+  COMMENT ON COLUMN NOC_OUTCOME_INDICATOR.UPDATE_TIME
+IS
+  'Update Time' ;
+  COMMENT ON COLUMN NOC_OUTCOME_INDICATOR.UPDATE_INSTITUTION
+IS
+  'Update Institution' ;
+-- CHANGE END: Ariel Machado

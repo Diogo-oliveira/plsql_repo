@@ -1,0 +1,18 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 14/04/2011 09:50
+-- CHANGE REASON: [ALERT-170786 ] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_indexes u
+     WHERE u.INDEX_NAME = 'IIT_INST_FK_IDX';
+
+    IF l_var <> 1
+    THEN
+        EXECUTE IMMEDIATE 'create index IIT_INST_FK_IDX on INTERV_INT_CAT (ID_INSTITUTION)';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso

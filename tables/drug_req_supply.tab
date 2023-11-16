@@ -1,0 +1,119 @@
+
+
+  CREATE TABLE DRUG_REQ_SUPPLY
+   (	ID_DRUG_REQ_SUPPLY NUMBER(24,0) NOT NULL ENABLE,
+	DT_BEGIN_SUPPLY DATE NOT NULL ENABLE,
+	ID_PROF_BEGIN_SUPPLY NUMBER(24,0) NOT NULL ENABLE,
+	ID_DRUG_REQ_DET NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	QTY_SUPPLY NUMBER(6,0),
+	NOTES VARCHAR2(4000),
+	DT_END_SUPPLY DATE,
+	ID_PROF_END_SUPPLY NUMBER(24,0),
+	DT_MOV_BEGIN DATE,
+	ID_PROF_MOV NUMBER(24,0),
+
+	DT_MOV_END DATE,
+	ID_PROF_RECEIVE NUMBER(24,0),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	QTY_REQ NUMBER(6,0),
+	DT_GIVE_AUX DATE,
+	ID_PROF_GIVE_AUX NUMBER(24,0),
+	DT_END_AUX DATE,
+	ID_PROF_END_AUX NUMBER(24,0),
+	ID_PROF_UTENTE NUMBER(24,0),
+	DT_UTENTE DATE
+   );
+
+
+
+COMMENT ON TABLE drug_req_supply IS 'Fornecimento e transporte dos medicamentos requisitados.Pode ser fornecida só uma parte da qtd total pedida no detalhe.' ;
+
+COMMENT ON COLUMN drug_req_supply.dt_begin_supply IS 'Data de início do processamento da requisição. Corresponde à data de criação do registo na tabela (FLG_STATUS= E - em preparação)' ;
+COMMENT ON COLUMN drug_req_supply.id_prof_begin_supply IS 'Profissional que inicia o processamento da requisição. Corresponde ao prof. que cria o registo na tabela.' ;
+COMMENT ON COLUMN drug_req_supply.flg_status IS 'E - em preparação; O - pronto p/ transp.; A - entregue ao auxiliar para transporte; T - em transporte; B - disponível no local; U - aviado ao utente; F - concluído; C - cancelado' ;
+COMMENT ON COLUMN drug_req_supply.qty_supply IS 'Quantidade fornecida' ;
+COMMENT ON COLUMN drug_req_supply.dt_end_supply IS 'Data de fim da intervenção do farmacêutico (FLG_STATUS = O - pronto p/ transp.)' ;
+COMMENT ON COLUMN drug_req_supply.id_prof_end_supply IS 'Prof. que finaliza a intervenção da farmácia' ;
+COMMENT ON COLUMN drug_req_supply.dt_mov_begin IS 'Data início do transporte do medicamento (FLG_STATUS = T - em transporte)' ;
+COMMENT ON COLUMN drug_req_supply.id_prof_mov IS 'Prof. q transporta' ;
+COMMENT ON COLUMN drug_req_supply.dt_mov_end IS 'Data fim do transporte do medicamento (FLG_STATUS = F - concluído)' ;
+COMMENT ON COLUMN drug_req_supply.id_prof_receive IS 'Prof. que recebe o medicamento' ;
+COMMENT ON COLUMN drug_req_supply.dt_give_aux IS 'Data em que o farmacêutico entregou o medicamento ao auxiliar (FLG_STATUS = A)' ;
+COMMENT ON COLUMN drug_req_supply.id_prof_give_aux IS 'ID do profissional que entregou o medicamento ao auxiliar.' ;
+COMMENT ON COLUMN drug_req_supply.dt_end_aux IS 'Data em que o auxiliar entrega o medicamento ao médico/enfermeiro (FLG_STATUS = B)' ;
+
+COMMENT ON COLUMN drug_req_supply.id_prof_end_aux IS 'ID do profissional que entrega o medicamento ao médico/enfermeiro.' ;
+COMMENT ON COLUMN drug_req_supply.id_prof_utente IS 'ID do profissional que avia ao utente.' ;
+COMMENT ON COLUMN drug_req_supply.dt_utente IS 'Data em que é aviado ao utente ID do profissional que avia ao utente (FLG_STATUS = U).' ;
+
+alter table drug_req_supply drop column dt_give_aux;
+
+alter table drug_req_supply drop column id_prof_give_aux;
+
+comment on column DRUG_REQ_SUPPLY.FLG_STATUS is 'E - em preparação; O - pronto p/ transp.; T - em transporte; B - disponível no local; U - aviado ao utente; F - concluído; C - cancelado';
+
+ALTER TABLE DRUG_REQ_SUPPLY 
+ ADD (DT_EXPIRE  DATE
+ ,PACKAGE_NUMBER  VARCHAR2(30)
+ );
+
+COMMENT ON COLUMN DRUG_REQ_SUPPLY.DT_EXPIRE IS 'Data de validade do medicamento fornecido';
+
+COMMENT ON COLUMN DRUG_REQ_SUPPLY.PACKAGE_NUMBER IS 'Lote';
+
+ALTER TABLE DRUG_REQ_SUPPLY 
+ modify (DT_EXPIRE  VARCHAR2(12)
+ ,PACKAGE_NUMBER  VARCHAR2(100)
+ );
+
+
+alter table drug_req_supply 
+add (dt_begin_supply_tstz timestamp with local time zone,
+dt_cancel_tstz timestamp with local time zone,
+dt_end_aux_tstz timestamp with local time zone,
+dt_end_supply_tstz timestamp with local time zone,
+dt_mov_begin_tstz timestamp with local time zone,
+dt_mov_end_tstz timestamp with local time zone,
+dt_utente_tstz timestamp with local time zone);
+
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2008-SET-22
+-- CHANGE REASON: Drop de colunas DATE com correspondentes DATE_TSTZ
+
+ALTER TABLE DRUG_REQ_SUPPLY DROP COLUMN DT_BEGIN_SUPPLY;
+ALTER TABLE DRUG_REQ_SUPPLY DROP COLUMN DT_END_SUPPLY;
+ALTER TABLE DRUG_REQ_SUPPLY DROP COLUMN DT_MOV_BEGIN;
+ALTER TABLE DRUG_REQ_SUPPLY DROP COLUMN DT_MOV_END;
+ALTER TABLE DRUG_REQ_SUPPLY DROP COLUMN DT_CANCEL;
+ALTER TABLE DRUG_REQ_SUPPLY DROP COLUMN DT_END_AUX;
+ALTER TABLE DRUG_REQ_SUPPLY DROP COLUMN DT_UTENTE;
+
+-- CHANGE END
+
+-- CHANGED BY: Rui Marante
+-- CHANGE DATE: 2009-06-03
+-- CHANGE REASON: ALERT-31058
+alter table drug_req_supply
+modify (
+	id_prof_begin_supply number(24) null,
+	flg_status varchar2(1) null
+);
+-- CHANGE END
+
+-- CHANGED BY: Rui Marante
+-- CHANGE DATE: 2009-06-03
+-- CHANGE REASON: ALERT-31058
+alter table drug_req_supply
+modify dt_expire varchar2(50);
+-- CHANGE END
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:36
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_REQ_SUPPLY IS 'Fornecimento e transporte dos medicamentos requisitados.Pode ser fornecida só uma parte da qtd total pedida no detalhe. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

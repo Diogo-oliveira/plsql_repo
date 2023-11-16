@@ -1,0 +1,54 @@
+-- CHANGED BY: Sérgio Cunha
+-- CHANGE DATE: 05/03/2010 15:09
+-- CHANGE REASON: [ALERT-78201] 
+declare
+  l_count pls_integer;
+  l_sql_stat varchar2(4000):='ALTER TABLE ALERT.ORDER_TYPE_SOFT_INST ADD CONSTRAINT ORD_TP_SFT_INST_INST_FK FOREIGN KEY (ID_INSTITUTION)
+  REFERENCES ALERT.INSTITUTION (ID_INSTITUTION) ENABLE';
+
+begin
+  select count(1)
+  into l_count
+  from all_constraints where owner = 'ALERT' and constraint_name = 'ORD_TP_SFT_INST_INST_FK';
+
+  if l_count = 0 then
+   execute immediate (l_sql_stat);
+ end if;
+
+end;
+/
+
+declare
+  l_count pls_integer;
+  l_sql_stat varchar2(4000):='ALTER TABLE ALERT.ORDER_TYPE_SOFT_INST ADD CONSTRAINT ORD_TP_SFT_INST_ORD_TP_FK FOREIGN KEY (ID_ORDER_TYPE)
+  REFERENCES ALERT.ORDER_TYPE (ID_ORDER_TYPE) ENABLE';
+
+begin
+  select count(1)
+  into l_count
+  from all_constraints where owner = 'ALERT' and constraint_name = 'ORD_TP_SFT_INST_ORD_TP_FK';
+
+  if l_count = 0 then
+   execute immediate (l_sql_stat);
+ end if;
+
+end;
+/
+
+declare
+  l_count pls_integer;
+  l_sql_stat varchar2(4000):='ALTER TABLE ALERT.ORDER_TYPE_SOFT_INST ADD CONSTRAINT ORD_TP_SFT_INST_SFT_FK FOREIGN KEY (ID_SOFTWARE)
+  REFERENCES ALERT.SOFTWARE (ID_SOFTWARE) ENABLE';
+
+begin
+  select count(1)
+  into l_count
+  from all_constraints where owner = 'ALERT' and constraint_name = 'ORD_TP_SFT_INST_SFT_FK';
+
+  if l_count = 0 then
+   execute immediate (l_sql_stat);
+ end if;
+
+end;
+/
+-- CHANGE END: Sérgio Cunha

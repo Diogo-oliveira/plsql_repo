@@ -1,0 +1,248 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/01/2010 12:06
+-- CHANGE REASON: [ALERT-31116] 
+CREATE TABLE REF_PIO(
+  ID_EXTERNAL_REQUEST NUMBER(24,0) NOT NULL,
+  FLG_STATUS_PIO VARCHAR2(1) NOT NULL,
+  DT_REF_PIO_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+  DT_UNTRANSF_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROFESSIONALNUMBER(24,0) NOT NULL,
+ID_INSTITUTIONNUMBER(24,0) NOT NULL,
+  CREATE_USER         VARCHAR2(24),
+  CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24),
+  UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24)
+);
+
+COMMENT ON TABLE REF_PIO  IS 'Referrals that are more than 4 months old and need to be processed by siglic';
+COMMENT ON COLUMN REF_PIO.ID_EXTERNAL_REQUEST IS 'Referral Identifier';
+COMMENT ON COLUMN REF_PIO.FLG_STATUS_PIO IS 'Record status: (W)aiting for approval; (P)rocessing; (U)ntransferable; (R)ead; (S)tand by';
+COMMENT ON COLUMN REF_PIO.DT_REF_PIO_TSTZ IS 'Registry date';
+COMMENT ON COLUMN REF_PIO.DT_UNTRANSF_TSTZ IS 'Ending untransferable date';
+comment on column REF_PIO.ID_PROFESSIONAL is 'Professional id that inserted  the record';
+comment on column REF_PIO.ID_INSTITUTION is 'Institution id where the record was inserted';
+comment on column REF_PIO.CREATE_USER is 'Creation User';
+comment on column REF_PIO.CREATE_TIME is 'Creation Time';
+comment on column REF_PIO.CREATE_INSTITUTION is 'Creation Institution';
+comment on column REF_PIO.UPDATE_USER is 'Update User';
+comment on column REF_PIO.UPDATE_TIME is 'Update Time';
+comment on column REF_PIO.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/01/2010 18:00
+-- CHANGE REASON: [ALERT-58261] 
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_objects u
+     WHERE u.object_name = 'REF_PIO';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+    
+        l_sql := 'CREATE TABLE REF_PIO(
+  ID_EXTERNAL_REQUEST NUMBER(24,0) NOT NULL,
+  FLG_STATUS_PIO VARCHAR2(1) NOT NULL,
+  DT_REF_PIO_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+  DT_UNTRANSF_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROFESSIONALNUMBER(24,0) NOT NULL,
+ID_INSTITUTIONNUMBER(24,0) NOT NULL,
+  CREATE_USER         VARCHAR2(24),
+  CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24),
+  UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24))';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON TABLE REF_PIO  IS 'Referrals that are more than 4 months old and need to be processed by siglic']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_PIO.ID_EXTERNAL_REQUEST IS 'Referral Identifier']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_PIO.FLG_STATUS_PIO IS 'Record status: (W)aiting for approval; (P)rocessing; (U)ntransferable; (R)ead; (S)tand by']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_PIO.DT_REF_PIO_TSTZ IS 'Registry date']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_PIO.DT_UNTRANSF_TSTZ IS 'Ending untransferable date']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_PIO.ID_PROFESSIONAL is 'Professional id that inserted  the record']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_PIO.ID_INSTITUTION is 'Institution id where the record was inserted']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_PIO.CREATE_USER is 'Creation User']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_PIO.CREATE_TIME is 'Creation Time']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_PIO.CREATE_INSTITUTION is 'Creation Institution']';
+        EXECUTE IMMEDIATE l_sql;
+
+l_sql := q'[comment on column REF_PIO.UPDATE_USER is 'Update User']';
+        EXECUTE IMMEDIATE l_sql;
+
+l_sql := q'[comment on column REF_PIO.UPDATE_TIME is 'Update Time']';
+        EXECUTE IMMEDIATE l_sql;
+
+l_sql := q'[comment on column REF_PIO.UPDATE_INSTITUTION is 'Update Institution']';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/03/2010 14:06
+-- CHANGE REASON: [ALERT-79864] 
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_objects u
+     WHERE u.object_name = 'REF_PIO';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+    
+        l_sql := 'CREATE TABLE REF_PIO(
+  ID_EXTERNAL_REQUEST NUMBER(24) not null,
+  FLG_STATUS_PIO      VARCHAR2(1) not null,
+  DT_REF_PIO_TSTZ     TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  DT_UNTRANSF_TSTZ    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROFESSIONAL     NUMBER(24) not null,
+  ID_INSTITUTION      NUMBER(24) not null,
+  CREATE_USER         VARCHAR2(24),
+  CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24),
+  UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24))';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON TABLE REF_PIO  IS 'Referrals that are more than 4 months old and need to be processed by siglic']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_PIO.ID_EXTERNAL_REQUEST IS 'Referral Identifier']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_PIO.FLG_STATUS_PIO IS 'Record status: (W)aiting for approval; (P)rocessing; (U)ntransferable; (R)ead; (S)tand by']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_PIO.DT_REF_PIO_TSTZ IS 'Registry date']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_PIO.DT_UNTRANSF_TSTZ IS 'Ending untransferable date']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_PIO.ID_PROFESSIONAL is 'Professional id that inserted  the record']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_PIO.ID_INSTITUTION is 'Institution id where the record was inserted']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_PIO.CREATE_USER is 'Creation User']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_PIO.CREATE_TIME is 'Creation Time']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_PIO.CREATE_INSTITUTION is 'Creation Institution']';
+        EXECUTE IMMEDIATE l_sql;
+
+l_sql := q'[comment on column REF_PIO.UPDATE_USER is 'Update User']';
+        EXECUTE IMMEDIATE l_sql;
+
+l_sql := q'[comment on column REF_PIO.UPDATE_TIME is 'Update Time']';
+        EXECUTE IMMEDIATE l_sql;
+
+l_sql := q'[comment on column REF_PIO.UPDATE_INSTITUTION is 'Update Institution']';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+
+-- adiciona a coluna ID_INSTITUTION
+DECLARE
+    l_sql   VARCHAR2(4000 CHAR);
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns u
+     WHERE u.table_name = 'REF_PIO'
+       AND u.column_name = 'ID_INSTITUTION';
+
+    IF l_count = 0
+    THEN
+        l_sql := q'[ALTER TABLE ref_pio add id_institution NUMBER(24)]';
+        EXECUTE IMMEDIATE l_sql;
+
+l_sql := q'[COMMENT ON column ref_pio.id_institution IS 'Institution id where the record was inserted']';
+EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+
+-- adiciona a coluna ID_PROFESSIONAL
+DECLARE
+    l_sql   VARCHAR2(4000 CHAR);
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns u
+     WHERE u.table_name = 'REF_PIO'
+       AND u.column_name = 'ID_PROFESSIONAL';
+
+    IF l_count = 0
+    THEN
+        l_sql := q'[ALTER TABLE ref_pio add id_professional NUMBER(24)]';
+        EXECUTE IMMEDIATE l_sql;
+
+l_sql := q'[COMMENT ON column ref_pio.id_professional IS 'Professional id that inserted  the record']';
+EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+
+-- coloca colunas NOT NULL
+BEGIN
+    EXECUTE IMMEDIATE q'[alter table REF_PIO modify ID_INSTITUTION not null]';
+    EXECUTE IMMEDIATE q'[alter table REF_PIO modify ID_PROFESSIONAL not null]';
+
+EXCEPTION
+    WHEN OTHERS THEN
+        -- se a tabela ja tiver dados, nao muda a coluna para not null
+        IF instr(SQLERRM, 'ORA-02296') != 0
+        THEN
+            NULL;
+        ELSIF instr(SQLERRM, 'ORA-01442') != 0
+        THEN
+            NULL;
+        ELSE
+            raise_application_error(-20000, SQLERRM);
+        END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro

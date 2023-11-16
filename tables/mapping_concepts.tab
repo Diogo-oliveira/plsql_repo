@@ -1,0 +1,55 @@
+-- Created by    : Carlos Mota Silva
+-- Creation Date : 2009/07/16
+CREATE TABLE MAPPING_CONCEPTS
+ (ID_MAPPING_CONCEPTS VARCHAR2(30) NOT NULL
+ ,ID_MAPPING_TARGETS VARCHAR2(30) NOT NULL
+ ,MAPPING_CONCEPT_PARENT VARCHAR2(30)
+ ,MAPPING_CONCEPT_STATUS VARCHAR2(30) 
+ ,CREATE_USER VARCHAR2(30) NOT NULL
+ ,CREATE_TIME_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL
+ ,CREATE_INSTITUTION NUMBER(24) 
+ ,UPDATE_USER VARCHAR2(30)
+ ,UPDATE_TIME_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ )
+;
+
+COMMENT ON TABLE MAPPING_CONCEPTS IS 'This table contains the Concepts on the Sets of Standards that can be mapped with the Contents on the ALERT Content Repository'
+;
+
+COMMENT ON COLUMN MAPPING_CONCEPTS.ID_MAPPING_CONCEPTS IS 'The unique identifier of the Mapping Target Concept, generated automatically'
+;
+
+COMMENT ON COLUMN MAPPING_CONCEPTS.ID_MAPPING_TARGETS IS 'The unique identifier of the Mapping Target'
+;
+
+COMMENT ON COLUMN MAPPING_CONCEPTS.MAPPING_CONCEPT_PARENT IS 'The Parent ConceptID of this row ConceptID; this allows the relationship between the several TargetIDs that, together, make a Target Concept'
+;
+
+COMMENT ON COLUMN MAPPING_CONCEPTS.CREATE_USER IS 'User who created the record'
+;
+
+COMMENT ON COLUMN MAPPING_CONCEPTS.CREATE_TIME_TSTZ IS 'Date of creation of the record'
+;
+
+COMMENT ON COLUMN MAPPING_CONCEPTS.UPDATE_USER IS 'User who changed the record last'
+;
+
+COMMENT ON COLUMN MAPPING_CONCEPTS.UPDATE_TIME_TSTZ IS 'Date of last change of the record'
+;
+
+COMMENT ON COLUMN MAPPING_CONCEPTS.MAPPING_CONCEPT_STATUS IS 'The Status of the Mapping Concept'
+;
+
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 15/10/2009 17:18
+-- CHANGE REASON: [ALERT-49804] 
+alter table MAPPING_CONCEPTS add CONCEPT_ORDER number(6);
+alter table MAPPING_CONCEPTS add FLG_CAV varchar2(1);
+alter table MAPPING_CONCEPTS add CONCEPT_GROUP number(6);
+
+comment on column MAPPING_CONCEPTS.CONCEPT_ORDER is 'The order of the element in the definition of the mapping';
+comment on column MAPPING_CONCEPTS.FLG_CAV is 'The Flag that identifies the type of element in the mapping (Concept, Attribute, Value)';
+comment on column MAPPING_CONCEPTS.CONCEPT_GROUP is 'The identifier of the Group to which an element belongs, when grouping elements that are related';
+-- CHANGE END: Tiago Silva

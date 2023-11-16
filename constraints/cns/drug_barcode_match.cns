@@ -1,0 +1,30 @@
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table DRUG_BARCODE_MATCH
+  add constraint DBM_PK primary key (ID_DBM)
+  using index 
+  tablespace TABLE_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate check constraints 
+alter table DRUG_BARCODE_MATCH
+  add constraint DBM_DRUG_CHK
+  check (id_drug is not null or drug_name is not null or id_brand is not null or brand_name is not null);
+-- Create/Recreate indexes 
+create unique index DBM_UIDX on DRUG_BARCODE_MATCH (BARCODE, ID_INSTITUTION, VERS)
+  tablespace TABLE_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );

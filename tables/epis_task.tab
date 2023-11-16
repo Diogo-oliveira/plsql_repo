@@ -1,0 +1,145 @@
+  CREATE TABLE EPIS_TASK
+   (	ID_EPIS_TASK NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	DT_HARVEST DATE,
+	DT_LAST_INTERACTION DATE,
+	DT_MOVEMENT DATE,
+	DT_NEXT_DRUG DATE,
+	DT_FIRST_OBS DATE,
+	DT_NEXT_INTERVENTION DATE,
+	DT_NEXT_VITAL_SIGN DATE,
+	DT_NEXT_POSITION DATE,
+	DT_ENTRANCE_ROOM DATE,
+
+	DT_HARVEST_MOV DATE,
+	DT_FIRST_NURSE_OBS DATE,
+	DT_FIRST_ANALYSIS_EXEC DATE,
+	DT_FIRST_ANALYSIS_REQ DATE,
+	DT_FIRST_IMAGE_EXEC DATE,
+	DT_FIRST_IMAGE_REQ DATE,
+	DT_FIRST_DRUG_PRSC DATE,
+	DT_FIRST_DRUG_TAKE DATE,
+	DT_FIRST_INTERVENTION_PRSC DATE,
+	DT_FIRST_INTERVENTION_TAKE DATE
+   );
+
+
+COMMENT ON TABLE epis_task IS 'Esta tabela contém as tarefas relacionadas com o episódio. Permite de uma forma rápida e centralizada ter uma noção das horas dos eventos requisitados ou em curso.Não contém histórico, mas sim o estado mais actualizado do doente.' ;
+
+COMMENT ON COLUMN epis_task.id_epis_task IS 'Chave primária' ;
+COMMENT ON COLUMN epis_task.dt_harvest IS 'Colheita' ;
+COMMENT ON COLUMN epis_task.dt_last_interaction IS 'Última interacção' ;
+COMMENT ON COLUMN epis_task.dt_movement IS 'Movimentação do paciente' ;
+COMMENT ON COLUMN epis_task.dt_next_drug IS 'Próxima toma de medicação' ;
+COMMENT ON COLUMN epis_task.dt_first_obs IS 'Primeira observação' ;
+COMMENT ON COLUMN epis_task.dt_next_intervention IS 'Próximo procedimento' ;
+COMMENT ON COLUMN epis_task.dt_next_vital_sign IS 'Próxima leitura de sinais vitais' ;
+COMMENT ON COLUMN epis_task.dt_next_position IS 'Próxima mudança de posição' ;
+COMMENT ON COLUMN epis_task.dt_entrance_room IS 'Entrada na sala' ;
+COMMENT ON COLUMN epis_task.dt_harvest_mov IS 'Movimentação da colheita' ;
+COMMENT ON COLUMN epis_task.dt_first_nurse_obs IS 'Data da primeira observação pela enfermeira' ;
+COMMENT ON COLUMN epis_task.dt_first_analysis_exec IS 'Data da primeira análise executada' ;
+
+COMMENT ON COLUMN epis_task.dt_first_analysis_req IS 'Data da primeira análise requisitada' ;
+COMMENT ON COLUMN epis_task.dt_first_image_exec IS 'Data da primeira imagem executada' ;
+COMMENT ON COLUMN epis_task.dt_first_image_req IS 'Data da primeira imagem requisitada' ;
+COMMENT ON COLUMN epis_task.dt_first_drug_prsc IS 'Data da primeira prescrição de medicação' ;
+COMMENT ON COLUMN epis_task.dt_first_drug_take IS 'Data da primeira toma de medicação' ;
+COMMENT ON COLUMN epis_task.dt_first_intervention_prsc IS 'Data da prescrição da primeira intervenção' ;
+COMMENT ON COLUMN epis_task.dt_first_intervention_take IS 'Data da primeira intervenção' ;
+ 
+
+alter table epis_task add (id_triage number (12),
+                           id_triage_white_reason number(24),
+                           id_first_triage number (12),
+                           id_first_triage_white_reason number(24));
+													 
+COMMENT ON COLUMN epis_task.id_triage IS 'ID da triagem' ;
+COMMENT ON COLUMN epis_task.id_first_triage IS 'ID da primeira triagem' ;
+COMMENT ON COLUMN epis_task.id_triage_white_reason IS 'ID da triagem de brancos' ;
+COMMENT ON COLUMN epis_task.id_first_triage_white_reason IS 'ID da primeira triagem de brancos' ;
+alter table epis_task 
+add (dt_harvest_tstz timestamp with local time zone,
+     dt_last_interaction_tstz timestamp with local time zone,
+     dt_movement_tstz timestamp with local time zone,
+     dt_next_drug_tstz timestamp with local time zone,
+     dt_first_obs_tstz timestamp with local time zone,
+     dt_next_intervention_tstz timestamp with local time zone,
+     dt_next_vital_sign_tstz timestamp with local time zone,
+     dt_next_position_tstz timestamp with local time zone,
+     dt_entrance_room_tstz timestamp with local time zone,
+     dt_harvest_mov_tstz timestamp with local time zone,
+     dt_first_nurse_obs_tstz timestamp with local time zone,
+     dt_first_analysis_exec_tstz timestamp with local time zone,
+     dt_first_analysis_req_tstz timestamp with local time zone,
+     dt_first_image_exec_tstz timestamp with local time zone,
+     dt_first_image_req_tstz timestamp with local time zone,
+     dt_first_drug_prsc_tstz timestamp with local time zone,
+     dt_first_drug_take_tstz timestamp with local time zone,
+     dt_first_interv_prsc_tstz timestamp with local time zone,		
+     dt_first_interv_take_tstz timestamp with local time zone); 
+
+alter table epis_task add dt_first_inst_obs_tstz timestamp with local time zone;
+COMMENT ON COLUMN epis_task.dt_first_inst_obs_tstz IS 'First observation in the current institution';
+
+
+-- Add/modify columns 
+alter table EPIS_TASK add DT_INIT TIMESTAMP(6) WITH LOCAL TIME ZONE;
+-- Add comments to the columns 
+comment on column EPIS_TASK.DT_INIT
+  is 'Data de início da consulta (Aplicado ao PP/CARE/OUTP)';
+	
+--Sérgio Santos, 22-05-2008, New columns to indicate the professional and date of the first registering date on scheduling episodes
+alter table epis_task 
+add (dt_first_sch timestamp with local time zone,
+     dt_first_nurse_sch timestamp with local time zone,
+     id_prof_first_sch Number(24),
+     id_prof_first_nurse_sch Number(24));
+		 
+comment on column EPIS_TASK.dt_first_sch is 'Date of the first data register on a schedule episode';
+comment on column EPIS_TASK.dt_first_nurse_sch is 'Date of the first data register on a schedule episode made by a nurse';
+comment on column EPIS_TASK.id_prof_first_sch is 'Professional who made the first data register on a schedule episode';
+comment on column EPIS_TASK.id_prof_first_nurse_sch is 'Nurse who made the first data register on a schedule episode';
+
+ALTER TABLE epis_task ADD id_prof_first_obs NUMBER(24);
+COMMENT ON COLUMN epis_task.id_prof_first_obs IS 'Professional who made the episode first observation';
+
+ALTER TABLE epis_task ADD id_prof_first_nurse_obs NUMBER(24);
+COMMENT ON COLUMN epis_task.id_prof_first_nurse_obs IS 'Nurse who made the episode first observation';
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-AUG-29
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15304
+
+COMMENT ON COLUMN EPIS_TASK.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN EPIS_TASK.DT_HARVEST_TSTZ IS 'Colheita';
+COMMENT ON COLUMN EPIS_TASK.DT_LAST_INTERACTION_TSTZ IS 'Última interacção';
+COMMENT ON COLUMN EPIS_TASK.DT_MOVEMENT_TSTZ IS 'Movimentação do paciente';
+COMMENT ON COLUMN EPIS_TASK.DT_NEXT_DRUG_TSTZ IS 'Próxima toma de medicação';
+COMMENT ON COLUMN EPIS_TASK.DT_FIRST_OBS_TSTZ IS 'Primeira observação';
+COMMENT ON COLUMN EPIS_TASK.DT_NEXT_INTERVENTION_TSTZ IS 'Próximo procedimento';
+COMMENT ON COLUMN EPIS_TASK.DT_NEXT_VITAL_SIGN_TSTZ IS 'Próxima leitura de sinais vitais';
+COMMENT ON COLUMN EPIS_TASK.DT_NEXT_POSITION_TSTZ IS 'Próxima mudança de posição';
+COMMENT ON COLUMN EPIS_TASK.DT_ENTRANCE_ROOM_TSTZ IS 'Entrada na sala';
+COMMENT ON COLUMN EPIS_TASK.DT_HARVEST_MOV_TSTZ IS 'Movimentação da colheita';
+COMMENT ON COLUMN EPIS_TASK.DT_FIRST_NURSE_OBS_TSTZ IS 'Data da primeira observação pela enfermeira';
+COMMENT ON COLUMN EPIS_TASK.DT_FIRST_ANALYSIS_EXEC_TSTZ IS 'Data da primeira análise executada';
+COMMENT ON COLUMN EPIS_TASK.DT_FIRST_ANALYSIS_REQ_TSTZ IS 'Data da primeira análise requisitada';
+COMMENT ON COLUMN EPIS_TASK.DT_FIRST_IMAGE_EXEC_TSTZ IS 'Data da primeira imagem executada';
+COMMENT ON COLUMN EPIS_TASK.DT_FIRST_IMAGE_REQ_TSTZ IS 'Data da primeira imagem requisitada';
+COMMENT ON COLUMN EPIS_TASK.DT_FIRST_DRUG_PRSC_TSTZ IS 'Data da primeira prescrição de medicação';
+COMMENT ON COLUMN EPIS_TASK.DT_FIRST_DRUG_TAKE_TSTZ IS 'Data da primeira toma de medicação';
+COMMENT ON COLUMN EPIS_TASK.DT_FIRST_INTERV_PRSC_TSTZ IS 'Data da prescrição da primeira intervenção';
+COMMENT ON COLUMN EPIS_TASK.DT_FIRST_INTERV_TAKE_TSTZ IS 'Data da primeira intervenção';
+
+-- CHANGE END
+
+
+
+-- Alert Data Governance - 22-Sep-2008
+alter table EPIS_TASK
+drop (DT_ENTRANCE_ROOM, DT_FIRST_ANALYSIS_EXEC, DT_FIRST_ANALYSIS_REQ, DT_FIRST_DRUG_PRSC, DT_FIRST_DRUG_TAKE, DT_FIRST_IMAGE_EXEC,
+DT_FIRST_IMAGE_REQ, DT_FIRST_INTERVENTION_PRSC, DT_FIRST_INTERVENTION_TAKE, DT_FIRST_NURSE_OBS, DT_FIRST_OBS, DT_HARVEST, DT_HARVEST_MOV, DT_LAST_INTERACTION, 
+DT_MOVEMENT, DT_NEXT_DRUG, DT_NEXT_INTERVENTION, DT_NEXT_POSITION, DT_NEXT_VITAL_SIGN);

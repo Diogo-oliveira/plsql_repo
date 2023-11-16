@@ -1,0 +1,85 @@
+
+create table AUDIT_REQ
+(
+	ID_AUDIT_REQ NUMBER,
+	ID_AUDIT_TYPE NUMBER,
+	ID_PROF_REQ NUMBER,
+	ID_PROF_CLOSE NUMBER,
+	ID_PROF_OPEN NUMBER,
+	ID_INSTITUTION NUMBER,
+	DT_REQ DATE,
+	DT_REQ_TSTZ TIMESTAMP WITH LOCAL TIME ZONE,
+	DT_OPEN DATE,
+	DT_OPEN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE,
+	DT_CLOSE DATE,
+	DT_CLOSE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE,
+	FLG_STATUS VARCHAR2(1),
+	DT_BEGIN DATE,
+	DT_BEGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE,
+	DT_END DATE,
+	DT_END_TSTZ TIMESTAMP WITH LOCAL TIME ZONE,
+	PERIOD DATE,
+	ADW_LAST_UPDATE DATE DEFAULT SYSDATE,
+	ID_PROF_CANCEL NUMBER,
+	DT_CANCEL DATE,
+	DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE,
+	NOTES_CANCEL VARCHAR2(4000)
+);
+   
+comment on table AUDIT_REQ
+	is 'Requisição de auditoria';
+comment on column AUDIT_REQ.ID_AUDIT_REQ
+	is 'Chave primária';
+comment on column AUDIT_REQ.ID_AUDIT_TYPE
+	is 'id do tipo de auditoria associado';
+comment on column AUDIT_REQ.ID_PROF_REQ
+	is 'id do requerente';
+comment on column AUDIT_REQ.ID_PROF_CLOSE
+	is 'id do profissional auditor que fechou a auditoria';
+comment on column AUDIT_REQ.ID_PROF_OPEN
+	is 'id do profissional auditor que abriu a auditoria';	
+comment on column AUDIT_REQ.ID_INSTITUTION
+	is 'id da instituição onde se realiza a auditoria';
+comment on column AUDIT_REQ.DT_REQ
+	is 'Data de requisição';
+comment on column AUDIT_REQ.DT_REQ_TSTZ
+	is 'Data de requisição';
+comment on column AUDIT_REQ.DT_OPEN
+	is 'Data em que a auditoria foi aberta';
+comment on column AUDIT_REQ.DT_OPEN_TSTZ
+	is 'Data em que a auditoria foi aberta';
+comment on column AUDIT_REQ.DT_CLOSE
+	is 'Data em que a auditoria foi fechada';
+comment on column AUDIT_REQ.DT_CLOSE_TSTZ
+	is 'Data em que a auditoria foi fechada';
+comment on column AUDIT_REQ.FLG_STATUS
+	is 'Estado da requisição: R - requisitado, A - aberta, C - cancelada, I - interrompida, F - fechada';
+comment on column AUDIT_REQ.DT_BEGIN
+	is 'Data de inicio do perìodo a auditar';
+comment on column AUDIT_REQ.DT_BEGIN_TSTZ
+	is 'Data de inicio do perìodo a auditar';
+comment on column AUDIT_REQ.DT_END
+	is 'Data de fim do período a auditar';
+comment on column AUDIT_REQ.DT_END_TSTZ
+	is 'Data de fim do período a auditar';
+comment on column AUDIT_REQ.PERIOD
+	is 'Ano e mês do período da auditoria';
+comment on column AUDIT_REQ.ID_PROF_CANCEL
+	is 'id do profissional que cancelou a auditoria';
+comment on column AUDIT_REQ.DT_CANCEL
+	is 'data de cancelamento da auditoria';	
+comment on column AUDIT_REQ.DT_CANCEL_TSTZ
+	is 'data de cancelamento da auditoria';	
+comment on column AUDIT_REQ.NOTES_CANCEL
+	is 'notas do cancelamento da auditoria';
+
+-- JSILVA 22-10-2008
+ALTER TABLE audit_req DROP COLUMN DT_REQ;
+ALTER TABLE audit_req DROP COLUMN DT_OPEN;
+ALTER TABLE audit_req DROP COLUMN DT_CLOSE;
+ALTER TABLE audit_req DROP CONSTRAINT ADT_REQ_DT_INTR_CHK;
+ALTER TABLE audit_req DROP COLUMN DT_BEGIN;
+ALTER TABLE audit_req DROP COLUMN DT_END;
+ALTER TABLE audit_req DROP COLUMN DT_CANCEL;
+-- END
+	

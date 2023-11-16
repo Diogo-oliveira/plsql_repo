@@ -1,0 +1,58 @@
+BEGIN
+pk_frmw_objects.insert_into_frmw_objects(
+         i_owner            => 'ALERT',
+         i_obj_name         => 'DEATH_REGISTRY_DET_HIST',
+         i_obj_type         => 'TABLE',
+         i_flg_category     => 'TRS',
+         i_delete_script    => '',
+		 i_responsible_team => 'CDOC',
+		 i_flg_nzd          => 'Y');
+END;
+/  
+
+
+
+CREATE TABLE DEATH_REGISTRY_DET_HIST 
+(
+  id_death_registry_hist   NUMBER(24) not null
+, dt_death_registry_hist   TIMESTAMP WITH LOCAL TIME ZONE default current_timestamp
+, id_death_registry   NUMBER(24)
+, id_ds_component     NUMBER(24)
+, value_N             NUMBER(24,6)
+, value_tz            TIMESTAMP WITH LOCAL TIME ZONE
+, value_vc2           VARCHAR2(4000)
+, unit_measure_value  NUMBER(24)
+, create_user         VARCHAR2 (30 CHAR )
+, create_time         TIMESTAMP (6 ) WITH LOCAL TIME ZONE 
+, create_institution  NUMBER(24 )
+, update_user         VARCHAR2 (30 CHAR )
+, update_time         TIMESTAMP (6 ) WITH LOCAL TIME ZONE 
+, update_institution  NUMBER(24 )
+)
+TABLESPACE ALERT_DATA;
+--SELECT * FROM v$parameter WHERE name = 'user_dump_dest';
+
+
+alter table DEATH_REGISTRY_DET_HIST  add CONSTRAINT DTHRD_H_DTHR_H_FK FOREIGN KEY (id_death_registry_hist) REFERENCES death_registry_hist (id_death_registry_hist);
+
+create index DTHRD_H_DTHR_H_FK_i on DEATH_REGISTRY_DET_HIST(id_death_registry_hist) tablespace alert_idx;
+
+comment on table  ALERT.DEATH_REGISTRY_DET_HIST is 'Contains history of changes of DEATH_REGISTRY_DET';
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.id_death_registry_hist  is 'Master record';
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.dt_death_registry_hist  is 'date of change';
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.id_death_registry       is 'Id of record copied';
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.id_ds_component         is 'Component of dynamic screen used';
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.value_N                 is 'value if component is number';
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.value_tz                is 'value if component is timestamp with local time zone';
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.value_vc2               is 'value if component is varchar2';
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.unit_measure_value      is 'value of unit_measure/id_sys_list if available';
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.CREATE_USER             is 'User that created the record';
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.CREATE_TIME             is 'Time when the record was created';
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.CREATE_INSTITUTION      is 'Institution where record was created';
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.UPDATE_USER             is 'Last user that changed the record';
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.UPDATE_INSTITUTION      is 'Last Institution where user made the change';
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.UPDATE_TIME             is 'Time of Last change';
+
+-- cmf 30-01-2017
+ALTER TABLE DEATH_REGISTRY_DET_HIST ADD id_DEATH_REGISTRY_DET_HIST NUMBER(24);
+comment on column ALERT.DEATH_REGISTRY_DET_HIST.id_DEATH_REGISTRY_DET_HIST  is 'PK field';

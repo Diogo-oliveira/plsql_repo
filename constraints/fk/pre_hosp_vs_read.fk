@@ -1,0 +1,13 @@
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_VS_READ
+					   add constraint PR_HSP_VSR_PR_HSP_ACC_FK foreign key (ID_PRE_HOSP_ACCIDENT)
+					   references PRE_HOSP_ACCIDENT(ID_PRE_HOSP_ACCIDENT)';
+
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_VS_READ
+					   add constraint PR_HSP_VSR_VSR_FK foreign key (ID_VITAL_SIGN_READ)
+					   references VITAL_SIGN_READ(ID_VITAL_SIGN_READ)';	
+EXCEPTION
+WHEN others THEN
+    NULL;
+END;
+/

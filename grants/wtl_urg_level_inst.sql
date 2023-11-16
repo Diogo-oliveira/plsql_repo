@@ -1,0 +1,1 @@
+grant select on WTL_URG_LEVEL_INST  to ALERT_VIEWER;

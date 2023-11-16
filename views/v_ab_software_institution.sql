@@ -1,0 +1,3 @@
+create or replace view v_ab_software_institution as
+select id_ab_software_institution id_software_institution, id_ab_software id_software, id_ab_institution id_institution, flg_noc
+  from alert_core_data.ab_software_institution ab;

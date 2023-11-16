@@ -1,0 +1,6 @@
+-- CHANGED BY: Diogo Oliveira
+-- CHANGED DATE: 2017-07-24
+-- CHANGE REASON: ALERT-332159
+CREATE OR REPLACE TYPE t_rec_episode AS OBJECT(id_episode NUMBER); 
+/
+-- CHANGED END: Diogo Oliveira

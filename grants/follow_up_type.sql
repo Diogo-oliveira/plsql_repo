@@ -1,0 +1,1 @@
+grant select on follow_up_type to alert_viewer; 

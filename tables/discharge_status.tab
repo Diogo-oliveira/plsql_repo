@@ -1,0 +1,46 @@
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 11/03/2010 19:08
+-- CHANGE REASON: [ALERT-80873] Reason for pending discharge: DB developments
+create table DISCHARGE_STATUS
+(
+  ID_DISCHARGE_STATUS   NUMBER(24) NOT NULL,
+  CODE_DISCHARGE_STATUS VARCHAR2(200 CHAR) NOT NULL,
+  FLG_STATUS            VARCHAR2(1 CHAR) NOT NULL,
+  FLG_AVAILABLE         VARCHAR2(1 CHAR) NOT NULL,
+  ID_CONTENT            VARCHAR2(200 CHAR),
+  CREATE_USER           VARCHAR2(24 CHAR),
+  CREATE_TIME           TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24 CHAR),
+  UPDATE_TIME           TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+);
+
+COMMENT ON TABLE DISCHARGE_STATUS IS 'Content available for discharge type/status.';
+
+COMMENT ON COLUMN DISCHARGE_STATUS.ID_DISCHARGE_STATUS IS 'Primary key';
+COMMENT ON COLUMN DISCHARGE_STATUS.CODE_DISCHARGE_STATUS IS 'Code for content translation';
+COMMENT ON COLUMN DISCHARGE_STATUS.FLG_STATUS IS 'Discharge status: A - active, P - pending (this flag is used to fill the column DISCHARGE.FLG_STATUS)';
+COMMENT ON COLUMN DISCHARGE_STATUS.FLG_AVAILABLE IS 'Availability of the record in the institution DB';
+COMMENT ON COLUMN DISCHARGE_STATUS.ID_CONTENT IS 'Content ID';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column DISCHARGE_STATUS.create_user
+  is 'Creation user';
+comment on column DISCHARGE_STATUS.create_time
+  is 'Creation time';
+comment on column DISCHARGE_STATUS.create_institution
+  is 'Creation institution';
+comment on column DISCHARGE_STATUS.update_user
+  is 'Update user';
+comment on column DISCHARGE_STATUS.update_time
+  is 'Update time';
+comment on column DISCHARGE_STATUS.update_institution
+  is 'Update institution';  
+  
+-- CHANGE END: Elisabete Bugalho

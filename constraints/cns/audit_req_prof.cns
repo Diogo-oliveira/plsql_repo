@@ -1,0 +1,24 @@
+
+alter table AUDIT_REQ_PROF modify(ID_AUDIT_REQ_PROF not null);
+alter table AUDIT_REQ_PROF modify(ID_AUDIT_REQ not null);
+alter table AUDIT_REQ_PROF modify(ID_PROFESSIONAL not null);
+alter table AUDIT_REQ_PROF modify(FLG_REL_TYPE not null);
+alter table AUDIT_REQ_PROF modify(FLG_SAW_RESULT not null);
+alter table AUDIT_REQ_PROF modify(ADW_LAST_UPDATE not null);
+	
+alter table AUDIT_REQ_PROF
+	add constraint ADT_REQ_PROF_PK primary key (ID_AUDIT_REQ_PROF);
+		
+alter table AUDIT_REQ_PROF
+   add constraint ADT_REQ_PROF_FLG_REL_CHK
+   check (FLG_REL_TYPE IN ('A','D'));
+
+alter table AUDIT_REQ_PROF
+   add constraint ADT_REQ_PROF_NUM_ADT_EPIS_CHK
+   --esta coluna apenas se usa para auditados
+   check(FLG_REL_TYPE <> 'D' or NUM_ADT_EPIS is not null);
+   
+alter table AUDIT_REQ_PROF
+   add constraint ADT_REQ_PRF_FLG_SAW_RES_CHK
+   check(FLG_SAW_RESULT in ('Y','N'));
+

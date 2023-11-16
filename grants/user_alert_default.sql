@@ -1,0 +1,1 @@
+Grant create synonym to alert_default;

@@ -1,0 +1,33 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/03/2011 14:13
+-- CHANGE REASON: [ALERT-170459 ] Review H&P database dvelopment with notes of DB Arch.
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TIMEFRAME_REP_GRP_MKT ADD (CONSTRAINT
+ TRGPM_TRPE_FK FOREIGN KEY 
+  (ID_TIMEFRAME_REP) REFERENCES TIMEFRAME_REP
+  (ID_TIMEFRAME_REP))';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+--
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TIMEFRAME_REP_GRP_MKT ADD (CONSTRAINT
+ TRGPM_TGP_FK FOREIGN KEY 
+  (ID_TIMEFRAME_GROUP) REFERENCES TIMEFRAME_GROUP
+  (ID_TIMEFRAME_GROUP))';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+ 
+-- CHANGE END: Sofia Mendes

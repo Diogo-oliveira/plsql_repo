@@ -1,0 +1,84 @@
+ALTER TABLE INSTITUTION_LOGO ADD 
+(CONSTRAINT ILO_INST_FK FOREIGN KEY 
+  (ID_INSTITUTION) REFERENCES INSTITUTION
+  (ID_INSTITUTION));
+
+  
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 17-Fev-2011
+-- CHANGE REASON: ALERT-162194
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'ILO_DCS_FK';
+     
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := 'ALTER TABLE INSTITUTION_LOGO ADD (CONSTRAINT ILO_DCS_FK FOREIGN KEY (ID_DEP_CLIN_SERV) REFERENCES DEP_CLIN_SERV (ID_DEP_CLIN_SERV))';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 17-Fev-2011
+-- CHANGE REASON: ALERT-162194
+COMMENT ON column institution_logo.id_dep_clin_serv IS 'Clinical service department';
+-- CHANGE END
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'ILO_UK';
+     
+    IF l_count = 1
+    THEN
+        -- creating data model
+        l_sql := 'alter table INSTITUTION_LOGO drop constraint ILO_UK';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 17-Fev-2011
+-- CHANGE REASON: ALERT-162194
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'ILO_UK';
+     
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := 'alter table INSTITUTION_LOGO add constraint ILO_UK unique (ID_INSTITUTION, ID_DEP_CLIN_SERV) using index tablespace TABLE_M';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END
+
+
+
+
+

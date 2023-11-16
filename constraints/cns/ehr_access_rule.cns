@@ -1,0 +1,66 @@
+ALTER TABLE EHR_ACCESS_RULE
+ ADD (CONSTRAINT EAE_PK PRIMARY KEY 
+  (ID_EHR_ACCESS_RULE));
+
+ALTER TABLE EHR_ACCESS_RULE
+ ADD (CONSTRAINT EAE_FLG_TYPE_CNS CHECK (FLG_TYPE IN ('B', 'E', 'F')));
+
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 21/12/2010 12:42
+-- CHANGE REASON: [ALERT-139534] 
+declare
+  e_protection EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_protection, -02443);
+begin
+BEGIN
+        EXECUTE IMMEDIATE 'alter table EHR_ACCESS_RULE  drop constraint EAR_FLG_TYPE_CNS';
+    EXCEPTION
+        WHEN e_protection THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+end;
+/
+declare
+  e_protection EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_protection, -02260);
+begin
+BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EHR_ACCESS_RULE
+ ADD (CONSTRAINT EAR_FLG_TYPE_CNS CHECK (FLG_TYPE IN (''B'', ''E'', ''F'', ''S'')))';
+    EXCEPTION
+        WHEN e_protection THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 22/12/2010 09:20
+-- CHANGE REASON: [ALERT-139534] 
+DECLARE
+    e_already_not_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -02443);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ehr_access_rule drop CONSTRAINT EAE_FLG_TYPE_CNS';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+
+    END;
+END;
+/
+
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 10/05/2011 10:08
+-- CHANGE REASON: [ALERT-176892 ] 
+alter table ehr_access_rule drop constraint EAR_FLG_TYPE_CNS;
+alter table EHR_ACCESS_RULE
+  add constraint EAR_FLG_TYPE_CNS
+  check (FLG_TYPE IN ('B', 'E', 'F', 'S', 'N'));
+-- CHANGE END: Sérgio Santos

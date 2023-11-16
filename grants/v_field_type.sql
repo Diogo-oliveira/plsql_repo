@@ -1,0 +1,1 @@
+GRANT SELECT ON v_field_type TO intf_alert;

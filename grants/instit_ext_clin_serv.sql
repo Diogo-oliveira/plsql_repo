@@ -1,0 +1,1 @@
+grant select on instit_ext_clin_serv to alert_viewer;

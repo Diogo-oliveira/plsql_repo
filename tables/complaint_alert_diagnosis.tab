@@ -1,0 +1,56 @@
+CREATE TABLE COMPLAINT_ALERT_DIAGNOSIS
+ (ID_COMPLAINT_ALERT_DIAGNOSIS  NUMBER(12) NOT NULL
+ ,ID_COMPLAINT  NUMBER(12) NOT NULL
+ ,ID_ALERT_DIAGNOSIS  NUMBER(12) NOT NULL
+ ,FLG_AVAILABLE  VARCHAR2(2)
+ ,ADW_LAST_UPDATE  DATE
+ );
+
+comment on column complaint_alert_diagnosis.id_complaint_alert_diagnosis is 'PK for the complaint ALERT diagnosis';
+comment on column complaint_alert_diagnosis.id_complaint is 'COMPLAINT ID';
+comment on column complaint_alert_diagnosis.id_alert_diagnosis is 'ALERT_DIAGNOSIS ID';
+comment on column complaint_alert_diagnosis.flg_available is 'If it is available (Y) Yes, (N) No';
+comment on column complaint_alert_diagnosis.adw_last_update is 'Last update';
+
+alter table complaint_alert_diagnosis
+add id_software number(12);
+comment on column complaint_alert_diagnosis.id_software is 'Software ID';
+alter table complaint_alert_diagnosis
+add id_institution number(12);
+comment on column complaint_alert_diagnosis.id_institution is 'Institution ID';
+alter table complaint_alert_diagnosis
+add id_profile_template number(12);
+comment on column complaint_alert_diagnosis.id_profile_template is 'Profile template ID';
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:43
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+
+-- Add comments to the table 
+comment on table COMPLAINT_ALERT_DIAGNOSIS
+  is 'Association between complaint and diagnosis (most frequent diagnosis by complaint used on past history)';
+-- CHANGE END: Elisabete Bugalho
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2018-07-12
+-- CHANGED REASON: EMR-4688
+DECLARE
+  e_ex EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_ex, -01430);
+BEGIN
+  -- Add/modify columns 
+  EXECUTE IMMEDIATE 'alter table COMPLAINT_ALERT_DIAGNOSIS add migration_status VARCHAR2(400 CHAR)';
+EXCEPTION
+  WHEN e_ex THEN
+    NULL;
+END;
+/
+
+-- Add comments to the columns 
+comment on column COMPLAINT_ALERT_DIAGNOSIS.migration_status
+  is 'Current status of this record in the migration for terminology server configurations.';
+
+-- CHANGE END: Humberto Cardoso
+

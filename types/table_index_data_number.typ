@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE table_index_data_number IS TABLE OF index_data_number;

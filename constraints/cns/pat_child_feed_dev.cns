@@ -1,0 +1,53 @@
+
+
+  ALTER TABLE PAT_CHILD_FEED_DEV ADD CONSTRAINT PCF_PK PRIMARY KEY (ID_PAT_CHILD_FEED_DEV) ENABLE;
+
+  ALTER TABLE PAT_CHILD_FEED_DEV MODIFY (ID_PAT_CHILD_FEED_DEV NOT NULL ENABLE);
+
+  ALTER TABLE PAT_CHILD_FEED_DEV MODIFY (DT_PAT_CHILD_FEED_DEV NOT NULL ENABLE);
+
+  ALTER TABLE PAT_CHILD_FEED_DEV MODIFY (ID_PATIENT NOT NULL ENABLE);
+
+  ALTER TABLE PAT_CHILD_FEED_DEV MODIFY (ID_CHILD_FEED_DEV NOT NULL ENABLE);
+
+  ALTER TABLE PAT_CHILD_FEED_DEV MODIFY (ID_PROFESSIONAL NOT NULL ENABLE);
+
+
+  ALTER TABLE PAT_CHILD_FEED_DEV MODIFY (CHILD_AGE NOT NULL ENABLE);
+
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE PAT_CHILD_FEED_DEV MODIFY (ID_EPISODE NOT NULL enable);
+-- CHANGE END
+
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/07/2011 15:01
+-- CHANGE REASON: [ALERT-188174] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -06512);
+    e_object_exists3 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists3, -02264);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table pat_child_feed_dev
+    add constraint pcfd_fs
+    check (flg_status IN (''A'',''C'',''V''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

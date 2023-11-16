@@ -1,0 +1,63 @@
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 28-04-2008
+-- CHANGE REASON: Nova tabela sch_dep_type
+
+-- Create table
+CREATE TABLE SCH_DEP_TYPE
+(
+  ID_SCH_DEP_TYPE NUMBER(24) NOT NULL,
+  DEP_TYPE VARCHAR2(2) NOT NULL,
+  INTERN_NAME VARCHAR2(30),
+  CODE_DEP_TYPE VARCHAR2(200),
+  FLG_AVAILABLE VARCHAR2(1),
+  CODE_SCHED_SUBTYPE VARCHAR2(200),
+  ADW_LAST_UPDATE DATE
+);
+ 
+
+-- Add comments to the table 
+comment on table SCH_DEP_TYPE
+  is 'dictionary of scheduling types';
+
+  -- Add comments to the columns 
+comment on column SCH_DEP_TYPE.DEP_TYPE
+  is 'scheduling type';
+comment on column SCH_DEP_TYPE.CODE_DEP_TYPE
+  is 'sched. type designation';
+comment on column SCH_DEP_TYPE.CODE_SCHED_SUBTYPE
+  is 'designation for subtype';
+  
+  
+--END
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 20-05-2010
+-- CHANGE REASON: ALERT-98534
+alter table SCH_DEP_TYPE add DEP_TYPE_GROUP varchar2(2);
+
+comment on column SCH_DEP_TYPE.DEP_TYPE_GROUP is 'scheduling type group. A group shares a set of rules and workflows. Major groups are C (consults), E(exams).';
+-- END CHANGE: Telmo Castro
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 25-01-2011
+-- CHANGE REASON: ALERT-156437
+alter table sch_dep_type add (duration NUMBER(4) DEFAULT 10);
+
+comment on column sch_dep_type.duration is 'Procedure duration, in Minutes';
+-- END CHANGE: Telmo Castro
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 15/01/2016 17:24
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON COLUMN SCH_DEP_TYPE.ID_SCH_DEP_TYPE IS 'Primary key';
+COMMENT ON COLUMN SCH_DEP_TYPE.FLG_AVAILABLE IS 'Available(Y/N)';
+COMMENT ON COLUMN SCH_DEP_TYPE.INTERN_NAME IS 'Intern name';
+COMMENT ON COLUMN SCH_DEP_TYPE.ADW_LAST_UPDATE IS 'Date of the last update';
+-- CHANGE END:  jose.m.silva
+
+-- CHANGED BY: Ana Moita
+-- CHANGE DATE: 07/08/2019 17:25
+-- CHANGE REASON: [EMR-18707] - CDC - Sch events
+comment on column SCH_DEP_TYPE.DEP_TYPE
+is 'Flag that indicates the scheduling type (C - Medical Appointment; E - Imaging Exam; A - Lab Test; PM - MRF Procedure; N - Nursing Appointment; S - Surgery; X - Other Exam ; U - Nutrition Appointment; IN - Admission; AS - Social Services Appointment ;CR - Rehabilitation appointment; CM - Multidisciplinary appointments; PY - Psychology appointments;  RT - Respiratory therapy appointment;  PC - CDC Appointment)';
+-- CHANGE END: Ana Moita

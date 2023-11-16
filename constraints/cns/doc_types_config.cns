@@ -1,0 +1,100 @@
+
+
+  ALTER TABLE "ALERT"."DOC_TYPES_CONFIG" ADD CONSTRAINT "DCG_PK" PRIMARY KEY ("ID_DOC_TYPES_CONFIG") ENABLE;
+
+
+
+  ALTER TABLE "ALERT"."DOC_TYPES_CONFIG" MODIFY ("ID_DOC_TYPES_CONFIG" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."DOC_TYPES_CONFIG" MODIFY ("ID_INSTITUTION" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."DOC_TYPES_CONFIG" MODIFY ("ID_SOFTWARE" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."DOC_TYPES_CONFIG" MODIFY ("ID_PROFILE_TEMPLATE" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."DOC_TYPES_CONFIG" MODIFY ("ID_SYS_BUTTON_PROP" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."DOC_TYPES_CONFIG" MODIFY ("FLG_VIEW" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."DOC_TYPES_CONFIG" MODIFY ("FLG_INSERT" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."DOC_TYPES_CONFIG" MODIFY ("FLG_OTHER" NOT NULL ENABLE);
+
+
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 2011-07-04
+-- CHANGE REASON: ALERT-187083
+
+DECLARE
+   e_object_exists EXCEPTION;
+                                 
+   PRAGMA EXCEPTION_INIT(e_object_exists, -02264);
+BEGIN
+                                 
+   BEGIN
+       EXECUTE IMMEDIATE 'alter table DOC_TYPES_CONFIG
+  add constraint DCG_FLG_VIEW_CHK
+  check (FLG_VIEW in (''Y'', ''N''))';
+   EXCEPTION
+       WHEN e_object_exists THEN
+           dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+   END;
+                                 
+END;
+/
+
+DECLARE
+   e_object_exists EXCEPTION;
+                                 
+   PRAGMA EXCEPTION_INIT(e_object_exists, -02264);
+BEGIN
+                                 
+   BEGIN
+       EXECUTE IMMEDIATE 'alter table DOC_TYPES_CONFIG
+  add constraint DCG_FLG_DOWNLOAD_CHK
+  check (FLG_DOWNLOAD in (''Y'', ''N''))';
+   EXCEPTION
+       WHEN e_object_exists THEN
+           dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+   END;
+                                 
+END;
+/
+
+-- CHANGED END: Bruno Martins
+
+-- CHANGED BY: Daniel Silva
+-- CHANGED DATE: 2012-11-23
+-- CHANGE REASON: ALERT-245606
+DECLARE
+   e_object_exists EXCEPTION;
+                                 
+   PRAGMA EXCEPTION_INIT(e_object_exists, -02264);
+BEGIN
+                                 
+   BEGIN
+       EXECUTE IMMEDIATE 'ALTER TABLE doc_types_config 
+                         add CONSTRAINT DCG_UK UNIQUE 
+                          (ID_DOC_TYPE, ID_DOC_ORI_TYPE, ID_DOC_ORIGINAL, ID_DOC_DESTINATION, ID_INSTITUTION, ID_SOFTWARE, ID_PROFILE_TEMPLATE, ID_SYS_BUTTON_PROP, ID_DOC_ORI_TYPE_PARENT)';
+   EXCEPTION
+       WHEN e_object_exists THEN
+           dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+   END;
+                                 
+END;
+/
+-- CHANGED END: Daniel Silva

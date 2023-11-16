@@ -1,0 +1,12 @@
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_VS_READ
+					   add constraint PR_HSP_VSR_PK primary key (ID_PRE_HOSP_ACCIDENT, ID_VITAL_SIGN_READ)';
+
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_VS_READ
+					   add constraint PR_HSP_VSR_FLG_ST_CHK
+					   check (FLG_STATUS IN (''A'', ''I''))';	
+EXCEPTION
+WHEN others THEN
+    NULL;
+END;
+/

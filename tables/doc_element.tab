@@ -1,0 +1,357 @@
+
+
+  CREATE TABLE DOC_ELEMENT
+   (	ID_DOC_ELEMENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOCUMENTATION NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOC_DIMENSION NUMBER(24,0) NOT NULL ENABLE,
+	INTERNAL_NAME VARCHAR2(200),
+	FLG_TYPE VARCHAR2(1),
+	FLG_GENDER VARCHAR2(1),
+	POSITION VARCHAR2(1),
+	AGE_MAX NUMBER(6,2),
+	AGE_MIN NUMBER(6,2),
+	MAX_VALUE NUMBER(24,0),
+	MIN_VALUE NUMBER(24,0),
+
+	RANK NUMBER NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN doc_element.id_doc_element IS 'Chave primária' ;
+COMMENT ON COLUMN doc_element.id_documentation IS 'Código da relação área/componente' ;
+COMMENT ON COLUMN doc_element.id_doc_dimension IS 'Código da dimensão' ;
+COMMENT ON COLUMN doc_element.internal_name IS 'Nome interno' ;
+COMMENT ON COLUMN doc_element.flg_type IS 'Indicador do tipo de auxiliar de preenchimento a mostrar: D - Keypad para datas; H - Keypad para horas; M - Multi choice; O - texto OTHER (abre ecrã inferior) ; S- Touch;  N-Keypad para numeros; T -  texto livre (no próprio elemento)' ;
+COMMENT ON COLUMN doc_element.flg_gender IS 'Sexo:F-Feminino;M-Masculino;T-Todos' ;
+COMMENT ON COLUMN doc_element.position IS 'Posição: I - In; O - Out' ;
+COMMENT ON COLUMN doc_element.age_max IS 'Idade Máxima' ;
+COMMENT ON COLUMN doc_element.age_min IS 'Idade mínima' ;
+COMMENT ON COLUMN doc_element.max_value IS 'Valor máximo para o Keypad' ;
+COMMENT ON COLUMN doc_element.min_value IS 'Valor mínimo para o Keypad' ;
+COMMENT ON COLUMN doc_element.rank IS 'Ordenação' ;
+COMMENT ON COLUMN doc_element.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+
+COMMENT ON COLUMN doc_element.adw_last_update IS 'Data da última alteração' ;
+
+alter table DOC_ELEMENT modify FLG_TYPE not null;
+
+COMMENT ON COLUMN doc_element.flg_type IS 'Indicador do tipo de auxiliar de preenchimento a mostrar: D - Keypad para datas; H - Keypad para horas; M - Multi choice; O - texto OTHER (abre ecrã inferior) ; S- Touch;  N-Keypad para numeros; T -  texto livre (no próprio elemento); I - Elemento invisível para preenchimento no componente; C - Keypad para data e hora';
+
+--Ariel Machado 2008/05/08
+COMMENT ON COLUMN doc_element.flg_gender IS 'Gender: F-Female; M-Male; I-Undefined; NULL-All';
+--Changed end
+
+--Ariel Machado 2008/05/16
+ALTER TABLE DOC_ELEMENT MODIFY (
+    FLG_TYPE VARCHAR2(2)
+);
+
+ALTER TABLE DOC_ELEMENT ADD (
+      FLG_BEHAVIOR VARCHAR2(1) DEFAULT 'N', 
+      FORMAT_NUM VARCHAR2(200),
+      FLG_OPTIONAL_VALUE VARCHAR2(1),
+      CODE_ELEMENT_DOMAIN VARCHAR2(200),
+      FLG_ELEMENT_DOMAIN_TYPE VARCHAR2(1)
+);
+
+COMMENT ON COLUMN DOC_ELEMENT.FLG_TYPE IS 'Type of element: ''D'' - Date keypad; ''H'' - Hour keypad; ''O'' - Other text (open inferior box) ; ''S''- Touch; ''N''- Numeric keypad; ''T'' -  free text (in element); ''I'' - Invisible element to fill component; ''C'' - Date and Hour keypad; ''G''- Numeric negative keypad; ''F'' - Float number keypad; ''CO'' - Multi-choice for only selection; ''CM'' - Multi-choice for multiple selection; ''CI'' - Composite element with keypad for duration in hours; ''CH''-Composite element with keypad for hours; ''CD'' - Composite element with keypad for date; ''CC'' - Composite element with keypad for date and hour; ''CN'' - Composite element with keypad for number';
+COMMENT ON COLUMN DOC_ELEMENT.FLG_BEHAVIOR IS 'Element behavior to fill a value: ''N''-Normal; ''R''-Recommended; ''M''-Mandatory';
+COMMENT ON COLUMN DOC_ELEMENT.FORMAT_NUM IS 'Format string for numeric elements of type ''CN''. Defines the number of integer/decimal places and sign.';
+COMMENT ON COLUMN DOC_ELEMENT.FLG_OPTIONAL_VALUE IS 'The filling of element value is optional. ''Y'' - yes, ''N'' - no';
+COMMENT ON COLUMN DOC_ELEMENT.CODE_ELEMENT_DOMAIN IS 'Element domain for multi-choice types.';
+COMMENT ON COLUMN DOC_ELEMENT.FLG_ELEMENT_DOMAIN_TYPE IS 'Type of domain for the value defined in the CODE_ELEMENT_DOMAIN field: ''T'' - Template domain defined in DOC_ELEMENT_DOMAIN table; ''S'' - System domain defined in SYS_DOMAIN table; ''D'' - Dynamic domain using application functions defined in DOC_FUNCTION table';
+--Changed End
+
+--CHANGED BY: Ariel Geraldo Machado
+--CHANGE DATE: 2009-JAN-08
+--CHANGE REASON: ALERT-1873 - Compound elements for Date and Text types
+
+    --Rename FORMAT_NUM field to INPUT_MASK--
+    ALTER TABLE DOC_ELEMENT RENAME COLUMN format_num TO input_mask;    
+
+    --Modify MIN/MAX VALUE fields from NUMBER to VARCHAR2 data type
+    --Rename current fields to "OLD". These fields are deleted by run_end.sql after data migration.
+    ALTER TABLE DOC_ELEMENT RENAME COLUMN min_value TO min_value_old;
+    ALTER TABLE DOC_ELEMENT RENAME COLUMN max_value TO max_value_old;
+
+    --Add new fields with the right type
+    ALTER TABLE DOC_ELEMENT ADD (min_value VARCHAR2(200), max_value VARCHAR2(200));
+    
+    COMMENT ON COLUMN DOC_ELEMENT.INPUT_MASK IS 'Sets the input format to use in the element''s keypad. For numbers, this field defines the number of integer/decimal places and sign. For dates, this field defines the type of date-input to be used (year, month-year, day, hour, etc.)';
+    COMMENT ON COLUMN DOC_ELEMENT.MIN_VALUE IS 'Minimum value allowed';
+    COMMENT ON COLUMN DOC_ELEMENT.MAX_VALUE IS 'Maximum value allowed';
+    COMMENT ON COLUMN DOC_ELEMENT.FLG_TYPE IS 'Type of element: ''D'' - Date keypad; ''H'' - Hour keypad; ''O'' - Other text (open inferior box) ; ''S''- Touch; ''N''- Numeric keypad; ''T'' -  free text (in element); ''I'' - Invisible element to fill component; ''C'' - Date and Hour keypad; ''G''- Numeric negative keypad; ''F'' - Float number keypad; ''CO'' - Multi-choice for only selection; ''CM'' - Multi-choice for multiple selection; ''CN'' - Compound element with keypad for number; ''CD'' - Compound element with keypad for date; ''CT'' - Compound element for free-text';
+--CHANGE END
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-MAR-23
+-- CHANGED REASON: ALERT-11985 - Changes on Touch-Option database model to include id content
+ALTER TABLE DOC_ELEMENT ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN DOC_ELEMENT.ID_CONTENT  IS 'Content identifier';
+--CHANGE END Ariel Machado
+
+
+-- CHANGED BY: Pedro Lopes
+-- CHANGED DATE: 2009-ABR-01
+-- CHANGED REASON: Update templates to HCN Touch Option
+
+alter table doc_element add  ( SCORE NUMBER(24,3));
+
+--END
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-JUN-29
+-- CHANGED REASON: ALERT-12013 - Keypad's with unit of measures on Touch-option templates
+ALTER TABLE doc_element add(
+    id_unit_measure_type NUMBER(24),
+    id_unit_measure_subtype NUMBER(24),
+    id_unit_measure_reference NUMBER(24)
+    );
+COMMENT ON COLUMN DOC_ELEMENT.ID_UNIT_MEASURE_TYPE IS 'UOM Type ID (temperature, mass, pressure, etc.)';
+COMMENT ON COLUMN DOC_ELEMENT.ID_UNIT_MEASURE_SUBTYPE IS 'UOM Subtype ID (corporal temperature, body mass, blood pressure, etc.)';
+COMMENT ON COLUMN DOC_ELEMENT.ID_UNIT_MEASURE_REFERENCE IS 'UOM ID used to define  limits, default values, etc.';
+-- CHANGE END: Ariel Geraldo Machado
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2010-MAR-18
+-- CHANGED REASON: ALERT-63005 - Ophthalmology - Change the notation for refractive values in the form sphere/cylinder x axis
+DECLARE
+    l_exists NUMBER := 0;
+    l_error  VARCHAR2(2000);
+BEGIN
+    l_error := 'Query in data dictionary to retrieve if the new column already exists';
+    SELECT COUNT(0)
+      INTO l_exists
+      FROM user_tab_cols col
+     WHERE col.table_name = 'DOC_ELEMENT'
+       AND col.column_name = 'DISPLAY_FORMAT';
+
+    IF l_exists = 0
+    THEN
+        -- The column doesn't exist.
+        l_error := 'Add DISPLAY_FORMAT and SEPARATOR column in DOC_ELEMENT table';
+        EXECUTE IMMEDIATE 'ALTER TABLE doc_element ADD (display_format VARCHAR2(200 CHAR), separator VARCHAR2(10 CHAR) )';
+    
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN DOC_ELEMENT.display_format IS ''Display format for values presentation. Example with the tags to be used: "<DESCRIPTION>: <VALUE>"''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN DOC_ELEMENT.separator IS ''String separator added before the value. Example: ", "''';
+    
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error on ' || l_error || '. SQLCode: ' || SQLCODE || ' SQLErrm:' || SQLERRM);
+END;
+/
+-- CHANGE END: Ariel Geraldo Machado
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 28/01/2011 16:18
+-- CHANGE REASON: [ALERT-156275] Reference values in Touch-Option templates
+DECLARE
+    l_exists PLS_INTEGER;
+    l_table  VARCHAR2(30) := 'DOC_ELEMENT';
+    l_col    VARCHAR2(30) := 'REF_VAL_MIN';
+
+    l_ddl_lst table_varchar2 := table_varchar2(
+'ALTER TABLE DOC_ELEMENT ADD (
+           FLG_REF_OP_MIN VARCHAR2(2 CHAR),
+ REF_VAL_MIN NUMBER(24,3),
+ FLG_REF_OP_MAX VARCHAR2(2 CHAR),
+ REF_VAL_MAX NUMBER(24,3))',
+  'COMMENT ON COLUMN doc_element.flg_ref_op_min is ''Comparison operator used in Minimum reference value:  (G)Greater, (GE)Greater or Equal''',
+    'COMMENT ON COLUMN doc_element.ref_val_min is ''Minimum reference value expressed in the reference UOM''',
+'COMMENT ON COLUMN doc_element.flg_ref_op_max is ''Comparison operator used in Maximum reference value:  (L)Less, (LE)Less or Equal''',
+    'COMMENT ON COLUMN doc_element.ref_val_max is ''Maximum reference value expressed in the reference UOM''');
+BEGIN
+    SELECT count(1)
+      INTO l_exists
+      FROM user_tab_cols utc
+     WHERE utc.table_name = l_table
+       AND utc.column_name = l_col;
+
+    IF l_exists = 0
+    THEN
+        FOR i IN l_ddl_lst.FIRST .. l_ddl_lst.LAST
+        LOOP
+            EXECUTE IMMEDIATE l_ddl_lst(i);
+        END LOOP;
+    ELSE
+        dbms_output.put_line('Info: Table DOC_ELEMENT already updated for reference values');
+    END IF;
+END;
+/
+
+COMMENT ON COLUMN DOC_ELEMENT.FLG_TYPE 
+   IS 'Type of element: ''D'' - Date keypad; ''H'' - Hour keypad; ''O'' - Other text (open inferior box) ; ''S''- Touch; ''N''- Numeric keypad; ''T'' -  free text (in element); ''I'' - Invisible element to fill component; ''C'' - Date and Hour keypad; ''G''- Numeric negative keypad; ''F'' - Float number keypad; ''CO'' - Multi-choice for only selection; ''CM'' - Multi-choice for multiple selection; ''CN'' - Compound element with keypad for number; ''CD'' - Compound element with keypad for date; ''CT'' - Compound element for free-text; ''CR'' - Compound element with keypad for number and reference values; ';
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 07/04/2011 09:13
+-- CHANGE REASON: [ALERT-164798] Touch-option framework must deal with vital signs as template elements
+COMMENT ON COLUMN DOC_ELEMENT.FLG_TYPE
+  IS 'Type of element: ''D'' - Date keypad; ''H'' - Hour keypad; ''O'' - Other text (open inferior box) ; ''S''- Touch; ''N''- Numeric keypad; ''T'' -  free text (in element); ''I'' - Invisible element to fill component; ''C'' - Date and Hour keypad; ''G''- Numeric negative keypad; ''F'' - Float number keypad; ''CO'' - Multi-choice for only selection; ''CM'' - Multi-choice for multiple selection; ''CN'' - Compound element with keypad for number; ''CD'' - Compound element with keypad for date; ''CT'' - Compound element for free-text; ''CR'' - Compound element with keypad for number and reference values; ; ''VS'' - Element for Vital Sign; ';
+
+DECLARE
+    l_exists PLS_INTEGER;
+    l_table  VARCHAR2(30) := 'DOC_ELEMENT';
+    l_col    VARCHAR2(30) := 'ID_MASTER_ITEM';
+
+    l_ddl_lst table_varchar := table_varchar(
+'ALTER TABLE DOC_ELEMENT ADD (
+           ID_MASTER_ITEM NUMBER(24,0))',
+  'COMMENT ON COLUMN doc_element.id_master_item is ''ID in master area that represents this element. For the master area Vital Signs(FLG_TYPE=VS) this field holds the ID_VITAL_SIGN''');
+BEGIN
+    SELECT count(1)
+      INTO l_exists
+      FROM user_tab_cols utc
+     WHERE utc.table_name = l_table
+       AND utc.column_name = l_col;
+
+    IF l_exists = 0
+    THEN
+        FOR i IN l_ddl_lst.FIRST .. l_ddl_lst.LAST
+        LOOP
+            EXECUTE IMMEDIATE l_ddl_lst(i);
+        END LOOP;
+    ELSE
+        dbms_output.put_line('Info: Table DOC_ELEMENT already has ID_MASTER_ITEM');
+    END IF;
+END;
+/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/01/2016 14:58
+-- CHANGE REASON: [ALERT-317702] 
+comment on table DOC_ELEMENT
+  is 'Documentation elements catalogue';
+-- Add comments to the columns 
+comment on column DOC_ELEMENT.id_doc_element
+  is 'Documentation element ID';
+comment on column DOC_ELEMENT.id_documentation
+  is 'Documentation ID';
+comment on column DOC_ELEMENT.id_doc_dimension
+  is 'Documentation dimension ID';
+comment on column DOC_ELEMENT.internal_name
+  is 'Internal description';
+comment on column DOC_ELEMENT.flg_type
+  is 'Type of element: D - Date keypad, H - Hour keypad, O - Other text (open inferior box), S - Touch, N- Numeric keypad, T -  free text (in element), I - Invisible element to fill component, C - Date and Hour keypad, G- Numeric negative keypad, F - Float number keypad, CO - Multi-choice for only selection, CM - Multi-choice for multiple selection, CN - Compound element with keypad for number, CD - Compound element with keypad for date, CT - Compound element for free-text, CR - Compound element with keypad for number and reference values, VS - Element for Vital Sign';
+comment on column DOC_ELEMENT.flg_gender
+  is 'Gender';
+comment on column DOC_ELEMENT.position
+  is 'Position: I - In, O - Out';
+comment on column DOC_ELEMENT.age_max
+  is 'Maximum age';
+comment on column DOC_ELEMENT.age_min
+  is 'Minimum age';
+comment on column DOC_ELEMENT.max_value_old
+  is 'Deprecated';
+comment on column DOC_ELEMENT.min_value_old
+  is 'Deprecated';
+comment on column DOC_ELEMENT.rank
+  is 'Rank';
+comment on column DOC_ELEMENT.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column DOC_ELEMENT.adw_last_update
+  is 'Update date';
+comment on column DOC_ELEMENT.flg_behavior
+  is 'Element behavior to fill a value: N - Normal, R - Recommended, M - Mandatory';
+comment on column DOC_ELEMENT.input_mask
+  is 'Sets the input format to use in the element''s keypad. For numbers, this field defines the number of integer/decimal places and sign. For dates, this field defines the type of date-input to be used (year, month-year, day, hour, etc.)';
+comment on column DOC_ELEMENT.flg_optional_value
+  is 'Flag that indicates if the filling of element value is optional (Y/N)';
+comment on column DOC_ELEMENT.code_element_domain
+  is 'Element domain for multi-choice types';
+comment on column DOC_ELEMENT.flg_element_domain_type
+  is 'Type of domain for the value defined in the CODE_ELEMENT_DOMAIN field: T - Template domain defined in DOC_ELEMENT_DOMAIN table, S - System domain defined in SYS_DOMAIN table, D - Dynamic domain using application functions defined in DOC_FUNCTION table';
+comment on column DOC_ELEMENT.min_value
+  is 'Minimum value allowed';
+comment on column DOC_ELEMENT.max_value
+  is 'Maximum value allowed';
+comment on column DOC_ELEMENT.id_content
+  is 'Content unique ID';
+comment on column DOC_ELEMENT.score
+  is 'Score';
+comment on column DOC_ELEMENT.create_user
+  is 'Creation User';
+comment on column DOC_ELEMENT.create_time
+  is 'Creation Time';
+comment on column DOC_ELEMENT.create_institution
+  is 'Creation Institution';
+comment on column DOC_ELEMENT.update_user
+  is 'Update User';
+comment on column DOC_ELEMENT.update_time
+  is 'Update Time';
+comment on column DOC_ELEMENT.update_institution
+  is 'Update Institution';
+comment on column DOC_ELEMENT.id_unit_measure_type
+  is 'UOM type ID (temperature, mass, pressure, etc.)';
+comment on column DOC_ELEMENT.id_unit_measure_subtype
+  is 'UOM subtype ID (corporal temperature, body mass, blood pressure, etc.)';
+comment on column DOC_ELEMENT.id_unit_measure_reference
+  is 'UOM ID used to define limits, default values, etc.';
+comment on column DOC_ELEMENT.display_format
+  is 'Display format for values presentation. Example with the tags to be used: "<DESCRIPTION>: <VALUE>"';
+comment on column DOC_ELEMENT.separator
+  is 'String separator added before the value. Example: ", "';
+comment on column DOC_ELEMENT.flg_ref_op_min
+  is 'Comparison operator used in Minimum reference value:  (G)Greater, (GE)Greater or Equal';
+comment on column DOC_ELEMENT.ref_val_min
+  is 'Minimum reference value expressed in the reference UOM';
+comment on column DOC_ELEMENT.flg_ref_op_max
+  is 'Comparison operator used in Maximum reference value:  (L)Less, (LE)Less or Equal';
+comment on column DOC_ELEMENT.ref_val_max
+  is 'Maximum reference value expressed in the reference UOM';
+comment on column DOC_ELEMENT.id_master_item
+  is 'ID in master area that represents this element. For the master area Vital Signs(FLG_TYPE=VS) this field holds the ID_VITAL_SIGN';
+  
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 14/10/2016 11:30
+-- CHANGE REASON: [ALERT-325319] 
+BEGIN
+    pk_versioning.run('ALTER TABLE doc_element ADD ID_MASTER_ITEM_AUX NUMBER(24)');
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+COMMENT ON COLUMN ALERT.DOC_ELEMENT.ID_MASTER_ITEM_AUX is '';
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 17/06/2021 12:28
+-- CHANGE REASON: [EMR-46130] - Assessment scales: vital sign clinical date should not be possible to change
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[alter table DOC_ELEMENT add FLG_CLINICAL_DT_BLOCK VARCHAR2(1 CHAR)]';
+pk_versioning.run(l_sql);
+end;
+comment on column DOC_ELEMENT.flg_clinical_dt_block
+is 'FLG used for  Vital Signs(FLG_TYPE=VS) than indicates if clinical date is BLOCKED';
+
+CREATE OR REPLACE   TYPE t_HASH_VARCHAR2 IS TABLE OF VARCHAR2(200) INDEX BY BINARY_INTEGER;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 18/06/2021 11:08
+-- CHANGE REASON: [EMR-46130] - Assessment scales: vital sign clinical date should not be possible to change
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[alter table DOC_ELEMENT add FLG_CLINICAL_DT_BLOCK VARCHAR2(1 CHAR)]';
+pk_versioning.run(l_sql);
+end;
+/
+comment on column DOC_ELEMENT.flg_clinical_dt_block
+is 'FLG used for  Vital Signs(FLG_TYPE=VS) than indicates if clinical date is BLOCKED';
+
+-- CHANGE END: Elisabete Bugalho

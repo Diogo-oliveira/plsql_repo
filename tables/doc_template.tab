@@ -1,0 +1,116 @@
+
+
+  CREATE TABLE DOC_TEMPLATE
+   (	ID_DOC_TEMPLATE NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOCUMENTATION_TYPE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_GENDER VARCHAR2(1),
+	AGE_MAX NUMBER(6,2),
+	AGE_MIN NUMBER(6,2),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	INTERNAL_NAME VARCHAR2(200)
+   );
+
+
+COMMENT ON COLUMN doc_template.id_doc_template IS 'Chave primária' ;
+COMMENT ON COLUMN doc_template.id_documentation_type IS 'Tipo de documentação' ;
+COMMENT ON COLUMN doc_template.flg_gender IS 'Sexo: F-Feminino;M-Masculino;G-Geral' ;
+COMMENT ON COLUMN doc_template.age_max IS 'Idade máxima' ;
+COMMENT ON COLUMN doc_template.age_min IS 'Idade Minima' ;
+COMMENT ON COLUMN doc_template.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN doc_template.adw_last_update IS 'Data da última alteração' ;
+
+alter table DOC_TEMPLATE modify INTERNAL_NAME VARCHAR2(240) not null;
+
+comment on column DOC_TEMPLATE.INTERNAL_NAME
+  is 'Descrição do template';
+  
+alter table doc_template add (code_doc_template varchar2(200));
+
+COMMENT ON COLUMN doc_template.code_doc_template IS 'Código para tradução por língua' ;
+
+
+ALTER TABLE DOC_TEMPLATE ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN DOC_TEMPLATE.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Ariel Machado
+-- CHANGED DATE: 2009-MAR-25
+-- CHANGED REASON: ALERT-12094 Touch-option: support for bilateral templates
+--Add new XMLType-column using XML schema
+ALTER TABLE doc_template ADD (template_layout XMLTYPE)
+  XMLTYPE COLUMN template_layout STORE AS OBJECT RELATIONAL
+  XMLSCHEMA "http://www.alert-online.com/2009/TemplateLayout.xsd"
+  ELEMENT "TemplateLayout"; 
+
+COMMENT ON COLUMN doc_template.template_layout IS 'Template layout in XML format';
+-- CHANGE END: Ariel Machado
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGED DATE: 2009-APR-30
+-- CHANGED REASON: ALERT-16315: Prototype of content tool for Templates Touch-option 
+
+--These columns aren't included in a version because they're exclusive for the content repository 
+
+ALTER TABLE doc_template add(flg_template_stage VARCHAR2(2), version_notes VARCHAR2(4000));
+
+COMMENT ON column doc_template.flg_template_stage IS 'Current stage of template:
+(D) Development - The content team is developing the template,
+(V) Versioning - The versioning team is including the template in a version,
+(T) Testing - The quality control team is testing the template,
+(C) Closed - The template is done';
+COMMENT ON column doc_template.version_notes IS 'Notes about template like version in which was included, etc.';
+-- CHANGE END: Ariel Machado
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/01/2016 14:58
+-- CHANGE REASON: [ALERT-317702] 
+comment on table DOC_TEMPLATE
+  is 'Documentation templates catalogue';
+-- Add comments to the columns 
+comment on column DOC_TEMPLATE.id_doc_template
+  is 'Documentation template ID';
+comment on column DOC_TEMPLATE.id_documentation_type
+  is 'Documentation type ID';
+comment on column DOC_TEMPLATE.flg_gender
+  is 'Gender';
+comment on column DOC_TEMPLATE.age_max
+  is 'Maximum age';
+comment on column DOC_TEMPLATE.age_min
+  is 'Minimum age';
+comment on column DOC_TEMPLATE.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column DOC_TEMPLATE.adw_last_update
+  is 'Update date';
+comment on column DOC_TEMPLATE.internal_name
+  is 'Internal description';
+comment on column DOC_TEMPLATE.code_doc_template
+  is 'Code translation';
+comment on column DOC_TEMPLATE.id_content
+  is 'Content unique ID';
+comment on column DOC_TEMPLATE.create_user
+  is 'Creation User';
+comment on column DOC_TEMPLATE.create_time
+  is 'Creation Time';
+comment on column DOC_TEMPLATE.create_institution
+  is 'Creation Institution';
+comment on column DOC_TEMPLATE.update_user
+  is 'Update User';
+comment on column DOC_TEMPLATE.update_time
+  is 'Update Time';
+comment on column DOC_TEMPLATE.update_institution
+  is 'Update Institution';
+comment on column DOC_TEMPLATE.template_layout
+  is 'Template layout in XML format';
+  
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 18/07/2018 17:29
+-- CHANGE REASON: [EMR-5029] [DB] New column "flg_process" in table doc_Template
+ALTER TABLE doc_template add flg_process VARCHAR2(1);
+COMMENT ON column doc_template.flg_process IS 'Indicates the process that led to the change (C - Versioned template; B - Template created and migrated from TOT tool)';
+-- CHANGE END: Nuno Coelho

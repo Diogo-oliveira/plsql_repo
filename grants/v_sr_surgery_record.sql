@@ -1,0 +1,5 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 24/03/2010 16:31
+-- CHANGE REASON: [ALERT-82859] 
+GRANT SELECT ON v_sr_surgery_record TO INTF_ALERT,INTER_ALERT_V2;
+-- CHANGE END: Gustavo Serrano

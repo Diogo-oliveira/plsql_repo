@@ -1,0 +1,34 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 11/04/2012 11:30
+-- CHANGE REASON: [ALERT-226949] cds popup improvements (ddl changes)
+declare
+  e_fk_exists exception;
+  pragma exception_init(e_fk_exists, -02275);
+begin
+  begin
+    execute immediate 'alter table CDR_ANS_SEV_INST
+  add constraint CDRASI_CDRAW_FK foreign key (ID_CDR_ANSWER)
+  references CDR_ANSWER (ID_CDR_ANSWER)
+';
+  exception when e_fk_exists then
+    dbms_output.put_line('foreign key cdrasi_cdraw_fk already exists!');
+  end;
+  begin
+    execute immediate 'alter table CDR_ANS_SEV_INST
+  add constraint CDRASI_CDRS_FK foreign key (ID_CDR_SEVERITY)
+  references CDR_SEVERITY (ID_CDR_SEVERITY)
+';
+  exception when e_fk_exists then
+    dbms_output.put_line('foreign key cdrasi_cdrs_fk already exists!');
+  end;
+  begin
+    execute immediate 'alter table CDR_ANS_SEV_INST
+  add constraint CDRASI_INST_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION)
+';
+  exception when e_fk_exists then
+    dbms_output.put_line('foreign key cdrasi_inst_fk already exists!');
+  end;
+end;
+/
+-- CHANGE END: Pedro Carneiro

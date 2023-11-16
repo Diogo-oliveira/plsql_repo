@@ -1,0 +1,1 @@
+GRANT SELECT ON V_SCH_INSTITUTION TO alert_apsschdlr_tr;

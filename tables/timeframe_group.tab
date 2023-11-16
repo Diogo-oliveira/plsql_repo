@@ -1,0 +1,57 @@
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 25/02/2011 17:31
+-- CHANGE REASON: [ALERT-164703] DDL Reports - H & P reformulation in INPATIENT
+DECLARE e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE TIMEFRAME_GROUP
+ (ID_TIMEFRAME_GROUP NUMBER(24) NOT NULL
+ ,CODE_TIMEFRAME_REP_GROUP VARCHAR2(1000 CHAR) NOT NULL
+ ,FLG_TYPE VARCHAR2(1 CHAR) DEFAULT ''T'' NOT NULL
+ ,RANK NUMBER(24) DEFAULT 0 NOT NULL
+ ,CREATE_USER VARCHAR2(24)
+ ,CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,CREATE_INSTITUTION NUMBER(24)
+ ,UPDATE_USER VARCHAR2(24)
+ ,UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ )';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON TABLE timeframe_group IS 'Table with all available groups for each timeframe report selection screen';
+/
+
+COMMENT ON column timeframe_group.id_timeframe_group IS 'Id of the timeframe group';
+/
+
+COMMENT ON column timeframe_group.code_timeframe_rep_group IS 'Code for the group of information (title of the group of information)';
+/
+
+COMMENT ON column timeframe_group.flg_type IS 'Tipe of the group (''R'' - Radio buttons with dinamic number; ''C'' -  Radio buttons with  date selection options; ''T'' - Text information)';
+/
+
+COMMENT ON column timeframe_group.rank IS 'Ranking for show groups order in screen';
+/
+
+COMMENT ON column timeframe_group.create_user IS 'Creation User';
+/
+
+COMMENT ON column timeframe_group.create_time IS 'Creation Time';
+/
+
+COMMENT ON column timeframe_group.create_institution IS 'Creation Institution';
+/
+
+COMMENT ON column timeframe_group.update_user IS 'Update User';
+/
+
+COMMENT ON column timeframe_group.update_time IS 'Update Time';
+/
+
+COMMENT ON column timeframe_group.update_institution IS 'Update Institution';
+/
+-- CHANGE END: António Neto

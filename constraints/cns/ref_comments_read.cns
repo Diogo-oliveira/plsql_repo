@@ -1,0 +1,38 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/11/2013 16:44
+-- CHANGE REASON: [ALERT-270542] 
+
+DECLARE
+    e_uk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_uk_already_exists, -02261);
+    e_pk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_exists, -02260);
+
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE REF_COMMENTS_READ
+ ADD (CONSTRAINT RCD_PK PRIMARY KEY 
+  (ID_REF_COMMENT_READ))';
+    
+    EXCEPTION
+        WHEN e_uk_already_exists THEN
+            NULL;
+        WHEN e_pk_already_exists THEN
+            NULL;
+        
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE REF_COMMENTS_READ
+  ADD ( CONSTRAINT RCD_UK UNIQUE (ID_PROFESSIONAL, ID_REF_COMMENT))';
+    EXCEPTION
+        WHEN e_uk_already_exists THEN
+            NULL;
+        WHEN e_pk_already_exists THEN
+            NULL;
+        
+    END;
+
+END;
+/
+-- CHANGE END: Joana Barroso

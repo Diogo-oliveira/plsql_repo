@@ -1,0 +1,35 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 13/03/2014 10:00
+-- CHANGE REASON: [ALERT-278983] 
+DECLARE e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE TABLE pn_context (
+  id_application_file    number(24,0)                      not null,  
+  flg_context            varchar2(4 char)                  not NULL,
+  create_user            varchar2(24 char)                 null,
+  create_time            timestamp(6) with local time zone null,
+  create_institution     number(24,0)                      null,
+  update_user            varchar2(24 char)                 null,
+  update_time            timestamp(6) with local time zone null,
+  update_institution     NUMBER(24,0)                      NULL)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+COMMENT ON TABLE pn_context IS 'Single page context';
+
+COMMENT ON COLUMN pn_context.id_application_file IS 'application file identifier';
+COMMENT ON COLUMN pn_context.flg_context IS 'flag context: D-detail; S-Shortcut; SC-screen';
+COMMENT ON COLUMN pn_context.create_user IS 'Creation User';
+COMMENT ON COLUMN pn_context.create_time IS 'Creation Time';
+COMMENT ON COLUMN pn_context.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN pn_context.update_user IS 'Update User';
+COMMENT ON COLUMN pn_context.update_time IS 'Update Time';
+COMMENT ON COLUMN pn_context.update_institution IS 'Update Institution';
+-- CHANGE END: Paulo Teixeira

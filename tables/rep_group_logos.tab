@@ -1,0 +1,77 @@
+-- Create table
+create table REP_GROUP_LOGOS
+(
+  id_rep_group_logos NUMBER(24) not null,
+  rep_description    VARCHAR2(1000) not null
+)
+tablespace ALERT_DATA
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns 
+comment on column REP_GROUP_LOGOS.id_rep_group_logos
+  is 'The id group of the report logos';
+comment on column REP_GROUP_LOGOS.rep_description
+  is 'description of that id group';
+
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON TABLE REP_GROUP_LOGOS IS 'Logos groups definitions';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table REP_GROUP_LOGOS add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column rep_group_logos.create_user IS 'Creation User';
+COMMENT ON column rep_group_logos.create_time IS 'Creation Time';
+COMMENT ON column rep_group_logos.create_institution IS 'Creation Institution';
+COMMENT ON column rep_group_logos.update_user IS 'Update User';
+COMMENT ON column rep_group_logos.update_time IS 'Update Time';
+COMMENT ON column rep_group_logos.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table rep_group_logos add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column rep_group_logos.create_user IS 'Creation User';
+COMMENT ON column rep_group_logos.create_time IS 'Creation Time';
+COMMENT ON column rep_group_logos.create_institution IS 'Creation Institution';
+COMMENT ON column rep_group_logos.update_user IS 'Update User';
+COMMENT ON column rep_group_logos.update_time IS 'Update Time';
+COMMENT ON column rep_group_logos.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

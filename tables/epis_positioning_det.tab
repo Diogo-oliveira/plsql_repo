@@ -1,0 +1,105 @@
+
+
+  CREATE TABLE EPIS_POSITIONING_DET
+   (	ID_EPIS_POSITIONING_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPIS_POSITIONING NUMBER(24,0) NOT NULL ENABLE,
+	ID_POSITIONING NUMBER(24,0) NOT NULL ENABLE,
+	RANK NUMBER(24,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:17
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+begin
+EXECUTE IMMEDIATE 'alter table epis_positioning_det add (dt_epis_positioning_det timestamp with local time zone)';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_positioning_det.dt_epis_positioning_det IS ''Last update epis_positioning_det table''' ;
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:32
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+begin
+EXECUTE IMMEDIATE 'alter table epis_positioning_det add (id_prof_last_upd number(24))';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_positioning_det.id_prof_last_upd IS ''Last update professional identifier''' ;
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:32
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+begin
+EXECUTE IMMEDIATE 'alter table epis_positioning_det add (flg_outdated varchar2(1 char) default ''N'')';
+EXECUTE IMMEDIATE 'comment on column epis_positioning_det.flg_outdated is ''It is current registry outdated (''''Y''''- Yes; ''''N''''- No) (DEFAULT: ''''N'''')''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 17:00
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+begin
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_positioning_det.ID_EPIS_POSITIONING_DET IS ''Epis_positioning_det identifier''' ;
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_positioning_det.ID_EPIS_POSITIONING IS ''Epis positioning identifier''' ;
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_positioning_det.ID_POSITIONING IS ''Positioning identifier''' ;
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_positioning_det.RANK IS ''Positioning rank order''' ;
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_positioning_det.ID_PROF_LAST_UPD IS ''Last update professional identifier''' ;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:42
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table EPIS_POSITIONING_DET
+  is ' Positionings records detail for epis_documentantion';
+-- Add comments to the columns 
+comment on column EPIS_POSITIONING_DET.id_epis_positioning_det
+  is 'Epis_positioning_det identifier';
+comment on column EPIS_POSITIONING_DET.id_epis_positioning
+  is 'Epis positioning identifier';
+comment on column EPIS_POSITIONING_DET.id_positioning
+  is 'Positioning identifier';
+comment on column EPIS_POSITIONING_DET.rank
+  is 'Positioning rank order';
+comment on column EPIS_POSITIONING_DET.adw_last_update
+  is 'Date of last updated used by adw';
+comment on column EPIS_POSITIONING_DET.create_user
+  is 'Creation User';
+comment on column EPIS_POSITIONING_DET.create_time
+  is 'Creation Time';
+comment on column EPIS_POSITIONING_DET.create_institution
+  is 'Creation Institution';
+comment on column EPIS_POSITIONING_DET.update_user
+  is 'Update User';
+comment on column EPIS_POSITIONING_DET.update_time
+  is 'Update Time';
+comment on column EPIS_POSITIONING_DET.update_institution
+  is 'Update Institution';
+comment on column EPIS_POSITIONING_DET.dt_epis_positioning_det
+  is 'Last update epis_positioning_det table';
+comment on column EPIS_POSITIONING_DET.id_prof_last_upd
+  is 'Last update professional identifier';
+comment on column EPIS_POSITIONING_DET.flg_outdated
+  is 'It is current registry outdated (''Y''- Yes; ''N''- No) (DEFAULT: ''N'')';
+  
+-- CHANGE END: Pedro Fernandes

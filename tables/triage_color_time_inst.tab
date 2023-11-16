@@ -1,0 +1,51 @@
+
+
+-- José Brito 14/05/2009 ALERT-20512 Triage T5 improvements
+BEGIN
+    EXECUTE IMMEDIATE '		CREATE TABLE triage_color_time_inst( ' ||
+                      '		       id_triage_color NUMBER(24) NOT NULL, ' ||
+                      '					 id_institution  NUMBER(24) NOT NULL, ' ||
+                      '					 obs_time        NUMBER(6) NOT NULL, ' ||
+                      '					 scale_time      NUMBER(6) NOT NULL, ' ||
+                      '					 scale_time_interv NUMBER(6), ' ||
+                      '					 flg_available     VARCHAR2(1) NOT NULL, ' ||
+											'          create_user        VARCHAR2(24), ' ||
+                      '          create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE, ' ||
+                      '          create_institution NUMBER(24), ' ||
+                      '          update_user        VARCHAR2(24), ' ||
+                      '          update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE, ' ||
+                      '          update_institution NUMBER(24) ' ||
+                      '		) ';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+COMMENT ON TABLE triage_color_time_inst IS 'Configuration of observation times for triage colors. DO NOT CHANGE data for Manchester Triage Protocol.';
+
+COMMENT ON COLUMN triage_color_time_inst.id_triage_color IS 'Triage color ID';
+COMMENT ON COLUMN triage_color_time_inst.id_institution IS 'Institution ID';
+COMMENT ON COLUMN triage_color_time_inst.obs_time IS 'Maximum time between end of triage and observation';
+COMMENT ON COLUMN triage_color_time_inst.scale_time IS 'Scale. Used in grids and chart.';
+COMMENT ON COLUMN triage_color_time_inst.scale_time_interv IS 'Interval between scale. Used in grids and chart.';
+COMMENT ON COLUMN triage_color_time_inst.flg_available IS 'Availability: (Y) yes (N) no';
+comment on column TRIAGE_COLOR_TIME_INST.CREATE_USER is 'Creation User';
+comment on column TRIAGE_COLOR_TIME_INST.CREATE_TIME is 'Creation Time';
+comment on column TRIAGE_COLOR_TIME_INST.CREATE_INSTITUTION is 'Creation Institution';
+comment on column TRIAGE_COLOR_TIME_INST.UPDATE_USER is 'Update User';
+comment on column TRIAGE_COLOR_TIME_INST.UPDATE_TIME is 'Update Time';
+comment on column TRIAGE_COLOR_TIME_INST.UPDATE_INSTITUTION is 'Update Institution';
+-- END
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 27/07/2018 17:55
+-- CHANGE REASON: [EMR-4850] CTAS levels and colors
+-- Add/modify columns 
+alter table TRIAGE_COLOR_TIME_INST add reassess_time NUMBER(6);
+-- Add comments to the columns 
+comment on column TRIAGE_COLOR_TIME_INST.reassess_time
+  is 'Interval for reassess patient';
+-- CHANGE END: Elisabete Bugalho

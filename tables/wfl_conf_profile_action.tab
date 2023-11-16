@@ -1,0 +1,21 @@
+create table wfl_conf_profile_action
+(
+	action number(4) not null,
+	profile_templ number(12) not null
+) tablespace TABLE_M;
+
+--comments
+comment on table wfl_conf_profile_action
+	is 'Table that gives permission to actions by profile (profile_template)';
+
+comment on column wfl_conf_profile_action.action
+	is 'id of the action';
+comment on column wfl_conf_profile_action.profile_templ
+	is 'id of the profile template';
+
+alter table wfl_conf_profile_action
+drop constraint wfl_cpra_sa_fk;
+
+alter table wfl_conf_profile_action
+add constraint wfl_cpra_a_fk foreign key (action) 
+references wfl_action (id_action);

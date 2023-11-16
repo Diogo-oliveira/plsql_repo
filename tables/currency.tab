@@ -1,0 +1,153 @@
+create table CURRENCY
+(
+  ID_CURRENCY     NUMBER(6) not null,
+  CODE_CURRENCY   VARCHAR2(200) not null,
+  CURRENCY_DESC   VARCHAR2(10) not null,
+  CURRENCY_VALUE  NUMBER(6,3),
+  FLG_AVAILABLE   VARCHAR2(1) not null,
+  ADW_LAST_UPDATE DATE not null
+);
+
+-- Add comments to the table 
+comment on table CURRENCY
+  is 'Moedas disponíveis para pagamento dos produtos';
+-- Add comments to the columns 
+comment on column CURRENCY.ID_CURRENCY
+  is 'ID da tabela';
+comment on column CURRENCY.CODE_CURRENCY
+  is 'Código para tradução';
+comment on column CURRENCY.CURRENCY_DESC
+  is 'Prefixo a usar para a respectiva moeda';
+comment on column CURRENCY.CURRENCY_VALUE
+  is 'Valor para conversão';
+comment on column CURRENCY.FLG_AVAILABLE
+  is 'Disponibilidade do registo';
+comment on column CURRENCY.ADW_LAST_UPDATE
+  is 'Data do último update no registo';
+
+ALTER TABLE CURRENCY 
+ ADD (UNIT_MEASURE  VARCHAR2(10)
+ );
+
+COMMENT ON COLUMN CURRENCY.UNIT_MEASURE IS 'Simbolo da moeda';
+
+
+alter table currency add
+(
+      decimal_delimiter varchar2(10),
+      millenarian_delimiter varchar2(10)
+);
+
+comment on column currency.decimal_delimiter is
+'Delimitador decimal da moeda';
+
+comment on column currency.millenarian_delimiter is
+'Delimitador milenar da moeda';
+
+
+
+alter table currency add
+(
+      number_format varchar2(50)
+);
+
+comment on column currency.number_format is
+'Formato do descritivo da moeda';
+
+
+alter table currency add
+(
+      unit_measure_flash varchar2(10)
+);
+
+comment on column currency.unit_measure_flash is
+'Unit measure a ser usado pelo flash';
+
+
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 28/09/2009 16:01
+-- CHANGE REASON: [ALERT-45380] Added Dutch guilder to currency(v2.5.0.6)
+alter table currency MODIFY
+(
+      currency_value NUMBER(9,6)
+);
+-- CHANGE END: Rui Duarte
+
+-- cmf 05-07-2010
+declare
+
+l_sql01     varchar2(4000);
+l_sql02     varchar2(4000);
+xpl         varchar2(4 char) := '''';
+
+COLUMN_ALREADY_EXISTS   EXCEPTION;
+PRAGMA                  EXCEPTION_INIT( COLUMN_ALREADY_EXISTS, -01430 );
+Err_msg_col_exist       varchar2(1000 char);
+
+begin
+
+Err_msg_col_exist := 'COLUMN ALREADY EXISTS, CONTINUE...';
+
+    <<ADD_ID_CONTENT_COLUMN>>
+		BEGIN
+		l_sql01 := 'alter table currency add id_content varchar2(200 char)';
+		execute immediate l_sql01;
+		exception
+		WHEN COLUMN_ALREADY_EXISTS THEN 
+		dbms_output.put_line(substr(Err_msg_col_exist, 1, 240 ) );
+		END ADD_ID_CONTENT_COLUMN;
+
+    <<ADD_CODE_ISO_COLUMN>>
+		BEGIN
+		l_sql02 := 'alter table currency add code_iso number(6)';
+		execute immediate l_sql02;
+		exception
+		WHEN COLUMN_ALREADY_EXISTS THEN 
+		dbms_output.put_line(substr(Err_msg_col_exist, 1, 240 ) );
+		END ADD_CODE_ISO_COLUMN;
+
+		l_sql01 := 'comment on column currency.id_content is'||xpl|| 'Unique Id for content validation'||xpl;
+		execute immediate l_sql01;
+		l_sql02 := 'comment on column currency.CODE_ISO   is'||xpl|| 'ISO Code of currency'||xpl;
+		execute immediate l_sql02;
+
+dbms_output.put_line(substr('DONE...', 1, 240 ) );
+
+exception
+when others then
+dbms_output.put_line(substr('ERRO:'||SQLERRM, 1, 240 ) );
+end;
+/
+---
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:50
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table CURRENCY
+  is 'Available currencies';
+-- Add comments to the columns 
+comment on column CURRENCY.id_currency
+  is 'Primary Key';
+comment on column CURRENCY.code_currency
+  is 'Translation code for currency ';
+comment on column CURRENCY.currency_desc
+  is 'Prefix to use on currency';
+comment on column CURRENCY.currency_value
+  is 'Conversion value';
+comment on column CURRENCY.flg_available
+  is 'Availability (Y/N)';
+comment on column CURRENCY.adw_last_update
+  is 'Date of last change';
+comment on column CURRENCY.unit_measure
+  is 'Currency Unit measure';
+comment on column CURRENCY.decimal_delimiter
+  is 'Decimal currency delimiter';
+comment on column CURRENCY.millenarian_delimiter
+  is 'millenarian currency delimiter';
+comment on column CURRENCY.number_format
+  is 'Currency description format';
+comment on column CURRENCY.unit_measure_flash
+  is 'Unit measure to be used by flash';  
+-- CHANGE END: Elisabete Bugalho

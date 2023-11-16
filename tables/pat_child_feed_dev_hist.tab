@@ -1,0 +1,73 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/07/2011 15:01
+-- CHANGE REASON: [ALERT-188174] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects('ALERT', 'PAT_CHILD_FEED_DEV_HIST', 'TABLE', 'TRS', 'N', '', 'N');
+    BEGIN
+        EXECUTE IMMEDIATE '
+CREATE TABLE pat_child_feed_dev_hist (
+  id_pat_child_feed_dev_hist NUMBER(24,0)                      NOT NULL,
+  dt_pat_child_feed_dev TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+  id_patient            NUMBER(24,0)                      NOT NULL,
+  id_child_feed_dev     NUMBER(12,0)                      NOT NULL,
+  id_professional       NUMBER(24,0)                      NOT NULL,
+  child_age             NUMBER(2,0)                       NOT NULL,
+  flg_status            VARCHAR2(1 char)                       NOT NULL,
+  id_episode            NUMBER(24,0)                      NOT NULL,
+  create_user           VARCHAR2(24 char)                      NULL,
+  create_time           TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  create_institution    NUMBER(24,0)                      NULL,
+  update_user           VARCHAR2(24 char)                      NULL,
+  update_time           TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  update_institution    NUMBER(24,0)                      NULL
+)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+
+COMMENT ON TABLE pat_child_feed_dev_hist IS 'Pediatric assessment history records';
+COMMENT ON COLUMN pat_child_feed_dev_hist.id_pat_child_feed_dev_hist IS 'Primary key identifier';
+COMMENT ON COLUMN pat_child_feed_dev_hist.id_patient IS 'Primary key identifier';
+COMMENT ON COLUMN pat_child_feed_dev_hist.id_professional IS 'Professional identifier';
+COMMENT ON COLUMN pat_child_feed_dev_hist.id_child_feed_dev IS 'Content identifier';
+COMMENT ON COLUMN pat_child_feed_dev_hist.dt_pat_child_feed_dev IS 'Register date';
+COMMENT ON COLUMN pat_child_feed_dev_hist.child_age IS 'child age in months';
+COMMENT ON COLUMN pat_child_feed_dev_hist.flg_status IS 'record status';
+COMMENT ON COLUMN pat_child_feed_dev_hist.id_episode IS 'Episode ID';
+COMMENT ON COLUMN pat_child_feed_dev_hist.create_user IS 'Creation User';
+COMMENT ON COLUMN pat_child_feed_dev_hist.create_time IS 'Creation Time';
+COMMENT ON COLUMN pat_child_feed_dev_hist.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN pat_child_feed_dev_hist.update_user IS 'Update User';
+COMMENT ON COLUMN pat_child_feed_dev_hist.update_time IS 'Update Time';
+COMMENT ON COLUMN pat_child_feed_dev_hist.update_institution IS 'Update Institution';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 20/01/2016 11:20
+-- CHANGE REASON: [ALERT-317944 ] 
+-- Add comments to the table 
+comment on table PAT_CHILD_FEED_DEV_HIST
+  is 'Pediatric assessment history records';
+-- Add comments to the columns 
+comment on column PAT_CHILD_FEED_DEV_HIST.id_pat_child_feed_dev_hist
+  is 'Primary key identifier';
+comment on column PAT_CHILD_FEED_DEV_HIST.dt_pat_child_feed_dev
+  is 'Registration date';
+comment on column PAT_CHILD_FEED_DEV_HIST.id_patient
+  is 'Patient Id';
+comment on column PAT_CHILD_FEED_DEV_HIST.id_child_feed_dev
+  is 'Content identifier';
+comment on column PAT_CHILD_FEED_DEV_HIST.id_professional
+  is 'Professional who made the registration';
+comment on column PAT_CHILD_FEED_DEV_HIST.child_age
+  is 'Child age in months';
+comment on column PAT_CHILD_FEED_DEV_HIST.flg_status
+  is 'Registration status';
+-- CHANGE END: cristina.oliveira

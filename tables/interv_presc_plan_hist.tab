@@ -1,0 +1,174 @@
+CREATE TABLE INTERV_PRESC_PLAN_HIST (
+  ID_INTERV_PRESC_PLAN NUMBER(24),
+  ID_PROF_PERFORMED NUMBER(24),
+  ID_EPISODE_WRITE NUMBER(24),
+  START_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  END_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  NOTES VARCHAR2(4000),
+  DT_INTERV_PRESC_PLAN_HIST TIMESTAMP(6) WITH LOCAL TIME ZONE
+);
+
+COMMENT ON TABLE INTERV_PRESC_PLAN_HIST IS 'History of intervention plan executions';
+COMMENT ON COLUMN INTERV_PRESC_PLAN_HIST.ID_INTERV_PRESC_PLAN IS 'Original intervention plan';
+COMMENT ON COLUMN INTERV_PRESC_PLAN_HIST.ID_PROF_PERFORMED IS 'Professional who performed the intervention';
+COMMENT ON COLUMN INTERV_PRESC_PLAN_HIST.ID_EPISODE_WRITE IS 'Episode of execution';
+COMMENT ON COLUMN INTERV_PRESC_PLAN_HIST.START_TIME IS 'Intervention start date/time';
+COMMENT ON COLUMN INTERV_PRESC_PLAN_HIST.END_TIME IS 'Intervention end date/time';
+COMMENT ON COLUMN INTERV_PRESC_PLAN_HIST.NOTES IS 'Execution notes';
+COMMENT ON COLUMN INTERV_PRESC_PLAN_HIST.DT_INTERV_PRESC_PLAN_HIST IS 'Editing timestamp';
+
+ALTER TABLE interv_presc_plan_hist ADD (id_professional NUMBER(24));
+COMMENT ON COLUMN interv_presc_plan_hist.id_professional IS 'Professional that inserts history record';
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 2008/07/24
+-- CHANGE REASON: Needed unique key
+ALTER TABLE interv_presc_plan_hist add id_interv_presc_plan_hist NUMBER(24) NOT NULL;
+COMMENT ON column interv_presc_plan_hist.id_interv_presc_plan_hist IS 'Primary key';
+ALTER TABLE interv_presc_plan_hist ADD dt_plan_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE;
+COMMENT ON column interv_presc_plan_hist.dt_plan_tstz is 'Date of session';
+ALTER TABLE interv_presc_plan_hist ADD num_exec_sess NUMBER(6);
+COMMENT ON column interv_presc_plan_hist.num_exec_sess is 'Number of executions';
+-- CHANGE END
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 2008/09/18
+-- CHANGE REASON: Interv_presc_plan date column
+ALTER TABLE INTERV_PRESC_PLAN_HIST
+ ADD (DT_INTERV_PRESC_PLAN  TIMESTAMP(6) WITH LOCAL TIME ZONE);
+
+COMMENT ON COLUMN INTERV_PRESC_PLAN_HIST.DT_INTERV_PRESC_PLAN IS 'Date of registry insertion on table interv_presc_plan';
+
+-- CHANEG END
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 12/12/2013 16:43
+-- CHANGE REASON: [ALERT-271990] 
+ALTER TABLE INTERV_PRESC_PLAN_HIST ADD ID_INTERV_PRESC_DET NUMBER(24,0);
+ALTER TABLE INTERV_PRESC_PLAN_HIST ADD ID_PROF_TAKE NUMBER(24,0);
+ALTER TABLE INTERV_PRESC_PLAN_HIST ADD FLG_STATUS VARCHAR2(1);
+ALTER TABLE INTERV_PRESC_PLAN_HIST ADD ID_PROF_CANCEL NUMBER(24,0);
+ALTER TABLE INTERV_PRESC_PLAN_HIST ADD NOTES_CANCEL VARCHAR2(4000); 
+ALTER TABLE INTERV_PRESC_PLAN_HIST ADD ID_WOUND_TREAT NUMBER(24,0);
+ALTER TABLE INTERV_PRESC_PLAN_HIST ADD dt_take_tstz timestamp with local time zone;
+ALTER TABLE INTERV_PRESC_PLAN_HIST ADD dt_cancel_tstz timestamp with local time zone; 
+alter table INTERV_PRESC_PLAN_HIST add flg_mfr varchar2(1);
+alter table INTERV_PRESC_PLAN_HIST add id_schedule_intervention number(24);
+alter table INTERV_PRESC_PLAN_HIST add id_change number;
+alter table INTERV_PRESC_PLAN_HIST add flg_supplies_reg varchar2(1 char) default 'N';
+ALTER TABLE INTERV_PRESC_PLAN_HIST ADD ID_CANCEL_REASON  NUMBER(24);
+ALTER TABLE INTERV_PRESC_PLAN_HIST ADD ID_EPIS_DOCUMENTATION NUMBER(24);
+ALTER TABLE INTERV_PRESC_PLAN_HIST ADD ID_CDR_EVENT NUMBER(24);
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 29/01/2014 15:37
+-- CHANGE REASON: [ALERT-275028 ] 
+ALTER TABLE INTERV_PRESC_PLAN_HIST ADD EXEC_NUMBER NUMBER(24);
+COMMENT ON COLUMN INTERV_PRESC_PLAN_HIST.EXEC_NUMBER IS 'The order of the execution used in reports';
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 11/01/2016 16:36
+-- CHANGE REASON: [ALERT-317702] 
+comment on table INTERV_PRESC_PLAN_HIST
+  is 'Procedures'' orders detail plan history table';
+-- Add comments to the columns 
+comment on column INTERV_PRESC_PLAN_HIST.id_interv_presc_plan
+  is 'Procedure''s plan ID';
+comment on column INTERV_PRESC_PLAN_HIST.id_prof_performed
+  is 'Professional that executed the procedure';
+comment on column INTERV_PRESC_PLAN_HIST.id_episode_write
+  is 'Execution episode ID';
+comment on column INTERV_PRESC_PLAN_HIST.start_time
+  is 'Start date of the procedure execution';
+comment on column INTERV_PRESC_PLAN_HIST.end_time
+  is 'End date of the procedure execution';
+comment on column INTERV_PRESC_PLAN_HIST.notes
+  is 'Notes';
+comment on column INTERV_PRESC_PLAN_HIST.dt_interv_presc_plan_hist
+  is 'Date when the register was made';
+comment on column INTERV_PRESC_PLAN_HIST.id_professional
+  is 'Professional who made the register';
+comment on column INTERV_PRESC_PLAN_HIST.id_interv_presc_plan_hist
+  is 'Primary key';
+comment on column INTERV_PRESC_PLAN_HIST.dt_plan_tstz
+  is 'Planned date';
+comment on column INTERV_PRESC_PLAN_HIST.num_exec_sess
+  is 'Deprecated';
+comment on column INTERV_PRESC_PLAN_HIST.dt_interv_presc_plan
+  is 'Date that indicates when the execution was registered';
+comment on column INTERV_PRESC_PLAN_HIST.create_user
+  is 'Creation User';
+comment on column INTERV_PRESC_PLAN_HIST.create_time
+  is 'Creation Time';
+comment on column INTERV_PRESC_PLAN_HIST.create_institution
+  is 'Creation Institution';
+comment on column INTERV_PRESC_PLAN_HIST.update_user
+  is 'Update User';
+comment on column INTERV_PRESC_PLAN_HIST.update_time
+  is 'Update Time';
+comment on column INTERV_PRESC_PLAN_HIST.update_institution
+  is 'Update Institution';
+comment on column INTERV_PRESC_PLAN_HIST.id_interv_presc_det
+  is 'Procedure''s order detail ID';
+comment on column INTERV_PRESC_PLAN_HIST.id_prof_take
+  is 'Execution professional ID';
+comment on column INTERV_PRESC_PLAN_HIST.flg_status
+  is 'Flag that indicates the procedure''s execution status';
+comment on column INTERV_PRESC_PLAN_HIST.id_prof_cancel
+  is 'Professional that cancels the procedure';
+comment on column INTERV_PRESC_PLAN_HIST.notes_cancel
+  is 'Cancelation notes';
+comment on column INTERV_PRESC_PLAN_HIST.id_wound_treat
+  is 'Dressing treatment ID';
+comment on column INTERV_PRESC_PLAN_HIST.dt_take_tstz
+  is 'Execution date';
+comment on column INTERV_PRESC_PLAN_HIST.dt_cancel_tstz
+  is 'Date that indicates when the procedure was cancelled';
+comment on column INTERV_PRESC_PLAN_HIST.flg_mfr
+  is 'Deprecated';
+comment on column INTERV_PRESC_PLAN_HIST.id_schedule_intervention
+  is 'Deprecated';
+comment on column INTERV_PRESC_PLAN_HIST.id_change
+  is 'Deprecated';
+comment on column INTERV_PRESC_PLAN_HIST.flg_supplies_reg
+  is 'Flag that indicates supplies consumption (Y/N)';
+comment on column INTERV_PRESC_PLAN_HIST.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column INTERV_PRESC_PLAN_HIST.id_epis_documentation
+  is 'Procedure''s perform ID (documentation ID)';
+comment on column INTERV_PRESC_PLAN_HIST.id_cdr_event
+  is 'Clinical decision rule ID';
+comment on column INTERV_PRESC_PLAN_HIST.exec_number
+  is 'Order of the execution (reports)';
+  
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 25/01/2016 16:33
+-- CHANGE REASON: [ALERT-318098] 
+ALTER TABLE INTERV_PRESC_PLAN_HIST 
+ ADD (ID_PROF_LAST_UPDATE    NUMBER(24),
+  DT_LAST_UPDATE_TSTZ    TIMESTAMP(6) WITH LOCAL TIME ZONE);
+ 
+COMMENT ON COLUMN INTERV_PRESC_PLAN_HIST.ID_PROF_LAST_UPDATE IS 'Last update professional ID';
+COMMENT ON COLUMN INTERV_PRESC_PLAN_HIST.DT_LAST_UPDATE_TSTZ IS 'Last update date';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 27/01/2016 12:34
+-- CHANGE REASON: [ALERT-318118] 
+ALTER TABLE INTERV_PRESC_PLAN_HIST 
+ MODIFY (DT_INTERV_PRESC_PLAN_HIST TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ ,ID_INTERV_PRESC_PLAN NUMBER(24) NOT NULL
+ ,ID_INTERV_PRESC_DET NUMBER(24) NOT NULL);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/03/2017 09:37
+-- CHANGE REASON: [ALERT-329532] 
+ALTER TABLE INTERV_PRESC_PLAN_HIST DROP COLUMN FLG_MFR;
+-- CHANGE END: Pedro Henriques

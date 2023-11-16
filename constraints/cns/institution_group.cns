@@ -1,0 +1,42 @@
+BEGIN
+		EXECUTE IMMEDIATE 'alter table INSTITUTION_GROUP
+			add constraint INST_GRP_PK primary key (ID_INSTITUTION, FLG_RELATION)';
+EXCEPTION
+WHEN others THEN
+    NULL;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table INSTITUTION_GROUP
+						   add constraint INST_GRP_FLG_RELATION_CHK
+						   check (FLG_RELATION IN (''ADT''))';
+EXCEPTION
+WHEN others THEN
+    NULL;
+END;
+/
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 14/09/2009 15:01
+-- CHANGE REASON: [ALERT-41968] Match de pacientes (outras instituições): a pesquisa está a procurar pacientes em toda a base de dados. Deve ser possível configurar o conjunto de instituições abrangidas por esta pesquisa.
+--                Match de episódios: deve ser possível configurar a localização do paciente após o match, ou seja, se fica com a sala do episódio temporário ou se fica com a do definitivo.
+ALTER TABLE institution_group drop CONSTRAINT inst_grp_flg_relation_chk;
+ALTER TABLE institution_group add CONSTRAINT inst_grp_flg_relation_chk CHECK(flg_relation IN ('ADT', 'ARS', 'INST_CNT'));
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 22/09/2009 16:32
+-- CHANGE REASON: [ALERT-44525] Issue Replication: Wrong sort order in patient admission multi-institution (INSTITUTION_GROUP)
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE institution_group drop CONSTRAINT INST_GRP_FLG_RELATION_CHK';    
+    EXECUTE IMMEDIATE 'alter table INSTITUTION_GROUP
+   add constraint INST_GRP_FLG_RELATION_CHK
+   check (FLG_RELATION IN (''ADT'', ''TRF'', ''ARS'', ''INST_CNT''))';
+EXCEPTION
+WHEN others THEN
+    NULL;
+END;
+/
+-- CHANGE END: Alexandre Santos

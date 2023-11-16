@@ -1,0 +1,66 @@
+CREATE TABLE CARE_STAGE
+   (	ID_CARE_STAGE NUMBER(24,0),
+	ID_EPISODE NUMBER(24,0),
+	DT_SET TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	FLG_STAGE VARCHAR2(3),
+	FLG_ACTIVE VARCHAR2(1),
+	DT_WARN TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	CREATE_USER NUMBER(24,0)
+   ) ;
+
+
+   COMMENT ON COLUMN CARE_STAGE.ID_CARE_STAGE IS 'Primary key';
+	 
+   COMMENT ON COLUMN CARE_STAGE.ID_EPISODE IS 'Foreign key to EPISODE table';
+
+   COMMENT ON COLUMN CARE_STAGE.DT_SET IS 'Date and time when the care status was set for the corresponding episode';
+
+   COMMENT ON COLUMN CARE_STAGE.FLG_STAGE IS 'Flag indicating care status ';
+
+   COMMENT ON COLUMN CARE_STAGE.FLG_ACTIVE IS 'Indicates whether this is the currently active care status';
+
+   COMMENT ON COLUMN CARE_STAGE.DT_WARN IS 'Date and time when the care status is to be considered late';
+
+   COMMENT ON COLUMN CARE_STAGE.CREATE_USER IS 'User ID of the user that set the status';
+
+   COMMENT ON TABLE CARE_STAGE  IS 'This table contains care status setting info by episode';
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/11/2011 09:34
+-- CHANGE REASON: [ALERT-206660] Issue Replication: Chile | GES; Emergency Law; Billing System Red UC (ALERT_206659)
+--                Versioning DDL
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE CARE_STAGE ADD FLG_INS_TYPE VARCHAR2(2 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN CARE_STAGE.FLG_INS_TYPE IS ''Method used for insertion of the record; A - Automatically (Action performed in other area of the ALERT application); I - Interface (Message received by a external system); M - Manually (State selected by the user);''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:44
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column CARE_STAGE.flg_stage
+  is 'Flag indicating care status (SYS_DOMAIN CARE_STAGE.FLG_STAGE)';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:49
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column CARE_STAGE.flg_stage
+  is 'Flag indicating care status (SYS_DOMAIN CARE_STAGE.FLG_STAGE)';
+-- CHANGE END: Elisabete Bugalho

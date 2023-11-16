@@ -1,0 +1,1 @@
+grant select on ACCOUNTS_CATEGORY to ALERT_VIEWER;

@@ -1,0 +1,251 @@
+
+
+  CREATE TABLE DEPARTMENT
+   (	ID_DEPARTMENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	CODE_DEPARTMENT VARCHAR2(200) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ABBREVIATION VARCHAR2(30),
+	ID_SOFTWARE NUMBER(24,0),
+	FLG_TYPE VARCHAR2(6),
+	ID_DEPT NUMBER(24,0),
+	FLG_DEFAULT VARCHAR2(1)
+   );
+
+
+
+COMMENT ON TABLE department IS 'Departamentos da instituição. Correspondem a áreas físicas da instituição.' ;
+
+COMMENT ON COLUMN department.code_department IS 'Código para o nome' ;
+COMMENT ON COLUMN department.rank IS 'Ordem de apresentação' ;
+COMMENT ON COLUMN department.abbreviation IS 'Sigla' ;
+COMMENT ON COLUMN department.flg_type IS 'Tipo: C - consulta externa, U - urgência, I - internamento, S - bloco operatório, A - Lab. análises, P - Lab. patologia clínica, T - Lab. anatomia patológica, R - radiologia, F - farmácia. Pode conter combinações (ex: AP - lab análises de patologia clínica)' ;
+COMMENT ON COLUMN department.flg_default IS 'Departamento por defeito: Y - Yes; N - No' ;
+
+ALTER TABLE DEPARTMENT 
+ ADD (FLG_AVAILABLE  VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ );
+
+COMMENT ON COLUMN DEPARTMENT.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD';
+
+ALTER TABLE DEPARTMENT MODIFY FLG_AVAILABLE default null;
+
+ALTER TABLE DEPARTMENT ADD (FLG_UNIDOSE  VARCHAR2(1) DEFAULT 'N' NOT NULL);
+
+comment on column DEPARTMENT.FLG_UNIDOSE
+  is 'Flag que indica se o departamento tem (Y) ou não (N) o sistema de unidose para requisição e administração de medicação.';
+
+ALTER TABLE DEPARTMENT ADD ID_ADMISSION_TYPE NUMBER(24) ;
+
+COMMENT ON COLUMN DEPARTMENT.ID_ADMISSION_TYPE IS 'Type of admission';
+
+
+ALTER TABLE DEPARTMENT 
+ ADD (FLG_PRIORITY VARCHAR2(1));
+
+COMMENT ON COLUMN DEPARTMENT.FLG_PRIORITY IS 'U- Urgent/CITO; N- Non Urgent';
+
+
+ALTER TABLE DEPARTMENT 
+ ADD (FLG_COLLECTION_BY VARCHAR2(1));
+
+COMMENT ON COLUMN DEPARTMENT.FLG_PRIORITY IS 'L- Laboratory; D- Department';
+
+	
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 15/07/2009
+-- CHANGE REASON: ADT-1149
+alter table department add ADM_AGE_MIN number(3);
+alter table department add ADM_AGE_MAX number(3);
+
+comment on column department.ADM_AGE_MIN
+  is 'Patient mininum age for admission purposes';
+comment on column department.ADM_AGE_MAX
+  is 'Patient maximum age for admission purposes';
+-- CHANGE END: Bruno Martins
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/06/2010 14:32
+-- CHANGE REASON: [ALERT-105487] 
+ALTER TABLE DEPARTMENT ADD 
+(
+admission_time TIMESTAMP WITH LOCAL TIME ZONE 
+);
+
+COMMENT ON COLUMN DEPARTMENT.admission_time IS 'Time of admission.';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 21/09/2012 16:39
+-- CHANGE REASON: [ALERT-240699] department flg type
+DECLARE
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+BEGIN
+
+    EXECUTE IMMEDIATE 'alter table department add constraint flg_type_chk check (flg_type in (''A'',''C'',''F'',''I'',''IO'',''M'',''P'',''R'',''S'',''T'',''U'',''W'', null)) novalidate';
+EXCEPTION
+    WHEN e_check_already_there THEN
+        dbms_output.put_line('Check constraint already there');
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 14/02/2014 15:24
+-- CHANGE REASON: [ALERT-275975] department configs
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    BEGIN
+        execute immediate 'ALTER TABLE department add phone_number VARCHAR2(200 CHAR) DEFAULT NULL';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        execute immediate 'ALTER TABLE department add fax_number VARCHAR2(200 CHAR) DEFAULT NULL';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department.phone_number IS ''Service phone number''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department.fax_number IS ''Service fax number''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 23/06/2014 11:58
+-- CHANGE REASON: new table
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    BEGIN
+        execute immediate 'ALTER TABLE department add phone_number VARCHAR2(200 CHAR) DEFAULT NULL';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        execute immediate 'ALTER TABLE department add fax_number VARCHAR2(200 CHAR) DEFAULT NULL';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department.phone_number IS ''Service phone number''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department.fax_number IS ''Service fax number''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 20/10/2014 17:36
+-- CHANGE REASON: [ALERT-298984] new domains
+DECLARE
+    i_sql VARCHAR2(1000 CHAR);
+BEGIN
+    i_sql := 'alter table department drop constraint FLG_TYPE_CHK';
+    pk_versioning.run(i_sql => i_sql);
+    
+     i_sql := 'alter table DEPARTMENT add constraint FLG_TYPE_CHK check (flg_type in (''A'',''C'',''F'',''I'',''IO'',''M'',''P'',''R'',''S'',''T'',''U'',''W'', ''MS'',''PC'', ''UC'', null)) novalidate';
+    pk_versioning.run(i_sql => i_sql);
+
+END;
+/
+ 
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: Joao Sa
+-- CHANGE DATE: 11/01/2016
+-- ISSUE: Refactor: Table comments
+comment on table DEPARTMENT
+  is 'Institution services';
+-- Add comments to the columns 
+comment on column DEPARTMENT.id_department
+  is 'Service id';
+comment on column DEPARTMENT.id_institution
+  is 'Service institution';
+comment on column DEPARTMENT.code_department
+  is 'Code to translate the service name';
+comment on column DEPARTMENT.rank
+  is 'Rank';
+comment on column DEPARTMENT.adw_last_update
+  is 'Record last update (ADW)';
+comment on column DEPARTMENT.abbreviation
+  is 'Service name acronym or abbreviation';
+comment on column DEPARTMENT.id_software
+  is 'Software module';
+comment on column DEPARTMENT.flg_type
+  is 'Type (C) Ambulatory or Outpatient Care; (U) Emergency; (I) Inpatient; (S) Operating room; (A) Lab tests; (P) Clinical pathology lab; (T) Anatomical pathology lab; (R) Radiology; (F) Pharmacy. May be combined (e.g.: AP - Lab Tests and  Clinical Pathology lab)';
+comment on column DEPARTMENT.id_dept
+  is 'Department the service belongs to';
+comment on column DEPARTMENT.flg_default
+  is 'Is default service? Y/N';
+comment on column DEPARTMENT.flg_available
+  is 'Available in this implementation? Y/N';
+comment on column DEPARTMENT.flg_unidose
+  is 'Service has unidose prescription system for medication? Y/N';
+comment on column DEPARTMENT.flg_priority
+  is '(U)rgent/CITO; (N)on Urgent (Deprecated)';
+comment on column DEPARTMENT.flg_collection_by
+  is '(L)aboratory or (D)epartment (Deprecated)';
+comment on column DEPARTMENT.admission_time
+  is 'Time of admission';
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/10/2017 15:03
+-- CHANGE REASON: [ALERT-333419] 
+ALTER TABLE DEPARTMENT ADD GENDER VARCHAR2(1 CHAR);
+COMMENT ON COLUMN DEPARTMENT.GENDER IS 'return gender by exception';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 09/03/2020 14:50
+-- CHANGE REASON: [EMR-24803] - [DB] Home Health Care workflow US6
+alter table department drop constraint FLG_TYPE_CHK;
+
+alter table DEPARTMENT
+add constraint FLG_TYPE_CHK
+check (flg_type in ('A','C','F','I','IO','M','P','R','S','T','U','W', 'MS','PC', 'UC','H', null))
+novalidate;
+
+comment on column DEPARTMENT.flg_type
+is 'Type (C) Ambulatory or Outpatient Care; (U) Emergency; (I) Inpatient; (S) Operating room; (A) Lab tests; (P) Clinical pathology lab; (T) Anatomical pathology lab; (R) Radiology; (H) Home health care; (F) Pharmacy. May be combined (e.g.: AP - Lab Tests and  Clinical Pathology lab)';
+-- CHANGE END: Nuno Coelho

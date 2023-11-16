@@ -1,0 +1,115 @@
+/*-- Last Change Revision: $Rev: 2055401 $*/
+/*-- Last Change by: $Author: diogo.oliveira $*/
+/*-- Date of last change: $Date: 2023-02-22 09:43:55 +0000 (qua, 22 fev 2023) $*/
+
+CREATE OR REPLACE PACKAGE pk_advanced_input AS
+
+    -- Author  : RITA.LOPES
+    -- Created : 4/23/2008 
+    -- Purpose : 
+
+    /** 
+    *  Convert date strings to date format
+    *
+    * @param C_date   String of date
+    *
+    * @return     TIMESTAMP WITH LOCAL TIME ZONE
+    * @author     Tiago Silva
+    * @version    1.0
+    * @since      2008/08/25
+    */
+    FUNCTION convert_to_date(c_date VARCHAR2) RETURN TIMESTAMP
+        WITH LOCAL TIME ZONE;
+
+    /************************************************************************************************************ 
+    * Get Advanced Input data. 
+    * This function is generic and gets all configured information for a specified Advanced Input control.
+    *
+    * @param      i_lang               number, default language
+    * @param      i_prof               object type, health profisisonal
+    * @param      i_id_advanced_input  ID, identification of the Adanced Input
+    * @param      o_fields             cursor, advanced input fields
+    * @param      o_multichoice_fields cursor, data for Adanced Input multichoice fields 
+    * @param      o_fields_det         cursor, advanced input fields details
+    * @param      o_error              error message
+    *
+    * @return     boolean type, "False" on error or "True" if success
+    * @author     Orlando Antunes 
+    * @version    0.1
+    * @since      2007/08/21
+    ***********************************************************************************************************/
+    FUNCTION get_advanced_input_data
+    (
+        i_lang               IN language.id_language%TYPE,
+        i_prof               IN profissional,
+        i_id_advanced_input  IN advanced_input.id_advanced_input%TYPE,
+        o_fields             OUT pk_types.cursor_type,
+        o_multichoice_fields OUT pk_types.cursor_type,
+        o_fields_det         OUT pk_types.cursor_type,
+        o_fields_units       OUT pk_types.cursor_type,
+        o_error              OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    /********************************************************************************************
+    * get all advanced input data (including inactive fields)
+    *
+    * @param    i_lang                 preferred language ID
+    * @param    i_prof                 object (id of professional, id of institution, id of software)
+    * @param    i_advanced_input       advanced input ID
+    * @param    o_fields               cursor, advanced input fields
+    * @param    o_multichoice_fields   cursor, data for Adanced Input multichoice fields 
+    * @param    o_fields_det           cursor, advanced input fields details
+    * @param    o_fields_units         cursor, advanced input fields details    
+    *
+    * @return   BOOLEAN                false in case of error and true otherwise
+    *
+    * @author                          Tiago Silva
+    * @since                           2010/08/02
+    ********************************************************************************************/
+    FUNCTION get_all_advanced_input_data
+    (
+        i_lang               IN language.id_language%TYPE,
+        i_prof               IN profissional,
+        i_advanced_input     IN advanced_input.id_advanced_input%TYPE,
+        o_fields             OUT pk_types.cursor_type,
+        o_multichoice_fields OUT pk_types.cursor_type,
+        o_fields_det         OUT pk_types.cursor_type,
+        o_fields_units       OUT pk_types.cursor_type,
+        o_error              OUT t_error_out
+    ) RETURN BOOLEAN;
+
+    FUNCTION get_multichoice_options
+    (
+        i_lang                    IN language.id_language%TYPE,
+        i_prof                    IN profissional,
+        i_advanced_input          IN advanced_input.id_advanced_input%TYPE,
+        i_id_advanced_input_field IN advanced_input_field.id_advanced_input_field%TYPE,
+        o_error                   OUT t_error_out
+    ) RETURN t_tbl_core_domain;
+
+    FUNCTION get_unit_measure_list
+    (
+        i_lang                    IN language.id_language%TYPE,
+        i_prof                    IN profissional,
+        i_advanced_input          IN advanced_input.id_advanced_input%TYPE,
+        i_id_advanced_input_field IN advanced_input_field.id_advanced_input_field%TYPE,
+        o_error                   OUT t_error_out
+    ) RETURN t_tbl_core_domain;
+
+    g_error           VARCHAR2(2000);
+    g_all_institution institution.id_institution%TYPE := 0;
+    g_all_software    software.id_software%TYPE := 0;
+
+    g_date_hour_keypad CONSTANT advanced_input_field.type%TYPE := 'DT';
+    g_date_keypad      CONSTANT advanced_input_field.type%TYPE := 'D';
+    g_multichoice      CONSTANT advanced_input_field.type%TYPE := 'L';
+
+    g_flg_yes VARCHAR2(1) := 'Y';
+    g_flg_no  VARCHAR2(1) := 'N';
+
+    -- Log variables
+    g_package_owner VARCHAR2(30);
+    g_package_name  VARCHAR2(30);
+
+END pk_advanced_input;
+/

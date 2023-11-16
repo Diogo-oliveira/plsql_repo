@@ -1,0 +1,47 @@
+create table fluids_presc_det
+(
+  ID_FLUIDS_PRESC_DET NUMBER(12) not null,
+  ID_DRUG_PRESC_DET   NUMBER(24),
+  ID_DRUG             NUMBER(12) not null,
+  QTY1                NUMBER(18,2),
+  ID_MEASURE_UNIT1    VARCHAR2(30),
+  QTY2                NUMBER(18,2),
+  ID_MEASURE_UNIT2    VARCHAR2(30),
+  RANK                NUMBER(6)
+);
+-- Add comments to the table 
+comment on table FLUIDS_PRESC_DET
+  is 'Constituintes dos soros complexos';
+-- Add comments to the columns 
+comment on column FLUIDS_PRESC_DET.ID_FLUIDS_PRESC_DET
+  is 'Chave primaria ';
+comment on column FLUIDS_PRESC_DET.ID_DRUG_PRESC_DET
+  is 'Id da prescrição (FK para DRUG_PRESC_DET)';
+comment on column FLUIDS_PRESC_DET.ID_DRUG
+  is 'ID do soro ou substancia que compoe novo soro (DK para IV_FLUIDS_COMPOSITION)';
+comment on column FLUIDS_PRESC_DET.QTY1
+  is 'Quantidade do componente expressa na unidade de medida measure_unit1';
+comment on column FLUIDS_PRESC_DET.ID_MEASURE_UNIT1
+  is 'Unidade de medida do componente em que se expressa a QTY1';
+comment on column FLUIDS_PRESC_DET.QTY2
+  is 'Quantidade do componente expressa na unidade de medida measure_unit2';
+comment on column FLUIDS_PRESC_DET.ID_MEASURE_UNIT2
+  is 'Unidade de medida do componente em que se expressa a QTY2';
+comment on column FLUIDS_PRESC_DET.RANK
+  is 'Ordem pela qual aparece no descritivo do soro';
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 2009-JUL-10
+-- CHANGE REASON: ALERT-35531
+
+alter table FLUIDS_PRESC_DET modify (ID_DRUG VARCHAR2(255));
+
+-- CHANGED END
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 28/10/2009 23:02
+-- CHANGE REASON: [ALERT-49774] 
+alter table FLUIDS_PRESC_DET add num_bottles number(6); 
+comment on column FLUIDS_PRESC_DET.num_bottles is 'Number of bottles';
+-- CHANGE END: Tiago Silva

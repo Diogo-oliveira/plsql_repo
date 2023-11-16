@@ -1,0 +1,1 @@
+grant execute on alert.PK_API_TRANSACTION_MODEL_HIE to alert_viewer;

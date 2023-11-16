@@ -1,0 +1,56 @@
+
+
+BEGIN
+EXECUTE IMMEDIATE 'create table fast_track_disable
+(
+  ID_FAST_TRACK_DISABLE   NUMBER(24) NOT NULL,  
+  CODE_FAST_TRACK_DISABLE VARCHAR2(200) NOT NULL,
+  ID_FAST_TRACK           NUMBER(24) NOT NULL,
+  ID_INSTITUTION          NUMBER(24) NOT NULL,
+	FLG_AVAILABLE           VARCHAR2(1) NOT NULL,
+	AGE_MAX                 NUMBER(6),
+	AGE_MIN                 NUMBER(6),
+  RANK                    NUMBER(6),
+  CREATE_USER             VARCHAR2(24),
+  CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION      NUMBER(24),
+  UPDATE_USER             VARCHAR2(24),
+  UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION      NUMBER(24)
+)';
+EXCEPTION
+  WHEN OTHERS THEN
+   NULL;
+END;
+/
+
+COMMENT ON TABLE fast_track_disable IS 'Reasons for disabling a fast track.';
+COMMENT ON COLUMN fast_track_disable.id_fast_track_disable IS 'Primary key.';
+COMMENT ON COLUMN fast_track_disable.code_fast_track_disable IS 'Translation code.';
+COMMENT ON COLUMN fast_track_disable.id_fast_track IS 'Fast track ID.';
+COMMENT ON COLUMN fast_track_disable.id_institution IS 'Institution ID.';
+COMMENT ON COLUMN fast_track_disable.flg_available IS 'Availability of the record in the institution DB.';
+COMMENT ON COLUMN fast_track_disable.age_max IS 'Maximum age that applies to this reason.';
+COMMENT ON COLUMN fast_track_disable.age_min IS 'Minimum age that applies to this reason.';
+COMMENT ON COLUMN fast_track_disable.rank IS 'Rank for ordering purposes.';
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:44
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column FAST_TRACK_DISABLE.create_user
+  is 'Creation User';
+comment on column FAST_TRACK_DISABLE.create_time
+  is 'Creation Time';
+comment on column FAST_TRACK_DISABLE.create_institution
+  is 'Creation Institution';
+comment on column FAST_TRACK_DISABLE.update_user
+  is 'Update User';
+comment on column FAST_TRACK_DISABLE.update_time
+  is 'Update Time';
+comment on column FAST_TRACK_DISABLE.update_institution
+  is 'Update Institution';
+-- CHANGE END: Elisabete Bugalho

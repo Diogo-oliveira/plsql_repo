@@ -1,0 +1,76 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE l_var PLS_INTEGER;
+
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tables
+     WHERE table_name = 'BDNP_PRESC_DETAIL';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'CREATE TABLE BDNP_PRESC_DETAIL(
+  flg_presc_type        VARCHAR2(1 CHAR) not null,
+  id_presc              NUMBER(24) not null,
+  id_patient            NUMBER(24) not null,
+  name                  VARCHAR2(1000 CHAR) not null,
+  gender                VARCHAR2(1 CHAR) not null,
+  dt_birth              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  flg_migrator          VARCHAR2(1 CHAR) not null,
+  id_country_nation     VARCHAR2(2 CHAR),
+  sns                   VARCHAR2(30 CHAR),
+  flg_occ_disease       VARCHAR2(1 CHAR),
+  flg_independent       VARCHAR2(1 CHAR),
+  id_health_plan        NUMBER(12),
+  num_health_plan       VARCHAR2(100 CHAR),
+  migrator_num_doc      VARCHAR2(300 CHAR),
+  dt_mig_doc_expire     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  id_mig_doc_type       NUMBER(12),
+  hp_alpha2_code        VARCHAR2(2 CHAR),
+  flg_indfess           VARCHAR2(1 CHAR),
+  hp_national_ident_nbr VARCHAR2(30 CHAR),
+  hp_dt_effective       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  flg_isencao           VARCHAR2(1 CHAR),
+  mcdt_nature           VARCHAR2(200 CHAR),
+  create_user           VARCHAR2(24 CHAR),
+  create_time           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution    NUMBER(24),
+  update_user           VARCHAR2(24 CHAR),
+  update_time           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution    NUMBER(24))';
+    ELSE
+        EXECUTE IMMEDIATE 'alter table BDNP_PRESC_DETAIL MODIFY num_health_plan VARCHAR2(100 CHAR) ';
+    END IF;
+END;
+/
+
+COMMENT ON column bdnp_presc_detail.flg_presc_type IS 'Type od Prescription M - Medication, R - Referral';
+COMMENT ON column bdnp_presc_detail.id_presc IS 'Id_external request if FLG_PRESC_TYPE = R or ID_PRESCRIPTION_XML if FLG_PRESC_TYPE = M';
+COMMENT ON column bdnp_presc_detail.id_patient IS 'Patient Id';
+COMMENT ON column bdnp_presc_detail.name IS 'Patient name';
+COMMENT ON column bdnp_presc_detail.gender IS 'Patient gender';
+COMMENT ON column bdnp_presc_detail.dt_birth IS 'Patient dt birth';
+COMMENT ON column bdnp_presc_detail.flg_migrator IS 'Patient is migrator: Y - Yes, N - No';
+COMMENT ON column bdnp_presc_detail.id_country_nation IS 'Patient birth place';
+COMMENT ON column bdnp_presc_detail.sns IS 'Nr. SNS';
+COMMENT ON column bdnp_presc_detail.flg_occ_disease IS 'Doente Profissional';
+COMMENT ON column bdnp_presc_detail.id_health_plan IS 'Id Health Plan';
+COMMENT ON column bdnp_presc_detail.num_health_plan IS 'Patient Health Plan Nr';
+COMMENT ON column bdnp_presc_detail.migrator_num_doc IS 'Nr Cartão Europeu de Saúde';
+COMMENT ON column bdnp_presc_detail.dt_mig_doc_expire IS 'Data de validade Cartão Europeu de Saúde';
+COMMENT ON column bdnp_presc_detail.id_mig_doc_type IS 'ID_DOC_TYPE';
+COMMENT ON column bdnp_presc_detail.hp_alpha2_code IS 'Pais emissor do Plano de saúde';
+COMMENT ON column bdnp_presc_detail.create_user IS 'Creation User';
+COMMENT ON column bdnp_presc_detail.create_time IS 'Creation Time';
+COMMENT ON column bdnp_presc_detail.create_institution IS 'Creation Institution';
+COMMENT ON column bdnp_presc_detail.update_user IS 'Update User';
+COMMENT ON column bdnp_presc_detail.update_time IS 'Update Time';
+COMMENT ON column bdnp_presc_detail.update_institution IS 'Update Institution';
+COMMENT ON column bdnp_presc_detail.flg_indfess IS 'Patient is FESSPIL beneficiary: Y - Yes, N - No';
+COMMENT ON column bdnp_presc_detail.hp_national_ident_nbr IS 'Código da entidade';
+COMMENT ON column bdnp_presc_detail.hp_dt_effective IS 'Data de validade do Plano no saúde ';
+COMMENT ON column bdnp_presc_detail.flg_isencao IS 'Referral flg_isencao';
+COMMENT ON column bdnp_presc_detail.mcdt_nature IS 'Referral MCDT Nature';
+-- CHANGE END: Joana Barroso

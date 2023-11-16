@@ -1,0 +1,24 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 08/06/2011 09:30
+-- CHANGE REASON: [ALERT-184001] Alert professionals to review advance directives (ALERT_41412)
+--                DB Versioning - New Objects
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE REMINDER_PARAM ADD CONSTRAINT RMDR_PAR_RMDR_FK FOREIGN KEY(ID_REMINDER) REFERENCES REMINDER(ID_REMINDER)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE REMINDER_PARAM ADD CONSTRAINT RMDR_PAR_SYS_LST_GRP_FK FOREIGN KEY(ID_SYS_LIST_GROUP) REFERENCES SYS_LIST_GROUP(ID_SYS_LIST_GROUP)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

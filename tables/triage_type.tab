@@ -1,0 +1,54 @@
+
+
+  CREATE TABLE TRIAGE_TYPE
+   (	ID_TRIAGE_TYPE NUMBER NOT NULL ENABLE,
+	CODE_TRIAGE_TYPE VARCHAR2(240) NOT NULL ENABLE,
+	ID_TRIAGE_UNITS NUMBER NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(240) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ACRONYM VARCHAR2(10)
+   );
+
+
+COMMENT ON COLUMN triage_type.id_triage_type IS 'Chave primária' ;
+COMMENT ON COLUMN triage_type.code_triage_type IS 'Descrição do tipo de triagem' ;
+COMMENT ON COLUMN triage_type.id_triage_units IS 'Unidade' ;
+COMMENT ON COLUMN triage_type.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN triage_type.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN triage_type.acronym IS 'Sigla do tipo de triagem. M- Manchester; T- Triage Nurse( 5 niveis); NTS - Triagem da Holanda' ;
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:34
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table TRIAGE_TYPE
+  is 'Type of triage';
+-- Add comments to the columns 
+comment on column TRIAGE_TYPE.id_triage_type
+  is 'Primary key';
+comment on column TRIAGE_TYPE.code_triage_type
+  is 'Translation code for triage description';
+comment on column TRIAGE_TYPE.id_triage_units
+  is 'Triage unit time conversion';
+comment on column TRIAGE_TYPE.flg_available
+  is 'Availability: (Y) Yes (N) No';
+comment on column TRIAGE_TYPE.adw_last_update
+  is 'Date of last change';
+comment on column TRIAGE_TYPE.acronym
+  is 'Acronym of triage. ';  
+  
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 12/02/2020 14:57
+-- CHANGE REASON: [EMR-25421] - New development ATS Australasian Triage Scale - Mental tool
+DECLARE
+l_sql VARCHAR2(1000) := q'[alter table TRIAGE_TYPE modify acronym VARCHAR2(20)]';
+BEGIN
+pk_versioning.run(l_sql);
+END;
+/
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,289 @@
+  CREATE TABLE SCHEDULE
+   (	ID_SCHEDULE NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTIT_REQUESTS NUMBER(12,0) NOT NULL ENABLE,
+	ID_INSTIT_REQUESTED NUMBER(12,0) NOT NULL ENABLE,
+	ID_DCS_REQUESTS NUMBER(24,0),
+	ID_DCS_REQUESTED NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_REQUESTS NUMBER(24,0),
+	ID_PROF_SCHEDULES NUMBER(24,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	FLG_URGENCY VARCHAR2(1) NOT NULL ENABLE,
+	DT_REQUEST DATE,
+	DT_SCHEDULE DATE NOT NULL ENABLE,
+
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_BEGIN DATE,
+	DT_END DATE,
+	NUM_AVAILABLE NUMBER(6,0),
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE,
+	SCHEDULE_NOTES VARCHAR2(4000),
+	ID_CANCEL_REASON NUMBER(24,0),
+	FLG_ALERT_AGENDA VARCHAR2(1),
+	ID_LANG_TRANSLATOR NUMBER(6,0),
+	ID_LANG_PREFERRED NUMBER(6,0),
+	ID_SCH_EVENT NUMBER(24,0),
+	ID_REASON NUMBER(24,0),
+
+	ID_ORIGIN NUMBER(24,0),
+	ID_ROOM NUMBER(24,0),
+	SCHEDULE_CANCEL_NOTES VARCHAR2(4000),
+	ID_SCH_SERVICE NUMBER(24,0),
+	FLG_NOTIFICATION VARCHAR2(2) DEFAULT 'P' NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE schedule IS 'Agendamentos' ;
+
+COMMENT ON COLUMN schedule.id_schedule IS 'Chave primária' ;
+COMMENT ON COLUMN schedule.notes IS 'Notas' ;
+COMMENT ON COLUMN schedule.dt_request IS 'Data / hora do registo de requisição' ;
+COMMENT ON COLUMN schedule.dt_schedule IS 'Data / hora do registo ou de confirmação / rejeição da requisição' ;
+COMMENT ON COLUMN schedule.flg_status IS '(O)pen - ready for scheduling (B)ooked - scheduled (C)anceled - canceled schedule' ;
+COMMENT ON COLUMN schedule.num_available IS 'DEPRECATED' ;
+COMMENT ON COLUMN schedule.flg_alert_agenda IS 'Used only by the interface. NULL means it was an Alert modified row, ''Y'' means it was an interface modification.' ;
+COMMENT ON COLUMN schedule.flg_notification IS 'Set if a notification was already sent to the patient. Possible values : ''N''otified or ''P''ending notification' ;
+
+
+alter table SCHEDULE add ID_SCHEDULE_REF NUMBER(24);
+
+comment on column SCHEDULE.FLG_STATUS
+  is 'A agendado';
+comment on column SCHEDULE.FLG_URGENCY
+  is 'N No Y yes';
+comment on column SCHEDULE.ID_SCHEDULE_REF
+  is 'Schedule reference identification. It can be used to store a cancel schedule id used in the reschedule functionality';
+
+ALTER TABLE schedule DROP COLUMN notes;
+
+ALTER TABLE schedule ADD flg_vacancy VARCHAR2(1);
+
+COMMENT ON COLUMN schedule.flg_vacancy IS 'Type of vacancy occupied: ''R'' routine, ''U'' urgent, ''V'' unplanned';
+
+ALTER TABLE schedule ADD flg_sch_type VARCHAR2(1);
+COMMENT ON COLUMN schedule.flg_sch_type IS 'Type of schedule: exam (E), analysis (A), outpatient (C), surgery room (S)';
+
+ALTER TABLE schedule DROP COLUMN id_sch_service;
+
+ALTER TABLE schedule ADD reason_notes VARCHAR2(4000);
+COMMENT ON COLUMN schedule.reason_notes IS 'Appointment reason in plain text';
+
+ALTER TABLE schedule DROP COLUMN flg_alert_agenda;
+
+COMMENT ON TABLE SCHEDULE IS 'Contains appointments'' data that is shared by consults, exams, analysis and surgeries.';
+
+COMMENT ON COLUMN SCHEDULE.ID_SCHEDULE IS 'Schedule identifier';
+COMMENT ON COLUMN SCHEDULE.ID_INSTIT_REQUESTS IS 'Institution that requested the appointment';
+COMMENT ON COLUMN SCHEDULE.ID_INSTIT_REQUESTED IS 'Institution that is requested to carry out the appointment';
+COMMENT ON COLUMN SCHEDULE.ID_DCS_REQUESTS IS 'Department-Clinical service that requested the appointment';
+COMMENT ON COLUMN SCHEDULE.ID_DCS_REQUESTED IS 'Department-Clinical service that is requested to carry out the appointment';
+COMMENT ON COLUMN SCHEDULE.ID_PROF_REQUESTS IS 'Professional that requested the appointment';
+COMMENT ON COLUMN SCHEDULE.ID_PROF_SCHEDULES IS 'Professional that created the appointment';
+COMMENT ON COLUMN SCHEDULE.DT_REQUEST IS 'Request creation date';
+COMMENT ON COLUMN SCHEDULE.DT_SCHEDULE IS 'Appointment creation date';
+COMMENT ON COLUMN SCHEDULE.FLG_STATUS IS 'Appointment status: ''A'' scheduled, ''R'' requested, ''C'' cancelled, ''D'' deleted, ''P'' pending';
+COMMENT ON COLUMN SCHEDULE.DT_BEGIN IS 'Appointment''s begin date';
+COMMENT ON COLUMN SCHEDULE.DT_END IS 'Appointment''s end date';
+COMMENT ON COLUMN SCHEDULE.NUM_AVAILABLE IS 'Deprecated column';
+COMMENT ON COLUMN SCHEDULE.ID_PROF_CANCEL IS 'Professional that cancelled the appointment';
+COMMENT ON COLUMN SCHEDULE.DT_CANCEL IS 'Appointment cancellation date';
+COMMENT ON COLUMN SCHEDULE.SCHEDULE_NOTES IS 'Free-text notes';
+COMMENT ON COLUMN SCHEDULE.ID_CANCEL_REASON IS 'Appointment cancellation reason';
+COMMENT ON COLUMN SCHEDULE.ID_LANG_TRANSLATOR IS 'Translator''s language (if a translator is required)';
+COMMENT ON COLUMN SCHEDULE.ID_LANG_PREFERRED IS 'Patient''s preferred language';
+COMMENT ON COLUMN SCHEDULE.ID_SCH_EVENT IS 'Event identifier';
+COMMENT ON COLUMN SCHEDULE.ID_REASON IS 'Reason for visit';
+COMMENT ON COLUMN SCHEDULE.ID_ORIGIN IS 'Patient''s origin';
+COMMENT ON COLUMN SCHEDULE.ID_ROOM IS 'Room where the appointment takes palce';
+COMMENT ON COLUMN SCHEDULE.FLG_URGENCY IS 'Is this an urgent appointment? ''Y'' yes, ''N'' no';
+COMMENT ON COLUMN SCHEDULE.SCHEDULE_CANCEL_NOTES IS 'Appointment cancellation notes';
+
+ALTER TABLE schedule DROP COLUMN num_available;
+
+ALTER TABLE SCHEDULE ADD DT_BEGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;	
+COMMENT ON COLUMN SCHEDULE.DT_BEGIN_TSTZ IS 'Appointment''s begin date';
+ALTER TABLE SCHEDULE ADD DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;	
+COMMENT ON COLUMN SCHEDULE.DT_CANCEL_TSTZ IS 'Appointment cancellation date';
+ALTER TABLE SCHEDULE ADD DT_END_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;	
+COMMENT ON COLUMN SCHEDULE.DT_END_TSTZ IS 'Appointment''s end date';
+ALTER TABLE SCHEDULE ADD DT_REQUEST_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;	
+COMMENT ON COLUMN SCHEDULE.DT_REQUEST_TSTZ IS 'Request creation date';
+ALTER TABLE SCHEDULE ADD DT_SCHEDULE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;	
+COMMENT ON COLUMN SCHEDULE.DT_SCHEDULE_TSTZ IS 'Appointment creation date';
+
+ALTER TABLE schedule ADD id_complaint NUMBER(24);
+COMMENT ON COLUMN schedule.id_complaint IS 'Complaint identifier';
+ALTER TABLE schedule ADD flg_instructions VARCHAR2(1);
+COMMENT ON COLUMN schedule.flg_instructions IS 'Instructions for the next visit: ''F'' fasting, ''N'' non-fasting';
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 29-05-2008
+-- CHANGE REASON: nova coluna id_sch_consult_vacancy
+
+alter table SCHEDULE add ID_SCH_CONSULT_VACANCY number(24);
+-- Add comments to the columns 
+comment on column SCHEDULE.ID_SCH_CONSULT_VACANCY
+  is 'Vacancy coupled to this schedule, unless this schedule was created outside work hours. Cannot have fk due to possible existing external system interface';
+--END
+
+alter table schedule add flg_notification_via varchar2(1);
+alter table schedule add id_prof_notification number(24);
+alter table schedule add dt_notification_tstz timestamp(6) with local time zone;
+
+comment on column schedule.flg_notification_via is 'Way that patient was notified';
+comment on column schedule.id_prof_notification is 'Professional that notificates';
+comment on column schedule.dt_notification_tstz is 'Notification date';
+
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 03-06-2008
+-- CHANGE REASON: passagem da schedule_outp.flg_sched_request_type para schedule.flg_request_type
+alter table SCHEDULE add FLG_REQUEST_TYPE varchar2(1);
+
+comment on column SCHEDULE.FLG_REQUEST_TYPE
+  is 'Appointment''s request type (patient, physician, nurse, institution)';
+--END
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 13-06-2008
+-- CHANGE REASON: inclusao do episodio para referencia cruzada
+alter table SCHEDULE add ID_EPISODE number(24);
+
+comment on column SCHEDULE.ID_EPISODE
+  is 'episode id';
+--END
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 14-08-2008
+-- CHANGE REASON: Novo tipo de flg_sch_type
+COMMENT ON COLUMN schedule.flg_sch_type IS 'Type of schedule: exam (E), analysis (A), outpatient (C), surgery room (S), interventions (I)';
+--END
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 23-09-2008
+-- CHANGE REASON: igualar datatype a institution.id_institution
+alter table SCHEDULE modify ID_INSTIT_REQUESTS NUMBER(24);
+alter table SCHEDULE modify ID_INSTIT_REQUESTED NUMBER(24);
+--END
+
+
+
+-- José Brito 22/09/2008 Eliminar colunas DATE
+alter table schedule drop column dt_begin;
+alter table schedule drop column dt_cancel;
+alter table schedule drop column dt_end;
+alter table schedule drop column dt_request;
+alter table schedule drop column dt_schedule;
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 09-01-2009
+-- CHANGE REASON: agenda MFR
+
+alter table SCHEDULE add ID_SCHEDULE_RECURSION number(24);
+alter table SCHEDULE modify FLG_SCH_TYPE VARCHAR2(2);
+ 
+comment on column SCHEDULE.ID_SCHEDULE_RECURSION is 'id of recursion plan used to generate this row';
+comment on column SCHEDULE.FLG_SCH_TYPE is 'Type of schedule: exam (E), analysis (A), outpatient (C), surgery room (S), interventions (PM), (X) other exams';
+comment on column SCHEDULE.FLG_STATUS is 'Appointment status: ''A'' scheduled, ''R'' requested, ''C'' cancelled, ''D'' deleted, ''P'' pending, ''T'' temporary - only for MFR scheduler';
+
+--END
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 18/06/2009
+-- CHANGE REASON: [ALERT-32069] 
+ALTER TABLE SCHEDULE
+ADD FLG_PRESENT VARCHAR2(1)
+ADD ID_MULTIDISC NUMBER(24);
+
+COMMENT ON COLUMN SCHEDULE.FLG_PRESENT IS 'Presential appointment - (Y)es / (N)o';
+COMMENT ON COLUMN SCHEDULE.ID_MULTIDISC IS 'Group schedule ID for multidisciplinar appointments';
+
+-- CHANGE END: Nuno Ferreira
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 22/06/2009
+-- CHANGE REASON: [ALERT-32069] 
+ALTER TABLE SCHEDULE
+ADD ID_SCH_COMBI_DETAIL NUMBER(24);
+
+COMMENT ON COLUMN SCHEDULE.ID_SCH_COMBI_DETAIL IS 'Combination detail ID';
+
+-- CHANGE END: Nuno Ferreira
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 11-11-11
+-- CHANGE REASON: alert-203423
+alter table SCHEDULE add id_resched_reason number(24);
+alter table SCHEDULE add id_prof_resched number(24);
+alter table SCHEDULE add dt_resched_date timestamp with local time zone;
+alter table SCHEDULE add resched_notes varchar2(4000);
+
+comment on column SCHEDULE.id_resched_reason is 'if filled, this schedule was rescheduled. this is the motive';
+comment on column SCHEDULE.id_prof_resched is 'rescheduled by this prof';
+comment on column SCHEDULE.dt_resched_date is 'reschedule date';
+comment on column SCHEDULE.resched_notes is 'resched notes';
+-- CHANGE END: Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 17-01-2012
+-- CHANGE REASON: ALERT-214428
+begin
+execute immediate 'alter table SCHEDULE add id_resched_reason number(24)';
+execute immediate 'alter table SCHEDULE add id_prof_resched number(24)';
+execute immediate 'alter table SCHEDULE add dt_resched_date timestamp with local time zone';
+execute immediate 'alter table SCHEDULE add resched_notes varchar2(4000)';
+
+execute immediate 'comment on column SCHEDULE.id_resched_reason is ''if filled, this schedule was rescheduled. this is the motive''';
+execute immediate 'comment on column SCHEDULE.id_prof_resched is ''rescheduled by this prof''';
+execute immediate 'comment on column SCHEDULE.dt_resched_date is ''reschedule date''';
+execute immediate 'comment on column SCHEDULE.resched_notes is ''resched notes''';
+exception
+  when others then null;
+end;
+-- CHANGE END: Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 09-07-2012
+-- CHANGE REASON: ALERT-235658
+begin
+   execute immediate 'alter table SCHEDULE add id_group number(24)';
+
+   execute immediate 'comment on column SCHEDULE.id_group is ''group appointments unifier code''';
+exception
+  when others then dbms_output.put_line('já existe');
+end;
+-- CHANGE END: Telmo
+
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 27-06-2013
+-- CHANGE REASON: ALERT-260738
+alter table SCHEDULE add flg_reason_type varchar2(2);
+comment on column SCHEDULE.flg_reason_type  is 'identifies the origin of the value in column id_reason. It can be R(sample texts),  RP(prof sample texts), C(complaints), RQ(requisition id where the reason id resides), RE(episode id where the reason id resides)';
+-- CHANGE END: Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 27-06-2013
+-- CHANGE REASON: ALERT-260738
+alter table SCHEDULE drop column id_complaint;
+-- CHANGE END: Telmo
+
+
+comment on column SCHEDULE.flg_status
+  is q'[Appointment status: 'A' scheduled, 'R' requested, 'C' cancelled, 'D' deleted, 'P' pending, 'V' Pending approval, 'T' temporary - only for MFR scheduler]';
+  
+  
+
+-- CHANGED BY: Ana Moita
+-- CHANGE DATE: 07/08/2020 15:39
+-- CHANGE REASON: [EMR-33597] - [DB] New contact type in grids, save videoconf link
+ALTER TABLE SCHEDULE ADD video_link VARCHAR2(400);
+comment on column SCHEDULE.video_link
+is 'Video Conference link';
+
+alter table schedule
+modify video_link varchar2(4000);
+-- CHANGE END: Ana Moita

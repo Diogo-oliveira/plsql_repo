@@ -1,0 +1,42 @@
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_INST_FK foreign key (ID_INSTITUTION)
+					   references INSTITUTION(ID_INSTITUTION)';
+
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_SOFT_FK foreign key (ID_SOFTWARE)
+					   references SOFTWARE(ID_SOFTWARE)';
+
+    EXECUTE IMMEDIATE 'alter table PRE_HOSP_ACCIDENT
+					   add constraint PR_HSP_ACC_PROF_FK foreign key (ID_PROF_CREATE)
+					   references PROFESSIONAL(ID_PROFESSIONAL)';
+EXCEPTION
+WHEN others THEN
+    NULL;
+END;
+/
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 08/09/2009 14:55
+-- CHANGE REASON: [ALERT-42113] "Present illness"_"History"_"Pre hospital" The Glasgow verbal text is not correct
+--                ID_EPISODE FK
+alter table PRE_HOSP_ACCIDENT
+add constraint PR_HSP_ACC_EPI_FK foreign key (ID_EPISODE)
+references EPISODE(ID_EPISODE);
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 26/11/2013 17:48
+-- CHANGE REASON: [ALERT-270633]     ALERT-265767 [UK-Brigthon] - Organisation Code for Ambulance trust
+--                
+-- Create/Recreate primary, unique and foreign key constraints 
+DECLARE
+    l_sql VARCHAR2(4000);
+BEGIN
+
+    l_sql := 'alter table PRE_HOSP_ACCIDENT add constraint PR_HSP_ACC_AMB_SL_FK foreign key (ID_AMB_TRUST_CODE) references sys_list (ID_SYS_LIST)';
+    pk_versioning.run(l_sql);
+
+END;
+/
+-- CHANGE END: Elisabete Bugalho

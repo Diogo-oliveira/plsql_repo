@@ -1,0 +1,41 @@
+
+create table pharm_unidose_req_gen
+(
+	id_req_gen			number(24) not null,
+	id_dep_clin_serv	number(24) not null,
+	id_prof				number(24), 
+	dt_begin			timestamp with local time zone not null,
+	dt_end				timestamp with local time zone not null,
+	flg_success			varchar2(1) default 'N' not null, -- Y: success | N: fail
+	flg_old				varchar2(1) default 'N' not null, -- Y: old (dont show on grid)
+	flg_manual_gen		varchar2(1) default 'N' not null -- N: automatic | Y: manual request generation
+) tablespace TABLE_M;
+
+--comments
+comment on table pharm_unidose_req_gen
+	is 'Table of unidose orders generation';
+
+comment on column pharm_unidose_req_gen.id_req_gen
+	is 'PK';
+comment on column pharm_unidose_req_gen.id_dep_clin_serv
+	is 'FK: id of department/service';
+comment on column pharm_unidose_req_gen.id_prof
+	is 'id of the professional (only on manual generation)';
+comment on column pharm_unidose_req_gen.dt_begin
+	is 'first day to generate';
+comment on column pharm_unidose_req_gen.dt_end
+	is 'last day to generate';
+comment on column pharm_unidose_req_gen.flg_success
+	is 'Y: success | N: fail';
+comment on column pharm_unidose_req_gen.flg_old
+	is 'Y: old (dont show on grid)';
+comment on column pharm_unidose_req_gen.flg_manual_gen
+	is 'N: automatic | Y: manual request generation';
+
+	
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:57
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PHARM_UNIDOSE_REQ_GEN IS 'Table of unidose orders generation [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

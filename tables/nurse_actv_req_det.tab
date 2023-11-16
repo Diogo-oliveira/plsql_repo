@@ -1,0 +1,128 @@
+
+
+  CREATE TABLE NURSE_ACTV_REQ_DET
+   (	ID_NURSE_ACTV_REQ_DET NUMBER(24,0) NOT NULL ENABLE,
+	DT_NURSE_ACTV_REQ_DET DATE NOT NULL ENABLE,
+	ID_NURSE_ACTIVITY_REQ NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	NOTES VARCHAR2(4000),
+	DT_BEGIN_SYMPTOMS DATE,
+	FLG_BEGIN_SYMPTOMS VARCHAR2(1),
+	ID_WOUND_TYPE NUMBER(24,0),
+
+	LOCATION VARCHAR2(200),
+	YEAR_BEGIN_SYMPTOMS NUMBER(4,0),
+	MONTH_BEGIN_SYMPTOMS NUMBER(2,0),
+	DAY_BEGIN_SYMPTOMS NUMBER(2,0)
+   );
+
+
+COMMENT ON TABLE nurse_actv_req_det IS 'Detalhes da requisição + cabeçalho de avaliação de feridas' ;
+
+COMMENT ON COLUMN nurse_actv_req_det.flg_status IS 'Estado: R - requisitado, E - em execução; F - terminado, C - cancelado; D - pendente' ;
+COMMENT ON COLUMN nurse_actv_req_det.dt_begin_symptoms IS 'Data de aparecimento da ferida' ;
+COMMENT ON COLUMN nurse_actv_req_det.flg_begin_symptoms IS 'Aparecimento da ferida: H - no domicílio; I - no internamento' ;
+COMMENT ON COLUMN nurse_actv_req_det.location IS 'Localização' ;
+COMMENT ON COLUMN nurse_actv_req_det.year_begin_symptoms IS 'Ano de aparecimento da ferida.' ;
+COMMENT ON COLUMN nurse_actv_req_det.month_begin_symptoms IS 'Mês de aparecimento da ferida.' ;
+COMMENT ON COLUMN nurse_actv_req_det.day_begin_symptoms IS 'Dia de aparecimento da ferida.' ;
+
+alter table nurse_actv_req_det 
+add (dt_nurse_actv_req_det_tstz timestamp with local time zone,
+     dt_begin_symptoms_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone);
+
+
+alter table nurse_actv_req_det drop column DT_NURSE_ACTV_REQ_DET;
+alter table nurse_actv_req_det drop column DT_CANCEL;
+alter table nurse_actv_req_det drop column DT_BEGIN_SYMPTOMS;
+
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 11/04/2011 15:19
+-- CHANGE REASON: [ALERT-163522] 
+BEGIN
+    ALTER TABLE nurse_actv_req_det add id_cancel_reason NUMBER(24);
+
+    COMMENT ON column nurse_actv_req_det.id_cancel_reason IS 'Cancel reason ID';
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/04/2011 12:27
+-- CHANGE REASON: [ALERT-163522] 
+
+    ALTER TABLE nurse_actv_req_det add id_cancel_reason NUMBER(24);
+
+    COMMENT ON column nurse_actv_req_det.id_cancel_reason IS 'Cancel reason ID';
+
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/04/2011 12:28
+-- CHANGE REASON: [ALERT-163522] 
+
+    ALTER TABLE nurse_actv_req_det add id_cancel_reason NUMBER(24);
+
+    COMMENT ON column nurse_actv_req_det.id_cancel_reason IS 'Cancel reason ID';
+
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 16:50
+-- CHANGE REASON: [ALERT-317702] 
+comment on table NURSE_ACTV_REQ_DET
+  is 'Dressing''s orders detail table';
+-- Add comments to the columns 
+comment on column NURSE_ACTV_REQ_DET.id_nurse_actv_req_det
+  is 'Dressing''s order detail ID';
+comment on column NURSE_ACTV_REQ_DET.id_nurse_activity_req
+  is 'Order''s ID';
+comment on column NURSE_ACTV_REQ_DET.flg_status
+  is 'Flag that indicates the status';
+comment on column NURSE_ACTV_REQ_DET.id_prof_cancel
+  is 'Professional that cancels the order';
+comment on column NURSE_ACTV_REQ_DET.notes_cancel
+  is 'Cancelation notes';
+comment on column NURSE_ACTV_REQ_DET.notes
+  is 'Notes';
+comment on column NURSE_ACTV_REQ_DET.flg_begin_symptoms
+  is 'Flag that indicates the wound origin: H - home, I - inpatient';
+comment on column NURSE_ACTV_REQ_DET.id_wound_type
+  is 'Wound type ID';
+comment on column NURSE_ACTV_REQ_DET.location
+  is 'Wound location';
+comment on column NURSE_ACTV_REQ_DET.year_begin_symptoms
+  is 'Year';
+comment on column NURSE_ACTV_REQ_DET.month_begin_symptoms
+  is 'Month';
+comment on column NURSE_ACTV_REQ_DET.day_begin_symptoms
+  is 'Day';
+comment on column NURSE_ACTV_REQ_DET.dt_nurse_actv_req_det_tstz
+  is 'Date that indicates when the order was registered';
+comment on column NURSE_ACTV_REQ_DET.dt_begin_symptoms_tstz
+  is 'Begin date';
+comment on column NURSE_ACTV_REQ_DET.dt_cancel_tstz
+  is 'Date that indicates when the order was cancelled';
+comment on column NURSE_ACTV_REQ_DET.create_user
+  is 'Creation User';
+comment on column NURSE_ACTV_REQ_DET.create_time
+  is 'Creation Time';
+comment on column NURSE_ACTV_REQ_DET.create_institution
+  is 'Creation Institution';
+comment on column NURSE_ACTV_REQ_DET.update_user
+  is 'Update User';
+comment on column NURSE_ACTV_REQ_DET.update_time
+  is 'Update Time';
+comment on column NURSE_ACTV_REQ_DET.update_institution
+  is 'Update Institution';
+comment on column NURSE_ACTV_REQ_DET.id_cancel_reason
+  is 'Cancel reason ID';
+  
+  
+  
+-- CHANGE END: Ana Matos

@@ -1,0 +1,47 @@
+
+
+  CREATE TABLE REP_SCREEN
+   (	ID_REP_SCREEN NUMBER(24,0) NOT NULL ENABLE,
+	INTERNAL_NAME VARCHAR2(200),
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	ID_SYS_BUTTON_PROP NUMBER(24,0) NOT NULL ENABLE,
+	SCREEN_NAME VARCHAR2(200) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE rep_screen IS 'Parametrização dos relatórios com tratamento específico num determinado ecrã' ;
+
+COMMENT ON COLUMN rep_screen.flg_type IS 'Indica se adiciona ou retira acessos a um determinado report no ecrã. Valores possíveis: A- Adiciona, R- Retira' ;
+
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 02/06/2010 14:47
+-- CHANGE REASON: [ALERT-102221] Issue Replication: 2.6 Reformulação dos reports de requisições de análises
+DECLARE
+    l_already_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(l_already_null, -1451);
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE rep_screen modify id_sys_button_prop NULL');
+EXCEPTION
+    WHEN l_already_null THEN
+        NULL;
+END;
+-- CHANGE END: Rui Spratley
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON TABLE REP_SCREEN IS 'Reports parameterization with specific treatment in specific screen';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON COLUMN REP_SCREEN.ID_REP_SCREEN IS 'Screen Identifier';
+COMMENT ON COLUMN REP_SCREEN.INTERNAL_NAME IS 'Internal Name';
+COMMENT ON COLUMN REP_SCREEN.FLG_TYPE IS 'Flag about access permissions on a specific report on a specific screen. Possible values: A- Add, R- Remove';
+COMMENT ON COLUMN REP_SCREEN.ID_SYS_BUTTON_PROP IS 'SYS_BUTTON_PROP Identifier';
+COMMENT ON COLUMN REP_SCREEN.SCREEN_NAME IS 'Screen Name';
+COMMENT ON COLUMN REP_SCREEN.ADW_LAST_UPDATE IS 'ADW Last Episode';
+-- CHANGE END:  ruben.araujo

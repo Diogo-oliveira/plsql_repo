@@ -1,0 +1,29 @@
+create table PROF_DEP_CLIN_SERV_HIST
+(
+  ID_PROFESSIONAL  NUMBER(24) NOT NULL,
+  ID_DEP_CLIN_SERV NUMBER(24) NOT NULL,
+  DT_BEGIN         timestamp with local time zone NOT NULL,
+  DT_END           timestamp with local time zone NOT NULL,  
+  FLG_DEFAULT      VARCHAR2(1) NOT NULL,
+  ID_INSTITUTION   NUMBER(24) NOT NULL
+);
+
+COMMENT ON TABLE PROF_DEP_CLIN_SERV_HIST IS 'Association between professionals and dep_clin_serv (historic)';
+
+COMMENT ON COLUMN PROF_DEP_CLIN_SERV_HIST.ID_PROFESSIONAL IS 'Professional ID';
+COMMENT ON COLUMN PROF_DEP_CLIN_SERV_HIST.ID_DEP_CLIN_SERV IS 'dep_clin_serv ID';
+COMMENT ON COLUMN PROF_DEP_CLIN_SERV_HIST.DT_BEGIN IS 'Creation date';
+COMMENT ON COLUMN PROF_DEP_CLIN_SERV_HIST.DT_END IS 'Expiration date';
+COMMENT ON COLUMN PROF_DEP_CLIN_SERV_HIST.FLG_DEFAULT IS 'Default record: Y - yes, N - no';
+COMMENT ON COLUMN PROF_DEP_CLIN_SERV_HIST.ID_INSTITUTION IS 'Institution ID';
+
+
+
+ALTER TABLE PROF_DEP_CLIN_SERV_HIST ADD (ID_SOFTWARE NUMBER(24));
+comment on column PROF_DEP_CLIN_SERV_HIST.ID_SOFTWARE is 'ID do software'; 
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 2008/10/20
+-- CHANGE REASON: Revert denormalization task
+alter table prof_dep_clin_serv_hist drop column id_software;
+-- CHANGE END

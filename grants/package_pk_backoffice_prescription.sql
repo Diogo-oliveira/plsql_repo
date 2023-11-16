@@ -1,0 +1,1 @@
+GRANT EXECUTE ON pk_backoffice_prescription TO ALERT_VIEWER;

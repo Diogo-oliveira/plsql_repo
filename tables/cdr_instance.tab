@@ -1,0 +1,143 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:25
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'CDR_INSTANCE',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'PRM',
+                                             i_flg_alert_default => 'Y',
+                                             i_delete_script     => '',
+                                             i_flg_default_child => 'N');
+END;
+/
+
+create table CDR_INSTANCE
+(
+  id_cdr_instance    NUMBER(24) not null,
+  id_cdr_definition  NUMBER(24) not null,
+  code_description   VARCHAR2(200 CHAR) not null,
+  flg_status         VARCHAR2(1 CHAR) default 'A' not null,
+  flg_origin         VARCHAR2(1 CHAR) default 'L' not null,
+  id_cdr_severity    NUMBER(24) not null,
+  id_institution     NUMBER(24) not null,
+  id_prof_create     NUMBER(24),
+  id_cancel_info_det NUMBER(24),
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+);
+
+comment on table CDR_INSTANCE
+  is 'Clinical decision rule instances. A rule instance is like a full implementation of a rule definition.';
+
+comment on column CDR_INSTANCE.id_cdr_instance
+  is 'Primary key.';
+comment on column CDR_INSTANCE.id_cdr_definition
+  is 'Rule definition identifier.';
+comment on column CDR_INSTANCE.code_description
+  is 'Rule instance description code for translation.';
+comment on column CDR_INSTANCE.flg_status
+  is 'Rule instance status: (A)ctive, (I)nactive, (E)dited, (C)ancelled.';
+comment on column CDR_INSTANCE.flg_origin
+  is 'Rule instance origin: (L)ocal, (D)efault.';
+comment on column CDR_INSTANCE.id_cdr_severity
+  is 'Rule severity identifier.';
+comment on column CDR_INSTANCE.id_institution
+  is 'Institution identifier.';
+comment on column CDR_INSTANCE.id_prof_create
+  is 'Record created by (professional identifier).';
+comment on column CDR_INSTANCE.id_cancel_info_det
+  is 'Cancel information detail identifier.';
+comment on column CDR_INSTANCE.create_user
+  is 'Creation User';
+comment on column CDR_INSTANCE.create_time
+  is 'Creation Time';
+comment on column CDR_INSTANCE.create_institution
+  is 'Creation Institution';
+comment on column CDR_INSTANCE.update_user
+  is 'Update User';
+comment on column CDR_INSTANCE.update_time
+  is 'Update Time';
+comment on column CDR_INSTANCE.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 12/05/2011 16:05
+-- CHANGE REASON: [ALERT-178626] rule severity must not be mandatory
+alter table cdr_instance modify (id_cdr_severity null);
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 07/10/2011 15:22
+-- CHANGE REASON: [ALERT-198677] changes_ddl
+alter table cdr_instance add (
+id_content    varchar2(200 char),
+flg_available varchar2(1 char) default 'Y' not null
+);
+
+comment on column cdr_instance.id_content
+  is 'Content identifier.';
+comment on column cdr_instance.flg_available
+  is 'Record availability (Y/N).';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 03/03/2014 12:39
+-- CHANGE REASON: [ALERT-277931] 
+BEGIN    
+EXECUTE IMMEDIATE 'alter table cdr_instance add content_date_tstz  TIMESTAMP(6) WITH LOCAL TIME ZONE default current_timestamp';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('Field already exists');
+
+END;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 03/03/2014 17:29
+-- CHANGE REASON: [ALERT-277931 ] new field on cdr_instance content_date_tstz
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table cdr_instance add content_date_tstz  TIMESTAMP(6) WITH LOCAL TIME ZONE';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Field already exists');
+    
+END;
+/
+
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+EXECUTE IMMEDIATE 'alter table cdr_instance modify content_date_tstz  TIMESTAMP(6) WITH LOCAL TIME ZONE default current_timestamp';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('Field already exists');
+
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+--ALERT-321061 (begin)
+--ID_CSI_SUPPLIER --DLL
+DECLARE
+    l_sql VARCHAR2(1000) := q'[ALTER TABLE cdr_instance ADD id_csi_supplier NUMBER(24) DEFAULT -1 NOT NULL]';
+BEGIN
+    pk_versioning.run(l_sql);
+END;
+/
+
+--ID_CSI_SUPPLIER - COMMENT
+
+COMMENT ON COLUMN cdr_instance.id_csi_supplier
+  IS 'Identify in which supplier rule was based and makes implicit if rule was automatic created from that (-1 -> If rule was created manual)';
+--ALERT-321061 (end)

@@ -1,0 +1,62 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 27/10/2009 12:08
+-- CHANGE REASON: Case Manager
+create table OPINION_REASON
+(
+  ID_OPINION         NUMBER(24) not null,
+  ID_DIAGNOSIS       NUMBER(24) not null,
+  CREATE_USER        VARCHAR2(24),
+  CREATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER        VARCHAR2(24),
+  UPDATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+);
+-- Add comments to the table 
+comment on table OPINION_REASON
+  is 'Reason for opinion request for CM';
+-- Add comments to the columns 
+comment on column OPINION_REASON.ID_OPINION
+  is 'ID Opinion';
+comment on column OPINION_REASON.ID_DIAGNOSIS
+  is 'ID Diagnosis';
+comment on column OPINION_REASON.CREATE_USER
+  is 'Creation User';
+comment on column OPINION_REASON.CREATE_TIME
+  is 'Creation Time';
+comment on column OPINION_REASON.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column OPINION_REASON.UPDATE_USER
+  is 'Update User';
+comment on column OPINION_REASON.UPDATE_TIME
+  is 'Update Time';
+comment on column OPINION_REASON.UPDATE_INSTITUTION
+  is 'Update Institution';
+ 
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 20/03/2020 09:11
+-- CHANGE REASON: [EMR-28148] - Reason for request field doesn't have the expected behavior
+alter table opinion_reason add diagnosis_desc varchar2(200);
+COMMENT ON COLUMN opinion_reason.diagnosis_desc IS 'Diagnosis description (free text record)';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 13/04/2022 12:14
+-- CHANGE REASON: [EMR-52729] - Follow-ups: migration to dynamic forms framework
+alter table opinion_reason
+add id_alert_diagnosis number(24);
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 13/04/2022 12:15
+-- CHANGE REASON: [EMR-52729] - Follow-ups: migration to dynamic forms framework
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[alter table opinion_reason add id_alert_diagnosis number(24)]';
+pk_versioning.run(l_sql);
+end;
+/
+-- CHANGE END: Diogo Oliveira

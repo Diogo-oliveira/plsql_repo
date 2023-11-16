@@ -1,0 +1,123 @@
+
+
+  CREATE TABLE SR_INTERVENTION
+   (	ID_SR_INTERVENTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_SR_INTERV_PARENT NUMBER(24,0),
+	CODE_SR_INTERVENTION VARCHAR2(200) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1),
+	FLG_TYPE VARCHAR2(1),
+	DURATION NUMBER(6,0),
+	PREV_RECOVERY_TIME NUMBER(6,0),
+	GDH VARCHAR2(100),
+	ICD VARCHAR2(50),
+	GENDER VARCHAR2(1),
+	AGE_MIN NUMBER(3,0),
+
+	AGE_MAX NUMBER(3,0),
+	COST NUMBER(18,4),
+	PRICE NUMBER(18,4),
+	ID_SYSTEM_ORGAN NUMBER(24,0),
+	ID_SPECIALITY NUMBER(12,0),
+	ADW_LAST_UPDATE DATE
+   );
+
+
+COMMENT ON COLUMN sr_intervention.id_sr_intervention IS 'ID único' ;
+COMMENT ON COLUMN sr_intervention.id_sr_interv_parent IS 'ID do "pai"' ;
+COMMENT ON COLUMN sr_intervention.code_sr_intervention IS 'Código para obtenção da descrição na tabela Translation' ;
+COMMENT ON COLUMN sr_intervention.flg_status IS 'Estado da intervenção. Valores possíveis: A- Activo, I- Inactivo' ;
+COMMENT ON COLUMN sr_intervention.flg_type IS 'Tipo de cirurgia. Valores possíveis: S- Cirurgia' ;
+COMMENT ON COLUMN sr_intervention.duration IS 'Duração estimada da intervenção' ;
+COMMENT ON COLUMN sr_intervention.prev_recovery_time IS 'Tempo estimado de permanência no recobro' ;
+COMMENT ON COLUMN sr_intervention.gdh IS 'Código GDH' ;
+COMMENT ON COLUMN sr_intervention.icd IS 'Código OCD' ;
+COMMENT ON COLUMN sr_intervention.gender IS 'Sexo a que a intervenção se aplica. Valores possíveis: F- Feminino, M- Masculino, null- todos' ;
+COMMENT ON COLUMN sr_intervention.age_min IS 'Idade mínima dos pacientes a que a intervenção se destina' ;
+COMMENT ON COLUMN sr_intervention.age_max IS 'Idade máxima dos pacientes a que a intervenção se destina' ;
+COMMENT ON COLUMN sr_intervention.cost IS 'Custo da intervenção' ;
+
+COMMENT ON COLUMN sr_intervention.price IS 'Preço da intervenção' ;
+COMMENT ON COLUMN sr_intervention.id_system_organ IS 'ID do orgão' ;
+COMMENT ON COLUMN sr_intervention.id_speciality IS 'ID da especialidade' ;
+COMMENT ON COLUMN sr_intervention.adw_last_update IS 'Data da última alteração' ;
+
+comment on column SR_INTERVENTION.ICD
+  is 'Código ICD';
+  
+  
+-- alert-25876 Pedro Santos
+ALTER TABLE SR_INTERVENTION ADD FLG_CODING VARCHAR2(1);
+ALTER TABLE SR_INTERVENTION ADD ID_CONTENT VARCHAR2(200);
+COMMENT ON COLUMN "SR_INTERVENTION"."FLG_CODING" IS 'Defines the coding type used';
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 21/01/2016 11:18
+-- CHANGE REASON: [ALERT-318028] ALERT-318028 CDOC Functionalities V7
+-- Add comments to the table 
+comment on table SR_INTERVENTION
+  is 'Content table with surgery intervention';
+-- Add comments to the columns 
+comment on column SR_INTERVENTION.id_sr_intervention
+  is 'Surgical intervention identifier';
+comment on column SR_INTERVENTION.id_sr_interv_parent
+  is 'Surgical intervention parent identifier';
+comment on column SR_INTERVENTION.code_sr_intervention
+  is 'Translation code  for surgery intervention to obtain the description on table translation.
+';
+comment on column SR_INTERVENTION.flg_status
+  is 'Record status. Values A - Active, I - Inactive, ';
+comment on column SR_INTERVENTION.flg_type
+  is 'Surgery type.Value S- Cirurgia.';
+comment on column SR_INTERVENTION.duration
+  is 'Estimated surgery intervention duration';
+comment on column SR_INTERVENTION.prev_recovery_time
+  is 'Estimated time of staying on recovery room';
+comment on column SR_INTERVENTION.gdh
+  is 'Code of Diagnosis Related Groups (GDH)';
+comment on column SR_INTERVENTION.icd
+  is 'Code International Classification of Diseases (ICD)';
+comment on column SR_INTERVENTION.gender
+  is 'Gender  to which the surgical intervention applies.
+Values F- Female, M - Male, null - all.';
+comment on column SR_INTERVENTION.age_min
+  is 'Minimum patient age  which the surgical intervention applies.
+';
+comment on column SR_INTERVENTION.age_max
+  is 'Maximum patient age  which the surgical intervention applies.
+';
+comment on column SR_INTERVENTION.cost
+  is 'Intervention cost';
+comment on column SR_INTERVENTION.price
+  is 'Intervention price';
+comment on column SR_INTERVENTION.id_system_organ
+  is 'System organ identifier (Primary key)';
+comment on column SR_INTERVENTION.id_speciality
+  is 'Speciality identifier';
+comment on column SR_INTERVENTION.adw_last_update
+  is 'Date of last change, used by adw.';
+comment on column SR_INTERVENTION.create_user
+  is 'Creation User';
+comment on column SR_INTERVENTION.create_time
+  is 'Creation Time';
+comment on column SR_INTERVENTION.create_institution
+  is 'Creation Institution';
+comment on column SR_INTERVENTION.update_user
+  is 'Update User';
+comment on column SR_INTERVENTION.update_time
+  is 'Update Time';
+comment on column SR_INTERVENTION.update_institution
+  is 'Update Institution';
+comment on column SR_INTERVENTION.flg_coding
+  is 'Defines the coding type used';
+comment on column SR_INTERVENTION.id_content
+  is 'content identifier';
+-- CHANGE END: Pedro Fernandes
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/07/2017 14:08
+-- CHANGE REASON: [ALERT-331061]
+begin
+pk_frmw_objects.set_category_dpc(i_owner => 'ALERT',i_obj_name => 'SR_INTERVENTION');
+end;
+-- CHANGE END: Pedro Henriques

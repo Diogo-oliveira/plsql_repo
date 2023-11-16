@@ -1,0 +1,1 @@
+GRANT SELECT ON v_city TO intf_alert;

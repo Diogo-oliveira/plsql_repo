@@ -1,0 +1,52 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 17:43
+-- CHANGE REASON: [ALERT-235313 ] 
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -00955); -- unique constraint
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'create table PRESC_LIGHT_LICENSE
+                          ( id_professional    NUMBER(24) not null,
+                            id_institution     NUMBER(24) not null,
+                            desc_entity        VARCHAR2(200 CHAR),
+                            flg_payment_plan   VARCHAR2(10 CHAR) not null,
+                            create_user        VARCHAR2(24),
+                            create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                            create_institution NUMBER(24),
+                            update_user        VARCHAR2(24),
+                            update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                            update_institution NUMBER(24))';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 06/07/2012 10:47
+-- CHANGE REASON: [ALERT-235313 ] 
+-- Add comments to the table 
+comment on table PRESC_LIGHT_LICENSE
+  is 'Presciption light license types';
+-- Add comments to the columns 
+comment on column PRESC_LIGHT_LICENSE.id_professional
+  is 'Professional ID';
+comment on column PRESC_LIGHT_LICENSE.id_institution
+  is 'Institution ID';
+comment on column PRESC_LIGHT_LICENSE.desc_entity
+  is 'Billing entity';
+comment on column PRESC_LIGHT_LICENSE.flg_payment_plan
+  is 'Type of license';
+  
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_LIGHT_LICENSE IS 'Presciption light license types [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

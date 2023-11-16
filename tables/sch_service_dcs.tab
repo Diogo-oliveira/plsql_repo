@@ -1,0 +1,43 @@
+
+
+  CREATE TABLE SCH_SERVICE_DCS
+   (	ID_SCH_SERVICE_DCS NUMBER(24,0) NOT NULL ENABLE,
+	ID_DEPARTMENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_SCH_SERVICE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1),
+	ID_CLINICAL_SERVICE NUMBER(12,0)
+   );
+
+
+COMMENT ON TABLE sch_service_dcs IS 'Sets all services available to schedule on the institution''s departements/clinical services.' ;
+
+COMMENT ON COLUMN sch_service_dcs.flg_type IS 'User profile. (D)octor, (A)dministrative, (N)urse' ;
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-01-2013
+-- CHANGE REASON: ALERT-246442
+begin
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', 
+                                           i_obj_name => 'SCH_SERVICE_DCS', 
+                                           i_obj_type => 'TABLE', 
+                                           i_flg_category => 'DPC', 
+                                           i_flg_nzd => 'N');
+
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT_APSSCHDLR_MT', 
+                                           i_obj_name => 'TMP_EXCLUIDOS', 
+                                           i_obj_type => 'TABLE', 
+                                           i_flg_category => 'PRM', 
+                                           i_flg_nzd => 'N');
+end;
+/
+--CHANGE END:Telmo
+
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 15/01/2016 17:24
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON COLUMN SCH_SERVICE_DCS.ID_DEPARTMENT IS 'Department ID';
+COMMENT ON COLUMN SCH_SERVICE_DCS.ID_SCH_SERVICE_DCS IS 'Primary key';
+COMMENT ON COLUMN SCH_SERVICE_DCS.ID_SCH_SERVICE IS 'Schedule service ID';
+COMMENT ON COLUMN SCH_SERVICE_DCS.ID_CLINICAL_SERVICE IS 'Clinical service ID'; 
+-- CHANGE END:  jose.m.silva

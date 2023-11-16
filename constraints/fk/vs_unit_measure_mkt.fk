@@ -1,0 +1,45 @@
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 14/10/2010
+-- CHANGE REASON: ALERT-130839
+DECLARE
+    e_fk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_exists, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_unit_measure_mkt ADD CONSTRAINT vumm_m_fk FOREIGN KEY (id_market) REFERENCES market (id_market)';
+
+EXCEPTION
+    WHEN e_fk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+
+DECLARE
+    e_fk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_exists, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_unit_measure_mkt ADD CONSTRAINT vumm_vs_fk FOREIGN KEY (id_vital_sign) REFERENCES vital_sign (id_vital_sign)';
+
+EXCEPTION
+    WHEN e_fk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+
+DECLARE
+    e_fk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_exists, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_unit_measure_mkt ADD CONSTRAINT vumm_um_fk FOREIGN KEY (id_unit_measure) REFERENCES unit_measure (id_unit_measure)';
+
+EXCEPTION
+    WHEN e_fk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+-- CHANGE END: Paulo Fonseca

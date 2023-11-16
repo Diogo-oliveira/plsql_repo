@@ -1,0 +1,63 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 13/02/2013 11:34
+-- CHANGE REASON: [ALERT-250890] Default instructions for nursing interventions - phase 1
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'create table ICNP_DEFAULT_INSTRUCTIONS_MSI
+(
+  id_composition         NUMBER(24) not null,
+  id_order_recurr_option NUMBER(24),
+  flg_prn                VARCHAR2(1) not null,
+  prn_notes              CLOB,
+  flg_time               VARCHAR2(1 CHAR) not null,
+  id_institution       NUMBER(24) not null,
+  id_software            NUMBER(24) not null,
+  id_market              NUMBER(24) not null,
+  flg_available      VARCHAR2(1 char) not null,
+  create_user            VARCHAR2(24 CHAR),
+  create_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution     NUMBER(24),
+  update_user            VARCHAR2(24 CHAR),
+  update_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution     NUMBER(24)
+)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('ICNP_DEFAULT_INSTRUCTIONS_MSI table already exists');
+END;
+/
+
+COMMENT ON TABLE icnp_default_instructions_msi IS 'ICNP default instructions configurations table [IDIMSI]';
+COMMENT ON column icnp_default_instructions_msi.id_composition IS 'Composition ID';
+COMMENT ON column icnp_default_instructions_msi.id_order_recurr_option IS 'Order recurrence option ID';
+COMMENT ON column icnp_default_instructions_msi.flg_prn IS 'Flag that indicates if the intervention should only be executed as the situation demands or not (Y - yes; N - no)';
+COMMENT ON column icnp_default_instructions_msi.prn_notes IS 'Notes to indicate the conditions under which the intervention should be executed.';
+COMMENT ON column icnp_default_instructions_msi.flg_time IS 'Flag that indicates when task must be performed (E - in current episode; N - next episode; B - before next episode)';
+COMMENT ON column icnp_default_instructions_msi.id_institution IS 'Institution ID, where record setup takes effect';
+COMMENT ON column icnp_default_instructions_msi.id_software IS 'Software ID, where record setup takes effect';
+COMMENT ON column icnp_default_instructions_msi.id_market IS 'Market ID, where record setup takes effect';
+COMMENT ON column icnp_default_instructions_msi.flg_available IS 'Record availability (Y - yes; N - no)';
+COMMENT ON column icnp_default_instructions_msi.create_user IS 'Creation User';
+COMMENT ON column icnp_default_instructions_msi.create_time IS 'Creation Time';
+COMMENT ON column icnp_default_instructions_msi.create_institution IS 'Creation Institution';
+COMMENT ON column icnp_default_instructions_msi.update_user IS 'Update User';
+COMMENT ON column icnp_default_instructions_msi.update_time IS 'Update Time';
+COMMENT ON column icnp_default_instructions_msi.update_institution IS 'Update Institution';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:29
+-- CHANGE REASON: [EMR-4796] 
+DECLARE 
+	l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.icnp_default_instructions_msi move lob(prn_notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

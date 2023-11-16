@@ -1,0 +1,29 @@
+-- CHANGED BY: Pedro Quinteiro
+-- CHANGE DATE: 23/11/2011 09:58
+-- CHANGE REASON: [ALERT-206286 ] 
+grant execute on TABLE_TIMESTAMP_TSTZ to ALERT_PRODUCT_TR;
+-- CHANGE END: Pedro Quinteiro
+
+-- CHANGED BY: Pedro Quinteiro
+-- CHANGE DATE: 23/11/2011 11:43
+-- CHANGE REASON: [ALERT-206286 ] 
+grant execute on table_timestamp_tstz to alert_inter;
+-- CHANGE END: Pedro Quinteiro
+
+-- CHANGED BY: Pedro Quinteiro
+-- CHANGE DATE: 24/11/2011 18:14
+-- CHANGE REASON: [ALERT-206929] 
+GRANT EXECUTE ON TABLE_TIMESTAMP_TSTZ TO ALERT_INTER;
+-- CHANGE END: Pedro Quinteiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 22/02/2016 15:30
+-- CHANGE REASON: [ALERT-316371 ] 
+grant execute on TABLE_TIMESTAMP_TSTZ to ALERT_PRODUCT_MT;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Adriana Ramos
+-- CHANGE DATE: 26/10/2018
+-- CHANGE REASON: [EMR-7450] 
+grant execute on TABLE_TIMESTAMP_TSTZ to ALERT_PHARMACY_FUNC;
+-- CHANGE END: Adriana Ramos

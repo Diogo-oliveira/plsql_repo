@@ -1,0 +1,27 @@
+-- CHANGED BY: rui.baeta
+-- CHANGE DATE: 12/11/2009 11:51
+-- CHANGE REASON: [ALERT-55962] reports are now parametrized by reports_group, with episode type, software and institution
+alter table reports add constraint repet_fk foreign key(id_epis_type) references epis_type(id_epis_type);
+-- CHANGE END: rui.baeta
+
+-- CHANGED BY: rui.baeta
+-- CHANGE DATE: 21/11/2009 20:23
+-- CHANGE REASON: [ALERT-55962] new table "epis_type_reports" for relationship between epis_type and reports
+alter table reports drop constraint repet_fk cascade ;
+-- CHANGE END: rui.baeta
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 02/12/2009 21:11
+-- CHANGE REASON: [PIX-341] HIE XDS Content Creator module in Alert
+ALTER TABLE REPORTS
+    ADD CONSTRAINT REP_MMT_FK FOREIGN KEY (MIME_TYPE)
+    REFERENCES MIME_TYPE(MIME_TYPE);
+
+ALTER TABLE REPORTS
+    ADD CONSTRAINT REP_XDSDC_FK FOREIGN KEY (ID_XDS_DOCUMENT_CLASS)
+    REFERENCES XDS_DOCUMENT_CLASS(ID_XDS_DOCUMENT_CLASS);
+
+ALTER TABLE REPORTS
+    ADD CONSTRAINT REP_XDSDF_FK FOREIGN KEY (ID_XDS_DOCUMENT_FORMAT)
+    REFERENCES XDS_DOCUMENT_FORMAT(ID_XDS_DOCUMENT_FORMAT);
+-- CHANGE END: Ariel Machado

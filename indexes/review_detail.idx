@@ -1,0 +1,38 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/11/2010 11:54
+-- CHANGE REASON: [ALERT-71181] 
+DECLARE
+    e_already_not_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -00955);
+BEGIN
+    BEGIN
+    
+        EXECUTE IMMEDIATE 'CREATE INDEX rd_epis_idx  ON review_detail (    id_episode  )  TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+    BEGIN
+    
+        EXECUTE IMMEDIATE 'CREATE INDEX revp_idx  ON review_detail (    id_professional  )  TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 26/01/2022 15:32
+-- CHANGE REASON: [EMR-51318] - O carregamento da Visita Actual na Consulta esta lenta. Por vezes nem carrega
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[create index alert.rd_search01_idx on alert.review_detail(ID_EPISODE,ID_RECORD_AREA,FLG_CONTEXT) tablespace alert_idx]';
+pk_versioning.run(l_sql);
+end;
+/
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,55 @@
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 16/04/2011 12:54
+-- CHANGE REASON: [ALERT-156637] 
+alter table REASON_ACTION
+  add constraint REA_ACT_PK primary key (id_action);
+  
+alter table REASON_ACTION
+  add constraint REA_ACT_FLG_AVAIL_CHK
+  check (FLG_TYPE in ('C', 'S', 'D', 'R', 'O', 'T'));
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 18/02/2014 11:51
+-- CHANGE REASON: [ALERT-275609] 
+alter table REASON_ACTION drop constraint REA_ACT_FLG_AVAIL_CHK;
+
+alter table REASON_ACTION
+  add constraint REA_ACT_FLG_AVAIL_CHK
+  check (FLG_TYPE in ('C', 'S', 'D', 'R', 'O', 'T', 'E'));
+-- CHANGE END: Paulo Teixeira
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 11/12/2017
+-- CHANGE REASON: CALERT-35
+ALTER TABLE reason_action drop CONSTRAINT rea_act_flg_avail_chk;
+
+ALTER TABLE reason_action add CONSTRAINT rea_act_flg_avail_chk CHECK(flg_type IN
+                                                                     ('C', 'S', 'D', 'R', 'O', 'T', 'E', 'U'));
+-- CHANGE END: Pedro Teixeira
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/05/2019 15:28
+-- CHANGE REASON: [EMR-15988]
+ALTER TABLE REASON_ACTION DROP CONSTRAINT REA_ACT_FLG_AVAIL_CHK;
+ALTER TABLE REASON_ACTION ADD CONSTRAINT REA_ACT_FLG_AVAIL_CHK CHECK (flg_type IN ('C', 'S', 'D', 'R', 'O', 'T', 'E', 'U', 'M'));
+-- CHANGE END: Pedro Henriques
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := 'alter table reason_action drop constraint REA_ACT_FLG_AVAIL_CHK';
+	pk_versioning.run(l_sql);
+end;
+/
+	
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := q'[ALTER TABLE REASON_ACTION ADD CONSTRAINT REA_ACT_FLG_AVAIL_CHK CHECK (flg_type IN ('C', 'S', 'D', 'R', 'O', 'T', 'E', 'U', 'M', 'A', 'N'))]';
+	pk_versioning.run(l_sql);
+end;
+/

@@ -1,0 +1,37 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 11/07/2016 16:18
+-- CHANGE REASON: [ALERT-322610 ] Automatic cancellation/discontinuation of active medication order after discharge
+--                
+
+BEGIN
+pk_versioning.run('create table presc_interrupt_soft_inst( 
+       flg_type_origin varchar2 (6 char) not null,
+  flg_type_dest varchar2(6char) not null,
+id_software    NUMBER(24) not null,
+id_institution NUMBER(24)not null,
+  flg_available      VARCHAR2(1 char) not null,
+  create_user        VARCHAR2(24 char),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 char),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+)');
+END;
+/
+--comments on table.
+comment on table presc_interrupt_soft_inst is 'Define if the prescription is cancelled/interruped automatically  when a service transfer is made';
+-- Add comments to the columns 
+COMMENT ON COLUMN presc_interrupt_soft_inst.flg_type_origin is 'origin type of service transfer';
+COMMENT ON COLUMN presc_interrupt_soft_inst.flg_type_dest is 'destination type of service transfer';
+COMMENT ON COLUMN presc_interrupt_soft_inst.id_software is 'software identifier';
+COMMENT ON COLUMN presc_interrupt_soft_inst.id_institution is 'institution identifier';
+COMMENT ON COLUMN presc_interrupt_soft_inst.flg_available is 'if it is available';
+COMMENT ON COLUMN presc_interrupt_soft_inst.create_user is 'Creation User';
+COMMENT ON COLUMN presc_interrupt_soft_inst.create_time is 'Creation Time';
+COMMENT ON COLUMN presc_interrupt_soft_inst.create_institution is 'Creation Institution';
+COMMENT ON COLUMN presc_interrupt_soft_inst.update_user is 'Update User';
+COMMENT ON COLUMN presc_interrupt_soft_inst.update_time is 'Update Time';
+COMMENT ON COLUMN presc_interrupt_soft_inst.update_institution is 'Update Institution';
+ 
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,318 @@
+
+
+  CREATE TABLE EPIS_INFO
+   (	ID_EPIS_INFO NUMBER(24,0) NOT NULL ENABLE,
+	ID_BED NUMBER(24,0),
+	ID_ROOM NUMBER(24,0),
+	ID_PROFESSIONAL NUMBER(24,0),
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	NORTON NUMBER(3,0),
+	FLG_HYDRIC VARCHAR2(1),
+	FLG_WOUND VARCHAR2(1),
+	COMPANION VARCHAR2(200),
+	FLG_UNKNOWN VARCHAR2(1),
+	DESC_INFO VARCHAR2(4000),
+
+	ID_SCHEDULE NUMBER(24,0),
+	ID_FIRST_NURSE_RESP NUMBER(24,0),
+	FLG_STATUS VARCHAR2(1),
+	ID_DEP_CLIN_SERV NUMBER(24,0),
+	ID_FIRST_DEP_CLIN_SERV NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE epis_info IS 'Esta tabela contém informação variada sobre o episódio. Serve para facilitar o acesso aos dados mais requisitados do episódio, uma vez que assim ficam centralizados.Não contém histórico, mas sim o estado mais actualizado do doente.' ;
+
+COMMENT ON COLUMN epis_info.id_epis_info IS 'Chave primária' ;
+COMMENT ON COLUMN epis_info.norton IS 'Escala de Norton' ;
+COMMENT ON COLUMN epis_info.flg_hydric IS 'Registos hídricos' ;
+COMMENT ON COLUMN epis_info.flg_wound IS 'Avaliação de feridas' ;
+COMMENT ON COLUMN epis_info.flg_unknown IS 'Pacientes temporários' ;
+COMMENT ON COLUMN epis_info.desc_info IS 'Para conter a queixa, diagnóstico, etc' ;
+COMMENT ON COLUMN epis_info.flg_status IS 'Estado: E - efectivado (epis. iniciado), D - alta médica, M - alta administrativa, A - alta automática, C - espera corredor, N - atendimento enfermagem pré-consulta, P - atendimento enfermagem pós-consulta, T - consulta' ;
+COMMENT ON COLUMN epis_info.id_first_dep_clin_serv IS 'Primeiro serviço clínico para o departamento' ;
+
+comment on column EPIS_INFO.ID_DEP_CLIN_SERV
+  is 'Serviço clinico do departamento';
+comment on column EPIS_INFO.ID_FIRST_DEP_CLIN_SERV
+  is 'Primeiro serviço clinico do departamento';
+
+
+alter table EPIS_INFO add ID_USF NUMBER(24);
+alter table EPIS_INFO add ID_PROF_TEAM NUMBER(24);
+-- Add comments to the columns 
+comment on column EPIS_INFO.ID_USF
+  is 'Id da USF';
+comment on column EPIS_INFO.ID_PROF_TEAM
+  is 'Identificador da equipa';
+
+-- correcção para a alta de enfermagem
+COMMENT ON COLUMN epis_info.flg_status IS 'Estado: E - efectivado (epis. iniciado), D - alta médica, M - alta administrativa, A - alta automática, C - espera corredor, N - atendimento enfermagem pré-consulta, P - alta de enfermagem, T - consulta' ;
+
+alter table EPIS_INFO rename column ID_USF to ID_INSTITUTION_USF;
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-AGO-18
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15273
+
+COMMENT ON COLUMN EPIS_INFO.ID_BED IS 'Bed ID';
+COMMENT ON COLUMN EPIS_INFO.ID_ROOM IS 'Room ID';
+COMMENT ON COLUMN EPIS_INFO.ID_PROFESSIONAL IS 'Professional ID';
+COMMENT ON COLUMN EPIS_INFO.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN EPIS_INFO.COMPANION IS 'Accompanying person';
+COMMENT ON COLUMN EPIS_INFO.ID_SCHEDULE IS 'Schedule ID';
+COMMENT ON COLUMN EPIS_INFO.ID_FIRST_NURSE_RESP IS 'First nurse responsible ID';
+COMMENT ON COLUMN EPIS_INFO.FLG_STATUS IS 'Estado: E - efectivado (epis. iniciado), D - alta médica, M - alta administrativa, A - alta automática, C - espera corredor, N - atendimento enfermagem pré-consulta, O - Alta de sessão, P - atendimento enfermagem pós-consulta, T - consulta' ;
+
+-- Change END
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-AUG-29
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15273
+COMMENT ON COLUMN EPIS_INFO.FLG_HYDRIC IS 'Registos hídricos: Y - Sim; N - Não';
+COMMENT ON COLUMN EPIS_INFO.FLG_WOUND IS 'Avaliação de feridas: Y - Sim; N - Não';
+COMMENT ON COLUMN EPIS_INFO.FLG_UNKNOWN IS 'Pacientes temporários: Y - Episódio temporário; N - Episódio definitivo';
+-- CHANGE END
+
+-- CHANGED BY: Eduardo
+-- CHANGE REASON: Denormalization
+-- CHANGE DATE: 2008/10/22
+ALTER TABLE EPIS_INFO ADD ID_TRIAGE NUMBER(12);
+ALTER TABLE EPIS_INFO ADD ID_TRIAGE_WHITE_REASON NUMBER(24);
+ALTER TABLE EPIS_INFO ADD ID_FIRST_TRIAGE NUMBER(12);
+ALTER TABLE EPIS_INFO ADD ID_FIRST_TRIAGE_WR NUMBER(24);
+ALTER TABLE EPIS_INFO ADD DT_HARVEST_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_LAST_INTERACTION_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_MOVEMENT_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_NEXT_DRUG_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_FIRST_OBS_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_NEXT_INTERVENTION_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_NEXT_VITAL_SIGN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_NEXT_POSITION_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_ENTRANCE_ROOM_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_HARVEST_MOV_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_FIRST_NURSE_OBS_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_FIRST_ANALYSIS_EXE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_FIRST_ANALYSIS_REQ_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_FIRST_IMAGE_EXEC_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_FIRST_IMAGE_REQ_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_FIRST_DRUG_PRSC_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_FIRST_DRUG_TAKE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_FIRST_INTERV_PRSC_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_FIRST_INTERV_TAKE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_FIRST_INST_OBS_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_INIT TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD ID_PROF_FIRST_OBS NUMBER(24);
+ALTER TABLE EPIS_INFO ADD ID_PROF_FIRST_NURSE_OBS NUMBER(24);
+ALTER TABLE EPIS_INFO ADD DT_FIRST_SCH TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_FIRST_NURSE_SCH TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD ID_PROF_FIRST_SCH NUMBER(24);
+ALTER TABLE EPIS_INFO ADD ID_PROF_FIRST_NURSE_SCH NUMBER(24);
+ALTER TABLE EPIS_INFO ADD ID_PATIENT NUMBER(24);
+ALTER TABLE EPIS_INFO ADD ID_SOFTWARE NUMBER(24);
+ALTER TABLE EPIS_INFO ADD FLG_DSCH_STATUS VARCHAR2(1);
+ALTER TABLE EPIS_INFO ADD ID_DISCH_REAS_DEST NUMBER(24);
+ALTER TABLE EPIS_INFO ADD DT_MED_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_PEND_ACTIVE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_ADMIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD ID_DCS_REQUESTED NUMBER(24);
+ALTER TABLE EPIS_INFO ADD ID_INSTIT_REQUESTED NUMBER(12);
+ALTER TABLE EPIS_INFO ADD ID_PROF_SCHEDULES NUMBER(24);
+ALTER TABLE EPIS_INFO ADD FLG_SCH_STATUS VARCHAR2(1);
+ALTER TABLE EPIS_INFO ADD ID_COMPLAINT NUMBER(24);
+ALTER TABLE EPIS_INFO ADD FLG_URGENCY VARCHAR2(1);
+ALTER TABLE EPIS_INFO ADD SCH_GROUP_ID_PATIENT NUMBER(24);
+ALTER TABLE EPIS_INFO ADD ID_SCHEDULE_OUTP NUMBER(24);
+ALTER TABLE EPIS_INFO ADD SCH_PROF_OUTP_ID_PROF NUMBER(24);
+ALTER TABLE EPIS_INFO ADD ID_SCHEDULE_SR NUMBER(24);
+ALTER TABLE EPIS_INFO ADD TRIAGE_ACUITY VARCHAR2(50);
+ALTER TABLE EPIS_INFO ADD TRIAGE_COLOR_TEXT VARCHAR2(240);
+ALTER TABLE EPIS_INFO ADD TRIAGE_RANK_ACUITY VARCHAR2(200);
+ALTER TABLE EPIS_INFO ADD TRIAGE_FLG_LETTER VARCHAR2(1);
+ALTER TABLE EPIS_INFO ADD FAST_TRACK_ICON VARCHAR2(100);
+ALTER TABLE EPIS_INFO ADD FAST_TRACK_DESC VARCHAR2(4000);
+ALTER TABLE EPIS_INFO ADD FAST_TRACK_COLOR VARCHAR2(240);
+ALTER TABLE EPIS_INFO ADD ID_ROOM_SCHEDULED NUMBER(24);
+ALTER TABLE EPIS_INFO ADD ROOM_SCH_FLG_STATUS VARCHAR2(1);
+ALTER TABLE EPIS_INFO ADD FLG_PAT_STATUS VARCHAR2(1);
+ALTER TABLE EPIS_INFO ADD DT_ROOM_ENTRY_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DT_SURGERY_TIME_DET_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE EPIS_INFO ADD DESC_DIET VARCHAR2(200);
+COMMENT ON COLUMN EPIS_INFO.ID_TRIAGE IS 'ID da triagem' ;
+COMMENT ON COLUMN EPIS_INFO.ID_TRIAGE_WHITE_REASON IS 'ID da triagem de brancos' ;
+COMMENT ON COLUMN EPIS_INFO.ID_FIRST_TRIAGE IS 'ID da primeira triagem' ;
+COMMENT ON COLUMN EPIS_INFO.ID_FIRST_TRIAGE_WR IS 'ID da primeira triagem de brancos' ;
+COMMENT ON COLUMN EPIS_INFO.DT_HARVEST_TSTZ IS 'Colheita' ;
+COMMENT ON COLUMN EPIS_INFO.DT_LAST_INTERACTION_TSTZ IS 'Última interacção' ;
+COMMENT ON COLUMN EPIS_INFO.DT_MOVEMENT_TSTZ IS 'Movimentação do paciente' ;
+COMMENT ON COLUMN EPIS_INFO.DT_NEXT_DRUG_TSTZ IS 'Próxima toma de medicação' ;
+COMMENT ON COLUMN EPIS_INFO.DT_FIRST_OBS_TSTZ IS 'Primeira observação' ;
+COMMENT ON COLUMN EPIS_INFO.DT_NEXT_INTERVENTION_TSTZ IS 'Próximo procedimento' ;
+COMMENT ON COLUMN EPIS_INFO.DT_NEXT_VITAL_SIGN_TSTZ IS 'Próxima leitura de sinais vitais' ;
+COMMENT ON COLUMN EPIS_INFO.DT_NEXT_POSITION_TSTZ IS 'Próxima mudança de posição' ;
+COMMENT ON COLUMN EPIS_INFO.DT_ENTRANCE_ROOM_TSTZ IS 'Entrada na sala' ;
+COMMENT ON COLUMN EPIS_INFO.DT_HARVEST_MOV_TSTZ IS 'Movimentação da colheita' ;
+COMMENT ON COLUMN EPIS_INFO.DT_FIRST_NURSE_OBS_TSTZ IS 'Data da primeira observação pela enfermeira' ;
+COMMENT ON COLUMN EPIS_INFO.DT_FIRST_ANALYSIS_EXE_TSTZ IS 'Data da primeira análise executada' ;
+COMMENT ON COLUMN EPIS_INFO.DT_FIRST_ANALYSIS_REQ_TSTZ IS 'Data da primeira análise requisitada' ;
+COMMENT ON COLUMN EPIS_INFO.DT_FIRST_IMAGE_EXEC_TSTZ IS 'Data da primeira imagem executada' ;
+COMMENT ON COLUMN EPIS_INFO.DT_FIRST_IMAGE_REQ_TSTZ IS 'Data da primeira imagem requisitada' ;
+COMMENT ON COLUMN EPIS_INFO.DT_FIRST_DRUG_PRSC_TSTZ IS 'Data da primeira prescrição de medicação' ;
+COMMENT ON COLUMN EPIS_INFO.DT_FIRST_DRUG_TAKE_TSTZ IS 'Data da primeira toma de medicação' ;
+COMMENT ON COLUMN EPIS_INFO.DT_FIRST_INTERV_PRSC_TSTZ IS 'Data da prescrição da primeira intervenção' ;
+COMMENT ON COLUMN EPIS_INFO.DT_FIRST_INTERV_TAKE_TSTZ IS 'Data da primeira intervenção' ;
+COMMENT ON COLUMN EPIS_INFO.DT_FIRST_INST_OBS_TSTZ IS 'First observation in the current institution' ;
+COMMENT ON COLUMN EPIS_INFO.DT_INIT IS 'Data de início da consulta (Aplicado ao PP/CARE/OUTP)' ;
+COMMENT ON COLUMN EPIS_INFO.ID_PROF_FIRST_OBS IS 'Professional who made the episode first observation' ;
+COMMENT ON COLUMN EPIS_INFO.ID_PROF_FIRST_NURSE_OBS IS 'Nurse who made the episode first observation' ;
+COMMENT ON COLUMN EPIS_INFO.DT_FIRST_SCH IS 'Date of the first data register on a schedule episode' ;
+COMMENT ON COLUMN EPIS_INFO.DT_FIRST_NURSE_SCH IS 'Date of the first data register on a schedule episode made by a nurse' ;
+COMMENT ON COLUMN EPIS_INFO.ID_PROF_FIRST_SCH IS 'Professional who made the first data register on a schedule episode' ;
+COMMENT ON COLUMN EPIS_INFO.ID_PROF_FIRST_NURSE_SCH IS 'Nurse who made the first data register on a schedule episode' ;
+COMMENT ON COLUMN EPIS_INFO.ID_PATIENT IS 'Patient ID' ;
+COMMENT ON COLUMN EPIS_INFO.ID_SOFTWARE IS 'Software ID' ;
+COMMENT ON COLUMN EPIS_INFO.FLG_DSCH_STATUS IS 'Estado da alta: A - activo, C - cancelado, R - reaberto, P - pendente' ;
+COMMENT ON COLUMN EPIS_INFO.ID_DISCH_REAS_DEST IS 'Discharge destiny reason' ;
+COMMENT ON COLUMN EPIS_INFO.DT_MED_TSTZ IS 'Discharge date' ;
+COMMENT ON COLUMN EPIS_INFO.DT_PEND_ACTIVE_TSTZ IS 'Discharge pending active date';
+COMMENT ON COLUMN EPIS_INFO.DT_ADMIN_TSTZ IS 'Administrative discharge date';
+COMMENT ON COLUMN EPIS_INFO.ID_DCS_REQUESTED IS 'Department-Clinical service that is requested to carry out the appointment' ;
+COMMENT ON COLUMN EPIS_INFO.ID_INSTIT_REQUESTED IS 'Institution that is requested to carry out the appointment' ;
+COMMENT ON COLUMN EPIS_INFO.ID_PROF_SCHEDULES IS 'Professional that created the appointment' ;
+COMMENT ON COLUMN EPIS_INFO.FLG_SCH_STATUS IS 'Appointment status: A - scheduled, R - requested, C - cancelled, D - deleted,  P - pending';
+COMMENT ON COLUMN EPIS_INFO.ID_COMPLAINT IS 'Complaint identifier' ;
+COMMENT ON COLUMN EPIS_INFO.FLG_URGENCY IS 'Is this an urgent appointment? Y - yes, N - no';
+COMMENT ON COLUMN EPIS_INFO.SCH_GROUP_ID_PATIENT IS 'Schedule group patient ID' ;
+COMMENT ON COLUMN EPIS_INFO.ID_SCHEDULE_OUTP IS 'SCHEDULE_OUTP ID' ;
+COMMENT ON COLUMN EPIS_INFO.SCH_PROF_OUTP_ID_PROF IS 'SCH_PROF_OUTP Professional ID' ;
+COMMENT ON COLUMN EPIS_INFO.ID_SCHEDULE_SR IS 'SCHEDULE_SR ID' ;
+COMMENT ON COLUMN EPIS_INFO.TRIAGE_ACUITY IS 'Triage acuity' ;
+COMMENT ON COLUMN EPIS_INFO.TRIAGE_COLOR_TEXT IS 'Triage color text' ;
+COMMENT ON COLUMN EPIS_INFO.TRIAGE_RANK_ACUITY IS 'Triage acuity rank' ;
+COMMENT ON COLUMN EPIS_INFO.TRIAGE_FLG_LETTER IS 'Indicação se vem acompanhado de carta do médico assistente (Y / N). Valor por defeito é N.' ;
+COMMENT ON COLUMN EPIS_INFO.FAST_TRACK_ICON IS 'Fast track icon' ;
+COMMENT ON COLUMN EPIS_INFO.FAST_TRACK_DESC IS 'Fast track description' ;
+COMMENT ON COLUMN EPIS_INFO.FAST_TRACK_COLOR IS 'Fast track color' ;
+COMMENT ON COLUMN EPIS_INFO.ID_ROOM_SCHEDULED IS 'ROOM_SCHEDULED ID' ;
+COMMENT ON COLUMN EPIS_INFO.ROOM_SCH_FLG_STATUS IS 'Estado da sala. Valores possíveis: A- Agendada F- Pronta, B- Ocupada, C- Em limpeza, D- Suja' ;
+COMMENT ON COLUMN EPIS_INFO.FLG_PAT_STATUS IS 'Estado do paciente. Valores possíveis: A-Ausente, W- Em espera, L- Pedido de transporte para o bloco, T- Em transporte para o bloco, V- Acolhido no bloco, P- Em preparação, R- Preparado para a cirurgia, S- Em cirurgia, F- Terminou a cirurgia, Y- No recobro, D- Alta do Recobro, O- Em transporte para outro local no hospital ou noutra instituição' ;
+COMMENT ON COLUMN EPIS_INFO.DT_ROOM_ENTRY_TSTZ IS 'Data / hora de entrada do paciente na sala operatória' ;
+COMMENT ON COLUMN EPIS_INFO.DT_SURGERY_TIME_DET_TSTZ IS 'Data do tempo operatório' ;
+ALTER TABLE EPIS_INFO DROP COLUMN ID_EPIS_INFO;
+-- CHANGE END
+
+-- CHANGED BY: Eduardo
+-- CHANGE REASON: Denormalization
+-- CHANGE DATE: 2008/10/22
+ALTER TABLE EPIS_INFO MODIFY ID_SCHEDULE NUMBER(24,0) NOT NULL;
+-- CHANGE END
+
+-- CHANGED BY: Eduardo
+-- CHANGE REASON: Denormalization
+-- CHANGE DATE: 2008/11/03
+ALTER TABLE EPIS_INFO ADD ID_TRIAGE_COLOR NUMBER(12);
+-- CHANGE END
+
+-- CHANGED BY: Eduardo
+-- CHANGE REASON: Denormalization
+-- CHANGE DATE: 2008/11/26
+COMMENT ON COLUMN EPIS_INFO.ID_TRIAGE_COLOR IS 'TRIAGE_COLOR ID' ;
+-- CHANGE END
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EPIS_INFO
+  is 'This table contains various information about the episode. Serves to facilitate access to the required data of the episode. Does not contain history, but the most updated status of the patient.';
+-- Add comments to the columns 
+comment on column EPIS_INFO.norton
+  is 'Norton Scale';
+comment on column EPIS_INFO.flg_hydric
+  is 'Hydrics: Y - Yes; N - No';
+comment on column EPIS_INFO.flg_wound
+  is 'Wound avaliation: Y - Yes; N - No';
+comment on column EPIS_INFO.companion
+  is 'Companion name';
+comment on column EPIS_INFO.flg_unknown
+  is 'Temporary patient: Y - Temporary episode; N - Final episode';
+comment on column EPIS_INFO.desc_info
+  is 'Compliant, diagnoses';
+comment on column EPIS_INFO.flg_status
+  is 'Episode status (SYS_DOMAIN EPIS_INFO.FLG_STATUS)';
+comment on column EPIS_INFO.id_dep_clin_serv
+  is 'Clinical service department';
+comment on column EPIS_INFO.id_first_dep_clin_serv
+  is 'First clinical service department';
+comment on column EPIS_INFO.id_prof_team
+  is 'Team ID';
+comment on column EPIS_INFO.id_triage
+  is 'Triage ID';
+comment on column EPIS_INFO.id_triage_white_reason
+  is 'White triage ID';
+comment on column EPIS_INFO.id_first_triage
+  is 'First triage ID';
+comment on column EPIS_INFO.id_first_triage_wr
+  is 'First white triage ID';
+comment on column EPIS_INFO.dt_harvest_tstz
+  is 'Harvest date';
+comment on column EPIS_INFO.dt_last_interaction_tstz
+  is 'Last patient interaction date';
+comment on column EPIS_INFO.dt_movement_tstz
+  is 'Patient movement date';
+comment on column EPIS_INFO.dt_next_drug_tstz
+  is 'Next medication date';
+comment on column EPIS_INFO.dt_first_obs_tstz
+  is 'First observation date';
+comment on column EPIS_INFO.dt_next_intervention_tstz
+  is 'Next observation  date';
+comment on column EPIS_INFO.dt_next_vital_sign_tstz
+  is 'Next vital sign reading date';
+comment on column EPIS_INFO.dt_next_position_tstz
+  is 'Next patient positioning date';
+comment on column EPIS_INFO.dt_entrance_room_tstz
+  is 'Entrance room date';
+comment on column EPIS_INFO.dt_harvest_mov_tstz
+  is 'Harvest movement date';
+comment on column EPIS_INFO.dt_first_nurse_obs_tstz
+  is 'First nurse observation date';
+comment on column EPIS_INFO.dt_first_analysis_exe_tstz
+  is 'First analysis execution date';
+comment on column EPIS_INFO.dt_first_analysis_req_tstz
+  is 'First analysis requesition date';
+comment on column EPIS_INFO.dt_first_image_exec_tstz
+  is 'First image exam execution date';
+comment on column EPIS_INFO.dt_first_image_req_tstz
+  is 'First image exam request date';
+comment on column EPIS_INFO.dt_first_drug_prsc_tstz
+  is 'First drug prescription date';
+comment on column EPIS_INFO.dt_first_drug_take_tstz
+  is 'First drug take date';
+comment on column EPIS_INFO.dt_first_interv_prsc_tstz
+  is 'First procedure(intervention) request date';
+comment on column EPIS_INFO.dt_first_interv_take_tstz
+  is 'First procedure execution date';
+comment on column EPIS_INFO.dt_init
+  is 'Appointment begin date(Used on  PP/CARE/OUTP)';
+comment on column EPIS_INFO.flg_dsch_status
+  is 'Discharge Status: A - Active, C - Cancelled, R - Reopen, P - Pending';
+comment on column EPIS_INFO.triage_flg_letter
+  is 'Indication is accompanied by a letter from the attending physician(Y / N). ';
+comment on column EPIS_INFO.room_sch_flg_status
+  is 'Room status ROOM_SCHEDULED.FLG_STATUS';
+comment on column EPIS_INFO.flg_pat_status
+  is 'Patient Status SR_SURGERY_RECORD.FLG_PAT_STATUS';
+comment on column EPIS_INFO.dt_room_entry_tstz
+  is 'Patient entrance date on operation room';
+comment on column EPIS_INFO.dt_surgery_time_det_tstz
+  is 'Operating time ';
+comment on column EPIS_INFO.desc_diet
+  is 'Diet description';
+  
+-- CHANGE END: Elisabete Bugalho

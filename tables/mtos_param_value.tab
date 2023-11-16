@@ -1,0 +1,135 @@
+CREATE TABLE mtos_param_value (
+       id_mtos_param_value NUMBER(24) NOT NULL,
+			 id_mtos_param NUMBER(24) NOT NULL,
+			 code_mtos_param_value VARCHAR2(200) NOT NULL,
+			 value NUMBER(6) NOT NULL,
+			 rank NUMBER(6) NOT NULL,
+			 flg_available VARCHAR2(1) NOT NULL,
+			 id_vital_sign NUMBER(24),
+			 vs_min_val NUMBER(6),
+			 vs_max_val NUMBER(6),
+			 id_vital_sign_desc NUMBER(24),
+			 id_content VARCHAR2(200),
+			 create_user VARCHAR2(24),
+			 create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 create_institution NUMBER(24),
+			 update_user VARCHAR2(24),
+			 update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 update_institution NUMBER(24)
+) TABLESPACE TABLE_S;
+
+COMMENT ON TABLE mtos_param_value IS 'Score values for every option in the MTOS dataset parameters.';
+COMMENT ON COLUMN mtos_param_value.id_mtos_param_value IS 'Primary key';
+COMMENT ON COLUMN mtos_param_value.id_mtos_param IS 'Parameter identifier';
+COMMENT ON COLUMN mtos_param_value.code_mtos_param_value IS 'Code for translation';
+COMMENT ON COLUMN mtos_param_value.value IS 'Score value for the current option or vital sign range';
+COMMENT ON COLUMN mtos_param_value.rank IS 'Value for sorting';
+COMMENT ON COLUMN mtos_param_value.flg_available IS 'Availability: (Y) Yes (N) No';
+COMMENT ON COLUMN mtos_param_value.id_vital_sign IS 'Vital sign identifier';
+COMMENT ON COLUMN mtos_param_value.vs_min_val IS 'Vital sign range minimum value';
+COMMENT ON COLUMN mtos_param_value.vs_max_val IS 'Vital sign range maximum value';
+COMMENT ON COLUMN mtos_param_value.id_vital_sign_desc IS 'Vital sign value (if filled by multichoice)';
+COMMENT ON COLUMN mtos_param_value.id_content IS 'Content unique identifier';
+COMMENT ON COLUMN mtos_param_value.create_user IS 'Creation user';
+COMMENT ON COLUMN mtos_param_value.create_time IS 'Creation date / time';
+COMMENT ON COLUMN mtos_param_value.create_institution IS 'Creation institution';
+COMMENT ON COLUMN mtos_param_value.update_user IS 'Update user';
+COMMENT ON COLUMN mtos_param_value.update_time IS 'Update date / time';
+COMMENT ON COLUMN mtos_param_value.update_institution IS 'Update institution';
+
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 14/12/2010 08:47
+-- CHANGE REASON: [ALERT-138136] 
+alter table MTOS_PARAM_VALUE add id_unit_measure NUMBER(24);
+
+comment on column MTOS_PARAM_VALUE.id_unit_measure is 'Unit measure identifier';
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 06/05/2011 14:24
+-- CHANGE REASON: [ALERT-173938] Severity scores: corrections on vital signs limits
+ALTER TABLE mtos_param_value MODIFY vs_min_val NUMBER(8,2);
+ALTER TABLE mtos_param_value MODIFY vs_max_val NUMBER(8,2);
+-- CHANGE END: José Silva
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 23/08/2013 14:53
+-- CHANGE REASON: [ALERT-262898] 
+BEGIN
+   BEGIN
+    EXECUTE IMMEDIATE 'alter table MTOS_PARAM_VALUE add color VARCHAR2(0200 CHAR)';
+   exception when others then
+      dbms_output.put_line('ALTER TABLE MTOS_PARAM_VALUE ERROR!');		
+	END;
+	BEGIN
+    EXECUTE IMMEDIATE 'comment on column MTOS_PARAM_VALUE.color is ''Color in hexadecimal for flash with 0x for the respective value''';
+   exception when others then
+      dbms_output.put_line('ALTER TABLE MTOS_PARAM_VALUE.color ERROR!');		
+	END;
+end;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/11/2017 10:19
+-- CHANGE REASON: [CALERT-804] 
+ALTER TABLE MTOS_PARAM_VALUE ADD EXTRA_SCORE VARCHAR2(1 CHAR) DEFAULT 'N';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 08/01/2018 16:00
+-- CHANGE REASON: [CALERT-1672]
+ALTER TABLE MTOS_PARAM_VALUE
+ADD FLG_PARAM_TASK_TYPE VARCHAR2(2) DEFAULT NULL;
+
+UPDATE MTOS_PARAM_VALUE m
+   SET m.FLG_PARAM_TASK_TYPE = 'VS'
+ WHERE m.id_vital_sign IS NOT NULL;
+ 
+ALTER TABLE MTOS_PARAM_VALUE
+ADD ID_PARAM_TASK number(24) DEFAULT NULL;
+
+ALTER TABLE MTOS_PARAM_VALUE
+ADD PARAM_TASK_MIN_VAL number(8,2) DEFAULT NULL;
+
+ALTER TABLE MTOS_PARAM_VALUE
+ADD PARAM_TASK_MAX_VAL number(8,2) DEFAULT NULL;
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE.Flg_Param_Task_Type
+        IS 'Flag than indicates the type of parameter: VS-"Vital Sign"';
+        
+COMMENT ON COLUMN MTOS_PARAM_VALUE.Id_Param_Task
+        IS 'Id task of the parameter (Id related to FLG_PARAM_TASK_TYPE)';
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE.Id_Vital_Sign
+  is 'Vital sign identifier, if the parameter is a vital sign - DEPRECATED';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 16/01/2018 08:00
+-- CHANGE REASON: [CALERT-1469] 
+ALTER TABLE MTOS_PARAM_VALUE
+ADD AGE_MIN number(4) DEFAULT NULL
+ADD AGE_MAX number(4) DEFAULT NULL;
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE.AGE_MIN
+        IS 'Minimum age (in months) for the parameter value to be available';
+COMMENT ON COLUMN MTOS_PARAM_VALUE.AGE_MAX 
+        IS 'Maximum age (in months) for the parameter value to be available';		
+--CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 26/01/2018 08:00
+-- CHANGE REASON: [CALERT-219] 
+declare
+                l_sql                      varchar2(1000 char);
+begin
+
+                l_sql := 'alter table mtos_param_value add internal_name varchar2(0100 char)';
+                pk_versioning.run( l_sql);
+
+end;
+/
+--CHANGE END: Diogo Oliveira

@@ -1,0 +1,18 @@
+-- CHANGED BY: Nuno Alves
+-- CHANGE DATE: 09/06/2015 09:16
+-- CHANGE REASON: [ALERT-312396] ALERT-312396 Issue Replication: [BSUH] Outpatient Appointment report and Outpatient GP Letter generation and sending 2 reports in discharge
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || REPLACE(srcstr => SQLERRM, oldsub => 'ORA-', newsub => '') || '; ' ||
+                                 i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl('CREATE sequence seq_discharge_report minvalue 1 maxvalue 999999999999 START
+    WITH 1 increment BY 1 cache 500');
+END;
+/
+-- CHANGE END: Nuno Alves

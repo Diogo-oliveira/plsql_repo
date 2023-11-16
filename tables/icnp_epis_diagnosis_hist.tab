@@ -1,0 +1,128 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+------------------------------------------
+--  New table icnp_epis_diagnosis_hist  --
+------------------------------------------
+-- Create table
+declare
+   e_table_already_there EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_table_already_there, -00955); -- table already there
+begin
+    BEGIN
+        EXECUTE IMMEDIATE 'create table ICNP_EPIS_DIAGNOSIS_HIST
+(
+  ID_ICNP_EPIS_DIAG_HIST NUMBER(24) not null,
+  ID_ICNP_EPIS_DIAG      NUMBER(24) not null,
+  ID_COMPOSITION         NUMBER(12),
+  ID_PROFESSIONAL        NUMBER(24),
+  FLG_STATUS             VARCHAR2(1 CHAR),
+  ID_EPISODE             NUMBER(24),
+  NOTES                  VARCHAR2(1000 CHAR),
+  ID_PROF_CLOSE          NUMBER(24),
+  NOTES_CLOSE            VARCHAR2(1000 CHAR),
+  ID_PATIENT             NUMBER(24),
+  DT_ICNP_EPIS_DIAG      TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DT_CLOSE               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_VISIT               NUMBER(24),
+  ID_EPIS_TYPE           NUMBER(24),
+  FLG_EXECUTIONS         VARCHAR2(1 CHAR),
+  ICNP_COMPO_REEVAL      NUMBER(24),
+  ID_PROF_LAST_UPDATE    NUMBER(24),
+  DT_LAST_UPDATE         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_SUSPEND_REASON      NUMBER(24),
+  ID_SUSPEND_PROF        NUMBER(24),
+  SUSPEND_NOTES          VARCHAR2(1000 CHAR),
+  DT_SUSPEND             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_CANCEL_REASON       NUMBER(24),
+  ID_CANCEL_PROF         NUMBER(24),
+  CANCEL_NOTES           VARCHAR2(1000 CHAR),
+  DT_CANCEL              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROF_CREATED_HIST   NUMBER(24),
+  DT_CREATED_HIST        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_USER            VARCHAR2(24 CHAR),
+  CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION     NUMBER(24),
+  UPDATE_USER            VARCHAR2(24 CHAR),
+  UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION     NUMBER(24)
+)';
+    EXCEPTION
+        WHEN e_table_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- Add comments to the table 
+comment on table ICNP_EPIS_DIAGNOSIS_HIST
+  is 'History of ICNP diagnosis records.';
+-- Add comments to the columns 
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_ICNP_EPIS_DIAG_HIST
+  is 'Primary key.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_ICNP_EPIS_DIAG
+  is 'ICNP diagnosis record identifier.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_COMPOSITION
+  is 'Diagnosis composition identifier.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_PROFESSIONAL
+  is 'Record created by (professional identifier).';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.FLG_STATUS
+  is 'Diagnosis status: (A)ctive, (S)olved, (C)ancelled, (T) suspended.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_EPISODE
+  is 'Episode identifier.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.NOTES
+  is 'Record notes.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_PROF_CLOSE
+  is 'Record closed by (professional identifier).';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.NOTES_CLOSE
+  is 'Close notes.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_PATIENT
+  is 'Patient identifier.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.DT_ICNP_EPIS_DIAG
+  is 'Record creation date.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.DT_CLOSE
+  is 'Record close date.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_VISIT
+  is 'Visit identifier.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_EPIS_TYPE
+  is 'Episode type identifier.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.FLG_EXECUTIONS
+  is 'Do executions exist? Y/N';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ICNP_COMPO_REEVAL
+  is 'Expected result composition identifier.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_PROF_LAST_UPDATE
+  is 'Last update made by (professional identifier).';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.DT_LAST_UPDATE
+  is 'Last update date.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_SUSPEND_REASON
+  is 'Suspension reason identifier.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_SUSPEND_PROF
+  is 'Suspended by (professional identifier).';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.SUSPEND_NOTES
+  is 'Suspension notes.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.DT_SUSPEND
+  is 'Suspension date.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_CANCEL_REASON
+  is 'Cancellation reason identifier.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_CANCEL_PROF
+  is 'Cancelled by (professional identifier).';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.CANCEL_NOTES
+  is 'Cancellation notes.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.DT_CANCEL
+  is 'Cancellation date.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.ID_PROF_CREATED_HIST
+  is 'History record created by (professional identifier).';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.DT_CREATED_HIST
+  is 'History record creation date.';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.CREATE_USER
+  is 'Creation User';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.CREATE_TIME
+  is 'Creation Time';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.UPDATE_USER
+  is 'Update User';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.UPDATE_TIME
+  is 'Update Time';
+comment on column ICNP_EPIS_DIAGNOSIS_HIST.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- CHANGE END: Sérgio Santos

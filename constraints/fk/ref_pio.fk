@@ -1,0 +1,135 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/01/2010 12:06
+-- CHANGE REASON: [ALERT-31116] 
+ALTER TABLE REF_PIO ADD CONSTRAINT RPO_ERTX_FK FOREIGN KEY (ID_EXTERNAL_REQUEST) REFERENCES P1_EXTERNAL_REQUEST (ID_EXTERNAL_REQUEST) ENABLE;
+ALTER TABLE REF_PIO ADD CONSTRAINT RPO_PRL_FK FOREIGN KEY (ID_PROFESSIONAL) REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+ALTER TABLE REF_PIO ADD CONSTRAINT RPO_INN_FK FOREIGN KEY (ID_INSTITUTION) REFERENCES INSTITUTION (ID_INSTITUTION) ENABLE;
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/01/2010 18:00
+-- CHANGE REASON: [ALERT-58261] 
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'RPO_ERTX_FK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+l_sql := q'[ALTER TABLE REF_PIO ADD CONSTRAINT RPO_ERTX_FK FOREIGN KEY (ID_EXTERNAL_REQUEST) REFERENCES P1_EXTERNAL_REQUEST (ID_EXTERNAL_REQUEST) ENABLE]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'RPO_PRL_FK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+l_sql := q'[ALTER TABLE REF_PIO ADD CONSTRAINT RPO_PRL_FK FOREIGN KEY (ID_PROFESSIONAL) REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'RPO_INN_FK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+l_sql := q'[ALTER TABLE REF_PIO ADD CONSTRAINT RPO_INN_FK FOREIGN KEY (ID_INSTITUTION) REFERENCES INSTITUTION (ID_INSTITUTION) ENABLE]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/03/2010 14:06
+-- CHANGE REASON: [ALERT-79864] 
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'RPO_ERTX_FK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := q'[ALTER TABLE REF_PIO ADD CONSTRAINT RPO_ERTX_FK FOREIGN KEY (ID_EXTERNAL_REQUEST) REFERENCES P1_EXTERNAL_REQUEST (ID_EXTERNAL_REQUEST) ENABLE]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'RPO_PRL_FK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := q'[ALTER TABLE REF_PIO ADD CONSTRAINT RPO_PRL_FK FOREIGN KEY (ID_PROFESSIONAL) REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'RPO_INN_FK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := q'[ALTER TABLE REF_PIO ADD CONSTRAINT RPO_INN_FK FOREIGN KEY (ID_INSTITUTION) REFERENCES INSTITUTION (ID_INSTITUTION) ENABLE]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro

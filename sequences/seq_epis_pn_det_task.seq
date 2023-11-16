@@ -1,0 +1,68 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 27/07/2012 13:57
+-- CHANGE REASON: [ALERT-237533 ] The system must be able to autosave user notes as a draft during the note creation
+BEGIN
+    execute immediate 'DROP SEQUENCE seq_epis_pn_det_task';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('operacao ja executada anteriormente');
+END;
+/
+
+DECLARE
+    l_max_id epis_pn_det_task.id_epis_pn_det_task%TYPE;
+BEGIN
+    SELECT MAX(id_epis_pn_det_task) + 1
+      INTO l_max_id
+      FROM epis_pn_det_task;
+
+    EXECUTE IMMEDIATE 'create sequence seq_epis_pn_det_task
+minvalue 1
+maxvalue 999999999999
+start with ' || l_max_id || '
+increment by 1
+cache 500
+noorder';
+    EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('operacao ja executada anteriormente');
+END;
+/
+
+--run_dml|ddl
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'EPIS_PN_WORK', i_obj_type => 'TABLE', i_flg_category => 'TRS', i_flg_nzd => 'N');
+    pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'EPIS_PN_DET_WORK', i_obj_type => 'TABLE', i_flg_category => 'TRS', i_flg_nzd => 'N');
+    pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'EPIS_PN_DET_TASK_WORK', i_obj_type => 'TABLE', i_flg_category => 'TRS', i_flg_nzd => 'N');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 12/11/2012 09:16
+-- CHANGE REASON: [ALERT-244481 ] Solve problem with the epis_pn_det_task sequence creation
+DECLARE l_max_id epis_pn_det_task.id_epis_pn_det_task%TYPE;
+BEGIN
+    SELECT MAX(id_epis_pn_det_task) + 1
+      INTO l_max_id
+      FROM epis_pn_det_task;
+
+    IF (l_max_id IS NULL)
+    THEN
+        l_max_id := 1;
+    END IF;
+   
+
+    EXECUTE IMMEDIATE 'create sequence seq_epis_pn_det_task
+minvalue 1
+maxvalue 999999999999
+start with ' || l_max_id || '
+increment by 1
+cache 500
+noorder';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('operacao ja executada anteriormente');
+END;
+/
+-- CHANGE END: Sofia Mendes

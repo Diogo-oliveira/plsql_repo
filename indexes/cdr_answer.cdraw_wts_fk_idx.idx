@@ -1,0 +1,14 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 27/06/2012 15:47
+-- CHANGE REASON: [ALERT-234510] gfr v2 changes ddl
+declare
+  e_idx_exists exception;
+  pragma exception_init(e_idx_exists, -00955);
+begin
+  execute immediate 'create index CDRAW_WTS_FK_IDX on CDR_ANSWER (ID_WORKFLOW, ID_STATUS_BEGIN, ID_STATUS_END, ID_WORKFLOW_ACTION)
+';
+exception when e_idx_exists then
+  dbms_output.put_line('index cdraw_wts_fk_idx already exists!');
+end;
+/
+-- CHANGE END: Pedro Carneiro

@@ -1,0 +1,29 @@
+alter table susp_task_medication add (constraint
+ stn_dpt_fk foreign key 
+  (id_drug_presc_det) references drug_presc_det
+  (id_drug_presc_det))
+/
+
+alter table susp_task_medication add (constraint
+ stn_wsk_fk foreign key 
+  (id_susp_task) references susp_task
+  (id_susp_task))
+/
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 25/11/2011 11:17
+-- CHANGE REASON: [ALERT-207033] Versioning BD - Corrections
+DECLARE
+    e_drop_already_made EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_drop_already_made, -2443);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE SUSP_TASK_MEDICATION DROP CONSTRAINT STN_DPT_FK';
+    EXCEPTION
+        WHEN e_drop_already_made THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

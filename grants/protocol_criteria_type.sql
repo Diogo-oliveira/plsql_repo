@@ -1,0 +1,5 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 08/03/2010 14:41
+-- CHANGE REASON: [ALERT-79917] 
+grant select, references on PROTOCOL_CRITERIA_TYPE to ALERT_DEFAULT;
+-- CHANGE END: Susana Silva

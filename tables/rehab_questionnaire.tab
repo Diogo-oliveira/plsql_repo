@@ -1,0 +1,89 @@
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 11/11/2021 12:17
+-- CHANGE REASON: [EMR-49526]
+create table REHAB_QUESTIONNAIRE
+(
+id_REHAB_QUESTIONNAIRE NUMBER(24) not null,
+id_rehab_interv               NUMBER(24),
+id_questionnaire      NUMBER(24) not null,
+flg_time              VARCHAR2(2 CHAR),
+flg_type              VARCHAR2(2 CHAR) not null,
+flg_mandatory         VARCHAR2(1 CHAR) not null,
+rank                  NUMBER(6) not null,
+flg_available         VARCHAR2(1 CHAR) not null,
+create_user           VARCHAR2(24 CHAR),
+create_time           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+create_institution    NUMBER(24),
+update_user           VARCHAR2(24 CHAR),
+update_time           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+update_institution    NUMBER(24),
+id_response           NUMBER(24),
+flg_copy              VARCHAR2(1 CHAR) not null,
+flg_validation        VARCHAR2(1 CHAR) not null,
+flg_exterior          VARCHAR2(1 CHAR) not null,
+id_unit_measure       NUMBER(24),
+id_institution        NUMBER(24) not null
+)
+tablespace TABLE_S
+pctfree 10
+initrans 1
+maxtrans 255
+storage
+(
+initial 128K
+next 128K
+minextents 1
+maxextents unlimited
+pctincrease 0
+);
+comment on table REHAB_QUESTIONNAIRE
+is 'Table that defines the questionnaires for each rehab interv';
+comment on column REHAB_QUESTIONNAIRE.id_REHAB_QUESTIONNAIRE
+is 'Primary key';
+comment on column REHAB_QUESTIONNAIRE.id_rehab_interv
+is 'Rehab Interv ID';
+comment on column REHAB_QUESTIONNAIRE.id_questionnaire
+is 'Questionnaire ID';
+comment on column REHAB_QUESTIONNAIRE.flg_time
+is 'Flag that indicates WHEN the questionnaire is to be answered';
+comment on column REHAB_QUESTIONNAIRE.flg_type
+is 'Flag that indicates which type of input a  question will have (N - Number; N - Number with Unit measure; MI - Inclusive Multichoice; ME - Exclusive Multichoice; D - Date; DF - Future Date; DP - Past Date; T - Free text)';
+comment on column REHAB_QUESTIONNAIRE.flg_mandatory
+is 'Flag that indicates if the question is mandatory or not: Y - Yes; N - No';
+comment on column REHAB_QUESTIONNAIRE.rank
+is 'Questionnaire rank';
+comment on column REHAB_QUESTIONNAIRE.flg_available
+is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column REHAB_QUESTIONNAIRE.create_user
+is 'Creation User';
+comment on column REHAB_QUESTIONNAIRE.create_time
+is 'Create Time';
+comment on column REHAB_QUESTIONNAIRE.create_institution
+is 'Create Institution';
+comment on column REHAB_QUESTIONNAIRE.update_user
+is 'Update User';
+comment on column REHAB_QUESTIONNAIRE.update_time
+is 'Update Time';
+comment on column REHAB_QUESTIONNAIRE.update_institution
+is 'Update Institution';
+comment on column REHAB_QUESTIONNAIRE.id_response
+is 'Response ID';
+comment on column REHAB_QUESTIONNAIRE.flg_copy
+is 'Flag that indicates if an answer can be copied to the same questions';
+comment on column REHAB_QUESTIONNAIRE.flg_validation
+is 'Flag that indicates if an answer is valide through out the episode for the same questions';
+comment on column REHAB_QUESTIONNAIRE.flg_exterior
+is 'Flag that indicates if a questionnaire is to be answered if the exam is to be performed outside the facility';
+comment on column REHAB_QUESTIONNAIRE.id_unit_measure
+is 'Unit measure ID';
+comment on column REHAB_QUESTIONNAIRE.id_institution
+is 'Institution ID';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2021 14:44
+-- CHANGE REASON: [EMR-49924]
+DROP TABLE rehab_Questionnaire;
+-- CHANGE END: Pedro Henriques

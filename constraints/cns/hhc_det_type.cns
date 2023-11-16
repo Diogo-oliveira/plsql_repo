@@ -1,0 +1,33 @@
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table HHC_DET_TYPE add constraint HHC_DET_TYPE_PK primary key ( ID_HHC_DET_TYPE ) using index tablespace ALERT_IDX';
+pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	pl    varchar2(1 char) := '''';
+	l_sql varchar2(1000 char);
+begin
+	l_sql := 'ALTER TABLE HHC_DET_TYPE ADD CONSTRAINT HHC_TYPE_NAME_CHK CHECK ( INTERNAL_NAME = UPPER(INTERNAL_NAME) OR INSTR(INTERNAL_NAME,CHR(32)) = 0 )';
+	pk_versioning.run(l_sql);  
+end;
+/
+
+declare
+	pl    varchar2(1 char) := '''';
+	l_sql varchar2(1000 char);
+begin
+	l_sql := q'[ALTER TABLE HHC_DET_TYPE ADD CONSTRAINT HHC_TYPE_FLG_TYPE_CHK CHECK ( (FLG_TYPE != 'T' AND TYPE_NAME IS NOT NULL) OR FLG_TYPE = 'T' )]';
+	pk_versioning.run(l_sql);  
+end;
+/
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 16/03/2020
+-- CHANGE REASON: EMR-19365
+ALTER TABLE HHC_DET_TYPE DROP CONSTRAINT HHC_TYPE_FLG_TYPE_CHK;
+ALTER TABLE HHC_DET_TYPE ADD CONSTRAINT HHC_TYPE_FLG_TYPE_CHK CHECK ((FLG_TYPE NOT IN ('T','DT') and type_name is not null) or FLG_TYPE IN ('T', 'DT')) ENABLE;
+-- CHANGE END: Pedro Teixeira

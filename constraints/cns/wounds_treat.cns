@@ -1,0 +1,18 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 02/11/2011 12:38
+-- CHANGE REASON: [ALERT-201577] Task Expire support for CPOE - Dressings
+DECLARE
+    e_nonexistent_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_nonexistent_constraint, -02443);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE wound_treat drop CONSTRAINT wtt_flg_status_chk';
+EXCEPTION
+    WHEN e_nonexistent_constraint THEN
+        NULL;
+    
+END;
+/ 
+
+ALTER TABLE wound_treat add CONSTRAINT wtt_flg_status_chk CHECK(flg_status IN ('A', 'N', 'C', 'O'));
+
+-- CHANGE END: Ariel Machado

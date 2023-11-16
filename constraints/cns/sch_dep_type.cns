@@ -1,0 +1,16 @@
+
+ALTER TABLE SCH_DEP_TYPE ADD (CONSTRAINT SDTY_PK PRIMARY KEY (ID_SCH_DEP_TYPE));
+
+ALTER TABLE SCH_DEP_TYPE ADD (CONSTRAINT SDTY_UK UNIQUE (DEP_TYPE));
+
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 13-10-2010
+-- CHANGE REASON: ALERT-148846
+begin
+  execute immediate 'alter table alert.sch_dep_type add constraint SDTY_FLG_AVAIL_CHK check (flg_available IN (''Y'', ''N''))';
+exception
+when others then null;
+end;
+/
+-- CHANGE END: Telmo

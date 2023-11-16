@@ -1,0 +1,51 @@
+
+
+  CREATE TABLE EPIS_TYPE
+   (	ID_EPIS_TYPE NUMBER(12,0) NOT NULL ENABLE,
+	INTERN_NAME_EPIS_TYPE VARCHAR2(200) NOT NULL ENABLE,
+	CODE_EPIS_TYPE VARCHAR2(200) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE epis_type IS 'Tipos de episódio: U - urgência, G - operatório, C - consulta externa, O - obs, S - social, I - internamento' ;
+
+COMMENT ON COLUMN epis_type.code_epis_type IS 'Código para tradução do tipo de episódio' ;
+COMMENT ON COLUMN epis_type.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+
+--INPATIENT Ricardo Nuno Almeida
+-- ALERT-1319: Desnormalização EPIS_TYPE_SOFT_INST
+ALTER TABLE EPIS_TYPE DROP COLUMN ID_SOFTWARE;
+-- END
+
+-- CHANGED BY: Bruno Martins
+-- CHANGE DATE: 01-07-2009
+-- CHANGE REASON: ADT-1074
+
+alter table EPIS_TYPE add CODE_ICON VARCHAR2(50);
+
+comment on column EPIS_TYPE.CODE_ICON
+  is 'Icon to be viewed in the ADT episode search grid';
+
+-- CHANGED END: Bruno Martins
+
+-- cmf 
+alter table EPIS_TYPE add COD_EPIS_TYPE_EXT VARCHAR2(0006 CHAR);
+COMMENT ON COLUMN epis_type.COD_EPIS_TYPE_EXT IS 'Billing Code for EPIS_EXT_SYS' ;
+--
+
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 20/01/2016 16:05
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON TABLE EPIS_TYPE IS 'Episode Types: U - urgency, G - operating room, C - extern consult, O - obs, S - social, I - internment';
+COMMENT ON COLUMN  EPIS_TYPE.RANK IS 'Item order';    
+COMMENT ON COLUMN  EPIS_TYPE.ID_EPIS_TYPE  IS 'Primary Key';       
+COMMENT ON COLUMN  EPIS_TYPE.INTERN_NAME_EPIS_TYPE IS 'Internal name';       
+COMMENT ON COLUMN  EPIS_TYPE.ADW_LAST_UPDATE IS 'Date of last change';     
+COMMENT ON COLUMN  EPIS_TYPE.CODE_EPIS_TYPE IS 'Translation Code';     
+COMMENT ON COLUMN  EPIS_TYPE.FLG_AVAILABLE IS 'Availability Y/N ';     
+-- CHANGE END:  ruben.araujo

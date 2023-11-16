@@ -1,0 +1,28 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 28/11/2013 10:40
+-- CHANGE REASON: [ALERT-268987] new fields and content tbls
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'create index PBOND_PARENT on professional_bond(id_bond_parent) tablespace ALERT_IDX';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Index already there');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'create index PBOND_EXTCODE on professional_bond(ext_code) tablespace ALERT_IDX';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Index already there');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'create index PBOND_TRLCODE on professional_bond(code_bond) tablespace ALERT_IDX';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Index already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

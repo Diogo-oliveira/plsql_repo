@@ -1,0 +1,33 @@
+  CREATE TABLE SR_CHKLIST
+   (	ID_SR_CHKLIST NUMBER(24,0) NOT NULL ENABLE,
+	ID_SR_CHKLIST_PARENT NUMBER(24,0),
+	CODE_SR_CHKLIST VARCHAR2(200) NOT NULL ENABLE,
+	FLG_MANUAL_CHK_YN VARCHAR2(1) NOT NULL ENABLE,
+	FLG_MANUAL_CHK_DET_YN VARCHAR2(1),
+	FLG_MANDATORY_YN VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1),
+	ICON_NAME VARCHAR2(200),
+	TABLE_NAME VARCHAR2(100),
+	INTERN_NAME VARCHAR2(100),
+	ID_SURG_PERIOD NUMBER(3,0),
+
+	FLG_PROF_CAT_TYPE VARCHAR2(1),
+	RANK NUMBER(6,0)
+   );
+
+
+COMMENT ON TABLE sr_chklist IS 'Tabela de elementos das checklists de cirurgia. Quando o id_sr_chklist_parent = 0 significa que é o OK PARA CIRURGIA, que pode ser actualizado manual ou automaticamente' ;
+
+COMMENT ON COLUMN sr_chklist.id_sr_chklist IS 'ID único' ;
+COMMENT ON COLUMN sr_chklist.id_sr_chklist_parent IS 'ID do critéio pai' ;
+COMMENT ON COLUMN sr_chklist.code_sr_chklist IS 'Código para descrição da check list' ;
+COMMENT ON COLUMN sr_chklist.flg_manual_chk_yn IS 'Indica se a check list pode ser alterada manualmente' ;
+COMMENT ON COLUMN sr_chklist.flg_manual_chk_det_yn IS 'Indica se a check list pode ser alterada manualmente nos ecrãs de detalhe' ;
+COMMENT ON COLUMN sr_chklist.flg_mandatory_yn IS 'Indica se a check list é de importância vital para o arranque da intervenção' ;
+COMMENT ON COLUMN sr_chklist.flg_available IS 'Indica se está disponível' ;
+COMMENT ON COLUMN sr_chklist.icon_name IS 'Nome do icon da categoria' ;
+COMMENT ON COLUMN sr_chklist.table_name IS 'Tipo de checklist. Permite categorizar a tarefa de forma a ser possível validar se a mesma já se encontra executada' ;
+COMMENT ON COLUMN sr_chklist.flg_prof_cat_type IS 'Tipo: L- TODOS, D - médico, N - enfermeiro, P - farmacêutico, A - administrativo, T - técnico, O - outro, F - fisioterapeuta, C - coordenador, A - anestesista, S - assistente social. FK para a tabela CATEGORY' ;
+COMMENT ON COLUMN sr_chklist.rank IS 'Ordem de visualização' ;
+
+DROP TABLE SR_CHKLIST;

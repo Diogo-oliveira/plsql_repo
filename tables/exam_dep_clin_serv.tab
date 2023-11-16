@@ -1,0 +1,144 @@
+
+
+  CREATE TABLE EXAM_DEP_CLIN_SERV
+   (	ID_EXAM_DEP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	ID_EXAM NUMBER(12,0),
+	ID_DEP_CLIN_SERV NUMBER(24,0),
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_EXAM_GROUP NUMBER(24,0),
+	ID_INSTITUTION NUMBER(24,0),
+	ID_PROFESSIONAL NUMBER(24,0),
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_FIRST_RESULT VARCHAR2(6),
+
+	FLG_MOV_PAT VARCHAR2(1),
+	COST NUMBER(18,4),
+	PRICE NUMBER(18,4)
+   );
+
+
+COMMENT ON TABLE exam_dep_clin_serv IS 'Exames mais frequentemente pedidos por um serv. clínico de um departamento' ;
+
+COMMENT ON COLUMN exam_dep_clin_serv.id_dep_clin_serv IS 'Departamento + serv. clínico que executa o exame, ou para o qual o exame é mais frequente' ;
+COMMENT ON COLUMN exam_dep_clin_serv.flg_type IS 'Tipo de acção do departamento e serv. clínico: R - realização do exame; P - pode pedir o exame, M - mais frequentes' ;
+COMMENT ON COLUMN exam_dep_clin_serv.id_institution IS 'Instituição para a qual o exame é requisitável' ;
+COMMENT ON COLUMN exam_dep_clin_serv.id_professional IS 'Profissional para o qual o exame é mais frequente' ;
+COMMENT ON COLUMN exam_dep_clin_serv.id_software IS 'Aplicação Alert para a qual se verifica o registo' ;
+COMMENT ON COLUMN exam_dep_clin_serv.flg_first_result IS 'Indicação de qual categoria de profissional deve registar resultados em 1º lugar: D - médico, T - técnico, N - enfermeiro, ou combinações (ex: DT - médico ou técnico). Esta flag é utilizada para impedir o registo de resultados pelo médico antes do técnico, por ex., para que não desapareça da grelha do técnico.' ;
+COMMENT ON COLUMN exam_dep_clin_serv.flg_mov_pat IS 'Necessidade de movimentação do doente (só é preenchido se FLG_TYPE=''P'')' ;
+COMMENT ON COLUMN exam_dep_clin_serv.cost IS 'Custo monetário (só é preenchido se FLG_TYPE=''P'')' ;
+COMMENT ON COLUMN exam_dep_clin_serv.price IS 'Preço de de venda (só é preenchido se FLG_TYPE=''P'')' ;
+
+
+ALTER TABLE EXAM_DEP_CLIN_SERV
+ADD ID_EXTERNAL_SYS NUMBER;
+
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_EXTERNAL_SYS
+  IS 'Esta associação serve para associar exames a sistemas externos onde podemos receber resultados';  
+
+-- CHANGED BY: Joao Sa
+-- CHANGED DATE: 2008-12-11
+-- CHANGED REASON: Conceito de execução na instituição
+alter table EXAM_DEP_CLIN_SERV add FLG_EXECUTE varchar2(1) default 'Y';
+comment on column EXAM_DEP_CLIN_SERV.FLG_EXECUTE is 'Execução do exame na instituição: Y / N';
+
+
+-- CHANGED BY: José Castro
+-- CHANGED DATE: 13-10-2010
+-- CHANGED REASON: ALERT-29500: Time out capability for exams
+-- Add/modify columns 
+alter table EXAM_DEP_CLIN_SERV add flg_timeout varchar2(1 CHAR) default 'N' not null;
+-- Add comments to the columns 
+comment on column EXAM_DEP_CLIN_SERV.flg_timeout
+  is 'Does the exam requires Time Out validation? Y for yes, N for no';
+
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGED DATE: 01/03/2012 09:34
+-- CHANGED REASON: ALERT-221190
+ALTER TABLE EXAM_DEP_CLIN_SERV ADD FLG_RESULT_NOTES VARCHAR2(1 CHAR) DEFAULT 'N' NOT NULL;
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_RESULT_NOTES IS 'Indicates whether it is mandatory to fill in the notes field to mark the exam as read: Y / N';
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 23/09/2014 10:00
+-- CHANGE REASON: [ALERT-296188] 
+ALTER TABLE EXAM_DEP_CLIN_SERV 
+ ADD (FLG_FIRST_EXECUTE VARCHAR2(6 CHAR)
+ ,FLG_CHARGEABLE VARCHAR2(1 CHAR))
+ MODIFY (ID_EXTERNAL_SYS NUMBER(12)
+ ,FLG_TYPE VARCHAR2(1 CHAR)
+ ,FLG_FIRST_RESULT VARCHAR2(6 CHAR)
+ ,FLG_MOV_PAT VARCHAR2(1 CHAR)
+ ,FLG_EXECUTE VARCHAR2(1 CHAR)
+ ,CREATE_USER VARCHAR2(24 CHAR)
+ ,UPDATE_USER VARCHAR2(24 CHAR));
+
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_EXAM_DEP_CLIN_SERV IS 'Primary key';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_EXAM IS 'Exam ID';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_EXAM_GROUP IS 'Exam group ID';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_TYPE IS 'Flag that indicates the search type: P - Exam available for order; W - Exam available to be performed; M - Most frequent; H - Exams from history; A - Past history (treatments: most frequent); B - Past history (treatments)';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.RANK IS 'Rank';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_SOFTWARE IS 'Software ID';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_DEP_CLIN_SERV IS 'Clinical service / department ID';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_PROFESSIONAL IS 'Professional ID';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.COST IS 'Exam cost (if FLG_TYPE = ''P'')';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.PRICE IS 'Exam price (if FLG_TYPE = ''P'')';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_MOV_PAT IS 'Flag that indicates if the exam needs the patient transportation (if FLG_TYPE = ''P'')';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_EXECUTE IS 'Flag that indicates if the exam is performed inside the instituion: Y - Yes; N - No';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_TIMEOUT IS 'Flag that indicates if the exam require Time Out validation (if FLG_TYPE = ''P''): Y - Yes; N - No';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_FIRST_EXECUTE IS 'Indicates which categories are allowed to perform the exam(if FLG_TYPE = ''P''): D - Physician, T - Technician, N - Nurse; U - Nutritionist';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_FIRST_RESULT IS 'Indicates which categories are allowed to register the exam result(if FLG_TYPE = ''P''): D - Physician, T - Technician, N - Nurse; U - Nutritionist';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_RESULT_NOTES IS 'Indicates whether it is mandatory to fill in the notes field to mark the exam as read: Y / N';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_CHARGEABLE IS 'Flag that indicates if the exam is going to be charged or not';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_EXTERNAL_SYS IS 'External system ID';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 06/01/2016 17:51
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE EXAM_DEP_CLIN_SERV IS 'Exam configuration';
+
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_EXAM_DEP_CLIN_SERV IS 'Primary key';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_EXAM IS 'Exam ID';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_DEP_CLIN_SERV IS 'Clinical service ID';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_TYPE IS 'Flag that indicates the configuration type: P - Available for order; W - Available to be performed; M - Most frequent; H - Available in HPI; A - Available in Past History (treatments: most frequent); B - Available in Past History (treatments)';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ADW_LAST_UPDATE IS 'Update date';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.RANK IS 'Rank';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_EXAM_GROUP IS 'Exam group ID';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_PROFESSIONAL IS 'Professional ID';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_SOFTWARE IS 'Software ID';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_FIRST_RESULT IS 'Indicates which categories are allowed to register the exam result(if FLG_TYPE = ''P''): D - Physician, T - Technician, N - Nurse; U - Nutritionist';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_MOV_PAT IS 'Flag that indicates if the patient needs to be moved (if FLG_TYPE = ''P'')';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.COST IS 'Exam cost (if FLG_TYPE = ''P'')';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.PRICE IS 'Exam price (if FLG_TYPE = ''P'')';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.ID_EXTERNAL_SYS IS 'External system ID';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_EXECUTE IS 'Flag that indicates if the exam is performed inside the instituion or not (Y/N)';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_TIMEOUT IS 'Flag that indicates if the exam requires Time Out validation (if FLG_TYPE = ''P'')';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_RESULT_NOTES IS 'Indicates whether it is mandatory to fill in the notes field to mark the exam as read (Y/N)';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_FIRST_EXECUTE IS 'Indicates which categories are allowed to perform the exam (if FLG_TYPE = ''P''): D - Physician, T - Technician, N - Nurse; U - Nutritionist';
+COMMENT ON COLUMN EXAM_DEP_CLIN_SERV.FLG_CHARGEABLE IS 'Flag that indicates if the exam is going to be charged or not';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 2018-19-03
+-- CHANGE REASON: [EMR-5344]
+ALTER TABLE exam_dep_clin_serv
+  ADD flg_priority varchar2(1);
+  
+  ALTER TABLE exam_dep_clin_serv
+  ADD CONSTRAINT ECST_FLG_PRIORITY
+  CHECK (flg_priority IN ('N','U','E'));
+
+COMMENT ON COLUMN  exam_dep_clin_serv.flg_priority IS 'FLG_PRIORITY: N-ROUTINE/U-ASAP/E-STAT (Values from sys_domain - EXAM_REQ.PRIORITY)'; 
+-- CHANGE END: Diogo Oliveira

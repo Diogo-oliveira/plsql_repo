@@ -1,0 +1,54 @@
+-- CHANGED BY Joao Martins
+-- CHANGE DATE 2009/07/03
+-- CHANGE REASON ALERT-874 Procedures Time Out
+create table interv_time_out (id_interv_presc_det number(24) not null, id_interv_presc_plan number(24) not null, id_epis_documentation number(24) not null, flg_complete varchar2(1) not null, create_user varchar2(24), create_time timestamp(6) with local time zone, create_institution number(24), update_user varchar2(24), update_time timestamp(6) with local time zone, update_institution number(24));
+alter table interv_time_out add constraint ITO_IPD_FK foreign key (id_interv_presc_det) references interv_presc_det(id_interv_presc_det);
+alter table interv_time_out add constraint ITO_IPP_FK foreign key (id_interv_presc_plan) references interv_presc_plan(id_interv_presc_plan);
+alter table interv_time_out add constraint ITO_EPISD_FK foreign key (id_epis_documentation) references epis_documentation(id_epis_documentation);
+alter table interv_time_out add constraint ITO_FLG_COMPLETE check (flg_complete in ('Y', 'N'));
+comment on table interv_time_out is 'Association between intervention requests/executions and their Time Out validations';
+comment on column interv_time_out.id_interv_presc_det is 'Intervention request ID';
+comment on column interv_time_out.id_interv_presc_plan is 'Intervention execution ID';
+comment on column interv_time_out.id_epis_documentation is 'Time Out form ID';
+comment on column interv_time_out.flg_complete is 'Answered Yes to all questions on the Time Out form?';
+comment on column interv_time_out.create_user is 'Creation user';
+comment on column interv_time_out.create_time is 'Creation time';
+comment on column interv_time_out.create_institution is 'Creation institution';
+comment on column interv_time_out.update_user is 'Update user';
+comment on column interv_time_out.update_time is 'Update time';
+comment on column interv_time_out.update_institution is 'Update institution';
+-- CHANGE END
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 22/01/2010 09:50
+-- CHANGE REASON: [ALERT-69787] Timeout change table
+alter table interv_time_out modify id_interv_presc_plan number(24) null;
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 11/01/2016 16:36
+-- CHANGE REASON: [ALERT-317702] 
+comment on table INTERV_TIME_OUT
+  is 'Procedure time out';
+-- Add comments to the columns 
+comment on column INTERV_TIME_OUT.id_interv_presc_det
+  is 'Procedure''s order detail ID';
+comment on column INTERV_TIME_OUT.id_interv_presc_plan
+  is 'Procedure''s plan ID';
+comment on column INTERV_TIME_OUT.id_epis_documentation
+  is 'Episode documentation ID';
+comment on column INTERV_TIME_OUT.flg_complete
+  is 'Flag that indicates if the from is complete (Y/N)';
+comment on column INTERV_TIME_OUT.create_user
+  is 'Creation User';
+comment on column INTERV_TIME_OUT.create_time
+  is 'Creation Time';
+comment on column INTERV_TIME_OUT.create_institution
+  is 'Creation Institution';
+comment on column INTERV_TIME_OUT.update_user
+  is 'Update User';
+comment on column INTERV_TIME_OUT.update_time
+  is 'Update Time';
+comment on column INTERV_TIME_OUT.update_institution
+  is 'Update Institution';
+-- CHANGE END: Ana Matos

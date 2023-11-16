@@ -1,0 +1,1 @@
+grant select on ALERT.ADVANCED_INPUT_FIELD to ALERT_VIEWER;

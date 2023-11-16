@@ -1,0 +1,16 @@
+--21/12/2010 Rui Batista
+--Alert's data dictionary
+alter table frmw_objects
+  add constraint FRMW_OBJECTS_PK primary key (OWNER, OBJ_NAME);
+  
+alter table FRMW_OBJECTS
+  add constraint FRMW_FLG_ALERT_DEF_CHK
+  check (flg_alert_default IN ('Y', 'N'));
+	
+alter table FRMW_OBJECTS
+  add constraint FRMW_FLG_CATEGORY_CHK
+  check (FLG_CATEGORY IN ('DSV', 'PRM', 'CNT', 'TRS', 'UNK', 'JNK', 'DPC'));
+	
+alter table FRMW_OBJECTS
+  add constraint FRMW_FLG_VERIFIED_CHK
+  check (flg_verified IN ('Y', 'N'));  

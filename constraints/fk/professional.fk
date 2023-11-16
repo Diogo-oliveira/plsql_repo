@@ -1,0 +1,95 @@
+
+
+  ALTER TABLE PROFESSIONAL ADD CONSTRAINT PROF_CTR_FK FOREIGN KEY (ID_COUNTRY)
+	  REFERENCES COUNTRY (ID_COUNTRY) ENABLE;
+
+  ALTER TABLE PROFESSIONAL ADD CONSTRAINT PROF_SCH_FK FOREIGN KEY (ID_SCHOLARSHIP)
+	  REFERENCES SCHOLARSHIP (ID_SCHOLARSHIP) ENABLE;
+
+  ALTER TABLE PROFESSIONAL ADD CONSTRAINT PROF_SPC_FK FOREIGN KEY (ID_SPECIALITY)
+	  REFERENCES SPECIALITY (ID_SPECIALITY) ENABLE;
+
+
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 28/11/2013 10:40
+-- CHANGE REASON: [ALERT-268987] new fields and content tbls
+DECLARE
+    e_fk_already_there EXCEPTION;
+   PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+   
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table professional
+  add constraint PBR_GEOBIRTH_FK foreign key (id_geo_state_birth)
+  references alert_adtcod_cfg.rb_regional_classifier (id_rb_regional_classifier)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table professional
+  add constraint PBR_DISCTBIRTH_FK foreign key (id_district_birth)
+  references alert_adtcod_cfg.rb_regional_classifier (id_rb_regional_classifier)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table professional
+  add constraint PBR_GEOADRESS_FK foreign key (id_geo_state_adress)
+  references alert_adtcod_cfg.rb_regional_classifier (id_rb_regional_classifier)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table professional
+  add constraint PBR_DISCTADRESS_FK foreign key (id_district_adress)
+  references alert_adtcod_cfg.rb_regional_classifier (id_rb_regional_classifier)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table professional
+  add constraint PBR_GEODOC_FK foreign key (id_geo_state_doc)
+  references alert_adtcod_cfg.rb_regional_classifier (id_rb_regional_classifier)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+        BEGIN
+        EXECUTE IMMEDIATE 'alter table professional
+  add constraint PROF_OCP_FK foreign key (id_prof_formation)
+  references occupation (id_occupation)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 08/01/2014 17:25
+-- CHANGE REASON: [ALERT-273236] BR fields (sbis)
+DECLARE
+    e_fk_already_there EXCEPTION;
+   PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+   
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table professional
+  add constraint PBR_HPLAN_FK foreign key (id_health_plan)
+  references health_plan (id_health_plan)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+  
+END;
+/
+-- CHANGE END:  Rui Gomes

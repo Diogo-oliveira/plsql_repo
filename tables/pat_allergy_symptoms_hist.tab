@@ -1,0 +1,27 @@
+CREATE TABLE pat_allergy_symptoms_hist
+(
+    id_pat_allergy_sym_hist NUMBER(24) NOT NULL,
+		id_pat_allergy          NUMBER(24) NOT NULL,
+    id_allergy_symptoms     VARCHAR2(200) NOT NULL
+);
+
+-- COMMENTS
+COMMENT ON TABLE pat_allergy_symptoms_hist IS 'This table represents the relationship between the tables PAT_ALLERGY and ALLERGY_SYMPTOMS';
+COMMENT ON COLUMN pat_allergy_symptoms_hist.id_pat_allergy_sym_hist IS 'Primary key';
+COMMENT ON COLUMN pat_allergy_symptoms_hist.id_pat_allergy IS 'Patient Allergy ID';
+COMMENT ON COLUMN pat_allergy_symptoms_hist.id_allergy_symptoms IS 'Symptoms of an Allergy ID';
+
+-- CONSTRAINTS
+ALTER TABLE pat_allergy_symptoms_hist ADD CONSTRAINT PASH_ALLERGY_SYMPTOMS_PK PRIMARY KEY (id_pat_allergy_sym_hist);
+
+ALTER TABLE pat_allergy_symptoms_hist MODIFY id_allergy_symptoms NUMBER(24);
+
+--
+-- CHANGED BY...: THIAGO BRITO
+-- CHANGE DATE..: 2009-MAR-24
+-- CHANGE REASON: ALERT-23926
+
+ALTER TABLE pat_allergy_symptoms_hist ADD revision NUMBER(24);
+COMMENT ON COLUMN pat_allergy_symptoms_hist.revision IS 'This field holds the number of times the register was changed.';
+
+-- CHANGE END

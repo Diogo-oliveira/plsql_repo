@@ -1,0 +1,16 @@
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'ALTER TABLE CDR_SCR_DEF_EXCEPTION ADD CONSTRAINT CDR_SCR_DEF_NAME_PK PRIMARY KEY (id_cdr_definition, screen_name, ID_INSTITUTION) ENABLE';
+pk_versioning.run( l_sql);
+end
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table CDR_SCR_DEF_EXCEPTION  add constraint CDR_SDE_INST_CHK  check ( ID_INSTITUTION != 0 )';
+pk_versioning.run( l_sql);
+end
+/
+

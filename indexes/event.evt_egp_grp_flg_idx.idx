@@ -1,0 +1,18 @@
+CREATE INDEX EVT_EGP_GRP_FLG_IDX ON EVENT (ID_EVENT_GROUP, ID_GROUP, FLG_GROUP);
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 14/06/2012 12:04
+-- CHANGE REASON: [ALERT-233165] added old indexes
+declare
+  name_already_used exception;
+  pragma exception_init(name_already_used, -00955);
+begin
+  execute immediate 'create index evt_egp_grp_flg_idx on event (id_event_group, id_group, flg_group)
+';
+exception
+  when name_already_used then
+      dbms_output.put_line('index evt_egp_grp_flg_idx already exists...');
+end;
+/
+-- CHANGE END: Pedro Carneiro

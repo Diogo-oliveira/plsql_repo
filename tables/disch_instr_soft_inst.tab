@@ -1,0 +1,30 @@
+CREATE TABLE disch_instr_soft_inst
+( id_disch_instr_soft_inst NUMBER(24) NOT NULL ENABLE,
+id_disch_instructions NUMBER(24) NOT NULL ENABLE,
+id_software NUMBER(24),
+id_institution NUMBER(24), 
+flg_available varchar2(1) not null enable,
+adw_last_update DATE NOT NULL ENABLE);
+
+
+COMMENT ON TABLE disch_instr_soft_inst IS 'Instruções da alta por instituição e software' ;
+
+COMMENT ON COLUMN disch_instr_soft_inst.id_disch_instr_soft_inst IS 'Chave primária' ;
+COMMENT ON COLUMN disch_instr_soft_inst.id_disch_instructions IS 'ID da instrução da alta' ;
+COMMENT ON COLUMN disch_instr_soft_inst.id_software IS 'Software' ;
+COMMENT ON COLUMN disch_instr_soft_inst.id_institution IS 'Institution' ;
+COMMENT ON COLUMN disch_instr_soft_inst.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN disch_instr_soft_inst.adw_last_update IS 'Data da última alteração' ;
+
+
+--29/10/2010 Rui Batista
+--[ALERT-136492] Database object Cleaning
+begin
+
+  execute immediate 'drop table DISCH_INSTR_SOFT_INST';
+--	
+	exception
+	when others then --ORA-00942 Table or view does not exists
+	     null;
+end;
+

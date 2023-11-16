@@ -1,0 +1,62 @@
+
+
+  CREATE TABLE GRID_TASK_BETWEEN
+   (	ID_GRID_TASK_BETWEEN NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_DRUG VARCHAR2(1),
+	FLG_INTERV VARCHAR2(1),
+	FLG_MONITOR VARCHAR2(1),
+	FLG_NURSE_ACT VARCHAR2(1),
+	FLG_PHARM VARCHAR2(1),
+	FLG_VACCINE VARCHAR2(1)
+   );
+
+
+COMMENT ON COLUMN grid_task_between.id_grid_task_between IS 'Chave primária.' ;
+COMMENT ON COLUMN grid_task_between.id_episode IS 'ID do episódio.' ;
+COMMENT ON COLUMN grid_task_between.flg_drug IS 'Indicação da existência de prescrição de medicamentos.' ;
+COMMENT ON COLUMN grid_task_between.flg_interv IS 'Indicação da existência de requisição de procedimentos.' ;
+COMMENT ON COLUMN grid_task_between.flg_monitor IS 'Indicação da existência de requisição de monitorizações.' ;
+COMMENT ON COLUMN grid_task_between.flg_nurse_act IS 'Indicação da existência de requisição de pensos.' ;
+COMMENT ON COLUMN grid_task_between.flg_pharm IS 'Indicação da existência de requisição de medicamentos à farmácia.' ;
+COMMENT ON COLUMN grid_task_between.flg_vaccine IS 'Indicação da existência de requisição de vacinas.' ;
+
+comment on table GRID_TASK_BETWEEN
+  is 'Tabela com a indicação, por episódio, da existência de requisições até à próxima consulta para hoje. Utilizada na função do 2º botão da enfermeira.';
+
+
+ALTER TABLE GRID_TASK_BETWEEN
+ADD (FLG_ICNP_INTERV VARCHAR2(1));
+
+COMMENT ON COLUMN GRID_TASK_BETWEEN.FLG_ICNP_INTERV IS 'Indicação da existência de requisição de intervenções de enfermagem.';
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table GRID_TASK_BETWEEN
+  is 'Table indicating, per episode, the existence of requests until the next appointment for today. Used in the function of the 2nd Nurse button.';
+-- Add comments to the columns 
+comment on column GRID_TASK_BETWEEN.id_grid_task_between
+  is 'Primary Key';
+comment on column GRID_TASK_BETWEEN.id_episode
+  is 'Episode ID';
+comment on column GRID_TASK_BETWEEN.flg_drug
+  is 'Indication of the existence of prescription medications.';
+comment on column GRID_TASK_BETWEEN.flg_interv
+  is 'Indication of procedures request.';
+comment on column GRID_TASK_BETWEEN.flg_monitor
+  is 'Indication of monitoring request.';
+comment on column GRID_TASK_BETWEEN.flg_nurse_act
+  is 'ndication of dressings request.';
+comment on column GRID_TASK_BETWEEN.flg_pharm
+  is 'Indication of drugs to the pharmacy requisition.';
+comment on column GRID_TASK_BETWEEN.flg_vaccine
+  is 'DEPRECATED.Indication of vaccines request.';
+comment on column GRID_TASK_BETWEEN.flg_icnp_interv
+  is 'Indication of nursing interventions request.';  
+  
+-- CHANGE END: Elisabete Bugalho

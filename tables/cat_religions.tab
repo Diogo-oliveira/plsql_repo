@@ -1,0 +1,24 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 26/09/2017 16:10
+-- CHANGE REASON: [ALERT-333174] NOM024 - Catalog tables creation
+--                
+begin
+  execute immediate 'drop table alert.CAT_RELIGIONS';
+exception 
+  when others then 
+    null;
+end;
+/  
+create table CAT_RELIGIONS
+(
+  id_grupo             VARCHAR2(30),
+  grupo                VARCHAR2(100 CHAR),
+  id_subgrupo          VARCHAR2(30),
+  subgrupo             VARCHAR2(100 CHAR),
+  nombre_credo         VARCHAR2(100 CHAR),
+  codigo_y_descripcion VARCHAR2(1000 CHAR),
+  id_alert             VARCHAR2(30 CHAR),
+  flg_available        VARCHAR2(10 CHAR) default 'Y'
+)
+tablespace ALERT_DATA;
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,102 @@
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 19/01/2018 17:30
+-- CHANGE REASON: [CALERT-1468] 
+ CREATE TABLE MTOS_PARAM_TASK
+   (  ID_MTOS_PARAM         NUMBER(24) NOT NULL,
+      FLG_PARAM_TASK_TYPE   VARCHAR2(2),
+      ID_PARAM_TASK         NUMBER(24),
+      ID_CONTENT_PARAM_TASK VARCHAR2(200),
+      FLG_AVAILABLE         VARCHAR2(1),
+      ID_INSTITUTION        NUMBER(24) NOT NULL,      
+      ID_SOFTWARE           NUMBER(24) NOT NULL,      
+      CREATE_USER           VARCHAR2(24),
+      CREATE_TIME           TIMESTAMP(6),
+      CREATE_INSTITUTION    NUMBER(24),
+      UPDATE_USER           VARCHAR2(24),
+      UPDATE_TIME           TIMESTAMP(6),
+      UPDATE_INSTITUTION    NUMBER(24),
+      FLG_SHOW_TASK_DESC    VARCHAR2(1),
+      CONSTRAINT MPT_MPM_FK FOREIGN KEY (ID_MTOS_PARAM)
+      REFERENCES mtos_param(id_mtos_param)
+   );
+
+ALTER TABLE MTOS_PARAM_TASK
+ADD CONSTRAINT MPT_FLG_AVAILABLE CHECK (FLG_AVAILABLE IN ('Y','N'));
+
+ALTER TABLE MTOS_PARAM_TASK
+ADD CONSTRAINT MPT_FLG_SHOW_TASK_DESC CHECK (FLG_SHOW_TASK_DESC IN ('Y','N'));
+   
+COMMENT ON COLUMN MTOS_PARAM_TASK.ID_MTOS_PARAM
+        IS 'MTOS parameter task identifier.';
+
+COMMENT ON COLUMN MTOS_PARAM_TASK.FLG_PARAM_TASK_TYPE
+        IS 'MTOS parameter task type (VS - Vital Sign, AP - Analysis parameter, D - Diagnosis';
+
+COMMENT ON COLUMN MTOS_PARAM_TASK.ID_PARAM_TASK
+        IS 'Parameter task identifier.';				
+
+		COMMENT ON COLUMN MTOS_PARAM_TASK.ID_CONTENT_PARAM_TASK
+        IS 'Parameter task id_content. (Only to be used when it is not possible to set a record with id_param_task)';
+		
+COMMENT ON COLUMN MTOS_PARAM_TASK.FLG_AVAILABLE
+        IS 'Flag that indicates if the record is available or not (Y/N)';
+
+COMMENT ON COLUMN MTOS_PARAM_TASK.ID_INSTITUTION
+        IS 'Institution ID';		
+
+COMMENT ON COLUMN MTOS_PARAM_TASK.ID_SOFTWARE
+        IS 'Software ID';	
+
+COMMENT ON COLUMN MTOS_PARAM_TASK.CREATE_USER
+        IS 'Creation User';
+
+COMMENT ON COLUMN MTOS_PARAM_TASK.CREATE_TIME
+        IS 'Creation Time';
+
+COMMENT ON COLUMN MTOS_PARAM_TASK.CREATE_INSTITUTION
+        IS 'Creation Institution';
+
+COMMENT ON COLUMN MTOS_PARAM_TASK.UPDATE_USER
+        IS 'Update User';
+
+COMMENT ON COLUMN MTOS_PARAM_TASK.UPDATE_TIME
+        IS 'Update Time';
+
+COMMENT ON COLUMN MTOS_PARAM_TASK.UPDATE_INSTITUTION
+        IS 'Update Institution';		
+
+COMMENT ON COLUMN MTOS_PARAM_TASK.FLG_SHOW_TASK_DESC
+        IS 'Flag that indicates if the task description is to be shown on the severity score';		
+
+comment on table MTOS_PARAM_TASK
+  is 'Configuration of tasks (VS, AP, D, etc.) for the MTOS parameters';		
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 09/04/2019 11:50
+-- CHANGE REASON: [EMR-14788] - Severity scores
+ALTER TABLE mtos_param_task
+DROP COLUMN Id_Software;
+                    
+ALTER TABLE mtos_param_task
+DROP COLUMN ID_INSTITUTION;  
+
+ALTER TABLE mtos_param_task
+add id_mtos_param_task number(24);
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 09/04/2019 11:50
+-- CHANGE REASON: [EMR-14788] - Severity scores
+ALTER TABLE mtos_param_task
+ADD CONSTRAINT MPT_PK PRIMARY KEY (id_mtos_param_task);
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 09/04/2019 11:51
+-- CHANGE REASON: [EMR-14788] - Severity scores
+ALTER TABLE mtos_param_task
+ADD CONSTRAINT MPT_UK UNIQUE (ID_MTOS_PARAM, FLG_PARAM_TASK_TYPE, ID_PARAM_TASK, ID_CONTENT_PARAM_TASK);
+
+COMMENT ON COLUMN mtos_param_task.id_mtos_param_task IS 'Parameter task identifier (Primary key) - Value automatically generated using insertion function pk_sev_scores_core.ins_mtos_param_task';
+-- CHANGE END: Diogo Oliveira

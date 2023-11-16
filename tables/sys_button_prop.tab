@@ -1,0 +1,141 @@
+
+
+  CREATE TABLE SYS_BUTTON_PROP
+   (    ID_SYS_BUTTON_PROP NUMBER(24,0) NOT NULL ENABLE,
+    ID_SYS_BUTTON NUMBER(24,0) NOT NULL ENABLE,
+    SCREEN_NAME VARCHAR2(200),
+    ID_SYS_APPLICATION_AREA NUMBER(12,0) NOT NULL ENABLE,
+    ID_SYS_SCREEN_AREA NUMBER(12,0) NOT NULL ENABLE,
+    FLG_VISIBLE VARCHAR2(1) NOT NULL ENABLE,
+    RANK NUMBER(12,0) NOT NULL ENABLE,
+    BORDER_COLOR VARCHAR2(6),
+    ALPHA NUMBER(12,0),
+    BACK_COLOR VARCHAR2(6),
+    ID_SYS_APPLICATION_TYPE NUMBER(12,0) NOT NULL ENABLE,
+
+    ID_BTN_PRP_PARENT NUMBER(24,0),
+    ACTION VARCHAR2(200),
+    FLG_ENABLED VARCHAR2(1) NOT NULL ENABLE,
+    CODE_TITLE_HELP VARCHAR2(200),
+    CODE_DESC_HELP VARCHAR2(200),
+    SUB_RANK NUMBER(12,0),
+    FLG_RESET_CONTEXT VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE sys_button_prop IS 'propriedades dos botõesOs botões com deepnavs não têm SCREEN_NAME preenchido' ;
+
+COMMENT ON COLUMN sys_button_prop.screen_name IS 'Nome do ficheiro swf acedido pelo botão' ;
+COMMENT ON COLUMN sys_button_prop.flg_visible IS 'Visível: Y / N' ;
+COMMENT ON COLUMN sys_button_prop.rank IS 'ranking order' ;
+COMMENT ON COLUMN sys_button_prop.border_color IS 'Border color of button' ;
+COMMENT ON COLUMN sys_button_prop.alpha IS 'Alpha level of button' ;
+COMMENT ON COLUMN sys_button_prop.back_color IS 'Background color of button' ;
+COMMENT ON COLUMN sys_button_prop.action IS 'Acção executada pelo botão, quando ñ é só um acesso' ;
+COMMENT ON COLUMN sys_button_prop.flg_enabled IS 'Disponibilidade do botão: Y / N' ;
+
+comment on column SYS_BUTTON_PROP.FLG_RESET_CONTEXT
+  is 'When clicked resets application context (Y)es, (N)o';
+
+
+
+
+-- CRS 2007-05-16 Setas na área dos botões
+ALTER TABLE SYS_BUTTON_PROP 
+ ADD (POSITION  NUMBER(3)
+ ,TOOLBAR_LEVEL  NUMBER(2)
+ )
+/
+
+COMMENT ON COLUMN SYS_BUTTON_PROP.POSITION IS 'Posição que o botão ocupa na toolbar superior'
+/
+
+COMMENT ON COLUMN SYS_BUTTON_PROP.TOOLBAR_LEVEL IS 'Nível em que que está incluído o botão (toolbar superior)'
+/
+
+
+--Rui Batista 2007/11/15
+--CPT Code Copyright message
+alter table sys_button_prop add (code_msg_copyright varchar2 (200));
+
+comment on column sys_button_prop.code_msg_copyright  is 'Código de mensagem a apresentar no ecrã. Este valor deve estar parametrizado na sys_doamin e na sys_config';
+
+-- RdSN 2008/01/10
+-- Tooltips
+
+alter table sys_button_prop
+add code_tooltip_title varchar2(200);
+comment on column sys_button_prop.code_tooltip_title is 'Code for the tooltip title translation';
+
+alter table sys_button_prop
+add code_tooltip_desc varchar2(200);
+comment on column sys_button_prop.code_tooltip_desc is 'Code for the tooltip title translation';
+
+
+-- Carlos Ferreira 2011/02/02
+alter table sys_button_prop add ( FLG_SCREEN_MODE varchar2(2 char) default 'NL' not null);
+comment on column sys_button_prop.FLG_SCREEN_MODE
+  is 'Screen Mode:NL: normal, FT: total fullscreen, without main navigation buttons and deepnavs, FN: fullscreen with only the main navigational buttons (without deepnavs), FD: fullscreen with main navigational buttons and deepnavs';
+-- END  
+
+-- cmf 12-09-2012
+alter table sys_button_prop add code_button_text varchar2(100 char);
+comment on column sys_button_prop.code_button_text is 'Text replacing icon if configured. Check ID_CONFIG: SBP_BUTTON_APPEARANCE_MODE ';
+
+-- cmf 12-11-2012
+alter table sys_button_prop drop column code_button_text;
+
+alter table sys_button_prop add CODE_BUTTON_TEXT GENERATED ALWAYS AS ('SYS_BUTTON_PROP.CODE_BUTTON_TEXT.' ||TO_CHAR(ID_SYS_BUTTON_PROP)) VIRTUAL;
+comment on column sys_button_prop.code_button_text is 'Text replacing icon if configured. Check ID_CONFIG: SBP_BUTTON_APPEARANCE_MODE ';
+
+-- CMF 08-01-2016
+COMMENT ON TABLE  alert.sys_button_prop 				IS 'Physical positioning of buttons. Buttons and loading screens screens are allocated in this table. ' ;
+comment on column alert.sys_button_prop.ID_SYS_BUTTON_PROP			IS 'Primary Key';
+comment on column alert.sys_button_prop.ID_SYS_BUTTON               IS '';
+COMMENT ON COLUMN alert.sys_button_prop.screen_name 				IS 'Name of swf file to be loaded' ;
+comment on column alert.sys_button_prop.ID_SYS_APPLICATION_AREA     IS '';
+comment on column alert.sys_button_prop.ID_SYS_SCREEN_AREA          IS '';
+COMMENT ON COLUMN alert.sys_button_prop.flg_visible 				IS 'Visible or not' ;
+COMMENT ON COLUMN alert.sys_button_prop.rank 						IS 'ranking order' ;
+COMMENT ON COLUMN alert.sys_button_prop.border_color				IS 'Deprecated. Border color of button' ;
+COMMENT ON COLUMN alert.sys_button_prop.alpha						IS 'Deprecated. Alpha level of button' ;
+COMMENT ON COLUMN alert.sys_button_prop.back_color					IS 'Deprecated. Background color of button' ;
+comment on column alert.sys_button_prop.ID_SYS_APPLICATION_TYPE     IS '';
+comment on column alert.sys_button_prop.ID_BTN_PRP_PARENT           IS 'Parent button ( ex: deepnav hierarchy ) ';
+COMMENT ON COLUMN alert.sys_button_prop.action						IS 'Action to be executed when button invoked.' ;
+COMMENT ON COLUMN alert.sys_button_prop.flg_enabled					IS 'Enabled or not' ;
+comment on column alert.sys_button_prop.CODE_TITLE_HELP             IS 'Deprecated. do not use.';
+comment on column alert.sys_button_prop.CODE_DESC_HELP              IS 'Deprecated. do not use.';
+comment on column alert.sys_button_prop.SUB_RANK                    IS 'secondary order field.';
+COMMENT ON COLUMN ALERT.SYS_BUTTON_PROP.FLG_RESET_CONTEXT			IS 'When clicked resets application context (Y)es, (N)o';
+COMMENT ON COLUMN ALERT.SYS_BUTTON_PROP.POSITION					IS 'Position taken on upper toolbar ( Multilple level toolbar)';
+COMMENT ON COLUMN ALERT.SYS_BUTTON_PROP.TOOLBAR_LEVEL				IS 'Level of button on upper toolbar (toolbar superior)';
+COMMENT ON COLUMN ALERT.SYS_BUTTON_PROP.CODE_MSG_COPYRIGHT			IS 'Copyright mesage to show on screen. Value must be set in SYS_DOMAIN and SYS_CONFIG.';
+COMMENT ON COLUMN ALERT.SYS_BUTTON_PROP.CODE_TOOLTIP_TITLE			IS 'Code for the tooltip title translation';
+COMMENT ON COLUMN ALERT.SYS_BUTTON_PROP.CODE_TOOLTIP_DESC			IS 'Code for the tooltip description translation';
+COMMENT ON COLUMN ALERT.SYS_BUTTON_PROP.FLG_SCREEN_MODE				IS 'Screen Mode:NL: normal, FT: total fullscreen, without main navigation buttons and deepnavs, FN: fullscreen with only the main navigational buttons (without deepnavs), FD: fullscreen with main navigational buttons and deepnavs';
+COMMENT ON COLUMN ALERT.SYS_BUTTON_PROP.CODE_BUTTON_TEXT			IS 'Text replacing icon if configured. Check ID_CONFIG: SBP_BUTTON_APPEARANCE_MODE ';
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := 'alter table sys_button_prop drop column BORDER_COLOR';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := 'alter table sys_button_prop drop column ALPHA';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := 'alter table sys_button_prop drop column BACK_COLOR';
+	pk_versioning.run(l_sql);
+end;
+/

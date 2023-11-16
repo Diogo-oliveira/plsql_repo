@@ -1,0 +1,28 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 26/08/2013 14:46
+-- CHANGE REASON: [ALERT-263008] 
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table PO_PARAM_UM
+  add constraint POPUM_PK primary key (ID_PO_PARAM_UM)
+';
+exception when e_pk_exists then
+  dbms_output.put_line('primary key POPUM_PK exists!');
+end;
+/
+
+declare
+  e_cns_exists exception;
+  pragma exception_init(e_cns_exists, -02264);
+begin
+  execute immediate 'alter table PO_PARAM_UM
+  add constraint POPUM_FLG_AVAILABLE_CHK
+  check (FLG_AVAILABLE in (''Y'', ''N''))
+';
+exception when e_cns_exists then
+  dbms_output.put_line('constraint POPUM_FLG_AVAILABLE_CHK exists!');
+end;
+/
+-- CHANGE END: mario.mineiro

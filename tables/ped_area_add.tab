@@ -1,0 +1,84 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/07/2011 15:01
+-- CHANGE REASON: [ALERT-188174] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects('ALERT', 'PED_AREA_ADD', 'TABLE', 'PRM', 'N', '', 'N');
+
+    EXECUTE IMMEDIATE 'CREATE TABLE ped_area_add (
+  id_ped_area_add            number(24,0)                      not null,
+  code_ped_area_add          varchar2(200 char)                not null,
+  id_ped_area                number(24,0)                      not null,
+  id_parent                  number(24,0)                      null,
+  id_doc_template            number(24,0)                      null,
+  id_content                 VARCHAR2(200 char)                null,
+  flg_gender                 varchar2(2 char)                  null,
+  age_min                    number(6)                         null,
+  age_max                    number(6)                         null,
+  id_unit_measure            number(24,0)                      null,
+  rank                       number(6)                         null,
+  create_user                varchar2(24 char)                      null,
+  create_time                timestamp(6) with local time zone null,
+  create_institution         number(24,0)                      null,
+  update_user                varchar2(24 char)                      null,
+  update_time                timestamp(6) with local time zone null,
+  update_institution         NUMBER(24,0)                      NULL
+)';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+
+END;
+/
+
+COMMENT ON TABLE ped_area_add IS 'pediatric area add';
+COMMENT ON COLUMN ped_area_add.id_ped_area_add IS 'pediatric area add identifier';
+COMMENT ON COLUMN ped_area_add.code_ped_area_add IS 'code pediatric area add';
+COMMENT ON COLUMN ped_area_add.id_ped_area IS 'pediatric area identifier';
+COMMENT ON COLUMN ped_area_add.rank                  IS 'rank           ';
+COMMENT ON COLUMN ped_area_add.id_parent             IS 'id parent pediatric area add     ';
+COMMENT ON COLUMN ped_area_add.id_doc_template       IS 'doc_template identifier';
+COMMENT ON COLUMN ped_area_add.flg_gender        IS 'gender';
+COMMENT ON COLUMN ped_area_add.age_min       IS 'age min';
+COMMENT ON COLUMN ped_area_add.age_max       IS 'age max';
+COMMENT ON COLUMN ped_area_add.id_unit_measure IS 'unit measure identifier';
+COMMENT ON COLUMN ped_area_add.create_user IS 'Creation User';
+COMMENT ON COLUMN ped_area_add.create_time IS 'Creation Time';
+COMMENT ON COLUMN ped_area_add.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN ped_area_add.update_user IS 'Update User';
+COMMENT ON COLUMN ped_area_add.update_time IS 'Update Time';
+COMMENT ON COLUMN ped_area_add.update_institution IS 'Update Institution';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 20/01/2016 11:23
+-- CHANGE REASON: [ALERT-317944 ] 
+-- Add comments to the table 
+comment on table PED_AREA_ADD
+  is 'Pediatric area add';
+-- Add comments to the columns 
+comment on column PED_AREA_ADD.id_ped_area_add
+  is 'Pediatric area add identifier';
+comment on column PED_AREA_ADD.code_ped_area_add
+  is 'Code for translation';
+comment on column PED_AREA_ADD.id_ped_area
+  is 'Pediatric area identifier';
+comment on column PED_AREA_ADD.id_parent
+  is 'Parent pediatric area add identifier';
+comment on column PED_AREA_ADD.id_doc_template
+  is 'Template Documentation identifier';
+comment on column PED_AREA_ADD.Id_Content
+  is 'Content identifier';  
+comment on column PED_AREA_ADD.flg_gender
+  is 'Gender';
+comment on column PED_AREA_ADD.age_min
+  is 'Age minimum';
+comment on column PED_AREA_ADD.age_max
+  is 'Age maximum';
+comment on column PED_AREA_ADD.id_unit_measure
+  is 'Unit measure identifier';
+comment on column PED_AREA_ADD.rank
+  is 'Rank';
+-- CHANGE END: cristina.oliveira

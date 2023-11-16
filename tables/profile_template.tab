@@ -1,0 +1,168 @@
+
+
+  CREATE TABLE PROFILE_TEMPLATE
+   (	ID_PROFILE_TEMPLATE NUMBER(12,0) NOT NULL ENABLE,
+	INTERN_NAME_TEMPL VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	ID_TEMPL_ASSOC NUMBER(24,0),
+	ID_INSTITUTION NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE profile_template IS 'Templates de perfis de acesso. Por ex: "médico" e "médico chefe de equipa".Os acessos para cada template são pré-definidos em SYS_TEMPLATE_ACCESS, podendo ser utilizados como base para atribuição de acessos a profissionais.' ;
+
+COMMENT ON COLUMN profile_template.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN profile_template.id_templ_assoc IS 'ID do template que está sempre associado ao do registo e q portanto é atribuído quando o registo actual é seleccionado p/ atribuição (por ex: o template "médico" tem associado o template do Viewer e portanto o registo do template "médico" tem esta coluna preenchida c/ o ID do template do Viewer)' ;
+
+alter table PROFILE_TEMPLATE add FLG_TYPE VARCHAR2(1);
+
+comment on column PROFILE_TEMPLATE.FLG_TYPE
+  is 'Tipo: D - Médico, N - Enfermeiro, P - Farmacêutico, X - Auxiliar, A - Administrativo, T - Técnico, S - Assistente Social';
+
+alter table profile_template add (code_profile_template varchar2(200));
+alter table profile_template add (adw_last_update date);
+
+alter table profile_template add (id_category NUMBER(12,0));
+
+COMMENT ON COLUMN profile_template.id_category IS 'Categoria profissional';
+
+ALTER TABLE profile_template ADD (FLG_GROUP VARCHAR2(4));
+
+COMMENT ON COLUMN profile_template.flg_group IS 'P - Physician(Médico), C - Clínico(não médico), N - Não clínico';
+
+-- José Brito 16/05/2008 Acrescentada flag do perfil 'interno do ano comum'
+COMMENT ON COLUMN profile_template.flg_type IS 'Tipo: D - médico, N - enfermeiro, P - farmacêutico, X - auxiliar, A - administrativo, T - técnico, S - assistente social, I - médico interno do ano comum, O - outro';
+
+
+
+-- JSILVA 27-03-2009
+ALTER TABLE profile_template ADD id_market NUMBER(24) DEFAULT 0;
+ALTER TABLE profile_template ADD id_parent NUMBER(24);
+
+COMMENT ON COLUMN profile_template.id_market IS 'Market ID associated with profile (0 - all markets)';
+COMMENT ON COLUMN profile_template.id_parent IS 'Parent profile';
+-- END
+
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 13/10/2009 17:29
+-- CHANGE REASON: [ALERT-44922 ] 
+ALTER TABLE profile_template
+DROP COLUMN ID_MARKET;
+-- CHANGE END: Susana Silva
+
+
+
+alter table profile_template drop constraint SPT_MRK_FK;
+alter table profile_template RENAME COLUMN id_market to old_id_market;
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 28/10/2009 19:29
+-- CHANGE REASON: [ALERT-52603] Taking responsibility over episode by multiple professionals
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE profile_template ADD flg_profile VARCHAR2(1)';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+COMMENT ON COLUMN profile_template.flg_profile IS 'Type of profile: (S) Specialist physician (R) Resident physician (I) Intern physician (N) Nurse';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 11/11/2009 15:52
+-- CHANGE REASON: [ALERT-41420] Approach switching functionality
+ALTER TABLE profile_template
+ADD (  FLG_APPROACH  VARCHAR2(1 char) default 'D' not null,
+   ID_PROFILE_TEMPLATE_APPR  Number(12));
+ 
+comment on column profile_template.flg_approach is 'Profile approach (D - default, S - SOAP)';
+comment on column profile_template.id_profile_template_appr is 'Default approach association (null if default)';
+-- CHANGE END: Sérgio Santos
+
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 12-03-2010
+-- CHANGE REASON: SCH-386
+alter table PROFILE_TEMPLATE add FLG_SCHEDULABLE varchar2(1);
+comment on column PROFILE_TEMPLATE.FLG_SCHEDULABLE is 'Y - professionals with this profile can receive new scheduler appointments';
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 09/10/2012 10:47
+-- CHANGE REASON: [ALERT-241721] 
+comment on column PROFILE_TEMPLATE.flg_profile
+  is 'Type of profile: (S) Specialist physician, (R) Resident physician, (I) Intern physician, (N) Nurse, (T) Student';
+-- CHANGE END:  sergio.dias
+
+
+-- 07-01-2016
+--- CMF 06-01-2016
+COMMENT ON TABLE  ALERT.profile_template IS 'Table of profiles. "Doctor","Nurse" are examples of profiles.' ;
+COMMENT ON COLUMN ALERT.profile_template.flg_available IS 'Availability of record' ;
+COMMENT ON COLUMN ALERT.profile_template.id_templ_assoc IS 'ID of profile belonging to the viewer module, turning on the correct viewer funtionality for the current profile';
+COMMENT ON COLUMN ALERT.profile_template.flg_type IS 'Type: D - doctor, N - nurse, P - pharmacist, X - ancillary, A – Registrar, T – Technician, S – Social Worker, I – Intern Physician, O – Other';
+COMMENT ON COLUMN ALERT.profile_template.id_category IS 'Professional category';
+COMMENT ON COLUMN ALERT.profile_template.flg_group IS 'P - Physician, C - Clinical(not Physician), N - Not clinical';
+COMMENT ON COLUMN ALERT.profile_template.id_parent IS 'Parent profile';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.FLG_APPROACH IS 'PROFILE APPROACH (D - DEFAULT, S - SOAP)';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.ID_PROFILE_TEMPLATE_APPR IS 'DEFAULT APPROACH ASSOCIATION (NULL IF DEFAULT)';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.FLG_SCHEDULABLE IS 'Y - PROFESSIONALS WITH THIS PROFILE CAN RECEIVE NEW SCHEDULER APPOINTMENTS';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.FLG_PROFILE IS 'TYPE OF PROFILE: (S) SPECIALIST PHYSICIAN, (R) RESIDENT PHYSICIAN, (I) INTERN PHYSICIAN, (N) NURSE, (T) STUDENT';
+
+-- 08-01-2016 CMF
+--- CMF 06-01-2016
+COMMENT ON TABLE  ALERT.profile_template IS 'Table of profiles. "Doctor","Nurse" are examples of profiles.' ;
+COMMENT ON COLUMN ALERT.profile_template.flg_available IS 'Availability of record' ;
+COMMENT ON COLUMN ALERT.profile_template.id_templ_assoc IS 'ID of profile belonging to the viewer module, turning on the correct viewer funtionality for the current profile';
+COMMENT ON COLUMN ALERT.profile_template.flg_type IS 'Type: D - doctor, N - nurse, P - pharmacist, X - ancillary, A – Registrar, T – Technician, S – Social Worker, I – Intern Physician, O – Other';
+COMMENT ON COLUMN ALERT.profile_template.id_category IS 'Professional category';
+COMMENT ON COLUMN ALERT.profile_template.flg_group IS 'P - Physician, C - Clinical(not Physician), N - Not clinical';
+COMMENT ON COLUMN ALERT.profile_template.id_parent IS 'Parent profile';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.FLG_APPROACH IS 'PROFILE APPROACH (D - DEFAULT, S - SOAP)';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.ID_PROFILE_TEMPLATE_APPR IS 'DEFAULT APPROACH ASSOCIATION (NULL IF DEFAULT)';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.FLG_SCHEDULABLE IS 'Y - PROFESSIONALS WITH THIS PROFILE CAN RECEIVE NEW SCHEDULER APPOINTMENTS';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.FLG_PROFILE IS 'TYPE OF PROFILE: (S) SPECIALIST PHYSICIAN, (R) RESIDENT PHYSICIAN, (I) INTERN PHYSICIAN, (N) NURSE, (T) STUDENT';
+
+--
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.ID_PROFILE_TEMPLATE        IS 'Primary Key';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.INTERN_NAME_TEMPL            IS 'Internal Name';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.ID_SOFTWARE                  IS 'Software owning current profile';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.ID_INSTITUTION              IS 'DEPRECATED. Do not use.';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.CODE_PROFILE_TEMPLATE         IS 'Code for translation purpose, if need arises.';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.ADW_LAST_UPDATE              IS 'DEPRECATED. Do not use.';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPLATE.OLD_ID_MARKET              IS 'DEPRECATED. Do not use.';
+
+
+declare
+
+	l_Sql	varchar2(4000);
+	xpl		varchar2(0010 char) := '''';
+begin
+
+l_sql := 'ALTER TABLE PROFILE_TEMPLATE ADD FLG_SUBMIT_MODE VARCHAR2(00010 CHAR) DEFAULT';
+l_sql := l_sql || chr(32) || xpl|| 'NA'|| xpl;
+
+pk_versioning.run( l_sql);
+
+end;
+/
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 04/09/2018 10:37
+-- CHANGE REASON: [EMR-5785] Configuration profiles that can assume MRP responsability
+
+alter table PROFILE_TEMPLATE add flg_mrp varchar2(1 CHAR);
+
+comment on column PROFILE_TEMPLATE.flg_mrp
+  is 'Specialist Physician can assume the MRP(Most Responsible Physician)Y/N';
+
+alter table PROFILE_TEMPLATE
+  add constraint PT_FLG_MRP
+  check (flg_mrp in ('Y','N'));
+  
+-- CHANGE END: Elisabete Bugalho

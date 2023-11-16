@@ -1,0 +1,108 @@
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 29/07/2010 15:09
+-- CHANGE REASON: [ALERT-116048] 
+create table REHAB_SCH_NEED_CHANGE
+(
+  ID_REHAB_SCH_NEED  NUMBER(24) not null,
+  ID_CHANGE          NUMBER(24) not null,
+  DT_CHANGE          TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  SESSIONS           NUMBER(6),
+  FREQUENCY          NUMBER(6),
+  FLG_FREQUENCY      VARCHAR2(1 CHAR),
+  FLG_PRIORITY       VARCHAR2(1 CHAR),
+  DT_BEGIN           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  FLG_STATUS         VARCHAR2(1 CHAR) not null,
+  NOTES              VARCHAR2(1000 CHAR),
+  FLG_STATUS_CHANGE  VARCHAR2(1 CHAR) default 'W' not null,
+  ID_PROF_REQ        NUMBER(24) not null,
+  DT_REQ             TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  ID_PROF_ACCEPT     NUMBER(24) not null,
+  DT_ACCEPT          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROF_DECLINE    NUMBER(24) not null,
+  DT_DECLINE         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  NOTES_DECLINE      VARCHAR2(1000 CHAR),
+  CREATE_USER        VARCHAR2(24 CHAR),
+  CREATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER        VARCHAR2(24 CHAR),
+  UPDATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+);
+comment on table REHAB_SCH_NEED_CHANGE
+  is 'To save proposals of changes of rehabilitation scheduling needs';
+comment on column REHAB_SCH_NEED_CHANGE.ID_CHANGE
+  is 'Number of the change';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 02/12/2011 15:16
+-- CHANGE REASON: [ALERT-208144] 
+alter table REHAB_SCH_NEED_HIST
+  add constraint RSNC_FLG_FREQUENCY_CHK
+  check (FLG_FREQUENCY IN ('H', 'D', 'W','M'));
+alter table REHAB_SCH_NEED_HIST
+  add constraint RSNC_FLG_PRIORITY_CHK
+  check (FLG_PRIORITY IN ('M', 'U', 'N'));
+alter table REHAB_SCH_NEED_HIST
+  add constraint RSNC_FLG_STATUS_CHK
+  check (FLG_STATUS IN ('D', 'S', 'W','C','N'));
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/01/2016 16:47
+-- CHANGE REASON: [ALERT-317912] 
+comment on table REHAB_SCH_NEED_CHANGE
+  is 'Rehabilitation scheduling need changes';
+-- Add comments to the columns 
+comment on column REHAB_SCH_NEED_CHANGE.id_rehab_sch_need
+  is 'Rehabilitation schedule need ID';
+comment on column REHAB_SCH_NEED_CHANGE.id_change
+  is 'Change number';
+comment on column REHAB_SCH_NEED_CHANGE.dt_change
+  is 'Date that indicates when the record was registered';
+comment on column REHAB_SCH_NEED_CHANGE.sessions
+  is 'Number of sessions';
+comment on column REHAB_SCH_NEED_CHANGE.frequency
+  is 'Frequency';
+comment on column REHAB_SCH_NEED_CHANGE.flg_frequency
+  is 'Flag that indicates the frequency';
+comment on column REHAB_SCH_NEED_CHANGE.flg_priority
+  is 'Priority';
+comment on column REHAB_SCH_NEED_CHANGE.dt_begin
+  is 'Begin date';
+comment on column REHAB_SCH_NEED_CHANGE.flg_status
+  is 'Flag that indicates the status';
+comment on column REHAB_SCH_NEED_CHANGE.notes
+  is 'Notes';
+comment on column REHAB_SCH_NEED_CHANGE.flg_status_change
+  is 'Flag that indicates the change''s status';
+comment on column REHAB_SCH_NEED_CHANGE.id_prof_req
+  is 'Professional that submited the change';
+comment on column REHAB_SCH_NEED_CHANGE.dt_req
+  is 'Date that indicates when the change was submited';
+comment on column REHAB_SCH_NEED_CHANGE.id_prof_accept
+  is 'Professional that accepts the change';
+comment on column REHAB_SCH_NEED_CHANGE.dt_accept
+  is 'Date that indicates when the change was accepted';
+comment on column REHAB_SCH_NEED_CHANGE.id_prof_decline
+  is 'Professional that refuses the change';
+comment on column REHAB_SCH_NEED_CHANGE.dt_decline
+  is 'Date that indicates when the change was refused';
+comment on column REHAB_SCH_NEED_CHANGE.notes_decline
+  is 'Refuse notes';
+comment on column REHAB_SCH_NEED_CHANGE.create_user
+  is 'Creation User';
+comment on column REHAB_SCH_NEED_CHANGE.create_time
+  is 'Creation Time';
+comment on column REHAB_SCH_NEED_CHANGE.create_institution
+  is 'Creation Institution';
+comment on column REHAB_SCH_NEED_CHANGE.update_user
+  is 'Update User';
+comment on column REHAB_SCH_NEED_CHANGE.update_time
+  is 'Update Time';
+comment on column REHAB_SCH_NEED_CHANGE.update_institution
+  is 'Update Institution';
+  
+  
+  
+-- CHANGE END: Ana Matos

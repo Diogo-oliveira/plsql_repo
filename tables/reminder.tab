@@ -1,0 +1,67 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 08/06/2011 09:30
+-- CHANGE REASON: [ALERT-184001] Alert professionals to review advance directives (ALERT_41412)
+--                DB Versioning - New Objects
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -00955);
+BEGIN
+    --i_flg_category
+--DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'REMINDER',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'DSV',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+
+    BEGIN
+        EXECUTE IMMEDIATE '
+CREATE TABLE REMINDER
+(
+  ID_REMINDER             NUMBER(24) NOT NULL,
+  INTERNAL_NAME           VARCHAR2(200 CHAR) NOT NULL,
+  CODE_REMINDER           VARCHAR2(200 CHAR) NOT NULL,
+  CODE                    VARCHAR2(200 CHAR),
+  FLG_AVAILABLE           VARCHAR2(1 CHAR) DEFAULT ''Y'' NOT NULL,
+  ID_CONTENT              VARCHAR2(200 CHAR),
+  CODE_MSG_TITLE          VARCHAR2(200 CHAR),
+  CODE_MSG_BODY           VARCHAR2(200 CHAR),
+ID_SYS_SHORTCUT_YES     NUMBER(24),
+ID_SYS_SHORTCUT_NO      NUMBER(24),
+CREATE_USER             VARCHAR2(24 CHAR),
+CREATE_TIME             TIMESTAMP WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION      NUMBER(24),
+UPDATE_USER             VARCHAR2(24 CHAR),
+UPDATE_TIME             TIMESTAMP WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION      NUMBER(24)
+)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+EXECUTE IMMEDIATE 'ALTER TABLE REMINDER MOVE TABLESPACE TABLE_S';
+
+EXECUTE IMMEDIATE 'COMMENT ON TABLE REMINDER IS ''Has all possible reminders types''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.ID_REMINDER IS ''Primary key''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.INTERNAL_NAME IS ''Internal name unique key''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.CODE_REMINDER IS ''Translation code.''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.CODE IS ''Column used for codification purposes.''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.FLG_AVAILABLE IS ''Availability of the record.''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.ID_CONTENT IS ''Content unique ID.''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.CODE_MSG_TITLE IS ''Reminder message title''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.CODE_MSG_BODY IS ''Reminder message body''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.ID_SYS_SHORTCUT_YES IS ''Shortcut id when the user presses yes button''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.ID_SYS_SHORTCUT_NO IS ''Shortcut id when the user presses no button''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.CREATE_USER is ''Professional ID which created the record''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.CREATE_TIME is ''Date of record creation''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.CREATE_INSTITUTION is ''Institution ID where record was created''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.UPDATE_USER is ''Professional ID who last updated the record''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.UPDATE_TIME is ''Date when record was last updated''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN REMINDER.UPDATE_INSTITUTION is ''Institution ID where record was last updated''';
+END;
+/
+-- CHANGE END: Alexandre Santos

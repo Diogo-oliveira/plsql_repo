@@ -1,0 +1,25 @@
+alter table HCN_EVAL_DET	add constraint HCN_EVAL_DET_PK primary key (ID_HCN_EVAL_DET);
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE HCN_EVAL_DET ADD CONSTRAINT HCN_EVAL_DET_FLG_STATUS_CHK CHECK (FLG_STATUS IN (''A'', ''I'', ''C'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint HCN_EVAL_DET_FLG_STATUS_CHK table HCN_EVAL_DET column FLG_STATUS: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE HCN_EVAL_DET ADD CONSTRAINT HCN_EVAL_DET_FLG_TYPE_CHK CHECK (FLG_TYPE IN (''F'', ''V'', ''I'', ''P'', ''D'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint HCN_EVAL_DET_FLG_TYPE_CHK table HCN_EVAL_DET column FLG_TYPE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto

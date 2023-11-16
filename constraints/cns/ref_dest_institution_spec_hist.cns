@@ -1,0 +1,34 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 20/02/2013 12:07
+-- CHANGE REASON: [ALERT-251862] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'RDISH_PK'
+       AND table_name = 'REF_DEST_INSTITUTION_SPEC_HIST';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_DEST_INSTITUTION_SPEC_HIST add constraint RDISH_PK primary key (ID_DEST_INSTITUTION_SPEC_HIST)';
+    END IF;
+END;
+/
+
+DECLARE l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'RDISH_RDIS_FK'
+       AND table_name = 'REF_DEST_INSTITUTION_SPEC_HIST';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_DEST_INSTITUTION_SPEC_HIST add constraint RDISH_RDIS_FK foreign key (ID_DEST_INSTITUTION_SPEC) references REF_DEST_INSTITUTION_SPEC (ID_DEST_INSTITUTION_SPEC)';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro

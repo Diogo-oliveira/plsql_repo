@@ -1,0 +1,27 @@
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 15-10-2010
+-- CHANGE REASON: ALERT-126053
+begin
+  execute immediate 'ALTER TABLE SCH_RESCHED_REASON_SOFT_INST ADD (CONSTRAINT SRSRSI_INN_FK FOREIGN KEY (ID_INSTITUTION) REFERENCES INSTITUTION (ID_INSTITUTION))';
+exception 
+  when others then
+   dbms_output.put_line('constraint já existe');
+end;
+/
+
+begin
+  execute immediate 'ALTER TABLE SCH_RESCHED_REASON_SOFT_INST ADD (CONSTRAINT SRSRSI_SRSR_FK FOREIGN KEY (ID_RESCHED_REASON) REFERENCES SCH_RESCHED_REASON (ID_RESCHED_REASON))';
+exception 
+  when others then
+   dbms_output.put_line('constraint já existe');
+end;
+/
+
+begin
+  execute immediate 'ALTER TABLE SCH_RESCHED_REASON_SOFT_INST ADD (CONSTRAINT SRSRSI_SOE_FK FOREIGN KEY (ID_SOFTWARE) REFERENCES SOFTWARE (ID_SOFTWARE))';
+exception 
+  when others then
+   dbms_output.put_line('constraint já existe');
+end;
+/
+-- CHANGE END: Telmo

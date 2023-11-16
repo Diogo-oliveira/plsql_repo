@@ -1,0 +1,22 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 04/07/2010 02:58
+-- CHANGE REASON: [ALERT-109296] TDE Core versioning (DDL)
+create index OSPT_REQ_TSK_TYPE_IDX on ORDER_SET_PROCESS_TASK (ID_REQUEST, ID_TASK_TYPE);
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 10/11/2011 15:02
+-- CHANGE REASON: [ALERT-198676] Institutionalized diet task type integration in Order Sets
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'create index OSPT_REQ_TSK_TYPE_IDX on ORDER_SET_PROCESS_TASK (ID_REQUEST, ID_TASK_TYPE)';
+    EXCEPTION
+        WHEN e_already_exists THEN
+            dbms_output.put_line('index OSPT_REQ_TSK_TYPE_IDX already exists');
+    END;
+END;
+/
+-- CHANGE END: Carlos Loureiro

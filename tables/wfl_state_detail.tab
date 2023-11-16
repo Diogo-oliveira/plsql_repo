@@ -1,0 +1,69 @@
+
+create table wfl_state_detail
+(
+	state			number(5) not null,
+	prof_type		varchar2(1) not null,
+	icon_name		varchar2(200) not null,
+	icon_type		varchar2(5) not null,
+	icon_color		varchar2(10) not null,
+	icon_bg_color	varchar2(10) not null,
+	flg_color		varchar2(1) not null
+) tablespace TABLE_S;
+
+--comments
+comment on table wfl_state_detail
+	is 'Table of states (icon details)';
+
+comment on column wfl_state_detail.state
+	is 'id of state';
+comment on column wfl_state_detail.prof_type
+	is 'type of professional';
+comment on column wfl_state_detail.icon_name
+	is 'icon name (for flash)';
+comment on column wfl_state_detail.icon_type
+	is 'icon type (for flash)';
+comment on column wfl_state_detail.icon_color
+	is 'icon color (for flash)';
+comment on column wfl_state_detail.icon_bg_color
+	is 'icon background color (for flash)';
+comment on column wfl_state_detail.flg_color
+	is 'color flag (for flash)';
+
+
+--Rui Marante
+--2009-04-03
+
+alter table wfl_state_detail
+modify (
+	icon_color varchar2(10) null,
+	icon_bg_color varchar2(10) null,
+	flg_color varchar2(1) null
+);
+
+alter table wfl_state_detail
+add grid_timeout number(4) default 720 not null;
+
+comment on column wfl_state_detail.grid_timeout is
+	'number of hours that the record is visible on the pharmacy grids';
+
+alter table wfl_state_detail
+add rank number(3) default 0 not null;
+
+alter table wfl_state_detail
+add state_can_be_delayed varchar2(1) default 'Y' not null;
+
+comment on column wfl_state_detail.state_can_be_delayed
+	is 'if state is delayed for that prof_type (it can be delayed for the pharmacist but not for other profiles)';
+
+comment on column wfl_state_detail.rank
+	is 'rank of state (for ordering proposes on grids)';
+
+alter table wfl_state_detail
+drop constraint wfl_stdet_st_fk;
+
+alter table wfl_state_detail
+add constraint wfl_stdet_st_fk foreign key (state)
+references wfl_state (id_state) on delete cascade;
+
+comment on column wfl_state.code_state_detail
+	is 'key for translation of state description -- for use on pharmacy request details';

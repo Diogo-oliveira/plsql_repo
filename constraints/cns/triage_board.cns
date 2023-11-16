@@ -1,0 +1,86 @@
+
+
+  ALTER TABLE TRIAGE_BOARD MODIFY (ID_TRIAGE_BOARD NOT NULL ENABLE);
+
+  ALTER TABLE TRIAGE_BOARD MODIFY (CODE_TRIAGE_BOARD NOT NULL ENABLE);
+
+  ALTER TABLE TRIAGE_BOARD MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE TRIAGE_BOARD MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+  ALTER TABLE TRIAGE_BOARD ADD CONSTRAINT TBRD_PK PRIMARY KEY (ID_TRIAGE_BOARD) ENABLE;
+
+
+
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 12/02/2010 10:00
+-- CHANGE REASON: [ALERT-74106] TRIAGE: configuration to check age limits in Manchester Triage flowcharts (except for "Crying baby")
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_BOARD ADD CONSTRAINT TCN_FLGOVERRIDECONFIG_CHK CHECK(FLG_OVERRIDE_CONFIG IN (''Y'', ''N''))';
+EXCEPTION
+      WHEN OTHERS THEN
+     dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 03/05/2012 18:42
+-- CHANGE REASON: [ALERT-229201] EST simplified triage
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_BOARD ADD CONSTRAINT TBRD_FLG_DIRECT_CONFIRM_CHK CHECK(FLG_DIRECT_CONFIRM IN (''Y'', ''N''))';
+EXCEPTION
+    WHEN OTHERS THEN
+      dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_BOARD ADD CONSTRAINT TBRD_FLGINITIALSCREENBOARD_CHK CHECK(FLG_INITIAL_SCREEN_BOARD IN (''Y'', ''N''))';
+EXCEPTION
+    WHEN OTHERS THEN
+      dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 08/10/2013 16:34
+-- CHANGE REASON: [ALERT-266469] EST: for the triage complaint 1903 it is requested to have an warning when it is selected (ALERT_262192)
+DECLARE
+    e_pk EXCEPTION;
+    e_uk1 EXCEPTION;
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);
+    PRAGMA EXCEPTION_INIT(e_pk, -2260);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_BOARD ADD CONSTRAINT TBRD_FLG_SHW_WRNG_CHK CHECK (FLG_SHOW_WARNING IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 22/05/2014 10:20
+-- CHANGE REASON: [ALERT-285605] EST: whenever the user denies the first two criteria for the motif 1105 the last one must be answered positively
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'ALTER TABLE TRIAGE_BOARD ADD CONSTRAINT TBRD_FLG_REQ_Y_DISC_CHK CHECK (FLG_REQ_YES_DISCRIM IN (''Y'',''N''))');
+END;
+/
+-- CHANGE END: Alexandre Santos

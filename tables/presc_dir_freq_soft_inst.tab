@@ -1,0 +1,75 @@
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195] 
+declare
+l_count pls_integer;
+l_sql_stat varchar2(4000) := 'CREATE TABLE ALERT.PRESC_DIR_FREQ_SOFT_INST
+   (ID_PRESC_DIR_FREQ_SOFT_INST NUMBER(24,0) NOT NULL,
+    ID_PRESC_DIR_FREQUENCY NUMBER(24,0) NOT NULL,
+    ID_MARKET NUMBER(24,0) NOT NULL,
+    ID_SOFTWARE NUMBER(24,0) NOT NULL,
+    ID_INSTITUTION NUMBER(24,0) NOT NULL,
+    ID_DEP_CLIN_SERV NUMBER(24,0) NOT NULL,
+    ID_PROFILE_TEMPLATE NUMBER(24,0) NOT NULL,
+    FREQ_HOUR INTERVAL DAY (3) TO SECOND (3),
+    FREQ_BEFORE_MEAL_DELAY INTERVAL DAY (3) TO SECOND (3),
+    FREQ_AFTER_MEAL_DELAY INTERVAL DAY (3) TO SECOND (3),
+    FLG_AVAILABLE VARCHAR2(1 CHAR),
+    DISPLAY_RANK NUMBER(6,0),
+    ID_GROUP NUMBER(6,0),
+    FLG_DEFAULT VARCHAR2(1 char),
+    CREATE_USER VARCHAR2(24 CHAR),
+    CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+    CREATE_INSTITUTION NUMBER(24,0),
+    UPDATE_USER VARCHAR2(24 CHAR),
+    UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+    UPDATE_INSTITUTION NUMBER(24,0)
+   )';
+		
+begin
+
+select count(1) into l_count from all_tables where table_name = 'PRESC_DIR_FREQ_SOFT_INST' and owner = 'ALERT';
+
+if l_count = 0 then
+  execute immediate (l_sql_stat);
+
+end if;
+
+end;
+/
+-- CHANGE END: Nuno Ferreira
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195]
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.ID_PRESC_DIR_FREQ_SOFT_INST IS 'Prescription directions SETUP ID - Primary Key';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.ID_PRESC_DIR_FREQUENCY IS 'Prescription Directions Frequency ID';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.ID_MARKET IS 'Market ID';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.ID_SOFTWARE IS 'Software ID';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.ID_INSTITUTION IS 'Institution ID';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.ID_DEP_CLIN_SERV IS 'Dep Clinical Service ID';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.ID_PROFILE_TEMPLATE IS 'Profile Template ID';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.FREQ_HOUR IS 'Frequency Hour';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.FREQ_BEFORE_MEAL_DELAY IS 'Meal period - BEFORE meal delay';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.FREQ_AFTER_MEAL_DELAY IS 'Meal period - AFTER meal delay';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.FLG_AVAILABLE IS 'Availability: (Y)es; (N)o';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.DISPLAY_RANK IS 'Rank for display hours';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.ID_GROUP IS 'Aggregation id. This is necessary to aggregate each pre-defined frequency which has more than one time associated. |||| Example: id_presc_dir_frequency =
+ 2. In this id_presc_dir_frequency, we have, for instance, 2 x day - 2h, 4h; It is necessary to insert a unique id_group value for this id_presc_dir_f
+requency in each id_presc_dir_freq_soft_inst for this frequency';
+   comment on column presc_dir_freq_soft_inst.flg_default is 'Default option according previous options. Example: After select meals, the meal period will be With Meal (FLG_DEFAULT=(Y)es)';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.CREATE_USER IS 'Creation User';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.CREATE_TIME IS 'Creation Time';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.CREATE_INSTITUTION IS 'Creation Institution';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.UPDATE_USER IS 'Update User';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.UPDATE_TIME IS 'Update Time';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_FREQ_SOFT_INST.UPDATE_INSTITUTION IS 'Update Institution';
+   COMMENT ON TABLE ALERT.PRESC_DIR_FREQ_SOFT_INST  IS 'Prescription directions setup: Market, Software, Institution, Dep. Clinical Service, Profile Template';
+-- CHANGE END: Nuno Ferreira
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_DIR_FREQ_SOFT_INST IS 'Prescription directions setup: Market, Software, Institution, Dep. Clinical Service, Profile Template [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

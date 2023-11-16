@@ -1,0 +1,52 @@
+
+
+  CREATE TABLE PRESCRIPTION_TYPE_ACCESS
+   (	ID_PRESCRIPTION_TYPE_ACCESS NUMBER(24,0) NOT NULL ENABLE,
+	ID_PRESCRIPTION_TYPE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_CAT_TYPE VARCHAR2(2) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE prescription_type_access IS 'Tabela que contém os tipos de prescrição.' ;
+
+COMMENT ON COLUMN prescription_type_access.id_prescription_type_access IS 'Chave primária.' ;
+COMMENT ON COLUMN prescription_type_access.id_prescription_type IS 'Chave primária.' ;
+COMMENT ON COLUMN prescription_type_access.flg_cat_type IS 'Categorias que têm acesso: D - médico, N -enfermeiro ou combinações destes valores.' ;
+COMMENT ON COLUMN prescription_type_access.id_institution IS 'ID da instituição em que o tipo de prescrição está disponível.' ;
+COMMENT ON COLUMN prescription_type_access.id_software IS 'ID do software em que o tipo de prescrição está disponível.' ;
+COMMENT ON COLUMN prescription_type_access.rank IS 'Rank para ordenação das opções no multichoice' ;
+
+
+alter table prescription_type_access add (id_professional number(24) default 0) ;
+
+COMMENT ON COLUMN prescription_type_access.id_professional IS 'Id do profissional' ;
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-MAY-08
+-- CHANGE REASON: Incluir na tabela a possibilidade de parametrização por ID_PROFILE_TEMPLATE para a opção de enfermeiro especialista.
+ALTER TABLE PRESCRIPTION_TYPE_ACCESS
+ADD ID_PROFILE_TEMPLATE NUMBER(12);
+
+COMMENT ON COLUMN PRESCRIPTION_TYPE_ACCESS.ID_PROFILE_TEMPLATE IS 
+'Permite a parametrização opcional por ID_PROFILE_TEMPLATE.';
+--CHANGE END
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-MAY-08
+-- CHANGE REASON: Parametrização do tipo de acesso das opções: A - todos; M - mais frequentes, P - pesquisáveis.
+ALTER TABLE PRESCRIPTION_TYPE_ACCESS 
+ADD FLG_TYPE_ACCESS VARCHAR2(1) DEFAULT 'A';
+
+COMMENT ON COLUMN PRESCRIPTION_TYPE_ACCESS.FLG_TYPE_ACCESS IS 
+'Parametrização dos acessos da opção: A - todos; M - mais frequentes, P - pesquisáveis';
+--CHANGE END
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:06
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESCRIPTION_TYPE_ACCESS IS 'Tabela que contém os tipos de prescrição. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

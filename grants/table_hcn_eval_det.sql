@@ -1,0 +1,1 @@
+grant select on alert.hcn_eval_det to alert_viewer;

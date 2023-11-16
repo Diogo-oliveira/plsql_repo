@@ -1,0 +1,23 @@
+ALTER TABLE CANCEL_REASON
+ ADD (CONSTRAINT CRE_PK PRIMARY KEY 
+  (ID_CANCEL_REASON))
+/
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 15/11/2010 11:23
+-- CHANGE REASON: [ALERT-140829] 
+DECLARE
+    e_generic EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_generic, -02264); 
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE cancel_reason ADD CONSTRAINT CRE_FLG_NOTES_MANDATORY_CHK CHECK (FLG_NOTES_MANDATORY in (''Y'', ''N'')) ENABLE';
+    EXCEPTION
+        WHEN e_generic THEN
+            dbms_output.put_line('WARNING: Operation already performed.');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

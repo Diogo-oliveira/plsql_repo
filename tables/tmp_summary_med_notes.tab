@@ -1,0 +1,92 @@
+CREATE GLOBAL TEMPORARY TABLE ALERT.TMP_SUMMARY_MED_NOTES
+(	
+NOTES_DATE              VARCHAR2(0050),
+SESSION_ID              NUMBER(24),
+NOTES_TIME              VARCHAR2(0050),
+ID_PROFESSIONAL         NUMBER(24),
+NOTES_DESC              VARCHAR2(4000),
+RANK                    NUMBER(6)
+) ON COMMIT PRESERVE ROWS ;
+
+
+-- inpatient 18-07-2008
+alter table ALERT.TMP_SUMMARY_MED_NOTES add NICK_NAME           VARCHAR2(200);
+alter table ALERT.TMP_SUMMARY_MED_NOTES add DESC_SPECIALITY      VARCHAR2(200);
+alter table ALERT.TMP_SUMMARY_MED_NOTES add INST_ABBREVIATION    VARCHAR2(0030);
+
+--inpatient 23-07-2008
+ALTER TABLE TMP_SUMMARY_MED_NOTES ADD DT_NOTES_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+
+COMMENT ON TABLE TMP_SUMMARY_MED_NOTES IS 'Tabela temporaria para output do sumario de diarios' ;
+
+COMMENT ON COLUMN TMP_SUMMARY_MED_NOTES.NOTES_DATE      IS 'data de output da sessao' ;
+COMMENT ON COLUMN TMP_SUMMARY_MED_NOTES.SESSION_ID      IS 'id da sessao' ;
+COMMENT ON COLUMN TMP_SUMMARY_MED_NOTES.NOTES_TIME      IS 'hora do último registo da sessão' ;
+COMMENT ON COLUMN TMP_SUMMARY_MED_NOTES.ID_PROFESSIONAL IS 'id do profissional que fez o registo' ;
+COMMENT ON COLUMN TMP_SUMMARY_MED_NOTES.NOTES_DESC      IS 'descritivo' ;
+COMMENT ON COLUMN TMP_SUMMARY_MED_NOTES.RANK            IS 'campo para ordenação' ;
+COMMENT ON COLUMN TMP_SUMMARY_MED_NOTES.DT_NOTES_TSTZ   IS 'data truncada da sessao para ordenação' ;
+
+
+
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 24/10/2011 17:18
+-- CHANGE REASON: [ALERT-201238] Performance improvement: Data paging for Medical/Nursing notes.
+DECLARE
+    temp_table_in_use EXCEPTION;
+    PRAGMA EXCEPTION_INIT(temp_table_in_use, -14450);
+
+    l_exists PLS_INTEGER;
+    l_table  VARCHAR2(30) := 'TMP_SUMMARY_MED_NOTES';
+    l_col    VARCHAR2(30) := 'TIME_FRAME_RANK';
+
+    l_ddl_lst table_varchar2 := table_varchar2(
+    'ALTER TABLE TMP_SUMMARY_MED_NOTES ADD (
+               TIME_FRAME_RANK NUMBER(2),
+               TIME_FRAME_DESC VARCHAR2(1000 CHAR),
+               TIME_FRAME_TOTAL_DAYS NUMBER(6))',
+    'COMMENT ON COLUMN tmp_summary_med_notes.time_frame_rank is ''Time frame rank. Also used as time frame ID''',
+'COMMENT ON COLUMN tmp_summary_med_notes.time_frame_desc is ''Time frame description''',
+'COMMENT ON COLUMN tmp_summary_med_notes.time_frame_total_days is ''Number of days in this time frame with records''');
+BEGIN
+    SELECT COUNT(1)
+      INTO l_exists
+      FROM user_tab_cols utc
+     WHERE utc.table_name = l_table
+       AND utc.column_name = l_col;
+
+    IF l_exists = 0
+    THEN
+        FOR i IN l_ddl_lst.first .. l_ddl_lst.last
+        LOOP
+            EXECUTE IMMEDIATE l_ddl_lst(i);
+        END LOOP;
+    ELSE
+        dbms_output.put_line('Info: Table TMP_SUMMARY_MED_NOTES already updated for data paging support');
+    END IF;
+EXCEPTION
+    WHEN temp_table_in_use THEN
+        dbms_output.put_line('Error: ' || SQLERRM);
+        dbms_output.put_line('There are sessions that are using the temporary table TMP_SUMMARY_MED_NOTES.');
+        dbms_output.put_line('In order to allow make changes in the table you need to disconnect/connect or kill sessions using the following script:');
+        dbms_output.put_line('SELECT o.object_name,');
+        dbms_output.put_line('       s.sid,');
+        dbms_output.put_line('       s.serial#,');
+        dbms_output.put_line('       s.username,');
+        dbms_output.put_line('       s.osuser,');
+        dbms_output.put_line('       s.machine,');
+        dbms_output.put_line('       a.type,');
+        dbms_output.put_line('       ''alter system kill session '''''' || to_char(s.sid) || '','' || to_char(s.serial#) || '''''';'' ks');
+        dbms_output.put_line('  FROM all_objects o');
+        dbms_output.put_line(' INNER JOIN v$lock a');
+        dbms_output.put_line('    ON a.id1 = o.object_id');
+        dbms_output.put_line(' INNER JOIN v$session s');
+        dbms_output.put_line('    ON a.sid = s.sid');
+        dbms_output.put_line(' WHERE o.owner = ''ALERT''');
+        dbms_output.put_line('   AND o.object_name = ''TMP_SUMMARY_MED_NOTES''');
+        dbms_output.put_line('   AND a.type = ''TO'';');
+END;
+/
+-- CHANGE END: Ariel Machado

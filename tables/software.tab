@@ -1,0 +1,41 @@
+
+
+  CREATE TABLE SOFTWARE
+   (	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	NAME VARCHAR2(200),
+	FLG_MNI VARCHAR2(1),
+	INTERN_NAME VARCHAR2(50),
+	RANK NUMBER(6,0),
+	DESC_SOFTWARE VARCHAR2(200)
+   );
+
+
+COMMENT ON COLUMN software.name IS 'Nome do software/aplicação' ;
+COMMENT ON COLUMN software.flg_mni IS 'Y-Software/aplicação da MNI, N-Externo' ;
+COMMENT ON COLUMN software.intern_name IS 'Nome para uso interno' ;
+COMMENT ON COLUMN software.rank IS 'Ordem pela qual devem aparecer as aplicações no login.' ;
+COMMENT ON COLUMN software.desc_software IS 'Descritivo da aplicação' ;
+
+ALTER TABLE software ADD (FLG_VIEWER VARCHAR2(1));
+
+COMMENT ON COLUMN software.flg_viewer IS 'Software relativo ao Viewer: Y (Yes) / N (No)';
+
+
+--João Eiras, 26-10-2007
+--Passar descrições para a TRANSLATION
+alter table software add code_software varchar2(200);
+comment on column software.code_software is 'Código do nome do software na translation';
+alter table software add code_icon varchar2(200);
+comment on column software.code_icon is 'Código do icon na translation';
+
+
+
+--Rui Batista 15/06/2010
+--ALERT-85998: Software description without HTML
+alter table software
+add( code_software_audit varchar2(200 char));
+
+COMMENT ON COLUMN software.code_software_audit IS 'Code for translation without special formatting (for use in audit trail)' ;
+
+-- CHANGE END: Rui Batista
+

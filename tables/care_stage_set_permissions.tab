@@ -1,0 +1,27 @@
+CREATE TABLE CARE_STAGE_SET_PERMISSIONS
+(	ID_PROFILE_TEMPLATE NUMBER(24,0),
+	CARE_STAGE_VAL VARCHAR2(30),
+	FLG_SET VARCHAR2(1)
+) ;
+
+
+COMMENT ON COLUMN CARE_STAGE_SET_PERMISSIONS.ID_PROFILE_TEMPLATE IS 'Profile Template foreign key';
+
+COMMENT ON COLUMN CARE_STAGE_SET_PERMISSIONS.CARE_STAGE_VAL IS 'Care status to set permissions';
+
+COMMENT ON COLUMN CARE_STAGE_SET_PERMISSIONS.FLG_SET IS 'Flag indicating whether the profile template can set the care status to the care_stage_val (‘Y’ / ‘N’)';
+
+COMMENT ON TABLE CARE_STAGE_SET_PERMISSIONS  IS 'This table contains profile care status setting permissions';
+
+
+alter table CARE_STAGE_SET_PERMISSIONS rename column care_stage_val to DOMAIN_VAL;
+
+
+-- jsilva 31-07-2009
+ALTER TABLE care_stage_set_permissions ADD RANK NUMBER(6);
+ALTER TABLE care_stage_set_permissions ADD ID_INSTITUTION NUMBER(6) DEFAULT 0;
+
+
+COMMENT ON COLUMN care_stage_set_permissions.rank IS 'Rank for ordering purposes.';
+COMMENT ON COLUMN care_stage_set_permissions.id_institution IS 'Institution ID.';
+-- end

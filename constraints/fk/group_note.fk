@@ -1,0 +1,15 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 05/09/2012 14:28
+-- CHANGE REASON: [ALERT-239422] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE group_note  ADD CONSTRAINT gn_prof_fk FOREIGN KEY (id_prof_last_update) REFERENCES professional (id_professional)';
+EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+END;
+/
+    
+-- CHANGE END: Paulo Teixeira

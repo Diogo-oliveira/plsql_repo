@@ -1,0 +1,94 @@
+
+
+  CREATE TABLE "ALERT"."VITAL_SIGN_SCALES"
+   (	"ID_VITAL_SIGN_SCALES" NUMBER(24,0),
+	"ID_VITAL_SIGN" NUMBER(24,0),
+	"CODE_VITAL_SIGN_SCALES" VARCHAR2(200),
+	"INTERNAL_NAME" VARCHAR2(200),
+	"FLG_AVAILABLE" VARCHAR2(1),
+	"ADW_LAST_UPDATE" DATE DEFAULT sysdate,
+	"AGE_MIN" NUMBER(3,0),
+	"AGE_MAX" NUMBER(3,0)
+   ) ;
+
+
+-- Para adicionar colunas pode ser usado código comentado
+-- De momento só são suportados os tipos de dados mais comuns.
+-- ALTER TABLE VITAL_SIGN_SCALES ADD ID_VITAL_SIGN_SCALES NUMBER(24,0) NOT NULL;
+-- ALTER TABLE VITAL_SIGN_SCALES ADD ID_VITAL_SIGN NUMBER(24,0) NOT NULL;
+-- ALTER TABLE VITAL_SIGN_SCALES ADD CODE_VITAL_SIGN_SCALES VARCHAR2(200) NOT NULL;
+-- ALTER TABLE VITAL_SIGN_SCALES ADD INTERNAL_NAME VARCHAR2(200) ;
+-- ALTER TABLE VITAL_SIGN_SCALES ADD FLG_AVAILABLE VARCHAR2(1) NOT NULL;
+-- ALTER TABLE VITAL_SIGN_SCALES ADD ADW_LAST_UPDATE DATE ;
+-- ALTER TABLE VITAL_SIGN_SCALES ADD AGE_MIN NUMBER(3,0) ;
+-- ALTER TABLE VITAL_SIGN_SCALES ADD AGE_MAX NUMBER(3,0) ;
+
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 2009-05-14 20:32
+-- CHANGE REASON: ALERT-28331 [Sinais vitais -> Indice de Dor após registo, não altera o conteudo]
+
+-- Add/modify columns 
+alter table VITAL_SIGN_SCALES add CODE_VITAL_SIGN_SCALES_SHORT VARCHAR2(200);
+-- Add comments to the columns 
+comment on column VITAL_SIGN_SCALES.CODE_VITAL_SIGN_SCALES_SHORT
+  is 'Short descrption to show at cells grid';
+  
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 03/10/2010
+-- CHANGE REASON: ALERT-130835
+DECLARE
+    e_col_not_found EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_col_not_found, -00904);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vital_sign_scales DROP COLUMN adw_last_update';
+
+EXCEPTION
+    WHEN e_col_not_found THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+-- CHANGE END: Paulo Fonseca
+
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table VITAL_SIGN_SCALES
+  is 'Table with all scales used in a vital sign context';
+-- Add comments to the columns 
+comment on column VITAL_SIGN_SCALES.id_vital_sign_scales
+  is 'Vital sign scales identifier';
+comment on column VITAL_SIGN_SCALES.id_vital_sign
+  is 'Vital sign identifier';
+comment on column VITAL_SIGN_SCALES.code_vital_sign_scales
+  is 'Translation code for vital sign scales name';
+comment on column VITAL_SIGN_SCALES.internal_name
+  is 'Internal name tu identify the scale';
+comment on column VITAL_SIGN_SCALES.flg_available
+  is 'Identify if this scale is available Y -Yes; N-No;';
+comment on column VITAL_SIGN_SCALES.age_min
+  is 'Minimum Age, criteria restrict the vital sign scale usage';
+comment on column VITAL_SIGN_SCALES.age_max
+  is 'Maximum Age, criteria restrict the vital sign scale usage';
+comment on column VITAL_SIGN_SCALES.create_user
+  is 'Creation User';
+comment on column VITAL_SIGN_SCALES.create_time
+  is 'Creation Time';
+comment on column VITAL_SIGN_SCALES.create_institution
+  is 'Creation Institution';
+comment on column VITAL_SIGN_SCALES.update_user
+  is 'Update User';
+comment on column VITAL_SIGN_SCALES.update_time
+  is 'Update Time';
+comment on column VITAL_SIGN_SCALES.update_institution
+  is 'Update Institution';
+comment on column VITAL_SIGN_SCALES.code_vital_sign_scales_short
+  is 'Short descrption to show at cells grid';
+  
+-- CHANGE END: Pedro Fernandes

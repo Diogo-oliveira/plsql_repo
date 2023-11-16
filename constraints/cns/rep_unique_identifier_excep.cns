@@ -1,0 +1,24 @@
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 14-Dec-2010
+-- CHANGE REASON: ALERT-ALERT-149266
+DECLARE
+    e_name_already_used_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_name_already_used_constraint, -02264);
+    l_table_name VARCHAR2(30) := 'REP_UNIQUE_IDENTIFIER_EXCEP';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name ||
+                      ' ADD CONSTRAINT ruie_flg_rep_type_chk CHECK (flg_report_type IN (''C'',''S'',''D'',''R'',''E'',''CE'',''CO'',''DE''))';
+EXCEPTION
+    WHEN e_name_already_used_constraint THEN
+        dbms_output.put_line('WARNING - Check constraint in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 27/Jan/2011 09:07
+-- CHANGE REASON: ALERT-158045
+ALTER TABLE rep_unique_identifier_excep DROP CONSTRAINT RUIE_FLG_REP_TYPE_CHK;
+ALTER TABLE rep_unique_identifier_excep ADD CONSTRAINT RUIE_FLG_REP_TYPE_CHK CHECK (flg_report_type IN ('C','D','S','REQUISITION','E','CONSENT','P','CM', 'CERTIFICATE'));
+-- CHANGE END

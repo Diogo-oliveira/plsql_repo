@@ -1,0 +1,103 @@
+--26/01/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+ALTER TABLE EPIS_PN_DET
+ ADD (CONSTRAINT EPTD_PK PRIMARY KEY 
+  (ID_EPIS_PN_DET))
+/
+
+  
+ALTER TABLE EPIS_PN_DET
+ ADD (CONSTRAINT EPTD_TYPE_CHK CHECK (FLG_TYPE IN ('PN', 'PPN','ICN','HPN')))
+/
+
+ALTER TABLE EPIS_PN_DET
+ ADD (CONSTRAINT EPTD_STATUS_CHK CHECK (FLG_STATUS in ('A', 'R')))
+/
+ 
+CREATE UNIQUE INDEX EPT_UK ON EPIS_PN_DET
+(
+DECODE(FLG_STATUS, 'A', ID_EPIS_PN||'|'||
+ ID_PN_DATA_BLOCK||'|'||
+ ID_PN_SOAP_BLOCK||'|'||
+ ID_EPIS_DOCUMENTATION||'|'||'A', ID_EPIS_PN_DET ));
+ 
+ 
+  
+ 
+--Rui Batista 
+--24/02/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+Begin
+ execute immediate 'drop index EPT_UK';
+
+Exception
+when others then
+  NULL;
+end;
+/  
+ 
+CREATE UNIQUE INDEX EPT_UK ON EPIS_PN_DET
+(DECODE(FLG_STATUS, 'A', ID_EPIS_PN||'|'||
+ ID_PN_DATA_BLOCK||'|'||
+ ID_PN_SOAP_BLOCK||'|'||'A', ID_EPIS_PN_DET ));
+ 
+ 
+ 
+--Rui Batista 
+--01/03/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+ 
+ALTER TABLE EPIS_PN_DET
+ADD (CONSTRAINT EPTD_STATUS_CHK CHECK (FLG_STATUS in ('A', 'R')))
+/
+ 
+CREATE UNIQUE INDEX EPT_UK ON EPIS_PN_DET
+(DECODE(FLG_STATUS, 'A', ID_EPIS_PN||'|'||
+ ID_PN_DATA_BLOCK||'|'||
+ ID_PN_SOAP_BLOCK||'|'||
+ ID_EPIS_DOCUMENTATION||'|'||'A', ID_EPIS_PN_DET ));
+ 
+ 
+Begin
+ execute immediate 'drop index EPT_UK';
+
+Exception
+when others then
+  NULL;
+end;
+/  
+ 
+CREATE UNIQUE INDEX EPT_UK ON EPIS_PN_DET
+(DECODE(FLG_STATUS, 'A', ID_EPIS_PN||'|'||
+ ID_PN_DATA_BLOCK||'|'||
+ ID_PN_SOAP_BLOCK||'|'||'A', ID_EPIS_PN_DET ));
+ 
+
+--Rui Batista 
+--01/03/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+ CREATE UNIQUE INDEX EPT_UK ON EPIS_PN_DET
+(DECODE(FLG_STATUS, 'A', ID_EPIS_PN||'|'||
+ ID_PN_DATA_BLOCK||'|'||
+ ID_PN_SOAP_BLOCK||'|'||'A', ID_EPIS_PN_DET )); 
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:49
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE EPIS_PN_DET drop constraint EPTD_STATUS_CHK';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE EPIS_PN_DET
+ADD (CONSTRAINT EPTD_STATUS_CHK CHECK (FLG_STATUS in (''A'', ''R'', ''S'', ''I'', ''Z'')))';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Luís Maia

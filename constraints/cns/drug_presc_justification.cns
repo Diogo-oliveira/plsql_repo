@@ -1,0 +1,17 @@
+alter table drug_presc_justification
+add constraint drug_presc_just_pk primary key (id_drug_presc_just)
+using index tablespace INDEX_M;
+
+alter table drug_presc_justification
+add constraint drug_presc_just_uk1 unique (id_drug_presc_det)
+using index tablespace INDEX_M;
+
+alter table drug_presc_justification
+add constraint drug_presc_just_uk2 unique (id_drug_req_det)
+using index tablespace INDEX_M;
+
+alter table drug_presc_justification
+add constraint dpj_omsp_chk check (flg_oth_med_same_purpose in ('N','Y'));
+
+alter table drug_presc_justification
+add constraint dpj_bs_chk check (flg_bacteriological_study in ('N','Y'));

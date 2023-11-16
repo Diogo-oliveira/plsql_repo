@@ -1,0 +1,24 @@
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 09-01-2009
+-- CHANGE REASON: agenda MFR
+
+ALTER TABLE SCHEDULE_RECURSION
+ ADD (CONSTRAINT SCHREC_PK PRIMARY KEY 
+  (ID_SCHEDULE_RECURSION));
+  
+--END
+
+
+-- CHANGED BY: Sofia MEndes
+-- CHANGE DATE: 08-06-2009
+-- CHANGE REASON: ALERT-32069: series of appointments
+alter table SCHEDULE_RECURSION add constraint SRC_FTP_CHK check (flg_type IN ('S','P'));
+
+alter table SCHEDULE_RECURSION add constraint SRC_FTR_CHK check (flg_type IN ('E','D',null));
+--END
+
+-- CHANGED BY: Sofia MEndes
+-- CHANGE DATE: 09-06-2009
+-- CHANGE REASON: ALERT-32069: series of appointments
+alter table SCHEDULE_RECURSION add constraint SRC_FTR_CHK check (flg_type IN ('E','D',null));
+--END

@@ -1,0 +1,129 @@
+
+
+  CREATE TABLE SYS_CONFIG
+   (	ID_SYS_CONFIG VARCHAR2(200) NOT NULL ENABLE,
+	VALUE VARCHAR2(4000) NOT NULL ENABLE,
+	DESC_SYS_CONFIG VARCHAR2(4000) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0),
+	ID_SOFTWARE NUMBER(24,0),
+	ID_PK NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE sys_config IS 'Opções de configuração.
+Para um parâmetro, se ID_INSTITUTION = 0, é pq serve p/ qualquer instituição. Caso haja excepções, cria-se registo específico para a instituição em causa.
+Tudo idêntico para ID_SOFTWARE.' ;
+
+
+COMMENT ON COLUMN sys_config.desc_sys_config IS 'Ajuda (objectivo do registo)' ;
+
+
+-- CHANGED BY: Susana Silva
+-- CHANGED DATE: 2009-03-06
+-- CHANGED REASON: ALERT-18824
+ALTER TABLE sys_config add global_configuration VARCHAR2(1);   
+COMMENT ON column sys_config.global_configuration IS 'Disponibilidade da configuração para o perfil 51';
+-- CHANGE END: Susana Silva
+
+
+
+ 
+-- CHANGED BY: Susana Silva
+-- CHANGED DATE: 2009-05-07
+-- CHANGED REASON: ALERT-26890
+ALTER TABLE sys_config add FLG_SCHEMA VARCHAR2(1) ;   
+COMMENT ON column sys_config.FLG_SCHEMA IS '(A) ALERT, (F) FINGER_DB';
+-- CHANGE END: Susana Silva
+
+
+
+
+
+-- CHANGED BY: Susana Silva
+-- CHANGED DATE: 2009-05-07
+-- CHANGED REASON: ALERT-26890
+ALTER TABLE SYS_CONFIG  MODIFY FLG_SCHEMA DEFAULT 'A';
+-- CHANGE END: Susana Silva
+
+
+-- CMF 20-10-2009
+ALTER TABLE SYS_CONFIG ADD ID_MARKET NUMBER(24) DEFAULT 0;
+COMMENT ON COLUMN sys_config.ID_MARKET IS 'id_market in use for parameter' ;
+
+-- CHANGED BY: Fábio Oliveira
+-- CHANGED DATE: 2011-01-14
+-- CHANGED REASON: ALERT-155610
+alter table SYS_CONFIG modify fill_type not null enable NOVALIDATE;
+alter table SYS_CONFIG modify client_configuration not null enable NOVALIDATE;
+alter table SYS_CONFIG modify internal_configuration not null enable NOVALIDATE;
+-- CHANGE END: Fábio Oliveira
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 08/07/2011 08:56
+-- CHANGE REASON: [ALERT-187743] comments in internal and client configuration fields
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+
+    EXECUTE IMMEDIATE 'comment on column SYS_CONFIG.CLIENT_CONFIGURATION is ''Configuration available for Client System Administrator''';
+EXCEPTION
+    WHEN e_invalid_identifier THEN
+        dbms_output.put_line('Table comment already exists');
+    
+END;
+/
+
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+
+    EXECUTE IMMEDIATE 'comment on column SYS_CONFIG.INTERNAL_CONFIGURATION is ''Configuration available for Alert System Administrator''';
+EXCEPTION
+    WHEN e_invalid_identifier THEN
+        dbms_output.put_line('Table comment already exists');
+    
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/05/2014 10:36
+-- CHANGE REASON: [ALERT-281776] source multichoices
+DECLARE
+
+    e_column_already_there EXCEPTION;
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE sys_config add mvalue VARCHAR2(1000 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('column already inserted');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column sys_config.mvalue IS ''api returning pipelined results with type t_rec_values_domain_mkt to source multichoice''';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('column already inserted');
+        
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+comment on table ALERT.SYS_CONFIG is 'Core Configurations. If one parameter has ID_INSTITUTION= 0, then parameter warks for any institution. For execptions, just create same parameter with eligible id_institution. Same with ID_SOFTWARE'. 
+comment on column ALERT.SYS_CONFIG.desc_sys_config		  is 'Help ( goal of parameter)';
+comment on column ALERT.SYS_CONFIG.value        		  is 'Desired value';
+comment on column ALERT.SYS_CONFIG.ID_INSTITUTION         is 'Institution id which configuration is allocated';
+comment on column ALERT.SYS_CONFIG.ID_SOFTWARE    		  is 'Software id id which configuration is allocated';
+comment on column ALERT.SYS_CONFIG.FILL_TYPE    		  is 'Type of entry: T-text, M-multichoice, K-keypad, F- value given by function in MVALUE field';
+comment on column ALERT.SYS_CONFIG.client_configuration	  is 'Configuration available for Client System Administrator';
+comment on column ALERT.SYS_CONFIG.internal_configuration is 'Configuration available for Alert System Administrator';
+comment on column ALERT.SYS_CONFIG.global_configuration	  is 'Configuration available for profile 51';
+comment on column ALERT.SYS_CONFIG.flg_schema			  is '(A) ALERT, (F) FINGER_DB';
+
+comment on column ALERT.SYS_CONFIG.id_sys_config		  is 'Key / name of configuration';

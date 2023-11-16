@@ -1,0 +1,23 @@
+
+
+  ALTER TABLE TRANSLATION MODIFY (ID_TRANSLATION NOT NULL ENABLE);
+
+  ALTER TABLE TRANSLATION MODIFY (ID_LANGUAGE NOT NULL ENABLE);
+
+  ALTER TABLE TRANSLATION MODIFY (CODE_TRANSLATION NOT NULL ENABLE);
+
+  ALTER TABLE TRANSLATION ADD CONSTRAINT TRL_PK PRIMARY KEY (ID_TRANSLATION) ENABLE;
+
+  alter table translation drop constraint TRL_PK drop index;
+  
+  alter table translation add constraint translation_PK primary key( id_language, code_translation ) using index tablespace index_l;
+  
+  
+
+-- CHANGED BY:  Álvaro Vasconcelos
+-- CHANGE DATE: 23/02/2011 08:26
+-- CHANGE REASON: [ALERT-158645] Release Notes DDL
+alter table TRANSLATION_LOB
+  add (constraint TRNSLTNLOB_PK primary key (CODE_TRANSLATION));
+    
+-- CHANGE END:  Álvaro Vasconcelos

@@ -1,0 +1,75 @@
+
+
+  CREATE TABLE TRIAGE_CONSIDERATIONS
+   (	ID_TRIAGE_CONSIDERATIONS NUMBER(24,0) NOT NULL ENABLE,
+	CODE_TRIAGE_CONSIDERATIONS VARCHAR2(200) NOT NULL ENABLE,
+	RANK NUMBER(24,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN triage_considerations.id_triage_considerations IS 'Chave primária' ;
+COMMENT ON COLUMN triage_considerations.code_triage_considerations IS 'Descrição das considerações por língua' ;
+COMMENT ON COLUMN triage_considerations.rank IS 'Ordenação' ;
+COMMENT ON COLUMN triage_considerations.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN triage_considerations.flg_available IS 'Disponibilidade do registo' ;
+
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 02/03/2010 10:50
+-- CHANGE REASON: [ALERT-77123] ESI Triage
+COMMENT ON COLUMN triage_considerations.rank IS 'DEPRECATED. Use TRIAGE_N_CONSID.RANK instead.';
+-- CHANGE END: José Brito
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 17/10/2013 11:04
+-- CHANGE REASON: [ALERT-244999] 
+ALTER TABLE triage_considerations
+ADD (age_min     NUMBER(5,2),
+     age_max     NUMBER(5,2),
+     gender      VARCHAR2(2)); 
+
+comment on column TRIAGE_CONSIDERATIONS.age_min
+  is 'Patient''s minimum age for this consideration to be displayed';
+comment on column TRIAGE_CONSIDERATIONS.age_max
+  is 'Patient''s maximum age for this consideration to be displayed';
+comment on column TRIAGE_CONSIDERATIONS.gender
+  is 'Patient''s gender: F - female, M - male, I - Unkown';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:34
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column TRIAGE_CONSIDERATIONS.id_triage_considerations
+  is 'Primary Key';
+comment on column TRIAGE_CONSIDERATIONS.code_triage_considerations
+  is 'Consideration translation code ';
+comment on column TRIAGE_CONSIDERATIONS.adw_last_update
+  is 'Date of last change';
+comment on column TRIAGE_CONSIDERATIONS.flg_available
+  is 'Availability: (Y) Yes (N) No';  
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 12:41
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table TRIAGE_CONSIDERATIONS
+  is 'Triage considerations';  
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 26/01/2016 14:44
+-- CHANGE REASON: [ALERT-318122] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table TRIAGE_CONSIDERATIONS
+  is 'Triage considerations';  
+  
+-- CHANGE END: Elisabete Bugalho

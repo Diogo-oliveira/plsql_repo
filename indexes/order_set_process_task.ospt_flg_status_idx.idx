@@ -1,0 +1,14 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 27/02/2012 11:32
+-- CHANGE REASON: [ALERT-220579] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -00955); -- when ORA-00955: name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE INDEX OSPT_FLG_STATUS_IDX on ORDER_SET_PROCESS_TASK (flg_status)';
+EXCEPTION
+    WHEN e_exception THEN
+        dbms_output.put_line('index OSPT_FLG_STATUS_IDX already exists' )
+END;
+/
+-- CHANGE END: Tiago Silva

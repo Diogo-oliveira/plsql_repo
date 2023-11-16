@@ -1,0 +1,61 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 30/09/2011 14:38
+-- CHANGE REASON: [ALERT-197754] Pre-hospital data - Road Traffic Accident (RTA)
+--                DB Versioning - New tables
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -00955);
+BEGIN
+    --i_flg_category
+    --DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'PRE_HOSP_FIELD',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'DSV',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+
+    BEGIN
+        EXECUTE IMMEDIATE '
+CREATE TABLE PRE_HOSP_FIELD
+(
+  ID_PRE_HOSP_FIELD NUMBER(24) NOT NULL,
+  INTERNAL_NAME VARCHAR2(200 CHAR) NOT NULL,
+  CODE_MSG_PRE_HOSP_FIELD VARCHAR2(200 CHAR),
+  CODE_MSG_DETAIL VARCHAR2(200 CHAR),
+  FLG_AVAILABLE VARCHAR2(1 CHAR) DEFAULT ''Y'' NOT NULL,
+  FLG_VISIBLE VARCHAR2(1 CHAR),
+  FLG_MANDATORY VARCHAR2(1 CHAR),
+  CREATE_USER VARCHAR2(24 CHAR),
+  CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER VARCHAR2(24 CHAR),
+  UPDATE_TIME TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    
+    EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_FIELD MOVE TABLESPACE TABLE_S';
+
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE PRE_HOSP_FIELD IS ''Pre hospital fields''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_FIELD.ID_PRE_HOSP_FIELD IS ''Primary key''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_FIELD.INTERNAL_NAME IS ''Field unique name''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_FIELD.CODE_MSG_PRE_HOSP_FIELD IS ''Code message used as the label of the field''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_FIELD.CODE_MSG_DETAIL IS ''Code message used in detail as the label of the new field value''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_FIELD.FLG_AVAILABLE IS ''Availability of the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_FIELD.FLG_VISIBLE IS ''Visibility of the field''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_FIELD.FLG_MANDATORY IS ''Is this a mandatory field?''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_FIELD.CREATE_USER is ''Professional ID which created the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_FIELD.CREATE_TIME is ''Date of record creation''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_FIELD.CREATE_INSTITUTION is ''Institution ID where record was created''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_FIELD.UPDATE_USER is ''Professional ID who last updated the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_FIELD.UPDATE_TIME is ''Date when record was last updated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_FIELD.UPDATE_INSTITUTION is ''Institution ID where record was last updated''';
+END;
+/
+-- CHANGE END: Alexandre Santos

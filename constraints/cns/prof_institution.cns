@@ -1,0 +1,163 @@
+
+
+  ALTER TABLE PROF_INSTITUTION ADD CONSTRAINT PRINS_PK PRIMARY KEY (ID_PROF_INSTITUTION) ENABLE;
+
+  ALTER TABLE PROF_INSTITUTION ADD CONSTRAINT PRINS_UK UNIQUE (ID_INSTITUTION, ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE PROF_INSTITUTION MODIFY (ID_PROF_INSTITUTION NOT NULL ENABLE);
+
+  ALTER TABLE PROF_INSTITUTION MODIFY (ID_PROFESSIONAL NOT NULL ENABLE);
+
+  ALTER TABLE PROF_INSTITUTION MODIFY (ID_INSTITUTION NOT NULL ENABLE);
+
+  ALTER TABLE PROF_INSTITUTION MODIFY (FLG_STATE NOT NULL ENABLE);
+
+  ALTER TABLE PROF_INSTITUTION DROP CONSTRAINT PRINS_UK;
+  
+  ALTER TABLE PROF_INSTITUTION ADD CONSTRAINT PRINSDTBG_UK UNIQUE (ID_INSTITUTION, ID_PROFESSIONAL,DT_BEGIN_TSTZ);
+
+
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 24/02/2010 15:54
+-- CHANGE REASON: [ALERT-71106] 
+ALTER TABLE PROF_INSTITUTION ADD CONSTRAINT PRINST_FLG_EXTERNAL_CHK CHECK (FLG_EXTERNAL IN ('Y', 'N'));
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 12-03-2010
+-- CHANGE REASON: SCH-386
+alter table PROF_INSTITUTION add constraint PRINS_UK check (flg_schedulable in ('Y','N'));
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 14-04-2010
+-- CHANGE REASON: SCH-529
+ALTER TABLE PROF_INSTITUTION DROP CONSTRAINT PRINS_UK;
+
+ALTER TABLE PROF_INSTITUTION ADD CONSTRAINT PRINS_FLG_SCHED_CHK check (flg_schedulable in ('Y','N'));
+-- CHANGE END: Telmo Castro
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 05/07/2010 16:26
+-- CHANGE REASON: [ALERT-109378] 
+alter table PROF_INSTITUTION add constraint PRINST_DN_FLG_STATUS_CHK check (DN_FLG_STATUS IN ('I', 'V', 'E', 'A'));
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:42
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_INSTITUTION add constraint PROF_INST_FLG_TYPE_CHK check ( FLG_TYPE in (''N'',''P''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:42
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_INSTITUTION add constraint PROF_INST_FLG_STATE_CHK check ( FLG_STATE in (''A'',''I'',''S''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 11/07/2011 17:44
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_INSTITUTION add constraint PROF_INST_FLG_STATE_CHK check ( FLG_STATE in (''A'',''I'',''S'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 12/07/2011 12:23
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_INSTITUTION add constraint PROF_INST_FLG_TYPE_CHK check ( FLG_TYPE in (''N'',''P''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/07/2011 12:02
+-- CHANGE REASON: [ALERT-187577] grouping changes with novalidate
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_INSTITUTION add constraint PROF_INST_FLG_TYPE_CHK check ( FLG_TYPE in (''N'',''P'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_INSTITUTION add constraint PROF_INST_FLG_STATE_CHK check ( FLG_STATE in (''A'',''I'',''S'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

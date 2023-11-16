@@ -1,0 +1,83 @@
+
+
+  CREATE TABLE DOC_ORI_TYPE
+   (	ID_DOC_ORI_TYPE NUMBER(6,0) NOT NULL ENABLE,
+	CODE_DOC_ORI_TYPE VARCHAR2(200),
+	FLG_AVAILABLE VARCHAR2(1),
+	RANK NUMBER(6,0),
+	ADW_LAST_UPDATE DATE
+   );
+
+
+COMMENT ON TABLE doc_ori_type IS 'Tipos de documentos,  e não tipo de original.' ;
+
+
+
+alter table DOC_ORI_TYPE add FLG_COMMENT_TYPE varchar2(1) default 'N';
+-- Add comments to the columns 
+comment on column DOC_ORI_TYPE.FLG_COMMENT_TYPE
+  is 'comentarios em documentos deste ori_type aparecem com as labels: Notas (N), Interpretações (I)';
+
+
+
+-- CHANGED BY: Telmo Castro
+-- CHANGED DATE: 2008-JAN-23
+-- CHANGING REASON:  novo campo doc_ori_type.flg_identification
+
+alter table DOC_ORI_TYPE add FLG_IDENTIFICATION varchar2(1) default 'N';
+-- Add comments to the columns 
+comment on column DOC_ORI_TYPE.FLG_IDENTIFICATION
+  is 'os types identification tem logica adicional quanto ao title no pk_doc.create_doc';
+
+-- END
+ 
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:19
+-- CHANGE REASON: [ALERT-126939] 
+alter table doc_ori_type add id_content VARCHAR2(30 CHAR);
+comment on column doc_ori_type.id_content
+  is 'Content identifier';
+-- CHANGE END:  carlos.guilherme
+
+ -- CHANGED BY: Telmo
+-- CHANGE DATE: 03-04-2012
+-- CHANGE REASON: ALERT-226014
+begin
+  execute immediate 'alter table DOC_ORI_TYPE add tl_color varchar2(20); comment on column DOC_ORI_TYPE.tl_color is ''color that identifies this type in the timeline screen''';
+exception
+	when others then dbms_output.put_line('coluna já existe');
+end;
+/
+-- CHANGE END: Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 09-10-2012
+-- CHANGE REASON: ALERT-226014
+begin
+  execute immediate 'alter table DOC_ORI_TYPE add tl_color varchar2(20)';
+  execute immediate 'comment on column DOC_ORI_TYPE.tl_color is ''color that identifies this type in the timeline screen''';
+exception
+  when others then dbms_output.put_line(SQLERRM);
+end;
+/
+-- CHANGE END: Telmo
+
+--14-01-2016 cmf
+COMMENT ON TABLE   ALERT.DOC_ORI_TYPE                    IS 'Types of document, and not types of original doc.' ;
+COMMENT ON COLUMN  ALERT.DOC_ORI_TYPE.ID_DOC_ORI_TYPE    IS 'Primary key.' ;
+COMMENT ON COLUMN  ALERT.DOC_ORI_TYPE.CODE_DOC_ORI_TYPE  IS 'Code for translated description' ;
+COMMENT ON COLUMN  ALERT.DOC_ORI_TYPE.FLG_AVAILABLE      IS 'Availability of record' ;
+COMMENT ON COLUMN  ALERT.DOC_ORI_TYPE.RANK               IS 'value for sorting purpose';
+COMMENT ON COLUMN  ALERT.DOC_ORI_TYPE.ADW_LAST_UPDATE    IS 'DEPRECATED';
+COMMENT ON COLUMN ALERT.DOC_ORI_TYPE.FLG_COMMENT_TYPE   is 'Label for comments: (N)otes, (I)nterpretations';
+COMMENT ON COLUMN ALERT.DOC_ORI_TYPE.FLG_IDENTIFICATION is 'Those with Y have additional logic in pk_doc.create_doc';
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/02/2016 17:21
+-- CHANGE REASON: [ALERT-318435] 
+ALTER TABLE DOC_ORI_TYPE ADD CODE_BUTTON GENERATED ALWAYS AS (CAST('DOC_ORI_TYPE.CODE_BUTTON.' ||TO_CHAR(ID_DOC_ORI_TYPE) AS VARCHAR2(200 CHAR))) VIRTUAL;
+
+COMMENT ON COLUMN DOC_ORI_TYPE.CODE_BUTTON IS 'Translation code (deepnav presentation)';
+-- CHANGE END: Ana Matos

@@ -1,0 +1,56 @@
+
+
+  CREATE TABLE PAT_CHILD_CLIN_REC
+   (	ID_PAT_CHILD_CLIN_REC NUMBER(24,0) NOT NULL ENABLE,
+	PREGNANCY_TIME NUMBER(2,0),
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0),
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	NUM_OBSTET_CONSULTING NUMBER(2,0),
+	PREGNANCY_TYPE VARCHAR2(1),
+	DELIVERY_TYPE VARCHAR2(1),
+	APGAR1 NUMBER(2,0),
+	APGAR5 NUMBER(2,0),
+	APGAR10 NUMBER(2,0),
+
+	REANIMATION VARCHAR2(1),
+	METAB_DISEASE_SEARCH VARCHAR2(1) NOT NULL ENABLE,
+	DT_METAB_DISEASE_SEARCH DATE,
+	NUM_NORMAL_PREV_PREGN NUMBER(2,0),
+	NUM_ABNORMAL_PREV_PREGN NUMBER(2,0),
+	NUM_LIVING_SIBLING NUMBER(2,0),
+	NUM_DECEASED_SIBLING NUMBER(2,0),
+	DELIVERY_WEIGHT NUMBER(5,2),
+	DELIVERY_STATURE NUMBER(5,2),
+	DELIVERY_CEFAL_PERIM NUMBER(5,2),
+	NOTES VARCHAR2(4000)
+   );
+
+
+COMMENT ON COLUMN pat_child_clin_rec.pregnancy_time IS 'Nº de semanas de gestação' ;
+COMMENT ON COLUMN pat_child_clin_rec.num_obstet_consulting IS 'Nº de consultas durante a gravidez' ;
+COMMENT ON COLUMN pat_child_clin_rec.pregnancy_type IS 'N - normal, R - risco' ;
+COMMENT ON COLUMN pat_child_clin_rec.delivery_type IS 'Tipo do parto: E - eutócico, C - cesariana, F - forceps, V - ventosa, P - extracção pélvica' ;
+COMMENT ON COLUMN pat_child_clin_rec.apgar1 IS 'Índice Apgar ao 1º minuto' ;
+COMMENT ON COLUMN pat_child_clin_rec.apgar5 IS 'Índice Apgar ao 5º minuto' ;
+COMMENT ON COLUMN pat_child_clin_rec.apgar10 IS 'Índice Apgar ao 10º minuto' ;
+COMMENT ON COLUMN pat_child_clin_rec.reanimation IS 'Indicação se houve reanimação' ;
+COMMENT ON COLUMN pat_child_clin_rec.metab_disease_search IS 'Rastreio de doenças metabólicas: S - sim, N - não, D - desconhecido' ;
+COMMENT ON COLUMN pat_child_clin_rec.dt_metab_disease_search IS 'Data de rastreio de doenças metabólicas' ;
+COMMENT ON COLUMN pat_child_clin_rec.num_normal_prev_pregn IS 'Nº de gestações normais anteriores' ;
+COMMENT ON COLUMN pat_child_clin_rec.num_abnormal_prev_pregn IS 'Nº de gestações anormais anteriores' ;
+COMMENT ON COLUMN pat_child_clin_rec.num_living_sibling IS 'Nº de irmãos vivos' ;
+
+COMMENT ON COLUMN pat_child_clin_rec.num_deceased_sibling IS 'Nº de irmãos falecidos' ;
+COMMENT ON COLUMN pat_child_clin_rec.delivery_weight IS 'Peso à nascença (Kg)' ;
+COMMENT ON COLUMN pat_child_clin_rec.delivery_stature IS 'Estatura à nascença (cm)' ;
+COMMENT ON COLUMN pat_child_clin_rec.delivery_cefal_perim IS 'Perímetro cefálico à nascença (cm)' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_CHILD_CLIN_REC ADD DT_METAB_DISEASE_SEARCH_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_CHILD_CLIN_REC.DT_METAB_DISEASE_SEARCH_TSTZ IS 'Data de rastreio de doen‡as metab¢licas'; 
+
+
+
+alter table PAT_CHILD_CLIN_REC drop column DT_METAB_DISEASE_SEARCH;

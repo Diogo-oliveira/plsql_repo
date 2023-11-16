@@ -1,0 +1,40 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 30/08/2013 14:24
+-- CHANGE REASON: [ALERT-264047] Alert tbl idx
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'create index POP_CNT_AVAILABLE_IDX on po_param(flg_available, id_content) tablespace INDEX_S';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'create index POP_CNT_IDX on po_param(id_content)  tablespace INDEX_S';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'create index POPMC_CNT_AVAILABLE_IDX on po_param_mc(flg_available, id_content) tablespace INDEX_S';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'create index POPMC_CNT_IDX on po_param_mc(id_content) tablespace INDEX_S';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'grant references on alert.unit_measure_type to alert_default';
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'grant references on alert.unit_measure_subtype to alert_default';
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

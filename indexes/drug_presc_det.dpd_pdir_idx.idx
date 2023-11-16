@@ -1,0 +1,17 @@
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195]
+declare
+  l_count pls_integer;
+  l_sql_stat varchar2(4000):=' create unique index DPD_PDIR_IDX on DRUG_PRESC_DET (ID_PRESC_DIRECTIONS) ';
+
+begin
+  select count(1) into l_count from all_indexes where owner = 'ALERT' and index_name = 'DPD_PDIR_IDX';
+
+  if l_count = 0 then
+    execute immediate (l_sql_stat);
+  end if;
+
+end;
+/
+-- CHANGE END: Nuno Ferreira

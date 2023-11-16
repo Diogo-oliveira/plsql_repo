@@ -1,0 +1,48 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 31/07/2009 16:30
+-- CHANGE REASON: [ALERT-18963 ] 
+
+CREATE TABLE "WF_TRANSITION"(
+ID_WORKFLOW NUMBER(12,0) NOT NULL,
+ID_STATUS_BEGIN NUMBER(24,0) NOT NULL,
+ID_STATUS_END NUMBER(24,0) NOT NULL,
+CODE_TRANSITION VARCHAR2(200) ,
+FLG_AVAILABLE VARCHAR2(1) NOT NULL,
+CREATE_USER VARCHAR2(24) ,
+CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+CREATE_INSTITUTION NUMBER(24,0) ,
+UPDATE_USER VARCHAR2(24) ,
+UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+UPDATE_INSTITUTION NUMBER(24,0) );
+
+
+   COMMENT ON COLUMN "WF_TRANSITION"."ID_WORKFLOW" IS 'Workflow that uses this transition';
+
+   COMMENT ON COLUMN "WF_TRANSITION"."ID_STATUS_BEGIN" IS 'Starting status for transition';
+
+   COMMENT ON COLUMN "WF_TRANSITION"."ID_STATUS_END" IS 'Finish status for transition';
+
+   COMMENT ON COLUMN "WF_TRANSITION"."CODE_TRANSITION" IS 'Transition (or action) name';
+
+   COMMENT ON COLUMN "WF_TRANSITION"."FLG_AVAILABLE" IS 'Y if available, N otherwise';
+
+   COMMENT ON TABLE "WF_TRANSITION"  IS 'Transition (arcs) configuration';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 11/09/2009 12:33
+-- CHANGE REASON: [ALERT-910] 
+comment on column wf_transition.CREATE_USER is 'Creation User';
+comment on column wf_transition.CREATE_TIME is 'Creation Time';
+comment on column wf_transition.CREATE_INSTITUTION is 'Creation Institution';
+comment on column wf_transition.UPDATE_USER is 'Update User';
+comment on column wf_transition.UPDATE_TIME is 'Update Time';
+comment on column wf_transition.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: João Almeida
+-- CHANGED DATE: 2009-SET-22
+-- CHANGED REASON: ALERT-45152
+alter TABLE WF_TRANSITION
+modify id_workflow NUMBER(24);
+-- CHANGE END: João Almeida

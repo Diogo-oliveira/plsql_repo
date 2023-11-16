@@ -1,0 +1,109 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:25
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'CDR_DEFINITION',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'PRM',
+                                             i_flg_alert_default => 'Y',
+                                             i_delete_script     => '',
+                                             i_flg_default_child => 'N');
+END;
+/
+
+create table CDR_DEFINITION
+(
+  id_cdr_definition  NUMBER(24) not null,
+  code_name          VARCHAR2(200 CHAR) not null,
+  code_description   VARCHAR2(200 CHAR) not null,
+  flg_status         VARCHAR2(1 CHAR) default 'A' not null,
+  flg_origin         VARCHAR2(1 CHAR) default 'L' not null,
+  id_cdr_type        NUMBER(24) not null,
+  id_institution     NUMBER(24) not null,
+  id_prof_create     NUMBER(24),
+  id_cancel_info_det NUMBER(24),
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+);
+
+comment on table CDR_DEFINITION
+  is 'Clinical decision rule definitions. A rule definition is like the abstract of a rule instance.';
+
+comment on column CDR_DEFINITION.id_cdr_definition
+  is 'Primary key.';
+comment on column CDR_DEFINITION.code_name
+  is 'Rule definition name code for translation.';
+comment on column CDR_DEFINITION.code_description
+  is 'Rule definition description code for translation.';
+comment on column CDR_DEFINITION.flg_status
+  is 'Rule definition status: (A)ctive, (I)nactive, (E)dited, (C)ancelled.';
+comment on column CDR_DEFINITION.flg_origin
+  is 'Rule definition origin: (L)ocal, (D)efault.';
+comment on column CDR_DEFINITION.id_cdr_type
+  is 'Rule type identifier.';
+comment on column CDR_DEFINITION.id_institution
+  is 'Institution identifier.';
+comment on column CDR_DEFINITION.id_prof_create
+  is 'Record created by (professional identifier).';
+comment on column CDR_DEFINITION.id_cancel_info_det
+  is 'Cancel information detail identifier.';
+comment on column CDR_DEFINITION.create_user
+  is 'Creation User';
+comment on column CDR_DEFINITION.create_time
+  is 'Creation Time';
+comment on column CDR_DEFINITION.create_institution
+  is 'Creation Institution';
+comment on column CDR_DEFINITION.update_user
+  is 'Update User';
+comment on column CDR_DEFINITION.update_time
+  is 'Update Time';
+comment on column CDR_DEFINITION.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 07/10/2011 15:22
+-- CHANGE REASON: [ALERT-198677] changes_ddl
+alter table cdr_definition add (
+id_content    varchar2(200 char),
+flg_available varchar2(1 char) default 'Y' not null,
+flg_generic   varchar2(1 char) default 'Y' not null
+);
+
+comment on column cdr_definition.id_content
+  is 'Content identifier.';
+comment on column cdr_definition.flg_available
+  is 'Record availability (Y/N).';
+comment on column cdr_definition.flg_generic
+  is 'Is this record considered generic content? Y/N';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 12/05/2014 14:37
+-- CHANGE REASON: [ALERT-284329] 
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CDR_DEFINITION add (ID_LINKS       number(24) )';  
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: This already exists.');
+END;
+/
+
+comment on column CDR_DEFINITION.ID_LINKS  is 'ID of table links with Url to call on infobutton acess.';
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 24/07/2015 09:05
+-- CHANGE REASON: [ALERT-311816 ] 
+alter table cdr_definition add (
+INTERNAL_NAME varchar2(240)
+);
+
+COMMENT ON COLUMN cdr_definition.INTERNAL_NAME 
+   IS 'Description of the CDS definition';
+-- CHANGE END: Sérgio Santos

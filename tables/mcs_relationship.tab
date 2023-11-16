@@ -1,0 +1,38 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 05/02/2010 12:18
+-- CHANGE REASON: [ALERT-71991] Medical Classification System DDL
+CREATE TABLE MCS_RELATIONSHIP 
+(
+    ID_MCS_SOURCE       NUMBER(24)         NOT NULL,
+    ID_MCS_RELATIONSHIP NUMBER(24)         NOT NULL,
+ID_MCS_CONCEPT_1    VARCHAR2(200 CHAR) NOT NULL,
+RELATIONSHIP_TYPE  VARCHAR2(20 CHAR)  NOT NULL,
+ID_MCS_CONCEPT_2    VARCHAR2(200 CHAR) NOT NULL,
+CHARACTERISTIC_TYPENUMBER(1)          ,
+REFINABILITY      NUMBER(1)          ,
+RELATIONSHIP_GROUP  NUMBER(5)          ,
+ID_CONTENT          VARCHAR2(200 CHAR) ,
+    CREATE_USER         VARCHAR2(24)       ,
+    CREATE_TIME         TIMESTAMP(6)       WITH LOCAL TIME ZONE,
+    CREATE_INSTITUTION  NUMBER(24)         ,
+    UPDATE_USER         VARCHAR2(24)       ,
+    UPDATE_TIME         TIMESTAMP(6)       WITH LOCAL TIME ZONE,
+    UPDATE_INSTITUTION  NUMBER(24)
+);
+comment on table MCS_RELATIONSHIP is                      'Medical Classification System (MCS) table that represents relationships between concepts';
+comment on column MCS_RELATIONSHIP.ID_MCS_SOURCE is       'MCS source ID';
+comment on column MCS_RELATIONSHIP.ID_MCS_RELATIONSHIP is 'MCS relationship ID';
+comment on column MCS_RELATIONSHIP.ID_MCS_CONCEPT_1 is    'MCS relationship concept source ID';
+comment on column MCS_RELATIONSHIP.RELATIONSHIP_TYPE is   'Defines the relationship type between source and target concepts';
+comment on column MCS_RELATIONSHIP.ID_MCS_CONCEPT_2 is    'MCS relationship concept target ID';
+comment on column MCS_RELATIONSHIP.CHARACTERISTIC_TYPE is 'Indication of whether a relationship specifies a defining characteristic of the source concept or a possible qualification of that concept';
+comment on column MCS_RELATIONSHIP.REFINABILITY is        'Indication of whether it is possible to refine the target concept when this relationship is used as a template for clinical data entry';
+comment on column MCS_RELATIONSHIP.RELATIONSHIP_GROUP is  'Expresses an association between two or more relationships';
+comment on column MCS_RELATIONSHIP.ID_CONTENT is          'Content identifier';
+comment on column MCS_RELATIONSHIP.CREATE_USER is         'Creation user';
+comment on column MCS_RELATIONSHIP.CREATE_TIME is         'Creation time';
+comment on column MCS_RELATIONSHIP.CREATE_INSTITUTION is  'Creation institution';
+comment on column MCS_RELATIONSHIP.UPDATE_USER is         'Update user';
+comment on column MCS_RELATIONSHIP.UPDATE_TIME is         'Update time';
+comment on column MCS_RELATIONSHIP.UPDATE_INSTITUTION is  'Update institution';
+-- CHANGE END: Carlos Loureiro

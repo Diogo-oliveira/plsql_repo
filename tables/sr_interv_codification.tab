@@ -1,0 +1,142 @@
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/07/2012 10:16
+-- CHANGE REASON: [ALERT-235117] Add columns required and codification - Add CODIFICATION id and episode ID_DEP_CLIN_SERV to the v_surgical_detail view
+begin
+execute immediate ('
+create table SR_INTERV_CODIFICATION
+(
+  id_sr_interv_codification NUMBER(24) not null,
+  id_codification           NUMBER(24) not null,
+  id_sr_intervention         NUMBER(24) not null,
+  flg_available             VARCHAR2(1) default ''Y'' not null,
+  standard_code             VARCHAR2(200 CHAR),
+  standard_desc             VARCHAR2(200 CHAR),
+  dt_standard_begin         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_standard_end           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_user               VARCHAR2(24),
+  create_time               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution        NUMBER(24),
+  update_user               VARCHAR2(24),
+  update_time               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution        NUMBER(24)
+)
+tablespace TABLE_S
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 2M
+    next 2M
+    minextents 1
+    maxextents unlimited
+    pctincrease 0
+  )');
+exception
+when others then
+NULL;
+end;
+/
+
+begin
+-- Add comments to the table 
+execute immediate ('
+comment on table SR_INTERV_CODIFICATION
+  is ''Table to indicate for each surgery intervention what is her codification.''');
+-- Add comments to the columns 
+execute immediate ('comment on column SR_INTERV_CODIFICATION.id_SR_INTERV_CODIFICATION
+  is ''Surgery intervention and Codification identifier''');
+execute immediate ('comment on column SR_INTERV_CODIFICATION.id_codification
+  is ''Codification Identifier''');
+execute immediate ('comment on column SR_INTERV_CODIFICATION.id_sr_intervention
+  is ''Surgery identifier''');
+execute immediate ('comment on column SR_INTERV_CODIFICATION.flg_available
+  is ''Y-Record available. N-Otherwise''');
+execute immediate ('comment on column SR_INTERV_CODIFICATION.standard_code
+  is ''Standard codification''');
+execute immediate ('comment on column SR_INTERV_CODIFICATION.standard_desc
+  is ''Standard description''');
+execute immediate ('comment on column SR_INTERV_CODIFICATION.DT_STANDARD_BEGIN
+  is ''Standard begin date''');
+execute immediate ('comment on column SR_INTERV_CODIFICATION.DT_STANDARD_END
+  is ''Standard end date''');
+execute immediate ('comment on column SR_INTERV_CODIFICATION.create_user
+  is ''Creation user''');
+execute immediate ('comment on column SR_INTERV_CODIFICATION.create_time
+  is ''Creation date / time''');
+execute immediate ('comment on column SR_INTERV_CODIFICATION.create_institution
+  is ''Creation institution''');
+execute immediate ('comment on column SR_INTERV_CODIFICATION.update_user
+  is ''Update user''');
+execute immediate ('comment on column SR_INTERV_CODIFICATION.update_time
+  is ''Update date / time''');
+execute immediate ('comment on column SR_INTERV_CODIFICATION.update_institution
+  is ''Update institution''');
+exception
+when others then
+NULL;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 31/08/2012 10:21
+-- CHANGE REASON: [ALERT-239064] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00904);
+    e_object_exists1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists1, -01430);
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -02260);
+BEGIN
+    BEGIN        EXECUTE IMMEDIATE 'alter table sr_interv_codification drop column ID_SR_INTERV_CODIFICATION';
+    EXCEPTION        WHEN e_object_exists THEN            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    END;
+    BEGIN        EXECUTE IMMEDIATE 'alter table sr_interv_codification drop column ID_SR_INTERVENTION';
+    EXCEPTION        WHEN e_object_exists THEN            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    END;
+    BEGIN        EXECUTE IMMEDIATE 'alter table sr_interv_codification drop column FLG_AVAILABLE';
+    EXCEPTION        WHEN e_object_exists THEN            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    END;
+    BEGIN        EXECUTE IMMEDIATE 'alter table sr_interv_codification drop column STANDARD_CODE';
+    EXCEPTION        WHEN e_object_exists THEN            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    END;
+    BEGIN        EXECUTE IMMEDIATE 'alter table sr_interv_codification drop column STANDARD_DESC';
+    EXCEPTION        WHEN e_object_exists THEN            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    END;
+    BEGIN        EXECUTE IMMEDIATE 'alter table sr_interv_codification drop column DT_STANDARD_BEGIN';
+    EXCEPTION        WHEN e_object_exists THEN            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    END;
+    BEGIN        EXECUTE IMMEDIATE 'alter table sr_interv_codification drop column DT_STANDARD_END';
+    EXCEPTION        WHEN e_object_exists THEN            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    END;
+    -- add
+    BEGIN        EXECUTE IMMEDIATE 'alter table sr_interv_codification add FLG_DIAG_TYPE varchar2(1 char)';
+    EXCEPTION        WHEN e_object_exists1 THEN            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    END;
+    EXECUTE IMMEDIATE 'COMMENT ON column sr_interv_codification.flg_diag_type IS ''Diagnosis type (refers to FLG_TYPE column on DIAGNOSIS table)''';
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 03/09/2012 09:13
+-- CHANGE REASON: [ALERT-239064] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00904);
+    e_object_exists1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists1, -01430);
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -02260);
+BEGIN
+    BEGIN        EXECUTE IMMEDIATE 'alter table sr_interv_codification drop column flg_diag_type';
+    EXCEPTION        WHEN e_object_exists THEN            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    END;   
+    -- add
+    BEGIN        EXECUTE IMMEDIATE 'alter table sr_interv_codification add FLG_CODING varchar2(1 char)';
+    EXCEPTION        WHEN e_object_exists1 THEN            dbms_output.put_line('AVISO: Operação já executada anteriormente.');    END;
+    EXECUTE IMMEDIATE 'COMMENT ON column sr_interv_codification.FLG_CODING IS ''FLG_CODING type (refers to FLG_CODING column on sr_intervention table)''';
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/07/2017 14:08
+-- CHANGE REASON: [ALERT-331061]
+begin
+pk_frmw_objects.set_category_dpc(i_owner => 'ALERT',i_obj_name => 'SR_INTERV_CODIFICATION');
+end;
+-- CHANGE END: Pedro Henriques

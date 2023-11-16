@@ -1,0 +1,30 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/02/2011 14:45
+-- CHANGE REASON: [ALERT-164319 ] Issue Replication: Atitudes terapêuticas
+-- Creating Primary Key on 'ICNP_TASK_COMP_SOFT_INST'
+BEGIN
+
+EXECUTE IMMEDIATE 'ALTER TABLE ICNP_TASK_COMP_SOFT_INST
+ ADD (CONSTRAINT ITT_PK PRIMARY KEY 
+  (ID_TASK
+  ,ID_TASK_TYPE
+  ,ID_COMPOSITION
+  ,ID_SOFTWARE
+  ,ID_INSTITUTION))';
+EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+ 
+-- Creating Check Constraint on 'ICNP_TASK_COMP_SOFT_INST'
+BEGIN
+
+EXECUTE IMMEDIATE 'ALTER TABLE ICNP_TASK_COMP_SOFT_INST
+ ADD (CONSTRAINT ITT_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'',''N'')))';
+EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: Elisabete Bugalho

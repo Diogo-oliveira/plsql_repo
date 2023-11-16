@@ -1,0 +1,94 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 02/12/2009 21:10
+-- CHANGE REASON: [PIX-341] HIE XDS Content Creator module in Alert
+CREATE TABLE XDS_DOCUMENT_SUBMISSION
+(
+    ID_XDS_DOCUMENT_SUBMISSION   NUMBER(24) NOT NULL,
+    ID_EPIS_REPORT               NUMBER(24) NOT NULL,
+    ID_PROFESSIONAL              NUMBER(24) NOT NULL,
+    ID_INSTITUTION               NUMBER(24) NOT NULL,
+    ID_XDS_CONFIDENTIALITY_LEVEL NUMBER(24) NOT NULL, 
+    DT_SUBMISSION_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+    FLG_SUBMISSION_STATUS        VARCHAR2(1 CHAR),
+    CREATE_USER                  VARCHAR2(24 CHAR),
+    CREATE_TIME                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    CREATE_INSTITUTION           NUMBER(24),
+    UPDATE_USER                  VARCHAR2(24 CHAR),
+    UPDATE_TIME                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    UPDATE_INSTITUTION           NUMBER(24)
+);
+
+COMMENT ON TABLE  XDS_DOCUMENT_SUBMISSION IS 'Submitted document to HIE XDS Document repository';
+
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.id_xds_document_submission IS 'Primary key';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.id_epis_report IS 'Submitted report';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.id_professional IS 'Professional that submitted the report';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.id_institution IS 'Institution where the report was submitted';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.id_xds_confidentiality_level IS 'Confidentiality level';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.dt_submission_time IS 'Submission time';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.flg_submission_status IS 'Current submission status: (P)-Pending; (S)-Sent; (X)-Error';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.create_user IS 'Creation User';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.create_time IS 'Creation Time';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.update_user IS 'Update User';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.update_time IS 'Update Time';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.update_institution IS 'Update Institution';
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:18
+-- CHANGE REASON: [ALERT-126939] 
+alter table xds_document_submission rename column id_epis_report to id_doc_external;
+comment on column xds_document_submission.id_doc_external is 'Reference to DOC_EXTERNAL table';
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:19
+-- CHANGE REASON: [ALERT-126939] 
+ALTER TABLE XDS_DOCUMENT_SUBMISSION 
+ ADD (VALUE NUMBER(7,3)
+ ,ID_CURRENCY NUMBER(6)
+ ,DESC_ITEM VARCHAR2(1000 CHAR));
+
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.ID_DOC_EXTERNAL IS 'Id from DOC_EXTERNAL table';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.FLG_SUBMISSION_STATUS IS 'Current submission status: (N)-New; (U)-Update; (D)-Delete; (P)-Pending; (S)-Sent; (X)-Error; (C)-Cancel';
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:19
+-- CHANGE REASON: [ALERT-126939] 
+ALTER TABLE XDS_DOCUMENT_SUBMISSION 
+ ADD (FLG_SUBMISSION_TYPE VARCHAR2(1 CHAR));
+
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.FLG_SUBMISSION_TYPE IS 'Submission Type: (N)-New; (U)-Update; (D)-Delete; (P)-Pending; (C)-Cancel';
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:19
+-- CHANGE REASON: [ALERT-126939] 
+alter table xds_document_submission drop column ID_XDS_CONFIDENTIALITY_LEVEL;
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:19
+-- CHANGE REASON: [ALERT-126939] 
+ALTER TABLE XDS_DOCUMENT_SUBMISSION 
+ ADD (DT_CREATE TIMESTAMP(6) WITH LOCAL TIME ZONE);
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.DT_CREATE IS 'Date of creation of the record';
+
+ALTER TABLE XDS_DOCUMENT_SUBMISSION 
+ ADD (DT_UPDATE TIMESTAMP(6) WITH LOCAL TIME ZONE);
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.DT_UPDATE IS 'Date of update of the record';
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:21
+-- CHANGE REASON: [ALERT-126939] 
+ALTER TABLE XDS_DOCUMENT_SUBMISSION  ADD (FLG_STATUS VARCHAR2(1 CHAR) DEFAULT 'A' NOT NULL );
+
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.FLG_SUBMISSION_STATUS IS 'Current submission status: (P)-Pending; (S)-Sent; (X)-Error; (R)-Ready; (C)-Canceled';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.VALUE IS 'Document value';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.ID_CURRENCY IS 'Currency ID';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.DESC_ITEM IS 'Description of what is being submited';
+COMMENT ON COLUMN XDS_DOCUMENT_SUBMISSION.FLG_STATUS IS 'Record Status A-Active I-Inactive';
+-- CHANGE END:  carlos.guilherme

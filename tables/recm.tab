@@ -1,0 +1,47 @@
+
+
+  CREATE TABLE RECM
+   (	ID_RECM NUMBER(24,0) NOT NULL ENABLE,
+	CODE_RECM VARCHAR2(200) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_RECM VARCHAR2(2)
+   );
+
+
+COMMENT ON COLUMN recm.flg_recm IS 'Letra identificativa do Regime Especial de Comparticipação de Medicamentos.' ;
+
+-- MODIFIED BY:    ricardo.patrocinio 
+-- DATE MODIFIED:  2009-02-26
+-- JIRA ISSUE:     ALERT-18519
+-- OPERATION TYPE: DDL
+-- NOTES:
+--    1) Add the FLG_AVAILABLE to the RECM table
+
+ALTER TABLE recm add(flg_available VARCHAR2(1) DEFAULT 'Y');
+
+COMMENT ON COLUMN recm.flg_available IS 'Y - Record is available, N - Otherwise.' ;
+
+-- CHANGED BY: Bruno Martins
+-- CHANGE DATE: 2014-06-27
+-- CHANGE REASON: ADT-6591
+
+DECLARE
+      e_object_exists EXCEPTION;
+  
+      PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+  BEGIN
+  
+      BEGIN
+          EXECUTE IMMEDIATE 'alter table recm add id_content VARCHAR2(100)';
+      EXCEPTION
+          WHEN e_object_exists THEN
+              dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+      END;
+  
+END;
+/
+
+comment on column RECM.id_content
+  is 'Content unique identifier';
+
+-- CHANGE END: Bruno Martins

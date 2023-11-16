@@ -1,0 +1,76 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:25
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'CDR_TYPE',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'DSV',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => '',
+                                             i_flg_default_child => 'N');
+END;
+/
+
+create table CDR_TYPE
+(
+  id_cdr_type        NUMBER(24) not null,
+  code_cdr_type      VARCHAR2(200 CHAR) not null,
+  internal_name      VARCHAR2(200 CHAR) not null,
+  icon               VARCHAR2(200 CHAR) not null,
+  flg_available      VARCHAR2(1 CHAR) default 'Y' not null,
+  rank               NUMBER(6) not null,
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+);
+
+comment on table CDR_TYPE
+  is 'Clinical decision rule types. A rule type is one of its clinical classifications.';
+
+comment on column CDR_TYPE.id_cdr_type
+  is 'Primary key.';
+comment on column CDR_TYPE.code_cdr_type
+  is 'Code for translation.';
+comment on column CDR_TYPE.internal_name
+  is 'Internal description.';
+comment on column CDR_TYPE.icon
+  is 'Rule type icon name.';
+comment on column CDR_TYPE.flg_available
+  is 'Record availability (Y/N).';
+comment on column CDR_TYPE.rank
+  is 'Rule type rank.';
+comment on column CDR_TYPE.create_user
+  is 'Creation User';
+comment on column CDR_TYPE.create_time
+  is 'Creation Time';
+comment on column CDR_TYPE.create_institution
+  is 'Creation Institution';
+comment on column CDR_TYPE.update_user
+  is 'Update User';
+comment on column CDR_TYPE.update_time
+  is 'Update Time';
+comment on column CDR_TYPE.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 18/06/2012 10:33
+-- CHANGE REASON: [ALERT-233362] added icon color
+declare
+  e_col_exists exception;
+  pragma exception_init(e_col_exists, -01430);
+begin
+  execute immediate 'alter table cdr_type add (icon_color varchar2(200 char))
+';
+exception when e_col_exists then
+  dbms_output.put_line('column cdr_type.icon_color already exists!');
+end;
+/
+
+comment on column CDR_TYPE.icon_color
+  is 'Rule type icon color.';
+-- CHANGE END: Pedro Carneiro

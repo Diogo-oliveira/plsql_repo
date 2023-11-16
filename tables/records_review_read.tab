@@ -1,0 +1,37 @@
+
+
+  CREATE TABLE RECORDS_REVIEW_READ
+   (	ID_RECORDS_REVIEW_READ NUMBER(24,0) NOT NULL ENABLE,
+	ID_RECORDS_REVIEW NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_CREATION DATE NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+comment on table RECORDS_REVIEW_READ
+  is 'Registo das revisões de registos';
+
+comment on column RECORDS_REVIEW_READ.ID_RECORDS_REVIEW_READ
+  is 'Chave primária';
+comment on column RECORDS_REVIEW_READ.ID_RECORDS_REVIEW
+  is 'Revisão do registo';
+comment on column RECORDS_REVIEW_READ.ID_EPISODE
+  is 'Episódio';
+comment on column RECORDS_REVIEW_READ.ID_PROFESSIONAL
+  is 'Profissional';
+comment on column RECORDS_REVIEW_READ.FLG_STATUS
+  is 'Estado da revisão do registo. A- Activo; C- Cancelado';
+comment on column RECORDS_REVIEW_READ.DT_CREATION
+  is 'Data de criação';
+comment on column RECORDS_REVIEW_READ.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+
+alter table records_review_read 
+add (dt_creation_tstz timestamp with local time zone); 
+
+
+-- Alert Data Governance - 22-Sep-2008
+alter table RECORDS_REVIEW_READ
+drop column dt_creation;

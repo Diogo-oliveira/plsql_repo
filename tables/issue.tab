@@ -1,0 +1,25 @@
+CREATE TABLE ISSUE (
+	ID_ISSUE NUMBER(24) NOT NULL,
+	TITLE VARCHAR2(200) NOT NULL,
+	ID_PROF_OWNER NUMBER(24) NOT NULL,
+	ID_PATIENT NUMBER(24) NOT NULL,
+	ID_EPISODE NUMBER(24),
+	FLG_STATUS VARCHAR2(1) NOT NULL,
+	DT_CREATION TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
+	ID_PROF_ASSIGNED NUMBER(24) NOT NULL
+);
+
+COMMENT ON COLUMN ISSUE.ID_ISSUE IS 'Primary key';
+COMMENT ON COLUMN ISSUE.TITLE IS 'The description of the issue';
+COMMENT ON COLUMN ISSUE.ID_PROF_OWNER IS 'Professional that created the issue';
+COMMENT ON COLUMN ISSUE.ID_PATIENT IS 'The patient this issue is assigned to';
+COMMENT ON COLUMN ISSUE.ID_EPISODE IS 'The episode this issue is assigned to';
+COMMENT ON COLUMN ISSUE.FLG_STATUS IS 'The status of the issue: R - Resolved, U - Unresolved, C - Canceled';
+COMMENT ON COLUMN ISSUE.DT_CREATION IS 'The date when the issue was created';
+COMMENT ON COLUMN ISSUE.ID_PROF_ASSIGNED IS 'The professional responsible for resolving the issue';
+
+ALTER TABLE ISSUE 
+ ADD (ID_PROF_DELETION  NUMBER ,DT_DELETION  timestamp with local time zone);
+
+COMMENT ON COLUMN ISSUE.ID_PROF_DELETION IS 'Professional that has cancelled the issue';
+COMMENT ON COLUMN ISSUE.DT_DELETION IS 'Date when the issue was cancelled';

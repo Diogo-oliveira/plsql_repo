@@ -1,0 +1,141 @@
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 21/04/2011 17:41
+-- CHANGE REASON: [ALERT-165349] 
+create table VITAL_SIGN_READ_HIST
+(
+  id_vital_sign_read_hist NUMBER(24) not null,
+  id_vital_sign_read      NUMBER(24) not null,
+  value                   NUMBER(10,3),
+  flg_status              VARCHAR2(1 CHAR),
+  id_unit_measure         NUMBER(24),
+  id_prof_read            NUMBER(24) not null,
+  dt_vital_sign_read_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  dt_registry             TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  flg_value_changed       VARCHAR2(1 CHAR),
+  flg_status_changed      VARCHAR2(1 CHAR),
+  flg_dt_vs_read_changed  VARCHAR2(1 CHAR),
+  flg_id_prof_changed     VARCHAR2(1 CHAR),    
+  flg_id_unit_changed     VARCHAR2(1 CHAR),    
+  create_user             VARCHAR2(24 CHAR),
+  create_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution      NUMBER(24),
+  update_user             VARCHAR2(24 CHAR),
+  update_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution      NUMBER(24)
+);
+-- Add comments to the table 
+comment on table VITAL_SIGN_READ_HIST
+  is 'Vital signs history table';
+-- Add comments to the columns 
+comment on column VITAL_SIGN_READ_HIST.id_vital_sign_read_hist
+  is 'Primary key';
+comment on column VITAL_SIGN_READ_HIST.id_vital_sign_read
+  is 'Vital signs read table reference';
+comment on column VITAL_SIGN_READ_HIST.value
+  is 'Read value';
+comment on column VITAL_SIGN_READ_HIST.flg_status
+  is 'Record status. Values: A-active, C-cancelled';  
+comment on column VITAL_SIGN_READ_HIST.id_unit_measure
+  is 'Measure unit ID';
+comment on column VITAL_SIGN_READ_HIST.id_prof_read
+  is 'Professional ID';
+comment on column VITAL_SIGN_READ_HIST.dt_vital_sign_read_tstz
+  is 'Date registered by the professional';
+comment on column VITAL_SIGN_READ_HIST.dt_registry
+  is 'Date when the professional made the record';
+comment on column VITAL_SIGN_READ_HIST.flg_value_changed
+  is 'Indicates if the vital sign value was changed in this edit operation. Values: Y/N';
+comment on column VITAL_SIGN_READ_HIST.Flg_Status_changed
+  is 'Indicates if the vital sign status was changed in this edit operation. Values: Y/N';  
+comment on column VITAL_SIGN_READ_HIST.flg_dt_vs_read_changed
+  is 'Indicates if the vital sign reading date was changed in this edit operation. Values: Y/N';
+comment on column VITAL_SIGN_READ_HIST.flg_id_prof_changed
+  is 'Indicates if the professinal that did the vital sign reading was changed in this edit operation. Values: Y/N';
+comment on column VITAL_SIGN_READ_HIST.flg_id_unit_changed
+  is 'Indicates if the vital sign measure unit was changed in this edit operation. Values: Y/N';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 25/05/2011 12:30
+-- CHANGE REASON: [ALERT-181480] Vital Signs - edit text value vital signs not working correctly(v2.6.1.1)
+DECLARE
+    e_column_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_exists, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vital_sign_read_hist ADD id_vital_sign_desc NUMBER(12)';
+EXCEPTION
+    WHEN e_column_already_exists THEN
+        dbms_output.put_line('WARNING - Column id_vital_sign_desc already created in previous version.');
+END;
+/
+-- CHANGE END: Rui Duarte
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 02/12/2013 09:33
+-- CHANGE REASON: [ALERT-270040] 
+DECLARE
+    excep EXCEPTION;
+    PRAGMA EXCEPTION_INIT(excep, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vital_sign_read_hist add id_unit_measure_sel number(24)';
+EXCEPTION
+    WHEN excep THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.'); 
+END;
+/
+COMMENT ON COLUMN vital_sign_read_hist.id_unit_measure_sel IS 'id_unit_measure selected identifier';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 18/02/2014 11:51
+-- CHANGE REASON: [ALERT-275609] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table vital_sign_read_hist add id_edit_reason NUMBER(24)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    
+        BEGIN
+        EXECUTE IMMEDIATE 'alter table vital_sign_read_hist add notes_edit clob';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter  table VITAL_SIGN_READ_HIST modify ID_VITAL_SIGN_DESC number(24)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+
+END;
+/
+
+COMMENT ON column vital_sign_read_hist.id_edit_reason IS 'Edit Reason identifier';
+COMMENT ON column vital_sign_read_hist.notes_edit IS 'Edit notes free text';
+-- CHANGE END: Paulo Teixeira
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 22/09/2017
+-- CHANGE REASON: CALERT-62
+BEGIN
+    EXECUTE IMMEDIATE 'alter table vital_sign_read_hist add value_high NUMBER(10,3)';
+    EXECUTE IMMEDIATE 'alter table vital_sign_read_hist add value_low NUMBER(10,3)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Operation already executed.');
+END;
+/
+
+COMMENT ON COLUMN vital_sign_read_hist.value_high IS 'Vital sign high value - situation where there is a range of values';
+COMMENT ON COLUMN vital_sign_read_hist.value_low IS 'Vital sign low value - situation where there is a range of values';
+-- CHANGE END: Pedro Teixeira

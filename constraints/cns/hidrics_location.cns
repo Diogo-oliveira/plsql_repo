@@ -1,0 +1,40 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 20:51
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+ALTER TABLE HIDRICS_LOCATION ADD CONSTRAINT HID_LOC_PK PRIMARY KEY (ID_HIDRICS_LOCATION) ENABLE;
+ALTER TABLE HIDRICS_LOCATION ADD CONSTRAINT HID_LOC_FLG_AV_CHK CHECK (FLG_AVAILABLE IN ('Y','N'));
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 22/09/2011 14:44
+-- CHANGE REASON: [ALERT-196468]  Intake and Output: Ensure that it is not possible to configure repeated locations - create an unique constraint
+ALTER TABLE hidrics_location
+add CONSTRAINT hl_bdp_bds_uk UNIQUE (id_body_part, id_body_side, flg_available) deferrable initially deferred novalidate;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 24/10/2011 11:20
+-- CHANGE REASON: [ALERT-201387] Intake and Output: hidrics_location: Should be allowed to have several lines with the same body_part and body_side and flg_available = 'N', because of the default process
+DECLARE    
+    e_non_existant EXCEPTION;
+    e_index_not_exists EXCEPTION;
+       
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+    PRAGMA EXCEPTION_INIT(e_index_not_exists, -01418); -- index
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table hidrics_location drop constraint HL_BDP_BDS_UK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    
+    BEGIN
+        EXECUTE IMMEDIATE 'drop index HL_BDP_BDS_UK';
+    EXCEPTION
+        WHEN e_index_not_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes

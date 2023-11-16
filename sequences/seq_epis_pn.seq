@@ -1,0 +1,43 @@
+--26/01/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+create sequence SEQ_EPIS_PN
+minvalue 1
+maxvalue 999999999999
+start with 1
+increment by 1
+cache 500
+noorder
+nocycle;
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 27/07/2012 13:57
+-- CHANGE REASON: [ALERT-237533 ] The system must be able to autosave user notes as a draft during the note creation
+BEGIN
+    execute immediate 'DROP SEQUENCE seq_epis_pn';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('operacao ja executada anteriormente');
+END;
+/
+
+DECLARE
+    l_max_epis_pn epis_pn.id_epis_pn%TYPE;
+BEGIN
+    SELECT MAX(id_epis_pn) + 1
+      INTO l_max_epis_pn
+      FROM epis_pn;
+
+    EXECUTE IMMEDIATE 'create sequence seq_epis_pn
+minvalue 1
+maxvalue 999999999999
+start with ' || l_max_epis_pn || '
+increment by 1
+cache 500
+noorder';
+    EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('operacao ja executada anteriormente');
+END;
+/
+-- CHANGE END: Sofia Mendes

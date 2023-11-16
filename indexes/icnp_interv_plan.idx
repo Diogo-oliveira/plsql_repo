@@ -1,0 +1,27 @@
+
+
+-- José Brito 24/10/2008 Denormalization
+CREATE INDEX IIP_EIPI_FK_I ON ICNP_INTERV_PLAN (ID_ICNP_EPIS_INTERV);
+CREATE INDEX IIP_STATUS_I ON ICNP_INTERV_PLAN (FLG_STATUS);
+CREATE INDEX IIP_PROFTK_FK_I ON ICNP_INTERV_PLAN (ID_PROF_TAKE);
+CREATE INDEX IIP_PRFC_FK_I ON ICNP_INTERV_PLAN (ID_PROF_CANCEL);
+CREATE INDEX IIP_EPISD_FK_I ON ICNP_INTERV_PLAN (ID_EPIS_DOCUMENTATION);
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+-- Drop indexes 
+declare
+   e_no_existent_index EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_no_existent_index, -01418); -- table already there
+begin
+    BEGIN
+        EXECUTE IMMEDIATE 'drop index IIP_EPIS_WRITE_FK_IDX';
+    EXCEPTION
+        WHEN e_no_existent_index THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

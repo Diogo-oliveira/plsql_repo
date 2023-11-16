@@ -1,0 +1,14 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 02/12/2010 16:44
+-- CHANGE REASON: [ALERT-146460] 
+DECLARE
+    e_already_not_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -00955);
+BEGIN
+        EXECUTE IMMEDIATE 'create index dldcs_inst_soft_flg on diag_lay_dep_clin_serv(id_institution,id_software,flg_type) tablespace index_s';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Paulo Teixeira

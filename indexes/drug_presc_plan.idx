@@ -1,0 +1,15 @@
+-- CHANGED BY: Sérgio Cunha
+-- CHANGE DATE: 05/03/2010 15:09
+-- CHANGE REASON: [ALERT-78201] 
+declare
+  l_count pls_integer;
+
+begin
+  select count(1) into l_count from all_indexes where owner = 'ALERT' and index_name = 'DRPRP_UNITMEASURE_FK_IDX';
+  if l_count = 0 then
+    execute immediate ( 'create index DRPRP_UNITMEASURE_FK_IDX on drug_presc_plan (id_unit_reference_value)
+            tablespace INDEX_M');
+  end if;
+end;
+/
+-- CHANGE END: Sérgio Cunha

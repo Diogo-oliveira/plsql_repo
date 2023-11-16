@@ -1,0 +1,47 @@
+  CREATE TABLE TRANSP_REQ
+   (	ID_TRANSP_REQ NUMBER(24,0) NOT NULL ENABLE,
+	DT_TRANSP_REQ DATE NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTIT_REQUEST NUMBER(12,0) NOT NULL ENABLE,
+	ID_INSTIT_DEST NUMBER(12,0) NOT NULL ENABLE,
+	ID_TRANSPORT_TYPE NUMBER(12,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_TRANSP_REQ_GROUP NUMBER(24,0),
+	DT_REQ DATE,
+	FLG_CONSULTING VARCHAR2(1),
+	FLG_MCD VARCHAR2(1),
+
+	FLG_TREATMENT VARCHAR2(1),
+	FLG_COMPANION VARCHAR2(1),
+	NOTES VARCHAR2(4000),
+	ID_CONSULT_REQ NUMBER(24,0),
+	ID_EXAM_REQ NUMBER(24,0),
+	ID_ANALYSIS_REQ NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE transp_req IS 'Requisição de transporte registada pelo médico; para transportar o utente até outra instituição de saúde para efectuar uma consulta de especialidade, um tratamento, ou um MCD.A requisição é depois completada pelo administrativo da Secretaria, que indica a entidade responsável pelo transporte (TRANSP_ENTITY)' ;
+
+COMMENT ON COLUMN transp_req.dt_transp_req IS 'Data de registo' ;
+COMMENT ON COLUMN transp_req.dt_req IS 'Data / hora para a qual é requisitado o transporte (ex. data/hora da consulta)' ;
+COMMENT ON COLUMN transp_req.flg_consulting IS 'Objectivo no destino é consulta da especialidade' ;
+COMMENT ON COLUMN transp_req.flg_mcd IS 'Objectivo no destino é MCD' ;
+COMMENT ON COLUMN transp_req.flg_treatment IS 'Objectivo no destino é tratamento' ;
+COMMENT ON COLUMN transp_req.flg_companion IS 'Necessita de acompanhante' ;
+COMMENT ON COLUMN transp_req.notes IS 'Notas do médico' ;
+COMMENT ON COLUMN transp_req.id_consult_req IS 'Requisição de consulta ao exterior, que justifica o transporte' ;
+COMMENT ON COLUMN transp_req.id_exam_req IS 'Requisição de exame ao exterior, que justifica o transporte' ;
+
+
+
+
+ALTER TABLE TRANSP_REQ ADD DT_REQ_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN TRANSP_REQ.DT_REQ_TSTZ IS 'Data / hora para a qual ‚ requisitado o transporte (ex. data/hora da consulta)'; 
+
+
+
+
+ALTER TABLE TRANSP_REQ ADD DT_TRANSP_REQ_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN TRANSP_REQ.DT_TRANSP_REQ_TSTZ IS 'Data de registo'; 
+
+ALTER TABLE transp_req drop (dt_transp_req, dt_req);

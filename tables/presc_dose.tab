@@ -1,0 +1,129 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 11:32
+-- CHANGE REASON: [ALERT-38908] Versionamento.
+-- Create table
+create table PRESC_DOSE
+(
+  ID_PRESC_DOSE               NUMBER(24) not null,
+  ID_PRESC_INSTR_DET          NUMBER(24) not null,
+  FLG_DOSE_TYPE               VARCHAR2(1) not null,
+  DOSE_VALUE                  NUMBER(24,4),
+  DOSE_VALUE_UNIT             NUMBER(24),
+  DOSE_MIN_VALUE              NUMBER(24,4),
+  DOSE_MIN_VALUE_UNIT         NUMBER(24),
+  DOSE_MAX_VALUE              NUMBER(24,4),
+  DOSE_MAX_VALUE_UNIT         NUMBER(24),
+  ID_SLIDING_SCALE            NUMBER(24),
+  FLG_STATUS                  VARCHAR2(1),
+  DATE_REG                    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PRESC_DURATION           NUMBER(24),
+  ID_PRESCRIPTION_FIELD_DET   NUMBER(24),
+  PRESCRIPTION_FIELD_DET_RANK NUMBER(24)
+)
+tablespace TABLE_M;
+-- Add comments to the table 
+comment on table PRESC_DOSE
+  is 'Tabela que contém as doses associadas às prescrições.';
+-- Add comments to the columns 
+comment on column PRESC_DOSE.ID_PRESC_DOSE
+  is 'primary key';
+comment on column PRESC_DOSE.ID_PRESC_INSTR_DET
+  is 'id da prescrição mãe';
+comment on column PRESC_DOSE.FLG_DOSE_TYPE
+  is 'tipo de dose; value (V); range (R); slinding scale (S)';
+comment on column PRESC_DOSE.DOSE_VALUE
+  is 'valor da dose';
+comment on column PRESC_DOSE.DOSE_VALUE_UNIT
+  is 'unidade de medida da dose';
+comment on column PRESC_DOSE.DOSE_MIN_VALUE
+  is 'dose minima';
+comment on column PRESC_DOSE.DOSE_MIN_VALUE_UNIT
+  is 'unidade de medida da dose minima';
+comment on column PRESC_DOSE.DOSE_MAX_VALUE
+  is 'dose maxima';
+comment on column PRESC_DOSE.DOSE_MAX_VALUE_UNIT
+  is 'unidade de medida da dose maxima';
+comment on column PRESC_DOSE.ID_SLIDING_SCALE
+  is 'id da sliding scale';
+comment on column PRESC_DOSE.FLG_STATUS
+  is 'flg_status';
+comment on column PRESC_DOSE.DATE_REG
+  is 'data de registo da dose';
+comment on column PRESC_DOSE.ID_PRESC_DURATION
+  is 'id da duração associada';
+comment on column PRESC_DOSE.ID_PRESCRIPTION_FIELD_DET
+  is 'id do campo da dose';
+comment on column PRESC_DOSE.PRESCRIPTION_FIELD_DET_RANK
+  is 'ordenação dos campos da dose';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 15:17
+-- CHANGE REASON: [ALERT-38908] add audit columns
+-- Create table
+create table PRESC_DOSE
+(
+  ID_PRESC_DOSE               NUMBER(24) not null,
+  ID_PRESC_INSTR_DET          NUMBER(24) not null,
+  FLG_DOSE_TYPE               VARCHAR2(1) not null,
+  DOSE_VALUE                  NUMBER(24,4),
+  DOSE_VALUE_UNIT             NUMBER(24),
+  DOSE_MIN_VALUE              NUMBER(24,4),
+  DOSE_MIN_VALUE_UNIT         NUMBER(24),
+  DOSE_MAX_VALUE              NUMBER(24,4),
+  DOSE_MAX_VALUE_UNIT         NUMBER(24),
+  ID_SLIDING_SCALE            NUMBER(24),
+  FLG_STATUS                  VARCHAR2(1),
+  DATE_REG                    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PRESC_DURATION           NUMBER(24),
+  ID_PRESCRIPTION_FIELD_DET   NUMBER(24),
+  PRESCRIPTION_FIELD_DET_RANK NUMBER(24),
+  CREATE_USER           VARCHAR2(24),
+  CREATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24),
+  UPDATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+)
+tablespace TABLE_M;
+-- Add comments to the table 
+comment on table PRESC_DOSE
+  is 'Tabela que contém as doses associadas às prescrições.';
+-- Add comments to the columns 
+comment on column PRESC_DOSE.ID_PRESC_DOSE
+  is 'primary key';
+comment on column PRESC_DOSE.ID_PRESC_INSTR_DET
+  is 'id da prescrição mãe';
+comment on column PRESC_DOSE.FLG_DOSE_TYPE
+  is 'tipo de dose; value (V); range (R); slinding scale (S)';
+comment on column PRESC_DOSE.DOSE_VALUE
+  is 'valor da dose';
+comment on column PRESC_DOSE.DOSE_VALUE_UNIT
+  is 'unidade de medida da dose';
+comment on column PRESC_DOSE.DOSE_MIN_VALUE
+  is 'dose minima';
+comment on column PRESC_DOSE.DOSE_MIN_VALUE_UNIT
+  is 'unidade de medida da dose minima';
+comment on column PRESC_DOSE.DOSE_MAX_VALUE
+  is 'dose maxima';
+comment on column PRESC_DOSE.DOSE_MAX_VALUE_UNIT
+  is 'unidade de medida da dose maxima';
+comment on column PRESC_DOSE.ID_SLIDING_SCALE
+  is 'id da sliding scale';
+comment on column PRESC_DOSE.FLG_STATUS
+  is 'flg_status';
+comment on column PRESC_DOSE.DATE_REG
+  is 'data de registo da dose';
+comment on column PRESC_DOSE.ID_PRESC_DURATION
+  is 'id da duração associada';
+comment on column PRESC_DOSE.ID_PRESCRIPTION_FIELD_DET
+  is 'id do campo da dose';
+comment on column PRESC_DOSE.PRESCRIPTION_FIELD_DET_RANK
+  is 'ordenação dos campos da dose';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_DOSE IS 'Tabela que contém as doses associadas às prescrições. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

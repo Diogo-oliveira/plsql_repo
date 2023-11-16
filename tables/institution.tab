@@ -1,0 +1,192 @@
+
+
+  CREATE TABLE INSTITUTION
+   (	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	CODE_INSTITUTION VARCHAR2(200) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	BARCODE VARCHAR2(30),
+	ABBREVIATION VARCHAR2(30),
+	LOCATION VARCHAR2(200),
+	INE_LOCATION VARCHAR2(6),
+	ID_PARENT NUMBER(12,0),
+
+	PHONE_NUMBER VARCHAR2(30),
+	EXT_CODE NUMBER(7,0)
+   );
+
+
+COMMENT ON TABLE institution IS 'Instituições de saúde' ;
+
+COMMENT ON COLUMN institution.code_institution IS 'Código para tradução' ;
+COMMENT ON COLUMN institution.flg_type IS 'Tipo: H - hospital, C - centro de saúde, P - clínica privada' ;
+COMMENT ON COLUMN institution.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN institution.rank IS 'Ordem de apresentação' ;
+COMMENT ON COLUMN institution.barcode IS 'Código de barras' ;
+COMMENT ON COLUMN institution.location IS 'Cidade ou localidade' ;
+COMMENT ON COLUMN institution.ine_location IS 'Localidade da instituição (codificação do INE). Este campo apresenta a estrutura DDCCFF onde: DD - código do distrito; CC - código do concelho; FF - código da freguesia.' ;
+COMMENT ON COLUMN institution.phone_number IS 'Nº de telefone da instituição.' ;
+
+
+comment on column INSTITUTION.ID_PARENT
+  is 'Instituição pai';
+comment on column INSTITUTION.EXT_CODE
+  is 'Código da institição no SONHO';
+
+alter table INSTITUTION modify EXT_CODE VARCHAR2(7);
+
+ALTER TABLE INSTITUTION 
+ ADD (ADDRESS  VARCHAR2(200)
+ ,ZIP_CODE  VARCHAR2(30)
+ ,FAX_NUMBER  VARCHAR2(30)
+ ,DISTRICT  VARCHAR2(200)
+ );
+
+COMMENT ON COLUMN INSTITUTION.ADDRESS IS 'Morada da instituição';
+
+COMMENT ON COLUMN INSTITUTION.ZIP_CODE IS 'Código postal da instituição';
+
+COMMENT ON COLUMN INSTITUTION.FAX_NUMBER IS 'Nº de fax da instituição';
+
+COMMENT ON COLUMN INSTITUTION.DISTRICT IS 'Distrito';
+
+
+alter table institution add (ID_TIMEZONE_REGION NUMBER(24));
+
+COMMENT ON COLUMN INSTITUTION.ID_TIMEZONE_REGION IS 'Timezone da instituição';
+
+
+
+alter table INSTITUTION modify INE_LOCATION not null;
+
+alter table institution modify id_institution number(24);
+
+comment on column INSTITUTION.FLG_TYPE is 'Tipo: H - hospital, C - centro de saúde, P - clínica privada, R - A.R.S., U - Unidade de saúde familiar';
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-AGO-18
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15262
+
+COMMENT ON COLUMN  INSTITUTION.ID_INSTITUTION IS 'Institution ID'; 
+COMMENT ON COLUMN  INSTITUTION.ADW_LAST_UPDATE IS 'Last update date'; 
+COMMENT ON COLUMN  INSTITUTION.ABBREVIATION IS 'Institution abbreviation'; 
+COMMENT on column  INSTITUTION.FLG_AVAILABLE IS 'Institution accessibility: Y - Active; N - Inactive; P - Pending';
+COMMENT on column  INSTITUTION.FLG_TYPE IS 'Institution type: C - Primary care center; E - Outpatient healthcare center; H - Hospital; P - Private practice; R - Health department; U - Familiar health center' 
+
+-- CHANGED END: Nuno Ferreira
+
+
+ALTER TABLE INSTITUTION ADD (ID_MARKET  NUMBER(24));
+
+comment on column INSTITUTION.ID_MARKET is 'Market identifier';
+
+
+-- cmf 21-01-2010
+declare
+xsql 		varchar(1000 char );
+begin
+
+xsql := 'alter table institution modify flg_type varchar2(3 char )';
+
+execute immediate xsql;
+
+exception
+when others 
+dbms_output.put_line('ERROR:'||sqlerrm);
+end;
+/
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 24/02/2010 15:37
+-- CHANGE REASON: [ALERT-71106] 
+ALTER TABLE INSTITUTION ADD (FLG_EXTERNAL VARCHAR2(1) DEFAULT 'N'  NOT NULL);
+comment on column INSTITUTION.FLG_EXTERNAL is 'External institution? Y - Yes, N - No';
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 05/07/2010 16:27
+-- CHANGE REASON: [ALERT-109378] 
+ALTER TABLE institution ADD (dn_flg_status VARCHAR2(1 CHAR) DEFAULT 'V');
+comment on column INSTITUTION.DN_FLG_STATUS is 'Status of the record regarding the staging area values: I - Institution doesn''t exist in the Stg. Area; V - Values valited by the System Administrator; E - Values edited by the System Adminitrator; A - Values needed to be validated by the System administrator';
+-- CHANGE END: Tércio Soares
+
+-- cmf 21-01-2010
+declare
+xsql 		varchar(1000 char );
+begin
+
+xsql := 'alter table institution modify flg_type varchar2(4 char )';
+
+execute immediate xsql;
+
+exception
+when others then
+dbms_output.put_line('ERROR:'||sqlerrm);
+end;
+/
+
+-- cmf 21-01-2010
+declare
+xsql 		varchar(1000 char );
+begin
+
+xsql := 'alter table institution modify flg_type varchar2(4 char )';
+
+execute immediate xsql;
+
+exception
+when others then
+dbms_output.put_line('ERROR:'||sqlerrm);
+end;
+/
+
+-- cmf 30-07-2010
+declare
+xsql 		varchar(1000 char );
+begin
+
+xsql := 'alter table institution modify flg_type varchar2(4 char )';
+
+execute immediate xsql;
+
+exception
+when others then
+dbms_output.put_line('ERROR:'||sqlerrm);
+end;
+/
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 24/11/2010 10:16
+-- CHANGE REASON: [ALERT-140512] 
+comment on column INSTITUTION.flg_type
+  is 'Institution type: H - Hospital; C - Centro de saúde; P - Clínica privada; E - Extensão; R - Adm. Regional de Saúde; A - Agrupamento de Centros de Saúde; ULS - Unidade Local de Saúde; CH - Centro Hospitalar; M - Maternidade; U - Unidade de saúde familiar';
+-- CHANGE END: Rui Spratley
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 27/01/2012 14:46
+-- CHANGE REASON: [ALERT-215480] 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE institution add adress_type VARCHAR2(10 CHAR) DEFAULT NULL';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('Column already there');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column INSTITUTION.ADRESS_TYPE IS ''Adress type of the Institution (sys_domain list).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

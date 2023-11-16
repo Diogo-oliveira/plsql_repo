@@ -1,0 +1,75 @@
+-- Create table
+create table GRAPHIC_LINE
+(
+  ID_GRAPHIC_LINE NUMBER(12) not null,
+  ID_GRAPHIC      NUMBER(12) not null,
+  LINE_LABEL      VARCHAR2(10),
+  LINE_WEIGHT     NUMBER(2) not null,
+  LINE_COLOR      VARCHAR2(10),
+  ADW_LAST_UPDATE DATE not null
+);
+
+comment on table GRAPHIC_LINE
+  is 'Esta tabela permite representar linhas dentro de um gráfico. Os pontos das linhas são definidos na tabela GRAPHIC_LINE_POINTS';
+-- Add comments to the columns 
+comment on column GRAPHIC_LINE.ID_GRAPHIC_LINE
+  is 'Chave primária da tabela';
+comment on column GRAPHIC_LINE.ID_GRAPHIC
+  is 'Gráfico a que a linha pertence.';
+comment on column GRAPHIC_LINE.LINE_LABEL
+  is 'Label a ser apresentada para a linha.';
+comment on column GRAPHIC_LINE.LINE_WEIGHT
+  is 'Largura da linha.';
+comment on column GRAPHIC_LINE.LINE_COLOR
+  is 'Cor atribuida à linha.';
+comment on column GRAPHIC_LINE.ADW_LAST_UPDATE
+  is 'Registo da data da última alteração';
+
+
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 21/01/2016 10:06
+-- CHANGE REASON: [ALERT-317983] ALERT-317983 CDOC Functionalities V5 Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table GRAPHIC_LINE
+  is 'This table allows graphic lines representation. Each line point are defined in GRAPHIC_LINE_POINTS table';
+-- Add comments to the columns 
+comment on column GRAPHIC_LINE.id_graphic_line
+  is 'Primary key';
+comment on column GRAPHIC_LINE.id_graphic
+  is 'Id graphic in graphic table';
+comment on column GRAPHIC_LINE.line_label
+  is 'Graphic line label';
+comment on column GRAPHIC_LINE.line_weight
+  is 'Line weight';
+comment on column GRAPHIC_LINE.line_color
+  is 'Line color';
+comment on column GRAPHIC_LINE.adw_last_update
+  is 'Last change update : deprecated';
+comment on column GRAPHIC_LINE.create_user
+  is 'Creation User';
+comment on column GRAPHIC_LINE.create_time
+  is 'Creation Time';
+comment on column GRAPHIC_LINE.create_institution
+  is 'Creation Institution';
+comment on column GRAPHIC_LINE.update_user
+  is 'Update User';
+comment on column GRAPHIC_LINE.update_time
+  is 'Update Time';
+comment on column GRAPHIC_LINE.update_institution
+  is 'Update Institution';
+-- CHANGE END: Renato Nunes
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 22/09/2017
+-- CHANGE REASON: CALERT-62
+BEGIN
+    EXECUTE IMMEDIATE 'alter table graphic_line add line_value NUMBER(10,3)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Operation already executed.');
+END;
+/
+
+COMMENT ON COLUMN graphic_line.line_value IS 'Graphic line value (used to store some value associated with the line, for example percentile value)';
+-- CHANGE END: Pedro Teixeira

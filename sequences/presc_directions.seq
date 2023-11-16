@@ -1,0 +1,13 @@
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195]
+declare
+  l_count pls_integer;
+begin
+  select count(1) into l_count from all_sequences where sequence_owner ='ALERT' and sequence_name = 'SEQ_PRESC_DIRECTIONS';
+  if l_count = 0 then
+    execute immediate ('create sequence SEQ_PRESC_DIRECTIONS minvalue 1 maxvalue 999999999999 start with 1 increment by 1 cache 500');
+  end if;
+end;
+/
+-- CHANGE END: Nuno Ferreira

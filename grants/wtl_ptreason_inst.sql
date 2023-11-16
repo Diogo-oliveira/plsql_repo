@@ -1,0 +1,1 @@
+grant select on Wtl_Ptreason_Inst  to ALERT_VIEWER;

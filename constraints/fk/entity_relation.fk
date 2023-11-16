@@ -1,0 +1,34 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 15/06/2010 12:13
+-- CHANGE REASON: [ALERT-94601] entity_relation
+alter table entity_relation
+  add constraint er_sl_req_fk foreign key (id_sys_list_req)
+  references sys_list (id_sys_list);
+alter table entity_relation
+  add constraint er_sl_fk foreign key (id_sys_list)
+  references sys_list (id_sys_list);
+alter table entity_relation
+  add constraint er_rls_fk foreign key (id_relation_service)
+  references relation_service (id_relation_service);
+alter table entity_relation
+  add constraint er_inst_fk foreign key (id_institution)
+  references institution (id_institution);
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 27/10/2010 10:17
+-- CHANGE REASON: [ALERT-135489] added constraint
+declare
+  fk_exists exception;
+  pragma exception_init(fk_exists, -02275);
+begin
+  execute immediate '
+alter table entity_relation
+  add constraint er_id_rel_set_fk foreign key (id_relation_set)
+  references entity_relation_content (id_relation_set)
+  novalidate
+';
+exception when fk_exists then dbms_output.put_line('foreign key exists!');
+end;
+/
+-- CHANGE END: Pedro Carneiro

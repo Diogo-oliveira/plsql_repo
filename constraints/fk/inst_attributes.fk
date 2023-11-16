@@ -1,0 +1,40 @@
+alter table INST_ATTRIBUTES
+  add constraint ISE_CIY_FK foreign key (ID_CITY)
+  references CITY (ID_CITY);
+alter table INST_ATTRIBUTES
+  add constraint ISE_CTR_FK foreign key (ID_COUNTRY)
+  references COUNTRY (ID_COUNTRY);
+alter table INST_ATTRIBUTES
+  add constraint ISE_GLN_FK foreign key (ID_GEO_LOCATION)
+  references GEO_LOCATION (ID_GEO_LOCATION);
+alter table INST_ATTRIBUTES
+  add constraint ISE_INST_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION);
+alter table INST_ATTRIBUTES
+  add constraint ISE_ITE_FK foreign key (ID_INST_TYPE)
+  references INST_TYPE (ID_INST_TYPE);
+  
+ALTER TABLE INST_ATTRIBUTES ADD CONSTRAINT ISE_ILA_FK FOREIGN KEY (ID_INSTITUTION_LANGUAGE) REFERENCES INSTITUTION_LANGUAGE (ID_INSTITUTION_LANGUAGE);
+
+alter table inst_attributes add constraint INSTATLTAX_FK foreign key (id_location_tax) references location_tax(id_location_tax);
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 15/07/2011 15:10
+-- CHANGE REASON: [ALERT-188516] missing FK on BO tables
+
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table INST_ATTRIBUTES
+  add constraint INST_ATT_CUR_FK foreign key (ID_CURRENCY)
+  references ALERT.CURRENCY(ID_CURRENCY) novalidate';
+    
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

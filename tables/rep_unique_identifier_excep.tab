@@ -1,0 +1,165 @@
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-JUL-07
+-- CHANGED REASON: ALERT-35028 - Reports
+CREATE TABLE rep_unique_identifier_excep
+(
+  ID_REP_UNIQUE_IDENTIFIER_EXCEP NUMBER(24),
+  ID_PROFESSIONAL                NUMBER(24),
+  ID_INSTITUTION                 NUMBER(24) NOT NULL,
+  ID_SOFTWARE                    NUMBER(24) NOT NULL,
+  ID_REPORTS                     NUMBER(24) NOT NULL,
+  ID_REP_SECTION                 NUMBER(24) NOT NULL,
+  ID_REP_UNIQUE_IDENTIFIER       VARCHAR2(200) NOT NULL,  
+  CREATE_USER                    VARCHAR2(24),
+  CREATE_TIME                    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION             NUMBER(24),
+  UPDATE_USER                    VARCHAR2(24),
+  UPDATE_TIME                    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION             NUMBER(24)
+);
+
+
+COMMENT ON TABLE  rep_unique_identifier_excep IS 'Data exceptions on report sections';
+COMMENT ON COLUMN rep_unique_identifier_excep.id_rep_unique_identifier_excep  IS 'Primary key';
+COMMENT ON COLUMN rep_unique_identifier_excep.id_professional IS 'Profissional';
+COMMENT ON COLUMN rep_unique_identifier_excep.id_institution IS 'Institution';
+COMMENT ON COLUMN rep_unique_identifier_excep.id_software IS 'Software';
+COMMENT ON COLUMN rep_unique_identifier_excep.id_reports IS 'Report';
+COMMENT ON COLUMN rep_unique_identifier_excep.id_rep_section IS 'Report section';
+COMMENT ON COLUMN rep_unique_identifier_excep.id_rep_unique_identifier IS 'Data ID in report section';  
+COMMENT ON COLUMN rep_unique_identifier_excep.create_user IS 'Creation User';
+COMMENT ON COLUMN rep_unique_identifier_excep.create_time IS 'Creation Time';
+COMMENT ON COLUMN rep_unique_identifier_excep.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN rep_unique_identifier_excep.update_user IS 'Update User';
+COMMENT ON COLUMN rep_unique_identifier_excep.update_time IS 'Update Time';
+COMMENT ON COLUMN rep_unique_identifier_excep.update_institution IS 'Update Institution';
+-- CHANGED END: Ariel Geraldo Machado
+
+-- CHANGED BY: Paulo Fonseca
+-- CHANGED DATE: 19-Feb-2010
+-- CHANGED REASON: ALERT-75960
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE rep_unique_identifier_excep drop column id_rep_unique_identifier_excep';
+
+EXCEPTION
+    WHEN e_invalid_identifier THEN
+        dbms_output.put_line('aviso: operação já executada anteriormente.');
+END;
+/
+
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE rep_unique_identifier_excep drop column id_rep_section';
+
+EXCEPTION
+    WHEN e_invalid_identifier THEN
+        dbms_output.put_line('aviso: operação já executada anteriormente.');
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE rep_unique_identifier_excep add flg_exclude VARCHAR2(1) DEFAULT ''Y'' NOT NULL';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('aviso: operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON column rep_unique_identifier_excep.flg_exclude IS 'Define if it''s should be excluded.';
+-- CHANGED END: Paulo Fonseca
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 14-Dec-2010
+-- CHANGE REASON: ALERT-ALERT-149266
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE REP_UNIQUE_IDENTIFIER_EXCEP add FLG_REPORT_TYPE VARCHAR2(1)';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 14-Dec-2010
+-- CHANGE REASON: ALERT-ALERT-149266
+COMMENT ON column REP_UNIQUE_IDENTIFIER_EXCEP.FLG_REPORT_TYPE IS 'Flag that indicates the type of the report';
+-- CHANGE END
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 14-Jan-2011
+-- CHANGE REASON: ALERT-155489
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE rep_unique_identifier_excep add ID_MARKET NUMBER(24)';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 14-Jan-2011
+-- CHANGE REASON: ALERT-155489
+COMMENT ON column rep_unique_identifier_excep.ID_MARKET IS 'Market where this relationship applies';
+-- CHANGE END
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 21-Jan-2011
+-- CHANGE REASON: ALERT-156882
+DECLARE
+    l_already_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(l_already_null, -1451);
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE rep_unique_identifier_excep modify id_market NOT NULL');
+EXCEPTION
+    WHEN l_already_null THEN
+        NULL;
+END;
+/
+-- CHANGE END
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 22-Feb-2011
+-- CHANGE REASON: ALERT-163674
+alter table 
+   rep_unique_identifier_excep
+modify flg_report_type varchar2(24);
+-- CHANGE END
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 21-Mar-2011
+-- CHANGE REASON: ALERT-168412
+alter table 
+   rep_unique_identifier_excep
+modify ID_MARKET NUMBER(24) default 0;
+-- CHANGE END

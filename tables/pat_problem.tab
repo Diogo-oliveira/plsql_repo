@@ -1,0 +1,288 @@
+
+
+  CREATE TABLE PAT_PROBLEM
+   (	ID_PAT_PROBLEM NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_DIAGNOSIS NUMBER(12,0),
+	ID_PROFESSIONAL_INS NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_PROBLEM DATE NOT NULL ENABLE,
+	DESC_PAT_PROBLEM VARCHAR2(4000),
+	NOTES VARCHAR2(4000),
+	FLG_AGE VARCHAR2(1),
+	YEAR_BEGIN NUMBER(4,0),
+	MONTH_BEGIN NUMBER(2,0),
+	DAY_BEGIN NUMBER(2,0),
+
+	YEAR_END NUMBER(4,0),
+	MONTH_END NUMBER(2,0),
+	DAY_END NUMBER(2,0),
+	PCT_INCAPACITY NUMBER(4,1),
+	FLG_SURGERY VARCHAR2(1),
+	NOTES_SUPPORT VARCHAR2(4000),
+	DT_CONFIRM DATE,
+	RANK NUMBER(24,0),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_EPIS_DIAGNOSIS NUMBER(24,0),
+	FLG_APROVED VARCHAR2(1),
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_PAT_HABIT NUMBER(24,0),
+
+	ID_HABIT NUMBER(24,0),
+	ID_EPISODE NUMBER(24,0),
+	ID_EPIS_ANAMNESIS NUMBER(24,0),
+	FLG_NATURE VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE pat_problem IS 'Problemas passivos e activos; antecedentes pessoais; incapacidade permanente.Pode indicar-se o período da vida do utente em que o problema foi detectado (infância, adulto, etc), ou a idade aproximada (ano, mês, dia)' ;
+
+COMMENT ON COLUMN pat_problem.id_pat_problem IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_problem.dt_pat_problem IS 'Data de registo' ;
+COMMENT ON COLUMN pat_problem.desc_pat_problem IS 'Descritivo do problema, no caso de não ser escolhido um diagnóstico da lista' ;
+COMMENT ON COLUMN pat_problem.flg_age IS 'Período da vida do utente: P - perinatal, N - neonatal, I - infância, E - escolar, A - adulto' ;
+COMMENT ON COLUMN pat_problem.year_begin IS 'Ano (aproximando) de inicio do problema' ;
+COMMENT ON COLUMN pat_problem.month_begin IS 'Mês (aproximando) de inicio do problema' ;
+COMMENT ON COLUMN pat_problem.day_begin IS 'Dia (aproximando) de inicio do problema' ;
+COMMENT ON COLUMN pat_problem.year_end IS 'Ano (aproximando) de fim do problema' ;
+COMMENT ON COLUMN pat_problem.month_end IS 'Mês (aproximando) de fim do problema' ;
+COMMENT ON COLUMN pat_problem.day_end IS 'Dia (aproximando) de fim do problema' ;
+COMMENT ON COLUMN pat_problem.pct_incapacity IS 'Grau de incapacidade provocado pela doença de trabalho' ;
+COMMENT ON COLUMN pat_problem.flg_surgery IS 'Indica se o problema foi tratado recorrendo a cirurgia' ;
+COMMENT ON COLUMN pat_problem.notes_support IS 'Apoios de recurso, relativos aos problemas apontados' ;
+
+COMMENT ON COLUMN pat_problem.dt_confirm IS 'Data de confirmação da doença de trabalho' ;
+COMMENT ON COLUMN pat_problem.rank IS 'Ordem de importância' ;
+COMMENT ON COLUMN pat_problem.flg_status IS 'Estado: A - activo; C - cancelado; P - passivo, I - incapacidade permanente' ;
+COMMENT ON COLUMN pat_problem.flg_aproved IS 'U - relatada pelo utente, M - comprovada clinicamente' ;
+
+comment on column PAT_PROBLEM.FLG_STATUS
+  is 'Estado: A - activo; C - cancelado; P - passivo, I - incapacidade permanente, R - resolvido';
+comment on column PAT_PROBLEM.ID_EPISODE
+  is 'ID do episódio em que foi feito o registo.';
+comment on column PAT_PROBLEM.FLG_NATURE
+  is 'Natureza do Problema: A | Acute; S | Self-limiting; C | Chronic; B | Blank';
+
+
+alter table pat_problem
+add id_alert_diagnosis number(12);
+comment on column pat_problem.id_alert_diagnosis is 'ALERT_DIAGNOSIS ID';
+alter table pat_problem 
+add (dt_pat_problem_tstz timestamp with local time zone,
+dt_confirm_tstz timestamp with local time zone); 
+
+
+
+ALTER TABLE PAT_PROBLEM DROP COLUMN DT_CONFIRM;
+ALTER TABLE PAT_PROBLEM DROP COLUMN DT_PAT_PROBLEM;
+
+
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 30/03/2009 10:27
+-- CHANGE REASON: [ALERT-12181] Notes Problems / Cancelation reason
+--                CCHIT: ED 25.01
+alter table pat_problem
+add id_cancel_reason number(24);
+comment on column pat_problem.id_cancel_reason is 'Cancel reason ID';
+
+alter table pat_problem
+add cancel_notes varchar2(4000);
+comment on column pat_problem.cancel_notes is 'Cancelation notes';
+-- CHANGE END
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 08/03/2010 15:55
+-- CHANGE REASON: [ALERT-73258] 
+ALTER TABLE PAT_PROBLEM ADD
+ (DT_RESOLUTION VARCHAR2(8 char)
+ );
+
+COMMENT ON COLUMN PAT_PROBLEM.DT_RESOLUTION IS 'Resolution date';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_PROBLEM modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_PROBLEM modify NOTES_SUPPORT varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_PROBLEM modify NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_PROBLEM modify FLG_SURGERY varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_PROBLEM modify FLG_STATUS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_PROBLEM modify FLG_NATURE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_PROBLEM modify FLG_APROVED varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_PROBLEM modify FLG_AGE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_PROBLEM modify DESC_PAT_PROBLEM varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_PROBLEM modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_PROBLEM modify CANCEL_NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 11:10
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table PAT_PROBLEM
+  is 'Active and passive problems; personal history; permanent disability; May register the patient life period that was detected the problem (childhood, adult ...) or the rough age (year, month, day) ';
+-- Add comments to the columns 
+comment on column PAT_PROBLEM.id_pat_problem
+  is 'Primary key';
+comment on column PAT_PROBLEM.id_patient
+  is 'Patient id';
+comment on column PAT_PROBLEM.id_diagnosis
+  is 'Id diagnosis';
+comment on column PAT_PROBLEM.id_professional_ins
+  is 'Id professional';
+comment on column PAT_PROBLEM.desc_pat_problem
+  is 'Problem description';
+comment on column PAT_PROBLEM.notes
+  is 'Documented notes';
+comment on column PAT_PROBLEM.flg_age
+  is 'Patient''s life period: P - perinatal, N - neonatal, I - childhood, E - school, A - adult';
+comment on column PAT_PROBLEM.year_begin
+  is 'Year (approaching) the beginning of the problem';
+comment on column PAT_PROBLEM.month_begin
+  is 'Month (approaching) the beginning of the problem';
+comment on column PAT_PROBLEM.day_begin
+  is 'Day (approaching) the beginning of the problem';
+comment on column PAT_PROBLEM.year_end
+  is 'Year (approaching) the end of the problem';
+comment on column PAT_PROBLEM.month_end
+  is 'Month (approaching) the end of the problem';
+comment on column PAT_PROBLEM.day_end
+  is 'Day (approaching) the end of the problem';
+comment on column PAT_PROBLEM.pct_incapacity
+  is 'Inability to work caused by the degree of disease';
+comment on column PAT_PROBLEM.flg_surgery
+  is 'It indicates that the issue is treated using surgery';
+comment on column PAT_PROBLEM.notes_support
+  is 'Resource support, for the problems identified';
+comment on column PAT_PROBLEM.rank
+  is 'Relevance order';
+comment on column PAT_PROBLEM.flg_status
+  is 'State: A - active; C - canceled; P - passive, I - permanent disability, R - resolved';
+comment on column PAT_PROBLEM.id_epis_diagnosis
+  is 'Id of epis diagnoses';
+comment on column PAT_PROBLEM.flg_aproved
+  is 'U - reported by patient, M - clinically proven';
+comment on column PAT_PROBLEM.id_institution
+  is 'Institution id';
+comment on column PAT_PROBLEM.id_pat_habit
+  is 'Patient habit id';
+comment on column PAT_PROBLEM.id_habit
+  is 'Habit id';
+comment on column PAT_PROBLEM.id_episode
+  is 'Id episode that was made the register';
+comment on column PAT_PROBLEM.id_epis_anamnesis
+  is 'Id of anamneses';
+comment on column PAT_PROBLEM.flg_nature
+  is 'Problem nature: A | Acute; S | Self-limiting; C | Chronic; B | Blank';
+comment on column PAT_PROBLEM.id_alert_diagnosis
+  is 'ALERT_DIAGNOSIS ID';
+comment on column PAT_PROBLEM.dt_pat_problem_tstz
+  is 'Date of problem register';
+comment on column PAT_PROBLEM.dt_confirm_tstz
+  is 'Confirmation date';
+comment on column PAT_PROBLEM.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column PAT_PROBLEM.cancel_notes
+  is 'Cancelation notes';
+comment on column PAT_PROBLEM.create_user
+  is 'Creation User';
+comment on column PAT_PROBLEM.create_time
+  is 'Creation Time';
+comment on column PAT_PROBLEM.create_institution
+  is 'Creation Institution';
+comment on column PAT_PROBLEM.update_user
+  is 'Update User';
+comment on column PAT_PROBLEM.update_time
+  is 'Update Time';
+comment on column PAT_PROBLEM.update_institution
+  is 'Update Institution';
+comment on column PAT_PROBLEM.dt_resolution
+  is 'Resolution date';
+comment on column PAT_PROBLEM.id_adiag_inst_owner
+  is 'Institution owner of the concept. Default 0 - ALERT';
+comment on column PAT_PROBLEM.id_diag_inst_owner
+  is 'Institution owner of the concept. Default 0 - ALERT';
+-- CHANGE END: Renato Nunes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 20/07/2016 15:52
+-- CHANGE REASON: [ALERT-323430] 
+begin
+  pk_versioning.run_dml('alter table pat_problem ADD id_habit_characterization NUMBER(24)'); 
+end;
+/
+comment on column pat_problem.id_habit_characterization is 'Habit characterization ID (Habit_characterization FK)';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 20/07/2016 15:57
+-- CHANGE REASON: [ALERT-323430] 
+begin
+  pk_versioning.run('alter table pat_problem ADD id_habit_characterization NUMBER(24)'); 
+end;
+/
+comment on column pat_problem.id_habit_characterization is 'Habit characterization ID (Habit_characterization FK)';
+-- CHANGE END: Paulo Teixeira

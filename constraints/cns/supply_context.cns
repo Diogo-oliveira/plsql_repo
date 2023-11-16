@@ -1,0 +1,26 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 10:04
+-- CHANGE REASON: [ALERT-12334] 
+alter table SUPPLY_CONTEXT
+  add constraint SCX_PK primary key (ID_SUPPLY_CONTEXT)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 02/12/2010 16:48
+-- CHANGE REASON: [ALERT-146441] Associate a surgical procedure to supplies
+alter table 
+supply_context drop constraint SCX_FLG_CONTEXT_CHK;
+
+alter table supply_context add constraint SCX_FLG_CONTEXT_CHK check (flg_context in('M','P','F','I','A','E','O','S'));
+-- CHANGE END: Filipe Silva

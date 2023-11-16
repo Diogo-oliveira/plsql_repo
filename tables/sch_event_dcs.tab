@@ -1,0 +1,49 @@
+
+
+  CREATE TABLE SCH_EVENT_DCS
+   (	ID_SCH_EVENT_DCS NUMBER(24,0) NOT NULL ENABLE,
+	ID_SCH_EVENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_DEP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	DURATION NUMBER(6,0)
+   );
+
+COMMENT ON COLUMN SCH_EVENT_DCS.DURATION IS 'Default event duration at the department-clinical service';
+COMMENT ON COLUMN SCH_EVENT_DCS.ID_DEP_CLIN_SERV IS 'Department-Clinical service identifier';
+COMMENT ON COLUMN SCH_EVENT_DCS.ID_SCH_EVENT IS 'Event identifier';
+COMMENT ON COLUMN SCH_EVENT_DCS.ID_SCH_EVENT_DCS IS 'Event-Department-Clinical service association identifier';
+
+COMMENT ON TABLE SCH_EVENT_DCS IS 'Defines which events can be used for the several department-clinical services';
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 24-04-2008
+-- CHANGE REASON: new columns for insert and update dates and profs. New column flg_available
+
+alter table SCH_EVENT_DCS add ID_PROF_CREATED number(24);
+alter table SCH_EVENT_DCS add DT_CREATED timestamp with local time zone default current_timestamp;
+alter table SCH_EVENT_DCS add ID_PROF_UPDATED number(24);
+alter table SCH_EVENT_DCS add DT_UPDATED timestamp with local time zone default current_timestamp;
+alter table SCH_EVENT_DCS add FLG_AVAILABLE varchar2(1) default 'Y';
+-- Add comments to the columns 
+comment on column SCH_EVENT_DCS.ID_PROF_CREATED
+  is 'row creator id';
+comment on column SCH_EVENT_DCS.DT_CREATED
+  is 'creation date';
+comment on column SCH_EVENT_DCS.ID_PROF_UPDATED
+  is 'row updated by prof';
+comment on column SCH_EVENT_DCS.DT_UPDATED
+  is 'update date';
+comment on column SCH_EVENT_DCS.FLG_AVAILABLE
+  is 'available setting';
+  
+--END
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 15/01/2016 17:24
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON TABLE SCH_EVENT_DCS IS 'Contains the associations between scheduler events and department clinical services';
+COMMENT ON COLUMN SCH_EVENT_DCS.FLG_AVAILABLE IS 'Available(Y/N)';
+COMMENT ON COLUMN SCH_EVENT_DCS.ID_DEP_CLIN_SERV IS 'Department clinical service ID';
+COMMENT ON COLUMN SCH_EVENT_DCS.ID_SCH_EVENT IS 'Schedule event ID';
+COMMENT ON COLUMN SCH_EVENT_DCS.ID_SCH_EVENT_DCS IS 'Primary key';
+COMMENT ON COLUMN SCH_EVENT_DCS.DURATION IS 'Duration';
+-- CHANGE END:  jose.m.silva

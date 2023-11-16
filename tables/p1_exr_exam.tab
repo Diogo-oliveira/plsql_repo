@@ -1,0 +1,121 @@
+
+  CREATE TABLE P1_EXR_EXAM
+   (	ID_EXR_EXAM NUMBER(24,0) NOT NULL ENABLE,
+	ID_EXTERNAL_REQUEST NUMBER(24,0),
+	ID_EXAM NUMBER(12,0) NOT NULL ENABLE
+   );
+
+
+ALTER TABLE P1_EXR_EXAM ADD (ID_EXAM_REQ_DET NUMBER(24))
+/
+COMMENT ON COLUMN P1_EXR_EXAM.ID_EXAM_REQ_DET IS 'Requisiton detail in the origin of this request'
+/
+
+
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 11/09/2009 19:29
+-- CHANGE REASON: [ALERT-910] 
+alter table P1_EXR_EXAM add id_codification NUMBER(24);
+ 
+comment on column P1_EXR_EXAM.id_codification
+  is 'Id codification';
+ 
+alter table P1_EXR_EXAM
+  add constraint PEM_cod_PK foreign key (ID_CODIFICATION)
+  references codification (ID_CODIFICATION);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 12/09/2011 16:35
+-- CHANGE REASON: [ALERT-194915 ] 
+
+
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns
+     WHERE table_name = 'P1_EXR_EXAM'
+       AND column_name = 'AMOUNT';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_exam ADD ( amount number(2) )';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 13/09/2011 09:31
+-- CHANGE REASON: [ALERT-194915 ] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns
+     WHERE table_name = 'P1_EXR_EXAM'
+       AND column_name = 'AMOUNT';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_exam ADD ( amount number(2)DEFAULT 1  )';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns
+     WHERE table_name = 'P1_EXR_EXAM'
+       AND column_name = 'AMOUNT';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_exam ADD ( amount number(2) DEFAULT 1)';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 23/09/2012 22:36
+-- CHANGE REASON: [ALERT-240371] 
+Alter table p1_exr_exam add( flg_ALD VARCHAR2(1 CHAR) default 'N');
+Alter table p1_exr_exam MODIFY( flg_ALD  not null);
+comment on column p1_exr_exam.flg_ALD  is 'Chronic disease (Y/N)';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on table P1_EXR_EXAM
+  is 'Mapping between exam orders and referrals. Defines the list of exam orders included in the referral';
+-- Add comments to the columns 
+comment on column P1_EXR_EXAM.id_exr_exam
+  is 'Internal id';
+comment on column P1_EXR_EXAM.id_external_request
+  is 'Referral';
+comment on column P1_EXR_EXAM.id_exam
+  is 'Exam';
+comment on column P1_EXR_EXAM.id_exam_req_det
+  is 'Exam order';
+comment on column P1_EXR_EXAM.amount
+  is 'Number of items';
+comment on column P1_EXR_EXAM.flg_ald
+  is 'Is chronic disease? Y/N';
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 05/05/2021 16:02
+-- CHANGE REASON: [EMR-44727]
+ALTER TABLE p1_exr_exam ADD id_p1_exr_temp NUMBER(24);
+-- CHANGE END: Pedro Henriques

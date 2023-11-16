@@ -1,0 +1,1 @@
+grant select on PASSWD_HIST to ALERT_VIEWER;

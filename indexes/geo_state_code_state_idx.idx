@@ -1,0 +1,31 @@
+-- CHANGED BY:  Álvaro Vasconcelos
+-- CHANGE DATE: 16/06/2011 14:48
+-- CHANGE REASON: [ALERT-184978] Sis Pre Natal
+
+DECLARE
+    e_index_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_index_not_exists, -01418);
+
+BEGIN
+    EXECUTE IMMEDIATE 'DROP INDEX gs_code_state_idx';
+
+EXCEPTION
+    WHEN e_index_not_exists THEN
+        dbms_output.put_line('Index not exists');
+END;
+/
+
+
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE INDEX gs_code_state_idx ON geo_state(code_state)';
+
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('Index already exists');
+END;
+/
+-- CHANGE END:  Álvaro Vasconcelos

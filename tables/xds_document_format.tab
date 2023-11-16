@@ -1,0 +1,37 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 02/12/2009 21:10
+-- CHANGE REASON: [PIX-341] HIE XDS Content Creator module in Alert
+CREATE TABLE XDS_DOCUMENT_FORMAT
+(
+    ID_XDS_DOCUMENT_FORMAT NUMBER(24) NOT NULL,
+    DOCUMENT_FORMAT        VARCHAR2(200 CHAR) NOT NULL,
+    CODE_DOCUMENT_FORMAT   VARCHAR2(200 CHAR),
+    ID_CONTENT             VARCHAR2(200 CHAR),
+    CREATE_USER            VARCHAR2(24 CHAR),
+    CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    CREATE_INSTITUTION     NUMBER(24),
+    UPDATE_USER            VARCHAR2(24 CHAR),
+    UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    UPDATE_INSTITUTION     NUMBER(24)
+);
+
+COMMENT ON TABLE  XDS_DOCUMENT_FORMAT IS 'Document format supported by HIE XDS document repository';
+
+COMMENT ON COLUMN XDS_DOCUMENT_FORMAT.id_xds_document_format IS 'Primary key';
+COMMENT ON COLUMN XDS_DOCUMENT_FORMAT.document_format IS 'Document format code';
+COMMENT ON COLUMN XDS_DOCUMENT_FORMAT.code_document_format IS 'Document format description';
+COMMENT ON COLUMN XDS_DOCUMENT_FORMAT.id_content IS 'Content identifier';
+COMMENT ON COLUMN XDS_DOCUMENT_FORMAT.create_user IS 'Creation User';
+COMMENT ON COLUMN XDS_DOCUMENT_FORMAT.create_time IS 'Creation Time';
+COMMENT ON COLUMN XDS_DOCUMENT_FORMAT.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN XDS_DOCUMENT_FORMAT.update_user IS 'Update User';
+COMMENT ON COLUMN XDS_DOCUMENT_FORMAT.update_time IS 'Update Time';
+COMMENT ON COLUMN XDS_DOCUMENT_FORMAT.update_institution IS 'Update Institution';
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:19
+-- CHANGE REASON: [ALERT-126939] 
+alter table xds_document_format 
+ modify (id_content varchar2(30 char) );
+-- CHANGE END:  carlos.guilherme

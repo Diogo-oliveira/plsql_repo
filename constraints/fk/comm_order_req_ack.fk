@@ -1,0 +1,11 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/04/2014 11:21
+-- CHANGE REASON: [ALERT-275664] 
+BEGIN
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ_ACK add constraint coqk_coq_fk foreign key (ID_COMM_ORDER_REQ) references COMM_ORDER_REQ (ID_COMM_ORDER_REQ)]');
+pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ_ACK add constraint coqk_prof_fk foreign key (ID_PROF_ACK) references professional (ID_PROFESSIONAL)]');
+pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ_ACK add constraint coqk_ainst_fk foreign key (ID_INST_ACK) references alert_core_data.ab_institution (ID_AB_INSTITUTION)]');
+pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ_ACK add constraint COQK_COQH_FK foreign key (ID_COMM_ORDER_REQ_HIST) references comm_order_req_hist (ID_COMM_ORDER_REQ_HIST)]');
+END;
+/
+-- CHANGE END: Ana Monteiro

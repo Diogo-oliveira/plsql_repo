@@ -1,0 +1,101 @@
+
+
+  CREATE TABLE DISTRICT
+   (	ID_DISTRICT NUMBER(12,0) NOT NULL ENABLE,
+	CODE_DISTRICT VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE district IS 'Distritos. Para diferentes países há uma lista de distritos diferente.' ;
+
+COMMENT ON COLUMN district.id_district IS 'Chave primária' ;
+COMMENT ON COLUMN district.code_district IS 'Chave para tradução. DISTRICT.CODE_DISTRICT.<id_district>. Preenchido por trigger.' ;
+COMMENT ON COLUMN district.flg_available IS 'Y - Disponível. N-Não disponível.' ;
+COMMENT ON COLUMN district.adw_last_update IS 'Data da última alteração. Preenchido pelo trigger.' ;
+
+-- CHANGED REASON: Ligação de distrito a país
+-- CHANGED BY: Luís Gaspar
+-- CHANGE DATE: 14-Nov-2007
+alter table DISTRICT add ID_COUNTRY number(12) default 620 not null;
+
+comment on column DISTRICT.ID_COUNTRY  is 'Contry id from country table.';
+--END
+
+
+ALTER TABLE district modify(id_district NUMBER(18));
+ALTER TABLE district add id_geo_state NUMBER;
+COMMENT ON column district.id_geo_state IS 'Id do estado a que este distrito pertence (FK para GEO_STATE.ID_GEO_STATE)';
+
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 2011-07-22
+-- CHANGE REASON: ADT-5067
+
+alter table DISTRICT add code_district_abbr varchar2(10 char);
+
+comment on column DISTRICT.code_district_abbr
+  is 'Region prefix';
+
+-- CHANGE END: Bruno Martins
+
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 2011-07-22
+-- CHANGE REASON: ADT-5067
+
+alter table DISTRICT add code_district_abbr varchar2(10 char);
+
+comment on column DISTRICT.code_district_abbr
+  is 'Region prefix';
+
+-- CHANGE END: Bruno Martins
+
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 2011-08-16
+-- CHANGE REASON: ADT-5067
+
+alter table DISTRICT modify code_district_abbr VARCHAR2(200 CHAR);
+
+-- CHANGE END: Bruno Martins
+
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 2011-10-14
+-- CHANGE REASON: ADT-5595
+
+DECLARE
+    e_object_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table DISTRICT add code_district_abbr varchar2(200 char)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+    END;
+
+END;
+/
+
+comment on column alert.DISTRICT.code_district_abbr is 'Region prefix';
+
+DECLARE
+    e_object_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table DISTRICT add id_content varchar2(200 char)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+    END;
+
+END;
+/
+
+comment on column DISTRICT.id_content is 'Content unique identifier';
+
+-- CHANGED END: Bruno Martins

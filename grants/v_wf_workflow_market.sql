@@ -1,0 +1,1 @@
+GRANT SELECT ON v_wf_workflow_market TO INTF_ALERT;

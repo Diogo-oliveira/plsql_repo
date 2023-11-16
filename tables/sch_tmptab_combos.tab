@@ -1,0 +1,35 @@
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 08/07/2009 17:51
+-- CHANGE REASON: [ALERT-32069] Making appointments
+CREATE GLOBAL TEMPORARY TABLE SCH_TMPTAB_COMBOS
+ (ID_SCH_CONSULT_VACANCY NUMBER(24) NOT NULL
+ ,ID_CODE NUMBER(24) NOT NULL
+ ,ID_COMBO NUMBER(24) NOT NULL
+ ,ID_SCV_PARENT NUMBER(24) NOT NULL
+ )
+ ON COMMIT PRESERVE ROWS;
+ 
+COMMENT ON TABLE SCH_TMPTAB_COMBOS IS 'temporary table for holding the combos out of the get_availability_cross_sv';
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-01-2013
+-- CHANGE REASON: ALERT-246442
+begin
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', 
+                                           i_obj_name => 'SCH_TMPTAB_COMBOS', 
+                                           i_obj_type => 'TABLE', 
+                                           i_flg_category => 'DSV');
+end;
+/
+--CHANGE END: Telmo
+
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 21/01/2016 10:29
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON COLUMN SCH_TMPTAB_COMBOS.ID_SCH_CONSULT_VACANCY IS 'Vacancy ID';
+COMMENT ON COLUMN SCH_TMPTAB_COMBOS.ID_CODE IS 'Code ID';
+COMMENT ON COLUMN SCH_TMPTAB_COMBOS.ID_COMBO IS 'Combo ID';
+COMMENT ON COLUMN SCH_TMPTAB_COMBOS.ID_SCV_PARENT IS 'Parent scv ID';
+-- CHANGE END:  jose.m.silva

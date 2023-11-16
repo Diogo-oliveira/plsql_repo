@@ -1,0 +1,59 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 20:41
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+CREATE TABLE HIDRICS_WAY_REL
+(
+   ID_WAY                  NUMBER(24) NOT NULL,
+   ID_HIDRICS_TYPE         NUMBER(24) NOT NULL,
+   ID_HIDRICS              NUMBER(24) NOT NULL,
+   RANK                    NUMBER(12),
+   FLG_AVAILABLE           VARCHAR2(1 CHAR) NOT NULL,
+   ID_DEPARTMENT           NUMBER(24),
+   ID_DEPT                 NUMBER(24),
+   CREATE_USER             VARCHAR2(24),
+   CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   CREATE_INSTITUTION      NUMBER(24),
+   UPDATE_USER             VARCHAR2(24),
+   UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   UPDATE_INSTITUTION      NUMBER(24)
+);
+
+ALTER TABLE HIDRICS_WAY_REL MOVE TABLESPACE TABLE_S;
+
+comment on table HIDRICS_WAY_REL is 'Hidrics way relation';
+
+comment on column HIDRICS_WAY_REL.ID_WAY is 'Hidrics way ID';
+comment on column HIDRICS_WAY_REL.ID_HIDRICS_TYPE is 'Hidrics type ID';
+comment on column HIDRICS_WAY_REL.ID_HIDRICS is 'Hidrics ID';
+comment on column HIDRICS_WAY_REL.RANK is 'Ranking order';
+comment on column HIDRICS_WAY_REL.FLG_AVAILABLE is 'Record availability. Y - Yes; N - No';
+comment on column HIDRICS_WAY_REL.ID_DEPARTMENT is 'Department ID';
+comment on column HIDRICS_WAY_REL.ID_DEPT is 'Dept ID';
+comment on column HIDRICS_WAY_REL.CREATE_USER is 'Creation User';
+comment on column HIDRICS_WAY_REL.CREATE_TIME is 'Creation Time';
+comment on column HIDRICS_WAY_REL.CREATE_INSTITUTION is 'Creation Institution';
+comment on column HIDRICS_WAY_REL.UPDATE_USER is 'Update User';
+comment on column HIDRICS_WAY_REL.UPDATE_TIME is 'Update Time';
+comment on column HIDRICS_WAY_REL.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 21:30
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+ALTER TABLE HIDRICS_WAY_REL ADD ID_INSTITUTION NUMBER(24) NOT NULL;
+COMMENT ON COLUMN HIDRICS_WAY_REL.ID_INSTITUTION IS 'Institution ID.';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 09:31
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+alter table HIDRICS_WAY_REL add ID_MARKET NUMBER(24);
+comment on column HIDRICS_WAY_REL.ID_MARKET is 'Market ID';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:44
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+alter table HIDRICS_WAY_REL modify ( create_user  varchar2(24 char));
+alter table HIDRICS_WAY_REL modify ( update_user  varchar2(24 char));
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,97 @@
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 29/07/2010 15:01
+-- CHANGE REASON: [ALERT-116048] 
+alter table REHAB_PRESC
+  add constraint RPC_PK primary key (ID_REHAB_PRESC);
+alter table REHAB_PRESC
+  add constraint RPC_FLG_STATUS_CHK
+  check (FLG_STATUS IN ('B','C','P','Q','E','D','S','F','O', 'X'));
+alter table REHAB_PRESC
+  add constraint RPC_FLG_PRESC_STATUS_CHK
+  check (FLG_PRESC_STATUS IN ('A', 'T', 'E', 'M'));
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 29/07/2010 15:12
+-- CHANGE REASON: [ALERT-116048] 
+alter table REHAB_SCHEDULE
+  add constraint RSC_PK primary key (ID_REHAB_SCHEDULE);
+alter table REHAB_SCHEDULE
+  add constraint RSC_FLG_STATUS_CHK
+  check (FLG_STATUS IN ('A', 'T', 'E', 'M'));
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 18/02/2011 08:51
+-- CHANGE REASON: [ALERT-158066] Corrections
+ALTER TABLE rehab_presc drop CONSTRAINT rpc_flg_status_chk;
+ALTER TABLE rehab_presc add  CONSTRAINT rpc_flg_status_chk CHECK(flg_status IN ('B', 'C', 'P', 'Q', 'E', 'D', 'S', 'F', 'O', 'X', 'L', 'R'));
+ALTER TABLE rehab_presc_change drop constraint RPCH_FLG_STATUS_CHANGE_CHK;
+ALTER TABLE rehab_presc_change add constraint RPCH_FLG_STATUS_CHANGE_CHK check (FLG_STATUS_CHANGE IN ('P', 'A', 'R', 'C'));
+-- CHANGE END: João Martins
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 09/06/2011 18:15
+-- CHANGE REASON: [ALERT-184413] 
+alter table REHAB_PRESC
+  add constraint RPC_ICOD_FK foreign key (ID_CODIFICATION)
+  references INTERV_CODIFICATION (ID_INTERV_CODIFICATION);
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 01/10/2012 16:48
+-- CHANGE REASON: [ALERT-241270] 
+DECLARE
+    e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+
+    EXECUTE IMMEDIATE 'ALTER TABLE rehab_presc add CONSTRAINT rpc_flg_laterality_chk CHECK(flg_laterality IN (''N'', ''B'', ''L'', ''R''))';
+
+EXCEPTION
+    WHEN e_constraint_already_there THEN
+        NULL;
+    
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 28/05/2014 11:10
+-- CHANGE REASON: [ALERT-283905 ] 
+DECLARE
+    e_nonexistent_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_nonexistent_constraint, -02443); 
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE rehab_presc DROP CONSTRAINT rpc_flg_status_chk';
+    EXCEPTION
+        WHEN e_nonexistent_constraint THEN
+            dbms_output.put_line('Constraint rehab_presc.rpc_flg_status_chk doesnt exist');
+    END;
+
+    EXECUTE IMMEDIATE 'ALTER TABLE rehab_presc ADD CONSTRAINT rpc_flg_status_chk check (flg_status IN (''B'', ''C'', ''P'', ''Q'', ''E'', ''D'', ''S'', ''F'', ''O'', ''X'', ''L'', ''R'', ''N''))';
+END;
+/
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 16/10/2014 10:50
+-- CHANGE REASON: [ALERT-297986 ] 
+DECLARE
+
+    e_cns_non_existent EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_cns_non_existent, -02443);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE ' ALTER TABLE rehab_presc drop CONSTRAINT rpc_flg_laterality_chk';
+    
+    EXCEPTION
+        WHEN e_cns_non_existent THEN
+            NULL;
+    END;
+
+    EXECUTE IMMEDIATE 'ALTER TABLE rehab_presc add CONSTRAINT rpc_flg_laterality_chk CHECK(flg_laterality IN (''N'', ''B'', ''L'', ''R'', ''Z''))';
+END;
+/
+-- CHANGE END: cristina.oliveira

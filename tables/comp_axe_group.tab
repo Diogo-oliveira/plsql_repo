@@ -1,0 +1,81 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 25/03/2010 14:08
+-- CHANGE REASON: [ALERT-63591] Registration of complications through templates in use at JBZ (JBZ will provide the templates).
+CREATE TABLE COMP_AXE_GROUP 
+(
+  ID_COMP_AXE_GROUP         NUMBER(24) NOT NULL,  
+CODE_COMP_AXE_GROUP       VARCHAR2(200 CHAR) NOT NULL,
+  CODE                      VARCHAR2(200 CHAR),
+  FLG_AVAILABLE             VARCHAR2(1 CHAR) NOT NULL,
+FLG_EXCLUSIVE             VARCHAR2(1 CHAR) NOT NULL,
+FLG_REQUIRED              VARCHAR2(1 CHAR) NOT NULL,
+ID_PARENT_GROUP           NUMBER(24),
+FLG_PARENT_GRP_CONTEXT    VARCHAR2(2 CHAR),
+  CREATE_USER               VARCHAR2(24 CHAR),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24 CHAR),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24)  
+);
+
+ALTER TABLE COMP_AXE_GROUP MOVE TABLESPACE TABLE_S;
+
+COMMENT ON TABLE COMP_AXE_GROUP IS 'Axes groups and attributes';
+COMMENT ON COLUMN COMP_AXE_GROUP.ID_COMP_AXE_GROUP IS 'Primary key.';
+COMMENT ON COLUMN COMP_AXE_GROUP.CODE_COMP_AXE_GROUP IS 'Translation code.';
+COMMENT ON COLUMN COMP_AXE_GROUP.CODE IS 'Column used for codification purposes.';
+COMMENT ON COLUMN COMP_AXE_GROUP.FLG_AVAILABLE IS 'Availability of the record.';
+COMMENT ON COLUMN COMP_AXE_GROUP.FLG_EXCLUSIVE IS 'Group items are exclusive';
+COMMENT ON COLUMN COMP_AXE_GROUP.FLG_REQUIRED IS 'Is required to select at least one item of the group';
+COMMENT ON COLUMN COMP_AXE_GROUP.ID_PARENT_GROUP IS 'Parent group; Used for instance by External Factor Medication group whose parent is the group with ext. factors comp_codes: 3.01.07.01, 3.01.07.02, 3.01.07.09, 3.01.09';
+COMMENT ON COLUMN COMP_AXE_GROUP.FLG_PARENT_GRP_CONTEXT IS 'Used to identify the sys_list_group_rel.flg_context of parent group';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY:  Mauro Sousa
+-- CHANGE DATE: 01/06/2010 14:37
+-- CHANGE REASON: [ALERT-99455] 
+alter table comp_axe_group
+  add id_content VARCHAR2(200);
+comment on column comp_axe_group.id_content
+  is 'Content parametrization'; 
+-- CHANGE END:  Mauro Sousa
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 10:27
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table COMP_AXE_GROUP
+  is 'Axes groups and attributes';
+-- Add comments to the columns 
+comment on column COMP_AXE_GROUP.id_comp_axe_group
+  is 'Primary key.';
+comment on column COMP_AXE_GROUP.code_comp_axe_group
+  is 'Translation code.';
+comment on column COMP_AXE_GROUP.code
+  is 'Column used for codification purposes.';
+comment on column COMP_AXE_GROUP.flg_available
+  is 'Availability of the record.';
+comment on column COMP_AXE_GROUP.flg_exclusive
+  is 'Group items are exclusive';
+comment on column COMP_AXE_GROUP.flg_required
+  is 'Is required to select at least one item of the group';
+comment on column COMP_AXE_GROUP.id_parent_group
+  is 'Parent group; Used for instance by External Factor Medication group whose parent is the group with ext. factors comp_codes: 3.01.07.01, 3.01.07.02, 3.01.07.09, 3.01.09';
+comment on column COMP_AXE_GROUP.flg_parent_grp_context
+  is 'Used to identify the sys_list_group_rel.flg_context of parent group';
+comment on column COMP_AXE_GROUP.create_user
+  is 'Creation User';
+comment on column COMP_AXE_GROUP.create_time
+  is 'Creation Time';
+comment on column COMP_AXE_GROUP.create_institution
+  is 'Creation Institution';
+comment on column COMP_AXE_GROUP.update_user
+  is 'Update User';
+comment on column COMP_AXE_GROUP.update_time
+  is 'Update Time';
+comment on column COMP_AXE_GROUP.update_institution
+  is 'Update Institution';
+comment on column COMP_AXE_GROUP.id_content
+  is 'Content parametrization';
+-- CHANGE END: Renato Nunes

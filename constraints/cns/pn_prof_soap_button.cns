@@ -1,0 +1,54 @@
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 03/12/2010 10:10
+-- CHANGE REASON: [ALERT-146512] 
+ALTER TABLE PN_PROF_SOAP_BUTTON ADD CONSTRAINT PPSB_PK PRIMARY KEY (ID_PN_SOAP_BUTTON_REL, ID_PROFILE_TEMPLATE) ENABLE;
+ALTER TABLE PN_PROF_SOAP_BUTTON ADD CONSTRAINT PPSB_SEQ_UKEY UNIQUE (ID_PN_PROF_SOAP_BUTTON);
+ALTER TABLE PN_PROF_SOAP_BUTTON ADD CONSTRAINT PPSB_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE in ('Y', 'N')) ENABLE;
+-- CHANGE END: Pedro Teixeira
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 11:49
+-- CHANGE REASON: [ALERT-164552] soap blocks existing model changes
+alter table pn_prof_soap_button
+  add constraint ppsb_pk primary key (id_institution, id_profile_template, id_conf_button_block);
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:49
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_prof_soap_button ADD CONSTRAINT PPSB_FLG_CFG_TYPE_CHK CHECK(FLG_CONFIG_TYPE IN (''S'', ''C'',''P''))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_prof_soap_button drop primary key drop index';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_prof_soap_button
+  add constraint ppsb_pk primary key (id_institution, id_profile_template, id_conf_button_block, id_software, id_category, flg_config_type)';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_prof_soap_button ADD CONSTRAINT PPSB_CFG_TYPE_CHK CHECK(case when FLG_CONFIG_TYPE = ''S'' and id_software<>0 and id_category=-1 and id_profile_template=0 then 1 when
+FLG_CONFIG_TYPE = ''C'' and id_software=0 and id_category<>-1 and id_profile_template=0 then 1 
+when FLG_CONFIG_TYPE = ''P'' and id_software=0 and id_category=-1 and id_profile_template<>0 then 1 else null end 
+is not null)';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Luís Maia

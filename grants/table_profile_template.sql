@@ -1,0 +1,12 @@
+
+
+  GRANT SELECT ON ALERT.PROFILE_TEMPLATE TO ALERT_VIEWER;
+
+  grant all on alert.profile_template to aol;
+GRANT SELECT ON ALERT.PROFILE_TEMPLATE TO ALERT_AT_VIEWER;
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 05-07-2010
+-- CHANGE REASON: APS-518
+grant select on ALERT.PROFILE_TEMPLATE to alert_basecomp;
+-- CHANGE END: Telmo Castro

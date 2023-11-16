@@ -1,0 +1,24 @@
+-- CHANGED BY: filipe.f.pereira
+-- CHANGE DATE: 18/07/2013
+-- CHANGE REASON: ALERT-217073
+
+DECLARE
+  e_constraint_already_exists EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_constraint_already_exists, -02275);
+  l_table_name VARCHAR2(30) := 'REP_EDITABLE_TEXT_MKT';
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name ||
+                    ' ADD CONSTRAINT retm_rep_fk FOREIGN KEY (id_reports) REFERENCES reports (id_reports)';
+  EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name ||
+                    ' ADD CONSTRAINT retm_mkt_fk FOREIGN KEY (id_market) REFERENCES market (id_market)';
+  EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name ||
+                    ' ADD CONSTRAINT retm_lang_fk FOREIGN KEY (id_language) REFERENCES language (id_language)';
+EXCEPTION
+  WHEN e_constraint_already_exists THEN
+    dbms_output.put_line('WARNING - Foreign keys in table ' ||
+                         l_table_name ||
+                         ' already created in previous version.');
+END;
+/
+
+-- CHANGE END: filipe.f.pereira

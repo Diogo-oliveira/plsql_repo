@@ -1,0 +1,46 @@
+
+
+  CREATE TABLE TESTS_REVIEW
+   (	ID_TESTS_REVIEW NUMBER(24,0) NOT NULL ENABLE,
+	ID_REQUEST NUMBER(24,0) NOT NULL ENABLE,
+	DESC_TESTS_REVIEW VARCHAR2(2000) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	DT_CREATION DATE NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+comment on table TESTS_REVIEW
+  is 'Revisões de exames e análises de um episódio';
+-- Add comments to the columns 
+comment on column TESTS_REVIEW.ID_TESTS_REVIEW
+  is 'Chave primária';
+comment on column TESTS_REVIEW.ID_REQUEST
+  is 'Análise ou exame';
+comment on column TESTS_REVIEW.DESC_TESTS_REVIEW
+  is 'Nota de revisão';
+comment on column TESTS_REVIEW.FLG_TYPE
+  is 'Tipo de revisão:A -Analysis ;E - Exam';
+comment on column TESTS_REVIEW.DT_CREATION
+  is 'Data de criação da revisão';
+comment on column TESTS_REVIEW.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+
+alter table tests_review 
+add (dt_creation_tstz timestamp with local time zone); 
+
+comment on column TESTS_REVIEW.FLG_TYPE
+  is 'Tipo de revisão:A -Analysis ;E - Exam; R - Análises Seriadas';
+  
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 2008/09/22
+-- CHANGE REASON: Drop obsolete columns of type DATE
+ALTER TABLE TESTS_REVIEW DROP COLUMN DT_CREATION;
+-- CHANGE END
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 25/09/08
+-- CHANGE REASON: Discontinuation of adw_last_update
+ALTER TABLE TESTS_REVIEW DROP COLUMN ADW_LAST_UPDATE;
+-- CHANGE END

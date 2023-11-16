@@ -1,0 +1,10 @@
+create or replace view v_epis_hhc_req_det as
+select
+ ID_EPIS_HHC_REQ_DET
+,ID_EPIS_HHC_REQ
+,ID_HHC_DET_TYPE
+,HHC_VALUE
+,HHC_TEXT
+,DT_CREATION
+,ID_PROF_CREATION
+from EPIS_HHC_REQ_DET;

@@ -1,0 +1,222 @@
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/09/2018 11:06
+-- CHANGE REASON: [EMR-6418] 
+create table BLOOD_PRODUCTS_EA
+(
+  id_blood_product_req  NUMBER(24),
+  id_blood_product_det     NUMBER(24) not null,
+  id_hemo_type         NUMBER(24),
+  flg_status_req          VARCHAR2(2 CHAR),
+  flg_status_det          VARCHAR2(2 CHAR),
+  flg_time                VARCHAR2(1),
+  dt_begin_req            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_begin_det            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_blood_product  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  id_professional         NUMBER(24),
+  flg_notes               VARCHAR2(1 CHAR),
+  status_str              VARCHAR2(200 CHAR),
+  status_msg              VARCHAR2(200 CHAR),
+  status_icon             VARCHAR2(200 CHAR),
+  status_flg              VARCHAR2(2 CHAR),
+  status_str_req              VARCHAR2(200 CHAR),
+  status_msg_req              VARCHAR2(200 CHAR),
+  status_icon_req             VARCHAR2(200 CHAR),
+  status_flg_req              VARCHAR2(2 CHAR),
+  id_prof_order           NUMBER(24),
+  flg_priority                VARCHAR2(1 CHAR),
+  id_episode_origin       NUMBER(24),
+  id_visit                NUMBER(24),
+  id_episode              NUMBER(24),
+  id_patient              NUMBER(24),
+  dt_blood_product_det     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_dg_last_update       TIMESTAMP(6) WITH LOCAL TIME ZONE default CURRENT_TIMESTAMP,
+  flg_doc                 VARCHAR2(1 CHAR),
+  id_order_recurrence     NUMBER(24),
+  id_task_dependency      NUMBER(24),
+  flg_req_origin_module   VARCHAR2(1 CHAR),
+  notes                   VARCHAR2(1000 CHAR),
+  notes_tech              VARCHAR2(1000 CHAR),
+  notes_cancel            VARCHAR2(1000 CHAR),
+  id_clinical_purpose     NUMBER(24),
+  clinical_purpose_notes  VARCHAR2(1000 CHAR),
+  TRANSFUSION_TYPE VARCHAR2(10 CHAR),
+  qty_exec NUMBER(24),
+  ID_unit_mea_qty_exec NUMBER(24),
+  special_instr NUMBER(24),
+  BARCODE_LAB VARCHAR2(50 CHAR),
+  qty_received NUMBER(24),
+  ID_unit_mea_qty_received NUMBER(24),
+  EXPIRATION_DATE TIMESTAMP(6) WITH LOCAL TIME ZONE,
+BLOOD_GROUP VARCHAR2(10 CHAR),
+ADVERSE_REACTION VARCHAR(1 CHAR),
+  create_user             VARCHAR2(50 CHAR),
+  create_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution      NUMBER(24),
+  update_user             VARCHAR2(50 CHAR),
+  update_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution      NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 2M
+    next 2M
+    minextents 1
+    maxextents unlimited
+    pctincrease 0
+  );
+-- Add comments to the table 
+comment on table BLOOD_PRODUCTS_EA
+  is 'Easy Access table for Blood Product''s';
+-- Add comments to the columns 
+comment on column BLOOD_PRODUCTS_EA.id_blood_product_req
+  is 'Request ID';
+comment on column BLOOD_PRODUCTS_EA.id_blood_product_det
+  is 'Request''s detail ID';
+comment on column BLOOD_PRODUCTS_EA.id_hemo_type
+  is 'Intervention''s ID';
+comment on column BLOOD_PRODUCTS_EA.flg_status_req
+  is 'Request''s status ';
+comment on column BLOOD_PRODUCTS_EA.flg_status_det
+  is 'Request''s detail status ';
+comment on column BLOOD_PRODUCTS_EA.flg_time
+  is 'Execution type: in this (E)pisode, (B)etween episodes, (N)ext episode.';
+comment on column BLOOD_PRODUCTS_EA.dt_begin_req
+  is 'Request''s begin date';
+comment on column BLOOD_PRODUCTS_EA.dt_begin_det
+  is 'Intervention''s begin date';
+comment on column BLOOD_PRODUCTS_EA.dt_blood_product
+  is 'Request''s registry date';
+comment on column BLOOD_PRODUCTS_EA.id_professional
+  is 'Request''s registry professional ID';
+comment on column BLOOD_PRODUCTS_EA.flg_notes
+  is 'Indication of whether there are notes (Y) or not (N). Notes: registry notes, cancellation notes or notes for the technician.';
+comment on column BLOOD_PRODUCTS_EA.status_str
+  is 'Request''s status (in a specific format)';
+comment on column BLOOD_PRODUCTS_EA.status_msg
+  is 'Code of the message to be displayed';
+comment on column BLOOD_PRODUCTS_EA.status_icon
+  is 'Code of the icon to be displayed according to status';
+comment on column BLOOD_PRODUCTS_EA.status_flg
+  is 'Value used to obtain status icon';
+comment on column BLOOD_PRODUCTS_EA.id_prof_order
+  is 'Request''s professional ID';
+comment on column BLOOD_PRODUCTS_EA.flg_priority
+  is 'Indication of whether it''s a prioritary request (Y) or not (N). Only for physical therapy requests.';
+comment on column BLOOD_PRODUCTS_EA.id_episode_origin
+  is 'When the patient has an episode with an intervention request with FLG_TIME = ''N'', then the patient comes to another appointment and that request is duplicated to this new episode. In this new request, this column is filled with the episode ID of the first request.';
+comment on column BLOOD_PRODUCTS_EA.id_visit
+  is 'Visit ID';
+comment on column BLOOD_PRODUCTS_EA.id_episode
+  is 'Episode ID';
+comment on column BLOOD_PRODUCTS_EA.id_patient
+  is 'Patient ID';
+comment on column BLOOD_PRODUCTS_EA.dt_blood_product_det
+  is 'Date of row insertion';
+comment on column BLOOD_PRODUCTS_EA.dt_dg_last_update
+  is 'Data governance last update date';
+comment on column BLOOD_PRODUCTS_EA.create_user
+  is 'Creation User';
+comment on column BLOOD_PRODUCTS_EA.create_time
+  is 'Creation Time';
+comment on column BLOOD_PRODUCTS_EA.create_institution
+  is 'Creation Institution';
+comment on column BLOOD_PRODUCTS_EA.update_user
+  is 'Update User';
+comment on column BLOOD_PRODUCTS_EA.update_time
+  is 'Update Time';
+comment on column BLOOD_PRODUCTS_EA.update_institution
+  is 'Update Institution';
+comment on column BLOOD_PRODUCTS_EA.flg_doc
+  is 'Indication of wether there are documents (Y) or not (N)';
+comment on column BLOOD_PRODUCTS_EA.id_order_recurrence
+  is 'Order recurrence ID';
+comment on column BLOOD_PRODUCTS_EA.id_task_dependency
+  is 'Task dependency identifier';
+comment on column BLOOD_PRODUCTS_EA.flg_req_origin_module
+  is 'Request created by: D - Default, O - Order Sets, I - Interfaces; S - Scheduler;  R - Referral';
+comment on column BLOOD_PRODUCTS_EA.notes
+  is 'General notes';
+comment on column BLOOD_PRODUCTS_EA.notes_tech
+  is 'General technician notes';
+comment on column BLOOD_PRODUCTS_EA.notes_cancel
+  is 'Procedures'' cancel notes';
+comment on column BLOOD_PRODUCTS_EA.id_clinical_purpose
+  is 'Clinical purpose ID';
+comment on column BLOOD_PRODUCTS_EA.clinical_purpose_notes
+  is 'Clinical purpose free text field (when id_clinical_purpose = 0)';
+comment on column BLOOD_PRODUCTS_EA.TRANSFUSION_TYPE
+  is 'Transfusion type';
+comment on column BLOOD_PRODUCTS_EA.BARCODE_LAB
+	is 'Barcode Receiver from Lab';
+
+	
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 19/09/2018 16:00
+-- CHANGE REASON: [EMR-6676] 
+ALTER TAbLE BLOOD_PRODUCTS_EA ADD BLOOD_GROUP_RH VARCHAR2(10 CHAR);
+ALTER TABLE BLOOD_PRODUCTS_EA ADD MATCH VARCHAR2(1 CHAR);
+ALTER TABLE BLOOD_PRODUCTS_EA ADD ADVERSE_REACTION_REQ VARCHAR2(1 CHAR);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 12/10/2018 17:30
+-- CHANGE REASON: [EMR-7594] 
+alter table blood_products_ea
+drop column match;
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/10/2018 14:35
+-- CHANGE REASON: [EMR-7652] 
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.ID_HEMO_TYPE IS 'Hemo Type ID';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.DT_BEGIN_DET IS 'Start date of the blood prod execution';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.QTY_EXEC IS 'Blood Produt quantity requested';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.ID_UNIT_MEA_QTY_EXEC IS 'Unit measure (QTY_EXEC)';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.SPECIAL_INSTR IS 'Special Instructions';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.STATUS_STR_REQ IS 'REQ - Request''s status (in a specific format)';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.STATUS_MSG_REQ IS 'REQ - Code of the message to be displayed';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.STATUS_ICON_REQ IS 'REQ - Code of the icon to be displayed according to status';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.STATUS_FLG_REQ IS 'REQ - Value used to obtain status icon';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.BARCODE_LAB IS 'Interface -> Barcode';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.QTY_RECEIVED IS 'Interface -> Quantity received by Interface';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.ID_UNIT_MEA_QTY_RECEIVED IS 'Interface -> Unit measure (QTY_RECEIVED)';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.EXPIRATION_DATE IS 'Interface -> Expiration Date';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.BLOOD_GROUP IS 'Interface -> Blood Group (A, B, O, AB)';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.ADVERSE_REACTION IS 'Have Adverse Reaction (Y/N)';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.BLOOD_GROUP_RH IS 'Interface -> Blood Group RH (Rh+, Rh-)';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.MATCH IS 'Have Match?';
+COMMENT ON COLUMN BLOOD_PRODUCTS_EA.ADVERSE_REACTION_REQ IS 'BP Req - Have Adverse Reaction (Y/N)';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/01/2019 12:14
+-- CHANGE REASON: [EMR-10465]
+ALTER TABLE blood_products_ea ADD qty_given NUMBER(24);
+COMMENT ON COLUMN blood_products_ea.qty_given IS 'Blood Produt quantity given';
+ALTER TABLE blood_products_ea ADD ID_UNIT_MEA_QTY_GIVEN NUMBER(24);
+COMMENT ON COLUMN blood_products_ea.qty_given IS 'Unit measure (QTY_GIVEN)';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/01/2019 12:35
+-- CHANGE REASON: [EMR-10725]
+ALTER TABLE blood_products_ea add id_special_type NUMBER(24);
+COMMENT ON COLUMN blood_products_ea.id_special_type IS 'Special type of transfusion';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 04/08/2022 10:23
+-- CHANGE REASON: [EMR-54405]
+ALTER TABLE Blood_products_ea ADD FLG_WITH_SCREENING VARCHAR2(1 CHAR) DEFAULT 'Y';
+comment on column Blood_products_ea.FLG_WITH_SCREENING IS 'With screening? (Y/N)';
+ALTER TABLE Blood_products_ea ADD FLG_WITHOUT_NAT_TEST VARCHAR2(1 CHAR) DEFAULT 'N';
+comment on column Blood_products_ea.FLG_WITH_SCREENING IS 'Consent without NAT testing? (Y/N)';
+ALTER TABLE Blood_products_ea ADD FLG_PREPARE_NOT_SEND VARCHAR2(1 CHAR) DEFAULT 'N';
+comment on column Blood_products_ea.FLG_WITH_SCREENING IS 'Prepare the blood but not send to the unit';
+-- CHANGE END: Pedro Henriques

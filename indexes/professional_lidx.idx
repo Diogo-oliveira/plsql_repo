@@ -1,0 +1,21 @@
+-- CHANGED BY: Pedro Pinheiro
+-- CHANGE DATE: 23/04/2013 09:20
+-- CHANGE REASON: [ARCHDB-1411] - Lucene search on professional name
+DECLARE
+    e_object_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX PROFESSIONAL_LIDX ON professional(nick_name) indextype IS lucene.luceneindex PARAMETERS(''LogLevel:INFO;Analyzer:org.apache.lucene.analysis.NameAnalyzer;MergeFactor:20;AutoTuneMemory:true;RewriteScore:true;SimilarityMethod:org.apache.lucene.search.WildcardSimilarity;DefaultOperator:AND;NormalizeScore:false;LobStorageParameters:TABLESPACE LUCENE_IDX PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS;'')';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+    END;
+
+END;
+/
+
+ALTER INDEX PROFESSIONAL_LIDX PARAMETERS('LockMasterTable:false;SyncMode:OnLine;');
+-- CHANGE END: Pedro Pinheiro

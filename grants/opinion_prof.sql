@@ -1,0 +1,1 @@
+GRANT SELECT ON opinion_prof TO ALERT_INTER;

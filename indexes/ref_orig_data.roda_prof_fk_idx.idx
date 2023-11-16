@@ -1,0 +1,23 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 09/03/2010 09:29
+-- CHANGE REASON: [ALERT-79864] 
+DECLARE
+    l_sql   VARCHAR2(1000 CHAR);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM all_indexes u
+     WHERE u.index_name = 'RODA_PROF_FK_IDX';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := q'[create index RODA_PROF_FK_IDX on REF_ORIG_DATA (ID_PROFESSIONAL)]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro

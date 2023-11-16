@@ -1,0 +1,30 @@
+create table DIAG_LAY_DEP_CLIN_SERV
+(
+  ID_DIAG_LAY_DEP_CLIN_SERV NUMBER(24) not null,
+  ID_DIAGRAM_LAYOUT         NUMBER(24) not null,
+  ID_INSTITUTION            NUMBER(24),
+  ID_SOFTWARE               NUMBER(24) not null,
+  FLG_TYPE                  VARCHAR2(1) not null,
+  RANK                      NUMBER(6),
+  ADW_LAST_UPDATE           DATE not null,
+  ID_DEP_CLIN_SERV          NUMBER(24) not null
+);
+
+comment on table DIAG_LAY_DEP_CLIN_SERV
+  is 'Layouts mais frequentes por serviço clínico, pesquisáveis por software e instituição e por defeito por serviço clínico.';
+comment on column DIAG_LAY_DEP_CLIN_SERV.ID_DIAG_LAY_DEP_CLIN_SERV
+  is 'Primary key';
+comment on column DIAG_LAY_DEP_CLIN_SERV.ID_DIAGRAM_LAYOUT
+  is 'Diagram layout id';
+comment on column DIAG_LAY_DEP_CLIN_SERV.ID_INSTITUTION
+  is 'Institution to which this row applies. Specified when flg_type=''P'' (searchable)';
+comment on column DIAG_LAY_DEP_CLIN_SERV.ID_SOFTWARE
+  is 'Software to which this row applies.';
+comment on column DIAG_LAY_DEP_CLIN_SERV.FLG_TYPE
+  is 'Type of configuration. P-searchable. M - Most frequent. D - Default. Every dep_clin_serv should have a Default registry.';
+comment on column DIAG_LAY_DEP_CLIN_SERV.RANK
+  is 'Order ranking';
+comment on column DIAG_LAY_DEP_CLIN_SERV.ADW_LAST_UPDATE
+  is 'Last update date to adw';
+comment on column DIAG_LAY_DEP_CLIN_SERV.ID_DEP_CLIN_SERV
+  is 'Dep_Clin_Serv id to which this row applies';

@@ -1,0 +1,39 @@
+
+
+  CREATE TABLE EPIS_PROBLEM
+   (	ID_EPIS_PROBLEM NUMBER(24,0) NOT NULL ENABLE,
+	DT_EPIS_PROBLEM DATE NOT NULL ENABLE,
+	DESC_EPIS_PROBLEM VARCHAR2(4000) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PAT_PROBLEM NUMBER(24,0),
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE epis_problem IS 'Resumo do(s) problema(s) actual(ais) + problemas activos / passivos registados anteriormente, mas com especial relevância para o episódio actual.Tem maior importância nos casos em q a duração de um episódio é longa (por ex. internamento) e o médico resume / assinala alguns problemas, p/ + facil/ serem consultados pelos enfermeiros ou outros profissionais.' ;
+
+alter table epis_problem 
+add (dt_epis_problem_tstz timestamp with local time zone); 
+
+alter table EPIS_PROBLEM drop column DT_EPIS_PROBLEM;
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_PROBLEM modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_PROBLEM modify DESC_EPIS_PROBLEM varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_PROBLEM modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro

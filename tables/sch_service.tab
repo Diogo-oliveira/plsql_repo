@@ -1,0 +1,54 @@
+
+
+  CREATE TABLE SCH_SERVICE
+   (	ID_SCH_SERVICE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	CODE_SCH_SERVICE VARCHAR2(200) NOT NULL ENABLE,
+	INTERN_NAME VARCHAR2(256),
+	DESC_SCH_SERVICE VARCHAR2(4000),
+	ID_SUB_SERVICE NUMBER(24,0),
+	DURATION NUMBER(6,0),
+	NEXT_APT_DELAY NUMBER(6,0),
+	FLG_AVAILABLE VARCHAR2(1) DEFAULT 'Y' NOT NULL ENABLE,
+	RANK NUMBER(6,0),
+	ADW_LAST_UPDATE DATE DEFAULT SYSDATE NOT NULL ENABLE
+
+   );
+
+
+COMMENT ON COLUMN sch_service.flg_type IS 'Primeira consulta mé(D)ica
+Consulta (M)édica subsequente
+Primeira consulta de es(P)ecialidade
+Consulta subsequente de especialidade (Q)' ;
+
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-01-2013
+-- CHANGE REASON: ALERT-246442
+begin
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', 
+                                           i_obj_name => 'SCH_SERVICE', 
+                                           i_obj_type => 'TABLE', 
+                                           i_flg_category => 'DPC', 
+                                           i_flg_nzd => 'N');
+end;
+/
+--CHANGE END: Telmo
+
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 15/01/2016 17:24
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON TABLE SCH_SERVICE IS 'Sets the schedule services';
+COMMENT ON COLUMN SCH_SERVICE.RANK IS 'Rank';
+COMMENT ON COLUMN SCH_SERVICE.ADW_LAST_UPDATE IS 'Date of the last update';
+COMMENT ON COLUMN SCH_SERVICE.FLG_AVAILABLE IS 'Available(Y/N)';
+COMMENT ON COLUMN SCH_SERVICE.CODE_SCH_SERVICE IS 'Code schedule service';
+COMMENT ON COLUMN SCH_SERVICE.INTERN_NAME IS 'Internal name';
+COMMENT ON COLUMN SCH_SERVICE.ID_SCH_SERVICE IS 'Primary key';
+COMMENT ON COLUMN SCH_SERVICE.FLG_TYPE IS 'D(first doctors appointment),M(subsequent Medical Consultation),P(first specialty consultation),Q(Subsequent query specialty)';
+COMMENT ON COLUMN SCH_SERVICE.DURATION IS 'Duration';
+COMMENT ON COLUMN SCH_SERVICE.NEXT_APT_DELAY IS 'Delay the next appointment';
+COMMENT ON COLUMN SCH_SERVICE.DESC_SCH_SERVICE IS 'Schedule service description ';
+COMMENT ON COLUMN SCH_SERVICE.ID_SUB_SERVICE IS 'Sub service ID';
+-- CHANGE END:  jose.m.silva

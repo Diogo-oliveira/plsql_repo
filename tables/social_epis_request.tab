@@ -1,0 +1,102 @@
+
+
+  CREATE TABLE SOCIAL_EPIS_REQUEST
+   (	ID_SOCIAL_EPIS_REQUEST NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOCIAL_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	DT_SOCIAL_EPIS_REQUEST DATE NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000)
+   );
+
+
+COMMENT ON COLUMN social_epis_request.dt_social_epis_request IS 'Data de registo' ;
+
+alter table social_epis_request
+add (dt_social_epis_request_tstz timestamp with local time zone); 
+
+--CHANGED BY: Rui Spratley
+--CHANGE DATE: 2008/09/22
+--CHANGE REASON: Drop colunas DATE
+alter table social_epis_request drop column dt_social_epis_request;
+-- CHANGE END
+
+
+-- CHANGED BY: THIAGO BRITO
+-- CHANGE DATE: 2008-JAN-15
+-- CHANGE REASON: ALERT-1614: Perfis clinicos devem visualizar os episódios sociais, mesmo quando não houve uma requisição de assistente social via ALERT 
+
+ALTER TABLE social_epis_request MODIFY id_professional NUMBER(24) NULL;
+/
+
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 24/03/2010 11:17
+-- CHANGE REASON: [ALERT-83146] social_epis_request
+alter table social_epis_request rename column dt_social_epis_request_tstz to dt_creation_tstz;
+alter table social_epis_request modify (id_social_episode null);
+alter table social_epis_request add (id_episode_origin    number(24),
+                                     flg_status           varchar2(1 char),
+ id_prof_answer       number(24),
+ dt_answer_tstz       timestamp with local time zone,
+ notes_answer         varchar2(1000 char),
+ id_cancel_info_det   number(24),
+ id_episode           number(24));
+
+comment on column social_epis_request.id_social_epis_request
+  is 'Primary key.';
+comment on column social_epis_request.id_social_episode
+  is 'Deprecated.';
+comment on column social_epis_request.id_professional
+  is 'Professional who creates the request.';
+comment on column social_epis_request.notes
+  is 'Request notes.';
+comment on column social_epis_request.dt_creation_tstz
+  is 'Request creation date.';
+comment on column social_epis_request.id_episode_origin
+  is 'Origin episode identifier.';
+comment on column social_epis_request.flg_status
+  is 'Status fo request: (P)ending, (C)ancelled, (A)ccepted, (R)ejected, (D)ischarged.';
+comment on column social_epis_request.id_prof_answer
+  is 'Professional who answers the request.';
+comment on column social_epis_request.dt_answer_tstz
+  is 'Request answer date.';
+comment on column social_epis_request.notes_answer
+  is 'Request answer notes.';
+comment on column social_epis_request.id_cancel_info_det
+  is 'Cancel information detail identifier.';
+comment on column social_epis_request.id_episode
+  is 'Social assistance episode identifier.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table SOCIAL_EPIS_REQUEST modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table SOCIAL_EPIS_REQUEST modify NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table SOCIAL_EPIS_REQUEST modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:50
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table SOCIAL_EPIS_REQUEST
+  is 'DEPRECATED only used for old social request';  
+  
+-- CHANGE END: Elisabete Bugalho

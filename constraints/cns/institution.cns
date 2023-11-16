@@ -1,0 +1,201 @@
+
+
+  ALTER TABLE INSTITUTION ADD CONSTRAINT INST_PK PRIMARY KEY (ID_INSTITUTION) ENABLE;
+
+  ALTER TABLE INSTITUTION MODIFY (ID_INSTITUTION NOT NULL ENABLE);
+
+  ALTER TABLE INSTITUTION MODIFY (CODE_INSTITUTION NOT NULL ENABLE);
+
+  ALTER TABLE INSTITUTION MODIFY (FLG_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE INSTITUTION MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE INSTITUTION MODIFY (RANK NOT NULL ENABLE);
+
+
+  ALTER TABLE INSTITUTION MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+alter table institution add CONSTRAINT chk_flg_type CHECK ( flg_type IN ('C','E','H', 'R', 'U', 'ACES', 'ULS', 'CH', 'M', 'P')) novalidate;
+
+
+-- cmf 21-01-2010
+declare
+xsql     varchar(1000 char );
+xpl      varchar2(10 char ) := '''';
+my_ex    exception;
+pragma   exception_init(my_ex, -02264 );
+begin
+
+
+xsql := 'alter table institution add CONSTRAINT chk_flg_type CHECK ( flg_type IN (@C@,@E@,@H@, @R@, @U@, @ACES@, @ULS@, @CH@, @M@, @P@)) novalidate';
+xsql := replace( xsql, '@', xpl );
+
+execute immediate xsql;
+
+dbms_output.put_line('xsql:'|| xsql);
+
+exception
+when my_ex then dbms_output.put_line('Já existe');
+when others then
+dbms_output.put_line('ERROR:'||sqlerrm);
+dbms_output.put_line('xsql:'|| xsql);
+end;
+/
+
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 24/02/2010 15:54
+-- CHANGE REASON: [ALERT-71106] 
+ALTER TABLE INSTITUTION ADD CONSTRAINT INSTITUTION CHECK (FLG_EXTERNAL IN ('Y', 'N'));
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 05/07/2010 16:27
+-- CHANGE REASON: [ALERT-109378] 
+alter table INSTITUTION add constraint INST_DN_FLG_STATUS_CHK check (DN_FLG_STATUS IN ('I', 'V', 'E', 'A'));
+-- CHANGE END: Tércio Soares
+
+-- cmf 21-01-2010
+declare
+xsql     varchar(1000 char );
+xpl      varchar2(10 char ) := '''';
+my_ex    exception;
+pragma   exception_init(my_ex, -02264 );
+begin
+
+
+xsql := 'alter table institution add CONSTRAINT chk_flg_type CHECK ( flg_type IN (@C@,@E@,@H@, @R@, @U@, @ACES@, @ULS@, @CH@, @M@, @P@)) novalidate';
+xsql := replace( xsql, '@', xpl );
+
+execute immediate xsql;
+
+dbms_output.put_line('xsql:'|| xsql);
+
+exception
+when my_ex then dbms_output.put_line('Já existe');
+when others then
+dbms_output.put_line('ERROR:'||sqlerrm);
+dbms_output.put_line('xsql:'|| xsql);
+end;
+/
+
+-- cmf 30-07-2010
+declare
+xsql     varchar(1000 char );
+xpl      varchar2(10 char ) := '''';
+my_ex    exception;
+pragma   exception_init(my_ex, -02264 );
+begin
+
+
+xsql := 'alter table institution add CONSTRAINT chk_flg_type CHECK ( flg_type IN (@C@,@E@,@H@, @R@, @U@, @ACES@, @ULS@, @CH@, @M@, @P@)) novalidate';
+xsql := replace( xsql, '@', xpl );
+
+execute immediate xsql;
+
+dbms_output.put_line('xsql:'|| xsql);
+
+exception
+when my_ex then dbms_output.put_line('Já existe');
+when others then
+dbms_output.put_line('ERROR:'||sqlerrm);
+dbms_output.put_line('xsql:'|| xsql);
+end;
+/
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 24/11/2010 10:16
+-- CHANGE REASON: [ALERT-140512] 
+DECLARE
+    xsql VARCHAR(1000 CHAR);
+    xpl  VARCHAR2(10 CHAR) := '''';
+
+    l_cnt NUMBER(6);
+
+    my_ex EXCEPTION;
+    PRAGMA EXCEPTION_INIT(my_ex, -02264);
+
+    check_constraint_violated EXCEPTION;
+    PRAGMA EXCEPTION_INIT(check_constraint_violated, -02293);
+
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_cnt
+      FROM user_constraints
+     WHERE constraint_name = 'CHK_FLG_TYPE';
+
+    IF l_cnt != 0
+    THEN
+        xsql := 'alter table institution drop CONSTRAINT chk_flg_type';
+        dbms_output.put_line(xsql);
+        EXECUTE IMMEDIATE xsql;
+    
+    END IF;
+
+    xsql := 'alter table institution add CONSTRAINT chk_flg_type CHECK ( flg_type IN (@C@, @E@, @H@, @R@, @U@, @A@, @ULS@, @CH@, @M@, @P@))';
+    xsql := REPLACE(xsql, '@', xpl);
+
+    dbms_output.put_line(xsql);
+    EXECUTE IMMEDIATE xsql;
+
+EXCEPTION
+    WHEN check_constraint_violated THEN
+        dbms_output.put_line('Impossible to validate');
+    
+        xsql := 'alter table institution add CONSTRAINT chk_flg_type CHECK ( flg_type IN (@C@, @E@, @H@, @R@, @U@, @A@, @ULS@, @CH@, @M@, @P@)) novalidate';
+        xsql := REPLACE(xsql, '@', xpl);
+        dbms_output.put_line(xsql);
+        EXECUTE IMMEDIATE xsql;
+    
+    WHEN OTHERS THEN
+        dbms_output.put_line('ERROR:' || SQLERRM);
+        dbms_output.put_line('xsql:' || xsql);
+END;
+/
+-- CHANGE END: Rui Spratley
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 24/11/2010 10:43
+-- CHANGE REASON: [ALERT-140512] 
+DECLARE
+    xsql VARCHAR(1000 CHAR);
+    xpl  VARCHAR2(10 CHAR) := '''';
+
+    check_constraint_violated EXCEPTION;
+    PRAGMA EXCEPTION_INIT(check_constraint_violated, -02293);
+
+BEGIN
+    xsql := 'alter table institution add CONSTRAINT chk_flg_type CHECK ( flg_type IN (@C@, @E@, @H@, @R@, @U@, @A@, @ULS@, @CH@, @M@, @P@))';
+    xsql := REPLACE(xsql, '@', xpl);
+    EXECUTE IMMEDIATE xsql;
+
+EXCEPTION
+    WHEN check_constraint_violated THEN
+        xsql := 'alter table institution add CONSTRAINT chk_flg_type CHECK ( flg_type IN (@C@, @E@, @H@, @R@, @U@, @A@, @ULS@, @CH@, @M@, @P@)) novalidate';
+        xsql := REPLACE(xsql, '@', xpl);
+        EXECUTE IMMEDIATE xsql;
+    
+    WHEN OTHERS THEN
+        dbms_output.put_line('ERROR:' || SQLERRM);
+END;
+/
+-- CHANGE END: Rui Spratley
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 27/01/2012 14:46
+-- CHANGE REASON: [ALERT-215480] 
+DECLARE
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE institution add(CONSTRAINT chk_inst_adresstype CHECK(ADRESS_TYPE IN (''B'', ''BA'', ''BDL'', ''BR'', ''C'', ''F'', ''GN'', ''H'', ''L'', ''M'', ''N'', ''O'', ''P'', ''RH'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

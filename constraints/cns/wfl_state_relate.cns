@@ -1,0 +1,14 @@
+
+--PK
+alter table wfl_state_relate
+add constraint wfl_str_pk primary key (id_state_relation)
+using index tablespace INDEX_S;
+
+--UK
+alter table wfl_state_relate
+add constraint wfl_str_uk unique (state, next_state)
+using index tablespace INDEX_S;
+
+--CHKs
+alter table wfl_state_relate
+add constraint wfl_str_flg_active_chk check (flg_active in ('Y','N'));

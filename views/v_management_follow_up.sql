@@ -1,0 +1,19 @@
+create or replace view V_MANAGEMENT_FOLLOW_UP as
+SELECT ID_MANAGEMENT_FOLLOW_UP,
+       ID_EPISODE,
+       ID_EPIS_ENCOUNTER,
+       TIME_SPENT,
+       FLG_STATUS,
+       ID_UNIT_TIME,
+       DT_REGISTER,
+       NOTES,
+       ID_CANCEL_REASON,
+       NOTES_CANCEL,
+       ID_PARENT,
+       ID_PROFESSIONAL,
+       DT_START,
+       DT_NEXT_ENCOUNTER,
+       FLG_END_FOLLOWUP,
+       ID_OPINION_TYPE,
+       DT_NEXT_ENC_PRECISION
+  FROM management_follow_up;

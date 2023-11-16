@@ -1,0 +1,20 @@
+DECLARE
+
+    l_count NUMBER;
+BEGIN
+
+    SELECT COUNT(*)
+      INTO l_count
+      FROM user_indexes ui
+     WHERE ui.index_name LIKE 'LTA_ID_ANALYSIS_REQ_IDX';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE ('CREATE INDEX LTA_ID_ANALYSIS_REQ_IDX ON LAB_TESTS_EA(ID_ANALYSIS_REQ)');
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Index exists with other name, but this is not a problem.');
+    
+END;

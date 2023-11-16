@@ -1,0 +1,74 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:32
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+ALTER TABLE EPIS_PN_DET_TASK
+ ADD (CONSTRAINT EPDTK_PK PRIMARY KEY 
+  (ID_EPIS_PN_DET_TASK))
+/
+
+ALTER TABLE EPIS_PN_DET_TASK
+ ADD (CONSTRAINT EPDTK_STATUS_CHK CHECK (FLG_STATUS in ('A', 'R')))
+/
+
+ALTER TABLE EPIS_PN_DET_TASK ADD CONSTRAINT EPDTK_FLG_TORIG_CHK CHECK (FLG_TABLE_ORIGIN IN ('D','A','S','O','F','R', null));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+ALTER TABLE EPIS_PN_DET_TASK
+ ADD (CONSTRAINT EPDTK_PK PRIMARY KEY 
+  (ID_EPIS_PN_DET_TASK))
+/
+
+ALTER TABLE EPIS_PN_DET_TASK
+ ADD (CONSTRAINT EPDTK_STATUS_CHK CHECK (FLG_STATUS in ('A', 'R')))
+/
+
+ALTER TABLE EPIS_PN_DET_TASK ADD CONSTRAINT EPDTK_FLG_TORIG_CHK CHECK (FLG_TABLE_ORIGIN IN ('D','A','S','O','F','R', null));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:49
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE EPIS_PN_DET_TASK drop constraint EPDTK_STATUS_CHK';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE EPIS_PN_DET_TASK
+ADD (CONSTRAINT EPDTK_STATUS_CHK CHECK (FLG_STATUS in (''A'', ''R'', ''S'', ''I'', ''Z'')))';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/10/2012 16:02
+-- CHANGE REASON: [ALERT-242379 ] Single page note for Discharge Summary
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_pn_det_task ADD (CONSTRAINT EPDT_FLG_ACTION_CHK CHECK (FLG_ACTION IN (''I'', ''S'',''A'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/05/2013 16:26
+-- CHANGE REASON: [ALERT-259145] Triage single page
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE epis_pn_det_task ADD CONSTRAINT EPDT_SAMPLE_TYPE_FK FOREIGN KEY (id_sample_type) REFERENCES sample_type(id_sample_type)');
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

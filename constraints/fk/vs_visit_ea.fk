@@ -1,0 +1,157 @@
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 25/10/2010
+-- CHANGE REASON: ALERT-130841
+DECLARE
+    e_fk_notexists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_notexists, -02443);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_visit_ea DROP CONSTRAINT vvea_p_fk';
+
+EXCEPTION
+    WHEN e_fk_notexists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+
+DECLARE
+    e_fk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_exists, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_visit_ea ADD CONSTRAINT vvea_v_fk FOREIGN KEY (id_visit) REFERENCES visit (id_visit)';
+
+EXCEPTION
+    WHEN e_fk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+
+DECLARE
+    e_fk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_exists, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_visit_ea ADD CONSTRAINT vvea_vs_fk FOREIGN KEY (id_vital_sign) REFERENCES vital_sign (id_vital_sign)';
+
+EXCEPTION
+    WHEN e_fk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+
+DECLARE
+    e_fk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_exists, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_visit_ea ADD CONSTRAINT vvea_um_fk FOREIGN KEY (id_unit_measure) REFERENCES unit_measure (id_unit_measure)';
+
+EXCEPTION
+    WHEN e_fk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+
+DECLARE
+    e_fk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_exists, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_visit_ea ADD CONSTRAINT vvea_vss_fk FOREIGN KEY (id_vital_sign_scales) REFERENCES vital_sign_scales (id_vital_sign_scales)';
+
+EXCEPTION
+    WHEN e_fk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+
+DECLARE
+    e_fk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_exists, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_visit_ea ADD CONSTRAINT vvea_fstvsr_fk FOREIGN KEY (id_first_vsr) REFERENCES vital_sign_read (id_vital_sign_read)';
+
+EXCEPTION
+    WHEN e_fk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+
+DECLARE
+    e_fk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_exists, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_visit_ea ADD CONSTRAINT vvea_minvsr_fk FOREIGN KEY (id_min_vsr) REFERENCES vital_sign_read (id_vital_sign_read)';
+
+EXCEPTION
+    WHEN e_fk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+
+DECLARE
+    e_fk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_exists, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_visit_ea ADD CONSTRAINT vvea_maxvsr_fk FOREIGN KEY (id_max_vsr) REFERENCES vital_sign_read (id_vital_sign_read)';
+
+EXCEPTION
+    WHEN e_fk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+
+DECLARE
+    e_fk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_exists, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_visit_ea ADD CONSTRAINT vvea_l1vsr_fk  FOREIGN KEY (id_last_1_vsr) REFERENCES vital_sign_read (id_vital_sign_read)';
+
+EXCEPTION
+    WHEN e_fk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+
+DECLARE
+    e_fk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_exists, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_visit_ea ADD CONSTRAINT vvea_l2vsr_fk  FOREIGN KEY (id_last_2_vsr) REFERENCES vital_sign_read (id_vital_sign_read)';
+
+EXCEPTION
+    WHEN e_fk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+
+DECLARE
+    e_fk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_exists, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_visit_ea ADD CONSTRAINT vvea_l3vsr_fk  FOREIGN KEY (id_last_3_vsr) REFERENCES vital_sign_read (id_vital_sign_read)';
+
+EXCEPTION
+    WHEN e_fk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+-- CHANGE END: Paulo Fonseca

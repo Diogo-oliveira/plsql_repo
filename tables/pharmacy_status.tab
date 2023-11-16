@@ -1,0 +1,74 @@
+CREATE TABLE PHARMACY_STATUS
+ (ID_PHARMACY_STATUS  NUMBER(24) NOT NULL
+ ,CODE_STATUS  VARCHAR2(200) NOT NULL
+ ,FLG_STATUS  VARCHAR2(1) NOT NULL
+ ,ICON_STATUS  VARCHAR2(200) NOT NULL
+ ,RANK_STATUS  NUMBER(6) NOT NULL
+ );
+
+COMMENT ON TABLE PHARMACY_STATUS IS 'Tabela com os ícones e ordenação dos estados das requisições à farmácia';
+
+COMMENT ON COLUMN PHARMACY_STATUS.ID_PHARMACY_STATUS IS 'Chave primária';
+
+COMMENT ON COLUMN PHARMACY_STATUS.CODE_STATUS IS 'Identificador da coluna: Nome da tabela.Nome da coluna';
+
+COMMENT ON COLUMN PHARMACY_STATUS.FLG_STATUS IS 'Estado';
+
+COMMENT ON COLUMN PHARMACY_STATUS.ICON_STATUS IS 'Nome do ícone';
+
+COMMENT ON COLUMN PHARMACY_STATUS.RANK_STATUS IS 'Ordenação dos estados';
+
+ALTER TABLE PHARMACY_STATUS 
+ ADD (TYPE_STATUS  VARCHAR2(5)
+ ,COLOR_STATUS  VARCHAR2(1)
+ );
+
+COMMENT ON COLUMN PHARMACY_STATUS.TYPE_STATUS IS 'Tipo: duração (D),  texto (T), ícone (I) ou combinação destes.';
+
+COMMENT ON COLUMN PHARMACY_STATUS.COLOR_STATUS IS 'Cor: R - vermelho, G - verde, X - sem cor';
+
+ALTER TABLE PHARMACY_STATUS 
+ MODIFY (TYPE_STATUS  VARCHAR2(5) NOT NULL
+ ,COLOR_STATUS  VARCHAR2(1) NOT NULL
+ );
+
+ALTER TABLE PHARMACY_STATUS 
+ ADD (ICON_COLOR  VARCHAR2(10)
+ );
+
+ALTER TABLE PHARMACY_STATUS 
+ ADD (BACKGROUND_COLOR  VARCHAR2(10)
+ );
+
+ALTER TABLE PHARMACY_STATUS 
+ MODIFY (ICON_COLOR  VARCHAR2(10) NOT NULL
+ ,BACKGROUND_COLOR  VARCHAR2(10) NOT NULL
+ );
+
+COMMENT ON COLUMN PHARMACY_STATUS.ICON_COLOR IS 'Cor do ícone';
+
+COMMENT ON COLUMN PHARMACY_STATUS.BACKGROUND_COLOR IS 'Cor de fundo';
+
+alter table pharmacy_status add (prof_cat_type varchar2(1)); 
+COMMENT ON COLUMN PHARMACY_STATUS.PROF_CAT_TYPE IS 'tipo: d - médico, n - enfermeiro, p - farmacêutico, a - administrativo, t - técnico, o - outro, f - fisioterapeuta, c - coordenador, a - anestesista, s - assistente social; m - manchester';
+
+alter table pharmacy_status add( code_status_2 varchar2(200),flg_status_2 varchar2(1)); 
+
+
+COMMENT ON COLUMN PHARMACY_STATUS.CODE_STATUS_2 IS 'Identificador da coluna (segundo status a comparar) : Nome da tabela.Nome da coluna';
+
+COMMENT ON COLUMN PHARMACY_STATUS.FLG_STATUS_2 IS 'Estado (segundo status a comparar)';
+
+
+
+Alter table pharmacy_status modify flg_status varchar2(2);
+
+
+Alter table pharmacy_status modify flg_status_2 varchar2(2);
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:57
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PHARMACY_STATUS IS 'Tabela com os ícones e ordenação dos estados das requisições à farmácia [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

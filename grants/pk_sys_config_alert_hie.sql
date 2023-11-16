@@ -1,0 +1,1 @@
+grant execute on ALERT.pk_sysconfig to ALERT_HIE;

@@ -1,0 +1,16 @@
+-- CHANGED BY:  Gisela Couto
+-- CHANGE DATE: 28/10/2014 17:44
+-- CHANGE REASON: [ALERT-299636] Match Error - integrate EPIS_INTAKE_TIME table
+DECLARE
+    e_index_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_index_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'create index DSCH_DTL_ED_FK_IDX on DISCHARGE_DETAIL (ID_EPIS_DIAGNOSIS)';
+    EXCEPTION
+        WHEN e_index_exists THEN
+            dbms_output.put_line('INDEX DSCH_DTL_ED_FK_IDX already exists!');
+    END;
+END;
+/
+-- CHANGE END:  Gisela Couto

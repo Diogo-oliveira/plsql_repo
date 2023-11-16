@@ -1,0 +1,30 @@
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 02/12/2010 11:58
+-- CHANGE REASON: [ALERT-146258] A rede de referenciação inter-hositalar deverá suportar que uma instituição seja destino dentro e fora da rede de referenciação conforme a especialidade em causa. (ALERT142962)
+PROMPT Creating Sequence 'SEQ_REF_DEST_INSTITUTION_SPEC'
+CREATE SEQUENCE SEQ_REF_DEST_INSTITUTION_SPEC
+ NOMAXVALUE
+ NOMINVALUE
+ NOCYCLE
+/
+
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 09/12/2010 17:24
+-- CHANGE REASON: [ALERT-146258] A rede de referenciação inter-hositalar deverá suportar que uma instituição seja destino dentro e fora da rede de referenciação conforme a especialidade em causa. (ALERT142962)
+DECLARE
+already_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(already_exists, -00955);
+BEGIN
+EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_REF_DEST_INSTITUTION_SPEC
+ NOMAXVALUE
+ NOMINVALUE
+ NOCYCLE';
+EXCEPTION
+WHEN already_exists THEN
+dbms_output.put_line('Already exists.');
+END;
+/
+
+-- CHANGE END:  Filipe Sousa

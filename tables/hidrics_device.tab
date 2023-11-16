@@ -1,0 +1,60 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 08:37
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+CREATE TABLE HIDRICS_DEVICE
+(
+   ID_HIDRICS_DEVICE   NUMBER(24) NOT NULL,
+   CODE_HIDRICS_DEVICE VARCHAR2(200 CHAR) NOT NULL,
+   CODE                 VARCHAR2(200 CHAR),
+   FLG_AVAILABLE        VARCHAR2(1 CHAR) NOT NULL,
+   ID_CONTENT           VARCHAR2(200 CHAR),
+   CREATE_USER             VARCHAR2(24 CHAR),
+   CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   CREATE_INSTITUTION      NUMBER(24),
+   UPDATE_USER             VARCHAR2(24 CHAR),
+   UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   UPDATE_INSTITUTION      NUMBER(24)
+);
+
+ALTER TABLE HIDRICS_DEVICE MOVE TABLESPACE TABLE_S;
+
+comment on table HIDRICS_DEVICE is 'Hidrics devices';
+
+comment on column HIDRICS_DEVICE.ID_HIDRICS_DEVICE is 'Primary key';
+comment on column HIDRICS_DEVICE.CODE_HIDRICS_DEVICE is 'Translation code';
+comment on column HIDRICS_DEVICE.CODE is 'Standard Code. This field should be filled if the content is associated to some standard.';
+comment on column HIDRICS_DEVICE.FLG_AVAILABLE is 'Record availability. Y - Yes; N - No';
+comment on column HIDRICS_DEVICE.ID_CONTENT is 'Content ID';
+comment on column HIDRICS_DEVICE.CREATE_USER is 'Creation User';
+comment on column HIDRICS_DEVICE.CREATE_TIME is 'Creation Time';
+comment on column HIDRICS_DEVICE.CREATE_INSTITUTION is 'Creation Institution';
+comment on column HIDRICS_DEVICE.UPDATE_USER is 'Update User';
+comment on column HIDRICS_DEVICE.UPDATE_TIME is 'Update Time';
+comment on column HIDRICS_DEVICE.UPDATE_INSTITUTION is 'Update Institution';
+
+alter table HIDRICS_DEVICE add FLG_FREE_TXT varchar2(1 char);
+
+alter table HIDRICS_DEVICE modify flg_free_txt default 'N';
+
+comment on column HIDRICS_DEVICE.FLG_FREE_TXT is 'Y - is a free text value; N - otherwise;';
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table HIDRICS_DEVICE modify (FLG_AVAILABLE default ''Y'')'; 
+
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Coluna já existe');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table HIDRICS_DEVICE modify (FLG_FREE_TXT not null)'; 
+
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Coluna já existe');
+END;
+/
+-- CHANGE END: Sofia Mendes

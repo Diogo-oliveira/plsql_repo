@@ -1,0 +1,59 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 11/11/2014 15:26
+-- CHANGE REASON: [ALERT-301386] 
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create table VACC_UPDATE_ADMIN
+(
+  id_vacc            NUMBER(24) NOT NULL,
+id_patient         number(24) not null,
+id_reg             NUMBER(24) not null,
+  flg_type           VARCHAR2(1  CHAR) not null,
+  flg_status         VARCHAR2(1  CHAR) not null,
+  dt_admin_date       TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  id_prof_write      NUMBER(24) not null,
+  dt_prof_write      TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+)   TABLESPACE ALERT_DATA ';
+exception when e_obj_exists then
+  dbms_output.put_line('table VACC_UPDATE_ADMIN exists!');
+end;
+/
+-- Add comments to the table 
+comment on table VACC_UPDATE_ADMIN
+  is 'Edição de data de administração de doses';
+-- Add comments to the columns 
+comment on column VACC_UPDATE_ADMIN.id_vacc is 'vacc identifier';
+comment on column VACC_UPDATE_ADMIN.id_patient is 'patient identifier';
+comment on column VACC_UPDATE_ADMIN.id_reg
+  is 'Id da tabela vacc no caso de relatos e vacinas fora do PNV, id drug_presc_plan nos restantes casos';
+comment on column VACC_UPDATE_ADMIN.flg_type
+  is 'Tipo de id: O no caso de relatos e vacinas fora do PNV, V nos restantes casos';
+comment on column VACC_UPDATE_ADMIN.dt_admin_date
+  is 'Data de administração da vacina';
+comment on column VACC_UPDATE_ADMIN.id_prof_write
+  is 'Id do profissional que registou a alteração';
+comment on column VACC_UPDATE_ADMIN.dt_prof_write
+  is 'Data de registo da alteraçãos';
+comment on column VACC_UPDATE_ADMIN.create_user
+  is 'Creation User';
+comment on column VACC_UPDATE_ADMIN.create_time
+  is 'Creation Time';
+comment on column VACC_UPDATE_ADMIN.create_institution
+  is 'Creation Institution';
+comment on column VACC_UPDATE_ADMIN.update_user
+  is 'Update User';
+comment on column VACC_UPDATE_ADMIN.update_time
+  is 'Update Time';
+comment on column VACC_UPDATE_ADMIN.update_institution
+  is 'Update Institution';
+-- CHANGE END: Elisabete Bugalho
+COMMENT ON COLUMN VACC_UPDATE_ADMIN.FLG_STATUS IS 'Status active inactive';
+-- CHANGE END: mario.mineiro

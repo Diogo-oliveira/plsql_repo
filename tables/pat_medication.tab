@@ -1,0 +1,55 @@
+
+
+  CREATE TABLE PAT_MEDICATION
+   (	ID_PAT_MEDICATION NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_DRUG NUMBER(12,0),
+	DT_PAT_MEDICATION DATE NOT NULL ENABLE,
+	YEAR_BEGIN NUMBER(4,0),
+	MONTH_BEGIN NUMBER(2,0),
+	DAY_BEGIN NUMBER(2,0),
+	YEAR_END NUMBER(4,0),
+	MONTH_END NUMBER(2,0),
+	RANK NUMBER(24,0),
+	DAY_END NUMBER(2,0),
+
+	NOTES VARCHAR2(4000),
+	ID_PROF_WRITES NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_UPD NUMBER(24,0),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE pat_medication IS 'Medicação crónica (em curso)' ;
+
+COMMENT ON COLUMN pat_medication.id_drug IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_medication.dt_pat_medication IS 'Data de registo' ;
+COMMENT ON COLUMN pat_medication.year_begin IS 'Ano (aproximando) de inicio da medicação' ;
+COMMENT ON COLUMN pat_medication.month_begin IS 'Mês (aproximando) de inicio da medicação' ;
+COMMENT ON COLUMN pat_medication.day_begin IS 'Dia (aproximando) de inicio da medicação' ;
+COMMENT ON COLUMN pat_medication.year_end IS 'Ano (aproximando) de fim da medicação' ;
+COMMENT ON COLUMN pat_medication.month_end IS 'Mês (aproximando) de fim da medicação' ;
+COMMENT ON COLUMN pat_medication.day_end IS 'Dia (aproximando) de fim da medicação' ;
+COMMENT ON COLUMN pat_medication.flg_status IS 'A - activo, C - cancelado' ;
+
+comment on column PAT_MEDICATION.ID_EPISODE
+  is 'ID do episódio em que foi feito o registo.';
+alter table pat_medication 
+add (dt_pat_medication_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+
+     
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2008-SET-22
+-- CHANGE REASON: Drop de colunas DATE com correspondentes DATE_TSTZ
+
+ALTER TABLE PAT_MEDICATION DROP COLUMN DT_PAT_MEDICATION;
+ALTER TABLE PAT_MEDICATION DROP COLUMN DT_CANCEL;
+
+-- CHANGE END

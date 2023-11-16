@@ -1,0 +1,35 @@
+-- CHANGED BY:  Álvaro Vasconcelos
+-- CHANGE DATE: 16/06/2011 14:48
+-- CHANGE REASON: [ALERT-184978] Sis Pre Natal
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE SERIES ADD (CONSTRAINT
+ SR_I_FK FOREIGN KEY 
+  (ID_INSTITUTION) REFERENCES INSTITUTION
+  (ID_INSTITUTION))';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('FK already exists');
+END;
+/
+
+
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+
+BEGIN
+
+    EXECUTE IMMEDIATE 'ALTER TABLE SERIES ADD (CONSTRAINT
+ SR_GS_FK FOREIGN KEY 
+  (ID_GEO_STATE) REFERENCES GEO_STATE
+  (ID_GEO_STATE))';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('FK already exists');
+END;
+/
+-- CHANGE END:  Álvaro Vasconcelos

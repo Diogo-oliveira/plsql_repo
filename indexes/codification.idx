@@ -1,0 +1,14 @@
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 17/12/2012 16:56
+-- CHANGE REASON: [ALERT-247586] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'create index CODIF_id_cod_avail_IDX on CODIFICATION (ID_CODIFICATION, flg_available)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('CODIF_id_cod_avail_IDX: o nome já está a ser utilizado por um objecto existente');
+END;
+/
+-- CHANGE END:  Nuno Neves

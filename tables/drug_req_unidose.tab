@@ -1,0 +1,96 @@
+-- Create table
+create table DRUG_REQ_UNIDOSE
+(
+  ID_DRUG_REQ_UNIDOSE       NUMBER(24) not null,
+  DT_DRUG_REQ_UNIDOSE       DATE not null,
+  NOTES_REQ         VARCHAR2(4000),
+  ID_EPISODE        NUMBER(24) not null,
+  ID_PROF_REQ       NUMBER(24) not null,
+  DT_CANCEL         DATE,
+  ID_PROF_CANCEL    NUMBER(24),
+  NOTES_CANCEL      VARCHAR2(4000),
+  FLG_STATUS        VARCHAR2(1) not null,
+  DT_BEGIN          DATE,
+  ID_ROOM           NUMBER(24),
+  FLG_TYPE          VARCHAR2(1),
+  FLG_SUB_TYPE      VARCHAR2(2),
+  FLG_PRINT_TYPE    VARCHAR2(2),
+  ID_PROF_PRINT     NUMBER(24),
+  DT_PRINT          DATE,
+  ID_PROF_PENDING   NUMBER(24),
+  DT_PENDING        DATE,
+  NOTES_PENDING     VARCHAR2(4000),
+  ID_DRUG_PRESC_DET NUMBER(24),
+  ID_UNIDOSE_CAR    NUMBER(24),
+  ID_PATIENT        NUMBER(24),
+  DT_UNIDOSE_CAR    DATE,
+	DT_STATUS         DATE,
+	STATUS            VARCHAR2(1))
+;
+-- Add comments to the table 
+comment on table DRUG_REQ_UNIDOSE
+  is 'Requisições internas de medicamentos à farmácia da instituição.Uma req. pode estar associada a uma receita, para os casos em q o medicamento é fornecido pela instituição, mas a receita é exigida pela Contabilidade.';
+-- Add comments to the columns 
+comment on column DRUG_REQ_UNIDOSE.DT_DRUG_REQ_UNIDOSE
+  is 'Data da req.';
+comment on column DRUG_REQ_UNIDOSE.FLG_STATUS
+  is 'T - temporária; D - pendente; R - requisitado; E - em execução; P - fornecimento parcial; F - terminado; C - cancelado; J - pedido rejeitado';
+comment on column DRUG_REQ_UNIDOSE.DT_BEGIN
+  is 'Data pretendida para início da execução do exame (ie, ñ imediata)';
+comment on column DRUG_REQ_UNIDOSE.FLG_TYPE
+  is 'Flag que indica se é uma prescrição de um medicamento para o utente aviar na farmácia do hospital (I) ou de uma requisição para administrar neste local (A).';
+comment on column DRUG_REQ_UNIDOSE.FLG_SUB_TYPE
+  is 'Flag que indica se é um dietético para a farmácia do hospital (DI) ou manipulado para aviar naf armácia do hospital(MI). Só é preenchida se FLG_TYPE = ''P''.';
+comment on column DRUG_REQ_UNIDOSE.FLG_PRINT_TYPE
+  is 'Flag que indica o tipo de impressão escolhido: N - normal, R - renovável (3vias); V2 - Renovável (2 vias)';
+comment on column DRUG_REQ_UNIDOSE.ID_PROF_PRINT
+  is 'ID do profissional que imprimiu.';
+comment on column DRUG_REQ_UNIDOSE.DT_PRINT
+  is 'Data em que a receita foi impressa.';
+comment on column DRUG_REQ_UNIDOSE.ID_PROF_PENDING
+  is 'ID do profissional que passou a requisição para pendente.';
+comment on column DRUG_REQ_UNIDOSE.DT_PENDING
+  is 'Data em que a requisição passou para pendente.';
+comment on column DRUG_REQ_UNIDOSE.NOTES_PENDING
+  is 'Notas de passagem para pendente.';
+comment on column DRUG_REQ_UNIDOSE.ID_DRUG_PRESC_DET
+  is 'ID da prescrição para administrar neste local que necessita de requisição à farmácia';
+comment on column DRUG_REQ_UNIDOSE.ID_UNIDOSE_CAR
+  is 'ID do carro de unidose alocado à requisição';
+comment on column DRUG_REQ_UNIDOSE.ID_PATIENT
+  is 'ID do paciente';
+comment on column DRUG_REQ_UNIDOSE.DT_STATUS
+  is 'Data da alteração do estado do registo';
+comment on column DRUG_REQ_UNIDOSE.STATUS
+  is 'Estado do registo P- processado, N- não processado , C- cancelado';
+	
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE DRUG_REQ_UNIDOSE ADD DT_BEGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN DRUG_REQ_UNIDOSE.DT_BEGIN_TSTZ IS 'Data pretendida para in¡cio da execu‡Æo do exame (ie, ¤ imediata)'; 
+ALTER TABLE DRUG_REQ_UNIDOSE ADD DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+ALTER TABLE DRUG_REQ_UNIDOSE ADD DT_DRUG_REQ_UNIDOSE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN DRUG_REQ_UNIDOSE.DT_DRUG_REQ_UNIDOSE_TSTZ IS 'Data da req.'; 
+ALTER TABLE DRUG_REQ_UNIDOSE ADD DT_PENDING_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN DRUG_REQ_UNIDOSE.DT_PENDING_TSTZ IS 'Data em que a requisi‡Æo passou para pendente.'; 
+ALTER TABLE DRUG_REQ_UNIDOSE ADD DT_PRINT_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN DRUG_REQ_UNIDOSE.DT_PRINT_TSTZ IS 'Data em que a receita foi impressa.'; 
+ALTER TABLE DRUG_REQ_UNIDOSE ADD DT_STATUS_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN DRUG_REQ_UNIDOSE.DT_STATUS_TSTZ IS 'Data da altera‡Æo do estado do registo'; 
+ALTER TABLE DRUG_REQ_UNIDOSE ADD DT_UNIDOSE_CAR_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2008-SET-22
+-- CHANGE REASON: Drop de colunas DATE com correspondentes DATE_TSTZ
+
+ALTER TABLE DRUG_REQ_UNIDOSE DROP COLUMN DT_DRUG_REQ_UNIDOSE;
+ALTER TABLE DRUG_REQ_UNIDOSE DROP COLUMN DT_CANCEL;
+ALTER TABLE DRUG_REQ_UNIDOSE DROP COLUMN DT_BEGIN;
+ALTER TABLE DRUG_REQ_UNIDOSE DROP COLUMN DT_PRINT;
+ALTER TABLE DRUG_REQ_UNIDOSE DROP COLUMN DT_PENDING;
+ALTER TABLE DRUG_REQ_UNIDOSE DROP COLUMN DT_UNIDOSE_CAR;
+ALTER TABLE DRUG_REQ_UNIDOSE DROP COLUMN DT_STATUS;
+
+-- CHANGE END

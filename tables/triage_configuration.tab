@@ -1,0 +1,150 @@
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 24/01/2010 19:49
+-- CHANGE REASON: [ALERT-70160] Triage refactoring
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE TRIAGE_CONFIGURATION( ' || --
+                      '  ID_INSTITUTION NUMBER(24) NOT NULL, ' || --
+                      '  ID_SOFTWARE NUMBER(24) NOT NULL, ' || --
+                      '  ID_TRIAGE_TYPE NUMBER(24) NOT NULL, ' || --
+                      '  FLG_BUTTONS VARCHAR2(1) NOT NULL, ' || --
+                      '  FLG_CONSIDERATIONS VARCHAR2(2) NOT NULL, ' || --
+                      '  NUM_EPIS_TRIAGE_AUDIT NUMBER(6), ' || --
+                      '  ID_REPORTS NUMBER(24), ' || --
+                      '  FLG_AUTO_PRINT_TAG VARCHAR2(1) NOT NULL, ' || --
+                      '  FLG_CHANGE_COLOR VARCHAR2(1) NOT NULL, ' || --
+                      '  FLG_COMPLAINT VARCHAR2(1) NOT NULL, ' || --
+                      '  FLG_DEFAULT_VIEW VARCHAR2(2) NOT NULL, ' || --
+                      '  FLG_CHECK_VITAL_SIGN VARCHAR2(1) NOT NULL, ' || --
+                      '  FLG_ID_BOARD VARCHAR2(1), ' || --
+                      '  CREATE_USER VARCHAR2(24), ' || --
+                      '  CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE, ' || --
+                      '  CREATE_INSTITUTION NUMBER(24), ' || --
+                      '  UPDATE_USER VARCHAR2(24), ' || --
+                      '  UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE, ' || --
+                      '  UPDATE_INSTITUTION NUMBER(24) ' || --
+                      ') TABLESPACE TABLE_M';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+
+COMMENT ON TABLE TRIAGE_CONFIGURATION IS 'Triage configurations, for each triage type';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.ID_SOFTWARE IS 'Software ID';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.ID_TRIAGE_TYPE IS 'Triage type ID';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.FLG_BUTTONS IS 'Activate NO/OK buttons? (Y) Yes (N) No. IMPORTANT: Some triage protocols ignore this configuration (e.g. ESI).';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.FLG_CONSIDERATIONS IS 'This type of triage has nurse considerations? (N) No (B) Yes, at the board level, using a grid (D) Yes, at the discriminator level, using a grid (BN) Board level, no grid (DN) Discriminator level, no grid';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.NUM_EPIS_TRIAGE_AUDIT IS 'Number of triaged episodes to audit per professional ? Used only in Manchester audit';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.ID_REPORTS IS 'ID of the report printed automatically after triage. To not print the report, set as NULL';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.FLG_AUTO_PRINT_TAG IS 'Automatically print tag after triage? (Y) Yes (N) No';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.FLG_CHANGE_COLOR IS 'Allow color change at the end of triage? (Y) Yes (N) No. IMPORTANT: Some triage protocols ignore this configuration (e.g. Manchester).';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.FLG_COMPLAINT IS 'Show screen with complaint registration, origin, necessities, etc? (Y) Yes (No)';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.FLG_DEFAULT_VIEW IS 'Default view: (V0) No need to choose flowchart ? ESI protocol (V1) Groups and flowcharts (V2) Flowcharts (V3) Flowcharts only, VIEWS button inactive';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.FLG_CHECK_VITAL_SIGN IS 'Registering vital signs is mandatory? (Y) Yes (N) No, but warn user (O) No, never show warning';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.FLG_ID_BOARD IS 'View flowchart ID next to label: (Y) Yes (N) No';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.CREATE_USER IS 'Creation user';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.CREATE_TIME IS 'Creation date / time';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.CREATE_INSTITUTION IS 'Creation institution';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.UPDATE_USER IS 'Update user';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.UPDATE_TIME IS 'Update date / time';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.UPDATE_INSTITUTION IS 'Update institution';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 12/02/2010 10:00
+-- CHANGE REASON: [ALERT-74106] TRIAGE: configuration to check age limits in Manchester Triage flowcharts (except for "Crying baby")
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE triage_configuration ADD flg_check_age_limits VARCHAR2(1 CHAR)';
+EXCEPTION
+      WHEN OTHERS THEN
+     dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+COMMENT ON COLUMN triage_configuration.flg_check_age_limits IS 'Show flowcharts appropriate to the patient age? (Y) Yes (N) No';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 02/03/2010 10:50
+-- CHANGE REASON: [ALERT-77123] ESI Triage
+ALTER TABLE TRIAGE_CONFIGURATION MODIFY FLG_BUTTONS VARCHAR2(1 CHAR);
+ALTER TABLE TRIAGE_CONFIGURATION MODIFY FLG_CONSIDERATIONS VARCHAR2(2 CHAR);
+ALTER TABLE TRIAGE_CONFIGURATION MODIFY FLG_AUTO_PRINT_TAG VARCHAR2(1 CHAR);
+ALTER TABLE TRIAGE_CONFIGURATION MODIFY FLG_CHANGE_COLOR VARCHAR2(1 CHAR);
+ALTER TABLE TRIAGE_CONFIGURATION MODIFY FLG_COMPLAINT VARCHAR2(1 CHAR);
+ALTER TABLE TRIAGE_CONFIGURATION MODIFY FLG_DEFAULT_VIEW VARCHAR2(2 CHAR);
+ALTER TABLE TRIAGE_CONFIGURATION MODIFY FLG_CHECK_VITAL_SIGN VARCHAR2(1 CHAR);
+ALTER TABLE TRIAGE_CONFIGURATION MODIFY FLG_ID_BOARD VARCHAR2(1 CHAR);
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 03/05/2012 18:42
+-- CHANGE REASON: [ALERT-229201] EST simplified triage
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_CONFIGURATION ADD ID_TRIAGE_DS_COMPONENT NUMBER(24) DEFAULT 1 NOT NULL';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_CONFIGURATION.ID_TRIAGE_DS_COMPONENT IS ''Dynamic screen component id''';
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_CONFIGURATION ADD FLG_FILTER_FLOWCHART VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL';
+EXCEPTION
+    WHEN OTHERS THEN
+      dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_CONFIGURATION ADD FLG_TRIAGE_RES_GRIDS VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL';
+EXCEPTION
+    WHEN OTHERS THEN
+      dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.FLG_FILTER_FLOWCHART IS 'Filter flowcharts according to the urgency level proposed by vital signs. Used in EST triage protocol. (Y) Yes, show flowcharts according to the minimum supported urgency level  (N) No, show all flowcharts';
+COMMENT ON COLUMN TRIAGE_CONFIGURATION.FLG_TRIAGE_RES_GRIDS IS 'Show triage result in patient grids and search result grids, under the patient''s name? (Y) Yes, show triage result (N - default) No';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 04/05/2012 15:54
+-- CHANGE REASON: [ALERT-229241] EST simplified triage
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE triage_configuration ADD FLG_SHOW_COLOR_DESC VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('Warning: column already exists.');
+    END;
+END;
+/
+
+COMMENT ON COLUMN triage_configuration.FLG_SHOW_COLOR_DESC IS 'Show color description in confirmation screen? (Y)es/(N)o';
+comment on column triage_configuration.flg_default_view
+  is 'Default view: (V0) No need to choose flowchart - ESI protocol (V1) Groups and flowcharts (V2) Flowcharts (V3) Flowcharts only, VIEWS button inactive (V4) Groups only (V5) Triage without flowcharts and discriminators';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 10/12/2018 13:24
+-- CHANGE REASON: [EMR-7600] Improvement for Canadian Triage Acuity Scale
+-- Add comments to the columns 
+comment on column TRIAGE_CONFIGURATION.flg_default_view
+  is 'Default view: (V0) No need to choose flowchart - ESI protocol (V1) Groups and flowcharts (V2) Flowcharts (V3) Flowcharts only, VIEWS button inactive (V4) Groups only (V5) Triage without flowcharts and discriminators (V6) EST (V7) CTAS includes a new step for critical look';
+-- Create/Recreate check constraints 
+alter table TRIAGE_CONFIGURATION
+  drop constraint TCN_FLGDEFAULTVIEW_CHK;
+alter table TRIAGE_CONFIGURATION
+  add constraint TCN_FLGDEFAULTVIEW_CHK
+  check (FLG_DEFAULT_VIEW IN ('V0', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6','V7'));
+-- CHANGE END: Elisabete Bugalho

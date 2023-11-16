@@ -1,0 +1,1 @@
+GRANT select on alert.sch_resched_reason to ALERT_APSSCHDLR_TR;

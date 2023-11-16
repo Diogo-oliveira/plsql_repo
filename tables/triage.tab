@@ -1,0 +1,89 @@
+
+
+  CREATE TABLE TRIAGE
+   (	ID_TRIAGE NUMBER(12,0) NOT NULL ENABLE,
+	ID_TRIAGE_COLOR NUMBER(12,0) NOT NULL ENABLE,
+	ID_TRIAGE_BOARD NUMBER(12,0) NOT NULL ENABLE,
+	ID_TRIAGE_DISCRIMINATOR NUMBER(12,0) NOT NULL ENABLE,
+	ID_TRIAGE_TYPE NUMBER NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	BOX NUMBER(3,0) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 24/01/2010 19:50
+-- CHANGE REASON: [ALERT-70160] Triage refactoring
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE ADD FLG_ACCEPTED_OPTION VARCHAR2(1) DEFAULT ''Y''';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE ADD ID_TRIAGE_COLOR_OTHER NUMBER(24)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE ADD FLG_REASSESS VARCHAR2(1)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+
+COMMENT ON COLUMN TRIAGE.ID_TRIAGE IS 'Triage ID';
+COMMENT ON COLUMN TRIAGE.ID_TRIAGE_COLOR IS 'Color ID, when the discriminator is confirmed with the acceptance option (FLG_ACCEPTED_OPTION)';
+COMMENT ON COLUMN TRIAGE.ID_TRIAGE_BOARD IS 'Triage board ID (flowchart ID)';
+COMMENT ON COLUMN TRIAGE.ID_TRIAGE_TYPE IS 'Triage type ID';
+COMMENT ON COLUMN TRIAGE.RANK IS 'Number for sorting';
+COMMENT ON COLUMN TRIAGE.BOX IS 'Screen number (set of discriminators). Value -1 hides the discriminator(s) from the user.';
+COMMENT ON COLUMN TRIAGE.FLG_AVAILABLE IS 'Availability (Y) Yes (N) No';
+COMMENT ON COLUMN TRIAGE.FLG_ACCEPTED_OPTION IS 'Option that confirms the discriminator: (Y) Yes - default (N) No'; 
+COMMENT ON COLUMN TRIAGE.ID_TRIAGE_COLOR_OTHER IS 'Color assigned to the patient if the opposite of the acceptance option (FLG_ACCEPTED_OPTION) is selected';
+COMMENT ON COLUMN TRIAGE.FLG_REASSESS IS 'If corresponds to a REASSESS triage, return to the complaints screen? (Y) Yes (N) No';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 04/02/2010 14:37
+-- CHANGE REASON: [ALERT-70160] Triage refactoring - merge bug fixes of version 2.5
+COMMENT ON COLUMN TRIAGE.FLG_REASSESS IS 'If corresponds to a REASSESS triage, return to the complaints screen? (Y) Yes - Reassess discriminator (S) Secondary triage discriminator (N) No';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 02/03/2010 10:50
+-- CHANGE REASON: [ALERT-77123] ESI Triage
+ALTER TABLE TRIAGE MODIFY FLG_ACCEPTED_OPTION VARCHAR2(1 CHAR);
+ALTER TABLE TRIAGE MODIFY FLG_REASSESS VARCHAR2(1 CHAR);
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:34
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+comment on table TRIAGE
+  is 'Association between flowcharts and discriminator';
+-- Add comments to the columns 
+comment on column TRIAGE.id_triage_discriminator
+  is 'Triage discriminator ID';
+comment on column TRIAGE.adw_last_update
+  is 'Date of last update';  
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 10/12/2018 13:24
+-- CHANGE REASON: [EMR-7600] Improvement for Canadian Triage Acuity Scale
+-- Add/modify columns 
+alter table TRIAGE add flg_critical_look varchar2(1 CHAR);
+-- Add comments to the columns 
+comment on column TRIAGE.flg_critical_look
+  is 'it corresponds to the critical look ';
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,106 @@
+  CREATE TABLE BED_TYPE
+   (	ID_BED_TYPE NUMBER(24),
+	CODE_BED_TYPE VARCHAR2(400),
+	FLG_AVAILABLE VARCHAR2(1),
+	ID_CONTENT VARCHAR2(200),
+	CREATE_USER VARCHAR2(24),
+	CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	CREATE_INSTITUTION NUMBER(24),
+	UPDATE_USER VARCHAR2(24),
+	UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	UPDATE_INSTITUTION NUMBER(24)
+   ) ;
+
+
+
+   COMMENT ON COLUMN BED_TYPE.ID_BED_TYPE IS 'Primary key';
+
+
+
+   COMMENT ON COLUMN BED_TYPE.CODE_BED_TYPE IS 'Code for translation';
+
+
+
+   COMMENT ON COLUMN BED_TYPE.FLG_AVAILABLE IS 'Flag indication availability';
+
+
+
+   COMMENT ON COLUMN BED_TYPE.ID_CONTENT IS 'Content id';
+
+
+
+   COMMENT ON TABLE BED_TYPE  IS 'Type of bed content table';
+	 
+   ALTER TABLE bed_type add(id_institution NUMBER(24));
+	 COMMENT ON column bed_type.id_institution IS 'Content id';
+
+   ALTER TABLE bed_type drop column id_content;
+
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/06/2010 14:32
+-- CHANGE REASON: [ALERT-105487] 
+ALTER TABLE BED_TYPE ADD 
+(
+flg_status VARCHAR2(1 CHAR),
+flg_parameterization_type VARCHAR2(1 CHAR) default 'C',
+id_professional NUMBER(24),
+dt_creation TIMESTAMP WITH LOCAL TIME ZONE,
+dt_last_update TIMESTAMP WITH LOCAL TIME ZONE,
+desc_bed_type VARCHAR2(1000 CHAR)
+);
+
+COMMENT ON COLUMN BED_TYPE.flg_status IS 'Status of this data: A - active, E - edited, C - canceled.';
+COMMENT ON COLUMN BED_TYPE.flg_parameterization_type IS 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+COMMENT ON COLUMN BED_TYPE.id_professional IS 'Id professional that creates the data, when using backoffice.';
+COMMENT ON COLUMN BED_TYPE.dt_creation IS 'Creation date.';
+COMMENT ON COLUMN BED_TYPE.dt_last_update IS 'Last date when this data was updated.';
+COMMENT ON COLUMN BED_TYPE.desc_bed_type IS 'Bed type description.';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 16/07/2010 08:54
+-- CHANGE REASON: [ALERT-112241] 
+alter table bed_type modify code_bed_type null;
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model -cdoc - monitorizations, bedmanagement, hidrics
+-- Add comments to the table 
+comment on table BED_TYPE
+  is 'Type of bed content table';
+-- Add comments to the columns 
+comment on column BED_TYPE.id_bed_type
+  is 'Primary key';
+comment on column BED_TYPE.code_bed_type
+  is 'Code for translation';
+comment on column BED_TYPE.flg_available
+  is 'Flag indication availability';
+comment on column BED_TYPE.create_user
+  is 'Create User';
+comment on column BED_TYPE.create_time
+  is 'Create Time';
+comment on column BED_TYPE.create_institution
+  is 'CReta Institution';
+comment on column BED_TYPE.update_user
+  is 'Update User';
+comment on column BED_TYPE.update_time
+  is 'Update Time';
+comment on column BED_TYPE.update_institution
+  is 'Update Institution';
+comment on column BED_TYPE.id_institution
+  is 'Institution identifier';
+comment on column BED_TYPE.flg_status
+  is 'Status of this data: A - active, E - edited, C - canceled.';
+comment on column BED_TYPE.flg_parameterization_type
+  is 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+comment on column BED_TYPE.id_professional
+  is 'Id professional that creates the data, when using backoffice.';
+comment on column BED_TYPE.dt_creation
+  is 'Creation date.';
+comment on column BED_TYPE.dt_last_update
+  is 'Last date when this data was updated.';
+comment on column BED_TYPE.desc_bed_type
+  is 'Bed type description.';
+-- CHANGE END: Pedro Fernandes

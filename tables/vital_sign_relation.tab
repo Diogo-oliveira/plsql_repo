@@ -1,0 +1,90 @@
+
+
+  CREATE TABLE VITAL_SIGN_RELATION
+   (	ID_VITAL_SIGN_RELATION NUMBER(12,0) NOT NULL ENABLE,
+	ID_VITAL_SIGN_PARENT NUMBER(12,0) NOT NULL ENABLE,
+	ID_VITAL_SIGN_DETAIL NUMBER(12,0) NOT NULL ENABLE,
+	VAL_MIN_PARENT NUMBER(12,2),
+	VAL_MAX_PARENT NUMBER(12,2),
+	VAL_MIN_DETAIL NUMBER(12,2),
+	VAL_MAX_DETAIL NUMBER(12,2),
+	ID_DISCRIMINATOR NUMBER(12,0),
+	RELATION_DOMAIN VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0)
+
+   );
+
+
+COMMENT ON TABLE vital_sign_relation IS 'Relação master-detail entre sinais vitais, para apresentação nos ecrãs de triagem de Manchester e (opcionalmente) valores de validação entre eles' ;
+
+COMMENT ON COLUMN vital_sign_relation.val_min_parent IS 'Valor mínimo para o SV indicado em ID_VS_PARENT' ;
+COMMENT ON COLUMN vital_sign_relation.val_max_parent IS 'Valor máximo para o SV indicado em ID_VS_PARENT' ;
+COMMENT ON COLUMN vital_sign_relation.val_min_detail IS 'Valor mínimo para o SV indicado em ID_VS_DETAIL' ;
+COMMENT ON COLUMN vital_sign_relation.val_max_detail IS 'Valor máximo para o SV indicado em ID_VS_DETAIL' ;
+COMMENT ON COLUMN vital_sign_relation.relation_domain IS 'Domínio de utilização da relação: M - manchester, C - concatenação (pressão arterial), S - soma (Glasgow)' ;
+COMMENT ON COLUMN vital_sign_relation.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN vital_sign_relation.rank IS 'Ordem da relação (ex: visualização das partes da PA)' ;
+
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table VITAL_SIGN_RELATION
+  is 'Master detail relation between vital signs, to show on vital signs areas(biometric and triage) and validation values between them(when applicable)
+';
+-- Add comments to the columns 
+comment on column VITAL_SIGN_RELATION.id_vital_sign_relation
+  is 'Vital sign relation identifeir';
+comment on column VITAL_SIGN_RELATION.id_vital_sign_parent
+  is 'Vital sign parent identifier (some vital signs has relations between them: e.g. blood pressure)';
+comment on column VITAL_SIGN_RELATION.id_vital_sign_detail
+  is 'Vital sign detail identifier';
+comment on column VITAL_SIGN_RELATION.val_min_parent
+  is 'Minimum vital sign value for  the  ID_VS_PARENT';
+comment on column VITAL_SIGN_RELATION.val_max_parent
+  is 'Maximum vital sign value for  the  ID_VS_PARENT';
+comment on column VITAL_SIGN_RELATION.val_min_detail
+  is 'Minimum vital sign value for  the  ID_VS_DETAIL';
+comment on column VITAL_SIGN_RELATION.val_max_detail
+  is 'Maximum vital sign value for  the  ID_VS_DETAIL';
+comment on column VITAL_SIGN_RELATION.id_discriminator
+  is 'Discriminator identifier (applicable only in context triage)';
+comment on column VITAL_SIGN_RELATION.relation_domain
+  is 'Relation  domain : M - manchester, C -concatenation (e.g. blood pressurel), S - sum (e.g. Glasgow)';
+comment on column VITAL_SIGN_RELATION.flg_available
+  is 'indicates if record is available on Institution database. Y- Yes;  N - No;';
+comment on column VITAL_SIGN_RELATION.rank
+  is 'Order Rank of vital sign relation (e.g blood pressure childs)';
+comment on column VITAL_SIGN_RELATION.create_user
+  is 'Creation User';
+comment on column VITAL_SIGN_RELATION.create_time
+  is 'Creation Time';
+comment on column VITAL_SIGN_RELATION.create_institution
+  is 'Creation Institution';
+comment on column VITAL_SIGN_RELATION.update_user
+  is 'Update User';
+comment on column VITAL_SIGN_RELATION.update_time
+  is 'Update Time';
+comment on column VITAL_SIGN_RELATION.update_institution
+  is 'Update Institution';
+  
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 02/05/2016 09:22
+-- CHANGE REASON: [ALERT-320563] 
+alter table
+   vital_sign_relation
+drop
+   (val_max_detail, val_min_detail, val_max_parent, val_min_parent);
+   
+-- CHANGE END: Paulo Teixeira
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 22/09/2017
+-- CHANGE REASON: CALERT-62
+COMMENT ON COLUMN vital_sign_relation.relation_domain IS 'Relation  domain : M - manchester, C -concatenation (e.g. blood pressurel), S - sum (e.g. Glasgow), P - percentile (e.g. relation between weight and weight_percentile)';
+-- CHANGE END: Pedro Teixeira

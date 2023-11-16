@@ -1,0 +1,371 @@
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 03/12/2010 10:05
+-- CHANGE REASON: [ALERT-146512] 
+CREATE TABLE PN_DATA_BLOCK
+(  
+  ID_PN_DATA_BLOCK NUMBER(24,0) NOT NULL ENABLE,
+  FLG_TYPE VARCHAR2(1 CHAR) NOT NULL ENABLE,
+  DATA_AREA VARCHAR2(24 CHAR) NOT NULL ENABLE,
+  FLG_AVAILABLE VARCHAR2(1 CHAR) NOT NULL ENABLE,
+  INTERNAL_NAME VARCHAR2(200 CHAR),
+  CODE_PN_DATA_BLOCK VARCHAR2(200 CHAR),
+  ORIGINAL_BLOCK VARCHAR2(1 CHAR),
+  TITLE_CODE VARCHAR2(200 CHAR),
+  SAMPLE_TEXT_CODE VARCHAR2(200 CHAR),
+  -----------------
+  CREATE_USER VARCHAR2(24),
+  CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24,0),
+  UPDATE_USER VARCHAR2(24),
+  UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24,0)
+  -----------------
+);
+COMMENT ON TABLE PN_DATA_BLOCK IS 'Table containing all Data Blocks which can be related to SOAP Blocks';
+COMMENT ON COLUMN PN_DATA_BLOCK.ID_PN_DATA_BLOCK IS 'Primary key';
+COMMENT ON COLUMN PN_DATA_BLOCK.FLG_TYPE IS 'T: Texto simples; D: Documentação';
+COMMENT ON COLUMN PN_DATA_BLOCK.DATA_AREA IS 'Identify the Data Area';
+COMMENT ON COLUMN PN_DATA_BLOCK.FLG_AVAILABLE IS 'Flag indicating if data block record is available';
+COMMENT ON COLUMN PN_DATA_BLOCK.INTERNAL_NAME IS 'Internal name to easily identify to which data type the records are related';
+COMMENT ON COLUMN PN_DATA_BLOCK.CODE_PN_DATA_BLOCK IS 'Record CODE for translation purposes';
+COMMENT ON COLUMN PN_DATA_BLOCK.ORIGINAL_BLOCK IS 'Identify the Original SOAP block to which this data type is related';
+COMMENT ON COLUMN PN_DATA_BLOCK.TITLE_CODE IS 'Title CODE in related template screen';
+COMMENT ON COLUMN PN_DATA_BLOCK.SAMPLE_TEXT_CODE IS 'Sample Text code in related template screen';
+COMMENT ON COLUMN PN_DATA_BLOCK.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN PN_DATA_BLOCK.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN PN_DATA_BLOCK.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN PN_DATA_BLOCK.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN PN_DATA_BLOCK.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN PN_DATA_BLOCK.UPDATE_INSTITUTION IS 'Update Institution';
+-- CHANGE END: Pedro Teixeira
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 11:49
+-- CHANGE REASON: [ALERT-164552] soap blocks existing model changes
+declare
+  column_exists exception;
+  pragma exception_init(column_exists, -01430);
+begin
+  execute immediate '
+alter table pn_data_block add (
+  code_pn_data_block_hist varchar2(200 char),
+  id_pndb_parent          number(24),
+  id_doc_area             number(24)
+)
+';
+exception
+  when column_exists then dbms_output.put_line('columns CODE_PN_DATA_BLOCK_HIST, ID_PNDB_PARENT, ID_DOC_AREA already exist');
+end;
+/
+
+COMMENT ON COLUMN pn_data_block.code_pn_data_block_hist IS 'Code for translation of the history edition records.';
+comment on column pn_data_block.flg_type
+  is 'Data block type: simple (T)ext, (D)ocumentation, (F)ree text, (C)urrent date, (S)tructure.';
+comment on column pn_data_block.id_pndb_parent
+  is 'Parent data block identifier.';
+comment on column pn_data_block.id_doc_area
+  is 'Documentation area identifier.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:29
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table pn_data_block add (ID_SWF_FILE_VIEWER NUMBER(24));
+alter table pn_data_block add (ID_SYS_BUTTON_VIEWER NUMBER(24));
+alter table pn_data_block add (FLG_WF_VIEWER VARCHAR2(3 char));
+
+COMMENT ON column pn_data_block.ID_SWF_FILE_VIEWER IS 'Viewer screen that is loaded when the area is selected';
+COMMENT ON column pn_data_block.ID_SYS_BUTTON_VIEWER IS 'Viewer sys_button where the viewer screen should open';
+COMMENT ON column pn_data_block.FLG_WF_VIEWER IS 'Flag that identifies the type of workflow that should be opened in the viewer.';
+comment on column pn_data_block.flg_type
+  is 'Data block type: simple (T)ext, (D)ocumentation, (F)ree text, (C)urrent date, (S)tructure, (P)opup with composed and simple date.';
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 09:59
+-- CHANGE REASON: H&P phase2
+alter table pn_data_block add (ID_SWF_FILE_VIEWER NUMBER(24));
+alter table pn_data_block add (ID_SYS_BUTTON_VIEWER NUMBER(24));
+alter table pn_data_block add (FLG_WF_VIEWER VARCHAR2(3 char));
+
+COMMENT ON column pn_data_block.ID_SWF_FILE_VIEWER IS 'Viewer screen that is loaded when the area is selected';
+COMMENT ON column pn_data_block.ID_SYS_BUTTON_VIEWER IS 'Viewer sys_button where the viewer screen should open';
+COMMENT ON column pn_data_block.FLG_WF_VIEWER IS 'Flag that identifies the type of workflow that should be opened in the viewer.';
+comment on column pn_data_block.flg_type
+  is 'Data block type: simple (T)ext, (D)ocumentation, (F)ree text, (C)urrent date, (S)tructure, (P)opup with composed and simple date.';
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:10
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table pn_data_block add (ID_SWF_FILE_VIEWER NUMBER(24));
+alter table pn_data_block add (ID_SYS_BUTTON_VIEWER NUMBER(24));
+alter table pn_data_block add (FLG_WF_VIEWER VARCHAR2(3 char));
+
+COMMENT ON column pn_data_block.ID_SWF_FILE_VIEWER IS 'Viewer screen that is loaded when the area is selected';
+COMMENT ON column pn_data_block.ID_SYS_BUTTON_VIEWER IS 'Viewer sys_button where the viewer screen should open';
+COMMENT ON column pn_data_block.FLG_WF_VIEWER IS 'Flag that identifies the type of workflow that should be opened in the viewer.';
+comment on column pn_data_block.flg_type
+  is 'Data block type: simple (T)ext, (D)ocumentation, (F)ree text, (C)urrent date, (S)tructure, (P)opup with composed and simple date.';
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:06
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER table PN_DATA_BLOCK modify ( CODE_PN_DATA_BLOCK not null ) ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:08
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER table PN_DATA_BLOCK modify ( CODE_PN_DATA_BLOCK_HIST not null ) ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table PN_DATA_BLOCK modify CREATE_USER varchar2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table PN_DATA_BLOCK modify UPDATE_USER varchar2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:15
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table PN_DATA_BLOCK modify FLG_WF_VIEWER varchar2(0024 char)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER table PN_DATA_BLOCK modify ( CODE_PN_DATA_BLOCK not null ) ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER table PN_DATA_BLOCK modify ( CODE_PN_DATA_BLOCK_HIST not null ) ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/01/2012 16:29
+-- CHANGE REASON: [ALERT-216664] 
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_data_block
+  modify FLG_TYPE VARCHAR2(2 CHAR)';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+ 
+comment on column pn_data_block.flg_type
+  is 'Data block type: simple (T)ext, (D)ocumentation, (F)ree text, (C)urrent date, (S)tructure, (P)opup with composed and simple date, (M)ultiple free text, (ID) Import structure Date, (IG) Import structure Group, (IS) Import structure Sub-group';
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:44
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    execute immediate 'alter table PN_DATA_BLOCK modify (FLG_TYPE VARCHAR2(24 char))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:55
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+BEGIN
+    execute immediate 'alter table pn_data_block add (id_summary_page NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+begin
+execute immediate ('COMMENT ON COLUMN pn_data_block.id_summary_page IS ''Identifier of Summary page for scenarios where we don''''t have the id_doc_area (ex: Assessment Tools)''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:56
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+BEGIN
+    execute immediate 'alter table pn_data_block add (SAMPLE_TEXT_COMMENT VARCHAR2(200 CHAR))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+begin
+execute immediate ('COMMENT ON COLUMN pn_data_block.SAMPLE_TEXT_COMMENT IS ''Sample Text code related to the comments area functionality''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 29/01/2013 15:15
+-- CHANGE REASON: [ALERT-250486 ] A physician suggested to add the option "Anamnesi Fisiologica" (or in (truncated)
+BEGIN
+    execute immediate 'alter table pn_data_block add (id_task_type NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_data_block.id_task_type IS ''Task type to use in the in place insertions.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 04/07/2013 17:03
+-- CHANGE REASON: [ALERT-259145 ] EDIS nurse single page
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_data_block add id_swf_file_detail NUMBER(24,0)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/ 
+COMMENT ON COLUMN pn_data_block.id_swf_file_detail IS 'Swf file to see the detail screen of the task';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY:  Vanessa Barsottelli
+-- CHANGE DATE: 10/07/2014 10:07
+-- CHANGE REASON: [ALERT-288920] Develop functions to cancel a chiefcomplaint on free text and encoded
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_data_block add (cancel_reason_area VARCHAR2(200 CHAR), sample_text_cancel VARCHAR2(200 CHAR))';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN pn_data_block.cancel_reason_area IS ''Cancel reason internal name for cancel functionality''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN pn_data_block.sample_text_cancel IS ''Sample Text code for cancel functionality''';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END:  Vanessa Barsottelli
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 17/01/2018 12:42
+-- CHANGE REASON: [CALERT-1724] Data block multichoice selection list
+-- Add/modify columns 
+alter table PN_DATA_BLOCK add multi_option_column VARCHAR2(200 CHAR);
+-- Add comments to the columns 
+comment on column PN_DATA_BLOCK.multi_option_column
+  is 'Multichoioce associated with data block (filled for flg_type SL)';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Lillian Lu
+-- CHANGE DATE: 18/01/2018
+-- CHANGE REASON: [CALERT-213 ] CCH Progress note - ICU Assessment Summary Note
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PN_DATA_BLOCK add id_mtos_score NUMBER(24)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('already exists');
+    END;
+END;
+/
+COMMENT ON COLUMN PN_DATA_BLOCK.id_mtos_score
+  IS 'id_mtos_score associated with data block';
+-- CHANGE END: Lillian Lu
+
+-- CHANGED BY: Vítor Sá
+-- CHANGE DATE: 06/02/2019
+-- CHANGE REASON: EMR-8685 - [DB] New data block type for arabic - single page developments
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN pn_data_block.flg_type IS ''Data block type: simple (T)ext, (D)ocumentation, (F)ree text, (C)urrent date, (S)tructure, (P)opup with composed and simple date, (M)ultiple free text, (ID) Import structure Date, (IG) Import structure Group, (IS) Import structure Sub-group, (FA) Arabic Free text''';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Vítor Sá

@@ -1,0 +1,51 @@
+
+
+  CREATE TABLE DIAGNOSIS_DEP_CLIN_SERV
+   (	ID_DIAGNOSIS_DEP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	ID_DEP_CLIN_SERV NUMBER(24,0),
+	ID_DIAGNOSIS NUMBER(12,0) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(240) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0),
+	ID_PROFESSIONAL NUMBER(24,0),
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE diagnosis_dep_clin_serv IS 'Diagnósticos mais frequentemente escolhidos pelos departamentos e sev. clínicos' ;
+
+COMMENT ON COLUMN diagnosis_dep_clin_serv.flg_type IS 'Tipo de acção do departamento e serv. clínico: R - fornecimento, P - pode requisitar, M - mais frequentes' ;
+COMMENT ON COLUMN diagnosis_dep_clin_serv.id_institution IS 'Instituição para a qual a análise é requisitável' ;
+COMMENT ON COLUMN diagnosis_dep_clin_serv.id_professional IS 'Profissional para o qual a análise é mais frequente' ;
+COMMENT ON COLUMN diagnosis_dep_clin_serv.id_software IS 'Aplicação Alert para a qual se verifica o registo' ;
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 07/10/2010 16:53
+-- CHANGE REASON: [ALERT-129562] 
+begin
+  execute immediate 'ALTER TABLE diagnosis_dep_clin_serv ADD (id_alert_diagnosis number(24))';
+
+  execute immediate 'COMMENT ON COLUMN diagnosis_dep_clin_serv.id_alert_diagnosis  is     ''ALERT Diagnosis ID which relates with Diagnosis ID''';
+exception
+	when others then
+	     dbms_output.put_line('Coluna já existe');
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 14:40
+-- CHANGE REASON: [ALERT-229308] VERSIONING TRANSACTIONAL MODEL MIGRATION - SCHEMA ALERT - CHANGE NAME AND VIEWS
+DECLARE
+    e_already_renamed EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_already_renamed, -942);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE DIAGNOSIS_DEP_CLIN_SERV RENAME TO MIG_DIAGNOSIS_DEP_CLIN_SERV';
+EXCEPTION
+    WHEN e_already_renamed THEN
+        dbms_output.put_line('Already renamed.');
+END;
+/
+-- CHANGE END: Alexandre Santos

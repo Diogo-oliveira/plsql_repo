@@ -1,0 +1,54 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 07/12/2010 15:05
+-- CHANGE REASON: [ALERT-147592] Issue Replication v2605 : [Habits] - habits aren't configurable by institution (v2.6.0.5)
+DECLARE
+    e_name_already_used EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_name_already_used, -00955);
+    l_table_name VARCHAR2(30) := 'HABIT_INST';
+    l_sql_clob CLOB;
+    l_sql table_varchar := table_varchar();
+
+BEGIN
+
+    l_sql_clob:= 'CREATE TABLE HABIT_INST (
+           id_habit             NUMBER(24) NOT NULL,
+           id_institution       NUMBER(12) DEFAULT 0 NOT NULL ,
+           flg_available        VARCHAR2(1) DEFAULT ''Y'' NOT NULL, 
+           --
+           create_user          VARCHAR2(24 CHAR),
+           create_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+           create_institution   NUMBER(24),
+           update_user          VARCHAR2(24 CHAR),
+           update_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+           update_institution   NUMBER(24)
+    )';
+
+    EXECUTE IMMEDIATE pk_string_utils.clob_to_sqlvarchar2(l_sql_clob);
+
+    l_sql.extend(11);
+
+    l_sql(1):= 'COMMENT ON TABLE HABIT_INST IS ''Allows configure a habit by institution.'''; 
+    l_sql(2):= 'COMMENT ON COLUMN habit_inst.id_habit                IS ''habit id''';
+    l_sql(3):= 'COMMENT ON COLUMN habit_inst.id_institution          IS ''institution id''';
+    l_sql(4):= 'COMMENT ON COLUMN habit_inst.flg_available           IS ''Y-register is available; N-register is not available''';
+    l_sql(5):= 'COMMENT ON COLUMN habit_inst.create_user             IS ''User that has created the register''';
+    l_sql(6):= 'COMMENT ON COLUMN habit_inst.create_time             IS ''Timestamp that defines when the register has been created''';
+    l_sql(7):= 'COMMENT ON COLUMN habit_inst.create_institution      IS ''Institution id where the register has been created''';
+    l_sql(8):= 'COMMENT ON COLUMN habit_inst.update_user             IS ''Latest user that has updated the register''';
+    l_sql(9):= 'COMMENT ON COLUMN habit_inst.update_time             IS ''Latest Timestamp that defines when the register has been updated''';
+    l_sql(10) := 'COMMENT ON COLUMN habit_inst.update_institution    IS ''Latest Institution id where the register has been updated''';
+    l_sql(11) := 'ALTER TABLE HABIT_INST MOVE TABLESPACE table_m';
+
+
+    <<my_loop>>
+    FOR i IN 1..11
+    LOOP
+       EXECUTE IMMEDIATE l_sql(i);
+    END LOOP my_loop;
+
+EXCEPTION
+    WHEN e_name_already_used THEN
+        dbms_output.put_line('WARNING - Table ' || l_table_name || ' already created in previous versions.');
+END;
+/
+-- CHANGE END: Filipe Machado

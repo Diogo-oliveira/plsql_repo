@@ -1,0 +1,15 @@
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 07/07/2014 10:50
+-- CHANGE REASON: [ALERT-289537 ] 
+DECLARE e_index_not_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_index_not_exists, -01418);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER INDEX SRT_ID_CODE_SAMPLE_UI RENAME TO SRT_ID_CODE_SAMPLE_UIDX';
+    EXCEPTION
+        WHEN e_index_not_exists THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: teresa.coutinho

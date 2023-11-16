@@ -1,0 +1,2 @@
+GRANT SELECT ON ALERT.epis_mtos_param TO ALERT_VIEWER;
+

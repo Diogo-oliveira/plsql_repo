@@ -1,0 +1,35 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 12/03/2012 09:55
+-- CHANGE REASON: [ALERT-222673] 
+DECLARE
+    e_object_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'create index icnpterm_search_idx on icnp_term(flg_available)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Index already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 12/03/2012 09:56
+-- CHANGE REASON: [ALERT-222673] 
+DECLARE
+    e_object_exists EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'create index icnp_term_def_search_idx on alert.icnp_term(id_axis,flg_available)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Index already there');      
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

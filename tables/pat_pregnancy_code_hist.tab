@@ -1,0 +1,64 @@
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 06/06/2011 11:19
+-- CHANGE REASON: [ALERT-183624] Pregnancy developments
+BEGIN
+pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'PAT_PREGNANCY_CODE_HIST', i_obj_type => 'TABLE', i_flg_category => 'TRS', i_flg_nzd => 'Y');
+END;
+/
+
+BEGIN
+EXECUTE IMMEDIATE 'create table PAT_PREGNANCY_CODE_HIST
+(
+  ID_PAT_PREGNANCY_HIST NUMBER(24) NOT NULL,
+  ID_GEO_STATE          NUMBER(24),
+  CODE_STATE            VARCHAR2(10 CHAR),
+  CODE_YEAR             VARCHAR2(10 CHAR),
+  CODE_NUMBER           NUMBER(24) NOT NULL,
+  FLG_TYPE              VARCHAR2(1 CHAR) NOT NULL,
+  CREATE_USER           VARCHAR2(24 CHAR),
+  CREATE_TIME           TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24 CHAR),
+  UPDATE_TIME           TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+)';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+
+COMMENT ON TABLE PAT_PREGNANCY_CODE_HIST IS 'Pregnancy associated codes (history table)';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column PAT_PREGNANCY_CODE_HIST.id_pat_pregnancy_hist
+  is 'Pregnancy Hist ID';
+comment on column PAT_PREGNANCY_CODE_HIST.id_geo_state
+  is 'State associated with the selected state code';
+comment on column PAT_PREGNANCY_CODE_HIST.code_state
+  is 'State code (filled in free text)';
+comment on column PAT_PREGNANCY_CODE_HIST.code_year
+  is 'Year code';
+comment on column PAT_PREGNANCY_CODE_HIST.code_number
+  is 'Number code';
+comment on column PAT_PREGNANCY_CODE_HIST.flg_type
+  is 'Code type: S - SIS prenatal (brazilian market)';
+comment on column PAT_PREGNANCY_CODE_HIST.create_user
+  is 'Creation User';
+comment on column PAT_PREGNANCY_CODE_HIST.create_time
+  is 'Creation Time';
+comment on column PAT_PREGNANCY_CODE_HIST.create_institution
+  is 'Creation Institution';
+comment on column PAT_PREGNANCY_CODE_HIST.update_user
+  is 'Update User';
+comment on column PAT_PREGNANCY_CODE_HIST.update_time
+  is 'Update Time';
+comment on column PAT_PREGNANCY_CODE_HIST.update_institution
+  is 'Update Institution';  
+  
+-- CHANGE END: Elisabete Bugalho

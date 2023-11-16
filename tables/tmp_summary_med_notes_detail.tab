@@ -1,0 +1,45 @@
+CREATE GLOBAL TEMPORARY TABLE ALERT.TMP_SUMMARY_MED_NOTES_DETAIL
+(  
+NOTES_DATE              VARCHAR2(0050),
+SESSION_ID              NUMBER(24),
+NOTES_TIME              VARCHAR2(0050),
+ID_PROFESSIONAL         NUMBER(24),
+NOTES_DESC              CLOB,
+RANK                    NUMBER(6),
+NICK_NAME           	VARCHAR2(200),
+DESC_SPECIALITY      	VARCHAR2(200),
+INST_ABBREVIATION    	VARCHAR2(0030),
+DT_NOTES_TSTZ 			TIMESTAMP WITH LOCAL TIME ZONE
+) ON COMMIT PRESERVE ROWS ;
+
+-- Comments
+COMMENT ON TABLE TMP_SUMMARY_MED_NOTES 					IS 'Tabela temporaria para output do sumario de diarios' ;
+COMMENT ON COLUMN TMP_SUMMARY_MED_NOTES.NOTES_DATE      IS 'data de output da sessao' ;
+COMMENT ON COLUMN TMP_SUMMARY_MED_NOTES.SESSION_ID      IS 'id da sessao' ;
+COMMENT ON COLUMN TMP_SUMMARY_MED_NOTES.NOTES_TIME      IS 'hora do último registo da sessão' ;
+COMMENT ON COLUMN TMP_SUMMARY_MED_NOTES.ID_PROFESSIONAL IS 'id do profissional que fez o registo' ;
+COMMENT ON COLUMN TMP_SUMMARY_MED_NOTES.NOTES_DESC      IS 'descritivo' ;
+COMMENT ON COLUMN TMP_SUMMARY_MED_NOTES.RANK            IS 'campo para ordenação' ;
+COMMENT ON COLUMN TMP_SUMMARY_MED_NOTES.DT_NOTES_TSTZ   IS 'data truncada da sessao para ordenação' ;
+
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 16/09/2010 14:33
+-- CHANGE REASON: [ALERT-125301] Physician notes area 
+alter table TMP_SUMMARY_MED_NOTES_DETAIL add FLG_STATUS VARCHAR2(1);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:32
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.tmp_summary_med_notes_detail move lob(notes_desc) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

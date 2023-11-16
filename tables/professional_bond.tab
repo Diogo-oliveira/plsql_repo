@@ -1,0 +1,119 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 28/11/2013 10:40
+-- CHANGE REASON: [ALERT-268987] new fields and content tbls
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                                 i_obj_name          => 'PROFESSIONAL_BOND',
+                                                 i_obj_type          => 'TABLE',
+                                                 i_flg_category      => 'DSV',
+                                                 i_flg_alert_default => 'N',
+                                                 i_delete_script     => NULL,
+                                                 i_flg_default_child => 'N',
+                                                 i_flg_nzd           => 'N');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'create table professional_bond(
+id_bond number(24) not null,
+id_bond_parent number(24),
+code_bond varchar2(200 char) not null, 
+ext_code varchar2(20 char),
+flg_available varchar2(1 char) default ''Y'' not null,
+create_user varchar2(200),
+create_institution varchar2(200),
+create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+update_user varchar2(200),
+update_institution varchar2(200),
+update_time TIMESTAMP(6) WITH LOCAL TIME ZONE) tablespace alert_data';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Table already exists');
+    END;
+END;
+/
+
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'comment on table professional_bond IS ''Table that records the domains existing on bonds that can be related to professionals within an institution.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional_bond.id_bond IS ''Bond id.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional_bond.id_bond_parent IS ''Bond Parent Id defining types and subtypes relations.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional_bond.code_bond IS ''Bond code to access translations.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional_bond.ext_code IS ''Bond external identifier.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional_bond.flg_available IS ''Status of the record Y available or N not available.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    --
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional_bond.create_user IS ''User that created the record.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional_bond.create_institution IS ''Institution that created the record.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional_bond.create_time IS ''Time when record was created.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional_bond.update_user IS ''User that updated the record.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional_bond.update_institution IS ''Institution that updated the record.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional_bond.update_time IS ''Time when record was updated.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

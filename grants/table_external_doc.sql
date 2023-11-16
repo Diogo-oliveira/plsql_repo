@@ -1,0 +1,1 @@
+grant select, insert, update, delete, references, index on external_doc to ALERT_VIEWER;

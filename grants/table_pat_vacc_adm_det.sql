@@ -1,0 +1,3 @@
+
+
+grant select on ALERT.PAT_VACC_ADM_DET to ALERT_VIEWER;

@@ -1,0 +1,65 @@
+CREATE TABLE EHR_ACCESS_LOG
+ (ID_EHR_ACCESS_LOG NUMBER(24) NOT NULL
+ ,ID_PROFESSIONAL NUMBER(24) NOT NULL
+ ,ID_INSTITUTION NUMBER(24) NOT NULL
+ ,ID_SOFTWARE NUMBER(24) NOT NULL
+ ,ID_PATIENT NUMBER(24) NOT NULL
+ ,ID_EPISODE NUMBER(24) NOT NULL
+ ,FLG_TYPE VARCHAR2(1) NOT NULL
+ ,ID_DEP_CLIN_SERV NUMBER(24)
+ ,ACCESS_REASON_TEXT VARCHAR2(4000)
+ ,DT_LOG TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ );
+
+COMMENT ON COLUMN EHR_ACCESS_LOG.ID_PROFESSIONAL IS 'Professional identification';
+COMMENT ON COLUMN EHR_ACCESS_LOG.ID_INSTITUTION IS 'Professional''s institution identification';
+COMMENT ON COLUMN EHR_ACCESS_LOG.ID_SOFTWARE IS 'Professional''s software identification';
+COMMENT ON COLUMN EHR_ACCESS_LOG.ID_PATIENT IS 'Patient identification';
+COMMENT ON COLUMN EHR_ACCESS_LOG.ID_EPISODE IS 'Episode identification';
+COMMENT ON COLUMN EHR_ACCESS_LOG.FLG_TYPE IS 'Type of the access:B - Break the Glass; E - EHR Access;';
+COMMENT ON COLUMN EHR_ACCESS_LOG.ID_DEP_CLIN_SERV IS 'Dep Clin Serv identification';
+COMMENT ON COLUMN EHR_ACCESS_LOG.ACCESS_REASON_TEXT IS 'A free text field when the professional gives a different access reason.';
+COMMENT ON COLUMN EHR_ACCESS_LOG.DT_LOG IS 'Access date.';
+
+
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table EHR_ACCESS_LOG modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table EHR_ACCESS_LOG modify FLG_TYPE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table EHR_ACCESS_LOG modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table EHR_ACCESS_LOG modify ACCESS_REASON_TEXT varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:43
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EHR_ACCESS_LOG
+  is 'Professional EHR access';
+-- Add comments to the columns 
+comment on column EHR_ACCESS_LOG.id_ehr_access_log
+  is 'Primary key ';  
+  
+-- CHANGE END: Elisabete Bugalho

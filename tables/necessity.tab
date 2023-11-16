@@ -1,0 +1,53 @@
+
+
+  CREATE TABLE NECESSITY
+   (	ID_NECESSITY NUMBER(12,0) NOT NULL ENABLE,
+	CODE_NECESSITY VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_MOV VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_COMB VARCHAR2(1) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE necessity IS 'Necessidades: maca, cadeira de rodas, acompanhante, ...' ;
+
+COMMENT ON COLUMN necessity.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN necessity.flg_mov IS 'Indicador de que serve para trasportar doentes' ;
+COMMENT ON COLUMN necessity.flg_comb IS 'Indica se a necessidade pode ser seleccionada em combinação com outra.' ;
+
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 04/03/2010 16:16
+-- CHANGE REASON: [ALERT-79339 ] 
+ALTER TABLE NECESSITY ADD (ID_CONTENT VARCHAR2(200));
+comment on column NECESSITY.ID_CONTENT is 'Identificador único de conteúdo';
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table NECESSITY
+  is 'List os necessities';
+-- Add comments to the columns 
+comment on column NECESSITY.id_necessity
+  is 'Primary Key';
+comment on column NECESSITY.code_necessity
+  is 'Translation code for necessity description';
+comment on column NECESSITY.flg_available
+  is 'Availability: (Y) Yes (N) No';
+comment on column NECESSITY.flg_mov
+  is 'Flg that indicates is the patient should be moved (Y - Yes , N - No)';
+comment on column NECESSITY.rank
+  is 'Rank for ordering';
+comment on column NECESSITY.adw_last_update
+  is 'Date of last update';
+comment on column NECESSITY.flg_comb
+  is 'Flag that indicates if this necessity could be selected in combination with other  (Y - Yes , N - No)';
+comment on column NECESSITY.id_content
+  is 'Unique content identifier';
+  
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,141 @@
+
+
+  CREATE TABLE EPIS_DIET
+   (	ID_EPIS_DIET NUMBER(24,0) NOT NULL ENABLE,
+	ID_DIET NUMBER(24,0),
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_CREATION DATE,
+	DESC_DIET VARCHAR2(200),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	NOTES VARCHAR2(200),
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(200),
+	DT_CANCEL DATE,
+
+	ID_PROF_INTER NUMBER(24,0),
+	NOTES_INTER VARCHAR2(200),
+	DT_INTER DATE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_DIET_SCHEDULE NUMBER(24,0),
+	DT_INITIAL DATE,
+	DT_END DATE,
+	FLG_HELP VARCHAR2(1)
+   );
+
+
+alter table epis_diet 
+add (dt_creation_tstz timestamp with local time zone,
+dt_cancel_tstz timestamp with local time zone,
+dt_inter_tstz timestamp with local time zone,
+dt_initial_tstz timestamp with local time zone,
+dt_end_tstz timestamp with local time zone); 
+
+ALTER TABLE EPIS_DIET DROP (DT_CREATION, DT_CANCEL, DT_INTER, DT_INITIAL, DT_END);
+
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 06/11/2009 08:28
+-- CHANGE REASON: [ADT-1670] Removed epis_diet constraints.
+ALTER TABLE epis_diet DROP constraint EDT_DSE_FK;
+ALTER TABLE epis_diet DROP constraint EDT_EPIS_FK;
+ALTER TABLE epis_diet DROP constraint EDT_PROF_FK;
+ALTER TABLE epis_diet DROP constraint EDT_PROF_FK2;
+ALTER TABLE epis_diet DROP constraint EDT_PROF_FK3;
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 14/01/2016 12:29
+-- CHANGE REASON: [ALERT-317702] 
+comment on table EPIS_DIET
+  is 'Episode''s diets';
+-- Add comments to the columns 
+comment on column EPIS_DIET.id_epis_diet
+  is 'Espiode diet ID';
+comment on column EPIS_DIET.id_diet
+  is 'Diet ID';
+comment on column EPIS_DIET.id_episode
+  is 'Episode ID';
+comment on column EPIS_DIET.id_professional
+  is 'Professional ID';
+comment on column EPIS_DIET.desc_diet
+  is 'Diet description';
+comment on column EPIS_DIET.flg_status
+  is 'Flag that indicates the status';
+comment on column EPIS_DIET.notes
+  is 'Notes';
+comment on column EPIS_DIET.id_prof_cancel
+  is 'Professional that cancels the record';
+comment on column EPIS_DIET.notes_cancel
+  is 'Cancelation notes';
+comment on column EPIS_DIET.id_prof_inter
+  is 'Professional that interrupts the record';
+comment on column EPIS_DIET.notes_inter
+  is 'Interruption notes';
+comment on column EPIS_DIET.adw_last_update
+  is 'Update date';
+comment on column EPIS_DIET.id_diet_schedule
+  is 'Diet schedule ID';
+comment on column EPIS_DIET.flg_help
+  is 'Flag that indicates if ehlp is needed';
+comment on column EPIS_DIET.dt_creation_tstz
+  is 'Date that indicates when the record was registered';
+comment on column EPIS_DIET.dt_cancel_tstz
+  is 'Date that indicates when the record was cancelled';
+comment on column EPIS_DIET.dt_inter_tstz
+  is 'Date that indicates when the record was interrupted';
+comment on column EPIS_DIET.dt_initial_tstz
+  is 'Begin date';
+comment on column EPIS_DIET.dt_end_tstz
+  is 'End date';
+comment on column EPIS_DIET.create_user
+  is 'Creation User';
+comment on column EPIS_DIET.create_time
+  is 'Creation Time';
+comment on column EPIS_DIET.create_institution
+  is 'Creation Institution';
+comment on column EPIS_DIET.update_user
+  is 'Update User';
+comment on column EPIS_DIET.update_time
+  is 'Update Time';
+comment on column EPIS_DIET.update_institution
+  is 'Update Institution';
+  
+  
+  
+--epis_diet_det|table
+comment on table EPIS_DIET_DET
+  is 'Diets order''s detail';
+-- Add comments to the columns 
+comment on column EPIS_DIET_DET.id_epis_diet_det
+  is 'Diet order''s detail ID';
+comment on column EPIS_DIET_DET.id_epis_diet_req
+  is 'Order''s ID';
+comment on column EPIS_DIET_DET.notes
+  is 'Notes';
+comment on column EPIS_DIET_DET.id_diet_schedule
+  is 'Diet schedule ID';
+comment on column EPIS_DIET_DET.dt_diet_schedule
+  is 'Meal hour';
+comment on column EPIS_DIET_DET.id_diet
+  is 'Diet ID';
+comment on column EPIS_DIET_DET.quantity
+  is 'Quantity';
+comment on column EPIS_DIET_DET.id_unit_measure
+  is 'Quantity unit measure ID';
+comment on column EPIS_DIET_DET.create_user
+  is 'Creation User';
+comment on column EPIS_DIET_DET.create_time
+  is 'Creation Time';
+comment on column EPIS_DIET_DET.create_institution
+  is 'Creation Institution';
+comment on column EPIS_DIET_DET.update_user
+  is 'Update User';
+comment on column EPIS_DIET_DET.update_time
+  is 'Update Time';
+comment on column EPIS_DIET_DET.update_institution
+  is 'Update Institution';
+  
+  
+  
+-- CHANGE END: Ana Matos

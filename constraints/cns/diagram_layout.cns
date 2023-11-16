@@ -1,0 +1,47 @@
+
+
+  ALTER TABLE DIAGRAM_LAYOUT ADD CONSTRAINT DIAGL_PK PRIMARY KEY (ID_DIAGRAM_LAYOUT) ENABLE;
+
+  ALTER TABLE DIAGRAM_LAYOUT MODIFY (ID_DIAGRAM_LAYOUT NOT NULL ENABLE);
+
+  ALTER TABLE DIAGRAM_LAYOUT MODIFY (INTERNAL_NAME NOT NULL ENABLE);
+
+  ALTER TABLE DIAGRAM_LAYOUT MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE DIAGRAM_LAYOUT MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: rui.mendonca
+-- CHANGE DATE: 11/12/2017 15:43
+-- CHANGE REASON: [CALERT-1112] New Neurological assessment figure
+BEGIN
+    pk_versioning.run('
+ALTER TABLE 
+  diagram_layout 
+ADD 
+  CONSTRAINT dl_flg_type_chk CHECK (
+    flg_type IN (''O'', ''N'', ''D'')
+  )');
+END;
+/
+-- CHANGE END: rui.mendonca
+
+-- CHANGED BY: Vítor Sá
+-- CHANGE DATE: 02/04/2019 15:31
+-- CHANGE REASON: EMR-13946 - Household button available in EDIS, INP, OUT and ORIS
+
+alter table diagram_layout drop constraint dl_flg_type_chk;
+BEGIN
+  
+    pk_versioning.run('
+ALTER TABLE 
+  diagram_layout 
+ADD 
+  CONSTRAINT dl_flg_type_chk CHECK (
+    flg_type IN (''O'', ''N'', ''D'', ''F'')
+  )');
+END;
+/
+-- CHANGE END: Vítor Sá	

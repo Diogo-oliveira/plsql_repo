@@ -1,0 +1,33 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 02/03/2010 11:28
+-- CHANGE REASON: [ALERT-78380] replication
+declare
+l_count pls_integer;
+l_sql_stat varchar2(4000) := 'create table presc_dir_freq_id_migration_pd
+(
+  id_source NUMBER(24) not null,
+  id_dest      NUMBER(24) not null,
+  migration_status varchar2(1 char),
+  migration_err_msg varchar2(4000 char)
+)
+tablespace TABLE_M';
+
+  
+begin
+
+select count(1) into l_count from all_tables where table_name = 'PRESC_DIR_FREQ_ID_MIGRATION_PD' and owner = 'ALERT';
+
+if l_count = 0 then
+  execute immediate (l_sql_stat);
+
+end if;
+
+end;
+/
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_DIR_FREQ_ID_MIGRATION_PD IS ' [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

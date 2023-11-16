@@ -1,0 +1,168 @@
+-- CHANGED BY: Telmo
+-- CHANGED DATE: 01-06-2009
+-- CHANGE REASON: ALERT-694 BED SCHEDULING
+
+CREATE TABLE SCH_BED_SLOT
+ (ID_BED NUMBER(24) NOT NULL
+ ,DT_BEGIN TIMESTAMP WITH TIME ZONE NOT NULL
+ ,DT_END TIMESTAMP WITH TIME ZONE NOT NULL
+ ,CREATE_USER VARCHAR2(24)
+ ,CREATE_TIME TIMESTAMP WITH TIME ZONE
+ ,CREATE_INSTITUTION NUMBER(24)
+ ,UPDATE_USER VARCHAR2(24)
+ ,UPDATE_TIME TIMESTAMP WITH TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ );
+
+COMMENT ON TABLE SCH_BED_SLOT IS 'Holds the INP-specific data about slots';
+COMMENT ON COLUMN SCH_BED_SLOT.ID_BED IS 'Bed id';
+COMMENT ON COLUMN SCH_BED_SLOT.DT_BEGIN IS 'starting instant for this slot';
+COMMENT ON COLUMN SCH_BED_SLOT.DT_END IS 'ending instant for this slot';
+COMMENT ON COLUMN SCH_BED_SLOT.CREATE_USER IS 'Creation user';
+COMMENT ON COLUMN SCH_BED_SLOT.CREATE_TIME IS 'creation time';
+COMMENT ON COLUMN SCH_BED_SLOT.CREATE_INSTITUTION IS 'creation institution';
+COMMENT ON COLUMN SCH_BED_SLOT.UPDATE_USER IS 'update user';
+COMMENT ON COLUMN SCH_BED_SLOT.UPDATE_TIME IS 'update time';
+COMMENT ON COLUMN SCH_BED_SLOT.UPDATE_INSTITUTION IS 'update institution';
+
+--END
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/03/2010 10:29
+-- CHANGE REASON: [ALERT-80069] Admissions scheduler: beds appear duplicated on list view
+--                
+DECLARE
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table 
+   sch_bed_slot
+add 
+( 
+   dt_begin_temp    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   dt_end_temp    TIMESTAMP(6) WITH LOCAL TIME ZONE
+)';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR creating columns dt_begin_temp e dt_end_temp');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'UPDATE sch_bed_slot 
+SET sch_bed_slot.dt_begin_temp = sch_bed_slot.dt_begin';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR updating dt_begin_temp column');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'UPDATE sch_bed_slot 
+SET sch_bed_slot.dt_end_temp = sch_bed_slot.dt_end';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR updating dt_end_temp column');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table
+   sch_bed_slot
+drop column
+   dt_begin';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR dropping column dt_begin');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE ' alter table
+   sch_bed_slot
+drop column
+   dt_end';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR dropping column dt_begin');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table 
+   sch_bed_slot
+add 
+( 
+   dt_begin    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   dt_end    TIMESTAMP(6) WITH LOCAL TIME ZONE
+)';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR creating columns dt_begin e dt_end');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'UPDATE sch_bed_slot 
+SET sch_bed_slot.dt_begin = sch_bed_slot.dt_begin_temp';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR updating dt_begin_temp column');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'UPDATE sch_bed_slot 
+SET sch_bed_slot.dt_end = sch_bed_slot.dt_end_temp';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR updating dt_begin_temp column');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table
+   sch_bed_slot
+drop column
+   dt_begin_temp';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR dropping column dt_begin_temp');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table
+   sch_bed_slot
+drop column
+   dt_end_temp';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR dropping column dt_end_temp');
+    END;
+
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/03/2010 10:35
+-- CHANGE REASON: [  ALERT-80080] 
+comment on column SCH_BED_SLOT.DT_BEGIN
+  is 'starting instant for this slot';
+comment on column SCH_BED_SLOT.DT_END
+  is 'ending instant for this slot';
+
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SCH_BED_SLOT MODIFY dt_begin TIMESTAMP(6) WITH LOCAL TIME ZONE not null';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR dropping column dt_end_temp');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SCH_BED_SLOT MODIFY dt_end TIMESTAMP(6) WITH LOCAL TIME ZONE not null';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR dropping column dt_end_temp');
+    END;
+END;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 15/01/2016 17:24
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON COLUMN SCH_BED_SLOT.UPDATE_TIME IS 'Time of the update';
+COMMENT ON COLUMN SCH_BED_SLOT.CREATE_TIME IS 'Time of the creation';
+-- CHANGE END:  jose.m.silva

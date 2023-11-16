@@ -1,0 +1,11 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 08/02/2011 09:39
+-- CHANGE REASON: [ALERT-157535] Intake
+GRANT SELECT ON ALERT.EPIS_INTAKE_TIME TO ALERT_VIEWER;
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Ana Coelho
+-- CHANGE DATE: 7-APR-2011
+-- CHANGE REASON: ALERT-171286 
+grant select, update, delete on ALERT.EPIS_INTAKE_TIME to alert_reset;
+-- CHANGE END: Ana Coelho

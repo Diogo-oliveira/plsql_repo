@@ -1,0 +1,58 @@
+
+
+  CREATE TABLE SAMPLE_TEXT_TYPE_CAT
+   (	ID_SAMPLE_TEXT_TYPE_CAT NUMBER(24,0) NOT NULL ENABLE,
+	ID_SAMPLE_TEXT_TYPE NUMBER(24,0) NOT NULL ENABLE,
+	ID_CATEGORY NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE sample_text_type_cat IS 'Áreas da aplicação a que cada categoria profissional em cada instituição tem acesso a textos mais frequentes.' ;
+
+COMMENT ON COLUMN sample_text_type_cat.id_sample_text_type_cat IS 'ID' ;
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 14/01/2016 10:04
+-- CHANGE REASON: [ALERT-317702] 
+comment on table SAMPLE_TEXT_TYPE_CAT
+  is 'Predefined text type configuration';
+-- Add comments to the columns 
+comment on column SAMPLE_TEXT_TYPE_CAT.id_sample_text_type_cat
+  is 'Primary key';
+comment on column SAMPLE_TEXT_TYPE_CAT.id_sample_text_type
+  is 'Predefined text type ID';
+comment on column SAMPLE_TEXT_TYPE_CAT.id_category
+  is 'Category ID';
+comment on column SAMPLE_TEXT_TYPE_CAT.id_institution
+  is 'Institution ID';
+comment on column SAMPLE_TEXT_TYPE_CAT.create_user
+  is 'Creation User';
+comment on column SAMPLE_TEXT_TYPE_CAT.create_time
+  is 'Creation Time';
+comment on column SAMPLE_TEXT_TYPE_CAT.create_institution
+  is 'Creation Institution';
+comment on column SAMPLE_TEXT_TYPE_CAT.update_user
+  is 'Update User';
+comment on column SAMPLE_TEXT_TYPE_CAT.update_time
+  is 'Update Time';
+comment on column SAMPLE_TEXT_TYPE_CAT.update_institution
+  is 'Update Institution';
+  
+  
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 20/10/2022 11:01
+-- CHANGE REASON: [EMR-54862] - Sample text change model
+begin
+pk_versioning.run('alter table SAMPLE_TEXT_TYPE_CAT drop column id_sample_text_type_cat');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: Elisabete Bugalho

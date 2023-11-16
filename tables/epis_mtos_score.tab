@@ -1,0 +1,48 @@
+CREATE TABLE epis_mtos_score (
+       id_epis_mtos_score NUMBER(24) NOT NULL,
+			 id_episode NUMBER(24) NOT NULL,
+			 flg_status VARCHAR2(1) NOT NULL,
+			 id_prof_create NUMBER(24) NOT NULL,
+			 dt_create TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+			 create_user VARCHAR2(24),
+			 create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 create_institution NUMBER(24),
+			 update_user VARCHAR2(24),
+			 update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 update_institution NUMBER(24)
+) TABLESPACE TABLE_M;
+
+COMMENT ON TABLE epis_mtos_score IS 'MTOS dataset scores for an episode';
+COMMENT ON COLUMN epis_mtos_score.id_epis_mtos_score IS 'Episode dataset score identifier';
+COMMENT ON COLUMN epis_mtos_score.id_episode IS 'Episode identifier';
+COMMENT ON COLUMN epis_mtos_score.flg_status IS 'Record status: (A) Active - ongoing evaluation (O) Outdated';
+COMMENT ON COLUMN epis_mtos_score.id_prof_create IS 'Creation user (showed in ALERT®)';
+COMMENT ON COLUMN epis_mtos_score.dt_create IS 'Creation date (showed in ALERT®)';
+COMMENT ON COLUMN epis_mtos_score.create_user IS 'Creation user';
+COMMENT ON COLUMN epis_mtos_score.create_time IS 'Creation date / time';
+COMMENT ON COLUMN epis_mtos_score.create_institution IS 'Creation institution';
+COMMENT ON COLUMN epis_mtos_score.update_user IS 'Update user';
+COMMENT ON COLUMN epis_mtos_score.update_time IS 'Update date / time';
+COMMENT ON COLUMN epis_mtos_score.update_institution IS 'Update institution';
+
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 05/11/2010 14:57
+-- CHANGE REASON: [ALERT-138136] 
+alter table EPIS_MTOS_SCORE add ID_CANCEL_REASON NUMBER(24);
+alter table EPIS_MTOS_SCORE add NOTES_CANCEL VARCHAR2(1000 CHAR);
+alter table EPIS_MTOS_SCORE add DT_CANCEL TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table EPIS_MTOS_SCORE add ID_PROF_CANCEL NUMBER(24);
+alter table EPIS_MTOS_SCORE add ID_EPIS_MTOS_SCORE_PARENT NUMBER(24);
+alter table EPIS_MTOS_SCORE add ID_MTOS_SCORE NUMBER(24);
+
+-- Add comments to the columns 
+comment on column EPIS_MTOS_SCORE.FLG_STATUS is 'Record status: (A) Active - ongoing evaluation (O) Outdated (C) Cancelled';
+comment on column EPIS_MTOS_SCORE.ID_CANCEL_REASON is 'Cancellation reason';
+comment on column EPIS_MTOS_SCORE.NOTES_CANCEL is 'Cancellation notes';
+comment on column EPIS_MTOS_SCORE.DT_CANCEL is 'Cancellation date';
+comment on column EPIS_MTOS_SCORE.ID_PROF_CANCEL is 'Cancellation user (showed in ALERT®)';
+comment on column EPIS_MTOS_SCORE.ID_EPIS_MTOS_SCORE_PARENT is 'Parent episode dataset score identifier';
+comment on column EPIS_MTOS_SCORE.ID_MTOS_SCORE is 'Score Identifier';
+-- CHANGE END: Tércio Soares

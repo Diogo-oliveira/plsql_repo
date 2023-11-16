@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_tbl_rec_dose IS TABLE OF t_rec_dose;

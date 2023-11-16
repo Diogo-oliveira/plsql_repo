@@ -1,0 +1,14 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 10:21
+-- CHANGE REASON: [ALERT-37067] 
+-- Create/Recreate primary, unique constraints 
+alter table PRESC_FIELD_DET_PROP
+  add constraint PFDP_PK primary key (ID_PRESCRIPTION_FIELD_REL);
+-- Create/Recreate check constraints 
+alter table PRESC_FIELD_DET_PROP
+  add constraint PFDP_FIELD_TYPE_CHK
+  check (field_type IN ('L', 'N', 'F', 'D', 'T', 'DT', 'OP', 'FT', 'LM'));
+alter table PRESC_FIELD_DET_PROP
+  add constraint PFDP_FLG_AVAILABLE_CHK
+  check (flg_available IN ('Y', 'N'));
+-- CHANGE END: Pedro Albuquerque

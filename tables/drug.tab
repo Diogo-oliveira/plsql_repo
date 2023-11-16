@@ -1,0 +1,125 @@
+
+
+  CREATE TABLE DRUG
+   (	ID_DRUG NUMBER(12,0) NOT NULL ENABLE,
+	ID_DRUG_PHARMA NUMBER(12,0),
+	ID_DRUG_BRAND NUMBER(12,0) NOT NULL ENABLE,
+	ID_DRUG_FORM NUMBER(12,0) NOT NULL ENABLE,
+	CODE_DRUG VARCHAR2(200) NOT NULL ENABLE,
+	MEASURE_UNIT VARCHAR2(30),
+	FLG_CONTINUOUS VARCHAR2(1),
+	FLG_OUTSIDE VARCHAR2(1),
+	COST NUMBER(18,4),
+	PRICE NUMBER(18,4),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+
+	ADW_LAST_UPDATE DATE,
+	BARCODE VARCHAR2(30),
+	FLG_JUSTIFY VARCHAR2(240) NOT NULL ENABLE,
+	QTY_BASIS NUMBER(18,2),
+	NOTES VARCHAR2(4000),
+	ID_DRUG_ROUTE NUMBER(24,0),
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	MDM_CODING NUMBER(12,0),
+	CHNM_ID NUMBER(8,0),
+	ID_FLUIDS_GROUP NUMBER(12,0)
+   );
+
+
+COMMENT ON TABLE drug IS 'Contem a lista de medicamentos.' ;
+
+COMMENT ON COLUMN drug.id_drug IS 'Chave primaria' ;
+COMMENT ON COLUMN drug.id_drug_pharma IS ' Chave primaria' ;
+COMMENT ON COLUMN drug.id_drug_brand IS 'Chave primaria' ;
+COMMENT ON COLUMN drug.id_drug_form IS 'Chave primaria' ;
+COMMENT ON COLUMN drug.code_drug IS 'Nome do medicamento' ;
+COMMENT ON COLUMN drug.measure_unit IS 'Unidade de medida' ;
+COMMENT ON COLUMN drug.flg_continuous IS 'Medicamento com toma continua' ;
+COMMENT ON COLUMN drug.flg_outside IS 'Medicamento passivel de ser prescrito para o exterior' ;
+COMMENT ON COLUMN drug.cost IS 'Preço de venda' ;
+COMMENT ON COLUMN drug.price IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN drug.flg_available IS 'Data da ultima alterac?o' ;
+COMMENT ON COLUMN drug.adw_last_update IS 'Custo monetário médio' ;
+COMMENT ON COLUMN drug.barcode IS 'Código de barras' ;
+
+COMMENT ON COLUMN drug.flg_justify IS 'Indica se é obrigatório justificar a prescrição (Y / N)' ;
+COMMENT ON COLUMN drug.qty_basis IS 'Qtd. base usada na prescrição' ;
+COMMENT ON COLUMN drug.notes IS 'Notas do medicamento' ;
+COMMENT ON COLUMN drug.id_drug_route IS 'Chave primaria' ;
+COMMENT ON COLUMN drug.flg_type IS 'Tipo de medicamento: S - soros; M - medicamentos' ;
+COMMENT ON COLUMN drug.chnm_id IS 'CHNM: Código Hospitalar Nacional do Medicamento' ;
+
+comment on column DRUG.ID_DRUG_PHARMA
+  is 'Chave primaria';
+comment on column DRUG.FLG_AVAILABLE
+  is 'Disponibilidade do registo na instituição onde está instalada a BD';
+comment on column DRUG.ADW_LAST_UPDATE
+  is 'Data da ultima alteracão';
+comment on column DRUG.MDM_CODING
+  is 'Codificação de  MDM "Medical Decision Making"';
+comment on column DRUG.FLG_TYPE
+  is 'Tipo de medicamento: F - soros simples; C- soros compostos; M - medicamentos';
+comment on column DRUG.ID_FLUIDS_GROUP
+  is 'Grupo do soro, no caso de ser um soro ';
+  
+  
+  
+  
+  alter table drug 
+add (id_fluids_group NUMBER(12));
+
+-- Add/modify columns 
+alter table DRUG add QTY_BOTTLE number(24,4);
+-- Add comments to the columns 
+comment on column DRUG.QTY_BOTTLE
+  is 'Quantidade contida na garrafa ou embalagem';
+
+-- Add/modify columns 
+alter table DRUG add ID_BOTTLE_UNIT_MEASURE number(24);
+-- Add comments to the columns 
+comment on column DRUG.ID_BOTTLE_UNIT_MEASURE
+  is 'ID Unidade de medida da embalagem';
+
+
+-- Add/modify columns 
+alter table DRUG add FLG_MIX_FLUID varchar2(1);
+-- Add comments to the columns 
+comment on column DRUG.FLG_MIX_FLUID
+  is 'Flag que indica se o medicamento pode ser diluido num soro - Y ';
+
+
+
+
+-- Add comments to the columns 
+comment on column drug.id_fluids_group 
+  is 'Grupo do soro, no caso de o ser' ;
+
+-- Add comments to the columns 
+comment on column drug.flg_type
+  is 'Tipo de medicamento: F - soros simples; C- soros compostos; M - medicamentos; N - Soro construido' ;
+
+
+
+-- Add/modify columns 
+alter table DRUG add ID_UNIT_MEASURE number(24);
+-- Add comments to the columns 
+comment on column DRUG.ID_UNIT_MEASURE
+  is 'ID Unidade de medida';
+-- Create/Recreate primary, unique and foreign key constraints 
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-FEB-15
+-- CHANGING REASON: alterações da tabela drug
+-- Add/modify columns 
+alter table DRUG add DOSAGEM VARCHAR2(255);
+-- Add comments to the columns 
+comment on column DRUG.DOSAGEM
+  is 'Dosage';
+-- CHANGE END Patrícia Neto
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:32
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE DRUG IS 'Contem a lista de medicamentos. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,16 @@
+create unique index arm_anal_room_flgtp_uidx on analysis_room(id_analysis,id_room,flg_type); 
+
+-- Create/Recreate indexes 
+drop index ARM_ANAL_ROOM_FLGTP_UIDX;
+create unique index ARM_ANAL_ROOM_FLGTP_UIDX on ANALYSIS_ROOM (id_analysis, id_room, flg_type, id_institution, flg_default);
+DECLARE
+  e_already_exists EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_already_exists, -955);
+BEGIN
+  EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX arm_anal_room_flgtp_uidx ON analysis_room(id_analysis, id_room, flg_type) COMPUTE STATISTICS'; 
+EXCEPTION  
+  WHEN e_already_exists THEN 
+    NULL;
+END;
+/
+

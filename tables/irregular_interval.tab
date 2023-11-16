@@ -1,0 +1,38 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGED DATE: 2009-ABR-02
+-- CHANGING REASON: create table
+-- Create table
+create table IRREGULAR_INTERVAL
+(
+  ID_IRREGULAR_INTERVAL   NUMBER(12),
+  ID_IRREGULAR_FREQUENCY  NUMBER(12),
+  INTERNAL_NAME           VARCHAR2(50),
+  CODE_IRREGULAR_INTERVAL VARCHAR2(50),
+  RANK					  NUMBER(6) default null
+)
+tablespace TABLE_S
+  pctfree 10
+  pctused 40
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+  
+
+  
+alter table IRREGULAR_INTERVAL
+  add constraint II_PK primary key (ID_IRREGULAR_INTERVAL)
+  using index 
+  tablespace TABLE_S;
+
+comment on table IRREGULAR_INTERVAL is 'Tabela que contém a lista dos intervalos associados a cada frequência para as posologias irregulares';
+comment on column IRREGULAR_INTERVAL.ID_IRREGULAR_INTERVAL is 'ID dos intervalos';
+comment on column IRREGULAR_INTERVAL.ID_IRREGULAR_FREQUENCY is 'ID das frequências';
+comment on column IRREGULAR_INTERVAL.INTERNAL_NAME is 'Descritivo dos intervalos';
+comment on column IRREGULAR_INTERVAL.CODE_IRREGULAR_INTERVAL is 'Código da tabela translation para os intervalos';
+comment on column irregular_interval.rank is 'Order values';
+-- CHANGE END Pedro Albuquerque

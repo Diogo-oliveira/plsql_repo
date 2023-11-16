@@ -1,0 +1,544 @@
+
+
+  CREATE TABLE "ALERT"."REFERRAL_EA"
+   (	"ID_EXTERNAL_REQUEST" NUMBER(24,0),
+	"ID_PATIENT" NUMBER(24,0),
+	"NUM_REQ" VARCHAR2(50),
+	"FLG_TYPE" VARCHAR2(1),
+	"FLG_STATUS" VARCHAR2(1),
+	"ID_PROF_STATUS" NUMBER(24,0),
+	"DT_STATUS" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"FLG_PRIORITY" VARCHAR2(1),
+	"FLG_HOME" VARCHAR2(1),
+	"ID_SPECIALITY" NUMBER(6,0),
+	"DECISION_URG_LEVEL" NUMBER,
+	"ID_INST_ORIG" NUMBER(24,0),
+	"ID_INST_DEST" NUMBER(24,0),
+	"ID_DEP_CLIN_SERV" NUMBER(24,0),
+	"ID_PROF_REDIRECTED" NUMBER(24,0),
+	"ID_MATCH" NUMBER(24,0),
+	"ID_PROF_REQUESTED" NUMBER(24,0),
+	"DT_REQUESTED" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_NEW" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_ISSUED" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"ID_PROF_TRIAGE" NUMBER(24,0),
+	"DT_TRIAGE" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_FORWARDED" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"ID_SCHEDULE" NUMBER(24,0),
+	"ID_PROF_SCHEDULE" NUMBER(24,0),
+	"DT_SCHEDULE" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_EFECTIV" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_ACKNOWLEDGE" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_DG_LAST_UPDATE" TIMESTAMP (6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP
+   ) ;
+
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."ID_EXTERNAL_REQUEST" IS 'Referral ID';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."ID_PATIENT" IS 'Patient Id';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."NUM_REQ" IS 'Referral Visualized ID';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."FLG_TYPE" IS 'Referral type: (C)onsultation, (A)nalysis, (I)mage, (O)ther Exam, Intervention (P) or Physiatrics (F).';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."FLG_STATUS" IS 'Referral status';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."ID_PROF_STATUS" IS 'Last professional changing the request status';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."DT_STATUS" IS '''Data da passagem ao estado actual''';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."FLG_PRIORITY" IS 'Urgent (Y), or not Urgent (N).';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."FLG_HOME" IS 'At home (Y). (N) Otherwise .';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."ID_SPECIALITY" IS 'Referral specialty';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."DECISION_URG_LEVEL" IS 'Referral priority set during referral''s triage.';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."ID_INST_ORIG" IS 'Origin institution ID';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."ID_INST_DEST" IS 'Destination institution ID';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."ID_DEP_CLIN_SERV" IS 'Referral''s Department/Clinical Service';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."ID_PROF_REDIRECTED" IS 'Professional to which the Referral was forwarded - ID';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."ID_MATCH" IS 'Match ID';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."ID_PROF_REQUESTED" IS 'Professional that created the referral - ID';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."DT_REQUESTED" IS 'Referral creation date (First status N).';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."DT_NEW" IS 'Referral recreation date (Last status N).';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."DT_ISSUED" IS 'Referral issue date (Date for status I, when becomes available in destination institution).';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."ID_PROF_TRIAGE" IS 'Triage Professional - ID';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."DT_TRIAGE" IS 'Sent to triage Date';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."DT_FORWARDED" IS 'Sent to triage professional date';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."ID_SCHEDULE" IS 'Scheduled ID';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."ID_PROF_SCHEDULE" IS 'Scheduled Professional ID';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."DT_SCHEDULE" IS 'Scheduled Date';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."DT_EFECTIV" IS 'Referral execution Date';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."DT_ACKNOWLEDGE" IS 'Answer Acknowledge Date';
+
+   COMMENT ON COLUMN "ALERT"."REFERRAL_EA"."DT_DG_LAST_UPDATE" IS 'Last update timestamp';
+
+   COMMENT ON TABLE "ALERT"."REFERRAL_EA"  IS 'Referral Easy Access table';
+
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGED DATE: 2009-JAN-27
+-- CHANGED REASON: ALERT-13289 Adicionada coluna DT_LAST_INTERACTION_TSTZ
+	
+	-- Add/modify columns 
+	alter table REFERRAL_EA add DT_LAST_INTERACTION_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE;
+	-- Add comments to the columns 
+	comment on column REFERRAL_EA.DT_LAST_INTERACTION_TSTZ
+	  is 'Referral last modification (data or status) date';
+	  
+-- CHANGE END: Ana Monteiro
+
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGED DATE: 2009-JUN-22
+-- CHANGED REASON: ALERT-18963 
+alter table REFERRAL_EA add ID_WORKFLOW NUMBER(12);
+ 
+comment on column REFERRAL_EA.ID_WORKFLOW
+  is 'Referral workflow identification';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 30/10/2009 02:57
+-- CHANGE REASON: [ALERT-52665] 
+ALTER TABLE REFERRAL_EA ADD (ID_EXTERNAL_SYS NUMBER(12) ,ID_REF_EXT_SYS VARCHAR2(50 CHAR))
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 06/11/2009 16:01
+-- CHANGE REASON: [ALERT-55025] 
+alter table REFERRAL_EA rename column ID_REF_EXT_SYS to EXT_REFERENCE;
+comment on column REFERRAL_EA.EXT_REFERENCE is 'Referral Id in the external system ';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: João Almeida
+-- CHANGE DATE: 09/03/2010 10:25
+-- CHANGE REASON: [ALERT-79864] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+into l_count
+      FROM all_tab_columns a
+     WHERE a.table_name = 'REFERRAL_EA'
+       AND a.column_name = 'ID_PROF_ORIG';
+
+    IF l_count = 0
+    THEN
+    
+        l_sql := q'[ALTER TABLE REFERRAL_EA ADD (ID_PROF_ORIG NUMBER(24))]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+DECLARE l_sql VARCHAR2(1000 CHAR);
+l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+into l_count
+      FROM all_tab_columns a
+     WHERE a.table_name = 'REFERRAL_EA'
+       AND a.column_name = 'PROF_NAME_RODA';
+
+    IF l_count = 0
+    THEN
+    
+        l_sql := q'[ALTER TABLE REFERRAL_EA ADD (PROF_NAME_RODA VARCHAR2(200))]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+DECLARE l_sql VARCHAR2(1000 CHAR);
+l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+into l_count
+      FROM all_tab_columns a
+     WHERE a.table_name = 'REFERRAL_EA'
+       AND a.column_name = 'INSTITUTION_NAME_RODA';
+
+    IF l_count = 0
+    THEN
+    
+        l_sql := q'[ALTER TABLE REFERRAL_EA ADD (INSTITUTION_NAME_RODA VARCHAR2(200))]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+DECLARE l_sql VARCHAR2(1000 CHAR);
+l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+into l_count
+      FROM all_tab_columns a
+     WHERE a.table_name = 'REFERRAL_EA'
+       AND a.column_name = 'ID_INST_ORIG_REQ';
+
+    IF l_count = 0
+    THEN
+    
+        l_sql := q'[ALTER TABLE REFERRAL_EA ADD (ID_INST_ORIG_REQ NUMBER(24))]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    
+  l_sql := q'[comment on column REFERRAL_EA.INSTITUTION_NAME_RODA is 'Institution name when institution does not have alert registration']';
+EXECUTE IMMEDIATE l_sql;
+l_sql := q'[comment on column REFERRAL_EA.ID_INST_ORIG_REQ is 'Institution Id when  is a alert institution']';
+EXECUTE IMMEDIATE l_sql;
+l_sql := q'[comment on column REFERRAL_EA.ID_PROF_ORIG is 'Professional Id if is a alert professional']';
+EXECUTE IMMEDIATE l_sql;
+l_sql := q'[comment on column REFERRAL_EA.PROF_NAME_RODA is 'Professional name when professional does not have alert registration']';
+EXECUTE IMMEDIATE l_sql;
+END;
+/
+-- CHANGE END: João Almeida
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 31/03/2010 14:59
+-- CHANGE REASON: [ALERT-85573] 
+comment on column REFERRAL_EA.ID_EXTERNAL_SYS
+  is 'External system identifier';
+
+comment on column REFERRAL_EA.EXT_REFERENCE
+  is 'Referral Id in the external system ';
+
+comment on column REFERRAL_EA.PROF_NAME_RODA
+  is 'Professional name when professional does not have alert registration';
+
+comment on column REFERRAL_EA.INSTITUTION_NAME_RODA
+  is 'Institution name when institution does not have alert registration';
+
+comment on column REFERRAL_EA.ID_PROF_ORIG
+  is 'Professional Id if is a alert professional';
+
+comment on column REFERRAL_EA.ID_INST_ORIG_REQ
+  is 'Institution Id when  is a alert institution';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 13/06/2012 11:45
+-- CHANGE REASON: [ALERT-232304] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.column_name = 'ID_PROF_SCH_SUGG'
+       AND c.table_name = 'REFERRAL_EA';
+
+    IF l_count = 0
+    THEN
+EXECUTE IMMEDIATE 'alter table REFERRAL_EA add id_prof_sch_sugg NUMBER(24)';
+        EXECUTE IMMEDIATE 'comment on column REFERRAL_EA.id_prof_sch_sugg is ''Scheduled professional suggested by triage physician''';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 06/12/2012 17:25
+-- CHANGE REASON: [ALERT-246452] 
+alter table REFERRAL_EA add flg_migrated VARCHAR2(1 CHAR);
+comment on column REFERRAL_EA.flg_migrated is 'Referral Migrated to external system ex. BDNP  N - No, W- Warnig, E- Error, S - Success';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/11/2013 16:52
+-- CHANGE REASON: [ALERT-270542 ] 
+
+BEGIN
+    pk_versioning.run(i_sql => 'alter table
+   referral_ea
+add  
+   (
+   nr_clinical_doc NUMBER(24),
+   flg_received VARCHAR2(1 CHAR), 
+   flg_sent_by VARCHAR2(1 CHAR),
+   nr_clin_comments NUMBER(24),  
+   dt_clin_last_comment TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   nr_adm_comments NUMBER(24), 
+   dt_adm_last_comment TIMESTAMP(6) WITH LOCAL TIME ZONE, 
+   id_prof_clin_comment NUMBER(24),
+   id_prof_adm_comment NUMBER(24))');
+
+COMMENT ON COLUMN referral_ea.nr_clinical_doc IS 'Number of clinical documents attached to referral';
+COMMENT ON COLUMN referral_ea.flg_received IS 'Document received: (Y)es; (N)o.';
+COMMENT ON COLUMN referral_ea.flg_sent_by IS 'Document sent by (E)mail; (F)ax; (M)ail';
+COMMENT ON COLUMN referral_ea.nr_clin_comments IS 'Number of active clinical comments attached to referral';
+COMMENT ON COLUMN referral_ea.dt_clin_last_comment IS 'Date of last clinical comment creation';
+COMMENT ON COLUMN referral_ea.nr_adm_comments IS 'Number of active administrative comments attached to referral';
+COMMENT ON COLUMN referral_ea.dt_adm_last_comment IS 'Date of last administrative comment creation';
+COMMENT ON COLUMN referral_ea.id_prof_clin_comment IS 'Last professional who creates clinical comment ';
+COMMENT ON COLUMN referral_ea.id_prof_adm_comment IS 'Last professional who creates administrative comment ';
+
+end;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 27/11/2013 10:48
+-- CHANGE REASON: [ALERT-267879] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REFERRAL_EA'
+       AND c.column_name = 'PROF_NAME_RODA';
+
+    IF l_count > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REFERRAL_EA drop column PROF_NAME_RODA';
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REFERRAL_EA'
+       AND c.column_name = 'ID_INST_ORIG_REQ';
+
+    IF l_count > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REFERRAL_EA drop column ID_INST_ORIG_REQ';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 27/11/2013 11:18
+-- CHANGE REASON: [ALERT-267879] 
+alter table REFERRAL_EA modify institution_name_roda VARCHAR2(1000 CHAR);
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 27/11/2013 11:21
+-- CHANGE REASON: [ALERT-267879] 
+-- replicacao dos campos que foram versionados em HF (referral_ea.sts_...)
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REFERRAL_EA'
+       AND c.column_name = 'STS_PROF_RESP';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REFERRAL_EA add sts_prof_resp VARCHAR2(100 CHAR)';
+EXECUTE IMMEDIATE 'alter table REFERRAL_EA add sts_orig_phy_cs_dc VARCHAR2(100 CHAR)';
+EXECUTE IMMEDIATE 'alter table REFERRAL_EA add sts_orig_phy_hs_dc VARCHAR2(100 CHAR)';
+EXECUTE IMMEDIATE 'alter table REFERRAL_EA add sts_orig_phy_cs VARCHAR2(100 CHAR)';
+EXECUTE IMMEDIATE 'alter table REFERRAL_EA add sts_orig_phy_hs VARCHAR2(100 CHAR)';
+EXECUTE IMMEDIATE 'alter table REFERRAL_EA add sts_orig_reg_cs VARCHAR2(100 CHAR)';
+EXECUTE IMMEDIATE 'alter table REFERRAL_EA add sts_orig_reg_hs VARCHAR2(100 CHAR)';
+EXECUTE IMMEDIATE 'alter table REFERRAL_EA add sts_dest_reg VARCHAR2(100 CHAR)';
+EXECUTE IMMEDIATE 'alter table REFERRAL_EA add sts_dest_phy_te VARCHAR2(100 CHAR)';
+EXECUTE IMMEDIATE 'alter table REFERRAL_EA add sts_dest_phy_t VARCHAR2(100 CHAR)';
+EXECUTE IMMEDIATE 'alter table REFERRAL_EA add sts_dest_phy_mc VARCHAR2(100 CHAR)';
+EXECUTE IMMEDIATE 'alter table REFERRAL_EA add sts_dest_phy_t_me VARCHAR2(100 CHAR)';
+
+EXECUTE IMMEDIATE q'[comment on column REFERRAL_EA.sts_prof_resp is 'Status string visible to the professional that is responsible for the referral']';
+EXECUTE IMMEDIATE q'[comment on column REFERRAL_EA.sts_orig_phy_cs_dc is 'Status string visible to the orig clinical director (profile_template=300)']';
+        EXECUTE IMMEDIATE q'[comment on column REFERRAL_EA.sts_orig_phy_hs_dc is 'Status string visible to the orig clinical director (profile_template=330)']';
+        EXECUTE IMMEDIATE q'[comment on column REFERRAL_EA.sts_orig_phy_cs is 'Status string visible to the orig physician (profile_template=300)']';
+EXECUTE IMMEDIATE q'[comment on column REFERRAL_EA.sts_orig_phy_hs is 'Status string visible to the orig physician (profile_template=330)']';
+EXECUTE IMMEDIATE q'[comment on column REFERRAL_EA.sts_orig_reg_cs is 'Status string visible to the orig registrar (profile_template=310)']';
+EXECUTE IMMEDIATE q'[comment on column REFERRAL_EA.sts_orig_reg_hs is 'Status string visible to the orig registrar (profile_template=320)']';
+EXECUTE IMMEDIATE q'[comment on column REFERRAL_EA.sts_dest_reg is 'Status string visible to the dest registrar (profile_template=320)']';
+EXECUTE IMMEDIATE q'[comment on column REFERRAL_EA.sts_dest_phy_te is 'Status string visible to the dest physician: clinical service triage physician (profile_template=330)']';
+EXECUTE IMMEDIATE q'[comment on column REFERRAL_EA.sts_dest_phy_t is 'Status string visible to the dest physician: triage physician (profile_template=330)']';
+EXECUTE IMMEDIATE q'[comment on column REFERRAL_EA.sts_dest_phy_mc is 'Status string visible to the dest physician: consulting physician (profile_template=330)']';
+EXECUTE IMMEDIATE q'[comment on column REFERRAL_EA.sts_dest_phy_t_me is 'Status string visible to the dest physician: I am the triage physician (profile_template=330)']';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 27/11/2013 11:30
+-- CHANGE REASON: [ALERT-267879] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REFERRAL_EA'
+       AND c.column_name = 'ID_EPISODE';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REFERRAL_EA add id_episode NUMBER(24)';
+EXECUTE IMMEDIATE q'[comment on column REFERRAL_EA.id_episode is 'Episode identifier in which the request was created']';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 27/11/2013 15:24
+-- CHANGE REASON: [ALERT-270542] 
+ BEGIN
+     pk_versioning.run(i_sql => 'alter table 
+   referral_ea 
+   add 
+   ( 
+   nr_clinical_doc NUMBER(24), 
+   flg_received VARCHAR2(1 CHAR), 
+   flg_sent_by VARCHAR2(1 CHAR), 
+   nr_clin_comments NUMBER(24), 
+  dt_clin_last_comment TIMESTAMP(6) WITH LOCAL TIME ZONE, 
+  nr_adm_comments NUMBER(24), 
+  dt_adm_last_comment TIMESTAMP(6) WITH LOCAL TIME ZONE, 
+  id_prof_clin_comment NUMBER(24), 
+  id_prof_adm_comment NUMBER(24))');
+ END;
+ /
+ 
+ COMMENT ON column referral_ea.nr_clinical_doc IS 'Number of clinical documents attached to referral';
+ COMMENT ON column referral_ea.flg_received IS 'Document received: (Y)es; (N)o.';
+ COMMENT ON column referral_ea.flg_sent_by IS 'Document sent by (E)mail; (F)ax; (M)ail';
+ COMMENT ON column referral_ea.nr_clin_comments IS 'Number of active clinical comments attached to referral';
+ COMMENT ON column referral_ea.dt_clin_last_comment IS 'Date of last clinical comment creation';
+ COMMENT ON column referral_ea.nr_adm_comments IS 'Number of active administrative comments attached to referral';
+ COMMENT ON column referral_ea.dt_adm_last_comment IS 'Date of last administrative comment creation';
+ COMMENT ON column referral_ea.id_prof_clin_comment IS 'Last professional who creates clinical comment ';
+ COMMENT ON column referral_ea.id_prof_adm_comment IS 'Last professional who creates administrative comment ';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 11/02/2014 11:37
+-- CHANGE REASON: [ALERT-275235] 
+BEGIN
+    pk_versioning.run(i_sql => q'[alter table REFERRAL_EA add flg_clin_comm_read VARCHAR2(1 CHAR) DEFAULT 'N' not null]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA add flg_adm_comm_read VARCHAR2(1 CHAR) DEFAULT 'N' not null]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA add id_inst_clin_comment number(24)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA add id_inst_adm_comment number(24)]');
+END;
+/
+
+comment on column REFERRAL_EA.flg_clin_comm_read is 'Indicates if receivers professionals have read clinical comment. Y- read, N- otherwise';
+comment on column REFERRAL_EA.flg_adm_comm_read is 'Indicates if receivers professionals have read administrative comment. Y- read, N- otherwise';
+comment on column REFERRAL_EA.id_inst_clin_comment is 'Last institution where clinical comment was created';
+comment on column REFERRAL_EA.id_inst_adm_comment is 'Last institution where administrative comment was created';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/01/2015 14:36
+-- CHANGE REASON: [ALERT-280039] 
+BEGIN
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify num_req VARCHAR2(50 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify flg_type VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify flg_priority VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify flg_home VARCHAR2(1 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify create_user VARCHAR2(30 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify update_user VARCHAR2(30 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify id_workflow NUMBER(24)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify id_external_sys NUMBER(24)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify sts_prof_resp VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify sts_orig_phy_cs_dc VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify sts_orig_phy_hs_dc VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify sts_orig_phy_cs VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify sts_orig_phy_hs VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify sts_orig_reg_cs VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify sts_orig_reg_hs VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify sts_dest_reg VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify sts_dest_phy_te VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify sts_dest_phy_t VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify sts_dest_phy_mc VARCHAR2(200 CHAR)]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA modify sts_dest_phy_t_me VARCHAR2(200 CHAR)]');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2016 09:13
+-- CHANGE REASON: [ALERT-326665] 
+ALTER TABLE referral_ea ADD prof_certificate VARCHAR2(30 CHAR);
+ALTER TABLE referral_ea ADD prof_name VARCHAR2(200 CHAR);
+ALTER TABLE referral_ea ADD prof_surname VARCHAR2(200 CHAR);
+ALTER TABLE referral_ea ADD prof_phone VARCHAR2(30 CHAR);
+-- CHANGE END: Pedro Henriques 
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 12/12/2016 09:13
+-- CHANGE REASON: [ALERT-327027]
+COMMENT ON COLUMN referral_ea.prof_certificate IS 'Receiving physician data - Professional license number';
+COMMENT ON COLUMN referral_ea.prof_name IS 'Receiving physician data - Name';
+COMMENT ON COLUMN referral_ea.prof_surname IS 'Receiving physician data - Last name';
+COMMENT ON COLUMN referral_ea.prof_phone IS 'Receiving physician data - Phone';
+-- CHANGE END: Pedro Henriques 
+
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 18/04/2017 09:13
+-- CHANGE REASON: [ALERT-330282]   
+ALTER TABLE referral_ea ADD ID_FAM_REL NUMBER(24);
+ALTER TABLE referral_ea ADD NAME_FIRST_REL VARCHAR2(100 CHAR);
+ALTER TABLE referral_ea ADD NAME_MIDDLE_REL VARCHAR2(300 CHAR);
+ALTER TABLE referral_ea ADD NAME_LAST_REL VARCHAR2(100 CHAR);
+COMMENT ON COLUMN referral_ea.ID_FAM_REL IS 'parentesc relationship';
+COMMENT ON COLUMN referral_ea.NAME_FIRST_REL IS 'First Name Parentesc';
+COMMENT ON COLUMN referral_ea.NAME_MIDDLE_REL IS 'Middle Name Parentesc';
+COMMENT ON COLUMN referral_ea.NAME_LAST_REL IS 'Last Name Parentesc';  
+-- CHANGE END: Pedro Henriques 
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/10/2020 14:40
+-- CHANGE REASON: [EMR-36650]
+begin
+pk_versioning.run('ALTER TABLE referral_ea ADD consent VARCHAR2(1 CHAR)');
+end;
+/
+
+COMMENT ON COLUMN referral_ea.consent IS 'Patient consent';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 18/05/2021 17:01
+-- CHANGE REASON: [EMR-45209] - MX / SA > MCDT > missing fields + labels is different
+alter table referral_ea
+add family_relationship_notes varchar2(1000 char);
+-- CHANGE END: Diogo Oliveira

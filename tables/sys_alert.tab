@@ -1,0 +1,101 @@
+
+
+  CREATE TABLE SYS_ALERT
+   (	ID_SYS_ALERT NUMBER(24,0) NOT NULL ENABLE,
+	CODE_ALERT VARCHAR2(200) NOT NULL ENABLE,
+	INTERN_NAME VARCHAR2(200),
+	ALERT_SQL LONG,
+	ID_SYS_ALERT_TYPE NUMBER(6,0),
+	FLG_READ VARCHAR2(1)
+   );
+
+
+COMMENT ON COLUMN sys_alert.alert_sql IS 'código de PL/SQL de obtenção dos alertas' ;
+COMMENT ON COLUMN sys_alert.id_sys_alert_type IS 'Tipo de alerta' ;
+
+--Rui Batista 2007/09/12
+--Reestruturação dos alertas
+alter table sys_alert modify alert_sql clob;
+
+--Rui Batista 2008/03/19
+--Alertas v3.0
+alter table sys_alert add (sql_alert clob));
+alter table sys_alert add (version varchar2(1));
+
+comment on column sys_alert.sql_alert is 'sql code for this alert ';
+comment on column sys_alert.version is '(d) - using sys_alert_det; (e) uses sys_alert_event ';
+
+-- CMF 25-03-2008
+ALTER TABLE SYS_ALERT ADD FLG_DELETE VARCHAR2(1) DEFAULT 'N' NOT NULL ;
+comment on column SYS_ALERT.FLG_DELETE  is 'Y - Alert is deleted on read, N - Alert is NOT deleted on read';
+-- end
+
+--2008/08/05 Rui Batista
+--Alerta de interfaces
+alter table sys_alert add (flg_detail varchar2(1) null);
+
+comment on column sys_alert.flg_detail is 'Alerta tem detalhe? (Y/N)';
+
+-- CMF 08-01-2016
+comment on table  alert.sys_alert is 'contains All alerts that may used in PFH';
+comment on column alert.sys_alert.ID_SYS_ALERT			IS 'Primary Key';
+comment on column alert.sys_alert.CODE_ALERT            IS 'code for translated description if needed.  ';
+comment on column alert.sys_alert.INTERN_NAME           IS 'Internal name';
+comment on column alert.sys_alert.ID_SYS_ALERT_TYPE     IS '';
+comment on column alert.sys_alert.FLG_READ              IS 'DEPRECATED.Sets if alert disappears from list when read.';
+comment on column alert.sys_alert.SQL_ALERT             IS 'SQL to be executed dinamically';
+comment on column alert.sys_alert.FLG_DELETE            IS 'DEPRECATED. Y - Alert is deleted on read, N - Alert is NOT deleted on read.';
+comment on column alert.sys_alert.FLG_DETAIL            IS 'Alert has detail information? (Y/N)';
+
+
+declare
+	l_sql varchar2(1000 char);
+begin
+
+l_sql := 'alter table sys_alert add SQL_COUNT varchar2(0030 char)';
+pk_versioning.run(l_sql);
+
+end;
+/
+
+COMMENT ON COLUMN SYS_ALERT.SQL_COUNT IS 'VIEW name for alert count estimates. Usually view used in field SQL_ALERT.'
+
+
+
+-- cmf
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := q'[alter table sys_alert add DAYS_FOR_EXPIRATION number(6) default 100 not null]';
+	pk_versioning.run( l_sql );
+end;
+/
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 20/10/2022 08:08
+-- CHANGE REASON: [EMR-55363]
+COMMENT ON TABLE sys_alert IS 'Alert messages';
+COMMENT ON COLUMN sys_alert.id_sys_alert IS 'Primary key';
+COMMENT ON COLUMN sys_alert.code_alert IS 'Translation code';
+COMMENT ON COLUMN sys_alert.intern_name IS 'Internal name';
+COMMENT ON COLUMN sys_alert.id_sys_alert_type IS 'Alert type ID';
+COMMENT ON COLUMN sys_alert.flg_read IS 'DEPRECATED';
+COMMENT ON COLUMN sys_alert.sql_alert IS 'SQL to be executed dinamically';
+COMMENT ON COLUMN sys_alert.flg_delete IS 'DEPRECATED';
+COMMENT ON COLUMN sys_alert.flg_detail IS 'Alert has detail information? (Y/N)';
+COMMENT ON COLUMN sys_alert.sql_count IS 'SQL to be executed dinamically for counting';
+COMMENT ON COLUMN sys_alert.days_for_expiration IS 'Number of days for automatic expiration';
+-- CHANGE END: Ana Matos
+
+DECLARE
+	L_SQL VARCHAR2(4000);
+BEGIN
+	l_sql := q'[alter table sys_alert drop column flg_read]';
+	pk_versioning.run( l_sql );
+
+	l_sql := q'[alter table sys_alert drop column flg_delete]';
+	pk_versioning.run( l_sql );
+	
+end;
+/

@@ -1,0 +1,178 @@
+--
+-- Generated for Oracle 10g on Fri Jun 06  18:41:45 2008 by Server Generator 10.1.2.8.46
+ 
+
+CREATE TABLE PAT_MEDICATION_DET
+ (ID_PAT_MEDICATION_DET NUMBER(24) NOT NULL
+ ,ID_PATIENT NUMBER(24) NOT NULL
+ ,FLG_NO_MED VARCHAR2(1)
+ ,FLG_UNKNOWN_MED VARCHAR2(1)
+ ,ADW_LAST_UPDATE DATE NOT NULL
+ ,ID_PROFESSIONAL NUMBER(24) NOT NULL
+ ,NO_MED_NOTES VARCHAR2(4000)
+ ,UNKNOWN_MED_NOTES VARCHAR2(4000)
+ ,DT_PAT_MEDICATION_DET_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE
+ )
+ TABLESPACE TABLE_S
+/
+
+COMMENT ON TABLE PAT_MEDICATION_DET IS 'This table contain information about the details of reported medication'
+/
+
+COMMENT ON COLUMN PAT_MEDICATION_DET.ID_PAT_MEDICATION_DET IS 'Primary key (id)'
+/
+
+COMMENT ON COLUMN PAT_MEDICATION_DET.ID_PATIENT IS 'Patient ID'
+/
+
+COMMENT ON COLUMN PAT_MEDICATION_DET.FLG_NO_MED IS 'Flag that indicates that the patient is not taking any medication (Y/N)'
+/
+
+COMMENT ON COLUMN PAT_MEDICATION_DET.FLG_UNKNOWN_MED IS 'Flag that indicates that the patient doesn''t know exactly which medication is taking (Y/N)'
+/
+
+COMMENT ON COLUMN PAT_MEDICATION_DET.ADW_LAST_UPDATE IS 'Date of the last update'
+/
+
+COMMENT ON COLUMN PAT_MEDICATION_DET.ID_PROFESSIONAL IS 'Professional ID'
+/
+
+COMMENT ON COLUMN PAT_MEDICATION_DET.NO_MED_NOTES IS 'Notes for No medication option'
+/
+
+COMMENT ON COLUMN PAT_MEDICATION_DET.UNKNOWN_MED_NOTES IS 'Notes for Unknown medication option'
+/
+
+COMMENT ON COLUMN PAT_MEDICATION_DET.DT_PAT_MEDICATION_DET_TSTZ IS 'Date '
+/
+
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE PAT_MEDICATION_DET ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN PAT_MEDICATION_DET.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 24/02/2011 14:51
+-- CHANGE REASON: [ALERT-155874] No relevant medication
+ALTER TABLE pat_medication_det
+ ADD flg_unrelevant_med varchar2(1) DEFAULT 'N';
+/
+comment on column pat_medication_det.flg_unrelevant_med
+  is 'Checked no relevant medication. Values "Y" or "N"';
+/
+alter table pat_medication_det
+  add constraint PAT_MEDICATION_DET_FUM_CHK
+  check (flg_unrelevant_med IN ('Y','N'));
+/
+  ALTER TABLE pat_medication_det
+ ADD unrelevant_med_notes varchar2(1000 CHAR);
+/
+comment on column pat_medication_det.unrelevant_med_notes
+  is 'Notes on no relevant medication.';
+/
+comment on TABLE pat_medication_det
+  is 'Reported medication details';
+/
+ALTER TABLE pat_medication_det MODIFY (create_user VARCHAR2(30 CHAR),
+                                       update_user VARCHAR2(30 CHAR));
+/
+comment on COLUMN pat_medication_det.DT_PAT_MEDICATION_DET_TSTZ
+  is 'Detail/record notes date';
+/
+comment on COLUMN pat_medication_det.UNKNOWN_MED_NOTES
+  is 'Notes on "Unknown medication"';
+/
+comment on COLUMN pat_medication_det.NO_MED_NOTES
+  is 'Notes on "Not taking any medication"';
+/
+comment on COLUMN pat_medication_det.ID_PROFESSIONAL
+  is 'Professional ID';
+/
+comment on COLUMN pat_medication_det.ADW_LAST_UPDATE
+  is 'Last update date';
+/
+comment on COLUMN pat_medication_det.FLG_UNKNOWN_MED
+  is 'Checked no unknown medication. Values "Y" or "N"';
+/
+comment on COLUMN pat_medication_det.FLG_NO_MED
+  is 'Checked not taking any medication. Values "Y" or "N"';
+/
+comment on COLUMN pat_medication_det.ID_PATIENT
+  is 'Patient ID';
+/
+comment on COLUMN pat_medication_det.ID_PAT_MEDICATION_DET
+  is 'Primary Key';
+/
+alter table PAT_MEDICATION_DET
+  add constraint PAT_MEDICATION_DET_FNM_CHK
+  check (FLG_NO_MED IN ('Y','N'));
+/
+alter table PAT_MEDICATION_DET
+  add constraint PAT_MEDICATION_DET_FUNKM_CHK
+  check (FLG_UNKNOWN_MED IN ('Y','N'));
+/
+-- CHANGE END:  Pedro Morais
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 25/02/2011 16:51
+-- CHANGE REASON: [ALERT-155874] No relevant medication
+comment on column pat_medication_det.flg_unrelevant_med
+  is 'Checked no relevant medication. Values "Y" or "N"';
+
+alter table pat_medication_det
+  add constraint PAT_MEDICATION_DET_FUM_CHK
+  check (flg_unrelevant_med IN ('Y','N'));
+
+  ALTER TABLE pat_medication_det
+ ADD unrelevant_med_notes varchar2(1000 CHAR);
+
+comment on column pat_medication_det.unrelevant_med_notes
+  is 'Notes on no relevant medication.';
+
+comment on TABLE pat_medication_det
+  is 'Reported medication details';
+
+ALTER TABLE pat_medication_det MODIFY (create_user VARCHAR2(30 CHAR),
+                                       update_user VARCHAR2(30 CHAR));
+
+comment on COLUMN pat_medication_det.DT_PAT_MEDICATION_DET_TSTZ
+  is 'Detail/record notes date';
+
+comment on COLUMN pat_medication_det.UNKNOWN_MED_NOTES
+  is 'Notes on "Unknown medication"';
+
+comment on COLUMN pat_medication_det.NO_MED_NOTES
+  is 'Notes on "Not taking any medication"';
+
+comment on COLUMN pat_medication_det.ID_PROFESSIONAL
+  is 'Professional ID';
+
+comment on COLUMN pat_medication_det.ADW_LAST_UPDATE
+  is 'Last update date';
+
+comment on COLUMN pat_medication_det.FLG_UNKNOWN_MED
+  is 'Checked no unknown medication. Values "Y" or "N"';
+
+comment on COLUMN pat_medication_det.FLG_NO_MED
+  is 'Checked not taking any medication. Values "Y" or "N"';
+
+comment on COLUMN pat_medication_det.ID_PATIENT
+  is 'Patient ID';
+
+comment on COLUMN pat_medication_det.ID_PAT_MEDICATION_DET
+  is 'Primary Key';
+
+alter table PAT_MEDICATION_DET
+  add constraint PAT_MEDICATION_DET_FNM_CHK
+  check (FLG_NO_MED IN ('Y','N'));
+
+alter table PAT_MEDICATION_DET
+  add constraint PAT_MEDICATION_DET_FUNKM_CHK
+  check (FLG_UNKNOWN_MED IN ('Y','N'));
+
+-- CHANGE END:  Pedro Morais

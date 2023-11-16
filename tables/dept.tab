@@ -1,0 +1,65 @@
+
+
+  CREATE TABLE DEPT
+   (	ID_DEPT NUMBER(24,0) NOT NULL ENABLE,
+	CODE_DEPT VARCHAR2(200) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE dept IS 'Tabela de departamentos (abrange os registos em DEPARTMENT)' ;
+
+COMMENT ON COLUMN dept.rank IS 'Ordem de apresentação' ;
+
+alter table DEPT add ABBREVIATION VARCHAR2(30);
+
+comment on column DEPT.ABBREVIATION   is 'Sigla';
+
+
+ALTER TABLE DEPT 
+ ADD (FLG_AVAILABLE  VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ );
+
+COMMENT ON COLUMN DEPT.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD';
+
+ALTER TABLE DEPT MODIFY FLG_AVAILABLE default null;
+
+
+
+ALTER TABLE DEPT 
+ ADD (FLG_PRIORITY VARCHAR2(1));
+
+COMMENT ON COLUMN DEPT.FLG_PRIORITY IS 'U- Urgent/CITO; N- Non Urgent';
+
+
+ALTER TABLE DEPT 
+ ADD (FLG_COLLECTION_BY VARCHAR2(1));
+
+COMMENT ON COLUMN DEPT.FLG_PRIORITY IS 'L- Laboratory; D- Department';
+
+-- CHANGED BY: Joao Sa
+-- CHANGE DATE: 11/01/2016
+-- ISSUE: Refactor: Table comments
+comment on table DEPT
+  is 'Institutiton departments';
+-- Add comments to the columns 
+comment on column DEPT.id_dept
+  is 'Department id';
+comment on column DEPT.code_dept
+  is 'Code to translate the department name';
+comment on column DEPT.rank
+  is 'Rank';
+comment on column DEPT.id_institution
+  is 'Institution the department belongs to';
+comment on column DEPT.adw_last_update
+  is 'Record last update (ADW)';
+comment on column DEPT.abbreviation
+  is 'Institution name acronym or abbreviation';
+comment on column DEPT.flg_available
+  is 'Available in this implementation? Y/N';
+comment on column DEPT.flg_priority
+  is '(U)rgent/CITO; (N)on Urgent (Deprecated)';
+comment on column DEPT.flg_collection_by
+  is '(L)aboratory or (D)epartment (Deprecated)';

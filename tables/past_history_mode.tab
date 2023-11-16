@@ -1,0 +1,84 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 30/04/2011 15:45
+-- CHANGE REASON: [ALERT-172825] PFSH (Past Family Social History) reformulation (v2.6.1.0.1)
+create table PAST_HISTORY_MODE
+(
+  id_doc_area             NUMBER(24) not null,
+  flg_codified            VARCHAR2(1 CHAR)  DEFAULT 'N' NOT NULL, 
+  flg_template            VARCHAR2(1 CHAR)  DEFAULT 'N' NOT NULL,
+  flg_free_text           VARCHAR2(1 CHAR)  DEFAULT 'N' NOT NULL,
+  flg_available           VARCHAR2(1 CHAR)  DEFAULT 'Y' NOT NULL,
+  id_institution          NUMBER(24)        DEFAULT  0 NOT NULL,
+  id_software             NUMBER(24)        DEFAULT  0 NOT NULL,
+  create_user             VARCHAR2(24 CHAR),
+  create_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution      NUMBER(24),
+  update_user             VARCHAR2(24 CHAR),
+  update_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution      NUMBER(24)
+
+);
+
+comment on table PAST_HISTORY_MODE is 'It allows configure the mode of registering data on Past History by id_doc_area';
+comment on column PAST_HISTORY_MODE.id_doc_area    is 'ID of doc_area (PK)';
+comment on column PAST_HISTORY_MODE.flg_codified   is 'Flag codified';
+comment on column PAST_HISTORY_MODE.flg_template   is 'Flag template';
+COMMENT on column PAST_HISTORY_MODE.flg_free_text  is 'Flag free text';
+comment on column PAST_HISTORY_MODE.flg_available  is 'Flag available';
+comment on column PAST_HISTORY_MODE.id_institution is 'ID institution';
+COMMENT on column PAST_HISTORY_MODE.id_software    is 'ID software';
+
+COMMENT ON COLUMN PAST_HISTORY_MODE.create_user is 'Creation User';
+COMMENT ON COLUMN PAST_HISTORY_MODE.create_time is 'Creation Time';
+COMMENT ON COLUMN PAST_HISTORY_MODE.create_institution is 'Creation Institution';
+COMMENT ON COLUMN PAST_HISTORY_MODE.update_user is 'Update User';
+COMMENT ON COLUMN PAST_HISTORY_MODE.update_time is 'Update Time';
+COMMENT ON COLUMN PAST_HISTORY_MODE.update_institution is 'Update Institution';
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 01/09/2011 15:29
+-- CHANGE REASON: [ALERT-172825] 
+create table PAST_HISTORY_MODE
+(
+  id_doc_area             NUMBER(24) not null,
+  flg_codified            VARCHAR2(1 CHAR)  DEFAULT 'N' NOT NULL, 
+  flg_template            VARCHAR2(1 CHAR)  DEFAULT 'N' NOT NULL,
+  flg_free_text           VARCHAR2(1 CHAR)  DEFAULT 'N' NOT NULL,
+  flg_available           VARCHAR2(1 CHAR)  DEFAULT 'Y' NOT NULL,
+  id_institution          NUMBER(24)        DEFAULT  0 NOT NULL,
+  id_software             NUMBER(24)        DEFAULT  0 NOT NULL,
+  create_user             VARCHAR2(24 CHAR),
+  create_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution      NUMBER(24),
+  update_user             VARCHAR2(24 CHAR),
+  update_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution      NUMBER(24)
+);
+
+comment on table PAST_HISTORY_MODE is 'It allows configure the mode of registering data on Past History by id_doc_area';
+comment on column PAST_HISTORY_MODE.id_doc_area    is 'ID of doc_area (PK)';
+comment on column PAST_HISTORY_MODE.flg_codified   is 'Flag codified';
+comment on column PAST_HISTORY_MODE.flg_template   is 'Flag template';
+COMMENT on column PAST_HISTORY_MODE.flg_free_text  is 'Flag free text';
+comment on column PAST_HISTORY_MODE.flg_available  is 'Flag available';
+comment on column PAST_HISTORY_MODE.id_institution is 'ID institution';
+COMMENT on column PAST_HISTORY_MODE.id_software    is 'ID software';
+
+COMMENT ON COLUMN PAST_HISTORY_MODE.create_user is 'Creation User';
+COMMENT ON COLUMN PAST_HISTORY_MODE.create_time is 'Creation Time';
+COMMENT ON COLUMN PAST_HISTORY_MODE.create_institution is 'Creation Institution';
+COMMENT ON COLUMN PAST_HISTORY_MODE.update_user is 'Update User';
+COMMENT ON COLUMN PAST_HISTORY_MODE.update_time is 'Update Time';
+COMMENT ON COLUMN PAST_HISTORY_MODE.update_institution is 'Update Institution';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 02/03/2021 12:22
+-- CHANGE REASON: [EMR-40282] -   Improvements in some areas of the "History" functionality
+-- Add/modify columns
+alter table PAST_HISTORY_MODE add flg_default varchar2(1 CHAR);
+-- Add comments to the columns
+comment on column PAST_HISTORY_MODE.flg_default
+is 'Default mode (C - Codified. T - Template,F - Free text)';
+-- CHANGE END: Elisabete Bugalho

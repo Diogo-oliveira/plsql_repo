@@ -1,0 +1,133 @@
+
+
+  CREATE TABLE DIAGRAM_LAYOUT
+   (	ID_DIAGRAM_LAYOUT NUMBER(24,0) NOT NULL ENABLE,
+	INTERNAL_NAME VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE diagram_layout IS 'Tabela de parametrização dos layouts onde as imagens serão visualizadas' ;
+
+COMMENT ON COLUMN diagram_layout.id_diagram_layout IS 'Chave primária' ;
+COMMENT ON COLUMN diagram_layout.internal_name IS 'Nome interno' ;
+COMMENT ON COLUMN diagram_layout.flg_available IS 'Disponibilidade do registo' ;
+COMMENT ON COLUMN diagram_layout.adw_last_update IS 'Data da última alteração' ;
+
+alter table DIAGRAM_LAYOUT add CODE_DIAGRAM_LAYOUT VARCHAR2(200);
+alter table DIAGRAM_LAYOUT add GENDER VARCHAR2(1);
+alter table DIAGRAM_LAYOUT add ID_BODY_PART NUMBER(24);
+alter table DIAGRAM_LAYOUT add ID_SYSTEM_APARATUS NUMBER(24);
+
+comment on column DIAGRAM_LAYOUT.CODE_DIAGRAM_LAYOUT
+  is 'Suporte para descrição multi-língua do template';
+comment on column DIAGRAM_LAYOUT.GENDER
+  is 'Sexo';
+comment on column DIAGRAM_LAYOUT.ID_BODY_PART
+  is 'Parte do corpo';
+comment on column DIAGRAM_LAYOUT.ID_SYSTEM_APARATUS
+  is 'Sistema a que se refere';
+
+alter table diagram_layout rename column ID_SYSTEM_APARATUS to ID_SYSTEM_APPARATI;
+
+alter table diagram_layout add id_body_layer number(24);
+ 
+alter table diagram_layout add id_body_side number(24);
+
+comment on column diagram_layout.id_body_side
+  is 'ID de body side';
+  
+comment on column diagram_layout.id_body_layer
+  is 'ID de body layer';
+
+alter table diagram_layout add small_image blob;
+
+ALTER TABLE diagram_layout
+ DROP COLUMN id_system_apparati ;
+ 
+
+ALTER TABLE diagram_layout
+ ADD id_sys_appar_organ  NUMBER(24);
+ 
+comment on column diagram_layout.id_sys_appar_organ
+  is 'ID de sys_appar_organ';
+
+
+alter table diagram_layout add id_system_apparati number(24);
+
+comment on column diagram_layout.id_system_apparati is 'ID do system_apparati a que o layout diz respeito';
+
+alter table diagram_layout modify code_diagram_layout not null;
+ 
+  
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 29/05/2009 09:44
+-- CHANGE REASON: [ALERT-19154] Body diagram - Filter images by age
+ALTER TABLE DIAGRAM_LAYOUT ADD ID_BODY_DIAG_AGE_GRP NUMBER(24);
+
+COMMENT ON COLUMN DIAGRAM_LAYOUT.ID_BODY_DIAG_AGE_GRP IS 'Body diagram age group corresponding to the layout';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 10:00
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table DIAGRAM_LAYOUT
+  is 'Body diagrams'' layout configuration';
+-- Add comments to the columns 
+comment on column DIAGRAM_LAYOUT.id_diagram_layout
+  is 'Body diagram layout ID';
+comment on column DIAGRAM_LAYOUT.internal_name
+  is 'Internal description';
+comment on column DIAGRAM_LAYOUT.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column DIAGRAM_LAYOUT.adw_last_update
+  is 'Update date';
+comment on column DIAGRAM_LAYOUT.code_diagram_layout
+  is 'Translation code';
+comment on column DIAGRAM_LAYOUT.gender
+  is 'Gender';
+comment on column DIAGRAM_LAYOUT.id_body_part
+  is 'Body part ID';
+comment on column DIAGRAM_LAYOUT.id_body_layer
+  is 'Body layer ID';
+comment on column DIAGRAM_LAYOUT.id_body_side
+  is 'Body side ID';
+comment on column DIAGRAM_LAYOUT.small_image
+  is 'Layout image';
+comment on column DIAGRAM_LAYOUT.id_sys_appar_organ
+  is 'Body organ ID';
+comment on column DIAGRAM_LAYOUT.id_system_apparati
+  is 'Body system ID';
+comment on column DIAGRAM_LAYOUT.create_user
+  is 'Creation User';
+comment on column DIAGRAM_LAYOUT.create_time
+  is 'Creation Time';
+comment on column DIAGRAM_LAYOUT.create_institution
+  is 'Creation Institution';
+comment on column DIAGRAM_LAYOUT.update_user
+  is 'Update User';
+comment on column DIAGRAM_LAYOUT.update_time
+  is 'Update Time';
+comment on column DIAGRAM_LAYOUT.update_institution
+  is 'Update Institution';
+comment on column DIAGRAM_LAYOUT.id_body_diag_age_grp
+  is 'Body diagram age group ID';
+-- CHANGE END: Renato Nunes
+
+-- CHANGED BY: rui.mendonca
+-- CHANGE DATE: 11/12/2017 15:43
+-- CHANGE REASON: [CALERT-1112] New Neurological assessment figure
+BEGIN
+    pk_versioning.run('
+ALTER TABLE 
+  diagram_layout 
+ADD 
+  flg_type VARCHAR2(1 CHAR) DEFAULT ''O'' NOT NULL');
+END;
+/
+COMMENT ON COLUMN diagram_layout.flg_type IS 'Type of diagram layout; D - Drainage, N - Neurological assessment, O - Others';
+-- CHANGE END: rui.mendonca

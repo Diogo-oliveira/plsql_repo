@@ -1,0 +1,86 @@
+-- CHANGED BY: Paulo Fonseca
+-- CHANGED DATE: 28/10/2009
+-- CHANGING REASON: ALERT-52637
+CREATE TABLE NECESSITY_DEPT_INST_SOFT
+(
+  ID_NECESSITY       NUMBER(12) NOT NULL,
+  ID_DEPARTMENT      NUMBER(24),
+  FLG_TYPE           VARCHAR2(6 CHAR),     
+  ID_INSTITUTION     NUMBER(24) NOT NULL,
+  ID_SOFTWARE        NUMBER(24) NOT NULL,
+  CREATE_USER        VARCHAR2(24),
+  CREATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER        VARCHAR2(24),
+  UPDATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+)
+TABLESPACE TABLE_M;
+
+COMMENT ON TABLE NECESSITY_DEPT_INST_SOFT IS 'Default means of transport for a department or a department type.';
+
+COMMENT ON COLUMN NECESSITY_DEPT_INST_SOFT.ID_NECESSITY IS 'Necessity Id';
+COMMENT ON COLUMN NECESSITY_DEPT_INST_SOFT.ID_DEPARTMENT IS 'Department Id';
+COMMENT ON COLUMN NECESSITY_DEPT_INST_SOFT.FLG_TYPE IS 'Department flag type';
+COMMENT ON COLUMN NECESSITY_DEPT_INST_SOFT.ID_INSTITUTION IS 'Institution Id';
+COMMENT ON COLUMN NECESSITY_DEPT_INST_SOFT.ID_SOFTWARE IS 'Software Id';
+COMMENT ON COLUMN NECESSITY_DEPT_INST_SOFT.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN NECESSITY_DEPT_INST_SOFT.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN NECESSITY_DEPT_INST_SOFT.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN NECESSITY_DEPT_INST_SOFT.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN NECESSITY_DEPT_INST_SOFT.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN NECESSITY_DEPT_INST_SOFT.UPDATE_INSTITUTION IS 'Update Institution';
+-- CHANGE END
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/03/2011 17:33
+-- CHANGE REASON: [ALERT-156375] [EDIS] INV_ALL_096: Missing Primary Keys in Alert tables
+DECLARE
+    e_col_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_col_already_exists, -1430);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'alter table NECESSITY_DEPT_INST_SOFT add (ID_NECT_DEPT_INST_SOFT NUMBER(24))';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column has already been added.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/03/2011 17:35
+-- CHANGE REASON: [ALERT-156375] [EDIS] INV_ALL_096: Missing Primary Keys in Alert tables
+DECLARE
+    e_pk_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_pk_already_exists, -2260);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'alter table NECESSITY_DEPT_INST_SOFT add constraint NDIS_PK primary key (ID_NECT_DEPT_INST_SOFT)';
+    EXCEPTION
+        WHEN e_pk_already_exists THEN
+            dbms_output.put_line('PK for table NECESSITY_DEPT_INST_SOFT already exists.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 26/09/2013 11:14
+-- CHANGE REASON: [ALERT-264768] 
+alter table necessity_dept_inst_soft
+add flg_selected VARCHAR2(1 CHAR) default 'N' not null;
+
+alter table necessity_dept_inst_soft
+add flg_area VARCHAR2 (30 CHAR) DEFAULT 'MOVEMENT';
+
+comment on column NECESSITY_DEPT_INST_SOFT.flg_area
+  is 'Flag that indicates to which area this configuration is valid. Values: MOVEMENT - movements area (used to select a default necessity), NECESSITY_INST_SOFT - general institution/software configurations)';
+comment on column NECESSITY_DEPT_INST_SOFT.flg_selected
+  is 'Flag that indicates if this necessity is automatically selected when the necessities screen is loaded';
+COMMENT on column NECESSITY_DEPT_INST_SOFT.ID_NECT_DEPT_INST_SOFT IS 'Primary key';
+-- CHANGE END:  sergio.dias

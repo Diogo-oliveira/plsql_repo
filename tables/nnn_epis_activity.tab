@@ -1,0 +1,144 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 18/07/2014 16:37
+-- CHANGE REASON: [ALERT-290969] Nursing Care Plan: NANDA, NIC, NOC - Data Model
+
+BEGIN
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'NNN_EPIS_ACTIVITY', i_obj_type => 'TABLE', i_flg_category => 'TRS', i_flg_alert_default => 'N', i_delete_script => '', i_flg_default_child => 'N', i_flg_nzd => 'Y', i_responsible_team => 'NURSING');
+END;
+/
+CREATE TABLE NNN_EPIS_ACTIVITY
+  (
+    ID_NNN_EPIS_ACTIVITY   NUMBER (24) NOT NULL ,
+    ID_NIC_ACTIVITY        NUMBER (24) ,
+    ID_NIC_OTHR_ACTV_VRSN  NUMBER (24) ,
+    ID_PATIENT             NUMBER (24) NOT NULL ,
+    ID_EPISODE             NUMBER (24) ,
+    ID_VISIT               NUMBER (24) ,
+    ID_PROFESSIONAL        NUMBER (24) NOT NULL ,
+    ID_CANCEL_REASON       NUMBER (24) ,
+    CANCEL_NOTES           VARCHAR2 (1000 CHAR) ,
+    ID_EPISODE_ORIGIN      NUMBER (24) ,
+    ID_EPISODE_DESTINATION NUMBER (24) ,
+    FLG_PRN                VARCHAR2 (1 CHAR) DEFAULT 'N' NOT NULL ,
+    CODE_NOTES_PRN         VARCHAR2 (200 CHAR) AS ( 'NNN_EPIS_ACTIVITY.CODE_NOTES_PRN.'
+    ||TO_CHAR(ID_NNN_EPIS_ACTIVITY) ) VIRTUAL NOT NULL ,
+    FLG_TIME             VARCHAR2 (1 CHAR) DEFAULT 'E' NOT NULL ,
+    FLG_PRIORITY         VARCHAR2 (1 CHAR) DEFAULT 'N' NOT NULL ,
+    ID_ORDER_RECURR_PLAN NUMBER (24) ,
+    FLG_DOC_TYPE         VARCHAR2 (1 CHAR) NOT NULL ,
+    DOC_PARAMETER        NUMBER (24) ,
+    FLG_REQ_STATUS       VARCHAR2 (1 CHAR) NOT NULL ,
+    DT_VAL_TIME_START    TIMESTAMP WITH LOCAL TIME ZONE NOT NULL ,
+    DT_VAL_TIME_END      TIMESTAMP WITH LOCAL TIME ZONE ,
+    DT_TRS_TIME_START    TIMESTAMP WITH LOCAL TIME ZONE NOT NULL ,
+    DT_TRS_TIME_END      TIMESTAMP WITH LOCAL TIME ZONE ,
+    CREATE_USER          VARCHAR2 (30 CHAR) ,
+    CREATE_TIME          TIMESTAMP WITH LOCAL TIME ZONE ,
+    CREATE_INSTITUTION   NUMBER (24) ,
+    UPDATE_USER          VARCHAR2 (30 CHAR) ,
+    UPDATE_TIME          TIMESTAMP WITH LOCAL TIME ZONE ,
+    UPDATE_INSTITUTION   NUMBER (24)
+  )
+  TABLESPACE ALERT_DATA ;
+
+COMMENT ON TABLE NNN_EPIS_ACTIVITY
+IS
+  'NIC Activities related to a NIC Intervention defined for a NANDA Diagnosis within a patient''s nursing care plan' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.ID_NNN_EPIS_ACTIVITY
+IS
+  'Episode''s NIC Activity ID (surrogate key)' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.ID_NIC_ACTIVITY
+IS
+  'NIC Activity ID' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.ID_NIC_OTHR_ACTV_VRSN
+IS
+  'NIC Other Activity ID' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.ID_PATIENT
+IS
+  'Patient ID' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.ID_EPISODE
+IS
+  'Episode ID where the entry was created /edited' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.ID_VISIT
+IS
+  'Visit ID' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.ID_PROFESSIONAL
+IS
+  'Profissional ID who did the creation/edition of this entry' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.ID_CANCEL_REASON
+IS
+  'Cancel reason ID' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.CANCEL_NOTES
+IS
+  'Cancelation notes' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.ID_EPISODE_ORIGIN
+IS
+  'Episode ID where the activity was registered' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.ID_EPISODE_DESTINATION
+IS
+  'Episode ID where the activity is going to be performed' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.FLG_PRN
+IS
+  'Flag that indicates wether the Activity is PRN or not' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.CODE_NOTES_PRN
+IS
+  'Notes to indicate when a PRN order should be activated' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.FLG_TIME
+IS
+  'Execution time to perform the NIC Activity: In current (E)pisode, (B)etween episodes, (N)ext episode.' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.FLG_PRIORITY
+IS
+  'Flag that indicates the priority of an Activity: (N)ormal, (U)rgent, (E)mergent' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.ID_ORDER_RECURR_PLAN
+IS
+  'Order recurrence plan ID for defined frequency in the instructions' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.FLG_DOC_TYPE
+IS
+  'Type of documentation: (T)ouch-option templates, (V)ital signs, Free-text (N)otes' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.DOC_PARAMETER
+IS
+  'Parameter according with the documentation type  (ID_Vital _Sign or ID_Doc_Template)' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.FLG_REQ_STATUS
+IS
+  'Request status:
+C Cancelled
+D Draft
+E Expired
+F Finished
+I Ignored
+O Ongoing
+P Suspended
+R Requested
+S Suggested
+T Discontinued' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.DT_VAL_TIME_START
+IS
+  'Valid time start' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.DT_VAL_TIME_END
+IS
+  'Valid time end' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.DT_TRS_TIME_START
+IS
+  'Transaction time start' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.DT_TRS_TIME_END
+IS
+  'Transaction time end' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.CREATE_USER
+IS
+  'Creation User' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.CREATE_TIME
+IS
+  'Creation Time' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.CREATE_INSTITUTION
+IS
+  'Creation Institution' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.UPDATE_USER
+IS
+  'Update User' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.UPDATE_TIME
+IS
+  'Update Time' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTIVITY.UPDATE_INSTITUTION
+IS
+  'Update Institution' ;
+-- CHANGE END: Ariel Machado

@@ -1,0 +1,129 @@
+CREATE TABLE mtos_score (
+       id_mtos_score NUMBER(24) NOT NULL,
+			 code_mtos_score VARCHAR2(200) NOT NULL,
+			 internal_name VARCHAR2(200) NOT NULL,
+			 flg_score_type VARCHAR2(5) NOT NULL,
+			 flg_available VARCHAR2(1) NOT NULL,
+			 rank NUMBER(6) NOT NULL,
+			 id_content VARCHAR2(200),
+			 create_user VARCHAR2(24),
+			 create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 create_institution NUMBER(24),
+			 update_user VARCHAR2(24),
+			 update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 update_institution NUMBER(24),
+			 code_mtos_score_abbrev VARCHAR2(200) NOT NULL
+) TABLESPACE TABLE_S;
+
+COMMENT ON TABLE mtos_score IS 'MTOS dataset scores';
+COMMENT ON COLUMN mtos_score.id_mtos_score IS 'Score Identifier (Primary key)';
+COMMENT ON COLUMN mtos_score.code_mtos_score IS 'Code for translation';
+COMMENT ON COLUMN mtos_score.internal_name IS 'Database internal name';
+COMMENT ON COLUMN mtos_score.flg_score_type IS 'Type of score: (GCS) Glasgow Coma Score (RTS) Revised Trauma Score (PTS) Pediatric Revised Trauma Score (ISS) Injury Severity Score (TRISS) Trauma Injury Severity Score';
+COMMENT ON COLUMN mtos_score.flg_available IS 'Availability: (Y) Yes (N) No';
+COMMENT ON COLUMN mtos_score.rank IS 'Value for sorting';
+COMMENT ON COLUMN mtos_score.id_content IS 'Content unique identifier';
+COMMENT ON COLUMN mtos_score.create_user IS 'Creation user';
+COMMENT ON COLUMN mtos_score.create_time IS 'Creation date / time';
+COMMENT ON COLUMN mtos_score.create_institution IS 'Creation institution';
+COMMENT ON COLUMN mtos_score.update_user IS 'Update user';
+COMMENT ON COLUMN mtos_score.update_time IS 'Update date / time';
+COMMENT ON COLUMN mtos_score.update_institution IS 'Update institution';
+COMMENT ON COLUMN mtos_score.code_mtos_score_abbrev IS 'Abbreviation of the score name';
+
+ALTER TABLE mtos_score MODIFY flg_score_type VARCHAR2(10);
+ALTER TABLE mtos_score ADD screen_name VARCHAR2(200);
+
+comment on column mtos_score.screen_name is 'Screen used to register this score';
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 23/08/2013 14:50
+-- CHANGE REASON: [ALERT-262898] 
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE MTOS_SCORE ADD (FLG_VIEWER VARCHAR2(001 CHAR) DEFAULT ''N'' not null)';
+   exception when others then
+      dbms_output.put_line('ALTER TABLE MTOS_SCORE ADD FLG_VIEWER ERROR!');		
+	END;		
+		BEGIN
+    EXECUTE IMMEDIATE 'comment on column MTOS_SCORE.FLG_VIEWER is ''Shows Premade Viewer Y/N''';
+   exception when others then
+      dbms_output.put_line('ALTER TABLE comment on column MTOS_SCORE.FLG_VIEWER ERROR!');		
+	END;		
+exception when others then
+  dbms_output.put_line('ALTER TABLE MTOS_SCORE ADD FLG_VIEWER ERROR!');
+end;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 28/08/2013 16:58
+-- CHANGE REASON: [ALERT-263996] 
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE MTOS_PARAM ADD (VAL_MIN NUMBER(24) DEFAULT 0)';	
+    EXECUTE IMMEDIATE 'comment on column MTOS_PARAM.VAL_MIN is ''Minimum value for this parameter only used when no vital sign associated.''';
+   exception when others then
+      dbms_output.put_line('ALTER TABLE MTOS_PARAM ADD VAL_MIN ERROR!');    
+  END;      
+	
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE MTOS_PARAM ADD (VAL_MAX NUMBER(24) DEFAULT 999999999999)';	
+		    EXECUTE IMMEDIATE 'comment on column MTOS_PARAM.VAL_MAX is ''Maximum value for this parameter only used when no vital sign associated.''';
+   exception when others then
+      dbms_output.put_line('ALTER TABLE MTOS_PARAM ADD VAL_MAX ERROR!');    
+  END;      	
+
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE MTOS_PARAM ADD (FORMAT_NUM NUMBER(24) DEFAULT 999999999999)';	
+    EXECUTE IMMEDIATE 'comment on column MTOS_PARAM.FORMAT_NUM is ''Format Number for this parameter only used when no vital sign associated.''';		
+   exception when others then
+      dbms_output.put_line('ALTER TABLE MTOS_PARAM ADD FORMAT_NUM ERROR!');    
+  END;     	
+
+end;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 28/08/2013 17:28
+-- CHANGE REASON: [ALERT-263996] 
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE MTOS_PARAM ADD (VAL_MIN NUMBER(24) DEFAULT 0)';	
+    EXECUTE IMMEDIATE 'comment on column MTOS_PARAM.VAL_MIN is ''Minimum value for this parameter only used when no vital sign associated.''';
+   exception when others then
+      dbms_output.put_line('ALTER TABLE MTOS_PARAM ADD VAL_MIN ERROR!');    
+  END;      
+	
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE MTOS_PARAM ADD (VAL_MAX NUMBER(24) DEFAULT 999999999999)';	
+		    EXECUTE IMMEDIATE 'comment on column MTOS_PARAM.VAL_MAX is ''Maximum value for this parameter only used when no vital sign associated.''';
+   exception when others then
+      dbms_output.put_line('ALTER TABLE MTOS_PARAM ADD VAL_MAX ERROR!');    
+  END;      	
+
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE MTOS_PARAM ADD (FORMAT_NUM NUMBER(24,2) DEFAULT 999999999999)';	
+    EXECUTE IMMEDIATE 'comment on column MTOS_PARAM.FORMAT_NUM is ''Format Number for this parameter only used when no vital sign associated.''';		
+   exception when others then
+      dbms_output.put_line('ALTER TABLE MTOS_PARAM ADD FORMAT_NUM ERROR!');    
+  END;     	
+
+end;
+/
+-- CHANGE END: mario.mineiro
+
+
+declare
+l_sql varchar2(4000);
+pl  varchar2(0010 char) := '''';
+begin
+l_Sql := 'alter table mtos_score add flg_title_visible varchar2(0001 char) default '||pl|| 'N'||pl||' not null';
+pk_versioning.run( l_sql);
+end;
+/
+
+comment on column MTOS_SCORE.flg_title_visible  is 'Controls display of title in severity score page: (Y/N)';
+
+

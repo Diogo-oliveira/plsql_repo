@@ -1,0 +1,123 @@
+
+
+  ALTER TABLE DIET ADD CONSTRAINT DIT_PK PRIMARY KEY (ID_DIET) ENABLE;
+
+  ALTER TABLE DIET MODIFY (ID_DIET NOT NULL ENABLE);
+
+  ALTER TABLE DIET MODIFY (CODE_DIET NOT NULL ENABLE);
+
+  ALTER TABLE DIET MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE DIET MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 01/06/2009 15:20
+-- CHANGE REASON: [ALERT-889 ] Modelo de dados do nutricionista
+alter table DIET
+drop constraint DIT_PK cascade;
+
+alter table DIET
+  add constraint DIT_PK primary key (ID_DIET, CODE_DIET);
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 01/06/2009 15:21
+-- CHANGE REASON: [ALERT-889 ] Modelo de dados do nutricionista
+ -- Creating Check Constraint on 'DIET'
+ALTER TABLE DIET
+ ADD (CONSTRAINT DIT_FLG_AVAIL_CHK CHECK (FLG_AVAILABLE IN ('Y','N')));
+
+ 
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 01/06/2009 15:31
+-- CHANGE REASON: [ALERT-889 ] Modelo de dados do nutricionista
+alter table DIET
+drop constraint DIT_PK cascade;
+
+alter table DIET
+  add constraint DIT_PK primary key (ID_DIET, CODE_DIET);
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 01/06/2009 15:31
+-- CHANGE REASON: [ALERT-889 ] Modelo de dados do nutricionista
+ -- Creating Check Constraint on 'DIET'
+ALTER TABLE DIET
+ ADD (CONSTRAINT DIT_FLG_AVAIL_CHK CHECK (FLG_AVAILABLE IN ('Y','N')));
+
+ 
+-- CHANGE END: Elisabete Bugalho
+
+
+-- Rita Lopes
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 01/06/2009 15:20
+-- CHANGE REASON: [ALERT-889 ] Modelo de dados do nutricionista
+BEGIN
+EXECUTE IMMEDIATE 'drop index DIT_PK';
+EXCEPTION
+WHEN OTHERS THEN
+NULL;
+END;
+/
+
+alter table DIET
+  add constraint DIT_PK primary key (ID_DIET, CODE_DIET);
+
+ALTER TABLE DIET
+ ADD (CONSTRAINT DIT_FLG_AVAIL_CHK CHECK (FLG_AVAILABLE IN ('Y','N')));
+
+-- CHANGE END
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 
+-- CHANGE REASON: ALERT-889 
+alter table DIET
+  drop constraint DIT_PK cascade;
+
+  alter table DIET
+  add constraint DIT_PK primary key (ID_DIET);
+-- CHANGE END
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 20/09/2011 18:06
+-- CHANGE REASON: [ALERT-187042] constraints
+DECLARE
+e_pk_already_there EXCEPTION;
+    e_unique_already_there EXCEPTION;
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.DIET
+  add constraint DIT_FLG_AVAIL_CHK
+  check (FLG_AVAILABLE IN (''Y'',''N''))';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

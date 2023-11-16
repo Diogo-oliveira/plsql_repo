@@ -1,0 +1,39 @@
+ALTER TABLE EHR_ACCESS_LOG
+ ADD (CONSTRAINT EAG_PK PRIMARY KEY 
+  (ID_EHR_ACCESS_LOG));
+ 
+ALTER TABLE EHR_ACCESS_LOG
+ ADD (CONSTRAINT EAL_FLG_TYPE_CNS CHECK (FLG_TYPE IN ('B', 'E', 'F')));
+
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 21/12/2010 12:42
+-- CHANGE REASON: [ALERT-139534] 
+declare
+  e_protection EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_protection, -02443);
+begin
+BEGIN
+        EXECUTE IMMEDIATE 'alter table ehr_access_log drop constraint EAL_FLG_TYPE_CNS';
+    EXCEPTION
+        WHEN e_protection THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+end;
+/
+declare
+  e_protection EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_protection, -02260);
+begin
+BEGIN
+        EXECUTE IMMEDIATE 'alter table EHR_ACCESS_LOG
+  add constraint EAL_FLG_TYPE_CNS
+  check (FLG_TYPE IN (''B'', ''E'', ''F'', ''S''))';
+    EXCEPTION
+        WHEN e_protection THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

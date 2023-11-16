@@ -1,0 +1,397 @@
+
+
+  CREATE TABLE EPIS_PROF_RESP
+   (	ID_EPIS_PROF_RESP NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	DT_REQUEST DATE NOT NULL ENABLE,
+	ID_PROF_REQ NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_TO NUMBER(24,0),
+	ID_PROF_COMP NUMBER(24,0),
+	ID_SPECIALITY NUMBER(12,0),
+	ID_MOVEMENT NUMBER(24,0),
+	NOTES VARCHAR2(240),
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+
+	ID_PROF_DECLINE NUMBER(24,0),
+	DT_CANCEL DATE,
+	DT_DECLINE DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(240),
+	DT_COMP DATE,
+	DT_TRF_REQUESTED DATE,
+	DT_TRF_ACCEPTED DATE,
+	TRF_REASON VARCHAR2(4000),
+	TRF_ANSWER VARCHAR2(4000),
+	ID_ROOM NUMBER(24,0),
+	ID_BED NUMBER(24,0),
+	DT_EXECUTE DATE,
+
+	ID_DEPARTMENT_ORIG NUMBER(24,0),
+	ID_DEPARTMENT_DEST NUMBER(24,0),
+	ID_PROF_EXECUTE NUMBER(24,0),
+	TRANSPORT_NOTES VARCHAR2(4000),
+	DT_END_TRANSFER DATE,
+	ID_PROF_PREV NUMBER(24,0),
+	FLG_TRANSFER VARCHAR2(1),
+	ID_BED_EXECUTE NUMBER(12,0),
+	ID_ROOM_EXECUTE NUMBER(12,0),
+	FLG_ESCORT VARCHAR2(1),
+	FLG_TRANSF_TYPE VARCHAR2(1) DEFAULT 'I' NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN epis_prof_resp.id_epis_prof_resp IS 'Chave primária' ;
+COMMENT ON COLUMN epis_prof_resp.id_episode IS 'Chave estrangeira' ;
+COMMENT ON COLUMN epis_prof_resp.dt_request IS 'Data do pedido' ;
+COMMENT ON COLUMN epis_prof_resp.id_prof_req IS 'Profissional que requisitou' ;
+COMMENT ON COLUMN epis_prof_resp.id_prof_to IS 'Profissional a quem foi pedido a transferência de responsabilidade' ;
+COMMENT ON COLUMN epis_prof_resp.id_prof_comp IS 'Profissional que confirmou a transferência de responsabilidade' ;
+COMMENT ON COLUMN epis_prof_resp.id_speciality IS 'Especialidade de destino' ;
+COMMENT ON COLUMN epis_prof_resp.id_movement IS 'Movimento (se aplicável)' ;
+COMMENT ON COLUMN epis_prof_resp.notes IS 'Notas' ;
+COMMENT ON COLUMN epis_prof_resp.flg_type IS 'Tipo de pedido: S- Assistente Social; N - Enfermeiro; D - Médico' ;
+COMMENT ON COLUMN epis_prof_resp.flg_status IS 'Status da transferência: R - Requisitado; C-Cancelado; F- Final;D- Rejeitado; X-Executada' ;
+COMMENT ON COLUMN epis_prof_resp.id_prof_decline IS 'Profissional que rejeitou a transferência de responsabilidade' ;
+COMMENT ON COLUMN epis_prof_resp.dt_cancel IS 'Data em que foi cancelado o pedido de transferência de responsabilidade' ;
+
+COMMENT ON COLUMN epis_prof_resp.dt_decline IS 'Data em que foi rejeitado o pedido de transferência de responsabilidade' ;
+COMMENT ON COLUMN epis_prof_resp.id_prof_cancel IS 'Profissional que cancelou a transferência de responsabilidade' ;
+COMMENT ON COLUMN epis_prof_resp.notes_cancel IS 'Notas de cancelamento' ;
+COMMENT ON COLUMN epis_prof_resp.dt_comp IS 'Data de confirmação da transferência de responsabilidade' ;
+COMMENT ON COLUMN epis_prof_resp.dt_trf_requested IS 'Data de transferencia pretendida' ;
+COMMENT ON COLUMN epis_prof_resp.dt_trf_accepted IS 'Data de transferencia aceite' ;
+COMMENT ON COLUMN epis_prof_resp.trf_reason IS 'Motivo da transferencia' ;
+COMMENT ON COLUMN epis_prof_resp.trf_answer IS 'Resposta ao pedido de transferencia' ;
+COMMENT ON COLUMN epis_prof_resp.id_room IS 'Sala de destino' ;
+COMMENT ON COLUMN epis_prof_resp.id_bed IS 'Cama de destino' ;
+COMMENT ON COLUMN epis_prof_resp.dt_execute IS 'Data de transferencia executada' ;
+COMMENT ON COLUMN epis_prof_resp.id_department_orig IS 'Serviço de origem' ;
+COMMENT ON COLUMN epis_prof_resp.id_department_dest IS 'Serviço de destino' ;
+
+COMMENT ON COLUMN epis_prof_resp.id_prof_execute IS 'Profissional que executou' ;
+COMMENT ON COLUMN epis_prof_resp.transport_notes IS 'Notas de transporte' ;
+COMMENT ON COLUMN epis_prof_resp.dt_end_transfer IS 'Data fim da transferência' ;
+COMMENT ON COLUMN epis_prof_resp.id_prof_prev IS 'Anterior responsavél' ;
+COMMENT ON COLUMN epis_prof_resp.flg_transfer IS 'Tipo de transferência. D - Pela grelha do médico, enfermeiro' ;
+COMMENT ON COLUMN epis_prof_resp.id_bed_execute IS 'Cama alocada ao paciente após executada a transferência' ;
+COMMENT ON COLUMN epis_prof_resp.id_room_execute IS 'Sala alocada ao paciente após executada a transferência' ;
+COMMENT ON COLUMN epis_prof_resp.flg_escort IS 'Y - Necessita de acompanhante N - Não necessita de acompanhante' ;
+COMMENT ON COLUMN epis_prof_resp.flg_transf_type IS 'I - Transferencia individual ( ex:Urgencia) S - Transferencia de serviço' ;
+
+
+comment on column EPIS_PROF_RESP.FLG_TYPE
+  is 'Tipo de pedido: S- Social; N - Enfermeira; D - Médico';
+comment on column EPIS_PROF_RESP.FLG_STATUS
+  is 'Status da transferência: R - Requisitado; C-Cancelado; F- Final;D- Rejeitado';
+comment on column EPIS_PROF_RESP.DT_CANCEL
+  is 'Data de cancelamento do pedido de transferência';
+comment on column EPIS_PROF_RESP.DT_DECLINE
+  is 'Data em que se rejeitou o pedido de transferência';
+comment on column EPIS_PROF_RESP.ID_PROF_CANCEL
+  is 'Profissional que cancelou o pedido de transferência de responsabilidade';
+comment on column EPIS_PROF_RESP.ID_DEPARTMENT_ORIG
+  is 'Departamento de origem';
+comment on column EPIS_PROF_RESP.ID_DEPARTMENT_DEST
+  is 'Departamento de destino';
+
+
+ALTER TABLE EPIS_PROF_RESP ADD id_clinical_service_orig NUMBER(24);
+ALTER TABLE EPIS_PROF_RESP ADD id_clinical_service_dest NUMBER(24);
+
+comment on column EPIS_PROF_RESP.id_clinical_service_orig is 'Especialidade de origem';
+comment on column EPIS_PROF_RESP.id_clinical_service_dest is 'Especialidade de destino';
+
+
+alter table epis_prof_resp modify NOTES varchar2(4000);
+
+alter table epis_prof_resp modify NOTES_CANCEL varchar2(4000);
+
+alter table epis_prof_resp modify ID_BED_EXECUTE NUMBER(24);
+
+alter table epis_prof_resp modify ID_ROOM_EXECUTE NUMBER(24);
+
+alter table epis_prof_resp 
+add (dt_request_tstz timestamp with local time zone,
+dt_cancel_tstz timestamp with local time zone,
+dt_decline_tstz timestamp with local time zone,
+dt_comp_tstz timestamp with local time zone,
+dt_trf_requested_tstz timestamp with local time zone,
+dt_trf_accepted_tstz timestamp with local time zone,
+dt_execute_tstz timestamp with local time zone,
+dt_end_transfer_tstz timestamp with local time zone); 
+
+-- inpatient 28-01-2008
+alter table epis_prof_resp modify id_bed_execute number(24);
+
+alter table epis_prof_resp modify id_room_execute number(24);
+-- end
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-AUG-29
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 16502
+
+comment on table EPIS_PROF_RESP is 'Tabela dos profissionais responsáveis por episodio';
+
+COMMENT ON COLUMN EPIS_PROF_RESP.DT_CANCEL_TSTZ IS 'Data de cancelamento do pedido de transferência';
+COMMENT ON COLUMN EPIS_PROF_RESP.DT_DECLINE_TSTZ IS 'Data em que se rejeitou o pedido de transferência';
+COMMENT ON COLUMN EPIS_PROF_RESP.DT_COMP_TSTZ IS 'Data de confirmação da transferência de responsabilidade';
+COMMENT ON COLUMN EPIS_PROF_RESP.DT_TRF_REQUESTED_TSTZ IS 'Data de transferencia pretendida';
+COMMENT ON COLUMN EPIS_PROF_RESP.DT_TRF_ACCEPTED_TSTZ IS 'Data de transferencia aceite';
+COMMENT ON COLUMN EPIS_PROF_RESP.DT_EXECUTE_TSTZ IS 'Data de transferencia executada';
+COMMENT ON COLUMN EPIS_PROF_RESP.DT_END_TRANSFER_TSTZ IS 'Data fim da transferência';
+COMMENT ON COLUMN EPIS_PROF_RESP.FLG_TYPE IS 'Tipo de pedido: A - Administrativo; D - Médico; M - Manchester; N - Enfermeira; S- Social';
+COMMENT ON COLUMN EPIS_PROF_RESP.FLG_STATUS IS 'Estado da transferência: C - Cancelado; D - Rejeitado; F - Final; R - Requisitado; X - Executado';
+COMMENT ON COLUMN EPIS_PROF_RESP.FLG_TRANSFER IS 'Y - Sim; N - Não';
+
+-- CHANGE END
+
+
+-- CHANGED BY: Carlos Vieira
+-- CHANGE DATE: 2008-Set-22
+-- CHANGE REASON:date columns, timestamp 
+
+
+alter table EPIS_PROF_RESP drop column DT_CANCEL;
+alter table EPIS_PROF_RESP drop column DT_DECLINE;
+alter table EPIS_PROF_RESP drop column DT_TRF_REQUESTED;
+alter table EPIS_PROF_RESP drop column DT_TRF_ACCEPTED;
+alter table EPIS_PROF_RESP drop column DT_EXECUTE;
+alter table EPIS_PROF_RESP drop column DT_END_TRANSFER;
+alter table EPIS_PROF_RESP drop column DT_REQUEST;
+alter table EPIS_PROF_RESP drop column DT_COMP;
+
+-- CHANGE END
+
+
+
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 18/11/2010 14:15
+-- CHANGE REASON: [ALERT-142370] Hand-off NL refactoring - replication to 2.6.0.4
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_prof_resp ADD id_cancel_reason NUMBER(24)';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_prof_resp.id_cancel_reason IS ''Cancel reason ID''';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EPIS_PROF_RESP
+  is 'Stores the responsible for a epispde';
+-- Add comments to the columns 
+comment on column EPIS_PROF_RESP.id_epis_prof_resp
+  is 'Primary key';
+comment on column EPIS_PROF_RESP.id_episode
+  is 'Episode ID';
+comment on column EPIS_PROF_RESP.id_prof_req
+  is 'Professional who requested';
+comment on column EPIS_PROF_RESP.id_prof_to
+  is 'Professional who was asked to transfer of responsibility';
+comment on column EPIS_PROF_RESP.id_prof_comp
+  is 'Professional who confirmed the transfer of responsibility';
+comment on column EPIS_PROF_RESP.id_speciality
+  is 'DEPRECATED';
+comment on column EPIS_PROF_RESP.id_movement
+  is 'Patient transport ID';
+comment on column EPIS_PROF_RESP.notes
+  is 'Hand-off notes';
+comment on column EPIS_PROF_RESP.flg_type
+  is 'Type of hand-off request: A - Registrar; D - Physician; M - Manchester; N - Nurse; S- Social Worker';
+comment on column EPIS_PROF_RESP.flg_status
+  is 'Status (SYS_DOMAIN EPIS_PROF_RESP.FLG_STATUS)';
+comment on column EPIS_PROF_RESP.id_prof_decline
+  is 'Professional who rejected the transfer of responsibility';
+comment on column EPIS_PROF_RESP.id_prof_cancel
+  is 'Professional that cancelled the request';
+comment on column EPIS_PROF_RESP.notes_cancel
+  is 'Cancellation notes';
+comment on column EPIS_PROF_RESP.trf_reason
+  is 'Transfer reason';
+comment on column EPIS_PROF_RESP.trf_answer
+  is 'answer to the hand-off request';
+comment on column EPIS_PROF_RESP.id_room
+  is 'Destination room ';
+comment on column EPIS_PROF_RESP.id_bed
+  is 'Destination bed';
+comment on column EPIS_PROF_RESP.id_department_orig
+  is 'Origin department';
+comment on column EPIS_PROF_RESP.id_department_dest
+  is 'Destination department';
+comment on column EPIS_PROF_RESP.id_prof_execute
+  is 'Professional performing request';
+comment on column EPIS_PROF_RESP.transport_notes
+  is 'Transportation notes';
+comment on column EPIS_PROF_RESP.id_prof_prev
+  is 'Previous responsible professional';
+comment on column EPIS_PROF_RESP.flg_transfer
+  is 'Is this a transfer request (Y/N)';
+comment on column EPIS_PROF_RESP.id_bed_execute
+  is 'Bed allocated to the patient after the transfer performed';
+comment on column EPIS_PROF_RESP.id_room_execute
+  is 'Room allocated to the patient after the transfer performed';
+comment on column EPIS_PROF_RESP.flg_escort
+  is 'Y - Needs escort N - Does not need escort';
+comment on column EPIS_PROF_RESP.flg_transf_type
+  is 'I - Hand off;S - Service transfer; O - General responsibility';
+comment on column EPIS_PROF_RESP.id_clinical_service_orig
+  is 'Origin clinical service';
+comment on column EPIS_PROF_RESP.id_clinical_service_dest
+  is 'Destination clinical service';
+comment on column EPIS_PROF_RESP.dt_request_tstz
+  is 'Date os request';
+comment on column EPIS_PROF_RESP.dt_cancel_tstz
+  is 'Cancellation  date of the transfer request';
+comment on column EPIS_PROF_RESP.dt_decline_tstz
+  is 'Rejection date of the transfer request';
+comment on column EPIS_PROF_RESP.dt_comp_tstz
+  is 'Confirmation date of the transfer request';
+comment on column EPIS_PROF_RESP.dt_trf_requested_tstz
+  is 'Intended date of transfer';
+comment on column EPIS_PROF_RESP.dt_trf_accepted_tstz
+  is 'Date of transfer accepted';
+comment on column EPIS_PROF_RESP.dt_execute_tstz
+  is 'Date of transfer executed';
+comment on column EPIS_PROF_RESP.dt_end_transfer_tstz
+  is 'End date of the transfer';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 06/03/2018 09:31
+-- CHANGE REASON: [EMR-1752] 
+COMMENT ON COLUMN EPIS_PROF_RESP.FLG_TRANSFER IS 'I - Hand off;S - Service transfer; O - General responsibility; A - Accept automatically';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.epis_prof_resp move lob(free_text_notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 10/04/2019 09:15
+-- CHANGE REASON: [EMR-14841] - Specific message for Service transfer to Rehab
+begin
+   EXECUTE IMMEDIATE 'alter table epis_prof_resp add (flg_patient_consent VARCHAR2(1))';
+end;
+/
+
+alter table epis_prof_resp
+ add constraint EPF_FLG_PATIENT_CONSENT_CHK
+  check (flg_patient_consent IN ('N','Y'));
+
+COMMENT ON column epis_prof_resp.flg_patient_consent IS 'indicates if the patient consent the transfer or not.';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 10/04/2019 10:47
+-- CHANGE REASON: [EMR-14886] - [DB] Specific message for Service transfer to Rehab
+begin
+   EXECUTE IMMEDIATE 'alter table alert.epis_prof_resp add (flg_patient_consent VARCHAR2(1 char))';
+end;
+/
+
+alter table alert.epis_prof_resp
+ add constraint EPF_FLG_PATIENT_CONSENT_CHK
+  check (flg_patient_consent IN ('N','Y'));
+
+COMMENT ON column alert.epis_prof_resp.flg_patient_consent IS 'indicates if the patient consent the transfer or not.';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 20/08/2019 14:23
+-- CHANGE REASON: [EMR-18975] - [DB] Change Hand-off request to return the SBAR summary - versioning
+ALTER TABLE EPIS_PROF_RESP add SBAR_NOTES clob;
+
+comment on column EPIS_PROF_RESP.SBAR_NOTES
+is 'SBAR note information';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 04/10/2019 12:15
+-- CHANGE REASON: [EMR-20941] - [DB] Improvements in Hand Off
+alter table epis_prof_resp add (notes_clob clob) lob(notes_clob) store as(tablespace alert_lob) ;
+
+ALTER TABLE epis_prof_resp MOVE LOB(sbar_notes) STORE AS (TABLESPACE alert_lob);
+
+alter index EPIS_PROF_RESP_FLG_ST_IDX rebuild;
+alter index EPR_PROF_FK6_I rebuild;
+alter index EPR_PROF_FK7_I rebuild;
+alter index EPR_PROF_FK4_I rebuild;
+alter index EPR_PROF_FK5_I rebuild;
+alter index EPR_SPC_FK_I rebuild;
+alter index EPR_PK rebuild;
+alter index EPR_ROOM_FK_I rebuild;
+alter index EPR_ROOMT_FK_I rebuild;
+alter index EPR_PROF_FK3_I rebuild;
+alter index EPR_CSDEST_FK_I rebuild;
+alter index EPR_CSORIG_FK_I rebuild;
+alter index EPR_BEDT_FK_I rebuild;
+alter index EPR_SEARCH01_IDX rebuild;
+alter index EPR_BED_FK_I rebuild;
+alter index EPR_PROF_FK_I rebuild;
+alter index EPR_PROF_FK2_I rebuild;
+alter index EPR_EPIS_FK_I rebuild;
+alter index EPR_DEP_FK_I rebuild;
+alter index EPR_DEP_FK2_I rebuild;
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 09/10/2019 08:31
+-- CHANGE REASON: [EMR-20941] - [DB] Improvements in Hand Off
+alter table epis_prof_resp add (notes_clob clob) lob(notes_clob) store as(tablespace alert_lob) ;
+
+ALTER TABLE epis_prof_resp MOVE LOB(sbar_notes) STORE AS (TABLESPACE alert_lob);
+
+alter index EPIS_PROF_RESP_FLG_ST_IDX rebuild;
+alter index EPR_PROF_FK6_I rebuild;
+alter index EPR_PROF_FK7_I rebuild;
+alter index EPR_PROF_FK4_I rebuild;
+alter index EPR_PROF_FK5_I rebuild;
+alter index EPR_SPC_FK_I rebuild;
+alter index EPR_PK rebuild;
+alter index EPR_ROOM_FK_I rebuild;
+alter index EPR_ROOMT_FK_I rebuild;
+alter index EPR_PROF_FK3_I rebuild;
+alter index EPR_CSDEST_FK_I rebuild;
+alter index EPR_CSORIG_FK_I rebuild;
+alter index EPR_BEDT_FK_I rebuild;
+alter index EPR_SEARCH01_IDX rebuild;
+alter index EPR_BED_FK_I rebuild;
+alter index EPR_PROF_FK_I rebuild;
+alter index EPR_PROF_FK2_I rebuild;
+alter index EPR_EPIS_FK_I rebuild;
+alter index EPR_DEP_FK_I rebuild;
+alter index EPR_DEP_FK2_I rebuild;
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 18/10/2019 15:21
+-- CHANGE REASON: [EMR-22082] - [DB] It should not be possible to re-use a "Shift endorsement" single page more than one time when doing the Hand-off
+alter table epis_prof_resp add id_epis_pn number;
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Ana Moita
+-- CHANGE DATE: 02/10/2020 12:10
+-- CHANGE REASON: [EMR-36351] - [CDOC_DB] Ability to view the doctor and nurse profile on the hand-off areas
+alter table epis_prof_resp add id_profile_template number;
+
+COMMENT ON column epis_prof_resp.id_profile_template IS 'Professional profile template';
+-- CHANGE END: Ana Moita

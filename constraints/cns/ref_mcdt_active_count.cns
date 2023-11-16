@@ -1,0 +1,70 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 13/09/2011 09:54
+-- CHANGE REASON: [ALERT-195015 ] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'REF_MCDT_ACTIVE_COUNT'
+       AND constraint_name = 'RMACT_FLG_MCDT_CHK';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE ref_mcdt_active_count add(CONSTRAINT rmact_flg_mcdt_chk CHECK(flg_mcdt IN (''A'', ''E'', ''I'', ''P'', ''F'')))';
+        EXECUTE IMMEDIATE 'ALTER TABLE ref_mcdt_active_count add(CONSTRAINT rmact_flg_available_chk CHECK(flg_available IN (''Y'', ''N'')))';
+        EXECUTE IMMEDIATE 'ALTER TABLE ref_mcdt_active_count add(CONSTRAINT rmact_pk primary key(flg_mcdt, id_mcdt))';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'REF_MCDT_ACTIVE_COUNT'
+       AND constraint_name = 'RMACT_FLG_MCDT_CHK';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE ref_mcdt_active_count add(CONSTRAINT rmact_flg_mcdt_chk CHECK(flg_mcdt IN (''A'', ''E'', ''I'', ''P'', ''F'')))';
+    END IF;
+
+END;
+/
+
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'REF_MCDT_ACTIVE_COUNT'
+       AND constraint_name = 'RMACT_FLG_AVAILABLE_CHK';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE ref_mcdt_active_count add(CONSTRAINT rmact_flg_available_chk CHECK(flg_available IN (''Y'', ''N'')))';
+    END IF;
+
+END;
+/
+
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'REF_MCDT_ACTIVE_COUNT'
+       AND constraint_name = 'RMACT_PK';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE ref_mcdt_active_count add(CONSTRAINT rmact_pk primary key(flg_mcdt, id_mcdt))';
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso

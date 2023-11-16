@@ -1,0 +1,29 @@
+
+CREATE table pat_advanced_directive(
+		id_pat_advanced_directive NUMBER NOT NULL,
+		id_pat_advanced_directive_prnt NUMBER,
+		id_patient NUMBER NOT NULL,
+		id_episode NUMBER NOT NULL,
+		id_prof_creation NUMBER NOT NULL,
+		dt_creation_tstz TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
+		id_prof_cancel  NUMBER,
+		dt_cancel_tstz TIMESTAMP WITH LOCAL TIME ZONE,
+		flg_status VARCHAR2(1) NOT NULL,
+		notes VARCHAR2(4000),
+		adw_last_update DATE DEFAULT sysdate NOT NULL
+);
+
+COMMENT ON TABLE pat_advanced_directive IS 'Registo de um conjunto de advanced directives num paciente/episódio.';
+COMMENT ON COLUMN pat_advanced_directive.id_pat_advanced_directive IS 'Chave primária';
+COMMENT ON COLUMN pat_advanced_directive.id_pat_advanced_directive_prnt IS 'Identificador do registo de associação de decisões antecipadas a pacientes original; este campo deve ser preenchido sempre que o registo seja editado';
+COMMENT ON COLUMN pat_advanced_directive.id_patient IS 'id do paciente';
+COMMENT ON COLUMN pat_advanced_directive.id_episode IS 'id do episódio onde foi efectuada a associação de decisões antecipadas ao paciente';
+COMMENT ON COLUMN pat_advanced_directive.id_prof_creation IS 'id do profissional que criou o registo';
+COMMENT ON COLUMN pat_advanced_directive.dt_creation_tstz IS 'data de criação do registo';
+COMMENT ON COLUMN pat_advanced_directive.id_prof_cancel IS 'id do profissional que cancelou o registo';
+COMMENT ON COLUMN pat_advanced_directive.dt_cancel_tstz IS 'data de cancelamento do registo';
+COMMENT ON COLUMN pat_advanced_directive.flg_status IS 'Estado do registo {A – activo, O – desactualizado, C – cancelado}';
+COMMENT ON COLUMN pat_advanced_directive.notes IS 'Notas associadas ao registo de decisões antecipadas';
+
+ALTER TABLE pat_advanced_directive ADD notes_cancel VARCHAR2(4000);
+COMMENT ON COLUMN pat_advanced_directive.notes_cancel IS 'Notas de cancelamento do registo';

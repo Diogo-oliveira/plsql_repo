@@ -1,0 +1,33 @@
+
+
+  CREATE TABLE PAT_EXT_SYS
+   (	ID_PAT_EXT_SYS NUMBER(12,0) NOT NULL ENABLE,
+	ID_EXTERNAL_SYS NUMBER(12,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	VALUE VARCHAR2(30) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE pat_ext_sys IS 'Correspondência dos identificadores únicos dos doentes, no Alert e nos sistemas externos' ;
+
+COMMENT ON COLUMN pat_ext_sys.value IS 'Identificador único do paciente, no sistema externo indicado' ;
+
+alter table pat_ext_sys
+modify (value varchar2(40));
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2020 18:02
+-- CHANGE REASON: [EMR-40083]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00942);
+BEGIN
+EXECUTE IMMEDIATE 'DROP TABLE pat_ext_sys_old';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos

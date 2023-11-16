@@ -1,0 +1,62 @@
+
+
+  CREATE TABLE PRESC_ATTENTION_DET
+   (	ID_PRESC_ATTENTION_DET NUMBER(24,0) NOT NULL ENABLE,
+	DT_ATTENTION_READ DATE NOT NULL ENABLE,
+	ID_PRESCRIPTION_PHARM NUMBER(24,0) NOT NULL ENABLE,
+	FLG_ATTENTION VARCHAR2(2) NOT NULL ENABLE,
+	ID_PROF_READ NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION_READ NUMBER(12,0) NOT NULL ENABLE,
+	ID_SOFTWARE_READ NUMBER(24,0) NOT NULL ENABLE,
+	NOTES_READ VARCHAR2(4000)
+   );
+
+
+COMMENT ON TABLE presc_attention_det IS 'Detalhe da leitura das chamadas de atenção.' ;
+
+COMMENT ON COLUMN presc_attention_det.id_presc_attention_det IS 'Chave primária' ;
+COMMENT ON COLUMN presc_attention_det.dt_attention_read IS 'Data de leitura da chamada de atenção' ;
+COMMENT ON COLUMN presc_attention_det.id_prescription_pharm IS 'ID da prescrição do fármaco em que foi gerada a chamada de atenção.' ;
+COMMENT ON COLUMN presc_attention_det.flg_attention IS 'Flag que identifica a chamada de atenção: CI - contra-indicações; B - medicamentos mais baratos; J - justificação de prescrição; IM - interacções medicamentosas; IA - interacções entre medicamentos e alergias' ;
+COMMENT ON COLUMN presc_attention_det.id_prof_read IS 'ID do profissional que leu a chamada de atenção.' ;
+COMMENT ON COLUMN presc_attention_det.id_institution_read IS 'ID da instituição onde a chamada de atenção foi lida.' ;
+COMMENT ON COLUMN presc_attention_det.id_software_read IS 'ID de software onde a chamada de atenção foi lida.' ;
+COMMENT ON COLUMN presc_attention_det.notes_read IS 'Notas de leitura da chamada de atenção (não está a ser utilizado)' ;
+
+alter table presc_attention_det 
+add (dt_attention_read_tstz timestamp with local time zone); 
+
+
+alter table presc_attention_det
+ modify (id_prescription_pharm number(24) null);
+
+alter table presc_attention_det
+add (id_drug_presc_det number(24),
+     id_drug_req_det number(24));
+
+comment on column presc_attention_det.id_drug_presc_det
+  is 'ID da requisição de medicação interna do fármaco em que foi gerada a chamada de atenção.';
+comment on column presc_attention_det.id_drug_req_det
+  is 'ID da requisição à farmácia do fármaco em que foi gerada a chamada de atenção.';
+  
+  
+-- CHANGED BY: Orlando Antunes
+-- CHANGED DATE: 2008-SEPT-22
+-- CHANGING REASON: Remoção de colunas do tipo DATE que tenham equivalentes do tipo TIMESTAMP WITH LOCAL TIME ZONE
+ALTER TABLE PRESC_ATTENTION_DET DROP COLUMN dt_attention_read ; 
+-- CHANGE END
+  
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-MAR-28
+-- CHANGING REASON: OVERDOSAGE MODULE
+alter table PRESC_ATTENTION_DET add ID_DRUG_PRESC_PLAN NUMBER(24);
+-- Add comments to the columns 
+comment on column PRESC_ATTENTION_DET.ID_DRUG_PRESC_PLAN
+  is 'ID da requisição do plano de administração de um fármaco para administrar netse local';
+-- CHANGE END Patrícia Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:06
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_ATTENTION_DET IS 'Detalhe da leitura das chamadas de atenção. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,43 @@
+
+  CREATE TABLE GUIDELINE_TASK_LINK
+   (	ID_GUIDELINE_TASK_LINK NUMBER(24,0) NOT NULL ENABLE,
+	ID_GUIDELINE NUMBER(24,0) NOT NULL ENABLE,
+	ID_TASK_LINK NUMBER(24,0),
+	TASK_TYPE NUMBER(24,0),
+	TASK_NOTES VARCHAR2(4000),
+	ID_TASK_INSTRUCT NUMBER
+   );
+
+COMMENT ON COLUMN guideline_task_link.id_guideline_task_link IS 'ID of guideline task' ;
+COMMENT ON COLUMN guideline_task_link.id_guideline IS 'ID of guideline' ;
+COMMENT ON COLUMN guideline_task_link.id_task_link IS 'ID of task linked to guideline' ;
+COMMENT ON COLUMN guideline_task_link.task_type IS 'Task Type :Analises / COnsulta subsequente/ Ensinos de enfermagem / Imagem / Imunizações / Intervenções de enfermagem / Medicação / Pareceres / Rastreios / Outros exames' ;
+COMMENT ON COLUMN guideline_task_link.task_notes IS 'Task notes' ;
+COMMENT ON COLUMN guideline_task_link.id_task_instruct IS 'Task instruction' ;
+
+ALTER TABLE guideline_task_link DROP COLUMN id_task_instruct;
+
+alter table GUIDELINE_TASK_LINK modify task_type not null;
+
+alter table guideline_task_link add id_task_attach number(24);
+COMMENT ON COLUMN guideline_task_link.id_task_attach IS 'Auxiliary ID associated to task' ;
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 05/11/2009 19:56
+-- CHANGE REASON: [ALERT-54623] 
+alter table GUIDELINE_TASK_LINK add task_codification number(24);
+comment on column GUIDELINE_TASK_LINK.task_codification is 'Task codification ID';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 10:00
+-- CHANGE REASON: [ALERT-317912] 
+comment on table GUIDELINE_TASK_LINK is 'Guidelines task link to other functionalities';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/01/2016 16:40
+-- CHANGE REASON: [ALERT-318048] 
+comment on column GUIDELINE_TASK_LINK.TASK_TYPE
+  is 'Task type ID';
+-- CHANGE END: Ana Matos

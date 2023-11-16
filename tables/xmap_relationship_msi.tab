@@ -1,0 +1,45 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 09/06/2011 12:12
+-- CHANGE REASON: [ALERT-184278] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE XMAP_RELATIONSHIP_MSI
+(
+  ID_SOURCE_MAP_CONCEPT     NUMBER(24) NOT NULL,
+  ID_TARGET_MAP_CONCEPT     NUMBER(24) NOT NULL,
+  ID_SOURCE_MAP_SET         NUMBER(24) NOT NULL,
+  ID_TARGET_MAP_SET         NUMBER(24) NOT NULL,  
+  ID_MARKET                 NUMBER(24) DEFAULT 0 NOT NULL ,
+  ID_INSTITUTION            NUMBER(24) DEFAULT 0 NOT NULL ,
+  ID_SOFTWARE               NUMBER(24) DEFAULT 0 NOT NULL ,
+  FLG_AVAILABLE             VARCHAR2(1 CHAR) DEFAULT ''Y'',
+  CREATE_USER               VARCHAR2(24),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24)
+)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('ORDER_RECURR_AREA table already exists');
+END;
+/
+comment on table XMAP_RELATIONSHIP_MSI is                            'Cross mappings configurations table [XMRMSI]';
+comment on column XMAP_RELATIONSHIP_MSI.ID_SOURCE_MAP_CONCEPT is     'Source mapping concept ID';
+comment on column XMAP_RELATIONSHIP_MSI.ID_TARGET_MAP_CONCEPT is     'Target mapping concept ID';
+comment on column XMAP_RELATIONSHIP_MSI.ID_SOURCE_MAP_SET is         'Source mapping set ID';
+comment on column XMAP_RELATIONSHIP_MSI.ID_TARGET_MAP_SET is         'Target mapping set ID';
+comment on column XMAP_RELATIONSHIP_MSI.ID_MARKET is                 'Market ID';
+comment on column XMAP_RELATIONSHIP_MSI.ID_INSTITUTION is            'Institution ID';
+comment on column XMAP_RELATIONSHIP_MSI.ID_SOFTWARE is               'Software ID';
+comment on column XMAP_RELATIONSHIP_MSI.FLG_AVAILABLE is             'Record availability: (Y)es or (N)o';
+comment on column XMAP_RELATIONSHIP_MSI.CREATE_USER is               'Creation user';
+comment on column XMAP_RELATIONSHIP_MSI.CREATE_TIME is               'Creation time';
+comment on column XMAP_RELATIONSHIP_MSI.CREATE_INSTITUTION is        'Creation institution';
+comment on column XMAP_RELATIONSHIP_MSI.UPDATE_USER is               'Update user';
+comment on column XMAP_RELATIONSHIP_MSI.UPDATE_TIME is               'Update time';
+comment on column XMAP_RELATIONSHIP_MSI.UPDATE_INSTITUTION is        'Update institution';
+-- CHANGE END: Tiago Silva

@@ -1,0 +1,10 @@
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 20/01/2015 11:08
+-- CHANGE REASON: [ALERT-304700 ] DB Development Flowsheets: parameters association to exams and procedures 
+alter table PO_PARAM_SETS
+  add constraint POPSETS_UK unique (ID_PO_PARAM, ID_INST_OWNER, ID_TASK_TYPE, TASK_TYPE_CONTENT, ID_SOFTWARE, ID_INSTITUTION);
+-- Create/Recreate check constraints 
+alter table PO_PARAM_SETS
+  add constraint POPSETS_FLG_AVAILABLE_CHK
+  check (FLG_AVAILABLE in ('Y', 'N'));
+-- CHANGE END: teresa.coutinho

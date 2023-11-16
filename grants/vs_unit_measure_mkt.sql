@@ -1,0 +1,1 @@
+-- CHANGED BY: Paulo Fonseca-- CHANGE DATE: 14/10/2010-- CHANGE REASON: ALERT-130839GRANT SELECT ON vs_unit_measure_mkt TO alert_viewer;-- CHANGE END: Paulo Fonseca

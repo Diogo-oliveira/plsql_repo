@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_tbl_bp_task_detail AS TABLE OF t_bp_task_detail;

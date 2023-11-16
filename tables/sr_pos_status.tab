@@ -1,0 +1,45 @@
+  CREATE TABLE "SR_POS_STATUS"
+(  
+  "ID_SR_POS_STATUS" NUMBER(24,0) NOT NULL,
+  "CODE" VARCHAR2(200) NOT NULL,
+  "CODE_ABBREV" VARCHAR2(200) NOT NULL,
+  "DESCRIPTION" varchar2(200),
+  "ID_CONTENT" varchar2(200),
+  "FLG_AVAILABLE" VARCHAR2(1),
+  "FLG_STATUS" VARCHAR2(2),
+  "CREATE_USER"  VARCHAR2(24),
+  "CREATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  "CREATE_INSTITUTION"  NUMBER(24),                         
+  "UPDATE_USER"  VARCHAR2(24),                       
+  "UPDATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,  
+  "UPDATE_INSTITUTION"  NUMBER(24)                  
+);
+
+COMMENT ON TABLE "SR_POS_STATUS"  IS 'This table stores the possible values for the Pre Operative Sreening status';
+COMMENT ON COLUMN "SR_POS_STATUS"."ID_SR_POS_STATUS" IS 'Primary Key';
+COMMENT ON COLUMN "SR_POS_STATUS"."CODE"  IS 'code to be used for translation purposes';
+COMMENT ON COLUMN "SR_POS_STATUS"."CODE_ABBREV"  IS 'abbreviation to be displayed on surgery/admission grids';
+COMMENT ON COLUMN "SR_POS_STATUS"."DESCRIPTION"  IS 'description of this field';
+COMMENT ON COLUMN "SR_POS_STATUS"."ID_CONTENT"  IS 'content unique identifier';
+COMMENT ON COLUMN "SR_POS_STATUS"."FLG_AVAILABLE"  IS 'Indicates if this Pre-Operative screening status is available';
+COMMENT ON COLUMN "SR_POS_STATUS"."FLG_STATUS"  IS 'Indicates Pre-Operative screening status: A approved; TA Temp approv TN - Temp Not approv NA Not approv ND No decision';
+COMMENT ON COLUMN "SR_POS_STATUS"."CREATE_USER" IS 'ID of the professional who created the record';
+COMMENT ON COLUMN "SR_POS_STATUS"."CREATE_TIME" IS 'Date of record creation';
+COMMENT ON COLUMN "SR_POS_STATUS"."CREATE_INSTITUTION" IS 'ID of institution where record was created'; 
+COMMENT ON COLUMN "SR_POS_STATUS"."UPDATE_USER" IS 'ID of the professional who last updated the record';
+COMMENT ON COLUMN "SR_POS_STATUS"."UPDATE_TIME" IS 'Date when record was last updated';
+COMMENT ON COLUMN "SR_POS_STATUS"."UPDATE_INSTITUTION" IS 'ID of the institution where record was last updated'; 
+
+
+
+-- CHANGED BY: Jorge Canossa
+-- CHANGE DATE: 2009-07-02
+-- CHANGE REASON: ALERT-31102 
+ALTER TABLE SR_POS_STATUS ADD FLG_TYPE_APPROVAL VARCHAR2(1) not null;
+ALTER TABLE SR_POS_STATUS ADD ID_INSTITUTION NUMBER(24) not null;
+COMMENT ON COLUMN "SR_POS_STATUS"."FLG_TYPE_APPROVAL"  IS 'Impact of this type of POS on the waiting list: Y - ready for scheduling/placed on WList; N - not ready to be placed on the WList';
+COMMENT ON COLUMN "SR_POS_STATUS"."ID_INSTITUTION"  IS 'Institution using this POS type';
+
+alter table SR_POS_STATUS drop column description;
+alter table SR_POS_STATUS drop column id_content;
+-- CHANGE END

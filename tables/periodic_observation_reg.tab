@@ -1,0 +1,93 @@
+-- CHANGE REASON: Nova tabela
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 25/10/2007
+create table PERIODIC_OBSERVATION_REG
+(
+  ID_PERIODIC_OBSERVATION_REG   NUMBER(12) not null,
+  ID_PERIODIC_OBSERVATION_PARAM NUMBER(12),
+  ID_PERIODIC_OBSERVATION_DESC  NUMBER(12),
+  VALUE                         VARCHAR2(200),
+  FLG_STATUS                    VARCHAR2(1),
+  ADW_LAST_UPDATE               DATE not null,
+  ID_PATIENT                    NUMBER(24),
+  ID_EPISODE                    NUMBER(24),
+  ID_PROF_WRITES                NUMBER(24),
+  DT_PERIODIC_OBSERVATION_REG   TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROF_CANC                  NUMBER(24),
+  DT_CANC                       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_UNIT_MEASURE               NUMBER(24),
+  ID_INSTITUTION                NUMBER(24),
+  FLG_TYPE_PARAM                VARCHAR2(1),
+  FLG_GROUP                     VARCHAR2(2),
+  ID_GROUP                      NUMBER(24),
+  ID_CLINICAL_SERVICE           NUMBER(24),
+  FLG_REF                       VARCHAR2(1),
+  ID_EPIS_CONTEXT               NUMBER(24),
+  FLG_TYPE_REG                  VARCHAR2(1),
+  FLG_MIG                       VARCHAR2(1),
+  DT_RESULT                     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_ANALYSIS_RESULT            NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns 
+comment on column PERIODIC_OBSERVATION_REG.ID_PERIODIC_OBSERVATION_REG
+  is 'Chame primária';
+comment on column PERIODIC_OBSERVATION_REG.ID_PERIODIC_OBSERVATION_PARAM
+  is 'Id da Observação periódica (aplica-se às Obs.Per e às Intervenções)';
+comment on column PERIODIC_OBSERVATION_REG.VALUE
+  is 'Valor (Sinal Vital, Análise, Hábito, Intervenção, Outros parâmetros)';
+comment on column PERIODIC_OBSERVATION_REG.FLG_STATUS
+  is 'Estado do registo: A - Activo; C- Cancelado';
+comment on column PERIODIC_OBSERVATION_REG.ID_PATIENT
+  is 'Id do paciente';
+comment on column PERIODIC_OBSERVATION_REG.ID_EPISODE
+  is 'Id do episódio';
+comment on column PERIODIC_OBSERVATION_REG.ID_PROF_WRITES
+  is 'Id do profissional que regista a obs.';
+comment on column PERIODIC_OBSERVATION_REG.DT_PERIODIC_OBSERVATION_REG
+  is 'Data da Observação periódica(Colheita)/Intervenção/Análise Seriada(Colheita)';
+comment on column PERIODIC_OBSERVATION_REG.ID_PROF_CANC
+  is 'Id do profissional que cancela a obs.';
+comment on column PERIODIC_OBSERVATION_REG.DT_CANC
+  is 'Data do cancelamento';
+comment on column PERIODIC_OBSERVATION_REG.ID_UNIT_MEASURE
+  is 'Unidade de medida';
+comment on column PERIODIC_OBSERVATION_REG.ID_INSTITUTION
+  is 'Id da Institutição';
+comment on column PERIODIC_OBSERVATION_REG.FLG_TYPE_PARAM
+  is 'Esta flag serve para distinguir se os registos gravados são do template parametrizado ou se são parametrios adicionais (P - Parametrizado, O - Outro) ';
+comment on column PERIODIC_OBSERVATION_REG.FLG_GROUP
+  is 'Tipo de parametro (VS - sinal vital, A - análise, H - Hábito, O - Outro)';
+comment on column PERIODIC_OBSERVATION_REG.ID_CLINICAL_SERVICE
+  is 'Id do serviço clinico (aplica-se às Obs. Per.)';
+comment on column PERIODIC_OBSERVATION_REG.FLG_REF
+  is 'Valores referência (Y/N)';
+comment on column PERIODIC_OBSERVATION_REG.FLG_TYPE_REG
+  is 'O - Observações Periódicas; I- Intervenções; S- Análises Seriadas';
+comment on column PERIODIC_OBSERVATION_REG.FLG_MIG
+  is 'Esta flag indica se o registo foi migrado (Y) ou não (N)';
+comment on column PERIODIC_OBSERVATION_REG.DT_RESULT
+  is 'Esta data refere-se à data do resultado nas análises seriadas (anteriormente analysis_req_temp)';
+comment on column PERIODIC_OBSERVATION_REG.ID_ANALYSIS_RESULT
+  is 'Id do resultado (migração da análises seriadas)';
+
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 10/01/2011 15:10
+-- CHANGE REASON: [ALERT-71518] periodic observation value cancelation
+alter table periodic_observation_reg add (flg_cancel_type varchar2(1 char));
+
+comment on column periodic_observation_reg.flg_cancel_type
+  is 'Cancellation type: (P)arameter, (V)alue.';
+-- CHANGE END: Pedro Carneiro

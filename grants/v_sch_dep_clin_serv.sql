@@ -1,0 +1,1 @@
+GRANT SELECT ON V_SCH_DEP_CLIN_SERV TO alert_apsschdlr_tr;

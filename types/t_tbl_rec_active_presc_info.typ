@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_tbl_rec_active_presc_info IS TABLE OF t_rec_active_presc_info;

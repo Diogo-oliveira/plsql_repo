@@ -1,0 +1,14 @@
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 28/05/2014 11:06
+-- CHANGE REASON: [ALERT-283905 ] 
+DECLARE
+    e_idx_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_idx_already_exists, -00955); 
+BEGIN
+    EXECUTE IMMEDIATE 'create index RP_NOR_FK_IDX on REHAB_PRESC (ID_NOT_ORDER_REASON)';
+EXCEPTION
+    WHEN e_idx_already_exists THEN
+        dbms_output.put_line('index RP_NOR_FK_IDX already exists');   
+END;
+/
+-- CHANGE END: cristina.oliveira

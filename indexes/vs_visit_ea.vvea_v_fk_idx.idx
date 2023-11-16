@@ -1,0 +1,17 @@
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 25/10/2010
+-- CHANGE REASON: ALERT-130841
+DECLARE
+    e_obj_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_obj_exists, -00955);
+
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE INDEX vvea_v_fk_idx ON vs_visit_ea(id_visit) TABLESPACE index_m';
+
+EXCEPTION
+    WHEN e_obj_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+-- CHANGE END: Paulo Fonseca

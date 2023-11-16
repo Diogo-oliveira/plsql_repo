@@ -1,0 +1,306 @@
+
+
+  CREATE TABLE REPORTS
+   (	ID_REPORTS NUMBER(24,0) NOT NULL ENABLE,
+	CODE_REPORTS VARCHAR2(200) NOT NULL ENABLE,
+	INTERNAL_NAME VARCHAR2(200),
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_PRINTER VARCHAR2(1),
+	REPORTS_SQL LONG,
+	FLG_TOOLS VARCHAR2(1),
+	FLG_FILTER VARCHAR2(1),
+	FLG_AUTH_REQ VARCHAR2(1),
+	FLG_ACTION VARCHAR2(2),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+
+	DET_SCREEN_NAME VARCHAR2(200),
+	FLG_AVAILABLE VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE reports IS 'Parametriação dos relatórios (reports)' ;
+
+COMMENT ON COLUMN reports.id_reports IS 'Chave primária' ;
+COMMENT ON COLUMN reports.code_reports IS 'Código para obter os relatórios por língua' ;
+COMMENT ON COLUMN reports.internal_name IS 'Nome interno' ;
+COMMENT ON COLUMN reports.flg_type IS 'Tipo de relatório: R-Report; G-Group of report' ;
+COMMENT ON COLUMN reports.flg_printer IS 'Tipo de impressão:D-Drugs;B-Barcode;P-Patients; R-Reports; Os relatórios do menu Save terão o tipo S' ;
+COMMENT ON COLUMN reports.reports_sql IS 'Código para obtenção da informação para determinado tipo de impressão' ;
+COMMENT ON COLUMN reports.flg_tools IS 'Indica se o reports apenas aponta para a utilização da Print Tool' ;
+COMMENT ON COLUMN reports.flg_filter IS 'Indica se tem filtro para aplicar, definido na coluna reports_sql. Valores possíveis: Y/N' ;
+COMMENT ON COLUMN reports.flg_auth_req IS 'Indica se é necessária autenticação antes de executar o relatório' ;
+COMMENT ON COLUMN reports.flg_action IS 'Tipo de acção: R- Print Report, S- Send to screen' ;
+COMMENT ON COLUMN reports.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN reports.det_screen_name IS 'Nome do ecrã a mostrar para visualizar o detalhe do item do report' ;
+COMMENT ON COLUMN reports.flg_available IS 'Disponibilidade' ;
+
+--João Eiras, 26-09-2007
+--Coluna que indica o contexto ao serem gerados relatórios
+alter table reports add flg_context_column varchar2(30);
+COMMENT ON COLUMN reports.flg_context_column IS 'Coluna que indica id do contexto ao serem gerados relatórios';
+
+--João Eiras, 03-10-2007
+--Colunas para as estatísticas
+ALTER TABLE reports add flg_time_fraction VARCHAR2(1);
+COMMENT ON column reports.flg_time_fraction IS 'Coluna que indica se o relatório necessita de indicação do fraccionamento do período de tempo';
+ALTER TABLE reports add flg_param_profs VARCHAR2(1);
+COMMENT ON column reports.flg_param_profs IS 'Coluna que indica se o relatório necessita que sejam especificados profissionais sobre os quais este relatório será gerado';
+ALTER TABLE reports add prof_sql CLOB;
+COMMENT ON column reports.prof_sql IS 'Query que lê os profissionais';
+ALTER TABLE reports add max_prof_count NUMBER;
+COMMENT ON column reports.max_prof_count IS 'Número máximo de profissionais a escolher';
+ALTER TABLE reports add interval_count NUMBER;
+COMMENT ON column reports.interval_count IS 'Número de intervalos de tempo a definir';
+
+--CHANGED BY:Ricardo Pires, 04/06/2008
+--REASON:Added a new column so that the name of the report can be different from the one on the printtool
+alter table REPORTS add CODE_REPORTS_TITLE VARCHAR2(200);
+COMMENT ON COLUMN REPORTS.CODE_REPORTS_TITLE IS 'Code for the translation that identifies the name that will appear on the Report.';
+--CHANGE END:Ricardo Pires
+
+
+ALTER TABLE REPORTS ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN REPORTS.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+
+--Luís Gaspar, 12-08-2008
+--coluna para formatação da assinatura digital
+ALTER TABLE REPORTS ADD (FLG_DIGITAL_SIGNATURE_FORMAT VARCHAR2(256));
+
+COMMENT ON COLUMN REPORTS.FLG_DIGITAL_SIGNATURE_FORMAT IS 'Format of the digital signature on the report. Example 1: x=0;y=200;width=0;height=2;color=0#FFFFFF;textSize=7;lineSpacing=10; Example 2: x=;y=200;width=0;height=2;color=;textSize=;lineSpacing=10; In the last example it was used a default value for x, color and textsize.';
+
+
+-- CHANGED BY: rui.baeta
+-- CHANGE DATE: 12/11/2009 11:51
+-- CHANGE REASON: [ALERT-55962] reports are now parametrized by reports_group, with episode type, software and institution
+alter table reports add id_epis_type number(12, 0);
+comment on column reports.id_epis_type is 'Episode type which a given report is associated to.';
+-- CHANGE END: rui.baeta
+
+-- CHANGED BY: rui.baeta
+-- CHANGE DATE: 21/11/2009 20:23
+-- CHANGE REASON: [ALERT-55962] new table "epis_type_reports" for relationship between epis_type and reports
+alter table reports drop column id_epis_type;
+-- CHANGE END: rui.baeta
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 02/12/2009 21:10
+-- CHANGE REASON: [PIX-341] HIE XDS Content Creator module in Alert
+ALTER TABLE REPORTS ADD
+(
+    ID_XDS_DOCUMENT_CLASS NUMBER(24),
+    ID_XDS_DOCUMENT_FORMAT NUMBER(24),
+    MIME_TYPE VARCHAR2(100 CHAR),
+    FLG_XDS_PUBLISHABLE VARCHAR2(1 CHAR) DEFAULT 'N'
+);
+
+COMMENT ON COLUMN REPORTS.id_xds_document_class IS 'Report''s document class supported by HIE XDS document repository';
+COMMENT ON COLUMN REPORTS.id_xds_document_format IS 'Report''s document format supported by HIE XDS document repository';
+COMMENT ON COLUMN REPORTS.mime_type IS 'Report''s MIME media type';
+COMMENT ON COLUMN REPORTS.flg_xds_publishable IS 'Availability to publish the report in HIE XDS document repository (Y/N)';
+-- CHANGE END: Ariel Machado
+
+-- cmf 12-07-2010
+ALTER TABLE REPORTS ADD N_COPIES_DEFAULT 				NUMBER(6)				 DEFAULT 1;
+ALTER TABLE REPORTS ADD FLG_SHOW_DIALOG_DEFAULT VARCHAR2(1 CHAR) DEFAULT 'N';
+ALTER TABLE REPORTS ADD FLG_ORIENTATION_DEFAULT VARCHAR2(2 CHAR) DEFAULT 'NP';
+ALTER TABLE REPORTS ADD FLG_SIZE_DEFAULT				VARCHAR2(6 CHAR) DEFAULT 'ISO_A4';
+ALTER TABLE REPORTS ADD FLG_SIDES_DEFAULT				VARCHAR2(1 CHAR) DEFAULT 'O';
+ALTER TABLE REPORTS ADD FLG_QUALITY_DEFAULT			VARCHAR2(1 CHAR) DEFAULT 'N';
+ALTER TABLE REPORTS ADD PRINTER_NAME_DEFAULT		VARCHAR2(30 CHAR) ;
+
+COMMENT ON COLUMN REPORTS.N_COPIES_DEFAULT 				 IS 'Default Number of copies' ;
+COMMENT ON COLUMN REPORTS.FLG_SHOW_DIALOG_DEFAULT  IS 'Default behavior to show dialog of available printers ( Y/N ) ' ;
+COMMENT ON COLUMN REPORTS.FLG_ORIENTATION_DEFAULT  IS 'Default report Orientation.' ;
+COMMENT ON COLUMN REPORTS.FLG_SIZE_DEFAULT				 IS 'Default report Size.' ;
+COMMENT ON COLUMN REPORTS.FLG_SIDES_DEFAULT				 IS 'Default report sides.' ;
+COMMENT ON COLUMN REPORTS.FLG_QUALITY_DEFAULT			 IS 'Default report qualty.' ;
+COMMENT ON COLUMN REPORTS.PRINTER_NAME_DEFAULT		 IS 'Default Printer name.' ;
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 23-Jul-2010 16:33
+-- CHANGE REASON: [ALERT-114599] Issue Replication: Reports organization on the printbutton (v2.6.0.3)
+
+-- Add/modify columns 
+alter table REPORTS add ID_PARENT NUMBER(24);
+-- Add comments to the columns 
+comment on column REPORTS.ID_PARENT
+  is 'FK to ID_REPORTS (ID of the parent report) with goal to define the reports menu and sub-menu reports';
+
+-- CHANGE END: Filipe Machado
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 14-Dec-2010
+-- CHANGE REASON: ALERT-ALERT-149266
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE REPORTS add FLG_REPORT_TYPE VARCHAR2(1)';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 14-Dec-2010
+-- CHANGE REASON: ALERT-ALERT-149266
+COMMENT ON column REPORTS.FLG_REPORT_TYPE IS 'Flag that indicates the type of the report';
+-- CHANGE END
+
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:21
+-- CHANGE REASON: [ALERT-126939] 
+ALTER TABLE REPORTS  ADD (FLG_AVLBLE_IN_DOC_ARCHIVE VARCHAR2(1) DEFAULT 'N' NOT NULL );
+COMMENT ON COLUMN REPORTS.FLG_AVLBLE_IN_DOC_ARCHIVE IS 'Is the report available in documents archive?';
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:22
+-- CHANGE REASON: [ALERT-126939] 
+alter table reports drop column id_xds_document_format
+-- CHANGE END:  carlos.guilherme
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 22-Feb-2011
+-- CHANGE REASON: ALERT-163674
+alter table 
+   reports
+modify flg_report_type varchar2(24);
+-- CHANGE END
+
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 25-Feb-2011
+-- CHANGE REASON: ALERT-164462
+ALTER TABLE reports MODIFY flg_sides_default DEFAULT 'D';
+-- CHANGE END
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 25/02/2011 17:35
+-- CHANGE REASON: [ALERT-164703] DDL Reports - H & P reformulation in INPATIENT
+DECLARE 
+e_column_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE REPORTS  ADD (FLG_DATE_FILTERS VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL )';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON COLUMN REPORTS.FLG_DATE_FILTERS IS 'Is the report available for being printed with date filtering? (''Y''- Yes; ''N''- No)';
+-- CHANGE END: António Neto
+
+-- CHANGED BY:Ricardo Pires
+-- CHANGE DATE: 14-Apr-2011 17:35
+-- CHANGE REASON: ALERT-173237
+ALTER TABLE REPORTS MODIFY REPORTS_SQL CLOB;
+-- CHANGE END
+
+-- CHANGED BY: ricardo.pires
+-- CHANGE DATE: 26-Jun-2014 12:00
+-- CHANGE REASON: ALERT-287183
+ALTER TABLE REPORTS  ADD (ID_TASK_TYPE NUMBER(24));
+COMMENT ON COLUMN REPORTS.ID_TASK_TYPE IS 'Association of a report to a task_type. Identifies the type of report, if it is lab tests or exams specific report.';
+
+alter table REPORTS
+  add constraint REP_TT_FK foreign key (ID_TASK_TYPE)
+  references TASK_TYPE (ID_TASK_TYPE);
+  
+alter table REPORTS
+   drop column ADW_LAST_UPDATE;
+-- CHANGE END   
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON TABLE REPORTS IS 'Reports parametization';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON COLUMN REPORTS.ID_REPORTS IS 'Primary Key';
+COMMENT ON COLUMN REPORTS.CODE_REPORTS IS 'Code to obtain reports by language';
+COMMENT ON COLUMN REPORTS.INTERNAL_NAME IS 'Internal Name';
+COMMENT ON COLUMN REPORTS.FLG_TYPE IS 'Type of report: R-Report; G-Group of report';
+COMMENT ON COLUMN REPORTS.FLG_TOOLS IS 'Flag that indicates if the report is used only in the print tool';
+COMMENT ON COLUMN REPORTS.FLG_FILTER IS 'Flag that indicates if theres any filter to apply. Possible Values: Y/N';
+COMMENT ON COLUMN REPORTS.DET_SCREEN_NAME IS 'Screen name that shows the details of the report';
+COMMENT ON COLUMN REPORTS.FLG_AVAILABLE IS 'Disponibility';
+COMMENT ON COLUMN REPORTS.FLG_CONTEXT_COLUMN IS 'Context id from the generated reports';
+COMMENT ON COLUMN REPORTS.FLG_TIME_FRACTION IS 'Flag that indicates if the report needs time fractions';
+COMMENT ON COLUMN REPORTS.FLG_PARAM_PROFS IS 'Flag that indicates if the report needs specific professionals to be generated';
+COMMENT ON COLUMN REPORTS.PROF_SQL IS 'Query that return professionals from a specift institution';
+COMMENT ON COLUMN REPORTS.MAX_PROF_COUNT IS 'Maximum number of professionals';
+COMMENT ON COLUMN REPORTS.INTERVAL_COUNT IS 'Number of time intervals to define';
+COMMENT ON COLUMN REPORTS.ID_CONTENT IS 'Content unique identifier';
+COMMENT ON COLUMN REPORTS.FLG_ACTION IS 'Type of action: R- Print Report, S- Send to screen';
+COMMENT ON COLUMN REPORTS.FLG_PRINTER IS 'Printing type: D-Drugs, B-Barcode, P-Patients,  R-Reports, S-reports from the "save" menu';
+COMMENT ON COLUMN REPORTS.REPORTS_SQL IS 'Code to obtain the info about a specific type of impression';
+COMMENT ON COLUMN REPORTS.FLG_AUTH_REQ IS 'Indicates if authentication is needed to execute a report';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 19/05/2016 
+-- CHANGE REASON: [ALERT-321123] 
+ALTER TABLE REPORTS ADD FLG_DATE_FILTERS_CONTEXT VARCHAR2(2 CHAR) DEFAULT 'N';
+COMMENT ON COLUMN REPORTS.FLG_DATE_FILTERS_CONTEXT 				 IS 'N - No context, ME - Multiple Episodes, YE - Episode , MP - Multiple Pacients, YP - Pacient' ;
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:30
+-- CHANGE REASON: [EMR-4796] 
+DECLARE 
+	l_sql VARCHAR2(1000 CHAR);
+	l_sql_1 VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.reports move lob(reports_sql) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+	l_sql_1 := 'ALTER TABLE alert.reports move lob(prof_sql) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql_1);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: nuno.amorim
+-- CHANGE DATE: 19/02/2019 
+-- CHANGE REASON: [EMR-7653] 
+ALTER TABLE REPORTS ADD FLG_SIGNABLE VARCHAR2(1) DEFAULT 'N';
+COMMENT ON COLUMN REPORTS.FLG_SIGNABLE IS 'N - Report is not signable, Y - Report is signable' ;
+-- CHANGE END: nuno.amorim
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 13/12/2022 14:41
+-- CHANGE REASON: [EMR-56303] - Print > Print tool > Episode archive > Print this note > All notes printed has name Physician progress note
+begin
+pk_versioning.run('ALTER TABLE reports
+ADD flg_dynamic_title varchar2(1 char) default ''N'' not null');
+end;
+/
+
+begin
+pk_versioning.run('alter table reports
+add constraint RPT_FLG_DYN_CHK
+check (flg_dynamic_title in (''N'', ''S''))');
+end;
+/
+
+begin
+pk_versioning.run('comment on column reports.flg_dynamic_title
+is ''Flag that indicates if the reports'''' title is dynamically presented [N - No / S - Title from the single page area]''');
+end;
+/
+-- CHANGE END: Diogo Oliveira

@@ -1,0 +1,44 @@
+--Rui Batista
+--2010/01/28
+create table SYS_LIST_GROUP_REL (
+  id_sys_list_group_rel  number(24,0) not null enable,
+  id_sys_list_group      number(24,0) not null enable,
+  id_sys_list            number(24,0) not null enable,
+  id_market          	 number(24,0) not null enable,
+  flg_available          varchar2(1 char) default 'Y',
+  rank                   number(6, 0),
+  create_user            varchar2(24 char),
+  create_time            timestamp(6) with local time zone,
+  create_institution     number(24,0),
+  update_user            varchar2(24 char),
+  update_time            timestamp(6) with local time zone,
+  update_institution     number(24)	
+   )
+	 tablespace TABLE_M;
+
+
+COMMENT ON TABLE SYS_LIST_GROUP_REL IS 'DEV - list values by group';
+
+COMMENT ON COLUMN SYS_LIST_GROUP_REL.id_sys_list_group_rel IS 'ID único' ;
+COMMENT ON COLUMN SYS_LIST_GROUP_REL.id_sys_list_group IS 'List group ID' ;
+COMMENT ON COLUMN SYS_LIST_GROUP_REL.id_sys_list IS 'Translation code' ;
+COMMENT ON COLUMN SYS_LIST_GROUP_REL.id_market IS 'Market ID';
+COMMENT ON COLUMN SYS_LIST_GROUP_REL.flg_available IS 'Available (Y/N)';
+COMMENT ON COLUMN SYS_LIST_GROUP_REL.rank IS 'Rank used to sort the list';
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 22/02/2010 11:16
+-- CHANGE REASON: [ALERT-72772] Data Model and API creation for manage lists of types of records
+-- Add/modify columns 
+alter table SYS_LIST_GROUP_REL add FLG_CONTEXT varchar2(2 CHAR) not null;
+-- Add comments to the columns 
+comment on column SYS_LIST_GROUP_REL.FLG_CONTEXT
+  is 'Context flag that uniquely identifies the record within the group';
+-- CHANGE END: Alexandre Santos
+
+comment on column ALERT.SYS_LIST_GROUP_REL.create_user			  is 'Creation User';
+comment on column ALERT.SYS_LIST_GROUP_REL.create_time			  is 'Creation Time';
+comment on column ALERT.SYS_LIST_GROUP_REL.create_institution	      is 'Creation Institution';
+comment on column ALERT.SYS_LIST_GROUP_REL.update_user			  is 'Update User';
+comment on column ALERT.SYS_LIST_GROUP_REL.update_time			  is 'Update Time';
+comment on column ALERT.SYS_LIST_GROUP_REL.update_institution	  	  is 'Update Institution';

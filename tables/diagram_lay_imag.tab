@@ -1,0 +1,65 @@
+
+
+  CREATE TABLE DIAGRAM_LAY_IMAG
+   (	ID_DIAGRAM_LAY_IMAG NUMBER(24,0) NOT NULL ENABLE,
+	ID_DIAGRAM_LAYOUT NUMBER(24,0) NOT NULL ENABLE,
+	POSITION_X NUMBER(24,2),
+	POSITION_Y NUMBER(24,2),
+	ID_DIAGRAM_IMAGE NUMBER(24,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE diagram_lay_imag IS 'Tabela de relação layout / imagem ' ;
+
+COMMENT ON COLUMN diagram_lay_imag.id_diagram_lay_imag IS 'Chave primária' ;
+COMMENT ON COLUMN diagram_lay_imag.id_diagram_layout IS 'Chave primária' ;
+COMMENT ON COLUMN diagram_lay_imag.position_x IS 'Posição X' ;
+COMMENT ON COLUMN diagram_lay_imag.position_y IS 'Posição Y' ;
+COMMENT ON COLUMN diagram_lay_imag.id_diagram_image IS 'Chave primária' ;
+COMMENT ON COLUMN diagram_lay_imag.adw_last_update IS 'Data da última alteração' ;
+
+alter table DIAGRAM_LAY_IMAG add POSITION_LABEL_X NUMBER(24,2);
+alter table DIAGRAM_LAY_IMAG add POSITION_LABEL_Y NUMBER(24,2);
+
+comment on column DIAGRAM_LAY_IMAG.POSITION_LABEL_X
+  is 'Posição X da legenda';
+comment on column DIAGRAM_LAY_IMAG.POSITION_LABEL_Y
+  is 'Posição Y da legenda';
+
+
+alter table DIAGRAM_LAY_IMAG drop column POSITION_LABEL_X;
+alter table DIAGRAM_LAY_IMAG drop column POSITION_LABEL_Y;
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 10:00
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table DIAGRAM_LAY_IMAG
+  is 'Body diagrams'' layout association to an image';
+-- Add comments to the columns 
+comment on column DIAGRAM_LAY_IMAG.id_diagram_lay_imag
+  is 'Primary key';
+comment on column DIAGRAM_LAY_IMAG.id_diagram_layout
+  is 'Body diagram layout ID';
+comment on column DIAGRAM_LAY_IMAG.position_x
+  is 'Position X';
+comment on column DIAGRAM_LAY_IMAG.position_y
+  is 'Position Y';
+comment on column DIAGRAM_LAY_IMAG.id_diagram_image
+  is 'Body diagram image ID';
+comment on column DIAGRAM_LAY_IMAG.adw_last_update
+  is 'Update date';
+comment on column DIAGRAM_LAY_IMAG.create_user
+  is 'Creation User';
+comment on column DIAGRAM_LAY_IMAG.create_time
+  is 'Creation Time';
+comment on column DIAGRAM_LAY_IMAG.create_institution
+  is 'Creation Institution';
+comment on column DIAGRAM_LAY_IMAG.update_user
+  is 'Update User';
+comment on column DIAGRAM_LAY_IMAG.update_time
+  is 'Update Time';
+comment on column DIAGRAM_LAY_IMAG.update_institution
+  is 'Update Institution';
+-- CHANGE END: Renato Nunes

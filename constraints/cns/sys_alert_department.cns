@@ -1,0 +1,35 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/12/2012 15:55
+-- CHANGE REASON: [ALERT-243533] new config table
+DECLARE
+    e_pk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+    e_unique_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE sys_alert_department add(CONSTRAINT SADEP_PK primary key(id_sys_alert_department) using index tablespace ALERT_IDX)';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE sys_alert_department add(CONSTRAINT SADEP_FLG_NO_CHK CHECK (flg_no_alert in (''Y'',''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table sys_alert_department add constraint SADEP_AFLG_CHK check ((id_sys_alert IS NULL AND flg_no_alert = ''Y'') OR (id_sys_alert IS NOT NULL AND flg_no_alert = ''N''))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

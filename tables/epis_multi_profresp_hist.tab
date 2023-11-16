@@ -1,0 +1,77 @@
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 18/11/2010 14:15
+-- CHANGE REASON: [ALERT-142370] Hand-off NL refactoring - replication to 2.6.0.4
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE EPIS_MULTI_PROFRESP_HIST ' || '( ' ||
+                      'ID_EPIS_MULTI_PROFRESP_HIST NUMBER(24) NOT NULL, ' ||
+                      'ID_EPIS_MULTI_PROF_RESP NUMBER(24) NOT NULL, ' ||
+                      'ID_EPISODE              NUMBER(24) NOT NULL, ' ||
+                      'FLG_STATUS              VARCHAR2(1) NOT NULL, ' ||
+                      'ID_PROFESSIONAL         NUMBER(24) NOT NULL, ' ||
+                      'FLG_PROFILE             VARCHAR2(1) NOT NULL, ' ||
+                      'DT_CREATE               TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL, ' ||
+                      'ID_EPIS_PROF_RESP       NUMBER(24) NOT NULL, ' ||
+                      'CREATE_USER             VARCHAR2(24), ' ||
+                      'CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE, ' ||
+                      'CREATE_INSTITUTION      NUMBER(24), ' ||
+                      'UPDATE_USER             VARCHAR2(24), ' ||
+                      'UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE, ' ||
+                      'UPDATE_INSTITUTION      NUMBER(24), ' ||
+                      'FLG_MAIN_RESPONSIBLE    VARCHAR2(1 CHAR), ' ||
+                      'ID_SPECIALITY           NUMBER(24), ' ||
+                      'FLG_RESP_TYPE           VARCHAR2(1 CHAR) ' || ') TABLESPACE TABLE_L ';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+
+comment on table EPIS_MULTI_PROFRESP_HIST
+  is 'Stores the history of multiple responsability for a patient';
+comment on column EPIS_MULTI_PROFRESP_HIST.ID_EPIS_MULTI_PROFRESP_HIST
+  is 'Transfer history identifier';
+comment on column EPIS_MULTI_PROFRESP_HIST.ID_EPIS_MULTI_PROF_RESP
+  is 'Transfer identifier';
+comment on column EPIS_MULTI_PROFRESP_HIST.ID_EPISODE
+  is 'Episode ID';
+comment on column EPIS_MULTI_PROFRESP_HIST.FLG_STATUS
+  is 'Status of the responsibility over the episode: (A) Active (H) On hold (O) Outdated';
+comment on column EPIS_MULTI_PROFRESP_HIST.ID_PROFESSIONAL
+  is 'ID of the professional responsible for the episode';
+comment on column EPIS_MULTI_PROFRESP_HIST.FLG_PROFILE
+  is 'Type of profile: (S) Specialist physician (R) Resident physician (I) Intern physician (N) Nurse';
+comment on column EPIS_MULTI_PROFRESP_HIST.DT_CREATE
+  is 'Record creation date. Used for sorting.';
+comment on column EPIS_MULTI_PROFRESP_HIST.ID_EPIS_PROF_RESP
+  is 'Identifier of the hand-off request';
+comment on column EPIS_MULTI_PROFRESP_HIST.CREATE_USER
+  is 'Creation user';
+comment on column EPIS_MULTI_PROFRESP_HIST.CREATE_TIME
+  is 'Creation date / time';
+comment on column EPIS_MULTI_PROFRESP_HIST.CREATE_INSTITUTION
+  is 'Creation institution';
+comment on column EPIS_MULTI_PROFRESP_HIST.UPDATE_USER
+  is 'Update user';
+comment on column EPIS_MULTI_PROFRESP_HIST.UPDATE_TIME
+  is 'Update date / time';
+comment on column EPIS_MULTI_PROFRESP_HIST.UPDATE_INSTITUTION
+  is 'Update institution';
+comment on column EPIS_MULTI_PROFRESP_HIST.FLG_MAIN_RESPONSIBLE
+  is 'Indicates if the professional is the overall main responsible: (Y) Yes (N) No';
+comment on column EPIS_MULTI_PROFRESP_HIST.ID_SPECIALITY
+  is 'The corresponding speciality, for the medical responsability.';
+comment on column EPIS_MULTI_PROFRESP_HIST.FLG_RESP_TYPE
+  is 'Type of responsability: (E - default) Episode (O) overall - patient responsability';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2018 16:22
+-- CHANGE REASON: [CALERT-1846] Discharge summary (Transfer block)
+alter table EPIS_MULTI_PROFRESP_HIST add priority NUMBER(24);
+alter table EPIS_MULTI_PROFRESP_HIST add dt_update TIMESTAMP(6) WITH LOCAL TIME ZONE;
+
+comment on column EPIS_MULTI_PROFRESP_HIST.priority
+  is 'Priority number';
+comment on column EPIS_MULTI_PROFRESP_HIST.dt_update
+  is 'Record update date';
+-- CHANGE END: Elisabete Bugalho

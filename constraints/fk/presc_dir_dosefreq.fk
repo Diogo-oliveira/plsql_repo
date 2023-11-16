@@ -1,0 +1,52 @@
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195]
+declare
+  l_count pls_integer;
+begin
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDDF_SLIDSCLAE_FK';
+  if l_count = 0 then
+    execute immediate ('ALTER TABLE ALERT.PRESC_DIR_DOSEFREQ ADD CONSTRAINT PDDF_SLIDSCLAE_FK FOREIGN KEY (ID_SLIDING_SCALE)
+    REFERENCES ALERT.SLIDING_SCALE (ID_SLIDING_SCALE) ENABLE');
+  end if;
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDDF_UNITMEASURE_FK01';
+  if l_count = 0 then
+    execute immediate ('  ALTER TABLE ALERT.PRESC_DIR_DOSEFREQ ADD CONSTRAINT PDDF_UNITMEASURE_FK01 FOREIGN KEY (EDF_RI_ID_UNIT)
+    REFERENCES ALERT.UNIT_MEASURE (ID_UNIT_MEASURE) ENABLE');
+  end if;
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDDF_UNITMEASURE_FK02';
+  if l_count = 0 then
+    execute immediate ('   ALTER TABLE ALERT.PRESC_DIR_DOSEFREQ ADD CONSTRAINT PDDF_UNITMEASURE_FK02 FOREIGN KEY (DF_RI_ID_UNIT)
+    REFERENCES ALERT.UNIT_MEASURE (ID_UNIT_MEASURE) ENABLE');
+  end if;
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDDF_UNITMEASURE_FK03';
+  if l_count = 0 then
+    execute immediate ('   ALTER TABLE ALERT.PRESC_DIR_DOSEFREQ ADD CONSTRAINT PDDF_UNITMEASURE_FK03 FOREIGN KEY (ID_UNIT_DOSE)
+    REFERENCES ALERT.UNIT_MEASURE (ID_UNIT_MEASURE) ENABLE');
+  end if;
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDDF_UNITMEASURE_FK04';
+  if l_count = 0 then
+    execute immediate ( '   ALTER TABLE ALERT.PRESC_DIR_DOSEFREQ ADD CONSTRAINT PDDF_UNITMEASURE_FK04 FOREIGN KEY (ID_UNIT_RNG_MIN)
+    REFERENCES ALERT.UNIT_MEASURE (ID_UNIT_MEASURE) ENABLE');
+  end if;
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDDF_UNITMEASURE_FK05';
+  if l_count = 0 then
+    execute immediate ( '   ALTER TABLE ALERT.PRESC_DIR_DOSEFREQ ADD CONSTRAINT PDDF_UNITMEASURE_FK05 FOREIGN KEY (ID_UNIT_RNG_MAX)
+    REFERENCES ALERT.UNIT_MEASURE (ID_UNIT_MEASURE) ENABLE');
+  end if;
+
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDDF_PDINTERVAL_FK';
+  if l_count = 0 then
+    execute immediate ('alter table PRESC_DIR_DOSEFREQ add constraint PDDF_PDINTERVAL_FK foreign key (ID_PRESC_DIR_INTERVAL)
+    references PRESC_DIR_INTERVAL (ID_PRESC_DIR_INTERVAL)');
+  end if;
+
+end;
+/
+-- CHANGE END: Nuno Ferreira

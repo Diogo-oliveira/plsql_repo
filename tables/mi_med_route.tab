@@ -1,0 +1,80 @@
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 05/11/2010 11:52
+-- CHANGE REASON: [ALERT-137957] 
+create table MI_MED_ROUTE
+(
+  id_drug            VARCHAR2(255) not null,
+  route_id           VARCHAR2(255) not null,
+  vers               VARCHAR2(255) not null,
+  flg_available      VARCHAR2(1) default 'Y' not null,
+  create_user        VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table MI_MED_ROUTE
+  is 'Contains the different routes per drug.';  
+-- Add comments to the columns 
+comment on column MI_MED_ROUTE.id_drug
+  is 'ID Drug';
+comment on column MI_MED_ROUTE.route_id
+  is 'ID Route ';
+comment on column MI_MED_ROUTE.vers
+  is 'Version';
+comment on column MI_MED_ROUTE.flg_available
+  is 'Route available (Y/N)';  
+comment on column MI_MED_ROUTE.create_user
+  is 'Creation User';
+comment on column MI_MED_ROUTE.create_time
+  is 'Creation Time';
+comment on column MI_MED_ROUTE.create_institution
+  is 'Creation Institution';
+comment on column MI_MED_ROUTE.update_user
+  is 'Update User';
+comment on column MI_MED_ROUTE.update_time
+  is 'Update Time';
+comment on column MI_MED_ROUTE.update_institution
+  is 'Update Institution';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table MI_MED_ROUTE
+  add constraint MI_MED_ROUTE_PK primary key (ID_DRUG, ROUTE_ID, VERS)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+
+alter table MI_MED_ROUTE
+  add constraint MI_MED_ROUTE_FLG_A_CHK
+  check (FLG_AVAILABLE IN ('Y','N'));
+  
+alter table MI_MED_ROUTE
+  add constraint MI_MED_ROUTE_MI_ROUTE_FK foreign key (ROUTE_ID, VERS)
+  references MI_ROUTE (ROUTE_ID, VERS)
+;
+-- CHANGE END:  NUNO ANTUNES
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:57
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE MI_MED_ROUTE IS 'Contains the different routes per drug. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

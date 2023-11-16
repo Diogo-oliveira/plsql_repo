@@ -1,0 +1,27 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 02/10/2013 15:31
+-- CHANGE REASON: [ALERT-266183 ] Intake and output improvements
+begin
+execute immediate ('ALTER TABLE epis_hd_line_group ADD CONSTRAINT EHLG_ID_EPIS_HD_GROUP_FK FOREIGN KEY (ID_EPIS_HIDRICS_GROUP) REFERENCES EPIS_HIDRICS_GROUP(ID_EPIS_HIDRICS_GROUP)');
+exception
+when others then
+dbms_output.put_line('operacao ja executada anteriormente');
+end;
+/
+
+begin
+execute immediate ('ALTER TABLE epis_hd_line_group ADD CONSTRAINT EHLG_ID_EPIS_HD_LINE_FK FOREIGN KEY (ID_EPIS_HIDRICS_LINE) REFERENCES EPIS_HIDRICS_LINE(ID_EPIS_HIDRICS_LINE)');
+exception
+when others then
+dbms_output.put_line('operacao ja executada anteriormente');
+end;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE epis_hd_line_group ADD CONSTRAINT EHLG_ID_EPIS_HLHCHILD_FK FOREIGN KEY (ID_EPIS_HDL_GROUP_CHILD) REFERENCES epis_hd_line_group(ID_EPIS_HD_LINE_GROUP)');
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('operacao ja executada anteriormente');
+END;
+/
+-- CHANGE END: Sofia Mendes

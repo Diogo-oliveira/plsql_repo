@@ -1,0 +1,155 @@
+  CREATE TABLE "WAITING_LIST_HIST"
+(	
+  "ID_WAITING_LIST_HIST" NUMBER(24,0) NOT NULL,
+	"ID_WAITING_LIST" NUMBER(24,0) NOT NULL,
+  "ID_PATIENT" NUMBER(24,0) NOT NULL,
+  "ID_PROF_REQ" NUMBER(24,0),
+  "DT_PLACEMENT" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  "FLG_TYPE" VARCHAR2(1),
+	"FLG_STATUS" VARCHAR2(1),
+	"DT_DPB" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  "DT_DPA" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  "DT_SURGERY" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  "DT_ADMISSION" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  "MIN_INFORM_TIME" NUMBER(6,0),
+	"ID_WTL_URG_LEVEL" NUMBER(24,0), 
+	"ID_PROF_REG" NUMBER(24,0),
+	"DT_REG" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+  "ID_CANCEL_REASON" NUMBER(24,0),
+	"ID_PROF_CANCEL" NUMBER(24,0),
+	"DT_CANCEL" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+	"NOTES_CANCEL" VARCHAR2(4000),
+	"CREATE_USER"	VARCHAR2(24),
+  "CREATE_TIME"	TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  "CREATE_INSTITUTION"	NUMBER(24),                       	
+  "UPDATE_USER"	VARCHAR2(24),                     	
+  "UPDATE_TIME"	TIMESTAMP(6) WITH LOCAL TIME ZONE,	
+  "UPDATE_INSTITUTION"	NUMBER(24)                  
+
+) ;
+
+COMMENT ON TABLE "WAITING_LIST_HIST"  IS 'This table stores data about requests for bed and/or surgery request on the waiting list';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."ID_WAITING_LIST_HIST" IS 'Primary Key';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."ID_WAITING_LIST" IS 'Parent Record';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."ID_PATIENT"  IS 'Patient ID';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."ID_PROF_REQ" IS 'professional who requests the scheduling';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."DT_PLACEMENT" IS 'Date when patient is placed on the waiting list';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."FLG_TYPE" IS 'Indicates which kind of request is being made: B - Bed; S - Surgery; A - Both (surgery and admission) ';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."FLG_STATUS" IS 'Indicates waiting list status, available values: A - active (ready for being scheduled); I - Inactive ; S - Scheduled; C - Cancelled; P - partial';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."DT_DPB"  IS 'Start date of the available period for surgery/admission';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."DT_DPA" IS 'End date of the available period for surgery/admission';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."DT_SURGERY" IS 'Suggested date for surgery';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."DT_ADMISSION" IS 'Suggested date for admission';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."MIN_INFORM_TIME" IS 'Minimum time to inform patient';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."ID_WTL_URG_LEVEL" IS 'Degree of urgency associated with this request';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."ID_PROF_REG" IS 'Professional ID - person who inserted data';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."DT_REG" IS 'date of insertion/update';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."ID_CANCEL_REASON" IS 'reason for cancellation';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."NOTES_CANCEL" IS 'notes for cancellation';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."CREATE_USER" IS 'ID of the professional who created the record';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."CREATE_TIME" IS 'Date of record creation';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."CREATE_INSTITUTION" IS 'ID of institution where record was created'; 
+COMMENT ON COLUMN "WAITING_LIST_HIST"."UPDATE_USER" IS 'ID of the professional who last updated the record';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."UPDATE_TIME" IS 'Date when record was last updated';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."UPDATE_INSTITUTION" IS 'ID of the institution where record was last updated';
+
+
+-- CHANGED BY: Jorge Canossa
+-- CHANGE DATE: 2009-10-28
+-- CHANGE REASON: ALERT-45879 
+ALTER TABLE WAITING_LIST_HIST ADD ID_EXTERNAL_REQUEST NUMBER(24);
+COMMENT ON COLUMN "WAITING_LIST_HIST"."ID_EXTERNAL_REQUEST" IS 'ID of the associated Referral request. If no Referral is associated with the Waiting List record this field should be null.';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."ID_PROF_CANCEL" IS 'ID professional who cancel the request';
+COMMENT ON COLUMN "WAITING_LIST_HIST"."DT_CANCEL" IS 'Date of cancel request';
+-- CHANGE END
+
+
+-- CHANGED BY: RicardoNunoAlmeida
+-- CHANGE DATE: 12/03/2010 18:00
+-- CHANGE REASON: [ALERT-60382] 
+ALTER TABLE waiting_list_hist add func_eval_score NUMBER(24);
+ALTER TABLE waiting_list_hist add notes_edit VARCHAR2(4000);
+
+comment on column waiting_list_hist.func_eval_score
+  is 'Value of the current valid evaluation to the patient (i.e. Barthel Index)';
+-- CHANGE END: RicardoNunoAlmeida
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 21/01/2016 12:30
+-- CHANGE REASON: [ALERT-318028] CDOC Functionalities V7
+-- Add comments to the table 
+comment on table WAITING_LIST_HIST
+  is 'This table stores data about requests for bed and/or surgery request on the waiting list';
+-- Add comments to the columns 
+comment on column WAITING_LIST_HIST.id_waiting_list_hist
+  is 'Primary Key';
+comment on column WAITING_LIST_HIST.id_waiting_list
+  is 'Parent Record';
+comment on column WAITING_LIST_HIST.id_patient
+  is 'Patient ID';
+comment on column WAITING_LIST_HIST.id_prof_req
+  is 'professional who requests the scheduling';
+comment on column WAITING_LIST_HIST.dt_placement
+  is 'Date when patient is placed on the waiting list';
+comment on column WAITING_LIST_HIST.flg_type
+  is 'Indicates which kind of request is being made: B - Bed; S - Surgery; A - Both (surgery and admission) ';
+comment on column WAITING_LIST_HIST.flg_status
+  is 'Indicates waiting list status, available values: A - active (ready for being scheduled); I - Inactive ; S - Scheduled; C - Cancelled; P - partial';
+comment on column WAITING_LIST_HIST.dt_dpb
+  is 'Start date of the available period for surgery/admission';
+comment on column WAITING_LIST_HIST.dt_dpa
+  is 'End date of the available period for surgery/admission';
+comment on column WAITING_LIST_HIST.dt_surgery
+  is 'Suggested date for surgery';
+comment on column WAITING_LIST_HIST.dt_admission
+  is 'Suggested date for admission';
+comment on column WAITING_LIST_HIST.min_inform_time
+  is 'Minimum time to inform patient';
+comment on column WAITING_LIST_HIST.id_wtl_urg_level
+  is 'Degree of urgency associated with this request';
+comment on column WAITING_LIST_HIST.id_prof_reg
+  is 'Professional ID - person who inserted data';
+comment on column WAITING_LIST_HIST.dt_reg
+  is 'date of insertion/update';
+comment on column WAITING_LIST_HIST.id_cancel_reason
+  is 'reason for cancellation';
+comment on column WAITING_LIST_HIST.id_prof_cancel
+  is 'ID professional who cancel the request';
+comment on column WAITING_LIST_HIST.dt_cancel
+  is 'Date of cancel request';
+comment on column WAITING_LIST_HIST.notes_cancel
+  is 'notes for cancellation';
+comment on column WAITING_LIST_HIST.create_user
+  is 'ID of the professional who created the record';
+comment on column WAITING_LIST_HIST.create_time
+  is 'Date of record creation';
+comment on column WAITING_LIST_HIST.create_institution
+  is 'ID of institution where record was created';
+comment on column WAITING_LIST_HIST.update_user
+  is 'ID of the professional who last updated the record';
+comment on column WAITING_LIST_HIST.update_time
+  is 'Date when record was last updated';
+comment on column WAITING_LIST_HIST.update_institution
+  is 'ID of the institution where record was last updated';
+comment on column WAITING_LIST_HIST.id_external_request
+  is 'ID of the associated Referral request. If no Referral is associated with the Waiting List record this field should be null.';
+comment on column WAITING_LIST_HIST.func_eval_score
+  is 'Value of the current valid evaluation to the patient (i.e. Barthel Index)';
+comment on column WAITING_LIST_HIST.notes_edit
+  is 'Contains the notes filled by the professional when a valid evaluation is edited ';
+  
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 06/03/2018 09:27
+-- CHANGE REASON: 
+ALTER TABLE waiting_list_hist MODIFY ID_PATIENT NULL;
+ALTER TABLE waiting_list_hist MODIFY FLG_STATUS VARCHAR2(2 CHAR);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/03/2018 10:44
+-- CHANGE REASON: [EMR-1983] 
+ALTER TABLE waiting_list_hist MODIFY ID_PATIENT NULL;
+ALTER TABLE waiting_list_hist MODIFY FLG_STATUS VARCHAR2(2 CHAR);
+-- CHANGE END: Pedro Henriques

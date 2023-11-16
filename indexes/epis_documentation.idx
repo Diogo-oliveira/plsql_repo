@@ -1,0 +1,34 @@
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 16/07/2021 17:31
+-- CHANGE REASON: [EMR-47297] -  [Subtask] Performance: pk_inp_nurse.get_doc_not_register improvements
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[create index EPISD_SEARCH02_IDX on EPIS_DOCUMENTATION(id_doc_area,flg_edition_type) tablespace alert_idx]';
+pk_versioning.run(l_sql);
+end;
+/
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[create index EPISD_SEARCH03_IDX on EPIS_DOCUMENTATION(id_doc_area,flg_status,flg_edition_type,id_epis_documentation) tablespace alert_idx]';
+pk_versioning.run(l_sql);
+end;
+/
+-- CHANGE END: Elisabete Bugalho
+
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := 'create index alert.episdd_search01_idx on alert.epis_documentation_det(id_documentation, id_professional, dt_creation_tstz) tablespace alert_idx';
+	pk_versioning.run(l_sql);
+
+	l_sql := 'create index alert.EPISD_SEARCH04_IDX on alert.epis_documentation(id_epis_documentation,id_episode) tablespace alert_idx';
+	pk_versioning.run(l_sql);
+
+end;
+/
+

@@ -1,0 +1,36 @@
+
+
+  CREATE TABLE HEMO_PROTOCOLS
+   (	ID_HEMO_PROTOCOLS NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROTOCOLS NUMBER(24,0) NOT NULL ENABLE,
+	ID_HEMO_TYPE NUMBER(24,0) NOT NULL ENABLE,
+	ABO VARCHAR2(10),
+	RH VARCHAR2(1),
+	QTY_REQ NUMBER(10,3),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE
+   );
+
+
+COMMENT ON COLUMN hemo_protocols.id_hemo_protocols IS 'ID único' ;
+COMMENT ON COLUMN hemo_protocols.id_protocols IS 'ID do protocolo' ;
+COMMENT ON COLUMN hemo_protocols.id_hemo_type IS 'Tipo de hemoderivados' ;
+COMMENT ON COLUMN hemo_protocols.abo IS 'Tipo ABO (Grupo sanguineo): A, B, AB, O' ;
+COMMENT ON COLUMN hemo_protocols.rh IS 'Tipo RH (Factor Rhesus): P - positivo, N - negativo' ;
+COMMENT ON COLUMN hemo_protocols.qty_req IS 'Quantidade a requisitar' ;
+COMMENT ON COLUMN hemo_protocols.flg_available IS 'Indica se está disponível' ;
+COMMENT ON COLUMN hemo_protocols.rank IS 'Ordem de visualização' ;
+COMMENT ON COLUMN hemo_protocols.adw_last_update IS 'Data da última alteração' ;
+
+--29/10/2010 Rui Batista
+--[ALERT-136492] Database object Cleaning
+begin
+
+  execute immediate 'drop table HEMO_PROTOCOLS';
+--	
+	exception
+	when others then --ORA-00942 Table or view does not exists
+	     null;
+end;
+

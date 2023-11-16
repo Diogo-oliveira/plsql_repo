@@ -1,0 +1,5 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/03/2010 14:06
+-- CHANGE REASON: [ALERT-79864] 
+grant execute on PK_P1_EXR_DIAGNOSIS_TEMP to INTERFACE_P1;
+-- CHANGE END: Ana Monteiro

@@ -1,0 +1,130 @@
+
+
+  CREATE TABLE DRUG_REQ
+   (	ID_DRUG_REQ NUMBER(24,0) NOT NULL ENABLE,
+	DT_DRUG_REQ DATE NOT NULL ENABLE,
+	NOTES_REQ VARCHAR2(4000),
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_REQ NUMBER(24,0) NOT NULL ENABLE,
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	ID_DRUG_PRESCRIPTION NUMBER(24,0),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_BEGIN DATE,
+
+	ID_ROOM NUMBER(24,0),
+	FLG_TYPE VARCHAR2(1),
+	FLG_SUB_TYPE VARCHAR2(2),
+	FLG_PRINT_TYPE VARCHAR2(2),
+	ID_PROF_PRINT NUMBER(24,0),
+	DT_PRINT DATE,
+	ID_PROF_PENDING NUMBER(24,0),
+	DT_PENDING DATE,
+	NOTES_PENDING VARCHAR2(4000)
+   );
+
+
+COMMENT ON TABLE drug_req IS 'Requisições internas de medicamentos à farmácia da instituição.Uma req. pode estar associada a uma receita, para os casos em q o medicamento é fornecido pela instituição, mas a receita é exigida pela Contabilidade.' ;
+
+COMMENT ON COLUMN drug_req.dt_drug_req IS 'Data da req.' ;
+COMMENT ON COLUMN drug_req.id_drug_prescription IS 'ID da prescrição associada à requisição interna, caso exista' ;
+COMMENT ON COLUMN drug_req.flg_status IS 'T - temporária; D - pendente; R - requisitado; E - em execução; P - fornecimento parcial; F - terminado; C - cancelado; J - pedido rejeitado' ;
+COMMENT ON COLUMN drug_req.dt_begin IS 'Data pretendida para início da execução do exame (ie, ñ imediata)' ;
+COMMENT ON COLUMN drug_req.flg_type IS 'Flag que indica se é uma prescrição de um medicamento para o utente aviar na farmácia do hospital (I) ou de uma requisição para administrar neste local (A).' ;
+COMMENT ON COLUMN drug_req.flg_sub_type IS 'Flag que indica se é um dietético para a farmácia do hospital (DI) ou manipulado para a farmácia do hospital (MI). Só é preenchida se FLG_TYPE = ''P''.' ;
+COMMENT ON COLUMN drug_req.flg_print_type IS 'Flag que indica o tipo de impressão escolhido: N - normal, R - renovável (3vias); V2 - renovável (2 vias)' ;
+COMMENT ON COLUMN drug_req.id_prof_print IS 'ID do profissional que imprimiu.' ;
+COMMENT ON COLUMN drug_req.dt_print IS 'Data em que a receita foi impressa.' ;
+COMMENT ON COLUMN drug_req.id_prof_pending IS 'ID do profissional que passou a requisição para pendente.' ;
+COMMENT ON COLUMN drug_req.dt_pending IS 'Data em que a requisição passou para pendente.' ;
+COMMENT ON COLUMN drug_req.notes_pending IS 'Notas de passagem para pendente.' ;
+
+comment on column DRUG_REQ.FLG_SUB_TYPE
+  is 'Flag que indica se é um dietético para a farmácia do hospital (DI) ou manipulado para aviar naf armácia do hospital(MI). Só é preenchida se FLG_TYPE = ''P''.';
+comment on column DRUG_REQ.FLG_PRINT_TYPE
+  is 'Flag que indica o tipo de impressão escolhido: N - normal, R - renovável (3vias); V2 - Renovável (2 vias)';
+
+comment on column DRUG_REQ.FLG_TYPE  
+  is 'Flag que indica se é uma prescrição para o utente aviar na farmácia do hospital (I), uma requisição para administrar neste local (A) ou uma requisição para administrar neste local feita de num serviço que adoptou a unidose (U).';
+
+ALTER TABLE DRUG_REQ 
+ ADD (ID_DRUG_PRESC_DET  NUMBER(24));
+
+COMMENT ON COLUMN DRUG_REQ.ID_DRUG_PRESC_DET IS 'ID da prescrição para administrar neste local que necessita de requisição à farmácia';
+
+alter table drug_req add id_unidose_car number(24);
+
+COMMENT ON COLUMN DRUG_REQ.id_unidose_car IS 'ID do carro de unidose alocado à requisição';
+
+alter table drug_req drop column id_drug_prescription;
+
+ALTER TABLE DRUG_REQ 
+ ADD (ID_PATIENT  NUMBER(24)
+ );
+
+COMMENT ON COLUMN DRUG_REQ.ID_PATIENT IS 'ID do paciente';
+
+alter table drug_req add (dt_unidose_car date );
+
+COMMENT ON COLUMN DRUG_REQ.dt_unidose_car  IS 'Data da associação do carro à reqisição';
+
+alter table drug_req 
+add (dt_drug_req_tstz timestamp with local time zone,
+dt_begin_tstz timestamp with local time zone,
+dt_cancel_tstz timestamp with local time zone,
+dt_pending_tstz timestamp with local time zone,
+dt_print_tstz timestamp with local time zone,
+dt_unidose_car_tstz timestamp with local time zone);
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-MAY-08
+-- CHANGING REASON: Quando se faz uma transferência de um episodio do EDIs para o INP as requisições à farmácia do hospital não estão a aparecer
+alter table DRUG_REQ add id_prev_episode number(24);
+-- Add comments to the columns 
+comment on column DRUG_REQ.id_prev_episode
+  is 'só é utilizado no edis para a passagem de urgência para obs. id do episódio em que foi registada a req. inicialmente (ie, se flg_time = ''n'')';
+-- CHANGE END Patrícia Neto	
+
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2008-SET-22
+-- CHANGE REASON: Drop de colunas DATE com correspondentes DATE_TSTZ
+
+ALTER TABLE DRUG_REQ DROP COLUMN DT_DRUG_REQ;
+ALTER TABLE DRUG_REQ DROP COLUMN DT_CANCEL;
+ALTER TABLE DRUG_REQ DROP COLUMN DT_BEGIN;
+ALTER TABLE DRUG_REQ DROP COLUMN DT_PRINT;
+ALTER TABLE DRUG_REQ DROP COLUMN DT_PENDING;
+ALTER TABLE DRUG_REQ DROP COLUMN DT_UNIDOSE_CAR;
+
+-- CHANGE END
+
+-- CHANGED BY: Rui Marante
+-- CHANGE DATE: 2009-AGO-28
+-- CHANGE REASON: ALERT-40841
+comment on column DRUG_REQ.FLG_PRINT_TYPE
+  is 'Flag que indica o tipo de impressão escolhido: N - normal, R - renovável (3vias); V2 - Renovável (2 vias); NP - no print (requisição sem impressão de receita);';
+-- CHANGE END: Rui Marante
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:36
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_REQ IS 'Requisições internas de medicamentos à farmácia da instituição.Uma req. pode estar associada a uma receita, para os casos em q o medicamento é fornecido pela instituição, mas a receita é exigida pela Contabilidade. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 28/01/2021 16:06
+-- CHANGE REASON: [EMR-41290]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00904);
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE drug_req DROP COLUMN id_drug_presc_det';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos

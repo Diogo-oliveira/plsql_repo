@@ -1,0 +1,46 @@
+-- Create table
+create table INTERV_PAT_PROBLEM
+(
+  ID_INTERV_PAT_PROBLEM      NUMBER(24) not null,
+  ID_PAT_PROBLEM             NUMBER(24),
+  ID_INTERV_PRESC_DET        NUMBER(24) not null,
+  ID_PROFESSIONAL            NUMBER(24) not null,
+  DT_INTERV_PAT_PROBLEM_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PAT_ALLERGY             NUMBER(24),
+  FLG_STATUS                 VARCHAR2(1),
+  ID_PROF_CANCEL             NUMBER(24),
+  DT_CANCEL_TSTZ             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PAT_HISTORY_DIAGNOSIS   NUMBER(12)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table INTERV_PAT_PROBLEM
+  is 'Associação de intervencoes de mfr a problemas.';
+-- Add comments to the columns 
+comment on column INTERV_PAT_PROBLEM.ID_INTERV_PAT_PROBLEM
+  is 'Chave primária.';
+comment on column INTERV_PAT_PROBLEM.ID_PAT_PROBLEM
+  is 'Problema a que está a associada a intervencao.';
+comment on column INTERV_PAT_PROBLEM.ID_INTERV_PRESC_DET
+  is 'Intervencao associada ao problema.';
+comment on column INTERV_PAT_PROBLEM.ID_PROFESSIONAL
+  is 'Profissional que regista a associação.';
+comment on column INTERV_PAT_PROBLEM.DT_INTERV_PAT_PROBLEM_TSTZ
+  is 'Data de registo da associação da intervencao ao problema.';
+comment on column INTERV_PAT_PROBLEM.ID_PAT_ALLERGY
+  is 'Alergia a que está a associada a intervencao.';
+comment on column INTERV_PAT_PROBLEM.FLG_STATUS
+  is 'Estado da associação: A - activo, C - cancelado.';
+comment on column INTERV_PAT_PROBLEM.ID_PROF_CANCEL
+  is 'Profissional que cancela.';
+comment on column INTERV_PAT_PROBLEM.DT_CANCEL_TSTZ
+  is 'Data de cancelamento.';

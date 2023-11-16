@@ -1,0 +1,35 @@
+
+CREATE TABLE PROTOCOL_ACTION_CATEGORY
+ (ID_PROTOCOL_ACTION_CATEGORY NUMBER(24) NOT NULL
+ ,ID_ACTION NUMBER NOT NULL
+ ,ID_CATEGORY NUMBER(12) NOT NULL
+ ,TASK_TYPE NUMBER(24) NOT NULL
+ ,FLG_AVAILABLE VARCHAR2(1) NOT NULL
+ );
+
+COMMENT ON COLUMN PROTOCOL_ACTION_CATEGORY.ID_PROTOCOL_ACTION_CATEGORY IS 'ID of guideline_action_category';
+COMMENT ON COLUMN PROTOCOL_ACTION_CATEGORY.ID_ACTION IS 'ID of action';
+COMMENT ON COLUMN PROTOCOL_ACTION_CATEGORY.ID_CATEGORY IS 'Category ID associated to action';
+COMMENT ON COLUMN PROTOCOL_ACTION_CATEGORY.TASK_TYPE IS 'Task type associated to action';
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 2007-NOV-12
+-- CHANGE REASON: Add column ID_PROFILE_TEMPLATE
+ALTER TABLE protocol_action_category ADD (ID_PROFILE_TEMPLATE NUMBER(12) DEFAULT '0' NOT NULL);
+
+COMMENT ON COLUMN PROTOCOL_ACTION_CATEGORY.ID_PROFILE_TEMPLATE IS 'Profile template ID associated to action';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 28/03/2011 09:23
+-- CHANGE REASON: [ALERT-168339] Insert constraints for flag_status columns defined in sys_domain
+comment on column PROTOCOL_ACTION_CATEGORY.FLG_AVAILABLE is 'Protocol availability for the action category: 
+Y - Yes (available)
+N - No (not available)';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 10:33
+-- CHANGE REASON: [ALERT-317912] 
+comment on table PROTOCOL_ACTION_CATEGORY is 'Protocols action association to a category';
+-- CHANGE END: Ana Matos

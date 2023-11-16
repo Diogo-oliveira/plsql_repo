@@ -1,0 +1,72 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/07/2011 15:44
+-- CHANGE REASON: [ALERT-188951] Possibility to calculate partial scores
+CREATE TABLE scales_formula (
+       id_scales_formula NUMBER(24) NOT NULL,
+       formula           varchar2(1000 char),
+       formula_alias      varchar2(50 char),
+       rank              number(12),
+       id_scales         number(24),
+       id_scales_group   number(24) default null,
+       id_documentation number(24) default null,
+       id_doc_element   number(24) default null,
+       flg_visible      varchar2(1 char) default 'Y',       
+       flg_summary      varchar2(1 char) default 'Y',
+       code_scales_formula  varchar2(200 char),              
+       flg_available      varchar2(1 char) default 'Y',
+       flg_formula_type   varchar2(2 char) default 'TM',       
+       create_user VARCHAR2(24),
+       create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution NUMBER(24),
+       update_user VARCHAR2(24),
+       update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution NUMBER(24)
+);
+
+
+alter table scales_formula modify (id_scales  number(24) not null);
+
+COMMENT ON TABLE scales_formula IS 'Formulas to be used to calculate the scale score.';
+COMMENT ON COLUMN scales_formula.id_scales_formula IS 'Scales formula identifier';
+COMMENT ON COLUMN scales_formula.rank IS 'Rank';
+COMMENT ON COLUMN scales_formula.id_scales IS 'Scales Id';
+COMMENT ON COLUMN scales_formula.id_scales_group IS 'Scales group id.';
+COMMENT ON COLUMN scales_formula.id_documentation IS 'Documentation id';
+COMMENT ON COLUMN scales_formula.id_doc_element IS 'Doc element id';
+COMMENT ON COLUMN scales_formula.flg_visible IS '(Y) The score is visible in the application (N) The score is not visible in the application. It is used in a formula of one parent record';
+COMMENT ON COLUMN scales_formula.flg_formula_type IS '(M): Main formula. It is bold formatted in the viewer. (C): Complementar formula. It appears together with the class descritoions in the viewer. ';
+COMMENT ON COLUMN scales_formula.flg_summary IS '(Y): The score appears in the summary grid. (N): The score does not appe ';
+COMMENT ON COLUMN scales_formula.create_user IS 'Creation user';
+COMMENT ON COLUMN scales_formula.create_time IS 'Creation date / time';
+COMMENT ON COLUMN scales_formula.create_institution IS 'Creation institution';
+COMMENT ON COLUMN scales_formula.update_user IS 'Update user';
+COMMENT ON COLUMN scales_formula.update_time IS 'Update date / time';
+COMMENT ON COLUMN scales_formula.update_institution IS 'Update institution';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/08/2011 08:33
+-- CHANGE REASON: [ALERT-192414 ] partial scores
+alter table scales_formula modify flg_visible      varchar2(1 char) default 'Y' not null;
+alter table scales_formula modify flg_summary      varchar2(1 char) default 'Y' not null;
+alter table scales_formula modify flg_available      varchar2(1 char) default 'Y' not null;
+alter table scales_formula modify flg_formula_type   varchar2(2 char) default 'TM' not null;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/08/2011 16:46
+-- CHANGE REASON: [ALERT-192414 ] partial scores
+COMMENT ON COLUMN scales_formula.formula IS 'Calculation formula of the scale score.';
+COMMENT ON COLUMN scales_formula.formula_alias IS 'Alias to the formula.';
+COMMENT ON COLUMN scales_formula.code_scales_formula IS 'Translation to the description associated to the formula.';
+COMMENT ON COLUMN scales_formula.flg_available IS 'Y-the record is available. N-otherwise';
+
+alter table scales_formula modify create_user VARCHAR2(24 char);
+alter table scales_formula modify update_user VARCHAR2(24 char);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 29/08/2011 15:23
+-- CHANGE REASON: [ALERT-191261 ] partial scores
+COMMENT ON COLUMN scales_formula.flg_formula_type IS '(TM): Total Main formula (Only one TM formula by scale). It is bold formatted in the viewer. TP: Total partial formula. It appears in the viewer after each partial group. (C): Complementar formula. It appears together with the class descritoions in the viewer. ';
+-- CHANGE END: Sofia Mendes

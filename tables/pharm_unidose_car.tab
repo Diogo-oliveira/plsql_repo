@@ -1,0 +1,80 @@
+
+create table pharm_unidose_car
+(
+	id_unidose_car	number(24) not null,
+	id_car_model	number(24) not null,
+	dt_car_begin	timestamp(6) with local time zone not null,
+	dt_car_end		timestamp(6) with local time zone not null,
+	notes			varchar2(4000)
+) tablespace TABLE_M;
+
+comment on table pharm_unidose_car
+	is 'Table of unidose cars';
+
+comment on column pharm_unidose_car.id_unidose_car
+	is 'PK';
+comment on column pharm_unidose_car.id_car_model
+	is 'FK: id of model';
+comment on column pharm_unidose_car.dt_car_begin
+	is 'date of car (first day)';
+comment on column pharm_unidose_car.dt_car_end
+	is 'date of car (last day - can be the same if the car is for one day only)';
+comment on column pharm_unidose_car.notes
+	is 'notes';
+
+alter table pharm_unidose_car
+drop column notes;
+
+alter table pharm_unidose_car
+add id_state number(5) not null;
+
+alter table pharm_unidose_car
+add dt_car_end timestamp with local time zone;
+
+comment on column pharm_unidose_car.dt_car_end is
+	'date of car - last day';
+	
+comment on column pharm_unidose_car.id_state is
+	'state of the car';
+
+	
+-- CHANGED BY: Rui Marante
+-- CHANGE DATE: 25-09-2009
+-- CHANGE REASON: ALERT-45766
+begin
+	execute immediate 'alter table alert.pharm_unidose_car modify dt_car_end null';
+exception
+when others then
+	null;
+end;
+/
+
+begin
+	execute immediate 'alter table alert.pharm_unidose_car modify dt_car_end default null';
+exception
+when others then
+	null;
+end;
+/
+--CHANGE END: Rui Marante
+
+
+-- CHANGED BY: Sérgio Cunha
+-- CHANGE DATE: 11/12/2009 02:15
+-- CHANGE REASON: [ALERT-54100] 
+alter table PHARM_UNIDOSE_CAR add FLG_KARDEX_SUCCESS VARCHAR2(1 CHAR);
+alter table PHARM_UNIDOSE_CAR add DT_KARDEX_SEND TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table PHARM_UNIDOSE_CAR add DT_KARDEX_SUCCESS TIMESTAMP(6) WITH LOCAL TIME ZONE;
+-- CHANGE END: Sérgio Cunha
+
+-- CHANGED BY: Sérgio Cunha
+-- CHANGE DATE: 11/12/2009 03:32
+-- CHANGE REASON: [ALERT-54100] 
+alter table PHARM_UNIDOSE_CAR modify FLG_KARDEX_SUCCESS default 'N' not null;
+-- CHANGE END: Sérgio Cunha
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:57
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PHARM_UNIDOSE_CAR IS 'Table of unidose cars [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

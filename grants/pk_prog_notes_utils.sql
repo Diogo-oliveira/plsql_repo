@@ -1,0 +1,1 @@
+grant execute on alert.pk_prog_notes_utils to public;

@@ -1,0 +1,17 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/12/2012 15:55
+-- CHANGE REASON: [ALERT-243533] new config table
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE sequence seq_sys_alert_department minvalue 1 maxvalue 999999999999 START
+        WITH 1 increment BY 1 cache 500';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Object already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

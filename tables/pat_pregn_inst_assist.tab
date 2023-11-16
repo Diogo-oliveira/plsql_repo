@@ -1,0 +1,18 @@
+create table PAT_PREGN_INST_ASSIST
+(
+	ID_INST_PARENT  NUMBER(24) NOT NULL,
+  	ID_INSTITUTION  NUMBER(24) NOT NULL,
+	RANK            NUMBER(6) NOT NULL
+);
+
+COMMENT ON TABLE PAT_PREGN_INST_ASSIST IS 'Association between an institution and a list of institutions where the patient was assisted during pregnancy';
+
+COMMENT ON COLUMN PAT_PREGN_INST_ASSIST.ID_INST_PARENT IS 'Institution ID where the patient is being assisted';
+COMMENT ON COLUMN PAT_PREGN_INST_ASSIST.ID_INSTITUTION IS 'Institution ID where the patient may have been assisted in the past';
+COMMENT ON COLUMN PAT_PREGN_INST_ASSIST.RANK IS 'Rank for ordering purposes';
+
+-- JSILVA 09-09-2008
+alter table pat_pregn_inst_assist add flg_type VARCHAR2(1);
+COMMENT ON COLUMN pat_pregn_inst_assist.flg_type IS 'Customization type: P - pre-natal assistance; L - labor/abortion';
+-- END
+

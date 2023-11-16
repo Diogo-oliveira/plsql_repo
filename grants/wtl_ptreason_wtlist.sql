@@ -1,0 +1,1 @@
+grant select on WTL_PTREASON_WTLIST  to ALERT_VIEWER;

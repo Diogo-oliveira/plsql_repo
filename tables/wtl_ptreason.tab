@@ -1,0 +1,35 @@
+  CREATE TABLE "WTL_PTREASON"
+(  
+  "ID_WTL_PTREASON" NUMBER(24,0) NOT NULL,
+  "CODE" VARCHAR2(200) NOT NULL,
+  "ID_CONTENT" VARCHAR2(200),
+  "FLG_AVAILABLE" VARCHAR2(1),
+  "CREATE_USER"  VARCHAR2(24),
+  "CREATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  "CREATE_INSTITUTION"  NUMBER(24),                         
+  "UPDATE_USER"  VARCHAR2(24),                       
+  "UPDATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,  
+  "UPDATE_INSTITUTION"  NUMBER(24)                  
+) ;
+
+COMMENT ON TABLE "WTL_PTREASON"  IS 'This table stores reasons for favourite periods on a certain institution';
+COMMENT ON COLUMN "WTL_PTREASON"."ID_WTL_PTREASON" IS 'Unique identifier';
+COMMENT ON COLUMN "WTL_PTREASON"."CODE" IS 'Reference of the reasons available for this institution';
+COMMENT ON COLUMN "WTL_PTREASON"."ID_CONTENT" IS 'Content unique identifier';
+COMMENT ON COLUMN "WTL_PTREASON"."FLG_AVAILABLE" IS 'Indicates if this record is available Y/N';
+COMMENT ON COLUMN "WTL_PTREASON"."CREATE_USER" IS 'ID of the professional who created the record';
+COMMENT ON COLUMN "WTL_PTREASON"."CREATE_TIME" IS 'Date of record creation';
+COMMENT ON COLUMN "WTL_PTREASON"."CREATE_INSTITUTION" IS 'ID of institution where record was created'; 
+COMMENT ON COLUMN "WTL_PTREASON"."UPDATE_USER" IS 'ID of the professional who last updated the record';
+COMMENT ON COLUMN "WTL_PTREASON"."UPDATE_TIME" IS 'Date when record was last updated';
+COMMENT ON COLUMN "WTL_PTREASON"."UPDATE_INSTITUTION" IS 'ID of the institution where record was last updated'; 
+
+
+-- CHANGED BY: Jorge Canossa
+-- CHANGE DATE: 2009-07-02
+-- CHANGE REASON: ALERT-31102 
+ALTER TABLE WTL_PTREASON ADD ID_INSTITUTION NUMBER(24) not null;
+COMMENT ON COLUMN "WTL_PTREASON"."ID_INSTITUTION" IS 'ID of the institution using this favourite reason';
+
+alter table WTL_PTREASON drop column id_content;
+-- CHANGE END

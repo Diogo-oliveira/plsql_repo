@@ -1,0 +1,98 @@
+
+
+   CREATE SEQUENCE  SEQ_DEP_CLIN_SERV  MINVALUE 1 MAXVALUE 999999999999 INCREMENT BY 1 START WITH 1 NOCACHE  NOORDER  NOCYCLE ;
+
+
+
+alter sequence SEQ_DEP_CLIN_SERV noorder cache 500;
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2017 09:00
+-- CHANGE REASON: [ALERT-334520] 
+DECLARE
+		maxVal NUMBER;
+		nxSeq NUMBER;
+BEGIN
+nxSeq := seq_DEP_CLIN_SERV.nextVal;
+
+SELECT MAX(a.id_DEP_CLIN_SERV) + 1 INTO maxVal FROM DEP_CLIN_SERV a;
+maxVal := maxVal - nxSeq + 1;
+
+EXECUTE IMMEDIATE 'ALTER SEQUENCE seq_DEP_CLIN_SERV MAXVALUE 999999999999999999999999';
+EXECUTE IMMEDIATE 'ALTER SEQUENCE seq_DEP_CLIN_SERV INCREMENT BY ' || maxVal;
+
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2017 09:00
+-- CHANGE REASON: [ALERT-334520] 
+DECLARE
+    maxVal NUMBER;
+    nxSeq NUMBER;
+BEGIN
+
+BEGIN
+	SELECT z.id_dep_clin_serv + 1 INTO maxVal FROM (
+            SELECT t.id_dep_clin_serv , (l.id_dep_clin_serv - t.id_dep_clin_serv) diff 
+            FROM (
+                           SELECT a.id_dep_clin_serv, rownum rn 
+                               FROM DEP_CLIN_SERV a order by 1) t,
+                         (
+                               SELECT a.id_dep_clin_serv, rownum rn 
+                               FROM DEP_CLIN_SERV a order by 1 ) l
+            WHERE t.rn+1 = l.rn
+                              ANd l.id_dep_clin_serv - t.id_dep_clin_serv  > 1000000
+            ) z
+	WHERE rownum = 1 ;
+EXCEPTION WHEN OTHERS THEN
+	SELECT MAX(id_dep_clin_serv) + 1 INTO maxVal FROM DEP_CLIN_SERV;
+END;
+
+
+EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_DEP_CLIN_SERV';
+EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_DEP_CLIN_SERV  MINVALUE 1 MAXVALUE 999999999999 INCREMENT BY 1 START WITH '|| maxVal || ' NOCACHE  NOORDER  NOCYCLE';
+
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2017 09:00
+-- CHANGE REASON: [ALERT-334520] 
+DECLARE
+    maxVal NUMBER;
+    nxSeq NUMBER;
+BEGIN
+
+BEGIN
+	SELECT z.id_dep_clin_serv + 1 INTO maxVal FROM (
+            SELECT t.id_dep_clin_serv , (l.id_dep_clin_serv - t.id_dep_clin_serv) diff 
+            FROM (
+                           SELECT a.id_dep_clin_serv, rownum rn 
+                               FROM DEP_CLIN_SERV a order by 1) t,
+                         (
+                               SELECT a.id_dep_clin_serv, rownum rn 
+                               FROM DEP_CLIN_SERV a order by 1 ) l
+            WHERE t.rn+1 = l.rn
+                              ANd l.id_dep_clin_serv - t.id_dep_clin_serv  > 1000000
+            ) z
+	WHERE rownum = 1 ;
+EXCEPTION WHEN OTHERS THEN
+	SELECT MAX(id_dep_clin_serv) + 1 INTO maxVal FROM DEP_CLIN_SERV;
+END;
+
+IF maxVal = 0 THEN
+	  maxVal := 1;
+END IF;
+
+EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_DEP_CLIN_SERV';
+EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_DEP_CLIN_SERV  MINVALUE 1 MAXVALUE 9999999999999999 INCREMENT BY 1 START WITH '|| maxVal || ' NOCACHE  NOORDER  NOCYCLE';
+
+END;
+/
+-- CHANGE END: Pedro Henriques

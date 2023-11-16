@@ -1,0 +1,663 @@
+
+
+  CREATE TABLE PROFESSIONAL
+   (	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	NAME VARCHAR2(200) NOT NULL ENABLE,
+	NICK_NAME VARCHAR2(200) NOT NULL ENABLE,
+	DT_BIRTH DATE,
+	ADDRESS VARCHAR2(200),
+	DISTRICT VARCHAR2(200),
+	CITY VARCHAR2(200),
+	ZIP_CODE VARCHAR2(200),
+	NUM_CONTACT VARCHAR2(30),
+	MARITAL_STATUS VARCHAR2(240),
+	GENDER VARCHAR2(1) NOT NULL ENABLE,
+
+	FLG_STATE VARCHAR2(1) NOT NULL ENABLE,
+	NUM_ORDER VARCHAR2(30),
+	ID_SCHOLARSHIP NUMBER(12,0),
+	ID_SPECIALITY NUMBER(12,0),
+	ID_COUNTRY NUMBER(12,0),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	BARCODE VARCHAR2(30),
+	INITIALS VARCHAR2(5),
+	TITLE VARCHAR2(6),
+	SHORT_NAME VARCHAR2(200)
+   );
+
+
+COMMENT ON COLUMN professional.name IS 'Nome completo' ;
+COMMENT ON COLUMN professional.nick_name IS 'Nome abreviado' ;
+COMMENT ON COLUMN professional.dt_birth IS 'Data nascimento' ;
+COMMENT ON COLUMN professional.address IS 'Morada' ;
+COMMENT ON COLUMN professional.district IS 'Distrito' ;
+COMMENT ON COLUMN professional.city IS 'Cidade' ;
+COMMENT ON COLUMN professional.zip_code IS 'Código postal' ;
+COMMENT ON COLUMN professional.num_contact IS 'Nº de contacto' ;
+COMMENT ON COLUMN professional.marital_status IS 'Estado civil: S - solteiro, C - casado, V - viúvo, D - divorciado' ;
+COMMENT ON COLUMN professional.gender IS 'Sexo: M - masculino, F - feminino' ;
+COMMENT ON COLUMN professional.flg_state IS 'Estado: A - activo, I - inactivo' ;
+COMMENT ON COLUMN professional.num_order IS 'Nº Ordem dos Médicos' ;
+COMMENT ON COLUMN professional.barcode IS 'Código de barras' ;
+
+COMMENT ON COLUMN professional.initials IS 'Iniciais dos nomes do profissionais' ;
+COMMENT ON COLUMN professional.title IS 'Título do profissional' ;
+
+ALTER TABLE PROFESSIONAL ADD (CELL_PHONE VARCHAR2(30));
+ALTER TABLE PROFESSIONAL ADD (FAX VARCHAR2(30));
+ALTER TABLE PROFESSIONAL ADD (EMAIL VARCHAR2(100));
+
+comment on column PROFESSIONAL.CELL_PHONE
+  is 'Número de telemóvel';
+  
+comment on column PROFESSIONAL.FAX
+  is 'Número de fax';
+  
+comment on column PROFESSIONAL.EMAIL
+  is 'E-mail do profissional';
+  
+ALTER TABLE PROFESSIONAL ADD (FIRST_NAME VARCHAR2(50));
+ALTER TABLE PROFESSIONAL ADD (MIDDLE_NAME VARCHAR2(100));
+ALTER TABLE PROFESSIONAL ADD (LAST_NAME VARCHAR2(50));
+
+COMMENT ON COLUMN PROFESSIONAL.FIRST_NAME IS 'Primeiro Nome';
+COMMENT ON COLUMN PROFESSIONAL.MIDDLE_NAME IS 'Nome(s) do meio';
+COMMENT ON COLUMN PROFESSIONAL.LAST_NAME IS 'Último Nome';
+
+alter table professional add (work_phone VARCHAR2(30));
+
+COMMENT ON COLUMN professional.work_phone IS 'Número de tefeone de trabalho';
+
+ALTER TABLE PROFESSIONAL ADD (UPIN VARCHAR2(30));
+ALTER TABLE PROFESSIONAL ADD (DEA VARCHAR2(30));
+
+comment on column PROFESSIONAL.UPIN is 'Número UPIN';
+comment on column PROFESSIONAL.UPIN is 'Número DEA';
+
+
+
+
+ALTER TABLE PROFESSIONAL ADD DT_BIRTH_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PROFESSIONAL.DT_BIRTH_TSTZ IS 'Data nascimento'; 
+
+ALTER TABLE PROFESSIONAL ADD (FLG_PROF_TEST VARCHAR2(1));
+
+COMMENT ON COLUMN PROFESSIONAL.FLG_PROF_TEST IS 'Profissional de teste: Y - Sim, N - Não';
+
+ALTER TABLE PROFESSIONAL ADD (FLG_MIGRATION VARCHAR2(1) DEFAULT 'A' NOT NULL);
+
+COMMENT ON COLUMN PROFESSIONAL.FLG_MIGRATION IS 'This column will have default ''A'' value for ALERT, migrated records will have ''M'' value, and test records will have ''T'' value';
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-AGO-01
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15285
+
+COMMENT ON COLUMN  PROFESSIONAL.DEA IS 'DEA Number';
+COMMENT ON COLUMN  PROFESSIONAL.UPIN IS 'UPIN Number'; 
+COMMENT ON COLUMN  PROFESSIONAL.ID_PROFESSIONAL IS 'Professional ID'; 
+COMMENT ON COLUMN  PROFESSIONAL.ID_SCHOLARSHIP IS 'Scholarship ID'; 
+COMMENT ON COLUMN  PROFESSIONAL.ID_SPECIALITY IS 'Speciality ID'; 
+COMMENT ON COLUMN  PROFESSIONAL.ID_COUNTRY IS 'Country ID'; 
+COMMENT ON COLUMN  PROFESSIONAL.ADW_LAST_UPDATE IS 'Last update date'; 
+COMMENT ON COLUMN  PROFESSIONAL.SHORT_NAME IS 'Short name'; 
+COMMENT ON COLUMN  PROFESSIONAL.GENDER IS 'Gender: M - Male; F - Female; I - Indefinite';
+COMMENT ON COLUMN  PROFESSIONAL.MARITAL_STATUS IS 'Marital status: D - Divorced; F - Separated; M - Married; S - Single; U - Living with partner; W - Widow(er)'
+
+-- CHANGED END: Nuno Ferreira
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-AGO-18
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15285
+
+COMMENT ON TABLE PROFESSIONAL IS 'Personal professional’s information';
+
+-- CHANGE END
+
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 2009-MAR-26
+-- CHANGE REASON: ALERT-21385
+
+alter table professional modify initials varchar2(10);
+
+-- CHANGE END
+
+ALTER TABLE PROFESSIONAL ADD (FLG_PROF_TEST VARCHAR2(1));
+
+COMMENT ON COLUMN PROFESSIONAL.FLG_PROF_TEST IS 'Profissional de teste: Y - Sim, N - Não';
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 27/01/2012 14:46
+-- CHANGE REASON: [ALERT-215480] 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table professional add adress_type varchar2(10 char) default null';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('Column already there');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column PROFESSIONAL.ADRESS_TYPE IS ''Adress type of the professional (sys_domain list).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 28/11/2013 10:40
+-- CHANGE REASON: [ALERT-268987] new fields and content tbls
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE professional add(id_cpf NUMBER(24), 
+        id_cns NUMBER(24), 
+        mother_name VARCHAR2(200 CHAR), 
+        father_name VARCHAR2(200 CHAR), 
+        id_geo_state_birth NUMBER(24), 
+        id_district_birth NUMBER(24), 
+        code_race VARCHAR2(200 CHAR), 
+        code_scoolarship VARCHAR2(200 CHAR), 
+        flg_in_school VARCHAR2(1 CHAR) default ''N'', 
+        code_logr_type VARCHAR2(200 CHAR), 
+        door_number VARCHAR2(200 CHAR), 
+        address_extension VARCHAR2(200 CHAR), 
+        id_geo_state_adress NUMBER(24), 
+        id_district_adress NUMBER(24), 
+        adress_area VARCHAR2(200 CHAR), 
+        code_banq VARCHAR2(200 CHAR), 
+        desc_banq_ag VARCHAR2(200 CHAR), 
+        id_banq_account VARCHAR2(200 CHAR), 
+        code_doc_type VARCHAR2(200 CHAR), 
+        code_certificate VARCHAR2(200 CHAR), 
+        desc_balcony VARCHAR2(200 CHAR), 
+        desc_book VARCHAR2(200 CHAR), 
+        desc_page VARCHAR2(200 CHAR), 
+        desc_term VARCHAR2(200 CHAR), 
+        dt_emission_cert TIMESTAMP(6)WITH LOCAL TIME ZONE,
+    id_document VARCHAR2(200 CHAR),
+    code_emitant_cert VARCHAR2(200 CHAR),
+    id_geo_state_doc NUMBER(24),
+    dt_emission_id TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    code_emitant_crm VARCHAR2(200 CHAR),
+    id_geo_state_crm NUMBER(24),
+    code_family_status VARCHAR2(200 CHAR),
+    id_prof_formation number(24) default null)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Table already exists');
+    END;
+END;
+/
+
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.id_cpf IS ''CPF number.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.id_cns IS ''CNS number.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.code_scoolarship IS ''professional scolarship.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.code_race IS ''Race or skin colour.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.flg_in_school IS ''IS professional studying?''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.mother_name IS ''Professional mother name.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.father_name IS ''Professional father name.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.id_district_birth IS ''IBGE ID birth.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.id_geo_state_birth IS ''UF id birth.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.code_logr_type IS ''Type of street (domain).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.door_number IS ''adress door number.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.address_extension IS ''extension to adress.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.adress_area IS ''adress area or neighbourhood.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.id_district_adress IS ''IBGE ID adress.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.id_geo_state_adress IS ''UF id address.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.code_banq IS ''Bank National Code.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.code_banq_ag IS ''Agency national code.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.id_banq_account IS ''Bank account number.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.id_document IS ''NAtional Identifiction number.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.code_emitant_cert IS ''Identification emitant.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.id_geo_state_doc IS ''UF id for the identity document.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.dt_emission_id IS ''Identification emission date.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.code_certificate IS ''Residence certificate code.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.desc_balcony IS ''balcony desc.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.desc_book IS ''certificate book desc.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.desc_page IS ''certificate book page.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.desc_term IS ''certificate term.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.dt_emission_cert IS ''certificate emission date.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.code_emitant_crm IS ''Regional medical counsil code.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+        BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.id_geo_state_crm IS ''Id geo state to crm emitant.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.CODE_FAMILY_STATUS IS ''Domain code to family status.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.code_doc_type IS ''Domain code of document type.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.id_prof_formation IS ''Professional Training area.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 06/12/2013 16:45
+-- CHANGE REASON: [ALERT-271429] other docs
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table professional add other_doc_desc varchar2(1000 char)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('Columns Already there');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.other_doc_desc IS ''Other documents free text''';
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 08/01/2014 17:25
+-- CHANGE REASON: [ALERT-273236] BR fields (sbis)
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE professional add(id_health_plan NUMBER(24))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Table already exists');
+    END;
+END;
+/
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.id_health_plan IS ''Health Plan ID.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 23/06/2014 15:16
+-- CHANGE REASON: [ALERT-286445] bip number
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table professional add bleep_number varchar2(200 char)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('Column already exists');
+    END;
+END;
+/
+
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column professional.bleep_number IS ''Professional bleep number.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 25/08/2014 10:25
+-- CHANGE REASON: [ALERT-293006] suffix field
+DECLARE
+    i_sql VARCHAR2(1000 CHAR);
+BEGIN
+    i_sql := 'alter table professional add suffix varchar2(50 char)';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'comment on column professional.suffix is ''Professional suffix''';
+    pk_versioning.run(i_sql => i_sql);
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 16/10/2014 12:18
+-- CHANGE REASON: [ALERT-297835] ELR fields
+DECLARE
+    i_sql VARCHAR2(1000 CHAR);
+BEGIN
+    i_sql := 'alter table professional add county varchar2(200 char)';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'alter table professional add address_other_name varchar2(1000 char)';
+    pk_versioning.run(i_sql => i_sql);
+    
+    i_sql := 'comment on column professional.county is ''county description''';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'comment on column professional.address_other_name is ''adress other designation''';
+    pk_versioning.run(i_sql => i_sql);
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 16/10/2014 14:12
+-- CHANGE REASON: [ALERT-297835] professional fields
+DECLARE
+    i_sql VARCHAR2(1000 CHAR);
+BEGIN
+    i_sql := 'alter table professional add county varchar2(200 char)';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'alter table professional add address_other_name varchar2(1000 char)';
+    pk_versioning.run(i_sql => i_sql);
+    
+    i_sql := 'comment on column professional.county is ''county description''';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'comment on column professional.address_other_name is ''adress other designation''';
+    pk_versioning.run(i_sql => i_sql);
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- cmf 15-01-2016
+COMMENT ON TABLE  ALERT.PROFESSIONAL                   IS 'Professional information';
+
+COMMENT ON COLUMN ALERT.PROFESSIONAL.ID_PROFESSIONAL                    IS 'Primary key';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.NAME                               IS 'Complete name';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.NICK_NAME                          IS 'nick name';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.DT_BIRTH                           IS 'Date of birth';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.ADDRESS                            IS 'Address of residence';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.DISTRICT                           IS 'District';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.CITY                               IS 'City';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.ZIP_CODE                           IS 'Zip Code';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.NUM_CONTACT                        IS 'Phone/Mobile number';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.MARITAL_STATUS                     IS 'Marital status';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.GENDER                             IS 'Gender';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.FLG_STATE                          IS 'Status: A - Active, I - inactive';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.NUM_ORDER                          IS 'Professional number/ affiliation identification';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.ID_SCHOLARSHIP                     IS 'Scholarship Id';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.ID_SPECIALITY                      IS 'Speciality id';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.ID_COUNTRY                         IS 'Country id';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.ADW_LAST_UPDATE                    IS 'DEPRECATED';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.BARCODE                            IS 'Barcode';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.INITIALS                           IS 'Professional name initials';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.TITLE                              IS 'Title. Ex: "Mr", "Sir", "Dr",';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.SHORT_NAME                         IS 'Short name';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.DT_BIRTH_TSTZ                      IS 'not used.';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.CELL_PHONE                         IS 'Cell phone';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.FAX                                IS 'Fax';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.EMAIL                              IS 'e-mail';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.FIRST_NAME                         IS 'First name';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.MIDDLE_NAME                        IS 'middle name';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.LAST_NAME                          IS 'last name';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.WORK_PHONE                         IS 'work phone number';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.UPIN                               IS 'Unique Physician Identification Number';
+COMMENT ON COLUMN ALERT.PROFESSIONAL.DEA                                IS 'DEA number';
+
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 06/01/2017
+-- CHANGE REASON: ALERT-327111
+ALTER TABLE PROFESSIONAL ADD ROAD VARCHAR2(80 CHAR);
+COMMENT ON COLUMN PROFESSIONAL.ROAD IS 'Road name';
+
+ALTER TABLE professional ADD id_entity NUMBER;
+COMMENT ON COLUMN PROFESSIONAL.id_entity IS 'Entity Id (CATALOG CLUES)';
+
+ALTER TABLE professional ADD id_municip NUMBER;
+COMMENT ON COLUMN PROFESSIONAL.id_municip IS 'Municip Id (CATALOG CLUES)';
+
+ALTER TABLE professional ADD id_localidad NUMBER;
+COMMENT ON COLUMN PROFESSIONAL.id_localidad IS 'Localidad Id (CATALOG CLUES)';
+
+ALTER TABLE professional ADD id_postal_code_rb NUMBER;
+COMMENT ON COLUMN PROFESSIONAL.id_postal_code_rb IS 'Postal Code Id (CATALOG CLUES)';
+
+ALTER TABLE PROFESSIONAL ADD ID_JURISDICTION NUMBER;
+COMMENT ON COLUMN PROFESSIONAL.ID_JURISDICTION IS 'Jurisdiction Id (CATALOG)';
+
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/01/2017
+-- CHANGE REASON: ALERT-327111
+ALTER TABLE PROFESSIONAL DROP COLUMN ROAD;
+
+ALTER TABLE PROFESSIONAL ADD ID_ROAD VARCHAR2(80 CHAR);
+COMMENT ON COLUMN PROFESSIONAL.ID_ROAD IS 'Road name';
+-- CHANGE END: Pedro Henriques
+
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 10/01/2017
+-- CHANGE REASON: ALERT-327673
+ALTER TABLE professional MODIFY id_road NUMBER; 
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 25/01/2018 12:19
+-- CHANGE REASON: [ALERT-335327] 
+ALTER TABLE professional ADD PARENT_NAME VARCHAR2(200 CHAR);
+COMMENT ON COLUMN professional.PARENT_NAME IS 'Parent Name (Saudi Arabia)';
+ALTER TABLE professional ADD FIRST_NAME_SA VARCHAR2(200 CHAR);
+COMMENT ON COLUMN professional.FIRST_NAME_SA IS 'First Name (lang Arabic) (Saudi Arabia)';
+ALTER TABLE professional ADD PARENT_NAME_SA VARCHAR2(200 CHAR);
+COMMENT ON COLUMN professional.PARENT_NAME_SA IS 'Parent Name (lang Arabic) (Saudi Arabia)';
+ALTER TABLE professional ADD MIDDLE_NAME_SA VARCHAR2(200 CHAR);
+COMMENT ON COLUMN professional.MIDDLE_NAME_SA IS 'Middle Name (lang Arabic) (Saudi Arabia)';
+ALTER TABLE professional ADD LAST_NAME_SA VARCHAR2(200 CHAR);
+COMMENT ON COLUMN professional.LAST_NAME_SA IS 'Last Name (lang Arabic) (Saudi Arabia)';
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 20/04/2018 08:19
+-- CHANGE REASON: [ALERT-335327] 
+ALTER TABLE professional ADD ID_AGRUPACION NUMBER(24);
+COMMENT ON COLUMN professional.ID_AGRUPACION IS 'Scholarship Group';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 08/09/2020 17:10
+-- CHANGE REASON: [EMR-35781]
+ALTER TABLE PROFESSIONAL ADD TAXPAYER_NUMBER NUMBER(24);
+ALTER TABLE PROFESSIONAL ADD CLINICAL_NAME VARCHAR2(200 CHAR);
+COMMENT ON COLUMN professional.TAXPAYER_NUMBER IS 'TAXPAYER NUMBER (NIF)';
+COMMENT ON COLUMN professional.CLINICAL_NAME IS 'Professional clinical name';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 06/07/2021 09:44
+-- CHANGE REASON: [EMR-46301]
+ALTER TAbLE professional ADD ID_AGRUPACION_INSTIT NUMBER(24);
+-- CHANGE END: Pedro Henriques

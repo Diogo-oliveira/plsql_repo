@@ -1,0 +1,33 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 25/01/2011 16:51
+-- CHANGE REASON: [ALERT-157333] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+     INTO l_count
+      FROM user_constraints
+     WHERE table_name = 'REF_SPEC_INSTITUTION'
+       AND constraint_name = 'RSIN_INN_FK';
+       
+    IF l_count <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE "REF_SPEC_INSTITUTION" ADD CONSTRAINT "RSIN_INN_FK" FOREIGN KEY ("ID_INSTITUTION")
+  REFERENCES "INSTITUTION" ("ID_INSTITUTION") ENABLE';
+    END IF;
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints
+     WHERE table_name = 'REF_SPEC_INSTITUTION'
+       AND constraint_name = 'RSIN_PSY_FK';
+
+    IF l_count <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE "REF_SPEC_INSTITUTION" ADD CONSTRAINT "RSIN_PSY_FK" FOREIGN KEY ("ID_SPECIALITY")
+  REFERENCES "P1_SPECIALITY" ("ID_SPECIALITY") ENABLE';
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso

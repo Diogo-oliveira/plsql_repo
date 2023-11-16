@@ -1,0 +1,14 @@
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 02/12/2010 16:48
+-- CHANGE REASON: [ALERT-146441] Associate a surgical procedure to supplies
+create index SWF_ID_FLG_CONTEXT_IDX on supply_workflow (id_context, flg_context,flg_status);
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/02/2019 15:32
+-- CHANGE REASON: [EMR-12576]
+begin
+pk_versioning.run('CREATE INDEX sw_search01_idx ON supply_workflow (id_episode, id_supply, id_supply_area, nvl(cod_table, 0), flg_status) TABLESPACE alert_idx');
+end;
+/
+-- CHANGE END: Ana Matos

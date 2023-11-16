@@ -1,0 +1,32 @@
+
+
+  ALTER TABLE INSTITUTION ADD CONSTRAINT INST_INST_FK FOREIGN KEY (ID_PARENT)
+	  REFERENCES INSTITUTION (ID_INSTITUTION) ENABLE;
+
+
+alter table institution  add constraint INST_TZR_FK foreign key (ID_TIMEZONE_REGION)  references timezone_region (ID_TIMEZONE_REGION);
+
+ALTER TABLE INSTITUTION ADD CONSTRAINT INST_MRK_FK FOREIGN KEY (ID_MARKET) REFERENCES MARKET (ID_MARKET);
+
+
+-- CMF 09-11-2010
+declare
+l_status           varchar2(0050 CHAR);
+L_SQL              varchar2(1000 CHAR);
+L_CONSTRAINT_NAME  varchar2(1000 CHAR);
+begin
+
+L_CONSTRAINT_NAME := UPPER('inst_inst_fk');
+
+select status into l_status from all_constraints where constraint_name = L_CONSTRAINT_NAME AND OWNER = 'ALERT';
+   
+if l_status = 'DISABLED' THEN
+
+   L_SQL := 'alter table ALERT.institution ENABLE constraint '|| L_CONSTRAINT_NAME;
+   EXECUTE IMMEDIATE L_SQL;
+   PK_UTILS.PUT_LINE( 'SQL FOR ENABLING'||L_SQL );
+   
+END IF;
+
+END;
+/

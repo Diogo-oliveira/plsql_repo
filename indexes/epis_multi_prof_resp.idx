@@ -1,0 +1,17 @@
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 20/08/2018 15:01
+-- CHANGE REASON: [EMR-5316] EMR_5316
+--                [CL][REDUC] Error on discharge due to more than one principal profe (truncated)
+create unique index EMPR_EPIS_STATUS_MAIN_RESP_IDX on EPIS_MULTI_PROF_RESP (CASE FLG_MAIN_RESPONSIBLE WHEN 'Y' THEN FLG_MAIN_RESPONSIBLE END, CASE FLG_MAIN_RESPONSIBLE WHEN 'Y' THEN ID_EPISODE END)
+  tablespace ALERT_IDX
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- CHANGE END: Nuno Coelho

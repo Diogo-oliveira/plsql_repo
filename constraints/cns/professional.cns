@@ -1,0 +1,216 @@
+
+
+  ALTER TABLE PROFESSIONAL ADD CONSTRAINT PROF_PK PRIMARY KEY (ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE PROFESSIONAL MODIFY (ID_PROFESSIONAL NOT NULL ENABLE);
+
+  ALTER TABLE PROFESSIONAL MODIFY (NAME NOT NULL ENABLE);
+
+  ALTER TABLE PROFESSIONAL MODIFY (NICK_NAME NOT NULL ENABLE);
+
+  ALTER TABLE PROFESSIONAL MODIFY (GENDER NOT NULL ENABLE);
+
+  ALTER TABLE PROFESSIONAL MODIFY (FLG_STATE NOT NULL ENABLE);
+
+
+  ALTER TABLE PROFESSIONAL MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+ALTER TABLE PROFESSIONAL ADD (CONSTRAINT PROF_MIG_CHK CHECK (FLG_MIGRATION in ('A','T','M')));
+
+  ALTER TABLE PROFESSIONAL DROP CONSTRAINT PROF_MIG_CHK;
+  
+  ALTER TABLE PROFESSIONAL ADD CONSTRAINT PROF_MIG_CHK CHECK (FLG_MIGRATION in ('A','T','M','I'));
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:36
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROFESSIONAL add constraint PROF_FLG_STATE_CHK check ( FLG_STATE in (''A'',''I''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:36
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROFESSIONAL add constraint PROF_MARITAL_STATUS_CHK check ( MARITAL_STATUS in (''D'',''F'',''M'',''S'',''U'',''W''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:37
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROFESSIONAL add constraint PROF_TITLE_CHK check ( TITLE in (''AF'',''AM'',''AMT'',''AN'',''BA'',''BH'',''BSC'',''CA'',''CNA'',''CRN'',''CRT'',''DF'',''DM'',''DO'',''DR'',''EF'',''EM'',''EO'',''HIM'',''IC'',''IN'',''IR'',''KA'',''LT'',''MA'',''ME'',''MLT'',''MSC'',''MT'',''OF'',''OM'',''OMN'',''PA'',''PC'',''PD'',''PE'',''PF'',''PM'',''RRT'',''RT'',''S'',''SF'',''SM'',''TA'',''TO'',''XRT''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 08/07/2011 17:58
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROFESSIONAL add constraint PROF_MARITAL_STATUS_CHK check ( MARITAL_STATUS in (''D'',''F'',''M'',''S'',''U'',''W'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 11/07/2011 16:52
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROFESSIONAL add constraint PROF_TITLE_CHK check ( TITLE in (''AF'',''AM'',''AMT'',''AN'',''BA'',''BH'',''BSC'',''CA'',''CNA'',''CRN'',''CRT'',''DF'',''DM'',''DO'',''DR'',''EF'',''EM'',''EO'',''HIM'',''IC'',''IN'',''IR'',''KA'',''LT'',''MA'',''ME'',''MLT'',''MSC'',''MT'',''OF'',''OM'',''OMN'',''PA'',''PC'',''PD'',''PE'',''PF'',''PM'',''RRT'',''RT'',''S'',''SF'',''SM'',''TA'',''TO'',''XRT'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/12/2011 16:18
+-- CHANGE REASON: [ALERT-208895] title constraint
+DECLARE
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table professional drop constraint PROF_TITLE_CHK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('chk NOT exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table professional add constraint PROF_TITLE_CHK check (title in (''AF'',''AMT'',''MLT'',''OT'',''S'',''AM'',''BSC'',''CRN'',
+''NT'',''PF'',''DO'',''F'',''MSC'',''PM'',''XRT'',''BH'',''IC'',''LT'',''MT'',''PC'',''PD'',''PSC'',''TO'',''BA'',''N'',''PH'',''RRT'',''CA'',''CNA'',
+''CRT'',''DM'',''EM'',''KA'',''OF'',''OM'',''OMN'',''PA'',''SM'',''DR'',''EF'',''HIM'',''IN'',''IR'',''MA'',''ME'',''PE'',''PHT'',''SF'',''TA'',''AN'',''DF'',''EO'',''RT'')) NOVALIDATE';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 27/01/2012 14:46
+-- CHANGE REASON: [ALERT-215480] 
+DECLARE
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE PROFESSIONAL add(CONSTRAINT chk_prof_adresstype CHECK(ADRESS_TYPE IN (''B'', ''BA'', ''BDL'', ''BR'', ''C'', ''F'', ''GN'', ''H'', ''L'', ''M'', ''N'', ''O'', ''P'', ''RH'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 01/03/2013 16:15
+-- CHANGE REASON: [ALERT-252760] 
+DECLARE
+    e_non_existant EXCEPTION;    
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); 
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE professional drop CONSTRAINT prof_title_chk';
+    EXCEPTION
+        WHEN e_non_existant THEN
+          dbms_output.put_line('Operation already executed');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 28/11/2013 10:40
+-- CHANGE REASON: [ALERT-268987] new fields and content tbls
+DECLARE
+    e_pk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+    e_unique_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+BEGIN
+   
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE professional add CONSTRAINT PBR_FLGSCHOOL_chk CHECK(flg_in_school IN (''Y'', ''N''))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;    
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Pedro Henriques
+-- CHANGE DATE: 02/03/2018 10:40
+-- CHANGE REASON: [EMR-1686]
+ALTER TABLE PROFEssioNAL DROP COnsTRAINT PROF_FLG_STATE_CHK;
+ALTER TAbLE Professional ADD CONSTRAINT PROF_FLG_STATE_CHK CHECK ( FLG_STATE in ('A','I', 'S'));
+-- CHANGE END:  Pedro Henriques

@@ -1,0 +1,33 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 28/05/2014 16:20
+-- CHANGE REASON: [ALERT-286189] 
+begin
+  execute immediate 'create table CDR_DOC_TYPE
+(
+  ID_CDR_DOC_TYPE           NUMBER(24) not null,
+  CODE_NAME                 as (''CDR_DOC_TYPE.CODE_NAME.''||TO_CHAR(ID_CDR_DOC_TYPE)) VIRTUAL,
+  CODE_TITLE                as (''CDR_DOC_TYPE.CODE_TITLE.''||TO_CHAR(ID_CDR_DOC_TYPE)) VIRTUAL,  
+  FLG_AVAILABLE             VARCHAR2(1 CHAR) default ''Y'' not null,         
+  create_user               VARCHAR2(24 CHAR),
+  create_time               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution        NUMBER(24),
+  update_user               VARCHAR2(24 CHAR),
+  update_time               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution        NUMBER(24)
+)';
+exception when others then
+  dbms_output.put_line('table CDR_DOC_TYPE exists!');
+end;
+/
+COMMENT ON TABLE CDR_DOC_TYPE IS 'Document type';
+COMMENT ON column CDR_DOC_TYPE.CODE_NAME IS 'Document type code for translation';
+COMMENT ON column CDR_DOC_TYPE.CODE_TITLE IS 'Document title code for translation';
+COMMENT ON column CDR_DOC_TYPE.CREATE_INSTITUTION IS 'Institution where the record was created';
+COMMENT ON column CDR_DOC_TYPE.CREATE_TIME IS 'Time of creation';
+COMMENT ON column CDR_DOC_TYPE.CREATE_USER IS 'User that created the record';
+COMMENT ON column CDR_DOC_TYPE.FLG_AVAILABLE IS  'Record availability (Y/N).';
+COMMENT ON column CDR_DOC_TYPE.ID_CDR_DOC_TYPE IS 'Foreign key for document type';
+COMMENT ON column CDR_DOC_TYPE.UPDATE_INSTITUTION IS 'Institution where the record was updated';
+COMMENT ON column CDR_DOC_TYPE.UPDATE_TIME IS 'Time of update';
+COMMENT ON column CDR_DOC_TYPE.UPDATE_USER IS 'User that updated the record';
+-- CHANGE END: mario.mineiro

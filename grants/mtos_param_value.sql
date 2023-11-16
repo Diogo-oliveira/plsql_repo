@@ -1,0 +1,2 @@
+GRANT SELECT ON ALERT.mtos_param_value TO ALERT_VIEWER;
+

@@ -1,0 +1,150 @@
+-- ADDED BY: Jose Castro
+-- ADDED DATE: 07/07/2009
+-- ADDED REASON: ALERT-910
+-- Create table
+create table ANALYSIS_CODIFICATION
+(
+  ID_ANALYSIS_CODIFICATION NUMBER(24) NOT NULL,
+  ID_CODIFICATION          NUMBER(24) NOT NULL,
+  ID_ANALYSIS              NUMBER(24) NOT NULL,
+  FLG_AVAILABLE            VARCHAR2(1) DEFAULT 'Y' NOT NULL,
+  CREATE_USER              VARCHAR2(24),
+  CREATE_TIME              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION       NUMBER(24),
+  UPDATE_USER              VARCHAR2(24),
+  UPDATE_TIME              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION       NUMBER(24)
+);
+
+-- Add comments to the table 
+comment on table ANALYSIS_CODIFICATION
+  is 'Analysis for each codification';
+
+-- Add comments to the columns 
+comment on column ANALYSIS_CODIFICATION.ID_ANALYSIS_CODIFICATION
+  is 'Analysis Codification ID';
+comment on column ANALYSIS_CODIFICATION.ID_CODIFICATION
+  is 'Codification ID';
+comment on column ANALYSIS_CODIFICATION.ID_ANALYSIS
+  is 'Analysis ID';
+comment on column ANALYSIS_CODIFICATION.FLG_AVAILABLE
+  is 'Record is available for Analysis Codification combination';
+comment on column ANALYSIS_CODIFICATION.CREATE_USER
+  is 'Creation User';
+comment on column ANALYSIS_CODIFICATION.CREATE_TIME
+  is 'Creation Time';
+comment on column ANALYSIS_CODIFICATION.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column ANALYSIS_CODIFICATION.UPDATE_USER
+  is 'Update User';
+comment on column ANALYSIS_CODIFICATION.UPDATE_TIME
+  is 'Update Time';
+comment on column ANALYSIS_CODIFICATION.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- ADDED END
+
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 07/11/2011 11:34
+-- CHANGE REASON: [ALERT-203458] 
+alter table analysis_codification add (STANDARD_CODE VARCHAR2(200 CHAR),STANDARD_DESC VARCHAR2(200 CHAR));
+comment on column analysis_codification.STANDARD_CODE
+  is 'Standard code';
+comment on column analysis_codification.STANDARD_DESC
+  is 'Standard desc';
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 07/11/2011 16:22
+-- CHANGE REASON: [ALERT-203458] 
+alter table analysis_codification add (DT_STANDARD_BEGIN TIMESTAMP(6) WITH LOCAL TIME ZONE,DT_STANDARD_END TIMESTAMP(6) WITH LOCAL TIME ZONE);
+comment on column analysis_codification.DT_STANDARD_BEGIN
+  is 'Date Standard begin';
+comment on column analysis_codification.DT_STANDARD_END
+  is 'Date Standard end';
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 14:57
+-- CHANGE REASON: [ALERT-246252] 
+ALTER TABLE analysis_codification MODIFY (ID_SAMPLE_TYPE NUMBER(12) NOT NULL);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:11
+-- CHANGE REASON: [ALERT-246248] 
+ALTER TABLE ANALYSIS_CODIFICATION ADD (ID_SAMPLE_TYPE NUMBER(12));
+
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.ID_SAMPLE_TYPE IS 'Sample type id';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 08/05/2013 15:21
+-- CHANGE REASON: [ALERT-257523 ] 
+alter table 
+   ANALYSIS_CODIFICATION
+modify 
+( 
+   STANDARD_DESC    varchar2(4000 char)
+);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 09/05/2013 14:58
+-- CHANGE REASON: [ALERT-257518 ] 
+alter table 
+   ANALYSIS_CODIFICATION
+modify 
+( 
+   STANDARD_DESC    varchar2(1000 char)
+);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:00
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS_CODIFICATION IS 'Lab test association to a codification';
+
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.ID_ANALYSIS_CODIFICATION IS 'Primary key';
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.ID_CODIFICATION IS 'Codification ID';
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.ID_ANALYSIS IS 'Lab test ID';
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.FLG_AVAILABLE IS 'Flag that indicates if the record is available or not (Y/N)';
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.STANDARD_CODE IS 'Standard code';
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.STANDARD_DESC IS 'Standard description';
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.DT_STANDARD_BEGIN IS 'Standard begin date';
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.DT_STANDARD_END IS 'Standard end date';
+COMMENT ON COLUMN ANALYSIS_CODIFICATION.ID_SAMPLE_TYPE IS 'Sample type ID';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 24/02/2021 15:29
+-- CHANGE REASON: [EMR-42266]
+ALTER TABLE analysis_codification MODIFY create_user VARCHAR2(24 CHAR);
+ALTER TABLE analysis_codification MODIFY update_user VARCHAR2(24 CHAR);
+
+ALTER TABLE analysis_codification ADD flg_show_code VARCHAR2(1 CHAR) default 'N';
+ALTER TABLE analysis_codification ADD flg_show_codification VARCHAR2(1 CHAR) default 'N';
+
+COMMENT ON COLUMN analysis_codification.flg_show_code IS 'Flag that indicates if the code is shown (Y/N)';
+COMMENT ON COLUMN analysis_codification.flg_show_codification IS 'Flag that indicates if the codification description is shown along with the lab test (Y/N)';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 05/05/2021 15:02
+-- CHANGE REASON: [EMR-44727] - ESP Certification 2020
+alter table analysis_codification
+add flg_mandatory_info varchar2(1 char) default 'N';
+
+COMMENT ON COLUMN analysis_codification.flg_mandatory_info IS 'Flag that indicates if the field ''Complementary information'' from the referral''s form should be mandatory (Y-Yes/N-No)';
+
+alter table analysis_codification
+add flg_concatenate_info varchar2(1 char) default 'N';
+
+COMMENT ON COLUMN analysis_codification.flg_concatenate_info IS 'Flag that indicates if the field ''Complementary information'' should be concatenated with the exam''s description when generating the referral''s report (Y-Yes/N-No)';
+-- CHANGE END: Diogo Oliveira

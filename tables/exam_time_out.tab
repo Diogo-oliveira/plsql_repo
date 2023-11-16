@@ -1,0 +1,52 @@
+-- ADDED BY: Jose Castro
+-- ADDED DATE: 13/10/2010
+-- ADDED REASON: ALERT-29500
+-- Create table
+create table EXAM_TIME_OUT
+(
+  id_exam_req_det       NUMBER(24),
+  id_epis_documentation NUMBER(24),
+  flg_complete          VARCHAR2(1 CHAR)
+);
+
+-- Add comments to the columns 
+comment on column EXAM_TIME_OUT.ID_EXAM_REQ_DET
+  is 'Exam Request Detail ID';
+comment on column EXAM_TIME_OUT.ID_EPIS_DOCUMENTATION
+  is 'Episode Documentation ID';
+comment on column EXAM_TIME_OUT.FLG_COMPLETE
+  is 'Flag that indicates if time out option should be used';
+-- ADDED END
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2011 16:14
+-- CHANGE REASON: [ALERT-156544] 
+ALTER TABLE exam_time_out ADD (id_exam_time_out number(24));
+COMMENT ON COLUMN exam_time_out.id_exam_time_out IS 'Primary key';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 06/01/2016 17:53
+-- CHANGE REASON: [ALERT-317702] 
+ALTER TABLE EXAM_TIME_OUT ADD 
+   (CREATE_USER            VARCHAR2(24 CHAR),
+    CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    CREATE_INSTITUTION     NUMBER(24),
+    UPDATE_USER            VARCHAR2(24 CHAR),
+    UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    UPDATE_INSTITUTION     NUMBER(24));
+
+COMMENT ON TABLE EXAM_TIME_OUT IS 'Exam time out';
+
+COMMENT ON COLUMN EXAM_TIME_OUT.ID_EXAM_REQ_DET IS 'Exam''s order detail ID';
+COMMENT ON COLUMN EXAM_TIME_OUT.ID_EPIS_DOCUMENTATION IS 'Episode documentation ID';
+COMMENT ON COLUMN EXAM_TIME_OUT.FLG_COMPLETE IS 'Flag that indicates if time out option should be used';
+COMMENT ON COLUMN EXAM_TIME_OUT.ID_EXAM_TIME_OUT IS 'Primary key';
+COMMENT ON COLUMN EXAM_TIME_OUT.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN EXAM_TIME_OUT.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN EXAM_TIME_OUT.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN EXAM_TIME_OUT.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN EXAM_TIME_OUT.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN EXAM_TIME_OUT.UPDATE_INSTITUTION IS 'Update Institution';
+-- CHANGE END: Ana Matos

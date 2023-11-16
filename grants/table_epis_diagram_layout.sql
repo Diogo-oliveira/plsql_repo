@@ -1,0 +1,1 @@
+grant select on EPIS_DIAGRAM_LAYOUT to ALERT_VIEWER;

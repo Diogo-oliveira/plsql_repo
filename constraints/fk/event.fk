@@ -1,0 +1,37 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/03/2011 16:12
+-- CHANGE REASON: [ALERT-165887] [EDIS] INV_ALL_096: Missing Foreign Keys in Alert tables
+--                Create fk's
+DECLARE
+    e_name_already_exists EXCEPTION;
+    e_invalid_identifier EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -904);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EVENT ADD CONSTRAINT EVT_EVTGRP_FK FOREIGN KEY(ID_EVENT_GROUP) REFERENCES EVENT_GROUP(ID_EVENT_GROUP)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('EVT_EVTGRP_FK already exists.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 04/12/2012 11:05
+-- CHANGE REASON: [ALERT-246248] add id_sample_type to event
+declare
+  e_fk_exists exception;
+  pragma exception_init(e_fk_exists, -02275);
+begin
+  execute immediate 'alter table EVENT
+  add constraint EVT_STE_FK foreign key (ID_SAMPLE_TYPE)
+  references SAMPLE_TYPE (ID_SAMPLE_TYPE)
+';
+exception when e_fk_exists then
+  dbms_output.put_line('constraint EVT_STE_FK already exists!');
+end;
+/
+-- CHANGE END: Pedro Carneiro

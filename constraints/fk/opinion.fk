@@ -1,0 +1,53 @@
+
+
+  ALTER TABLE OPINION ADD CONSTRAINT OPN_EPIS_FK FOREIGN KEY (ID_EPISODE)
+	  REFERENCES EPISODE (ID_EPISODE) ENABLE;
+
+  ALTER TABLE OPINION ADD CONSTRAINT OPN_PROF_QUESTIONED_FK FOREIGN KEY (ID_PROF_QUESTIONED)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE OPINION ADD CONSTRAINT OPN_PROF_QUESTIONS_FK FOREIGN KEY (ID_PROF_QUESTIONS)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE OPINION ADD CONSTRAINT OPN_SPC_FK FOREIGN KEY (ID_SPECIALITY)
+	  REFERENCES SPECIALITY (ID_SPECIALITY) ENABLE;
+
+
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 27/10/2009 16:03
+-- CHANGE REASON: Case Manager
+alter table OPINION
+  add constraint OPN_PATIENT_FK foreign key (ID_PATIENT)
+  references alert_adtcod.patient (ID_PATIENT);
+alter table OPINION
+  add constraint OPN_ML_FK foreign key (ID_MANAGEMENT_LEVEL)
+  references MANAGEMENT_LEVEL (ID_MANAGEMENT_LEVEL);
+alter table OPINION
+  add constraint OPN_EPISA_FK foreign key (ID_EPISODE_ANSWER)
+  references EPISODE (ID_EPISODE);
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 16/04/2010 15:45
+-- CHANGE REASON: [ALERT-86898] opinion changes
+alter table opinion
+  add constraint opn_ot_fk foreign key (id_opinion_type)
+references opinion_type (id_opinion_type);
+alter table opinion
+  add constraint opn_cse_fk foreign key (id_clinical_service)
+references clinical_service (id_clinical_service);
+alter table opinion
+  add constraint opn_prof_approved_fk foreign key (id_prof_approved)
+references professional (id_professional);
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 19/04/2010 11:03
+-- CHANGE REASON: [ALERT-90102] added field to opinion
+alter table opinion
+  add constraint opn_episapp_fk foreign key (id_episode_approval)
+references episode (id_episode);
+-- CHANGE END: Pedro Carneiro

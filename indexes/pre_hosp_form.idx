@@ -1,0 +1,18 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 30/09/2011 14:38
+-- CHANGE REASON: [ALERT-197754] Pre-hospital data - Road Traffic Accident (RTA)
+--                DB Versioning - New tables
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -955);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'CREATE INDEX PHF_FLG_AV_IDPHF_IDX ON PRE_HOSP_FORM (FLG_AVAILABLE,ID_PRE_HOSP_FORM) TABLESPACE INDEX_S';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

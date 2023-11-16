@@ -1,0 +1,60 @@
+
+
+  CREATE TABLE SOCIAL_EPISODE
+   (	ID_SOCIAL_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(6,0) NOT NULL ENABLE,
+	DT_FIRST_OBS DATE,
+	ID_PROFESSIONAL NUMBER(24,0)
+   );
+
+
+COMMENT ON COLUMN social_episode.id_episode IS 'Chave primaria' ;
+COMMENT ON COLUMN social_episode.id_patient IS 'Paciente' ;
+COMMENT ON COLUMN social_episode.dt_first_obs IS 'Data da primeira observação' ;
+COMMENT ON COLUMN social_episode.id_professional IS 'Profissional' ;
+
+alter table social_episode
+add (dt_first_obs_tstz timestamp with local time zone); 
+
+alter table social_episode
+add (id_institution number(12));
+
+COMMENT ON COLUMN social_episode.id_institution IS 'ID da instituição';
+
+
+-- CHANGED BY: THIAGO BRITO
+-- CHANGE DATE: 22-JUL-2008
+-- CHANGE REASON: THE NUMBER OF PATIENT'S SEQUENCE IS GREATER THAN CURRENT COLUMN SIZE 
+
+ALTER TABLE SOCIAL_EPISODE
+MODIFY ( ID_PATIENT NUMBER(24) ) 
+/
+
+-- CHANGE END
+
+--CHANGED BY: Rui Spratley
+--CHANGE DATE: 2008/09/22
+--CHANGE REASON: Drop colunas DATE
+alter table social_episode drop column dt_first_obs;
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 22/03/2010 17:07
+-- CHANGE REASON: [ALERT-69945] social harmless ddl - social_episode
+alter table social_episode add (id_episode_migrated number(24));
+
+comment on column social_episode.id_episode_migrated
+  is 'Migrated social assistance episode identifier.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:50
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+  comment on table SOCIAL_EPISODE
+  is 'DEPRECATED only used for old social episodes';
+  
+-- CHANGE END: Elisabete Bugalho

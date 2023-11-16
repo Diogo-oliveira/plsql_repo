@@ -1,0 +1,51 @@
+
+
+  CREATE TABLE SCH_PERMISSION
+   (	ID_CONSULT_PERMISSION NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_AGENDA NUMBER(24,0),
+	FLG_PERMISSION VARCHAR2(1) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_DEP_CLIN_SERV NUMBER(24,0),
+	ID_SCH_EVENT NUMBER(24,0) NOT NULL ENABLE
+   );
+
+COMMENT ON TABLE SCH_PERMISSION IS 'Holds the professionals'' permissions for accessing self/other professionals/dcs'' schedules. ';
+COMMENT ON COLUMN SCH_PERMISSION.ID_CONSULT_PERMISSION IS 'Permission identifier';
+COMMENT ON COLUMN SCH_PERMISSION.ID_INSTITUTION IS 'Institution identifier';
+COMMENT ON COLUMN SCH_PERMISSION.ID_PROFESSIONAL IS 'Professional identifier';
+COMMENT ON COLUMN SCH_PERMISSION.ID_PROF_AGENDA IS 'Target professional identifier (or NULL if this permission has a Department-Clinical service''s schedule as a target)';
+COMMENT ON COLUMN SCH_PERMISSION.ID_DEP_CLIN_SERV IS 'Department-Clinical service identifier (or NULL if this permission has a professional as a target)';
+COMMENT ON COLUMN SCH_PERMISSION.ID_SCH_EVENT IS 'Event identifier';
+COMMENT ON COLUMN SCH_PERMISSION.FLG_PERMISSION IS 'Permission flag: ''S'' schedule, ''R'' read';
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 15-05-2008
+-- CHANGE REASON: new columns for insert and update dates and profs
+
+alter table SCH_PERMISSION add ID_PROF_CREATED number(24);
+alter table SCH_PERMISSION add DT_CREATED timestamp with local time zone;
+alter table SCH_PERMISSION add ID_PROF_UPDATED number(24);
+alter table SCH_PERMISSION add DT_UPDATED timestamp with local time zone;
+
+alter table SCH_PERMISSION modify DT_CREATED default current_timestamp;
+
+-- Add comments to the columns 
+comment on column SCH_PERMISSION.FLG_PERMISSION
+  is 'Permission flag: ''S'' schedule, ''R'' read, ''N'' none';
+comment on column SCH_PERMISSION.ID_PROF_CREATED
+  is 'creator id';
+comment on column SCH_PERMISSION.DT_CREATED
+  is 'creation date';
+comment on column SCH_PERMISSION.ID_PROF_UPDATED
+  is 'updater id';
+comment on column SCH_PERMISSION.DT_UPDATED
+  is 'update date';
+  
+--END
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 23-09-2008
+-- CHANGE REASON: igualar datatype a institution.id_institution
+alter table SCH_PERMISSION modify ID_INSTITUTION NUMBER(24);
+--END

@@ -1,0 +1,45 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/04/2014 10:47
+-- CHANGE REASON: [ALERT-275664] 
+BEGIN
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_pk primary key (ID_COMM_ORDER_REQ)]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_flg_free_text_chk check (flg_free_text in ('Y','N'))]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_flg_clinical_purpose_chk check (flg_clinical_purpose in ('N','S','P','R','T','C','PO','O'))]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_flg_priority_chk check (flg_priority in ('R','A','S'))]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_flg_prn_chk check (flg_prn in ('Y','N'))]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_flg_co_sign_chk check (flg_co_sign in ('Y','N'))]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_status_dt_begin_chk check ((id_status != 504 and dt_begin is not null) or id_status = 504)]');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/12/2014 08:14
+-- CHANGE REASON: [ALERT-304679] 
+BEGIN
+  pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint COQ_FLG_NEED_ACK_CHK check (FLG_NEED_ACK IN ('Y','N'))]');
+  pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint COQ_FLG_ACTION_CHK check (FLG_ACTION IN ('ORDER','EDITION','ACK','EXPIRED','DISCONTINUED','CANCELED','DRAFT','PREDEFINED'))]');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 22/04/2015 09:11
+-- CHANGE REASON: [ALERT-310275] 
+BEGIN
+    pk_versioning.run('alter table COMM_ORDER_REQ drop constraint COQ_OTP_FK');
+    pk_versioning.run('alter table COMM_ORDER_REQ drop constraint COQ_PROF_CS_FK');
+    pk_versioning.run('alter table COMM_ORDER_REQ drop constraint COQ_PROF_ORD_FK');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 04/09/2019 08:20
+-- CHANGE REASON: [EMR-19579]
+alter table comm_order_req
+drop constraint COQ_FLG_ACTION_CHK;
+
+alter table comm_order_req
+add constraint COQ_FLG_ACTION_CHK check(FLG_ACTION IN ('ORDER','EDITION','ACK','EXPIRED','DISCONTINUED','CANCELED','DRAFT','PREDEFINED','COMPLETED'));
+-- CHANGE END: Diogo Oliveira

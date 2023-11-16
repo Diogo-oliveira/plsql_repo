@@ -1,0 +1,23 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 09:44
+-- CHANGE REASON: [ALERT-229216] VERSIONING TERMINOLOGY SERVER - SCHEMA ALERT - DDL (EA Tables)
+DECLARE
+    e_pk EXCEPTION;
+    e_uk1 EXCEPTION;
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);
+    PRAGMA EXCEPTION_INIT(e_pk, -2260);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE DIAGNOSIS_EA ADD CONSTRAINT DIAG_EA_PK PRIMARY KEY (ID_CONCEPT_VERSION,ID_CNCPT_VRS_INST_OWNER,ID_CONCEPT_TERM,ID_CNCPT_TRM_INST_OWNER,ID_LANGUAGE,ID_INSTITUTION,ID_SOFTWARE,ID_DEP_CLIN_SERV,ID_PROFESSIONAL) USING INDEX TABLESPACE ALERT_IDX';
+    EXCEPTION
+        WHEN e_pk THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

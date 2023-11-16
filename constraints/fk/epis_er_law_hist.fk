@@ -1,0 +1,30 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/11/2011 10:04
+-- CHANGE REASON: [ALERT-206660] Issue Replication: Chile | GES; Emergency Law; Billing System Red UC (ALERT_206659)
+--                Versioning DDL
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_ER_LAW_HIST ADD CONSTRAINT ERLWH_EPIS_FK FOREIGN KEY(ID_EPISODE) REFERENCES EPISODE(ID_EPISODE)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_ER_LAW_HIST ADD CONSTRAINT ERLWH_ERLW_FK FOREIGN KEY(ID_EPIS_ER_LAW) REFERENCES EPIS_ER_LAW(ID_EPIS_ER_LAW)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_ER_LAW_HIST ADD CONSTRAINT ERLWH_CNC_RS_FK FOREIGN KEY (ID_CANCEL_REASON) REFERENCES CANCEL_REASON(ID_CANCEL_REASON)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

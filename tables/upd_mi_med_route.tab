@@ -1,0 +1,43 @@
+BEGIN
+PK_FRMW_OBJECTS.insert_into_frmw_objects('ALERT','UPD_MI_MED_ROUTE','TABLE','CNT','N',NULL,'N');
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -00955); 
+BEGIN
+    EXECUTE IMMEDIATE 'create table UPD_MI_MED_ROUTE
+(
+  ID_DRUG         VARCHAR2(255) not null,
+  ROUTE_ID        VARCHAR2(255) not null,
+  VERS            VARCHAR2(255) not null,
+  FLG_AVAILABLE   VARCHAR2(1),
+  ID_PROCESS      NUMBER(24),
+  FLG_STATUS      VARCHAR2(1),
+  ERR_DESCRIPTION VARCHAR2(255)
+)';
+EXCEPTION
+    WHEN e_exception THEN
+    NULL;
+END;
+/
+
+-- Add comments to the table 
+comment on table UPD_MI_MED_ROUTE
+  is 'Contains the different routes per drug.';
+-- Add comments to the columns 
+comment on column UPD_MI_MED_ROUTE.ID_DRUG
+  is 'ID Drug';
+comment on column UPD_MI_MED_ROUTE.ROUTE_ID
+  is 'ID Route ';
+comment on column UPD_MI_MED_ROUTE.VERS
+  is 'Version';
+comment on column UPD_MI_MED_ROUTE.FLG_AVAILABLE
+  is 'Route available (Y/N)';
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:27
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE UPD_MI_MED_ROUTE IS 'Contains the different routes per drug. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

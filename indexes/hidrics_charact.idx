@@ -1,0 +1,18 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 21/05/2013 16:59
+-- CHANGE REASON: [ALERT-248672] New frmw objs
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX hidchr_cnt_uk ON hidrics_charact(CASE WHEN(id_content IS NOT NULL AND
+                                                              nvl(flg_available, ''Y'') <> ''N'') THEN id_content END,
+                                                         CASE
+                                                         WHEN(id_content IS NOT NULL AND nvl(flg_available, ''Y'') <> ''N'') THEN
+                                                         flg_available END)';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('INDEX ALREADY INSTALLED');
+END;
+/
+-- CHANGE END:  Rui Gomes

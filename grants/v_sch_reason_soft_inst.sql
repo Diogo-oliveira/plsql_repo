@@ -1,0 +1,5 @@
+-- CHANGED BY: Miguel Monteiro
+-- CHANGE DATE: 03/03/2020 10:33
+-- CHANGE REASON: [ALERT-134153] 
+grant select on V_SCH_REASON_SOFT_INST to ALERT_INTER;
+-- CHANGE END: Miguel Monteiro

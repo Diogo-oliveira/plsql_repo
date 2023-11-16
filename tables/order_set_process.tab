@@ -1,0 +1,145 @@
+CREATE TABLE ORDER_SET_PROCESS
+(ID_ORDER_SET_PROCESS NUMBER(24) NOT NULL,
+ ID_ORDER_SET NUMBER(24) NOT NULL,
+ NOTES_GLOBAL VARCHAR2(4000),
+ ADDITIONAL_INFO VARCHAR2(4000),
+ ID_EPISODE NUMBER(24),
+ ID_PATIENT NUMBER(24) NOT NULL,
+ FLG_STATUS VARCHAR2(1) NOT NULL,
+ DT_STATUS_TSTZ TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
+ ID_PROFESSIONAL NUMBER(24) NOT NULL,
+ DT_ORDER_SET_PROCESS_TSTZ TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
+ ID_PROF_REQUEST NUMBER(24) NOT NULL,
+ CANCEL_NOTES VARCHAR2(200)
+ );
+ 
+COMMENT ON TABLE ORDER_SET_PROCESS IS 'Contains the process of all order sets applied to the patients';
+COMMENT ON COLUMN ORDER_SET_PROCESS.ID_ORDER_SET_PROCESS IS 'Order Set process ID';
+COMMENT ON COLUMN ORDER_SET_PROCESS.ID_ORDER_SET IS 'Order Set ID that generates this process';
+COMMENT ON COLUMN ORDER_SET_PROCESS.NOTES_GLOBAL IS 'Global notes of the order set process';
+COMMENT ON COLUMN ORDER_SET_PROCESS.ADDITIONAL_INFO IS 'Additional information of the order set process';
+COMMENT ON COLUMN ORDER_SET_PROCESS.ID_EPISODE IS 'ID of episode to which this process applies';
+COMMENT ON COLUMN ORDER_SET_PROCESS.ID_PATIENT IS 'ID of the patient associated to this process';
+COMMENT ON COLUMN ORDER_SET_PROCESS.FLG_STATUS IS 'Status of the process (T - temporary; R - running; C - canceled; F - finished)';
+COMMENT ON COLUMN ORDER_SET_PROCESS.DT_STATUS_TSTZ IS 'Date when status changed last time';
+COMMENT ON COLUMN ORDER_SET_PROCESS.ID_PROFESSIONAL IS 'Professional who changes order set process status';
+COMMENT ON COLUMN ORDER_SET_PROCESS.DT_ORDER_SET_PROCESS_TSTZ IS 'Order set process creation date';
+COMMENT ON COLUMN ORDER_SET_PROCESS.ID_PROF_REQUEST IS 'Professional ID that creates this order set process';
+COMMENT ON COLUMN ORDER_SET_PROCESS.CANCEL_NOTES IS 'Cancel notes';
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 17/02/2010 14:34
+-- CHANGE REASON: [ALERT-70321] 
+alter table ORDER_SET_PROCESS add DT_ORDER timestamp with local time zone;
+alter table ORDER_SET_PROCESS add ID_PROF_ORDER NUMBER(24);
+alter table ORDER_SET_PROCESS add ID_ORDER_TYPE NUMBER(24);
+alter table ORDER_SET_PROCESS add FLG_CO_SIGN VARCHAR2(1 CHAR) DEFAULT 'N';
+alter table ORDER_SET_PROCESS add DT_CO_SIGN timestamp with local time zone;
+alter table ORDER_SET_PROCESS add ID_PROF_CO_SIGN NUMBER(24);
+alter table ORDER_SET_PROCESS add NOTES_CO_SIGN VARCHAR2(1000 CHAR);
+
+comment on column ORDER_SET_PROCESS.DT_ORDER is 'Moment when the ordering professional ask the registering professional to request';
+comment on column ORDER_SET_PROCESS.ID_PROF_ORDER is 'Ordering professional';
+comment on column ORDER_SET_PROCESS.ID_ORDER_TYPE is 'Request order type (telephone, verbal, etc.)';
+comment on column ORDER_SET_PROCESS.FLG_CO_SIGN is 'Co-sign flag: (Y) - Order co-signed; (N) - Order not co-signed';
+comment on column ORDER_SET_PROCESS.DT_CO_SIGN is 'Co-sign moment';
+comment on column ORDER_SET_PROCESS.ID_PROF_CO_SIGN is 'Co-sign professional';
+comment on column ORDER_SET_PROCESS.NOTES_CO_SIGN is 'Co-sign notes';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 01/04/2010 16:25
+-- CHANGE REASON: [ALERT-86001] 
+alter table ORDER_SET_PROCESS drop column FLG_CO_SIGN;
+alter table ORDER_SET_PROCESS drop column DT_CO_SIGN;
+alter table ORDER_SET_PROCESS drop column ID_PROF_CO_SIGN;
+alter table ORDER_SET_PROCESS drop column NOTES_CO_SIGN;
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY:  Ines Azevedo
+-- CHANGE DATE: 20/10/2010 18:14
+-- CHANGE REASON: [ALERT-133347] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ORDER_SET_PROCESS add ID_CANCEL_REASON number(24)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+-- CHANGE END:  Ines Azevedo
+
+-- CHANGED BY:  Ines Azevedo
+-- CHANGE DATE: 21/10/2010 10:39
+-- CHANGE REASON: [ALERT-133347] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA_01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ORDER_SET_PROCESS add ID_CANCEL_REASON number(24)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+-- CHANGE END:  Ines Azevedo
+
+-- CHANGED BY:  Ines Azevedo
+-- CHANGE DATE: 15/11/2010 10:20
+-- CHANGE REASON: [ALERT-139938] 
+comment on column ORDER_SET_PROCESS.ID_CANCEL_REASON is 'Cancel reason ID';
+-- CHANGE END:  Ines Azevedo
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 14/07/2011 12:00
+-- CHANGE REASON: [ALERT-188529] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); -- column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ORDER_SET_PROCESS add ID_CDR_CALL number(24)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('ORDER_SET_PROCESS.ID_CDR_CALL column already created');
+END;
+/
+comment on column ORDER_SET_PROCESS.ID_CDR_CALL is 'Clinical decision rule call ID';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 15/03/2012 09:13
+-- CHANGE REASON: [ALERT-223328] 
+-- New Status: 'I' - This orderset was interrupted because there exists some task running or finished.
+COMMENT ON COLUMN ORDER_SET_PROCESS.FLG_STATUS IS 'Status of the process (T - temporary; R - running; C - canceled; F - finished; I - interrupted)';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 07/11/2012 10:50
+-- CHANGE REASON: [ALERT-240453] new clinical indication and order set type fields on order sets
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ORDER_SET_PROCESS add clinical_indications clob';
+EXCEPTION
+    WHEN e_exception THEN NULL;
+END;
+/
+comment on column ORDER_SET_PROCESS.clinical_indications is 'Clinical indications/diagnoses of the order set process';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.order_set_process move lob(clinical_indications) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

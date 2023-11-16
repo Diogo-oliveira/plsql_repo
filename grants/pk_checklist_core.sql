@@ -1,0 +1,5 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 24/06/2010 15:29
+-- CHANGE REASON: [ALERT-70633] Checklists: Back Office & Front Office (DDL)
+GRANT EXECUTE ON PK_CHECKLIST_CORE TO ALERT_VIEWER;
+-- CHANGE END: Ariel Machado

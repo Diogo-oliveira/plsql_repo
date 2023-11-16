@@ -1,0 +1,40 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 09:51
+-- CHANGE REASON: [ALERT-12334 ] 
+alter table SUPPLY_SOFT_INST
+  add constraint SOI_DPT_FK foreign key (ID_DEPT)
+  references DEPT (ID_DEPT);
+alter table SUPPLY_SOFT_INST
+  add constraint SOI_INST_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION);
+alter table SUPPLY_SOFT_INST
+  add constraint SOI_PRF_FK foreign key (ID_PROFESSIONAL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table SUPPLY_SOFT_INST
+  add constraint SOI_SOF_FK foreign key (ID_SOFTWARE)
+  references SOFTWARE (ID_SOFTWARE);
+alter table SUPPLY_SOFT_INST
+  add constraint SOI_SPL_FK foreign key (ID_SUPPLY)
+  references SUPPLY (ID_SUPPLY);
+alter table SUPPLY_SOFT_INST
+  add constraint SOI_UNS_FK foreign key (ID_UNIT_MEASURE)
+  references UNIT_MEASURE (ID_UNIT_MEASURE);
+-- Create/Recreate check constraints 
+alter table SUPPLY_SOFT_INST
+  add constraint SOI_FLG_CONS_TYPE_CHK
+  check (FLG_CONS_TYPE in ('C', 'L'));
+alter table SUPPLY_SOFT_INST
+  add constraint SOI_FLG_EDITABLE_CHK
+  check (FLG_EDITABLE IN ('Y','N'));
+alter table SUPPLY_SOFT_INST
+  add constraint SOI_FLG_REUSABLE_CHK
+  check (FLG_REUSABLE in ('Y','N'));
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 03/09/2020 11:45
+-- CHANGE REASON: [EMR-35608]
+ALTER TABLE supply_soft_inst DROP constraint SOI_SOFT_INST_UK;
+ALTER TABLE supply_soft_inst
+ADD CONSTRAINT SOI_SOFT_INST_UK UNIQUE (id_supply, id_institution, id_software);
+-- CHANGE END: Pedro Henriques

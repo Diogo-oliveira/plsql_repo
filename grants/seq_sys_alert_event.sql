@@ -1,0 +1,1 @@
+grant alter on ALERT.SEQ_SYS_ALERT_EVENT to ALERT_IDP;

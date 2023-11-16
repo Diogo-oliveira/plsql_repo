@@ -1,0 +1,63 @@
+
+
+  CREATE TABLE PAT_DELIVERY
+   (	ID_PAT_DELIVERY NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_DELIVERY DATE NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_DELIVERY DATE NOT NULL ENABLE,
+	DELIVERY_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	DELIVERY_NUM VARCHAR2(1) NOT NULL ENABLE,
+	FLG_MEMBRANE_RUPT VARCHAR2(1),
+	MEMBE_RUPT_DUR NUMBER(2,0),
+	DELIVERY_DUR NUMBER(2,0),
+	FLG_PLACENTA_EXPEL VARCHAR2(1),
+
+	FLG_BLOOD_LOSS VARCHAR2(1),
+	FLG_EPISIOTOMY VARCHAR2(1),
+	FLG_PERINEUM_LACER VARCHAR2(1),
+	FLG_ANTI_D VARCHAR2(1) NOT NULL ENABLE,
+	FLG_STILLBORN VARCHAR2(1) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0),
+	NOTES VARCHAR2(4000),
+	ID_PAT_PREGNANCY NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE pat_delivery IS 'Informações do parto. Deve ser preenchido na maternidade, p/ posterior actualização no CS. No entanto, se a utente não tem toda a informação relativa a partos anteriores, o médico de família deve preencher a info possível de cada parto anterior.' ;
+
+COMMENT ON COLUMN pat_delivery.dt_pat_delivery IS 'Data de registo' ;
+COMMENT ON COLUMN pat_delivery.dt_delivery IS 'Data do parto (yyyy.mm.dd hh:mi)' ;
+COMMENT ON COLUMN pat_delivery.delivery_type IS 'Tipo do parto: E - eutócico, C - cesariana, F - forceps, V - ventosa, P - extracção pélvica' ;
+COMMENT ON COLUMN pat_delivery.delivery_num IS 'S - simples, G - gemelar' ;
+COMMENT ON COLUMN pat_delivery.flg_membrane_rupt IS 'Ruptura de membranas: E - espontânea, T - terapêutica' ;
+COMMENT ON COLUMN pat_delivery.membe_rupt_dur IS 'Duração da ruptura espontânea de membranas' ;
+COMMENT ON COLUMN pat_delivery.delivery_dur IS 'Duração do trabalho de parto (horas)' ;
+COMMENT ON COLUMN pat_delivery.flg_placenta_expel IS 'Expulsão da placenta: N - natural, M - manual' ;
+COMMENT ON COLUMN pat_delivery.flg_blood_loss IS 'Perda de sangue: N - normal, E - exagerado' ;
+COMMENT ON COLUMN pat_delivery.flg_episiotomy IS 'Episiotomia (incisão do períneo durante o parto p/ evitar a sua laceração e facilitar a saída do feto): S / N' ;
+COMMENT ON COLUMN pat_delivery.flg_perineum_lacer IS 'Laceração do períneo: S / N' ;
+COMMENT ON COLUMN pat_delivery.flg_anti_d IS 'Gamaglobulina Anti-D. Feto Rh+ em mulher Rh- : S - sim, N - não, B - não sabe' ;
+COMMENT ON COLUMN pat_delivery.flg_stillborn IS 'Nado-morto: S / N' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_DELIVERY ADD DT_DELIVERY_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_DELIVERY.DT_DELIVERY_TSTZ IS 'Data do parto (yyyy.mm.dd hh:mi)'; 
+ALTER TABLE PAT_DELIVERY ADD DT_PAT_DELIVERY_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_DELIVERY.DT_PAT_DELIVERY_TSTZ IS 'Data de registo'; 
+
+
+
+alter table PAT_DELIVERY drop column  DT_DELIVERY;
+alter table PAT_DELIVERY drop column DT_PAT_DELIVERY;
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:49
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table PAT_DELIVERY
+  is 'DEPRECATED';  
+-- CHANGE END: Elisabete Bugalho

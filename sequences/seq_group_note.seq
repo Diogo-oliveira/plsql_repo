@@ -1,0 +1,18 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 05/09/2012 14:25
+-- CHANGE REASON: [ALERT-239422] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+EXECUTE IMMEDIATE '
+create sequence seq_group_note
+minvalue 1
+maxvalue 999999999999999999999999
+start with 1
+increment by 1
+cache 500';
+    EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.'); 
+END;
+/
+-- CHANGE END: Paulo Teixeira

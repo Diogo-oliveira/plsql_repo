@@ -1,0 +1,76 @@
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 07/07/2014 10:50
+-- CHANGE REASON: [ALERT-289537 ] 
+DECLARE
+
+e_object_exists EXCEPTION;
+e_invalid_identifier EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE '
+CREATE TABLE ANALYSIS_RESULT_SEND
+ (ID_ANALYSIS_RESULT_SEND NUMBER(24) NOT NULL
+ ,ID_ANALYSIS_REQ_DET NUMBER(24) NOT NULL
+ ,ID_PROF_CC NUMBER(24)
+ ,ID_PROF_BCC NUMBER(24)
+ ,EMAIL_CC VARCHAR2(200 CHAR)
+ ,EMAIL_BCC VARCHAR2(200 CHAR)
+ ,FLG_STATUS VARCHAR2(1 CHAR) NOT NULL
+ ,CREATE_USER VARCHAR2(24 CHAR)
+ ,CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+ ,CREATE_INSTITUTION NUMBER(24)
+ ,UPDATE_USER VARCHAR2(24 CHAR)
+ ,UPDATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON TABLE analysis_result_send IS ''Table with the professionals to send tha lab tests results report''';
+        EXECUTE IMMEDIATE 'COMMENT ON column analysis_result_send.id_analysis_result_send IS ''Primary key''';
+        EXECUTE IMMEDIATE 'COMMENT ON column analysis_result_send.id_analysis_req_det IS ''Lab test''''s order detail ID''';
+        EXECUTE IMMEDIATE 'COMMENT ON column analysis_result_send.id_analysis_result IS ''Lab test''''s result ID''';
+        EXECUTE IMMEDIATE 'COMMENT ON column analysis_result_send.id_prof_cc IS ''Professional ID (CC)''';
+        EXECUTE IMMEDIATE 'COMMENT ON column analysis_result_send.id_prof_bcc IS ''Professional ID (BCC)''';
+        EXECUTE IMMEDIATE 'COMMENT ON column analysis_result_send.email_cc IS ''Email adress for professionals that are not registered in the institution (CC)''';
+        EXECUTE IMMEDIATE 'COMMENT ON column analysis_result_send.email_bcc IS ''Email adress for professionals that are not registered in the institution (BCC)''';
+        EXECUTE IMMEDIATE 'COMMENT ON column analysis_result_send.flg_status IS ''Flag that indicates the lab_tests results'''' sending status''';
+        EXECUTE IMMEDIATE 'COMMENT ON column analysis_result_send.create_user IS ''Creation User''';
+        EXECUTE IMMEDIATE 'COMMENT ON column analysis_result_send.create_time IS ''Creation Time''';
+        EXECUTE IMMEDIATE 'COMMENT ON column analysis_result_send.create_institution IS ''Creation Institution''';
+        EXECUTE IMMEDIATE 'COMMENT ON column analysis_result_send.update_user IS ''Update User''';
+        EXECUTE IMMEDIATE 'COMMENT ON column analysis_result_send.update_time IS ''Update Time''';
+        EXECUTE IMMEDIATE 'COMMENT ON column analysis_result_send.update_institution IS ''Update Institution''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:01
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS_RESULT_SEND IS 'Lab tests'' results send table';
+
+COMMENT ON COLUMN ANALYSIS_RESULT_SEND.ID_ANALYSIS_RESULT_SEND IS 'Primary key';
+COMMENT ON COLUMN ANALYSIS_RESULT_SEND.ID_ANALYSIS_REQ_DET IS 'Lab test''s order detail ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_SEND.ID_PROF_CC IS 'Professional ID in cc';
+COMMENT ON COLUMN ANALYSIS_RESULT_SEND.ID_PROF_BCC IS 'Professional ID in bcc';
+COMMENT ON COLUMN ANALYSIS_RESULT_SEND.EMAIL_CC IS 'Email in cc';
+COMMENT ON COLUMN ANALYSIS_RESULT_SEND.EMAIL_BCC IS 'Email in bcc';
+COMMENT ON COLUMN ANALYSIS_RESULT_SEND.FLG_STATUS IS 'Flag that indicates the status';
+COMMENT ON COLUMN ANALYSIS_RESULT_SEND.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ANALYSIS_RESULT_SEND.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ANALYSIS_RESULT_SEND.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ANALYSIS_RESULT_SEND.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ANALYSIS_RESULT_SEND.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ANALYSIS_RESULT_SEND.UPDATE_INSTITUTION IS 'Update Institution';
+-- CHANGE END: Ana Matos

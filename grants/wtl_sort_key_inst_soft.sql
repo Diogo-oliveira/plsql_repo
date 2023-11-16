@@ -1,0 +1,5 @@
+-- CHANGED BY: RicardoNunoAlmeida
+-- CHANGE DATE: 12/03/2010 17:47
+-- CHANGE REASON: [ALERT-60382] 
+GRANT SELECT ON ALERT.wtl_sort_key_inst_soft TO ALERT_VIEWER;
+-- CHANGE END: RicardoNunoAlmeida

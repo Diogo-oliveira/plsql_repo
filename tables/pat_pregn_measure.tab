@@ -1,0 +1,34 @@
+
+
+  CREATE TABLE PAT_PREGN_MEASURE
+   (	ID_PAT_PREGN_MEASURE NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_PREGN_MEASURE DATE NOT NULL ENABLE,
+	ID_PAT_PREGNANCY NUMBER(24,0) NOT NULL ENABLE,
+	FLG_UTERIN_AMENORHEA VARCHAR2(1),
+	UTERIN_HEIGHT NUMBER(3,1)
+   );
+
+
+COMMENT ON TABLE pat_pregn_measure IS 'Histórico de medidas e proporções durante a gravidez' ;
+
+COMMENT ON COLUMN pat_pregn_measure.dt_pat_pregn_measure IS 'Data de registo' ;
+COMMENT ON COLUMN pat_pregn_measure.flg_uterin_amenorhea IS 'Relação entre vol. uterino e tempo de amenorreia: C - concordante, M - discordante (maior), N - discordante (menor)' ;
+COMMENT ON COLUMN pat_pregn_measure.uterin_height IS 'Altura uterina (cm)' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_PREGN_MEASURE ADD DT_PAT_PREGN_MEASURE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_PREGN_MEASURE.DT_PAT_PREGN_MEASURE_TSTZ IS 'Data de registo';
+
+-- JSILVA 22-10-2008
+ALTER TABLE pat_pregn_measure DROP COLUMN DT_PAT_PREGN_MEASURE;
+ 
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+comment on table PAT_PREGN_MEASURE
+  is 'Histórico de medidas e proporções durante a gravidez (DEPRECATED)';  
+-- CHANGE END: Elisabete Bugalho

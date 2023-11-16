@@ -1,0 +1,16 @@
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/07/2014 15:21
+-- CHANGE REASON: [ALERT-290913] 
+DECLARE
+    e_index_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_index_already_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX GTL_ART_FK_IDX ON GRID_TASK_LAB (ID_ANALYSIS_REQ_DET)';
+    EXCEPTION
+        WHEN e_index_already_exists THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+-- CHANGE END: Ana Matos

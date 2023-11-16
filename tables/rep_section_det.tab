@@ -1,0 +1,184 @@
+
+
+  CREATE TABLE REP_SECTION_DET
+   (	ID_REP_SECTION_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_REPORTS NUMBER(24,0) NOT NULL ENABLE,
+	ID_REP_SECTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	RANK NUMBER(6,0)
+   );
+
+
+COMMENT ON TABLE rep_section_det IS 'Parametrização das secções que compõem um report' ;
+
+COMMENT ON COLUMN rep_section_det.id_rep_section_det IS 'Chave primária' ;
+COMMENT ON COLUMN rep_section_det.id_reports IS 'Código do relatório' ;
+COMMENT ON COLUMN rep_section_det.id_rep_section IS 'Código da secção do relatório' ;
+COMMENT ON COLUMN rep_section_det.id_software IS 'Disponibilidade' ;
+COMMENT ON COLUMN rep_section_det.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN rep_section_det.rank IS 'Ordem de visualização' ;
+
+
+--Rui Batista 2007/11/02
+--Permitir parametrizar quais as secções a incluir, por defeito, no relatório
+alter table rep_section_det add (flg_default varchar2(1));
+
+COMMENT ON COLUMN rep_section_det.flg_default IS 'Secção Activa/inactiva por defeito. Valores possíveis:(Y/N)' ;
+COMMENT ON COLUMN rep_section_det.flg_default IS 'Secção Activa/inactiva por defeito. Valores possíveis:(A/I)' ;
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 14-Dec-2010
+-- CHANGE REASON: ALERT-ALERT-149266
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE REP_SECTION_DET add ID_MARKET NUMBER(24)';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 14-Dec-2010
+-- CHANGE REASON: ALERT-ALERT-149266
+COMMENT ON column REP_SECTION_DET.ID_MARKET IS 'Market where this relationship applies';
+-- CHANGE END
+
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 15-Fev-2011
+-- CHANGE REASON: ALERT-162298
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE rep_section_det add FLG_VISIBLE VARCHAR2(1) DEFAULT ''Y'' NOT NULL';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN rep_section_det.flg_visible IS ''Indicates whether the section should appear in the Print Tool. For instance, the header could be considered a section, but it should not be selectable.''';
+    EXECUTE IMMEDIATE 'ALTER TABLE rep_section_det add CONSTRAINT RSD_FLG_VISIBLE_CHK CHECK (FLG_VISIBLE IN (''Y'', ''N''))';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 26-Apr-2011
+-- CHANGE REASON: ALERT-174695
+alter table 
+   rep_section_det
+modify rank NUMBER(6) default 0;
+-- CHANGE END
+
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 26-Apr-2011
+-- CHANGE REASON: ALERT-174695
+DECLARE
+    l_already_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(l_already_null, -1442);
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE rep_section_det modify rank NOT NULL');
+EXCEPTION
+    WHEN l_already_null THEN
+        NULL;
+END;
+/
+-- CHANGE END
+
+
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 07-Jul-2011
+-- CHANGE REASON: ALERT-182778 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01442);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE rep_section_det modify id_market DEFAULT 0 NOT NULL ';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+-- CHANGED BY: joao.reis
+-- CHANGE DATE: 02-Sep-2011
+-- CHANGE REASON: ALERT-193793
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01442);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE rep_section_det ADD id_rep_profile_template NUMBER(12) DEFAULT 0 NOT NULL ';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+COMMENT ON COLUMN rep_section_det.id_rep_profile_template IS 'Perfil ID dos Reports para o profissional' ;
+/
+-- CHANGE END: joao.reis
+
+-- CHANGED BY: Tiago Lourenço
+-- CHANGE DATE: 28/11/2011
+-- CHANGE REASON: [ALERT-207295] 
+DECLARE 
+e_column_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE REP_SECTION_DET  ADD (FLG_DATE_FILTERS VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL )';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+COMMENT ON COLUMN REP_SECTION_DET.FLG_DATE_FILTERS IS 'Is the section available for being printed with date filtering? (''Y''- Yes; ''N''- No)';
+-- CHANGE END: tiago.lourenco
+
+
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 05/Dez/2011 14:45
+-- CHANGE REASON: ALERT-207597
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01442);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE REP_SECTION_DET MODIFY FLG_DEFAULT DEFAULT ''A'' NOT NULL ';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END: jorge.matos
+
+
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON TABLE REP_SECTION_DET IS 'Section parameterization that build up a report';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON COLUMN REP_SECTION_DET.ID_REP_PROFILE_TEMPLATE IS 'Parametization between profile and template identifier';
+COMMENT ON COLUMN REP_SECTION_DET.ID_REP_SECTION_DET IS 'Primary Key';
+COMMENT ON COLUMN REP_SECTION_DET.ID_REPORTS IS 'Report Identifier';
+COMMENT ON COLUMN REP_SECTION_DET.ID_REP_SECTION IS 'Section Identifier';
+COMMENT ON COLUMN REP_SECTION_DET.ID_SOFTWARE IS 'Software Identifier';
+COMMENT ON COLUMN REP_SECTION_DET.ID_INSTITUTION IS 'Institution Identifier';
+COMMENT ON COLUMN REP_SECTION_DET.RANK IS 'Line-up';
+COMMENT ON COLUMN REP_SECTION_DET.FLG_DEFAULT IS 'Active(A)/Inactive(I) Section';
+-- CHANGE END:  ruben.araujo

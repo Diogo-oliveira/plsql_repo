@@ -1,0 +1,25 @@
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 26/01/2022 15:32
+-- CHANGE REASON: [EMR-51318] - O carregamento da Visita Actual na Consulta esta lenta. Por vezes nem carrega
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[create index alert.epdt_search01_idx on alert.EPIS_PN_DET_TASK(id_epis_pn_det,id_task,id_task_type,nvl(id_task_aggregator, -1),flg_status) tablespace alert_idx]';
+pk_versioning.run(l_sql);
+end;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 30/03/2022 08:52
+-- CHANGE REASON: [EMR-52558] - INC000000260999 We have long stay patient that History and Phys
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[create index alert.epdt_search02_idx on alert.EPIS_PN_DET_TASK(id_epis_pn_det,id_task_type,flg_status) tablespace alert_idx]';
+pk_versioning.run(l_sql);
+end;
+/
+-- CHANGE END: Elisabete Bugalho

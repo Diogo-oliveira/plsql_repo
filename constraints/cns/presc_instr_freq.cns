@@ -1,0 +1,13 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 11:32
+-- CHANGE REASON: [ALERT-38908] Versionamento.
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table PRESC_INSTR_FREQ
+  add constraint PIQ_PK primary key (ID_PRESC_INSTR_FREQ)
+  using index 
+  tablespace INDEX_M;
+-- Create/Recreate check constraints 
+alter table PRESC_INSTR_FREQ
+  add constraint PIQ_FREQ_TYPE_CHK
+  check (FREQ_TYPE in ('MF','OF', 'PD'));
+-- CHANGE END: Pedro Albuquerque

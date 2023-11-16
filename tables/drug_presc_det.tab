@@ -1,0 +1,806 @@
+
+
+  CREATE TABLE DRUG_PRESC_DET
+   (	ID_DRUG_PRESC_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_DRUG NUMBER(12,0) NOT NULL ENABLE,
+	ID_DRUG_PRESCRIPTION NUMBER(24,0) NOT NULL ENABLE,
+	DT_BEGIN DATE,
+	DT_END DATE,
+	NOTES VARCHAR2(4000),
+	FLG_TAKE_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	QTY NUMBER(6,0),
+	RATE VARCHAR2(30),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_CANCEL DATE,
+
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	NOTES_JUSTIF VARCHAR2(4000),
+	INTERVAL NUMBER(12,4),
+	TAKES NUMBER(12,0),
+	DOSAGE NUMBER(19,3),
+	ID_DRUG_JUSTIFICATION NUMBER(24,0),
+	FLG_CI VARCHAR2(1),
+	FLG_CHEAPER VARCHAR2(1),
+	FLG_JUSTIF VARCHAR2(1),
+	FLG_ATTENTION VARCHAR2(2),
+	FLG_ATTENTION_PRINT VARCHAR2(1),
+	ID_DRUG_DESPACHOS NUMBER(24,0),
+
+	DOSAGE_DESCRIPTION VARCHAR2(1000),
+	VALUE_BOLUS NUMBER(24,0),
+	VALUE_DRIP NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE drug_presc_det IS 'Esta tabela contem os dados de uma prescrição de medicamentos.A prescrição pode ter como parametros o nº de tomas e o intervalo, para medicamentos com tomas com intervalos de tempo fixos ou então ser definido um plano de tomas.' ;
+
+COMMENT ON COLUMN drug_presc_det.id_drug_presc_det IS 'Chave primaria' ;
+COMMENT ON COLUMN drug_presc_det.dt_begin IS 'Data de inicio' ;
+COMMENT ON COLUMN drug_presc_det.dt_end IS 'Data de fim' ;
+COMMENT ON COLUMN drug_presc_det.notes IS 'Notas da prescric?o' ;
+COMMENT ON COLUMN drug_presc_det.flg_take_type IS 'Tipo de plano de tomas: N - normal, S - SOS, U - unitário, C - contínuo, A - ad eternum' ;
+COMMENT ON COLUMN drug_presc_det.qty IS 'Quantidade prescrita' ;
+COMMENT ON COLUMN drug_presc_det.rate IS 'Ritmo de administrac?o do medicamento' ;
+COMMENT ON COLUMN drug_presc_det.flg_status IS 'Estado da prescrição: D - pendente, R - requisitado, E - em curso, F - concluído, C - anulado, I - interrompido' ;
+COMMENT ON COLUMN drug_presc_det.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN drug_presc_det.notes_cancel IS 'Notas de cancelamento' ;
+COMMENT ON COLUMN drug_presc_det.notes_justif IS 'Texto de justificação' ;
+COMMENT ON COLUMN drug_presc_det.interval IS 'Intervalo entre tomas' ;
+COMMENT ON COLUMN drug_presc_det.takes IS 'Nº de tomas' ;
+
+COMMENT ON COLUMN drug_presc_det.dosage IS 'Dosagem' ;
+COMMENT ON COLUMN drug_presc_det.id_drug_justification IS 'ID da justificação.' ;
+COMMENT ON COLUMN drug_presc_det.flg_ci IS 'Chamada de atenção de contra-indicações: Y - sim; N - não; R - lida.' ;
+COMMENT ON COLUMN drug_presc_det.flg_cheaper IS 'Chamada de atenção de medicamentos mais baratos: Y - sim; N - não; R - lida.' ;
+COMMENT ON COLUMN drug_presc_det.flg_justif IS 'Chamada de atenção de justificação de prescrição: Y - sim; N - não; R - lida.' ;
+COMMENT ON COLUMN drug_presc_det.flg_attention IS 'Flag que indica a chamada de atenção prioritária: CI - contra-indicações; B - medicamentos mais baratos; J - justificação de prescrição; IM - interacções medicamentosas' ;
+COMMENT ON COLUMN drug_presc_det.flg_attention_print IS 'Flag que indica se o profissional prosseguiu (Y) ou não (N) com a impressão apesar das chamadas de atenção.' ;
+COMMENT ON COLUMN drug_presc_det.id_drug_despachos IS 'Despacho associado a esta requisição.' ;
+COMMENT ON COLUMN drug_presc_det.dosage_description IS 'Descritivo da dosagem (composição das opções em texto)' ;
+
+comment on column DRUG_PRESC_DET.VALUE_BOLUS
+  is 'Valor do bolus';
+comment on column DRUG_PRESC_DET.VALUE_DRIP
+  is 'Valor do drip';
+
+-- Add/modify columns 
+alter table DRUG_PRESC_DET add ID_DRUG_ROUTE number(24);
+-- Add comments to the columns 
+comment on column DRUG_PRESC_DET.ID_DRUG_ROUTE
+  is 'Forma de administração';
+
+
+-- Add/modify columns 
+alter table DRUG_PRESC_DET add ID_UNIT_MEASURE number(24);
+alter table DRUG_PRESC_DET add ID_UNIT_MEASURE_BOLUS number(24);
+alter table DRUG_PRESC_DET add ID_UNIT_MEASURE_DRIP number(24);
+
+alter table DRUG_PRESC_DET add DT_END_PRESC date;
+alter table DRUG_PRESC_DET add DT_END_BOTTLE date;
+
+
+
+-- Add comments to the columns 
+comment on column DRUG_PRESC_DET .DT_END_PRESC
+  is 'Data do fim da administração do medicamento ou soro';
+comment on column DRUG_PRESC_DET .DT_END_BOTTLE
+  is 'Data fim da embalagem ou garrafa de soro';
+comment on column DRUG_PRESC_DET.ID_UNIT_MEASURE
+  is 'ID da unidade de medida da quantidade';
+comment on column DRUG_PRESC_DET.ID_UNIT_MEASURE_BOLUS
+  is 'ID da unidade de medida do bolus';
+comment on column DRUG_PRESC_DET.ID_UNIT_MEASURE_DRIP
+  is 'ID da unidade de medida da velocidade de perfusão';
+
+
+
+ALTER TABLE DRUG_PRESC_DET ADD (VALUE_BOLUS_AUX   NUMBER(24,4), VALUE_DRIP_AUX NUMBER(24,4) , QTY_AUX NUMBER(24,4));
+UPDATE DRUG_PRESC_DET SET VALUE_BOLUS_AUX=VALUE_BOLUS,VALUE_DRIP_AUX =VALUE_DRIP , QTY_AUX=QTY ;
+UPDATE DRUG_PRESC_DET SET VALUE_BOLUS=NULL,VALUE_DRIP =NULL , QTY=NULL ;
+ALTER TABLE DRUG_PRESC_DET MODIFY (VALUE_BOLUS   NUMBER(24,4), VALUE_DRIP NUMBER(24,4) , QTY NUMBER(24,4));
+UPDATE DRUG_PRESC_DET SET VALUE_BOLUS=VALUE_BOLUS_AUX,VALUE_DRIP =VALUE_DRIP_AUX , QTY=QTY_AUX ;
+
+ALTER TABLE DRUG_PRESC_DET DROP COLUMN VALUE_BOLUS_AUX   ; 
+ALTER TABLE DRUG_PRESC_DET DROP COLUMN VALUE_DRIP_AUX   ;
+ALTER TABLE DRUG_PRESC_DET DROP COLUMN QTY_AUX   ;
+
+alter table drug_presc_det 
+add (dt_begin_tstz timestamp with local time zone,
+dt_end_tstz timestamp with local time zone,
+dt_cancel_tstz timestamp with local time zone,
+dt_end_presc_tstz timestamp with local time zone,
+dt_end_bottle_tstz timestamp with local time zone);
+
+
+
+alter table drug_presc_det add (
+  DT_ORDER             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROF_ORDER        NUMBER(24),
+  ID_ORDER_TYPE        NUMBER(24),
+  FLG_CO_SIGN          VARCHAR2(1) default 'N' not null,
+  DT_CO_SIGN           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  NOTES_CO_SIGN        VARCHAR2(4000),
+  ID_PROF_CO_SIGN      NUMBER(24));
+	
+	
+		comment on column drug_presc_det.DT_ORDER
+  is 'Moment when the ordering professional ask the registering professional to request';
+comment on column drug_presc_det.ID_PROF_ORDER
+  is 'Ordering professional';
+comment on column drug_presc_det.ID_ORDER_TYPE
+  is 'Request order type (telephone, verbal, ...)';
+comment on column drug_presc_det.FLG_CO_SIGN
+  is 'Co-sign flag. (Y)-Order co-signed. (N)-Order not co-signed.';
+comment on column drug_presc_det.DT_CO_SIGN
+  is 'Co-sign moment';
+comment on column drug_presc_det.NOTES_CO_SIGN
+  is 'Co-sign notes';
+comment on column drug_presc_det.ID_PROF_CO_SIGN
+  is 'Co-sign professional';
+
+alter table drug_presc_det add(
+duration        number(24)
+);
+alter table drug_presc_det add(
+id_unit_measure_dur        number(24)
+);
+alter table drug_presc_det add(
+Frequency     number(24)
+);
+alter table drug_presc_det add(
+id_unit_measure_freq        number(24)
+);
+alter table drug_presc_det add(
+DT_START_PRESC_TSTZ        TIMESTAMP(6) WITH LOCAL TIME ZONE 
+);
+alter table drug_presc_det add(
+DT_END_PRESC_TSTZ        TIMESTAMP(6) WITH LOCAL TIME ZONE 
+);
+alter table drug_presc_det add (refill    number(24,4));
+alter table Drug_presc_det   add (qty_inst  number(24,4));
+alter table Drug_presc_det   add (unit_measure_inst  number(24,4));
+
+-- Add comments to the columns 
+comment on column drug_presc_det.ID_UNIT_MEASURE
+  is 'Unidade de medida relativa à quantidade';
+comment on column drug_presc_det.FREQUENCY
+  is 'Frequencia (Posologia)';
+comment on column drug_presc_det.ID_UNIT_MEASURE_FREQ
+  is 'Unidade de medida da frequencia';
+comment on column drug_presc_det.DURATION
+  is 'Duração (Posologia)';
+comment on column drug_presc_det.ID_UNIT_MEASURE_DUR
+  is 'Unidade de medida da duração';
+comment on column drug_presc_det.DT_START_PRESC_TSTZ
+  is 'Data inicio do tratamento (Posologia)';
+comment on column drug_presc_det.DT_END_PRESC_TSTZ
+  is 'Data end do tratamento (Posologia)';
+comment on column drug_presc_det.REFILL
+  is 'Reffil';
+comment on column drug_presc_det.QTY_INST
+  is 'Quantidade';
+comment on column drug_presc_det.UNIT_MEASURE_INST
+  is 'Unidade de medida da qty_inst';
+  
+ 
+alter table drug_presc_det
+modify (FLG_CI default 'N',
+				FLG_CHEAPER default 'N',
+				FLG_JUSTIF default 'N',
+				FLG_INTERAC_MED default 'N',
+				FLG_INTERAC_ALLERGY default 'N');
+				
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-DEC-15
+-- CHANGING REASON:  detectar um relato que passou a uma prescrição para administrar neste local
+-- Add/modify columns 
+alter table DRUG_PRESC_DET add ID_PAT_MEDICATION_LIST NUMBER(24);
+-- Add comments to the columns 
+comment on column DRUG_PRESC_DET.ID_PAT_MEDICATION_LIST
+  is 'Id do relato. Isto acontece quando se faz uma prescrição para administrar neste local a partir de um relato.';
+-- CHANGE END Patrícia Neto			
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-DEC-18
+-- CHANGING REASON: nova coluna, track das alterações
+-- Add/modify columns 
+alter table DRUG_PRESC_DET add DT_LAST_CHANGE TIMESTAMP(6) WITH LOCAL TIME ZONE;
+-- Add comments to the columns 
+comment on column DRUG_PRESC_DET.DT_LAST_CHANGE
+  is 'data da ultima alteração dos dados desta prescrição';
+-- CHANGE END Patrícia Neto			
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-MAY-22
+-- CHANGE REASON: Criação de nova coluna na tabela associar a outros produtos prescritos em texto livre (-1 = texto livre)
+ALTER TABLE DRUG_PRESC_DET
+ADD ID_OTHER_PRODUCT NUMBER(24);
+
+ALTER TABLE DRUG_PRESC_DET
+ADD DESC_OTHER_PRODUCT VARCHAR2(1000);
+
+-- Add comments to the columns 
+comment on column DRUG_PRESC_DET.ID_OTHER_PRODUCT
+  is 'ID for product/drugs prescribed in free text.';
+  
+comment on column DRUG_PRESC_DET.DESC_OTHER_PRODUCT
+  is 'Description for product/drugs prescribed in free text.';
+--CHANGE END
+
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-ABR-22
+-- CHANGE REASON: Registar o período de tempo em que o medicamento está suspenso
+ALTER TABLE DRUG_PRESC_DET
+ADD DT_HOLD_BEGIN TIMESTAMP(6) WITH LOCAL TIME ZONE;
+
+--destino dos fármaco
+ALTER TABLE DRUG_PRESC_DET
+ADD DT_HOLD_END TIMESTAMP(6) WITH LOCAL TIME ZONE;
+
+
+-- Add comments to the columns 
+comment on column DRUG_PRESC_DET.DT_HOLD_BEGIN
+  is 'Hold begin date.';
+  
+comment on column DRUG_PRESC_DET.DT_HOLD_END
+  is 'Hold end date.';
+--CHANGE END
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-ABR-26
+-- CHANGE REASON: Criação de flg para indicar se o registo foi alterado e a alteração ainda não foi confirmada
+ALTER TABLE DRUG_PRESC_DET
+ADD FLG_MODIFIED VARCHAR2(1) DEFAULT 'N';
+
+-- Add comments to the columns 
+comment on column DRUG_PRESC_DET.FLG_MODIFIED
+  is 'flg para indicar se o registo foi alterado e a alteração ainda não foi confirmada: Y - registo alterado, N - registo não alterado.';
+--CHANGE END
+
+
+-- CHANGED BY: Rafael Santos
+-- CHANGE DATE: 2008-SET-02
+-- CHANGE REASON: WO17070 - Data Quality Control - DB Best Practices - 032
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_DRUG_PRESCRIPTION is 'ID da prescrição de medicamentos';
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_PROF_CANCEL is 'ID do profissional que cancela a prescrição';
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_BEGIN_TSTZ is 'Data/hora de início da prescrição com TIMEZONE';
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_END_TSTZ is 'Data/hora de fim da prescrição com TIMEZONE';
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_CANCEL_TSTZ is 'Data/hora de cancelamento da prescrição com TIMEZONE';
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_END_BOTTLE_TSTZ is 'Data/hora de fim da embalagem ou garrafa de soro';
+COMMENT ON COLUMN DRUG_PRESC_DET.NOTES is 'Notas da prescrição';
+COMMENT ON COLUMN DRUG_PRESC_DET.RATE is 'Ritmo de administração do medicamento';
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_ATTENTION is 'Flag que indica a chamada de atenção prioritária: CI - contra-indicações; B - medicamentos mais baratos; J - justificação de prescrição; IM - interacções medicamentosas; IA - interacções entre medicamentos e alergias';
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_CI is 'Chamada de atenção de contra-indicações: Y - sim; N - não; R - lida; NULL - sem informação.';
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_CHEAPER is 'Chamada de atenção de medicamentos mais baratos: Y - sim; N - não; R - lida; NULL - sem informação.';
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_JUSTIF is 'Chamada de atenção de justificação de prescrição: Y - sim; N - não; R - lida; NULL - sem informação.';
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_ATTENTION is 'Flag que indica a chamada de atenção prioritária: CI - contra-indicações; B - medicamentos mais baratos; J - justificação de prescrição; IM - interacções medicamentosas; IA - interacções entre medicamentos e alergias; NULL - sem informação.';
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_ATTENTION_PRINT is 'Flag que indica se o profissional prosseguiu (Y) ou não (N) com a impressão apesar das chamadas de atenção; NULL - sem informação.';
+
+-- CHANGE END
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2008-SET-22
+-- CHANGE REASON: Drop de colunas DATE com correspondentes DATE_TSTZ
+
+ALTER TABLE DRUG_PRESC_DET DROP COLUMN DT_BEGIN;
+ALTER TABLE DRUG_PRESC_DET DROP COLUMN DT_END;
+ALTER TABLE DRUG_PRESC_DET DROP COLUMN DT_CANCEL;
+ALTER TABLE DRUG_PRESC_DET DROP COLUMN DT_END_PRESC;
+ALTER TABLE DRUG_PRESC_DET DROP COLUMN DT_END_BOTTLE;
+
+-- CHANGE END
+
+
+--
+-- CHANGED BY: Thiago Brito
+-- CHANGE DATE: 2008-OCT-08
+-- CHANGE REASON: In order to perform the denormilization task, for this table, these columns need to be added
+--
+
+ALTER TABLE ALERT.DRUG_PRESC_DET ADD STATUS_FLG VARCHAR2(100);
+/
+
+ALTER TABLE ALERT.DRUG_PRESC_DET ADD STATUS_ICON VARCHAR2(100);
+/
+
+ALTER TABLE ALERT.DRUG_PRESC_DET ADD STATUS_MSG VARCHAR2(100);
+/
+
+ALTER TABLE ALERT.DRUG_PRESC_DET ADD STATUS_STR VARCHAR2(100);
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.STATUS_FLG IS 'Request''s status flag (udes to return the icon)';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.STATUS_ICON IS 'Request''s status icon';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.STATUS_MSG IS 'Request''s status message code';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.STATUS_STR IS 'Request''s status (in specific format)';
+/
+
+-- CHANGE END
+--
+
+-- CHANGED REASON: New fields for Dispense
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 19/03/2009
+ALTER TABLE ALERT.DRUG_PRESC_DET ADD DISPENSE NUMBER(24,4);
+/
+ALTER TABLE DRUG_PRESC_DET ADD UNIT_MEASURE_DISPENSE NUMBER(24);
+/
+COMMENT ON COLUMN DRUG_PRESC_DET.DISPENSE IS 'Dispensed quantity';
+/
+COMMENT ON COLUMN DRUG_PRESC_DET.UNIT_MEASURE_DISPENSE IS 'Unit measure for dispense quantity';
+/
+-- CHANGE END
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-MAR-28
+-- CHANGING REASON: OVERDOSAGE MODULE
+alter table drug_presc_det add FLG_DOSAGE_CHECK VARCHAR2(4);
+-- Add comments to the columns 
+comment on column drug_presc_det.FLG_DOSAGE_CHECK
+  is 'Indica a presença de alertas de sobredosagem, subdosagem, etc.';
+-- CHANGE END Patrícia Neto
+
+-- CHANGED REASON: Prescription of Compounds 
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 28/03/2009
+ALTER TABLE ALERT.DRUG_PRESC_DET ADD ID_COMBINATION_COMPOUND NUMBER(24);
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_COMBINATION_COMPOUND IS 'Compound drug ID';
+/
+-- CHANGE END
+
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGED DATE: 2009-ABR-02
+-- CHANGING REASON: nova coluna para as os IDs das posologias irregulares
+
+alter table drug_presc_det
+add id_irregular_directions NUMBER(6) default null;
+comment on column drug_presc_det.id_irregular_directions is 'ID das posologias irregulares';
+
+-- CHANGE END Pedro Albuquerque
+
+
+
+-- CHANGED BY: Rafael Santos
+-- CHANGED DATE: 2009-ABR-23
+-- CHANGING REASON: ALERT-24324
+
+ALTER TABLE DRUG_PRESC_DET
+  ADD COLUMN FLG_MIX_INSTR VARCHAR2(2) DEFAUL NULL;
+ALTER TABLE DRUG_PRESC_DET
+  ADD COLUMN MIX_INSTR VARCHAR2(1000) DEFAUL NULL;
+
+comment on column DRUG_PRESC_DET.ID_COMBINATION_COMPOUND
+  is 'ID do compound';
+comment on column DRUG_PRESC_DET.FLG_MIX_INSTR
+  is 'Flag de Mixing Instructions de um compound';
+comment on column DRUG_PRESC_DET.MIX_INSTR
+  is 'Descrição de MIxing instructions de um compound';
+
+-- CHANGE END Rafael Santos
+
+alter table drug_presc_det
+modify refill varchar2(100);
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 2009-JUL-10
+-- CHANGE REASON: ALERT-35531
+
+alter table DRUG_PRESC_DET modify ID_DRUG VARCHAR2(255);
+
+-- CHANGED END
+
+-- CHANGED BY: Sérgio Cunha
+-- CHANGE DATE: 28/10/2009 22:33
+-- CHANGE REASON: [ALERT-52263] 
+
+
+alter table DRUG_PRESC_DET add ID_JUSTIFY_REASON NUMBER(24);
+alter table DRUG_PRESC_DET add JUSTIFY_REASON varchar2(1000 CHAR);
+-- Add comments to the columns 
+comment on column DRUG_PRESC_DET.ID_JUSTIFY_REASON
+  is 'Posteriori prescription justification id';
+comment on column DRUG_PRESC_DET.JUSTIFY_REASON
+  is 'Posteriori prescription justification';
+-- CHANGE END: Sérgio Cunha
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 28/10/2009 23:02
+-- CHANGE REASON: [ALERT-49774] 
+alter table DRUG_PRESC_DET add NUM_SCHEMES number(6);
+comment on column DRUG_PRESC_DET.NUM_SCHEMES is 'Number of schemes (used on IV FLUIDS requisitions)';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 11/12/2009 04:38
+-- CHANGE REASON: [ALERT-61938] 
+comment on column drug_presc_det.flg_status is 'estado da prescrição: d - pendente, r - requisitado, e - em curso, f - concluído, c - anulado, i - interrompido, w - expired, y - draft';
+-- CHANGE END: Pedro Albuquerque
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195] 
+declare
+ l_count pls_integer;
+begin
+
+  select count(1)
+  into l_count
+  from all_tab_columns 
+  where owner = 'ALERT' and table_name = 'DRUG_PRESC_DET' and column_name = 'ID_PRESC_DIRECTIONS';
+
+  if l_count = 0 then
+    execute immediate ( 'ALTER TABLE DRUG_PRESC_DET ADD ID_PRESC_DIRECTIONS NUMBER(24)' );
+  end if;
+
+end;
+/
+-- CHANGE END: Nuno Ferreira
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195] 
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_PRESC_DIRECTIONS IS 'Prescription Directions ID';
+-- CHANGE END: Nuno Ferreira
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 19/03/2010 14:47
+-- CHANGE REASON: [ALERT-80419] 
+alter table drug_presc_det
+add flg_free_text varchar2(1 char);
+comment on column DRUG_PRESC_DET.flg_free_text
+is 'Prescribed drug is a free text other product(Y) or not(N)';
+-- CHANGE END: Pedro Albuquerque
+
+
+-- CHANGED BY: Pedro Martins Santos
+-- CHANGE DATE: 07/07/2010
+-- CHANGE REASON: [ALERT-100250] 
+DECLARE
+e_column_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_column_already_there,-01430);
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE DRUG_PRESC_DET ADD ID_TASK_DEPENDENCY NUMBER(24)'; 
+EXCEPTION
+WHEN e_column_already_there THEN
+  dbms_output.put_line('Aviso: coluna anteriormente criada!');
+END;
+/
+-- CHANGE END: Pedro Martins Santos 
+
+
+-- CHANGED BY: Pedro Martins Santos
+-- CHANGE DATE: 07/07/2010
+-- CHANGE REASON: [ALERT-100250]                                                           
+DECLARE
+e_column_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_column_already_there,-01430);
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE DRUG_PRESC_DET ADD FLG_REQ_ORIGIN_MODULE VARCHAR2(1 CHAR) DEFAULT ''D'''; 
+EXCEPTION
+WHEN e_column_already_there THEN
+  dbms_output.put_line('Aviso: coluna anteriormente criada!');
+END;
+/
+-- CHANGE END: Pedro Martins Santos 
+
+
+-- CHANGED BY: Pedro Martins Santos
+-- CHANGE DATE: 07/07/2010
+-- CHANGE REASON: [ALERT-100250] 
+COMMENT ON COLUMN drug_presc_det.ID_TASK_DEPENDENCY IS 'Task dependency ID - refers to Task Dependency Engine';
+COMMENT ON COLUMN drug_presc_det.FLG_REQ_ORIGIN_MODULE IS 'Indicates task origin: O - order sets task; D - default task';
+
+-- CHANGE END: Pedro Martins Santos 
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 05/05/2011 10:30
+-- CHANGE REASON: [ALERT-168636] IVFluids Take in case replication - Included in reconciliation
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE drug_presc_det add(take_in_case VARCHAR2(1000 CHAR)');
+  EXECUTE IMMEDIATE ('COMMENT ON column drug_presc_det.take_in_case IS ''Take in case notes''');
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Column already exits.');
+END;
+/
+-- CHANGE END:  Pedro Morais
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 05/05/2011 18:21
+-- CHANGE REASON: [ALERT-168636] IVFluids Take in case replication - Included in reconciliation
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE drug_presc_det add(take_in_case VARCHAR2(1000 CHAR))');
+  EXECUTE IMMEDIATE ('COMMENT ON column drug_presc_det.take_in_case IS ''Take in case notes''');
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Column already exits.');
+END;
+/
+-- CHANGE END:  Pedro Morais
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 10/05/2011 15:45
+-- CHANGE REASON: [ALERT-177865] 
+DECLARE
+e_column_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_column_already_there,-01430);
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE DRUG_PRESC_DET ADD ID_VACC_MANUFACTURER NUMBER(24)'; 
+EXCEPTION
+WHEN e_column_already_there THEN
+  dbms_output.put_line('Aviso: coluna anteriormente criada!');
+END;
+/
+
+DECLARE
+e_column_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_column_already_there,-01430);
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE DRUG_PRESC_DET ADD CODE_MVX VARCHAR2(200)'; 
+EXCEPTION
+WHEN e_column_already_there THEN
+  dbms_output.put_line('Aviso: coluna anteriormente criada!');
+END;
+/
+
+COMMENT ON COLUMN drug_presc_det.ID_VACC_MANUFACTURER IS 'Id vacc manufacturer'; 
+COMMENT ON COLUMN drug_presc_det.CODE_MVX IS 'Code vacc manufacturer';
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 20/05/2011 11:45
+-- CHANGE REASON: [ALERT-180704] CDR: create concepts and conditions for dietaries, compound medications and other products
+-- Add/modify columns 
+alter table drug_presc_det add ID_CDR_CALL number(24);
+-- CHANGE END:  Pedro Morais
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:22
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_PRESC_DET IS 'Prescription details related with vaccination and immunization';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_DRUG_PRESC_DET  IS 'Prescription details identifier';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_DRUG_PRESCRIPTION  IS 'Prescription identifier';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.NOTES  IS 'Prescription notes';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_TAKE_TYPE  IS 'Administration plan type. U - unit dose. (The other options are deprecated)';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.QTY  IS 'Prescribed quantity.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.Rate  IS 'Administration rate [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.Flg_Status  IS 'Prescription status: D -pending; R-requested; E-on going; F-concluded; C-cancelled; I-interrupetd; W-expired; Y-draft';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_PROF_CANCEL IS 'Professional that cancelled the precription';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.NOTES_CANCEL IS 'Cancellation notes';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.NOTES_JUSTIF IS 'Justification text [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.NOTES_JUSTIF IS 'Justification text [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.INTERVAL IS 'Interval between administrations';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.TAKES  IS 'Nr of administrations';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.TAKES  IS 'Nr of administrations';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DOSAGE  IS 'Dose';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_CI  IS 'Indicates the need to pay attention to contraindications. Y-Yes. N-No; R - Read; Null - there is no information [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_CHEAPER  IS 'Indicates if there is cheaper medications. Y-Yes. N-No; R - Read; Null - there is no information [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_JUSTIF  IS 'Indicates if there is justification in the prescription. Y-Yes; N-No; R - Read; Null - there is no information [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_ATTENTION  IS 'Indicates which warning has the highest priority. CI - contra-indications; B- cheaper medications; J - prescription justitification; IM - drug interactions; IA - interaction between drgus and allergies; NULL - there is no information [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_ATTENTION_PRINT  IS 'Indicates if the professional printed (Y) or not (N) the prescription in spite of warnings; NULL- there is no information [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_DRUG_DESPACHOS  IS 'Identifier of the State Legislation on Prescription Drugs [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DOSAGE_DESCRIPTION  IS 'Free text dose description.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.VALUE_BOLUS  IS 'Bolus value [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.VALUE_BOLUS  IS 'Bolus value [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.VALUE_DRIP   IS 'Drip value [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_UNIT_MEASURE   IS 'Quantity unit measure';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_UNIT_MEASURE_BOLUS   IS 'Bolus unit measure [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_UNIT_MEASURE_DRIP   IS 'Drip unit measure [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_BEGIN_TSTZ IS 'Prescription start date.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_END_TSTZ  IS 'Prescription end date.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_CANCEL_TSTZ IS 'Cancellation date.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_END_PRESC_TSTZ  IS 'treatment end date [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_END_BOTTLE_TSTZ  IS 'Bottle end date [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_ORDER IS 'Date in which the ordering professional ask the registering professional to request [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_ORDER_TYPE IS 'Request order type (telephone, verbal, ...) [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_CO_SIGN  IS 'Co-sign flag. (Y)-Order co-signed. (N)-Order not co-signed. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_CO_SIGN  IS 'Co-sign moment. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.NOTES_CO_SIGN  IS 'Co-sign notes. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_PROF_CO_SIGN  IS 'Co-sign professional. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DURATION  IS 'Posology duration';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_UNIT_MEASURE_DUR  IS 'Duration unit measure';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.FREQUENCY  IS 'Posology frequency';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_UNIT_MEASURE_FREQ IS 'Frequency unit measure';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_START_PRESC_TSTZ IS 'Posology start date';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.REFILL IS 'Refill [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.QTY_INST IS 'Posology quantity [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.UNIT_MEASURE_INST IS 'Posology quantity unit measure [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_PAT_MEDICATION_LIST IS 'Home medication ID. When it is created a local prescription based on a home medication [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_LAST_CHANGE IS 'Last update date';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ROUTE_ID IS 'Administration route id';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_JUSTIFICATION IS 'Justification id [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.VERS IS 'Version. PT, USA...';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_INTERAC_MED IS 'Indicate the need to pay attention to interations between medications. Y - Yes; N - No; R - Read [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_INTERAC_MED IS 'Indicate the need to pay attention to interations between medications and allergies. Y - Yes; N - No; R - Read [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_DRUG IS 'Medication ID';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_OTHER_PRODUCT  IS 'ID for product/medication prescribed in free text. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DESC_OTHER_PRODUCT  IS 'Description for product/medication prescribed in free text. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_HOLD_BEGIN  IS 'Hold begin date. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DT_HOLD_END  IS 'Hold end date. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_MODIFIED  IS 'Indicates if the record was updated and not yet confirmed. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.STATUS_FLG  IS 'Request''s status flag (used to return the status icon of the prescription)';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.DISPENSE  IS 'Dispensed quantity. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.UNIT_MEASURE_DISPENSE  IS 'Unit measure for dispense quantity. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_DOSAGE_CHECK  IS 'Identifies if there is warnings of overdose, underdosing, ... [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_COMBINATION_COMPOUND  IS 'Compound product id. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_IRREGULAR_DIRECTIONS  IS 'Irregular possology ID. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_MIX_INSTR  IS 'Flag that indicates compound mixing Instructions. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.MIX_INSTR  IS 'Compound mixing instructions description. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_PRESC_INSTR_DET  IS 'Id of the instructions popup. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.NUM_SCHEMES  IS 'Number of schemes (used on IV FLUIDS requisitions). [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_JUSTIFY_REASON  IS 'Id of the justification reason. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.JUSTIFY_REASON  IS 'Text of the justification reason. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.FLG_FREE_TEXT  IS 'Prescribed medication is a free text other product(Y) or not(N). [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_TASK_DEPENDENCY  IS 'Task dependency ID - refers to Task Dependency Engine. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.TAKE_IN_CASE  IS 'Take in case notes. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_DET.ID_CDR_CALL  IS 'Rule engine call identifier';
+/
+-- CHANGE END: Sofia Mendes

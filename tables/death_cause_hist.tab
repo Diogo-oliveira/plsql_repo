@@ -1,0 +1,68 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:20
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+CREATE TABLE death_cause_hist (
+       id_death_cause_hist    NUMBER(24) NOT NULL,
+       id_death_registry_hist NUMBER(24) NOT NULL,
+       --
+       id_death_cause         NUMBER(24) NOT NULL,
+       id_death_registry      NUMBER(24) NOT NULL,
+       id_epis_diagnosis      NUMBER(24) NOT NULL,
+       death_cause_rank       NUMBER(2) NOT NULL,
+       --
+       create_user            VARCHAR2(24 CHAR),
+       create_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution     NUMBER(24),
+       update_user            VARCHAR2(24 CHAR),
+       update_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution     NUMBER(24)
+);
+
+--
+
+COMMENT ON TABLE death_cause_hist IS 'Table for death causes registries history';
+--
+COMMENT ON COLUMN death_cause_hist.id_death_cause_hist    IS 'Death cause registry history Id';
+COMMENT ON COLUMN death_cause_hist.id_death_registry_hist IS 'Death registry history Id';
+--
+COMMENT ON COLUMN death_cause_hist.id_death_cause         IS 'Death cause Id';
+COMMENT ON COLUMN death_cause_hist.id_death_registry      IS 'Death registry Id';
+COMMENT ON COLUMN death_cause_hist.id_epis_diagnosis      IS 'Id of the death cause diagnosis registry';
+COMMENT ON COLUMN death_cause_hist.death_cause_rank       IS 'Death cause rank';
+--
+COMMENT ON COLUMN death_cause_hist.create_user            IS 'Professional that created the registry';
+COMMENT ON COLUMN death_cause_hist.create_time            IS 'Date of the registry creation';
+COMMENT ON COLUMN death_cause_hist.create_institution     IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN death_cause_hist.update_user            IS 'Last professional that updated the registry';
+COMMENT ON COLUMN death_cause_hist.update_time            IS 'Date of the last update to the registry';
+COMMENT ON COLUMN death_cause_hist.update_institution     IS 'Id of the last institution where the registry was updated';
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:20
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE death_cause_hist MOVE TABLESPACE table_m;
+--
+-- CHANGE END: Filipe Machado
+
+--
+ALTER TABLE death_cause_hist ADD id_diagnosis NUMBER(24) default -1;
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 31/08/2017 12:37
+-- CHANGE REASON: [ALERT-332716 ] NOM024 - Additional needs related to guide "Muertes Generales" - Death Diagnosis
+--                
+alter table DEATH_CAUSE_HIST add id_diag_inst_owner  NUMBER(24) default 0;
+alter table DEATH_CAUSE_HIST add id_alert_diagnosis  NUMBER(24);
+alter table DEATH_CAUSE_HIST add id_adiag_inst_owner NUMBER(24) default 0;
+-- Add comments to the columns 
+comment on column DEATH_CAUSE_HIST.id_diag_inst_owner
+  is 'Institution owner of the concept. Default 0 - ALERT';
+comment on column DEATH_CAUSE_HIST.id_alert_diagnosis
+  is 'ALERT_DIAGNOSIS ID for synonym association';
+comment on column DEATH_CAUSE_HIST.id_adiag_inst_owner
+  is 'Institution owner of the concept. Default 0 - ALERT';
+  
+-- CHANGE END: Elisabete Bugalho

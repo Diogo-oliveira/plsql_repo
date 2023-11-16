@@ -1,0 +1,22 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 10/05/2011 23:48
+-- CHANGE REASON: [ALERT-178077] Order recurrence job enabling
+DECLARE
+    e_fk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_exists, -02275); -- such a referential constraint already exists in the table
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ORDER_RECURR_CONTROL ADD (CONSTRAINT ORCC_ORCA_FK FOREIGN KEY (ID_ORDER_RECURR_AREA) REFERENCES ORDER_RECURR_AREA (ID_ORDER_RECURR_AREA))';
+    EXCEPTION
+        WHEN e_fk_already_exists THEN
+            dbms_output.put_line('foreign key ORCC_ORCA_FK already exists');   
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ORDER_RECURR_CONTROL ADD (CONSTRAINT ORCC_ORCPL_FK FOREIGN KEY (ID_ORDER_RECURR_PLAN) REFERENCES ORDER_RECURR_PLAN (ID_ORDER_RECURR_PLAN))';
+    EXCEPTION
+        WHEN e_fk_already_exists THEN
+            dbms_output.put_line('foreign key ORCC_ORCPL_FK already exists');   
+    END;
+END;
+/
+-- CHANGE END: Carlos Loureiro

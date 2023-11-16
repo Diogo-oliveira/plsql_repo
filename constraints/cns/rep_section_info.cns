@@ -1,0 +1,38 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 15/01/2010 08:22
+-- CHANGE REASON: [ALERT-67475] [REPLICATION]: Suitable report for discharge prescription
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE rep_section_info ADD CONSTRAINT RSNI_PK PRIMARY KEY (id_reports, id_rep_section, id_software, id_institution, id_market) ENABLE';
+    EXCEPTION
+        WHEN OTHERS THEN
+            NULL;
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table rep_section_info
+add constraint RSNI_FLG_TYPE_CHK
+check (FLG_TYPE IN (''V'', ''E'', ''P''))';
+    EXCEPTION
+        WHEN OTHERS THEN
+            NULL;
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 19/01/2010 10:05
+-- CHANGE REASON: [ALERT-67475] [REPLICATION]: Suitable report for discharge prescription
+BEGIN
+    BEGIN
+    EXECUTE IMMEDIATE 'alter table rep_section_info drop constraint RSNI_FLG_TYPE_CHK';
+        EXECUTE IMMEDIATE 'alter table rep_section_info
+add constraint RSNI_FLG_TYPE_CHK
+check (FLG_TYPE IN (''V'', ''E'', ''P'', ''A''))';
+    EXCEPTION
+        WHEN OTHERS THEN
+            NULL;
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

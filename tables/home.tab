@@ -1,0 +1,358 @@
+
+
+  CREATE TABLE HOME
+   (	ID_HOME NUMBER(24,0) NOT NULL ENABLE,
+	ID_PAT_FAMILY NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_REGISTRY DATE NOT NULL ENABLE,
+	NUM_ROOMS NUMBER(2,0),
+	NUM_BEDROOMS NUMBER(2,0),
+	NUM_PERSON_ROOM NUMBER(2,0),
+	FLG_WC_TYPE VARCHAR2(1),
+	FLG_WC_LOCATION VARCHAR2(1),
+	FLG_WC_OUT VARCHAR2(1),
+	FLG_WATER_DISTRIB VARCHAR2(1),
+
+	FLG_WATER_ORIGIN VARCHAR2(1),
+	FLG_CONSERV VARCHAR2(1),
+	FLG_OWNER VARCHAR2(1),
+	FLG_HAB_TYPE VARCHAR2(1),
+	FLG_LIGHT VARCHAR2(1),
+	FLG_HEAT VARCHAR2(1),
+	ARQUITECT_BARRIER VARCHAR2(4000)
+   );
+
+
+COMMENT ON TABLE home IS 'Condições habitacionais' ;
+
+COMMENT ON COLUMN home.id_pat_family IS 'Chave primaria' ;
+COMMENT ON COLUMN home.num_rooms IS 'Nº de divisões da casa' ;
+COMMENT ON COLUMN home.num_bedrooms IS 'Nº de quartos' ;
+COMMENT ON COLUMN home.num_person_room IS 'Nº de pessoas por quarto' ;
+COMMENT ON COLUMN home.flg_wc_type IS 'C - completo, I - incompleto, N - não tem' ;
+COMMENT ON COLUMN home.flg_wc_location IS 'H - na habitação, F - fora da habitação, N - inexistente' ;
+COMMENT ON COLUMN home.flg_wc_out IS 'Modo de lançamento no exterior: R - rede pública, F - fossa séptica, O - outro, N - nenhum' ;
+COMMENT ON COLUMN home.flg_water_distrib IS 'D - domiciliária, T - torneira no quintal, F - fontanário (< 100m de casa), M - fontanário (> 100m de casa)' ;
+COMMENT ON COLUMN home.flg_water_origin IS 'P - pública, S - semi-pública, T - particular' ;
+COMMENT ON COLUMN home.flg_conserv IS 'B - bom, D - degradado, R - razoável,' ;
+COMMENT ON COLUMN home.flg_owner IS 'A - arrendada, C - cedida, F - família, P - própria, O - outro' ;
+COMMENT ON COLUMN home.flg_hab_type IS 'A - andar, Q - quarto, B - barraca, C - abarracada, R - rural, T - tradicional, V - vivenda, U - urbana, S - sem abrigo' ;
+COMMENT ON COLUMN home.flg_light IS 'Existência de luz' ;
+
+COMMENT ON COLUMN home.flg_heat IS 'C-  central, L - local, N - nenhum' ;
+COMMENT ON COLUMN home.arquitect_barrier IS 'Barreiras arquitectónicas' ;
+
+alter table home
+add (dt_registry_tstz timestamp with local time zone); 
+
+alter table home
+add (flg_hab_location varchar2(1));
+
+comment on column home.flg_hab_location is 'Zona de habitação: (R)ural, (S)uburbana ou (U)rbana';
+
+
+alter table home
+add (notes varchar2(4000));
+
+comment on column home.notes is 'Notas';
+
+
+
+-- Alert Data Governance - 22-Sep-2008
+alter table HOME
+drop column dt_registry;
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 23/03/2010 09:41
+-- CHANGE REASON: [ALERT-69945] 
+ALTER TABLE HOME ADD (FLG_STATUS VARCHAR2(1 CHAR));
+comment on column HOME.FLG_STATUS
+  is 'Flag status - values: A - active, C - canceled';
+
+ALTER TABLE HOME ADD (ID_CANCEL_INFO_DET NUMBER(24));
+--
+comment on column HOME.ID_CANCEL_INFO_DET
+  is 'Cancel information details.';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 22/09/2011 09:03
+-- CHANGE REASON: [ALERT-192572] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add flg_water_treatment varchar2(5 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add flg_garbage_dest varchar2(5 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FLG_BATH varchar2(5 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FT_BATH varchar2(1000 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FT_WC_TYPE varchar2(1000 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FT_WC_LOCATION varchar2(1000 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FT_WC_OUT varchar2(1000 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FT_WATER_DISTRIB varchar2(1000 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FT_WATER_ORIGIN varchar2(1000 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FT_CONSERV varchar2(1000 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FT_OWNER varchar2(1000 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FT_GARBAGE_DEST varchar2(1000 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FT_HAB_TYPE varchar2(1000 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FT_WATER_TREATMENT varchar2(1000 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FT_LIGHT varchar2(1000 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FT_HEAT varchar2(1000 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home add FT_HAB_LOCATION varchar2(1000 char) null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+
+COMMENT ON column home.flg_water_treatment IS 'water treatment flag';
+COMMENT ON column home.flg_garbage_dest IS 'garbage destination flag';
+COMMENT ON column home.flg_bath IS 'bathtub flag';
+COMMENT ON column home.ft_bath IS 'free text bath';
+COMMENT ON column home.ft_wc_type IS 'WC_TYPE free text';
+COMMENT ON column home.ft_wc_location IS 'WC_LOCATION free text';
+COMMENT ON column home.ft_wc_out IS 'WC_OUT free text';
+COMMENT ON column home.ft_water_distrib IS 'WATER_DISTRIB free text';
+COMMENT ON column home.ft_water_origin IS 'WATER_ORIGIN free text';
+COMMENT ON column home.ft_conserv IS 'CONSERV free text';
+COMMENT ON column home.ft_owner IS 'OWNER free text';
+COMMENT ON column home.ft_hab_type IS 'HAB_TYPE free text';
+COMMENT ON column home.ft_light IS 'LIGHT free text';
+COMMENT ON column home.ft_heat IS 'HEAT free text';
+COMMENT ON column home.ft_hab_location IS 'HAB_LOCATION free text';
+COMMENT ON column home.ft_water_treatment IS 'WATER_TREATMENT free text';
+COMMENT ON column home.ft_garbage_dest IS 'GARBAGE_DEST free text';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 08/05/2013 16:04
+-- CHANGE REASON: [ALERT-257537] 
+alter table home modify FLG_WC_TYPE varchar2(5 char) ;
+alter table home modify FLG_WC_LOCATION varchar2(5 char);
+alter table home modify FLG_WC_OUT varchar2(5 char);
+alter table home modify FLG_WATER_DISTRIB varchar2(5 char);
+alter table home modify FLG_WATER_ORIGIN varchar2(5 char);
+alter table home modify FLG_CONSERV varchar2(5 char);
+alter table home modify FLG_OWNER varchar2(5 char);
+alter table home modify FLG_HAB_TYPE varchar2(5 char);
+alter table home modify FLG_LIGHT varchar2(5 char);
+alter table home modify FLG_HEAT varchar2(5 char);
+alter table home modify flg_hab_location varchar2(5 char);
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 09/05/2013 16:35
+-- CHANGE REASON: [ALERT-257537] 
+ALTER TABLE HOME DROP CONSTRAINT HOME_WATER_ORIGIN;
+ALTER TABLE HOME DROP CONSTRAINT HOME_OWNER;
+ALTER TABLE HOME DROP CONSTRAINT HOME_HAB_TYPE;
+ALTER TABLE HOME DROP CONSTRAINT HOME_WC_LOCATION;
+
+alter table HOME add constraint HOME_WATER_ORIGIN
+check (FLG_WATER_ORIGIN IN ('E','I','N','O','P','S','T', 'EP', 'R', 'SP', 'C'));
+   
+alter table HOME add constraint HOME_WC_LOCATION
+check (flg_wc_location IN ('H', 'F', 'N', 'FS', 'PN', 'A', 'Q', 'S', 'O') or flg_wc_location is null);
+ 
+alter table HOME add constraint HOME_OWNER
+check (fLG_OWNER IN ('A','C','D','F','O','P', 'PR', 'CP', 'AR', 'U', 'T'));
+ 
+alter table HOME add constraint HOME_HAB_TYPE
+check (fLG_HAB_TYPE IN ('A','B','C','D','E','F','G','H','I','J','K','M','N','O','Q','R','S','T','U','V', 'VC', 'CC', 'HO', 'RS', 'CR', 'P', 'MA', 'DE', 'CS'));
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table HOME modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table HOME modify NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table HOME modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table HOME modify ARQUITECT_BARRIER varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:49
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table HOME
+  is 'housing conditions';
+-- Add comments to the columns 
+comment on column HOME.id_home
+  is 'Primary Key';
+comment on column HOME.id_pat_family
+  is 'Household ID';
+comment on column HOME.id_professional
+  is 'Professional ID';
+comment on column HOME.num_rooms
+  is 'Number of divisions';
+comment on column HOME.num_bedrooms
+  is 'Number of rooms ';
+comment on column HOME.num_person_room
+  is 'Number of people per room';
+comment on column HOME.flg_wc_type
+  is 'Type of bathroom (SYS_DOMAIN HOME.FLG_WC_TYPE)';
+comment on column HOME.flg_wc_location
+  is 'Location of bathroom  (SYS_DOMAIN HOME.FT_WC_LOCATION)';
+comment on column HOME.flg_wc_out
+  is 'Sewer system (SYS_DOMAIN HOME.FLG_WC_OUT)';
+comment on column HOME.flg_water_distrib
+  is 'Running water in home (SYS_DOMAIN HOME.FLG_WATER_DISTRIB)';
+comment on column HOME.flg_water_origin
+  is 'Water source (SYS_DOMAIN HOME.FLG_WATER_ORIGIN)';
+comment on column HOME.flg_conserv
+  is 'Living conditions (SYS_DOMAIN HOME.FLG_CONSERV)';
+comment on column HOME.flg_owner
+  is 'Ownership (SYS_DOMAIN HOME.FLG_OWNER)';
+comment on column HOME.flg_hab_type
+  is 'Type of housing (SYS_DOMAIN HOME.FLG_HAB_TYPE)';
+comment on column HOME.flg_light
+  is 'Electricity (SYS_DOMAIN HOME.FLG_LIGHT)';
+comment on column HOME.flg_heat
+  is 'Heating (SYS_DOMAIN HOME.FLG_HEAT)';
+comment on column HOME.arquitect_barrier
+  is 'Barriers';
+comment on column HOME.dt_registry_tstz
+  is 'Registry date';
+comment on column HOME.flg_hab_location
+  is 'Housing area  (SYS_DOMAIN HOME.FLG_HAB_LOCATION)';
+comment on column HOME.notes
+  is 'Notes';
+comment on column HOME.flg_water_treatment
+  is 'Water treatment (sys_domain HOME.FLG_WATER_TREATMENT)';
+comment on column HOME.flg_garbage_dest
+  is 'Garbage disposal (SYS_DOMAIN  HOME.FLG_GARBAGE_DEST)';
+comment on column HOME.flg_bath
+  is 'Bathroom facilities (SYS_DOMAIN HOME.FLG_BATH)';
+comment on column HOME.ft_bath
+  is 'Bathroom facilities  in free text';
+comment on column HOME.ft_wc_type
+  is 'Type of bathroom in  free text';
+comment on column HOME.ft_wc_location
+  is 'Location of bathroom in free text';
+comment on column HOME.ft_wc_out
+  is 'Sewer system in  free text';
+comment on column HOME.ft_water_distrib
+  is 'Running water in home in  free text';
+comment on column HOME.ft_water_origin
+  is 'Water source in  free text';
+comment on column HOME.ft_conserv
+  is 'Living conditions  in  free text';
+comment on column HOME.ft_owner
+  is 'Ownership in free text';
+comment on column HOME.ft_garbage_dest
+  is 'Garbage disposal in  free text';
+comment on column HOME.ft_hab_type
+  is 'Type of housing in  free text';
+comment on column HOME.ft_water_treatment
+  is 'Water treatment in  free text';
+comment on column HOME.ft_light
+  is 'Electricity in  free text';
+comment on column HOME.ft_heat
+  is 'Heating in free text';
+comment on column HOME.ft_hab_location
+  is 'Housing area in  free text';
+  
+-- CHANGE END: Elisabete Bugalho

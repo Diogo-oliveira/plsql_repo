@@ -1,0 +1,8 @@
+CREATE OR REPLACE TYPE TR_MED_TASKS AS OBJECT (
+  id_drug     VARCHAR2(255),
+  desc_status VARCHAR2(4000),
+  last_date   TIMESTAMP WITH LOCAL TIME ZONE,
+  dt_begin    TIMESTAMP WITH LOCAL TIME ZONE,
+  desc_drug   VARCHAR2(4000)
+)
+/

@@ -1,0 +1,89 @@
+
+  CREATE TABLE GUIDELINE_PROCESS_TASK
+   (	ID_GUIDELINE_PROCESS_TASK NUMBER(24,0) NOT NULL ENABLE,
+	ID_GUIDELINE_PROCESS NUMBER(24,0) NOT NULL ENABLE,
+	ID_TASK NUMBER(24,0),
+	TASK_TYPE NUMBER(24,0),
+	ID_REQUEST NUMBER(24,0),
+	DT_REQUEST DATE,
+	FLG_STATUS_LAST VARCHAR2(1),
+	DT_STATUS_LAST DATE
+   );
+
+COMMENT ON COLUMN guideline_process_task.id_guideline_process_task IS 'ID of process task' ;
+COMMENT ON COLUMN guideline_process_task.id_guideline_process IS 'ID of rpocess to whicg this task is linked' ;
+COMMENT ON COLUMN guideline_process_task.id_task IS 'ID of task to be executed' ;
+COMMENT ON COLUMN guideline_process_task.task_type IS 'Type of task to be executed' ;
+COMMENT ON COLUMN guideline_process_task.id_request IS 'ID of request returned for this task' ;
+COMMENT ON COLUMN guideline_process_task.dt_request IS 'Date of request' ;
+COMMENT ON COLUMN guideline_process_task.flg_status_last IS 'Status of task: done / interrupted / canceled / to be executed / being executed' ;
+COMMENT ON COLUMN guideline_process_task.dt_status_last IS 'Date when status changed the last time' ;
+
+ALTER TABLE GUIDELINE_PROCESS_TASK ADD TASK_NOTES VARCHAR2(4000);
+COMMENT ON COLUMN GUIDELINE_PROCESS_TASK.TASK_NOTES IS 'Notes of task to be executed';
+
+alter table GUIDELINE_PROCESS_TASK modify task_type not null;
+
+alter table guideline_process_task modify (dt_request timestamp with local time zone,
+									dt_status_last timestamp with local time zone);
+									
+alter table guideline_process_task add id_task_attach number(24);
+COMMENT ON COLUMN guideline_process_task.id_task_attach IS 'Auxiliary ID associated to task' ;
+
+ALTER TABLE GUIDELINE_PROCESS_TASK ADD (ID_PROFESSIONAL NUMBER(24));
+COMMENT ON COLUMN GUIDELINE_PROCESS_TASK.ID_PROFESSIONAL IS 'ID of the professional responsible for changing state of the guideline';
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 05/11/2009 19:56
+-- CHANGE REASON: [ALERT-54623] 
+alter table GUIDELINE_PROCESS_TASK add task_codification number(24);
+comment on column GUIDELINE_PROCESS_TASK.task_codification is 'Task codification ID';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 28/03/2011 09:23
+-- CHANGE REASON: [ALERT-168339] Insert constraints for flag_status columns defined in sys_domain
+comment on column GUIDELINE_PROCESS_TASK.FLG_STATUS_LAST is 'Guideline process task status:
+H - scheduled
+C - cancelled
+F - finished
+E - in progress
+I - discontinued
+P - pending
+R - recommended
+S - on hold
+O - closed';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 15/04/2011 11:24
+-- CHANGE REASON: [ALERT-173333] Cancel reason for Guidelines, Protocols, Order Sets and CPOE
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); --  column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table GUIDELINE_PROCESS_TASK add ID_CANCEL_REASON number(24)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        NULL;
+END;
+/
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); --  column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table GUIDELINE_PROCESS_TASK add CANCEL_NOTES varchar2(1000 char)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        NULL;
+END;
+/
+comment on column GUIDELINE_PROCESS_TASK.ID_CANCEL_REASON is 'Cancel reason ID';
+comment on column GUIDELINE_PROCESS_TASK.CANCEL_NOTES is 'Cancel notes';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 10:00
+-- CHANGE REASON: [ALERT-317912] 
+comment on table GUIDELINE_PROCESS_TASK is 'Guidelines process task';
+-- CHANGE END: Ana Matos

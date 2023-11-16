@@ -1,0 +1,6 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 02/12/2009 21:11
+-- CHANGE REASON: [PIX-341] HIE XDS Content Creator module in Alert
+GRANT EXECUTE ON PK_UX_HIE_XDS TO ALERT_VIEWER;
+    
+-- CHANGE END: Ariel Machado

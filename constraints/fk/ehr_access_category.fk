@@ -1,0 +1,26 @@
+ALTER TABLE EHR_ACCESS_CATEGORY ADD (CONSTRAINT
+ EAY_CAY_FK FOREIGN KEY 
+  (ID_CATEGORY) REFERENCES CATEGORY
+  (ID_CATEGORY));
+
+ALTER TABLE EHR_ACCESS_CATEGORY ADD (CONSTRAINT
+ EAY_INN_FK FOREIGN KEY 
+  (ID_INSTITUTION) REFERENCES INSTITUTION
+  (ID_INSTITUTION));
+
+
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 24/03/2010 11:33
+-- CHANGE REASON: [ALERT-83122] 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ehr_access_category ADD CONSTRAINT eay_sof_fk FOREIGN KEY (id_software) REFERENCES software (id_software)';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Paulo Teixeira

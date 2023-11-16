@@ -1,0 +1,46 @@
+-- Create table
+create table DRUG_POSOLOGIA
+(
+  ID_DRUG_POSOLOGIA   NUMBER(24) not null,
+  FLG_TYPE            VARCHAR2(1) not null,
+  DESC_FREQ           VARCHAR2(200),
+  DESC_DURA           VARCHAR2(200),
+  ID_UNIT_MEASURE     NUMBER(24),
+  CODE_DRUG_POSOLOGIA VARCHAR2(200) not null,
+  FLG_AVAILABLE       VARCHAR2(1) not null,
+  QTY                 NUMBER(6) not null,
+  ADW_LAST_UPDATE     DATE
+);
+
+-- Add comments to the table 
+comment on table DRUG_POSOLOGIA
+  is 'Parametrização dos descritivos de frequência e duração da posologia presentes na medicação para a receita do hospital.';
+-- Add comments to the columns 
+comment on column DRUG_POSOLOGIA.FLG_TYPE
+  is 'Tipo de descritivo: F (de frequência) e D (de duração)';
+comment on column DRUG_POSOLOGIA.DESC_FREQ
+  is 'Descritivo da frequência presente na posologia, se FLG_TYPE é F';
+comment on column DRUG_POSOLOGIA.DESC_DURA
+  is 'Descritivo da duração presente na posologia, se FLG_TYPE é D';
+comment on column DRUG_POSOLOGIA.QTY
+  is 'Quantidade a considerar ';
+comment on column DRUG_POSOLOGIA.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+
+
+-- Patrícia Neto
+-- 13-09-2007
+alter table drug_posologia
+DROP COLUMN DESC_FREQ;
+
+alter table drug_posologia
+DROP COLUMN DESC_DURA;
+
+ALTER TABLE drug_posologia
+ADD (DESCR VARCHAR2(200));
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:36
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_POSOLOGIA IS 'Parametrização dos descritivos de frequência e duração da posologia presentes na medicação para a receita do hospital. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

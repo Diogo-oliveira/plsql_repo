@@ -1,0 +1,91 @@
+CREATE TABLE DATA_GOV_EVENT (
+       ID_DATA_GOV_EVENT NUMBER(24) NOT NULL,
+       DG_TABLE_NAME        VARCHAR2(200) NOT NULL,
+			 SOURCE_TABLE_NAME    VARCHAR2(200) NOT NULL,
+			 SOURCE_COLUMN_NAME   VARCHAR2(200),
+       FLG_ENABLED          VARCHAR2(1) NOT NULL,
+       FLG_BACKGROUND       VARCHAR2(1) NOT NULL,
+       EXEC_PROCEDURE       VARCHAR2(200) NOT NULL,
+       EXEC_ORDER           NUMBER(24) NOT NULL,
+       ID_SOFTWARE          NUMBER(24) NOT NULL
+);
+
+COMMENT ON TABLE DATA_GOV_EVENT IS 'Stores Data Governance maintenance events configuration.';
+COMMENT ON COLUMN DATA_GOV_EVENT.DG_TABLE_NAME IS 'Data Governance table that will be modified after processing this event';
+COMMENT ON COLUMN DATA_GOV_EVENT.SOURCE_TABLE_NAME IS 'Source table that was modified in order to launch this event';
+COMMENT ON COLUMN DATA_GOV_EVENT.SOURCE_COLUMN_NAME IS 'Column on the source table that was modified and triggered this event. A NULL value means that event refers to more than one column';
+COMMENT ON COLUMN DATA_GOV_EVENT.FLG_ENABLED IS 'Whether or not ';
+
+
+COMMENT ON TABLE DATA_GOV_EVENT IS 'Stores Data Governance maintenance events configuration.';
+COMMENT ON COLUMN DATA_GOV_EVENT.DG_TABLE_NAME IS 'Data Governance table that will be modified after processing this event';
+COMMENT ON COLUMN DATA_GOV_EVENT.SOURCE_TABLE_NAME IS 'Source table that was modified in order to launch this event';
+COMMENT ON COLUMN DATA_GOV_EVENT.SOURCE_COLUMN_NAME IS 'Column on the source table that was modified and triggered this event. A NULL value means that event refers to more than one column';
+COMMENT ON COLUMN DATA_GOV_EVENT.FLG_ENABLED IS 'Whether or not this event is enabled';
+COMMENT ON COLUMN DATA_GOV_EVENT.ID_DATA_GOV_EVENT IS 'Generated primary key';
+COMMENT ON COLUMN DATA_GOV_EVENT.FLG_BACKGROUND IS 'Whether or not should this event''s procedure be executed on background';
+COMMENT ON COLUMN DATA_GOV_EVENT.EXEC_PROCEDURE IS 'Procedure to be executed when the event is triggered';
+COMMENT ON COLUMN DATA_GOV_EVENT.EXEC_ORDER IS 'Execution order';
+COMMENT ON COLUMN DATA_GOV_EVENT.ID_SOFTWARE IS 'Software identifier';
+
+BEGIN
+    pk_versioning.run('alter table data_gov_event add (flg_IUD varchar2(3 CHAR) default (''IUD'') not null )');
+
+    pk_versioning.run('comment on column DATA_GOV_EVENT.flg_IUD is ''I(nsert), U(pdate) and D(elete) flag. Any combination is allowed''');
+
+    pk_versioning.run('alter table DATA_GOV_EVENT add constraint DGE_IUD_CK check (flg_IUD IN (''I'',''U'',''D'',''IU'',''ID'',''UD'',''IUD''))');
+END;
+
+
+-- cmf 24-01-2013
+declare
+l_sql	varchar2(4000);
+begin
+l_sql := 'alter table data_gov_event add DG_OWNER     VARCHAR2(0030 char)';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+l_sql	varchar2(4000);
+begin
+l_sql := 'alter table data_gov_event add SOURCE_OWNER VARCHAR2(0030 char)';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+pl		varchar2(0010 char ) := '''';
+l_sql  varchar2(4000);
+begin
+l_sql := 'COMMENT ON column data_gov_event.DG_OWNER     IS '||pl||'Schema of target table.'||pl;
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+pl		varchar2(0010 char ) := '''';
+l_sql	varchar2(4000);
+begin
+l_sql := 'COMMENT ON column data_gov_event.SOURCE_OWNER IS '||pl||'Schema of source table.'||pl;
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+pl		varchar2(0010 char ) := '''';
+l_sql	varchar2(4000);
+begin
+l_sql := 'alter table DATA_GOV_EVENT   add constraint       DGE_DG_OWNER_CK   check (DG_OWNER     IS NOT NULL )';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+pl		varchar2(0010 char ) := '''';
+l_sql	varchar2(4000);
+begin
+l_sql := 'alter table DATA_GOV_EVENT   add constraint       DGE_SRC_OWNER_CK  check (SOURCE_OWNER IS NOT NULL )';
+pk_versioning.run( l_sql );
+end;
+/

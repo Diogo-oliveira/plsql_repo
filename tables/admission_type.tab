@@ -1,0 +1,119 @@
+  CREATE TABLE ADMISSION_TYPE
+   (	ID_ADMISSION_TYPE NUMBER(24),
+	INTERNAL_NAME VARCHAR2(40),
+	ID_CONTENT VARCHAR2(200),
+	FLG_AVAILABLE VARCHAR2(1),
+	CODE_ADMISSION_TYPE VARCHAR2(400),
+	MAX_ADMISSION_TIME NUMBER(3),
+	CREATE_USER VARCHAR2(24),
+	CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	CREATE_INSTITUTION NUMBER(24),
+	UPDATE_USER VARCHAR2(24),
+	UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	UPDATE_INSTITUTION NUMBER(24)
+   ) ;
+
+
+
+   COMMENT ON COLUMN ADMISSION_TYPE.ID_ADMISSION_TYPE IS 'Admission type primary key';
+
+
+
+   COMMENT ON COLUMN ADMISSION_TYPE.INTERNAL_NAME IS 'Internal name for this admission type';
+
+
+
+   COMMENT ON COLUMN ADMISSION_TYPE.ID_CONTENT IS 'ID used for content';
+
+
+
+   COMMENT ON COLUMN ADMISSION_TYPE.FLG_AVAILABLE IS 'Flag that indicates if this record is available (''Y''/''N'')';
+
+
+
+   COMMENT ON COLUMN ADMISSION_TYPE.CODE_ADMISSION_TYPE IS 'Code used for translation';
+
+
+
+   COMMENT ON COLUMN ADMISSION_TYPE.MAX_ADMISSION_TIME IS 'Maximum admission time in hours';
+
+
+
+   COMMENT ON TABLE ADMISSION_TYPE  IS 'Admission type of a department';
+	 
+	 ALTER TABLE admission_type add(id_institution NUMBER(24));
+   COMMENT ON column admission_type.id_institution IS 'Institution ID';
+   ALTER TABLE admission_type drop column internal_name;
+   ALTER TABLE admission_type drop column id_content;
+
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/06/2010 14:24
+-- CHANGE REASON: [ALERT-105487] 
+ALTER TABLE ADMISSION_TYPE ADD 
+(
+flg_status VARCHAR2(1 CHAR),
+flg_parameterization_type VARCHAR2(1 CHAR) default 'C',
+id_professional NUMBER(24),
+dt_creation TIMESTAMP WITH LOCAL TIME ZONE,
+dt_last_update TIMESTAMP WITH LOCAL TIME ZONE,
+desc_admission_type VARCHAR2(1000 CHAR)
+);
+
+COMMENT ON COLUMN ADMISSION_TYPE.flg_status IS 'Status of this data: A - active, E - edited, C - canceled.';
+COMMENT ON COLUMN ADMISSION_TYPE.flg_parameterization_type IS 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+COMMENT ON COLUMN ADMISSION_TYPE.id_professional IS 'Id professional that creates the data, when using backoffice.';
+COMMENT ON COLUMN ADMISSION_TYPE.dt_creation IS 'Creation date.';
+COMMENT ON COLUMN ADMISSION_TYPE.dt_last_update IS 'Last date when this data was updated.';
+COMMENT ON COLUMN ADMISSION_TYPE.desc_admission_type IS 'Admission type description.';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 16/07/2010 12:12
+-- CHANGE REASON: [ALERT-112517] 
+alter table admission_type modify code_admission_type null;
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:42
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table ADMISSION_TYPE
+  is 'Admission type of a department';
+-- Add comments to the columns 
+comment on column ADMISSION_TYPE.id_admission_type
+  is 'Admission type primary key';
+comment on column ADMISSION_TYPE.flg_available
+  is 'Flag that indicates if this record is available (''Y''/''N'')';
+comment on column ADMISSION_TYPE.code_admission_type
+  is 'Code used for translation';
+comment on column ADMISSION_TYPE.max_admission_time
+  is 'Maximum admission time in hours';
+comment on column ADMISSION_TYPE.create_user
+  is 'Create User';
+comment on column ADMISSION_TYPE.create_time
+  is 'Create Time';
+comment on column ADMISSION_TYPE.create_institution
+  is 'Create Institution';
+comment on column ADMISSION_TYPE.update_user
+  is 'Update User';
+comment on column ADMISSION_TYPE.update_time
+  is 'Update Time';
+comment on column ADMISSION_TYPE.update_institution
+  is 'Update Institution';
+comment on column ADMISSION_TYPE.id_institution
+  is 'Institution IDentifier';
+comment on column ADMISSION_TYPE.flg_status
+  is 'Status of this data: A - active, E - edited, C - canceled.';
+comment on column ADMISSION_TYPE.flg_parameterization_type
+  is 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+comment on column ADMISSION_TYPE.id_professional
+  is 'Id professional that creates the data, when using backoffice.';
+comment on column ADMISSION_TYPE.dt_creation
+  is 'Creation date.';
+comment on column ADMISSION_TYPE.dt_last_update
+  is 'Last date when this data was updated.';
+comment on column ADMISSION_TYPE.desc_admission_type
+  is 'Admission type description.';
+  
+-- CHANGE END: Pedro Fernandes

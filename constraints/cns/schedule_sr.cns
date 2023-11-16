@@ -1,0 +1,62 @@
+
+
+  ALTER TABLE SCHEDULE_SR ADD CONSTRAINT SR_SCHED_PK PRIMARY KEY (ID_SCHEDULE_SR) ENABLE;
+
+  ALTER TABLE SCHEDULE_SR MODIFY (ID_SCHEDULE_SR NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE_SR MODIFY (ID_PATIENT NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE_SR MODIFY (FLG_STATUS NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE_SR MODIFY (FLG_SCHED NOT NULL ENABLE);
+
+  ALTER TABLE SCHEDULE_SR MODIFY (ID_INSTITUTION NOT NULL ENABLE);
+
+
+  ALTER TABLE SCHEDULE_SR MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+  
+  -- alert-25876 Pedro Santos
+  ALTER TABLE "SCHEDULE_SR" ADD CONSTRAINT "SCHR_ICU_CHK" CHECK (ICU IN ('Y', 'N')) ENABLE;
+ALTER TABLE "SCHEDULE_SR" ADD CONSTRAINT "SCHR_ADM_NEEDED_CHK" CHECK (ICU IN ('Y', 'N')) ENABLE;
+
+
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 30-04-2009
+-- CHANGE REASON: agenda ORIS
+alter table schedule_sr
+add constraint SCHSR_FLGTEMP_CHK check(FLG_TEMPORARY in ('Y', 'N'));
+--END
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 13-10-2010
+-- CHANGE REASON: ALERT-148846
+begin
+  execute immediate 'alter table alert.schedule_sr add constraint SR_FLG_STATUS_CHK check (flg_status IN (''A'', ''C'', ''I''))';
+exception
+when others then null;
+end;
+/
+
+begin
+  execute immediate 'alter table alert.schedule_sr add constraint SR_FLG_SCHED_CHK check (flg_sched IN (''A'', ''N''))';
+exception
+when others then null;
+end;
+/
+
+begin
+  execute immediate 'alter table alert.schedule_sr add constraint SR_FLG_DUR_CON_CHK check (flg_dur_control IN (''Y'', ''N''))';
+exception
+when others then null;
+end;
+/
+
+begin
+  execute immediate 'alter table alert.SCHEDULE_SR drop constraint SCHR_ADM_NEEDED_CHK';
+  execute immediate 'ALTER TABLE alert.SCHEDULE_SR ADD CONSTRAINT SCHR_ADM_NEEDED_CHK CHECK (adm_needed IN (''Y'', ''N'')) ENABLE';
+exception
+when others then null;
+end;
+/
+-- CHANGE END: Telmo

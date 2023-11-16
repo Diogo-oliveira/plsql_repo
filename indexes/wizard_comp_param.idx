@@ -1,0 +1,23 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 23/12/2010 16:32
+-- CHANGE REASON: [ALERT-151846] DB versioning - Tables
+CREATE INDEX WCM_FAV_W_I_R_IDX ON WIZARD_COMP_PARAM(FLG_AVAILABLE,ID_WIZARD,ID_INSTITUTION,RANK) TABLESPACE INDEX_S;
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 19/01/2011 16:46
+-- CHANGE REASON: [ALERT-151846] DB versioning - Tables
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -955);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'CREATE INDEX WCM_FAV_W_I_R_IDX ON WIZARD_COMP_PARAM(FLG_AVAILABLE,ID_WIZARD,ID_INSTITUTION,RANK) TABLESPACE INDEX_S';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

@@ -1,0 +1,2 @@
+grant select on ALERT.EHR_ACCESS_PROFILE_RULE to ALERT_VIEWER;
+

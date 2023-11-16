@@ -1,0 +1,21 @@
+ALTER TABLE REPORTS_INST_SOFT
+ ADD (CONSTRAINT RIT_PK PRIMARY KEY 
+  (ID_REPORTS_INST_SOFT)
+ USING INDEX 
+ TABLESPACE INDEX_M);
+ 
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 2009/06/19 09:55
+-- CHANGE REASON: ALERT-32911 [Change the table REPORTS_INST_SOFT]
+
+-- Create/Recreate check constraints 
+alter table REPORTS_INST_SOFT
+  add constraint CHK_FLG_SHOW_PHOTO
+  check (FLG_SHOW_PHOTO IN ('Y' , 'N')); 
+
+-- Add/modify columns 
+alter table REPORTS_INST_SOFT modify FLG_DIGITAL_SIGNATURE null; 
+
+-- CHANGE END: Filipe Machado  
+ 

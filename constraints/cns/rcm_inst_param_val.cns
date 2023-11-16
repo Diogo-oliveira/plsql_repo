@@ -1,0 +1,23 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/05/2012 11:22
+-- CHANGE REASON: [ALERT-217767] 
+ALTER TABLE RCM_INST_PARAM_VAL
+ ADD (CONSTRAINT RIPL_PK PRIMARY KEY 
+  (ID_RCM_RULE
+  ,ID_RULE_INST
+  ,PARAMETER_NAME
+  ,ID_PARAM_SEQ));
+
+ALTER TABLE RCM_INST_PARAM_VAL
+ ADD (CONSTRAINT RIPL_VAL_CHK CHECK ((CHR_VAL is not null 
+and DTE_VAL is null and NUM_VAL is null and INTERVAL_VAL is null)
+or
+(CHR_VAL is null 
+and DTE_VAL is not null and NUM_VAL is null and INTERVAL_VAL is null)
+or
+(CHR_VAL is null 
+and DTE_VAL is null and NUM_VAL is not null and INTERVAL_VAL is null)
+or
+(CHR_VAL is null 
+and DTE_VAL is null and NUM_VAL is null and INTERVAL_VAL is not null)));
+-- CHANGE END: Ana Monteiro

@@ -1,0 +1,52 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:25
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'CDR_PARAMETER',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'PRM',
+                                             i_flg_alert_default => 'Y',
+                                             i_delete_script     => '',
+                                             i_flg_default_child => 'N');
+END;
+/
+
+create table CDR_PARAMETER
+(
+  id_cdr_parameter   NUMBER(24) not null,
+  id_cdr_def_cond    NUMBER(24) not null,
+  id_cdr_concept     NUMBER(24) not null,
+  rank               NUMBER(6) not null,
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+);
+
+comment on table CDR_PARAMETER
+  is 'Clinical decision rule parameters. A rule condition usually has one or more parameters.';
+
+comment on column CDR_PARAMETER.id_cdr_parameter
+  is 'Primary key.';
+comment on column CDR_PARAMETER.id_cdr_def_cond
+  is 'Rule definition condition identifier.';
+comment on column CDR_PARAMETER.id_cdr_concept
+  is 'Rule concept identifier.';
+comment on column CDR_PARAMETER.rank
+  is 'Rule parameter rank.';
+comment on column CDR_PARAMETER.create_user
+  is 'Creation User';
+comment on column CDR_PARAMETER.create_time
+  is 'Creation Time';
+comment on column CDR_PARAMETER.create_institution
+  is 'Creation Institution';
+comment on column CDR_PARAMETER.update_user
+  is 'Update User';
+comment on column CDR_PARAMETER.update_time
+  is 'Update Time';
+comment on column CDR_PARAMETER.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro

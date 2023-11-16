@@ -1,0 +1,31 @@
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 27/03/2009 17:36
+-- CHANGE REASON: [ALERT-684] Phyisiotherapy evaluation
+CREATE TABLE physiatry_area_template(id_physiatry_area NUMBER(24) NOT NULL,
+                                     id_doc_template NUMBER(24) NOT NULL,
+                                     id_institution NUMBER(24) DEFAULT 0 NOT NULL,
+                                     id_professional NUMBER(24) DEFAULT 0 NOT NULL,
+                                     id_software NUMBER(24) DEFAULT 0 NOT NULL,
+                                     flg_type VARCHAR2(1) NOT NULL,
+                                     flg_status VARCHAR2(1) DEFAULT 'A' NOT NULL,
+                                     flg_total VARCHAR2(1) DEFAULT 'N' NOT NULL,
+                                     rank NUMBER(6));
+COMMENT ON TABLE physiatry_area_template IS 'Relationship between doc area templates and physiatry areas and parametrization.';
+COMMENT ON COLUMN physiatry_area_template.id_physiatry_area IS 'Physiatry area';
+COMMENT ON COLUMN physiatry_area_template.id_doc_template IS 'Documentation template';
+COMMENT ON COLUMN physiatry_area_template.id_institution IS 'Institution specific parametrization (or 0 for all institutions)';
+COMMENT ON COLUMN physiatry_area_template.id_professional IS 'Professional specific parametrization (or 0 for all professionals)';
+COMMENT ON COLUMN physiatry_area_template.id_software IS 'Software specific parametrization (or 0 for all softwares)';
+COMMENT ON COLUMN physiatry_area_template.flg_type IS 'Parametrization type: My ALERT (M) or searchable (P)';
+COMMENT ON COLUMN physiatry_area_template.flg_status IS 'Template parametrization status (Active, Inactive, uNavailable)';
+COMMENT ON COLUMN physiatry_area_template.flg_total IS 'Should numeric values be summed?';
+COMMENT ON COLUMN physiatry_area_template.rank IS 'Order level';
+-- CHANGE END
+
+-- CHANGED BY Joao Martins
+-- CHANGE DATE 2009/07/02
+-- CHANGE REASON ALERT-34460
+alter table physiatry_area_template modify (id_professional number(24) default null null);
+comment on column physiatry_area_template.id_professional is 'Professional specific parametrization (or NULL for all professionals)'
+-- CHANGE END
+

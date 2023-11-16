@@ -1,0 +1,99 @@
+
+
+  CREATE TABLE WL_PATIENT_SONHO_TRANSFERED
+   (	PATIENT_ID NUMBER(24,0),
+	PATIENT_NAME VARCHAR2(200),
+	PATIENT_DT_BIRTH DATE,
+	PATIENT_GENDER VARCHAR2(1),
+	NUM_PROC NUMBER(24,0),
+	CLIN_PROF_ID NUMBER(24,0),
+	CLIN_PROF_NAME VARCHAR2(200),
+	DT_CONSULT DATE,
+	CONSULT_ID NUMBER(24,0),
+	CONSULT_NAME VARCHAR2(200),
+	PROF_ID NUMBER(24,0),
+
+	MACHINE_NAME VARCHAR2(200),
+	ID_INSTITUTION NUMBER(24,0),
+	ID_EPISODE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE wl_patient_sonho_transfered IS 'Tabela onde são guardados os registos resultantes do interface com o Sonho, após tratados do waiting line' ;
+
+COMMENT ON COLUMN wl_patient_sonho_transfered.patient_id IS 'Id do doente no Sonho' ;
+COMMENT ON COLUMN wl_patient_sonho_transfered.patient_name IS 'Nome do doente no Sonho' ;
+COMMENT ON COLUMN wl_patient_sonho_transfered.patient_dt_birth IS 'Data de nascimento do doente no Sonho' ;
+COMMENT ON COLUMN wl_patient_sonho_transfered.patient_gender IS 'Sexo do doente no Sonho' ;
+COMMENT ON COLUMN wl_patient_sonho_transfered.num_proc IS 'Nº do processo' ;
+COMMENT ON COLUMN wl_patient_sonho_transfered.clin_prof_id IS 'Id do médico no Sonho' ;
+COMMENT ON COLUMN wl_patient_sonho_transfered.clin_prof_name IS 'Nome do médico no Sonho' ;
+COMMENT ON COLUMN wl_patient_sonho_transfered.dt_consult IS 'Data da consulta no Sonho' ;
+COMMENT ON COLUMN wl_patient_sonho_transfered.consult_id IS 'Id do tipo de consulta no Sonho' ;
+COMMENT ON COLUMN wl_patient_sonho_transfered.consult_name IS 'Nome do tipo de consulta no Sonho' ;
+COMMENT ON COLUMN wl_patient_sonho_transfered.prof_id IS 'Id do utilizador da aplicação responsável pela efectivação' ;
+COMMENT ON COLUMN wl_patient_sonho_transfered.machine_name IS 'Nome da máquina onde foi  efectivada a consulta' ;
+
+
+
+
+ALTER TABLE WL_PATIENT_SONHO_TRANSFERED ADD DT_CONSULT_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN WL_PATIENT_SONHO_TRANSFERED.DT_CONSULT_TSTZ IS 'Data da consulta no Sonho'; 
+
+-- INPATIENT Ricardo Nuno Almeida 2008/09/22
+-- Drop às colunas DATE
+ALTER TABLE WL_PATIENT_SONHO_TRANSFERED DROP COLUMN DT_CONSULT;
+-- END
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table WL_PATIENT_SONHO_TRANSFERED
+  is 'Table where are saved the records produced by the interaction with external admission software(SONHO),
+ after been processed by waiting line.';
+-- Add comments to the columns 
+comment on column WL_PATIENT_SONHO_TRANSFERED.patient_id
+  is 'Patient identifier on external admission software(Sonho) ';
+comment on column WL_PATIENT_SONHO_TRANSFERED.patient_name
+  is 'Patient Name on external admission software(Sonho) ';
+comment on column WL_PATIENT_SONHO_TRANSFERED.patient_dt_birth
+  is 'Patient birth on date external admission software(Sonho) ';
+comment on column WL_PATIENT_SONHO_TRANSFERED.patient_gender
+  is 'Patient Gender on external admission software(Sonho) ';
+comment on column WL_PATIENT_SONHO_TRANSFERED.num_proc
+  is 'Process number ';
+comment on column WL_PATIENT_SONHO_TRANSFERED.clin_prof_id
+  is 'Professional identifier on external admission software(Sonho) ';
+comment on column WL_PATIENT_SONHO_TRANSFERED.clin_prof_name
+  is 'Professional name on external admission software(Sonho) ';
+comment on column WL_PATIENT_SONHO_TRANSFERED.consult_id
+  is 'Consult identifier type on external admission software(Sonho) ';
+comment on column WL_PATIENT_SONHO_TRANSFERED.consult_name
+  is 'Consult name type on external admission software(Sonho) ';
+comment on column WL_PATIENT_SONHO_TRANSFERED.prof_id
+  is 'Professional identifier responsable for the admission';
+comment on column WL_PATIENT_SONHO_TRANSFERED.machine_name
+  is 'Machine name wher admission occurs ';
+comment on column WL_PATIENT_SONHO_TRANSFERED.id_institution
+  is 'Institution identifier on Alert ';
+comment on column WL_PATIENT_SONHO_TRANSFERED.id_episode
+  is ' Episode identifier on Alert ';
+comment on column WL_PATIENT_SONHO_TRANSFERED.dt_consult_tstz
+  is 'Consult date on external admission software(Sonho) ';
+comment on column WL_PATIENT_SONHO_TRANSFERED.id_wl_patient_sonho_transfered
+  is 'WL_PATIENT_SONHO_TRANSFERED identifier (Primary key)';
+comment on column WL_PATIENT_SONHO_TRANSFERED.create_user
+  is 'Creation User';
+comment on column WL_PATIENT_SONHO_TRANSFERED.create_time
+  is 'Creation Time';
+comment on column WL_PATIENT_SONHO_TRANSFERED.create_institution
+  is 'Creation Institution';
+comment on column WL_PATIENT_SONHO_TRANSFERED.update_user
+  is 'Update User';
+comment on column WL_PATIENT_SONHO_TRANSFERED.update_time
+  is 'Update Time';
+comment on column WL_PATIENT_SONHO_TRANSFERED.update_institution
+  is 'Update Institution';
+  
+-- CHANGE END: Pedro Fernandes

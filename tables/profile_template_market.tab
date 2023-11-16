@@ -1,0 +1,54 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 13/10/2009 17:17
+-- CHANGE REASON: [ALERT-44922 ] 
+
+-- Create table
+create table PROFILE_TEMPLATE_MARKET
+(
+  ID_PROFILE_TEMPLATE_MARKET NUMBER(24) not null,
+  ID_PROFILE_TEMPLATE        NUMBER(24) not null,
+  ID_MARKET                  NUMBER(24) not null,
+  CREATE_USER                VARCHAR2(24),
+  CREATE_TIME                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION         NUMBER(24),
+  UPDATE_USER                VARCHAR2(24),
+  UPDATE_TIME                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION         NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table PROFILE_TEMPLATE_MARKET
+  is 'Relation between Market and profile template';
+-- Add comments to the columns 
+comment on column PROFILE_TEMPLATE_MARKET.ID_PROFILE_TEMPLATE_MARKET
+  is 'Relation between Profile template and market identification';
+comment on column PROFILE_TEMPLATE_MARKET.ID_PROFILE_TEMPLATE
+  is 'Profile template identification';
+comment on column PROFILE_TEMPLATE_MARKET.ID_MARKET
+  is 'Market identification';
+comment on column PROFILE_TEMPLATE_MARKET.CREATE_USER
+  is 'Creation User';
+comment on column PROFILE_TEMPLATE_MARKET.CREATE_TIME
+  is 'Creation Time';
+comment on column PROFILE_TEMPLATE_MARKET.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column PROFILE_TEMPLATE_MARKET.UPDATE_USER
+  is 'Update User';
+comment on column PROFILE_TEMPLATE_MARKET.UPDATE_TIME
+  is 'Update Time';
+comment on column PROFILE_TEMPLATE_MARKET.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- CHANGE END: Susana Silva
+
+
+alter table profile_template drop constraint SPT_MRK_FK;
+alter table profile_template RENAME COLUMN id_market to old_id_market;

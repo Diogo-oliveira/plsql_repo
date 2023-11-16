@@ -1,0 +1,95 @@
+
+
+  ALTER TABLE NURSE_TEA_REQ ADD CONSTRAINT NTR_PK PRIMARY KEY (ID_NURSE_TEA_REQ) ENABLE;
+
+  ALTER TABLE NURSE_TEA_REQ MODIFY (ID_NURSE_TEA_REQ NOT NULL ENABLE);
+
+  ALTER TABLE NURSE_TEA_REQ MODIFY (DT_NURSE_TEA_REQ NOT NULL ENABLE);
+
+  ALTER TABLE NURSE_TEA_REQ MODIFY (ID_PROF_REQ NOT NULL ENABLE);
+
+  ALTER TABLE NURSE_TEA_REQ MODIFY (ID_EPISODE NOT NULL ENABLE);
+
+  ALTER TABLE NURSE_TEA_REQ MODIFY (FLG_STATUS NOT NULL ENABLE);
+
+
+  ALTER TABLE NURSE_TEA_REQ MODIFY (NOTES_REQ NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 11/04/2011 15:19
+-- CHANGE REASON: [ALERT-163522] 
+begin
+alter table NURSE_TEA_REQ
+  add constraint NTR_CRN_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/04/2011 12:27
+-- CHANGE REASON: [ALERT-163522] 
+
+alter table NURSE_TEA_REQ
+  add constraint NTR_CRN_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/04/2011 12:28
+-- CHANGE REASON: [ALERT-163522] 
+
+alter table NURSE_TEA_REQ
+  add constraint NTR_CRN_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 05/05/2011 11:43
+-- CHANGE REASON: [ALERT-176423] Patient education: check constraints
+alter table NURSE_TEA_REQ add constraint NTR_FLG_STATUS_CHK check (FLG_STATUS IN ('I','S','F','D','C','A','Z'));
+alter table NURSE_TEA_REQ add constraint NTR_FLG_TIME_CHK check (FLG_TIME IN ('B','E','N'));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 02/11/2011 11:11
+-- CHANGE REASON: [ALERT-201544] Task Expire support for CPOE - Patient Education (v2.6)
+alter table NURSE_TEA_REQ
+  drop constraint NTR_FLG_STATUS_CHK;
+
+alter table NURSE_TEA_REQ
+  add constraint NTR_FLG_STATUS_CHK
+  check (FLG_STATUS IN ('I','S','F','D','C','A','Z','O'));
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 27/05/2014 15:24
+-- CHANGE REASON: [ALERT-282667] 
+DECLARE
+  e_nonexistent_constraint EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_nonexistent_constraint, -02443); 
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE nurse_tea_req DROP CONSTRAINT ntr_flg_status_chk';
+  EXCEPTION
+    WHEN e_nonexistent_constraint THEN
+      dbms_output.put_line('Constraint nurse_tea_req.ntr_flg_status_chk doesnt exist');
+  END;
+
+  EXECUTE IMMEDIATE 'ALTER TABLE nurse_tea_req ADD CONSTRAINT ntr_flg_status_chk check (flg_status IN (
+  ''I'',''S'',''F'',''D'',''C'',''A'',''Z'',''O'',''N''))';
+END;
+/
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 06/06/2018 15:55
+-- CHANGE REASON: [EMR-2454] 
+ALTER TABLE NURSE_TEA_REQ DROP CONSTRAINT NTR_FLG_STATUS_CHK;
+ALTER TABLE NURSE_TEA_REQ ADD CONSTRAINT NTR_FLG_STATUS_CHK CHECK (flg_status IN ('I','S','F','D','C','A','Z','O','N', 'X'));
+-- CHANGE END: Pedro Henriques

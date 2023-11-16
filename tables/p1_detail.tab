@@ -1,0 +1,156 @@
+
+  CREATE TABLE P1_DETAIL
+   (	ID_DETAIL NUMBER(24,0) NOT NULL ENABLE,
+	ID_EXTERNAL_REQUEST NUMBER(24,0) NOT NULL ENABLE,
+	TEXT VARCHAR2(4000),
+	DT_INSERT DATE,
+	FLG_TYPE NUMBER(6,0),
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_TRACKING NUMBER(24,0),
+	FLG_STATUS VARCHAR2(1)
+   );
+
+
+
+COMMENT ON COLUMN p1_detail.text IS 'Texto do registo' ;
+COMMENT ON COLUMN p1_detail.dt_insert IS 'Data de inserção' ;
+COMMENT ON COLUMN p1_detail.flg_type IS 'Tipo de registo; 0 - Justificação, 1 - Sintomatologia, 2 - Evolução, 3 - História, 4 - História Familiar, 5 - Exame objectivo, 6 - Exames complementares, 7- Notas ao administrativo, 8 - Notas ao triador, 9 - Notas da Decisão, 10 - Notas de Cancelamento' ;
+COMMENT ON COLUMN p1_detail.flg_status IS '(A)ctive; (C)anceled' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE P1_DETAIL ADD DT_INSERT_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN P1_DETAIL.DT_INSERT_TSTZ IS 'Data de inser‡Æo'; 
+
+COMMENT ON COLUMN p1_detail.flg_type IS 'Tipo de registo; 0 - Justificação, 1 - Sintomatologia, 2 - Evolução, 3 - História, 4 - História Familiar, 5 - Exame objectivo, 6 - Exames complementares, 7- Notas ao administrativo, 8 - Notas ao triador, 9 - Notas da Decisão, 10 - Notas de Cancelamento, 11 - Notas de recusa administrativa, 12 - Notas do administrativo do Centro de Saúde, 13 - Resumo da observação, 14 - Proposta de terapêutica, 15 - Proposta de novos exames, 16 - Conclusões';
+
+
+
+-- CHANGED BY: Joana Barroso	
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização P1 - eliminação de colunas
+
+alter table P1_DETAIL drop column DT_INSERT;
+
+-- CHANGE END
+
+-- CHANGED BY: Ana Monteiro	
+-- CHANGE DATE: 2009-JAN-09
+-- CHANGE REASON: ALERT-827
+
+alter table P1_DETAIL add ID_GROUP number(3);
+
+comment on column P1_DETAIL.ID_GROUP is 'Groups detail records having the same id_external_request';
+comment on column P1_DETAIL.FLG_STATUS is '(A)ctive; (O)utdated; (C)anceled';
+
+-- CHANGE END
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/01/2010 12:06
+-- CHANGE REASON: [ALERT-31116] 
+comment on column P1_DETAIL.FLG_TYPE is 'Record type: 0 - Reason, 1 - Symptomatology, 2 - Progress, 3 - History, 4 - Family history, 5 - Objective exam, 6 - Diagnostic exams, 7- Notes to the registrar, 8 - Notes to the triage physician, 9 - Decision notes, 10 - Cancellation notes, 11 - Administrative refusal notes, 12 - Notes from the sender Registrar, 13 - Observation summary, 14 - Treatment proposal, 15 - New exams proposal, 16 - Conclusion, 17 - MCDTs notes, 18 - Referral blocking notes, 19-Ordered items, 20-UBRN';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/01/2010 17:59
+-- CHANGE REASON: [ALERT-58261] 
+comment on column P1_DETAIL.FLG_TYPE is 'Record type: 0 - Reason, 1 - Symptomatology, 2 - Progress, 3 - History, 4 - Family history, 5 - Objective exam, 6 - Diagnostic exams, 7- Notes to the registrar, 8 - Notes to the triage physician, 9 - Decision notes, 10 - Cancellation notes, 11 - Administrative refusal notes, 12 - Notes from the sender Registrar, 13 - Observation summary, 14 - Treatment proposal, 15 - New exams proposal, 16 - Conclusion, 17 - MCDTs notes, 18 - Referral blocking notes, 19-Ordered items, 20-UBRN';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/03/2010 14:06
+-- CHANGE REASON: [ALERT-79864] 
+comment on column P1_DETAIL.FLG_TYPE is 'Record type: 0 - Reason, 1 - Symptomatology, 2 - Progress, 3 - History, 4 - Family history, 5 - Objective exam, 6 - Diagnostic exams, 7- Notes to the registrar, 8 - Notes to the triage physician, 9 - Decision notes, 10 - Cancellation notes, 11 - Administrative refusal notes, 12 - Notes from the sender Registrar, 13 - Observation summary, 14 - Treatment proposal, 15 - New exams proposal, 16 - Conclusion, 17 - MCDTs notes, 18 - Referral blocking notes, 19-Ordered items, 20-UBRN';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 21/06/2010 17:57
+-- CHANGE REASON: [ALERT-103305] FERTIS (2.6.0.3)
+COMMENT ON column p1_detail.flg_type IS 'Record type: 0 - Reason, 1 - Symptomatology, 2 - Progress, 3 - History, 4 - Family history, 5 - Objective exam, 6 - Diagnostic exams, 7- Notes to the registrar, 8 - Notes to the triage physician, 9 - Decision notes, 10 - Cancellation notes, 11 - Administrative refusal notes, 12 - Notes from the sender Registrar, 13 - Observation summary, 14 - Treatment proposal, 15 - New exams proposal, 16 - Conclusion, 17 - MCDTs notes, 18 - Referral blocking notes, 19-Ordered items, 20-UBRN, 24- Missed notes';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 06/10/2010 09:27
+-- CHANGE REASON: [ALERT-129275] 
+comment on column P1_DETAIL.ID_DETAIL is 'Detail identifier. Primary key';
+comment on column P1_DETAIL.ID_EXTERNAL_REQUEST is 'Referral identifier';
+comment on column P1_DETAIL.TEXT is 'Detail description';
+comment on column P1_DETAIL.FLG_TYPE is 'Record type: 0 - Reason, 1 - Symptomatology, 2 - Progress, 3 - History, 4 - Family history, 5 - Objective exam, 6 - Diagnostic exams, 7- Notes to the registrar, 8 - Notes to the triage physician, 9 - Decision notes, 10 - Cancellation notes, 11 - Administrative refusal notes, 12 - Notes from the sender Registrar, 13 - Observation summary, 14 - Treatment proposal, 15 - New exams proposal, 16 - Conclusion, 17 - MCDTs notes, 18 - Referral blocking notes, 19-Ordered items, 20-UBRN, 24- Missed notes, 25- Transf. Resp., 26- Cancel Request Notes, 27- Accept/Reject cancel req notes'; 
+comment on column P1_DETAIL.ID_PROFESSIONAL is 'Professional identifier creating this record';
+comment on column P1_DETAIL.ID_INSTITUTION is 'Institution identifier where the record was created';
+comment on column P1_DETAIL.ID_TRACKING is 'Tracking identifier associated to this detail';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/11/2010 14:20
+-- CHANGE REASON: [ALERT-137811] ALERT_75390 Possibilidade do médico hospital encaminhar o pedido para o administrativo hospital
+comment on column P1_DETAIL.FLG_TYPE is 'Record type: 0 - Reason, 1 - Symptomatology, 2 - Progress, 3 - History, 4 - Family history, 5 - Objective exam, 6 - Diagnostic exams, 7- Notes to the registrar, 8 - Notes to the triage physician, 9 - Decision notes, 10 - Cancellation notes, 11 - Administrative refusal notes, 12 - Notes from the sender Registrar, 13 - Observation summary, 14 - Treatment proposal, 15 - New exams proposal, 16 - Conclusion, 17 - MCDTs notes, 18 - Referral blocking notes, 19-Ordered items, 20-UBRN, 24- Missed notes, 25- Transf. Resp., 26- Cancel Request Notes, 27- Reject cancel req notes, 29- Notes to the registrar from triage physician';
+ 
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/11/2010 15:52
+-- CHANGE REASON: [ALERT-137811] ALERT_75390 Possibilidade do médico hospital encaminhar o pedido para o administrativo hospital
+comment on column P1_DETAIL.FLG_TYPE
+  is 'Record type: 0 - Reason, 1 - Symptomatology, 2 - Progress, 3 - History, 4 - Family history, 5 - Objective exam, 6 - Diagnostic exams, 7- Notes to the registrar, 8 - Notes to the triage physician, 9 - Decision notes, 10 - Cancellation notes, 11 - Administrative refusal notes, 12 - Notes from the sender Registrar, 13 - Observation summary, 14 - Treatment proposal, 15 - New exams proposal, 16 - Conclusion, 17 - MCDTs notes, 18 - Referral blocking notes, 19-Ordered items, 20-UBRN, 24- Missed notes, 25- Transf. Resp., 26- Cancel Request Notes, 27- Reject cancel req notes, 29- Notes to the registrar from triage physician, 30- AUGE (Chile)';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 01/04/2011 17:19
+-- CHANGE REASON: [ALERT-170757] 
+comment on column P1_DETAIL.FLG_TYPE is 'Record type: 0 - Reason, 1 - Symptomatology, 2 - Progress, 3 - History, 4 - Family history, 5 - Objective exam, 6 - Diagnostic exams, 7- Notes to the registrar, 8 - Notes to the triage physician, 9 - Decision notes, 10 - Cancellation notes, 11 - Administrative refusal notes, 12 - Notes from the sender Registrar, 13 - Observation summary, 14 - Treatment proposal, 15 - New exams proposal, 16 - Conclusion, 17 - MCDTs notes, 18 - Referral blocking notes, 19-Ordered items, 20-UBRN, 22- Medication GP Portal, 23- Begin Schedule GP Portal, 24- Missed notes, 25- Transf. Resp., 26- Cancel Request Notes, 27- Reject cancel req notes, 28- Professional to schedule GP Portal,  29- Notes to the registrar from triage physician, 30- AUGE (Chile), 31- GP Portal, 32- notes clinical director, 33- Flg Urgency, 34- Flg home';
+alter table P1_DETAIL drop constraint PEL_FLG_TYPE_CHK;
+alter table P1_DETAIL add constraint PEL_FLG_TYPE_CHK
+  check (flg_type IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27,28, 29, 30, 31,32,33,34));
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 20/04/2011 09:55
+-- CHANGE REASON: [ALERT-169416] 
+alter table  P1_DETAIL
+drop constraint PEL_FLG_TYPE_CHK;
+
+alter table P1_DETAIL
+  add constraint PEL_FLG_TYPE_CHK
+  check (flg_type IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27,28, 29, 30, 31,32));
+
+comment on column P1_DETAIL.flg_type
+  is 'Record type: 0 - Reason, 1 - Symptomatology, 2 - Progress, 3 - History, 4 - Family history, 5 - Objective exam, 6 - Diagnostic exams, 7- Notes to the registrar, 8 - Notes to the triage physician, 9 - Decision notes, 10 - Cancellation notes, 11 - Administrative refusal notes, 12 - Notes from the sender Registrar, 13 - Observation summary, 14 - Treatment proposal, 15 - New exams proposal, 16 - Conclusion, 17 - MCDTs notes, 18 - Referral blocking notes, 19-Ordered items, 20-UBRN, 22- Medication GP Portal, 23- Begin Schedule GP Portal, 24- Missed notes, 25- Transf. Resp., 26- Cancel Request Notes, 27- Reject cancel req notes, 28- Professional to schedule GP Portal,  29- Notes to the registrar from triage physician, 30- AUGE (Chile), 31- GP Portal, 32- notes clinical director';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 02/04/2012 10:56
+-- CHANGE REASON: [ALERT-225844] 
+comment on column P1_DETAIL.flg_type is 'Record type: 0 - Reason, 1 - Symptomatology, 2 - Progress, 3 - History, 4 - Family history, 5 - Objective exam, 6 - Diagnostic exams, 7- Notes to the registrar, 8 - Notes to the triage physician, 9 - Decision notes, 10 - Cancellation notes, 11 - Administrative refusal notes, 12 - Notes from the sender Registrar, 13 - Observation summary, 14 - Treatment proposal, 15 - New exams proposal, 16 - Conclusion, 17 - MCDTs notes, 18 - Referral blocking notes, 19-Ordered items, 20-UBRN, 22- Medication, 23- Begin Schedule GP Portal, 24- Missed notes, 25- Transf. Resp., 26- Cancel Request Notes, 27- Reject cancel req notes, 28- Professional to schedule GP Portal,  29- Notes to the registrar from triage physician, 30- AUGE (Chile), 31- GP Portal, 32- notes clinical director, 33- Flg Urgency, 34- Flg home';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 15/02/2013 10:11
+-- CHANGE REASON: [ALERT-251629 ] 
+comment on column P1_DETAIL.flg_type  
+  is 'Record type: 0 - Reason, 1 - Symptomatology, 2 - Progress, 3 - History, 4 - Family history, 5 - Objective exam, 6 - Diagnostic exams, 7- Notes to the registrar, 8 - Notes to the triage physician, 9 - Decision notes, 10 - Cancellation notes, 11 - Administrative refusal notes, 12 - Notes from the sender Registrar, 13 - Observation summary, 14 - Treatment proposal, 15 - New exams proposal, 16 - Conclusion, 17 - MCDTs notes, 18 - Referral blocking notes, 19-Ordered items, 20-UBRN, 22- Medication, 23- Begin Schedule GP Portal, 24- Missed notes, 25- Transf. Resp., 26- Cancel Request Notes, 27- Reject cancel req notes, 28- Professional to schedule GP Portal,  29- Notes to the registrar from triage physician, 30- AUGE (Chile), 31- GP Portal, 32- notes clinical director, 33- Flg Urgency, 34- Flg home, 35- Data da visita CC, 36- Dia da semana CC, 37- setor CC, 38-Resposável CC, 39- Notas CC, 41- Print notes, 42- Efective notes';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 27/02/2013 12:23
+-- CHANGE REASON: [ALERT-251633 ] 
+comment on column P1_DETAIL.flg_type  
+  is 'Record type: 0 - Reason, 1 - Symptomatology, 2 - Progress, 3 - History, 4 - Family history, 5 - Objective exam, 6 - Diagnostic exams, 7- Notes to the registrar, 8 - Notes to the triage physician, 9 - Decision notes, 10 - Cancellation notes, 11 - Administrative refusal notes, 12 - Notes from the sender Registrar, 13 - Observation summary, 14 - Treatment proposal, 15 - New exams proposal, 16 - Conclusion, 17 - MCDTs notes, 18 - Referral blocking notes, 19-Ordered items, 20-UBRN, 22- Medication, 23- Begin Schedule GP Portal, 24- Missed notes, 25- Transf. Resp., 26- Cancel Request Notes, 27- Reject cancel req notes, 28- Professional to schedule GP Portal,  29- Notes to the registrar from triage physician, 30- AUGE (Chile), 31- GP Portal, 32- notes clinical director, 33- Flg Urgency, 34- Flg home, 35- Data da visita CC, 36- Dia da semana CC, 37- setor CC, 38-Resposável CC, 39- Notas CC, 41- Print notes, 42- Efective notes';
+-- CHANGE END: Joana Barroso
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on table P1_DETAIL
+  is 'Referral text data fields';
+-- Add comments to the columns 
+comment on column P1_DETAIL.flg_type
+  is 'Record type: 0 - Reason; 1 - Symptomatology; 2 - Progress; 3 - History; 4 - Family history; 5 - Objective exam; 6 - Diagnostic exams; 7- Notes to the registrar; 8 - Notes to the triage physician; 9 - Decision notes; 10 - Cancellation notes; 11 - Administrative refusal notes; 12 - Notes from the sender registrar; 13 - Observation summary; 14 - Treatment proposal; 15 - New exams proposal; 16 - Conclusion; 17 - MCDTs notes; 18 - Referral blocking notes; 19 - Ordered items; 20 - UBRN; 22 - Medication; 23 - Begin Schedule GP Portal; 24 - Missed notes; 25 - Transf. of Responsibility; 26 - Cancel Request Notes; 27 - Reject cancel req notes; 28 - Professional to schedule GP Portal; 29 - Notes to the registrar from triage physician; 30 - AUGE (Chile); 31 - GP Portal; 32 - Clinical director notes; 33 - Flag Urgency; 34 - Flag home; 35 - Visit date CC; 36 - Week day CC; 37 - Sector CC; 38 - Responsible CC; 39 - Notes CC; 41 - Print notes; 42 - Efective notes';
+comment on column P1_DETAIL.id_professional
+  is 'Professional creating this record';
+comment on column P1_DETAIL.id_institution
+  is 'Institution where the record was created';
+comment on column P1_DETAIL.id_tracking
+  is 'Tracking history associated to this detail';
+comment on column P1_DETAIL.dt_insert_tstz
+  is 'Insert date';
+

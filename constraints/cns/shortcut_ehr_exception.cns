@@ -1,0 +1,39 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 21/09/2011 15:19
+-- CHANGE REASON: [ALERT-196265 ] 
+-- Create/Recreate primary, unique and foreign key constraints 
+DECLARE
+    e_gen EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_gen, -02260); 
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SHORTCUT_EHR_EXCEPTION
+  add constraint SEHRE_PK primary key (ID_SHORTCUT, ID_INSTITUTION, ID_PROFILE_TEMPLATE, ID_DEP_CLIN_SERV) ENABLE';
+    EXCEPTION
+        WHEN e_gen THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+
+
+-- Create/Recreate check constraints 
+DECLARE
+    e_gen EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_gen, -02264); 
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SHORTCUT_EHR_EXCEPTION
+  add constraint SEHRE_FLG_AVAILABLE_CHK
+  check (flg_available in (''Y'', ''N''))';
+    EXCEPTION
+        WHEN e_gen THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

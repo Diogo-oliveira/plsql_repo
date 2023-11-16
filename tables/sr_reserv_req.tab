@@ -1,0 +1,129 @@
+
+
+  CREATE TABLE SR_RESERV_REQ
+   (	ID_SR_RESERV_REQ NUMBER(24,0) NOT NULL ENABLE,
+	ID_SURG_PERIOD NUMBER(3,0) NOT NULL ENABLE,
+	ID_SR_EQUIP NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_SR_INTERVENTION NUMBER(24,0),
+	ID_PROTOCOLS NUMBER(24,0),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	QTY_REQ NUMBER(12,3) NOT NULL ENABLE,
+	DT_REQ DATE NOT NULL ENABLE,
+	ID_PROF_REQ NUMBER(24,0) NOT NULL ENABLE,
+	DT_EXEC DATE,
+
+	ID_PROF_EXEC NUMBER(24,0),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(2000),
+	ADW_LAST_UPDATE DATE
+   );
+
+
+COMMENT ON COLUMN sr_reserv_req.id_sr_reserv_req IS 'ID único' ;
+COMMENT ON COLUMN sr_reserv_req.id_surg_period IS 'ID do periodo operatório' ;
+COMMENT ON COLUMN sr_reserv_req.id_sr_equip IS 'ID do tipo de reserva' ;
+COMMENT ON COLUMN sr_reserv_req.id_episode IS 'ID do episódio' ;
+COMMENT ON COLUMN sr_reserv_req.id_protocols IS 'ID do protocolo, caso tenha sido requesitado através de um protocolo.' ;
+COMMENT ON COLUMN sr_reserv_req.flg_status IS 'Estado da requisição. Valores possíveis: R- Requisitado, F- Concluído, C- Cancelado' ;
+COMMENT ON COLUMN sr_reserv_req.qty_req IS 'Quantidade requisitada' ;
+COMMENT ON COLUMN sr_reserv_req.dt_req IS 'Data de requisição' ;
+COMMENT ON COLUMN sr_reserv_req.id_prof_req IS 'ID do profissional que requisitou' ;
+COMMENT ON COLUMN sr_reserv_req.dt_exec IS 'Data de execução' ;
+COMMENT ON COLUMN sr_reserv_req.id_prof_exec IS 'ID do profissional que efectou a requisição' ;
+COMMENT ON COLUMN sr_reserv_req.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN sr_reserv_req.id_prof_cancel IS 'Id do profissional que cancelou a requisição' ;
+
+COMMENT ON COLUMN sr_reserv_req.notes_cancel IS 'Notas de cancelamento' ;
+COMMENT ON COLUMN sr_reserv_req.adw_last_update IS 'Data da última alteração' ;
+
+
+--Rui Batista 2007/09/13
+--Consumos do Bloco
+
+--Adiciona coluna de indicação de R- Reserva ou C - Consumo
+alter table sr_reserv_req modify id_surg_period null;
+alter table sr_reserv_req add flg_type varchar2(1) default 'R';
+
+COMMENT ON COLUMN sr_reserv_req.flg_type IS 'Tipo de registo. R- Reservas, C- Consumos';
+
+--Rui Batista 2007/12/05
+--TI: Pré-operatório
+alter table sr_reserv_req add (id_episode_context number(24));
+
+COMMENT ON COLUMN sr_reserv_req.id_episode_context IS 'ID do episódio de destino onde poderá ser consultada esta informação (TI)';
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização SR - eliminação de colunas
+ALTER TABLE SR_RESERV_REQ drop column DT_REQ;
+ALTER TABLE SR_RESERV_REQ drop column DT_EXEC;
+ALTER TABLE SR_RESERV_REQ drop column DT_CANCEL;
+-- CHANGE END
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 17:41
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table SR_RESERV_REQ
+  is 'Reserves requirements';
+-- Add comments to the columns 
+comment on column SR_RESERV_REQ.id_sr_reserv_req
+  is 'Primary key';
+comment on column SR_RESERV_REQ.id_surg_period
+  is 'Id of surgey period';
+comment on column SR_RESERV_REQ.id_sr_equip
+  is 'Id of reserve tyoe';
+comment on column SR_RESERV_REQ.id_episode
+  is 'Episode id';
+comment on column SR_RESERV_REQ.id_sr_intervention
+  is 'Id of surgical intervation';
+comment on column SR_RESERV_REQ.id_protocols
+  is 'Protocol id (only if the request was made following a protocol)';
+comment on column SR_RESERV_REQ.flg_status
+  is 'Requirement state. Possible values: R- Requested, F- Done, C- Canceled';
+comment on column SR_RESERV_REQ.qty_req
+  is 'Required amount';
+comment on column SR_RESERV_REQ.id_prof_req
+  is 'Id professional that made the request';
+comment on column SR_RESERV_REQ.id_prof_exec
+  is 'Id professional that executes the request';
+comment on column SR_RESERV_REQ.id_prof_cancel
+  is 'Id professional that canceled the request';
+comment on column SR_RESERV_REQ.notes_cancel
+  is 'Cancel notes';
+comment on column SR_RESERV_REQ.adw_last_update
+  is 'Last update date : deprecate';
+comment on column SR_RESERV_REQ.flg_type
+  is 'Register type. R- Reservs, C- Consumptions';
+comment on column SR_RESERV_REQ.dt_req_tstz
+  is 'Requirement date';
+comment on column SR_RESERV_REQ.dt_exec_tstz
+  is 'Execution date';
+comment on column SR_RESERV_REQ.dt_cancel_tstz
+  is 'Cancel date';
+comment on column SR_RESERV_REQ.id_episode_context
+  is 'Id of context episode';
+comment on column SR_RESERV_REQ.create_user
+  is 'Creation User';
+comment on column SR_RESERV_REQ.create_time
+  is 'Creation Time';
+comment on column SR_RESERV_REQ.create_institution
+  is 'Creation Institution';
+comment on column SR_RESERV_REQ.update_user
+  is 'Update User';
+comment on column SR_RESERV_REQ.update_time
+  is 'Update Time';
+comment on column SR_RESERV_REQ.update_institution
+  is 'Update Institution';
+-- CHANGE END: Renato Nunes
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/07/2017 14:08
+-- CHANGE REASON: [ALERT-331061]
+ALTER TABLE SR_RESERV_REQ DROP CONSTRAINT SRQ_SIN_FK;
+ALTER TABLE SR_RESERV_REQ ADD CONSTRAINT SRQ_SIN_FK FOREIGN KEY (ID_SR_INTERVENTION) REFERENCES INTERVENTION (ID_INTERVENTION);
+-- CHANGE END: Pedro Henriques

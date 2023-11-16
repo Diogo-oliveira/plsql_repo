@@ -1,0 +1,36 @@
+
+
+  CREATE TABLE CRITICAL_CARE_READ
+   (	ID_CRITICAL_CARE_READ NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_CREATION DATE NOT NULL ENABLE,
+	NOTES VARCHAR2(200),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+comment on table CRITICAL_CARE_READ
+  is 'Registo das notas críticas';
+
+comment on column CRITICAL_CARE_READ.ID_CRITICAL_CARE_READ
+  is 'Chave primária';
+comment on column CRITICAL_CARE_READ.ID_EPISODE
+  is 'Episódio';
+comment on column CRITICAL_CARE_READ.ID_PROFESSIONAL
+  is 'Profissional';
+comment on column CRITICAL_CARE_READ.DT_CREATION
+  is 'Data de criação';
+comment on column CRITICAL_CARE_READ.NOTES
+  is 'Notas';
+comment on column CRITICAL_CARE_READ.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+
+alter table critical_care_read 
+add (dt_creation_tstz timestamp with local time zone); 
+
+
+-- INPATIENT LMAIA 22-09-2008
+-- DROP das colunas DT_... que não são Timezone (desnormalização)
+alter table critical_care_read drop (DT_CREATION);
+-- END
+

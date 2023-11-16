@@ -1,0 +1,88 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 29/10/2009 04:37
+-- CHANGE REASON: [ALERT-51207] 
+CREATE TABLE CPOE_TASK_SOFT_INST
+(
+  ID_TASK_TYPE              NUMBER(24) NOT NULL,
+  ID_TASK_TYPE_PARENT       NUMBER(24),
+  ID_TASK_GROUP_PARENT      NUMBER(24),
+  ID_INSTITUTION            NUMBER(24) NOT NULL,
+  ID_SOFTWARE               NUMBER(24) NOT NULL,
+  FLG_SEARCH_TYPE           VARCHAR2(1 CHAR) NOT NULL,
+  RANK                      NUMBER(6),
+FLG_AVAILABLE             VARCHAR2(1 CHAR) NOT NULL,
+  CREATE_USER               VARCHAR2(24 CHAR),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24 CHAR),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24)
+);
+comment on table  CPOE_TASK_SOFT_INST is                      'Computerized Physician Order Entry (CPOE) task hierarchy, software and institution configurations';
+comment on column CPOE_TASK_SOFT_INST.ID_TASK_TYPE is         'CPOE task type ID';
+comment on column CPOE_TASK_SOFT_INST.ID_TASK_TYPE_PARENT is  'CPOE parent task type ID, for task hierarchy ordering';
+comment on column CPOE_TASK_SOFT_INST.ID_TASK_GROUP_PARENT is 'CPOE parent task group ID, for group hierarchy ordering';
+comment on column CPOE_TASK_SOFT_INST.ID_INSTITUTION is       'Institution ID, where record setup takes effect';
+comment on column CPOE_TASK_SOFT_INST.ID_SOFTWARE is          'Software ID, where record setup takes effect';
+comment on column CPOE_TASK_SOFT_INST.FLG_SEARCH_TYPE is      'Search type: (S)earchable (M)ost frequent (B)oth';
+comment on column CPOE_TASK_SOFT_INST.RANK is                 'CPOE task rank to be used in order by clauses';
+comment on column CPOE_TASK_SOFT_INST.FLG_AVAILABLE is        'CPOE record setup availability: (Y)es (N)o';
+comment on column CPOE_TASK_SOFT_INST.CREATE_USER is          'Creation user';
+comment on column CPOE_TASK_SOFT_INST.CREATE_TIME is          'Creation time';
+comment on column CPOE_TASK_SOFT_INST.CREATE_INSTITUTION is   'Creation institution';
+comment on column CPOE_TASK_SOFT_INST.UPDATE_USER is          'Update user';
+comment on column CPOE_TASK_SOFT_INST.UPDATE_TIME is          'Update time';
+comment on column CPOE_TASK_SOFT_INST.UPDATE_INSTITUTION is   'Update institution';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 11/12/2009 01:01
+-- CHANGE REASON: [ALERT-61939] CPOE 2nd phase: versioning of CPOE feature for Diets and Hidrics
+alter table CPOE_TASK_SOFT_INST modify FLG_AVAILABLE not null;
+alter table CPOE_TASK_SOFT_INST add 
+(
+FLG_NEED_PRESC varchar2(1 char) default 'N' not null,
+FLG_EXPIRABLE  varchar2(1 char) default 'N' not null
+);
+comment on column CPOE_TASK_SOFT_INST.FLG_NEED_PRESC is 'CPOE task needs active prescription? (Y)es, (N)o';
+comment on column CPOE_TASK_SOFT_INST.FLG_EXPIRABLE is 'CPOE task expires with prescription? (Y)es, (N)o';
+-- CHANGE END: Carlos Loureiro
+
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 15/10/2019 14:48
+-- CHANGE REASON: [EMR-21164] - CPOE: possibility to configure statuses and a timeline for the orders to be shown - DDL
+DECLARE
+e_already_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_already_exists, -01430); -- column being added already exists in table
+BEGIN
+EXECUTE IMMEDIATE 'alter table cpoe_task_soft_inst add flg_full_date_validation VARCHAR2(1 CHAR) default ''Y''';
+EXCEPTION
+WHEN e_already_exists THEN
+dbms_output.put_line('flg_full_date_validation column already exists in cpoe_task_soft_inst table');
+END;
+/
+
+DECLARE
+e_already_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_already_exists, -01430); -- column being added already exists in table
+BEGIN
+EXECUTE IMMEDIATE 'alter table cpoe_task_soft_inst add flg_out_of_cpoe_process  VARCHAR2(1 CHAR) default ''N''';
+EXCEPTION
+WHEN e_already_exists THEN
+dbms_output.put_line('flg_out_of_cpoe_process column already exists in cpoe_task_soft_inst table');
+END;
+/
+
+comment on column cpoe_task_soft_inst.flg_full_date_validation
+is 'Validate task type full date';
+comment on column cpoe_task_soft_inst.flg_out_of_cpoe_process
+is 'Task types that are out of cpoe workflow (advanced_mode)';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 06/07/2022 11:25
+-- CHANGE REASON: [EMR-53954]
+ALTER TABLE cpoe_task_soft_inst ADD FLG_OPEN_CLOSE_BY_GROUP_PARENT VARCHAR(1 CHAR) DEFAULT 'O';
+COMMENT ON COLUMN cpoe_task_soft_inst.FLG_OPEN_CLOSE_BY_GROUP_PARENT IS 'CPOE Grid -> Task Type Panel Open (O) or Close (C) -> Only parent nodes are considered';
+-- CHANGE END: Pedro Henriques

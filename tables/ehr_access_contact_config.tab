@@ -1,0 +1,102 @@
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 05/12/2013 17:42
+-- CHANGE REASON: [ALERT-271441] 
+CREATE TABLE EHR_ACCESS_CONTACT_CONFIG
+(
+  ID_PROFESSIONAL     NUMBER(24) default 0 not null,
+  ID_SOFTWARE         NUMBER(24) default 0 not null, 
+  ID_INSTITUTION      NUMBER(24) default 0 not null,
+  ID_PROFILE_TEMPLATE NUMBER (12) default 0 not null,
+  ID_DEPARTMENT       NUMBER(24),
+  FLG_DEPARTMENT      VARCHAR2(2 char),
+  ID_EVENT            NUMBER(24),
+  ID_DEP_CLIN_SERV    NUMBER(24),
+  CREATE_USER varchar2(30 char),
+  UPDATE_USER varchar2(30 char),
+  CREATE_TIME timestamp with local time zone,
+  UPDATE_TIME timestamp with local time zone,
+  CREATE_INSTITUTION  number(24),
+  UPDATE_INSTITUTION  number(24) 
+);
+
+
+COMMENT ON TABLE EHR_ACCESS_CONTACT_CONFIG IS 'Configure parameters in the contact creation';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.id_professional IS 'Professional identifier';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.id_software IS 'Software identifier';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.id_institution IS 'Institution identifier';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.id_profile_template IS 'Profile template identifier';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.id_department IS 'Department identifier default selected';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.flg_department IS 'Department flag default selected';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.id_event IS 'Event identifier default selected';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.id_dep_clin_serv IS 'Clinical Service identifier default selected';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.CREATE_USER IS 'User that created the record';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.UPDATE_USER IS 'User that updated the record';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.CREATE_TIME IS 'Time when the record was created';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.UPDATE_TIME IS 'Time when the record was updated';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.CREATE_INSTITUTION IS 'Institution where the record was created';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.UPDATE_INSTITUTION IS 'Institution where the record was updated';
+
+
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG add CONSTRAINT eacc_id_software_fk foreign key(id_software) references software(id_software);
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG add CONSTRAINT eacc_id_institution_fk foreign key(id_institution) references institution(id_institution);
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG add CONSTRAINT eacc_id_professional_fk foreign key(id_professional) references professional(id_professional);
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG add CONSTRAINT eacc_id_profile_template_fk foreign key(id_profile_template) references profile_template(id_profile_template);
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG add CONSTRAINT eacc_id_department_fk foreign key(id_department) references department(id_department);
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG add CONSTRAINT eacc_id_sch_event_fk foreign key(id_event) references sch_event(id_sch_event);
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG add CONSTRAINT eacc_id_dep_clin_serv_fk foreign key(id_dep_clin_serv) references dep_clin_serv(id_dep_clin_serv);
+
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG
+ ADD CONSTRAINT CONTACT_CONFIG_PK primary key (id_professional,id_software,id_institution,id_profile_template);
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 06/12/2013 10:31
+-- CHANGE REASON: [ALERT-271441] 
+-->EHR_ACCESS_CONTACT_CONFIG|table
+CREATE TABLE EHR_ACCESS_CONTACT_CONFIG
+(
+  ID_PROFESSIONAL     NUMBER(24) default 0 not null,
+  ID_SOFTWARE         NUMBER(24) default 0 not null, 
+  ID_INSTITUTION      NUMBER(24) default 0 not null,
+  ID_PROFILE_TEMPLATE NUMBER (12) default 0 not null,
+  ID_DEPARTMENT       NUMBER(24),
+  FLG_DEPARTMENT      VARCHAR2(2 char),
+  ID_EVENT            NUMBER(24),
+  ID_DEP_CLIN_SERV    NUMBER(24),
+  CREATE_USER varchar2(30 char),
+  UPDATE_USER varchar2(30 char),
+  CREATE_TIME timestamp with local time zone,
+  UPDATE_TIME timestamp with local time zone,
+  CREATE_INSTITUTION  number(24),
+  UPDATE_INSTITUTION  number(24) 
+);
+
+
+COMMENT ON TABLE EHR_ACCESS_CONTACT_CONFIG IS 'Configure parameters in the contact creation';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.id_professional IS 'Professional identifier';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.id_software IS 'Software identifier';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.id_institution IS 'Institution identifier';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.id_profile_template IS 'Profile template identifier';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.id_department IS 'Department identifier default selected';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.flg_department IS 'Department flag default selected';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.id_event IS 'Event identifier default selected';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.id_dep_clin_serv IS 'Clinical Service identifier default selected';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.CREATE_USER IS 'User that created the record';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.UPDATE_USER IS 'User that updated the record';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.CREATE_TIME IS 'Time when the record was created';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.UPDATE_TIME IS 'Time when the record was updated';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.CREATE_INSTITUTION IS 'Institution where the record was created';
+COMMENT ON COLUMN EHR_ACCESS_CONTACT_CONFIG.UPDATE_INSTITUTION IS 'Institution where the record was updated';
+
+
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG add CONSTRAINT eacc_id_software_fk foreign key(id_software) references alert_core_data.ab_software(ID_AB_SOFTWARE);
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG add CONSTRAINT eacc_id_institution_fk foreign key(id_institution) references alert_core_data.ab_institution(ID_AB_INSTITUTION);
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG add CONSTRAINT eacc_id_professional_fk foreign key(id_professional) references professional(id_professional);
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG add CONSTRAINT eacc_id_profile_template_fk foreign key(id_profile_template) references profile_template(id_profile_template);
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG add CONSTRAINT eacc_id_department_fk foreign key(id_department) references department(id_department);
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG add CONSTRAINT eacc_id_sch_event_fk foreign key(id_event) references sch_event(id_sch_event);
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG add CONSTRAINT eacc_id_dep_clin_serv_fk foreign key(id_dep_clin_serv) references dep_clin_serv(id_dep_clin_serv);
+
+ALTER TABLE EHR_ACCESS_CONTACT_CONFIG
+ ADD CONSTRAINT CONTACT_CONFIG_PK primary key (id_professional,id_software,id_institution,id_profile_template);
+-- CHANGE END: Jorge Silva

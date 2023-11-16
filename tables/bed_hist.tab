@@ -1,0 +1,77 @@
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/06/2010 16:09
+-- CHANGE REASON: [ALERT-105487] 
+-- Create table
+create table BED_HIST
+(
+  ID_BED                    NUMBER(24) not null,
+  CODE_BED                  VARCHAR2(200) not null,
+  ID_ROOM_HIST              NUMBER(24) not null,
+  FLG_TYPE                  VARCHAR2(1) not null,
+  FLG_STATUS                VARCHAR2(1) not null,
+  DESC_BED                  VARCHAR2(100),
+  NOTES                     VARCHAR2(4000),
+  RANK                      NUMBER(6),
+  FLG_AVAILABLE             VARCHAR2(1) not null,
+  CREATE_USER               VARCHAR2(24),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24),
+  ID_BED_TYPE               NUMBER(24),
+  DT_CREATION               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  FLG_SCHEDULABLE           VARCHAR2(1),
+  FLG_BED_STATUS            VARCHAR2(1 CHAR),
+  FLG_PARAMETERIZATION_TYPE VARCHAR2(1 CHAR),
+  ID_PROFESSIONAL           NUMBER(24),
+  DT_LAST_UPDATE            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  FLG_SELECTED_SPECIALTIES  VARCHAR2(1 CHAR),
+  ID_BED_HIST               NUMBER(24) not null
+);
+
+COMMENT ON TABLE BED_HIST IS 'Bed history';
+COMMENT ON COLUMN BED_HIST.FLG_SCHEDULABLE IS 'Y - this bed can receive new scheduler appointments';
+COMMENT ON COLUMN BED_HIST.FLG_BED_STATUS IS 'Status of this data: A - active, E - edited, C - canceled.';
+COMMENT ON COLUMN BED_HIST.FLG_PARAMETERIZATION_TYPE IS 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+COMMENT ON COLUMN BED_HIST.ID_PROFESSIONAL IS 'Id professional that creates the data, when using backoffice.';
+COMMENT ON COLUMN BED_HIST.DT_LAST_UPDATE IS 'Last date when this data was updated.';
+COMMENT ON COLUMN BED_HIST.FLG_SELECTED_SPECIALTIES IS 'Flag that indicates the type of selection of specialties: A - all, N - none, O - other';
+COMMENT ON COLUMN BED_HIST.ID_BED IS 'Bed identifier (Primary key)';
+COMMENT ON COLUMN BED_HIST.CODE_BED IS 'Bed description code into translations table';
+COMMENT ON COLUMN BED_HIST.ID_ROOM_HIST IS 'Room history identifier where bed is located physicaly';
+COMMENT ON COLUMN BED_HIST.FLG_TYPE IS 'Type of bed: (P- Permanent bed; T- Temporary bed) (DEFAULT: T)';
+COMMENT ON COLUMN BED_HIST.FLG_STATUS IS 'Main bed status: (O- Occupied bed; V- Free bed; D- Depracated registry/released temporary bed) (DEFAULT: O)';
+COMMENT ON COLUMN BED_HIST.DESC_BED IS 'Description of temporary beds';
+COMMENT ON COLUMN BED_HIST.NOTES IS 'Bed notes (temporary beds only)';
+COMMENT ON COLUMN BED_HIST.RANK IS 'Bed ranking inside correspondent room';
+COMMENT ON COLUMN BED_HIST.FLG_AVAILABLE IS 'Is this bed available: (Y- Yes; N- No) (DEFAULT: Y)';
+COMMENT ON COLUMN BED_HIST.CREATE_USER IS 'Professional ID that creates the registry';
+COMMENT ON COLUMN BED_HIST.CREATE_TIME IS 'Date of registry creation';
+COMMENT ON COLUMN BED_HIST.CREATE_INSTITUTION IS 'Institution ID where registry was created';
+COMMENT ON COLUMN BED_HIST.UPDATE_USER IS 'Professional ID that last updates the registry';
+COMMENT ON COLUMN BED_HIST.UPDATE_TIME IS 'Date of registry last update';
+COMMENT ON COLUMN BED_HIST.UPDATE_INSTITUTION IS 'Institution ID where registry was last updated';
+COMMENT ON COLUMN BED_HIST.ID_BED_TYPE IS 'Type of bed identifier';
+COMMENT ON COLUMN BED_HIST.DT_CREATION IS 'Date in which this bed was created';
+
+COMMENT ON COLUMN BED_HIST.flg_bed_status IS 'Status of this data: A - active, E - edited, C - canceled.';
+COMMENT ON COLUMN BED_HIST.flg_parameterization_type IS 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+COMMENT ON COLUMN BED_HIST.id_professional IS 'Id professional that creates the data, when using backoffice.';
+COMMENT ON COLUMN BED_HIST.dt_last_update IS 'Last date when this data was updated.';
+COMMENT ON COLUMN BED_HIST.flg_selected_specialties IS 'Flag that indicates the type of selection of specialties: A - all, N - none, O - other';
+
+
+ALTER TABLE BED_HIST ADD 
+(
+DCS_IDS table_number
+) NESTED TABLE DCS_IDS STORE AS DCS_IDS_BED_TAB;
+
+COMMENT ON COLUMN BED_HIST.DCS_IDS IS 'List of services/clinical services for which the BED is parametrized.';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 14/04/2011 18:10
+-- CHANGE REASON: [ALERT-173251 ] [NZD] Correct problem with tables: BED_HIST, ROOM_HIST, ADM_INDICATION_HIST
+alter table bed_hist drop column dcs_ids;
+-- CHANGE END: Sofia Mendes

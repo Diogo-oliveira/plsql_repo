@@ -1,0 +1,36 @@
+CREATE OR REPLACE TYPE FORCE t_rec_presc_interop AS OBJECT
+(
+    id_drug_presc_det         NUMBER(24),
+    id_prof_prescribed        NUMBER(24),
+    id_prof_action            NUMBER(24),
+    id_professional_cancel    NUMBER(24),
+    id_prof_cosign            NUMBER(24),
+    flg_status                VARCHAR2(1),
+    id_item                   VARCHAR2(255),
+    flg_item_type             VARCHAR2(3),
+    desc_item                 VARCHAR2(1000),
+    id_patient                NUMBER(24),
+    id_episode                NUMBER(24),
+    flg_take_type             VARCHAR2(3),
+    value_bolus               NUMBER(24),
+    id_unit_measure_bolus     NUMBER(24),
+    descr_unit_measure_bolus  VARCHAR2(1000),
+    value_drip                NUMBER(24),
+    id_unit_measure_drip      NUMBER(24),
+    descr_unit_measure_drip   VARCHAR2(1000),
+    id_drug_route             VARCHAR2(255),
+    desc_drug_route           VARCHAR2(1000),
+    freetext_instr            VARCHAR2(1000),
+    note_presc                VARCHAR2(4000),
+    note_cancel               VARCHAR2(4000),
+    note_justification        VARCHAR2(4000),
+    note_condition            VARCHAR2(4000),
+    unidose                   VARCHAR2(3),
+    vers                      VARCHAR2(10),
+    interval_tbl              t_table_presc_interval,
+    dt_cancel_tstz            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    dt_drug_prescription_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    dt_last_change_tstz       TIMESTAMP(6) WITH LOCAL TIME ZONE
+)
+;
+/

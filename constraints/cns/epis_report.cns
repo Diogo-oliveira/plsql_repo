@@ -1,0 +1,179 @@
+  ALTER TABLE EPIS_REPORT ADD CONSTRAINT EREPT_PK PRIMARY KEY (ID_EPIS_REPORT) ENABLE;
+
+  ALTER TABLE EPIS_REPORT MODIFY (ID_EPIS_REPORT NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_REPORT MODIFY (ID_REPORTS NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_REPORT MODIFY (ID_EPISODE NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_REPORT MODIFY (ID_PROFESSIONAL NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_REPORT MODIFY (DT_CREATION NOT NULL ENABLE);
+
+
+  ALTER TABLE EPIS_REPORT MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+alter table epis_report modify(id_episode null enable);
+
+--João Eiras, 03-10-2007
+alter table epis_report add constraint erep_repgp_fk foreign key (ID_REPORTS_GEN_PARAM) references REPORTS_GEN_PARAM(ID_REPORTS_GEN_PARAM);
+
+alter table epis_report drop constraint erep_ctx_null_cns;
+alter table epis_report add constraint erep_ctx_null_cns(coalesce(ID_EPISODE,ID_AUDIT_REQ_PROF_EPIS,ID_AUDIT_REQ_PROF,ID_REPORTS_GEN_PARAM) is not null);
+
+--Emilia Taborda 2007/11/05
+-- Correcção da WO [5378] João Eiras, 03-10-2007 (Revisão 38281)
+alter table epis_report add constraint erep_repgp_fk foreign key (ID_REPORTS_GEN_PARAM) references REPORTS_GEN_PARAM(ID_REPORTS_GEN_PARAM);
+
+alter table epis_report drop constraint erep_ctx_null_cns;
+alter table epis_report add constraint erep_ctx_null_cns check (coalesce(ID_EPISODE,ID_AUDIT_REQ_PROF_EPIS,ID_AUDIT_REQ_PROF,ID_REPORTS_GEN_PARAM) is not null);
+
+--CHANGED BY: Rui Spratley
+--CHANGE DATE: 2008/05/26
+--CHANGE REASON: 
+ALTER TABLE EPIS_REPORT ADD (CONSTRAINT EREP_FLG_SIGNED_CHK CHECK (FLG_SIGNED in ('Y','N')));
+-- CHANGE END
+
+--CHANGED BY: Ricardo Pires
+--CHANGE DATE: 2008/06/20
+--CHANGE REASON: Necessario alterar constraint para as novas colunas criadas.
+ALTER TABLE epis_report DROP CONSTRAINT erep_ctx_null_cns;
+alter table epis_report add constraint erep_ctx_null_cns check (coalesce(ID_EPISODE,ID_AUDIT_REQ_PROF_EPIS,ID_AUDIT_REQ_PROF,ID_REPORTS_GEN_PARAM,ID_SOCIAL_EPISODE , ID_PATIENT,  ID_EXTERNAL_REQUEST , ID_VISIT) is not null);
+-- CHANGE END
+
+
+
+-- José Brito 26/11/2008 ALERT-10540
+ALTER TABLE epis_report DROP CONSTRAINT EREP_CTX_NULL_CNS;
+ALTER TABLE epis_report ADD CONSTRAINT EREP_CTX_NULL_CNS CHECK(coalesce(id_episode,
+                                                                         id_audit_req_prof_epis,
+                                                                         id_audit_req_prof,
+                                                                         id_audit_req,
+                                                                         id_reports_gen_param,
+                                                                         id_social_episode,
+                                                                         id_patient,
+                                                                         id_external_request,
+                                                                         id_visit) IS NOT NULL);
+-- END
+
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 2009/09/22 12:13
+-- CHANGE REASON: [ALERT-44853] QC FIX - MNI4001 INP - patients grid - print button - diet report - ERROR
+-- CHANGE REVISION: 2.5.0.6
+
+
+-- Enable/Disable check constraints 
+alter table EPIS_REPORT
+  disable constraint EREP_CTX_NULL_CNS;
+
+ -- CHANGE END Filipe MAchado 
+  
+
+
+
+-- CHANGED BY: jorge.matos 
+-- CHANGE DATE: 2010/10/27 
+-- CHANGE REASON: ALERT-119559 
+DECLARE 
+lv_count INTEGER; 
+BEGIN 
+  lv_count :=0; 
+  SELECT COUNT(*) INTO lv_count FROM user_constraints uc WHERE uc.constraint_name='EREP_CTX_NULL_CNS' and uc.table_name = 'EPIS_REPORT'; 
+  IF lv_count > 0 THEN 
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT DROP CONSTRAINT EREP_CTX_NULL_CNS'; 
+  END IF; 
+END; 
+/ 
+-- CHANGE END jorge.matos 
+
+
+-- CHANGED BY: jorge.matos 
+-- CHANGE DATE: 2010/10/27 
+-- CHANGE REASON: ALERT-135564 
+DECLARE 
+lv_count INTEGER; 
+BEGIN 
+  lv_count :=0; 
+  SELECT COUNT(*) INTO lv_count FROM user_constraints uc WHERE uc.constraint_name='EREP_CTX_NULL_CNS' and uc.table_name = 'EPIS_REPORT'; 
+  IF lv_count > 0 THEN 
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT DROP CONSTRAINT EREP_CTX_NULL_CNS'; 
+  END IF; 
+END; 
+/ 
+-- CHANGE END jorge.matos
+
+
+
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 2010/10/27
+-- CHANGE REASON: ALERT-135828 
+DECLARE
+lv_count INTEGER;
+BEGIN
+  lv_count :=0;
+  SELECT COUNT(*) INTO lv_count FROM user_constraints uc WHERE uc.constraint_name='EREP_CTX_NULL_CNS' and uc.table_name = 'EPIS_REPORT';
+  IF lv_count > 0 THEN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT DROP CONSTRAINT EREP_CTX_NULL_CNS';
+  END IF;
+END;
+/
+-- CHANGE END jorge.matos
+
+
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 08/04/2011 20:25
+-- CHANGE REASON: [ALERT-172090] Define reports as the formal health record for disclosure purposes (ALERT_60289)
+DECLARE
+  e_name_already_exists EXCEPTION;
+
+  PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);  
+BEGIN
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_REPORT ADD CONSTRAINT ER_FLG_DISCL_CHK CHECK (FLG_DISCLOSURE IN (''Y'', ''N''))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('ER_FLG_DISCL_CHK already exists.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Tiago Lourenço
+-- CHANGE DATE: 31-May-2011
+-- CHANGE REASON: ALERT-182484
+DECLARE
+  e_nonexistent EXCEPTION;
+  e_name_already_exists EXCEPTION;
+
+  PRAGMA EXCEPTION_INIT(e_nonexistent, -2443);  
+  PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);  
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'alter table EPIS_REPORT drop constraint EPIS_REPORT_FLG_STATUS_CHK';
+    EXCEPTION
+      WHEN e_nonexistent THEN
+        dbms_output.put_line('EPIS_REPORT_FLG_STATUS_CHK doesn''t exists.');
+  END;
+  BEGIN
+    EXECUTE IMMEDIATE 'alter table EPIS_REPORT add constraint EPIS_REPORT_FLG_STATUS_CHK check (flg_status IN (''D'', ''E'', ''F'', ''I'', ''N'', ''R'', ''S''))';
+    EXCEPTION
+      WHEN e_name_already_exists THEN
+        dbms_output.put_line('EPIS_REPORT_FLG_STATUS_CHK already exists.');
+  END;
+END;
+/
+-- CHANGE END: Tiago Lourenço
+
+-- CHANGED BY: tiago.pereira
+-- CHANGE DATE: 20/03/2015
+-- CHANGE REASON: ALERT-307854
+
+alter table EPIS_REPORT
+  add constraint EPIS_FLG_TYPE_CHK
+  check (FLG_TYPE IN ('C', 'H'));
+  
+--CHANGE END

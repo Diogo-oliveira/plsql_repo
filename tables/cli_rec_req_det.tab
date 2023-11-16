@@ -1,0 +1,23 @@
+
+
+  CREATE TABLE CLI_REC_REQ_DET
+   (	ID_CLI_REC_REQ_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_CLI_REC_REQ NUMBER(24,0) NOT NULL ENABLE,
+	ID_CLIN_RECORD NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000)
+   );
+
+
+COMMENT ON TABLE cli_rec_req_det IS 'Processos clínicos requisitados' ;
+
+COMMENT ON COLUMN cli_rec_req_det.flg_status IS 'D - pendente; R - requisitado; E - em execução; F - terminado; P - fornecimento parcial; C - cancelado' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE CLI_REC_REQ_DET ADD DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+
+alter table CLI_REC_REQ_DET drop column DT_CANCEL;

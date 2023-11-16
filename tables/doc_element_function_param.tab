@@ -1,0 +1,24 @@
+CREATE TABLE DOC_ELEMENT_FUNCTION_PARAM
+(
+    ID_DOC_ELEMENT NUMBER(24,0),
+    ID_DOC_FUNCTION VARCHAR2(200),
+    RANK NUMBER(6,0),
+    FLG_PARAM_TYPE VARCHAR2(1),
+    FLG_VALUE_TYPE VARCHAR2(1),
+    PARAM_VALUE VARCHAR2(200)
+);
+
+COMMENT ON COLUMN DOC_ELEMENT_FUNCTION_PARAM.ID_DOC_ELEMENT IS 'Element ID';
+COMMENT ON COLUMN DOC_ELEMENT_FUNCTION_PARAM.ID_DOC_FUNCTION IS 'Function ID';
+COMMENT ON COLUMN DOC_ELEMENT_FUNCTION_PARAM.RANK IS 'Parameter order';
+COMMENT ON COLUMN DOC_ELEMENT_FUNCTION_PARAM.FLG_PARAM_TYPE IS 'Type of parameter: ''V'' - Value; ''T'' - Touch-option''s element ID; ''E'' - Environment variable on UI';
+COMMENT ON COLUMN DOC_ELEMENT_FUNCTION_PARAM.FLG_VALUE_TYPE IS 'Value''s data type. This flag depends of parameter type. For value parameter (''V'') this flag can be: ''N'' - Number; ''S'' - String; ''A'' - Array. For element parameter (''T'') this flag can be: ''C'' - Element criteria; ''V'' - Element value. For an UI environment variable parameter (''E'') this flag is not used.';
+COMMENT ON COLUMN DOC_ELEMENT_FUNCTION_PARAM.PARAM_VALUE IS 'Parameter value';
+COMMENT ON TABLE DOC_ELEMENT_FUNCTION_PARAM IS 'Parameters used by an element to call a function';
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-MAR-23
+-- CHANGED REASON: ALERT-11985 - Changes on Touch-Option database model to include id content
+ALTER TABLE DOC_ELEMENT_FUNCTION_PARAM ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN DOC_ELEMENT_FUNCTION_PARAM.ID_CONTENT  IS 'Content identifier';
+--CHANGE END Ariel Machado

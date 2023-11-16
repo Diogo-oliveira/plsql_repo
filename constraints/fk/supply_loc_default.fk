@@ -1,0 +1,14 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 10:18
+-- CHANGE REASON: [ALERT-12334 ] 
+alter table SUPPLY_LOC_DEFAULT
+  add constraint SLD_SPL_FK foreign key (ID_SUPPLY_LOCATION)
+  references SUPPLY_LOCATION (ID_SUPPLY_LOCATION);
+alter table SUPPLY_LOC_DEFAULT
+  add constraint SLD_SSI_FK foreign key (ID_SUPPLY_SOFT_INST)
+  references SUPPLY_SOFT_INST (ID_SUPPLY_SOFT_INST);
+-- Create/Recreate check constraints 
+alter table SUPPLY_LOC_DEFAULT
+  add constraint SLD_FLG_DEFAULT_CHK
+  check (FLG_DEFAULT IN ('Y','N'));
+-- CHANGE END: Susana Silva

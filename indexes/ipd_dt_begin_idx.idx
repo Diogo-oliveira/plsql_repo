@@ -1,0 +1,16 @@
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/01/2013 16:52
+-- CHANGE REASON: [ALERT-249772] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX IPD_DT_BEGIN_IDX ON INTERV_PRESC_DET(DT_BEGIN_TSTZ)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('index already inserted');
+    END;
+END;
+/
+-- CHANGE END: Ana Matos

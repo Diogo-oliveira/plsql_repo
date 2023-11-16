@@ -1,0 +1,133 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 09:44
+-- CHANGE REASON: [ALERT-229216] VERSIONING TERMINOLOGY SERVER - SCHEMA ALERT - DDL (EA Tables)
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -955);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'CREATE INDEX DIAGEA_CNCPTTY_IDX ON DIAGNOSIS_EA (CONCEPT_TYPE_INT_NAME, ID_INSTITUTION, ID_SOFTWARE) TABLESPACE ALERT_IDX';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'CREATE INDEX DIAGEA_CNCPTTR_IDX ON DIAGNOSIS_EA (ID_CONCEPT_TERM) TABLESPACE ALERT_IDX';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'CREATE INDEX DIAGEA_CNCPTCD_IDX ON DIAGNOSIS_EA (CONCEPT_CODE) TABLESPACE ALERT_IDX';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'CREATE INDEX DIAG_EA_INST_SOFT_IDX ON DIAGNOSIS_EA(ID_INSTITUTION, ID_SOFTWARE, FLG_TERMINOLOGY, FLG_DIAG_TYPE, FLG_MSI_CONCEPT_TERM) TABLESPACE ALERT_IDX';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 24/05/2012 15:00
+-- CHANGE REASON: [ALERT-231337] Diagnosis performance improvements
+CREATE INDEX DIAGEA_FLGOTH_IDX ON diagnosis_ea (flg_other) TABLESPACE ALERT_IDX;
+CREATE INDEX DIAGEA_CODE_DIAG_IDX ON diagnosis_ea (code_diagnosis,id_software,id_institution) TABLESPACE ALERT_IDX;
+CREATE INDEX DIAGEA_CODE_MED_IDX ON diagnosis_ea (code_medical,id_software,id_institution) TABLESPACE ALERT_IDX;
+CREATE INDEX DIAGEA_CODE_SURG_IDX ON diagnosis_ea (code_surgical,id_software,id_institution) TABLESPACE ALERT_IDX;
+CREATE INDEX DIAGEA_CODE_PROB_IDX ON diagnosis_ea (code_problems,id_software,id_institution) TABLESPACE ALERT_IDX;
+CREATE INDEX DIAGEA_CODE_ANOM_IDX ON diagnosis_ea (code_cong_anomalies,id_software,id_institution) TABLESPACE ALERT_IDX;
+CREATE INDEX DIAGEA_CODE_PART_IDX ON diagnosis_ea (code_diagnosis_partial,id_software,id_institution) TABLESPACE ALERT_IDX;
+-- CHANGE END: José Silva
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 11/06/2012 10:17
+-- CHANGE REASON: [ALERT-232656] 
+create index DIAGEA_FLGTRM_IDX on diagnosis_ea(flg_terminology);
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 18/06/2012 09:28
+-- CHANGE REASON: [ALERT-232485] [PERFORMANCE] - DiagnosisDifferentialCreate.swf
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -955);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'CREATE INDEX DIAGEA_SFTINST_CT_PR_IDX ON DIAGNOSIS_EA (FLG_MSI_CONCEPT_TERM, ID_SOFTWARE, ID_INSTITUTION, ID_PROFESSIONAL) TABLESPACE ALERT_IDX';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 30/08/2013 18:27
+-- CHANGE REASON: [ALERT-264219] DB Versioning - SCHEMA ALERT TABLE CHANGES (ALERT_251640)
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'CREATE INDEX DIAGEA_FLG_IS_DIAG_IDX ON DIAGNOSIS_EA (FLG_IS_DIAGNOSIS) TABLESPACE ALERT_IDX ');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 30/08/2013 19:14
+-- CHANGE REASON: [ALERT-264219] DB Versioning - SCHEMA ALERT TABLE CHANGES (ALERT_251640)
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'CREATE INDEX DIAGEA_FLG_IS_DIAG_IDX ON DIAGNOSIS_EA (FLG_IS_DIAGNOSIS) TABLESPACE ALERT_IDX ');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/02/2014 07:40
+-- CHANGE REASON: [ALERT-277769] PERFORMANCE - Most frequent and searchable diagnoses
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'DROP INDEX DIAG_EA_INST_SOFT_IDX');
+    run_ddl(i_sql => 'CREATE INDEX DIAG_EA_INST_SOFT_IDX ON DIAGNOSIS_EA (ID_INSTITUTION, ID_SOFTWARE, FLG_TERMINOLOGY, FLG_DIAG_TYPE, FLG_MSI_CONCEPT_TERM, FLG_IS_DIAGNOSIS) TABLESPACE ALERT_IDX');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- cmf
+declare
+	l_sql	varchar2(4000);
+begin
+
+	l_sql := q'[CREATE INDEX ALERT.DIAG_EA_SEARCH01_IDX ON ALERT.DIAGNOSIS_EA(ID_INSTITUTION, ID_SOFTWARE, ID_DEP_CLIN_SERV,FLG_TERMINOLOGY,FLG_DIAG_TYPE, FLG_MSI_CONCEPT_TERM, FLG_IS_DIAGNOSIS)  TABLESPACE ALERT_IDX]';
+	pk_versioning.run( l_sql);
+end;
+/

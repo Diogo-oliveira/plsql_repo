@@ -1,0 +1,53 @@
+
+
+  CREATE TABLE ANALYSIS_ALIAS
+   (	ID_ANALYSIS_ALIAS NUMBER(24,0) NOT NULL ENABLE,
+	ID_ANALYSIS NUMBER(12,0) NOT NULL ENABLE,
+	CODE_ANALYSIS_ALIAS VARCHAR2(200) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(12,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE analysis_alias IS 'Definição das abreviaturas associadas às análises, por instituição / software.Pode-se pesquisar pelo alias, em vez do nome completo da análise, mas o resultado deve mostrar o nome completo.' ;
+
+COMMENT ON COLUMN analysis_alias.code_analysis_alias IS 'Código para tradução da abreviatura, gerado pelo trigger da tabela' ;
+COMMENT ON COLUMN analysis_alias.id_institution IS 'Instituição para a qual é válido o registo' ;
+COMMENT ON COLUMN analysis_alias.id_software IS 'Aplicação para a qual é válido o registo' ;
+COMMENT ON COLUMN analysis_alias.id_professional IS 'Profissional para o qual é válido o registo' ;
+
+-- CHANGED BY: Rui Spratley
+-- CHANGED DATE: 2007-OUT-10
+-- CHANGED REASON: Reformulação das análises
+
+-- Add/modify columns 
+alter table ANALYSIS_ALIAS add ID_DEP_CLIN_SERV NUMBER(24);
+-- Add comments to the columns 
+comment on column ANALYSIS_ALIAS.ID_DEP_CLIN_SERV
+  is 'Serviço / especialidade para o qual é válido o registo. ';
+
+-- CHANGE END: Rui Spratley
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:00
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS_ALIAS IS 'Lab tests alias';
+
+COMMENT ON COLUMN ANALYSIS_ALIAS.ID_ANALYSIS_ALIAS IS 'Lab test alias ID';
+COMMENT ON COLUMN ANALYSIS_ALIAS.ID_ANALYSIS IS 'Lab test ID';
+COMMENT ON COLUMN ANALYSIS_ALIAS.CODE_ANALYSIS_ALIAS IS 'Translation code';
+COMMENT ON COLUMN ANALYSIS_ALIAS.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN ANALYSIS_ALIAS.ID_SOFTWARE IS 'Software ID';
+COMMENT ON COLUMN ANALYSIS_ALIAS.ID_PROFESSIONAL IS 'Professional ID';
+COMMENT ON COLUMN ANALYSIS_ALIAS.ADW_LAST_UPDATE IS 'Update date';
+COMMENT ON COLUMN ANALYSIS_ALIAS.ID_DEP_CLIN_SERV IS 'Clinical service ID';
+COMMENT ON COLUMN ANALYSIS_ALIAS.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ANALYSIS_ALIAS.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ANALYSIS_ALIAS.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ANALYSIS_ALIAS.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ANALYSIS_ALIAS.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ANALYSIS_ALIAS.UPDATE_INSTITUTION IS 'Update Institution';
+-- CHANGE END: Ana Matos

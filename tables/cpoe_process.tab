@@ -1,0 +1,118 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 29/10/2009 04:37
+-- CHANGE REASON: [ALERT-51207] 
+CREATE TABLE CPOE_PROCESS
+(
+  ID_CPOE_PROCESS          NUMBER(24)    NOT NULL,
+  DT_CPOE_PROC_START       TIMESTAMP(6)  WITH LOCAL TIME ZONE,
+  DT_CPOE_PROC_END         TIMESTAMP(6)  WITH LOCAL TIME ZONE,
+DT_CPOE_PROC_CREATE      TIMESTAMP(6)  WITH LOCAL TIME ZONE,
+  FLG_STATUS               VARCHAR2(1 CHAR) NOT NULL,
+  ID_EPISODE               NUMBER(24)    NOT NULL,
+ID_PROFESSIONAL          NUMBER(24)    NOT NULL,
+  CREATE_USER              VARCHAR2(24 CHAR),
+  CREATE_TIME              TIMESTAMP(6)  WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION       NUMBER(24)    ,
+  UPDATE_USER              VARCHAR2(24 CHAR),
+  UPDATE_TIME              TIMESTAMP(6)  WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION       NUMBER(24)
+);
+comment on table  CPOE_PROCESS  is                          'Computerized Physician Order Entry (CPOE) process table';
+comment on column CPOE_PROCESS.ID_CPOE_PROCESS is           'CPOE process ID';
+comment on column CPOE_PROCESS.DT_CPOE_PROC_START is        'CPOE process start timestamp';
+comment on column CPOE_PROCESS.DT_CPOE_PROC_END is          'CPOE process end timestamp';
+comment on column CPOE_PROCESS.DT_CPOE_PROC_CREATE is       'CPOE process create timestamp';
+comment on column CPOE_PROCESS.FLG_STATUS is                'CPOE process status: (A)ctive (I)nactive (D)raft (E)xpired';
+comment on column CPOE_PROCESS.ID_EPISODE is                'Episode ID';
+comment on column CPOE_PROCESS.ID_PROFESSIONAL is           'Professional ID';
+comment on column CPOE_PROCESS.CREATE_USER is               'Creation user';
+comment on column CPOE_PROCESS.CREATE_TIME is               'Creation time';
+comment on column CPOE_PROCESS.CREATE_INSTITUTION is        'Creation institution';
+comment on column CPOE_PROCESS.UPDATE_USER is               'Update user';
+comment on column CPOE_PROCESS.UPDATE_TIME is               'Update time';
+comment on column CPOE_PROCESS.UPDATE_INSTITUTION is        'Update institution';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 11/12/2009 00:23
+-- CHANGE REASON: [ALERT-61939] CPOE 2nd phase: versioning of CPOE feature for Diets and Hidrics
+alter table CPOE_PROCESS drop column DT_CPOE_PROC_CREATE;
+alter table CPOE_PROCESS add 
+(
+  ID_INSTITUTION number(24) not null,
+  ID_SOFTWARE    number(24) not null,
+DT_LAST_UPDATE timestamp(6) with local time zone
+);
+comment on column CPOE_PROCESS.ID_INSTITUTION is 'Institution ID';
+comment on column CPOE_PROCESS.ID_SOFTWARE is 'Software ID';
+comment on column CPOE_PROCESS.DT_LAST_UPDATE is 'CPOE process last update date';
+
+comment on column CPOE_PROCESS.FLG_STATUS is 'CPOE process status: (A)ctive (I)nterrupted (E)xpired';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 12/10/2010 10:06
+-- CHANGE REASON: [ALERT-128784] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_PROCESS add FLG_CPOE_PROC_AUTO_REFRESH varchar2(1 char) default ''N'' not null';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_PROCESS add DT_CPOE_PROC_AUTO_REFRESH timestamp with local time zone';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_PROCESS add DT_CPOE_EXPIRED timestamp with local time zone';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_PROCESS add DT_CPOE_REFRESHED timestamp with local time zone';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/    
+comment on column CPOE_PROCESS.FLG_CPOE_PROC_AUTO_REFRESH is 'Flag that indicates if auto copy2draft or refresh job action should occur or not';
+comment on column CPOE_PROCESS.DT_CPOE_PROC_AUTO_REFRESH is 'CPOE process auto copy2draft or refresh timestamp';
+comment on column CPOE_PROCESS.DT_CPOE_EXPIRED is 'CPOE process "expired prescription" timestamp';
+comment on column CPOE_PROCESS.DT_CPOE_REFRESHED is 'CPOE process "refreshed to draft prescription" timestamp';
+comment on table CPOE_PROCESS is 'Computerized Prescription Order Entry (CPOE) process table [CPOEP]';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 27/09/2011 12:10
+-- CHANGE REASON: [ALERT-185453] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_PROCESS add ID_DEP_CLIN_SERV number(24)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+
+comment on column CPOE_PROCESS.ID_DEP_CLIN_SERV is 'Department clinical service';
+-- CHANGE END: Tiago Silva

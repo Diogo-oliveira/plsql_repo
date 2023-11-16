@@ -1,0 +1,105 @@
+
+
+  ALTER TABLE "ALERT"."WOUNDS_EA" MODIFY ("ID_NURSE_ACTV_REQ_DET" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."WOUNDS_EA" MODIFY ("ID_NURSE_ACTIVITY_REQ" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."WOUNDS_EA" ADD CONSTRAINT "WOUNDS_EA_FLG_EVAL_CHK" CHECK (FLG_STATUS_EVALUATION IN ('A','I')) ENABLE;
+
+
+
+  ALTER TABLE "ALERT"."WOUNDS_EA" ADD CONSTRAINT "WOUNDS_EA_FLG_NOTES_CHK" CHECK (FLG_NOTES IN ('Y','N')) ENABLE;
+
+
+
+  ALTER TABLE "ALERT"."WOUNDS_EA" ADD CONSTRAINT "WOUNDS_EA_FLG_STATUS_DET_CHK" CHECK (FLG_STATUS_DET IN ('R','E','F','C','D')) ENABLE;
+
+
+
+  ALTER TABLE "ALERT"."WOUNDS_EA" ADD CONSTRAINT "WOUNDS_EA_FLG_STATUS_REQ_CHK" CHECK (FLG_STATUS_REQ in ('F','R','C','E','D','P')) ENABLE;
+
+
+
+  ALTER TABLE "ALERT"."WOUNDS_EA" ADD CONSTRAINT "WOUNDS_EA_FLG_TIME_CHK" CHECK (FLG_TIME IN ('E','N','B')) ENABLE;
+
+
+
+  ALTER TABLE "ALERT"."WOUNDS_EA" ADD CONSTRAINT "WOUNDS_EA_FLG_TREAT_CHK" CHECK (FLG_STATUS_TREAT  IN ('A','N','C')) ENABLE;
+
+
+
+  ALTER TABLE "ALERT"."WOUNDS_EA" ADD CONSTRAINT "WOUNDS_EA_PK" PRIMARY KEY ("ID_NURSE_ACTV_REQ_DET") ENABLE;
+
+
+
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/12/2009 21:08
+-- CHANGE REASON: [ALERT-62132] CPOE Procedures/Dressings/Patient education
+alter table wounds_ea drop constraint WOUNDS_EA_FLG_STATUS_DET_CHK;
+alter table wounds_ea add constraint WOUNDS_EA_FLG_STATUS_DET_CHK check (FLG_STATUS_DET IN ('R','E','F','C','D','Z'));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 02/11/2011 11:11
+-- CHANGE REASON: [ALERT-201577] Task Expire support for CPOE - Dressings
+alter table WOUNDS_EA
+  drop constraint WOUNDS_EA_FLG_STATUS_REQ_CHK;
+alter table WOUNDS_EA
+  add constraint WOUNDS_EA_FLG_STATUS_REQ_CHK
+  check (FLG_STATUS_REQ in ('F','R','C','E','D','P', 'O'));
+
+alter table WOUNDS_EA
+  drop constraint WOUNDS_EA_FLG_STATUS_DET_CHK;
+alter table WOUNDS_EA
+  add constraint WOUNDS_EA_FLG_STATUS_DET_CHK
+  check (FLG_STATUS_DET IN ('R','E','F','C','D','Z','O'));
+
+alter table WOUNDS_EA
+ drop constraint WOUNDS_EA_FLG_TREAT_CHK;
+alter table WOUNDS_EA
+  add constraint WOUNDS_EA_FLG_TREAT_CHK
+  check (FLG_STATUS_TREAT  IN ('A','N','C','O'));
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 28/05/2014 09:01
+-- CHANGE REASON: [ALERT-283443 ] 
+DECLARE
+  e_nonexistent_constraint EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_nonexistent_constraint, -02443); 
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE wounds_ea DROP CONSTRAINT wounds_ea_flg_status_req_chk';
+  EXCEPTION
+    WHEN e_nonexistent_constraint THEN
+      dbms_output.put_line('Constraint wounds_ea.wounds_ea_flg_status_req_chk doesnt exist');
+  END;
+
+  EXECUTE IMMEDIATE 'ALTER TABLE wounds_ea ADD CONSTRAINT wounds_ea_flg_status_req_chk check (FLG_STATUS_REQ in (''F'',''R'',''C'',''E'',''D'',''P'', ''O'',''N''))';
+END;
+/
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 28/05/2014 09:03
+-- CHANGE REASON: [ALERT-283443 ] 
+DECLARE
+  e_nonexistent_constraint EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_nonexistent_constraint, -02443); 
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE wounds_ea DROP CONSTRAINT wounds_ea_flg_status_det_chk';
+  EXCEPTION
+    WHEN e_nonexistent_constraint THEN
+      dbms_output.put_line('Constraint wounds_ea.wounds_ea_flg_status_det_chk doesnt exist');
+  END;
+
+  EXECUTE IMMEDIATE 'ALTER TABLE wounds_ea ADD CONSTRAINT wounds_ea_flg_status_det_chk check (FLG_STATUS_DET IN (''R'',''E'',''F'',''C'',''D'',''Z'',''O'', ''N''))';
+END;
+/
+-- CHANGE END: cristina.oliveira

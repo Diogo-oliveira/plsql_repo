@@ -1,0 +1,91 @@
+  CREATE TABLE SR_EQUIP
+   (	ID_SR_EQUIP NUMBER(24,0) NOT NULL ENABLE,
+	ID_SR_EQUIP_PARENT NUMBER(24,0),
+	CODE_EQUIP VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1),
+	FLG_SCHEDULE_YN VARCHAR2(1),
+	FLG_HEMO_YN VARCHAR2(1),
+	RANK NUMBER(6,0),
+	ADW_LAST_UPDATE DATE
+   );
+
+
+COMMENT ON COLUMN sr_equip.flg_schedule_yn IS 'Indica se o equipamento é "agendável" ou em número limitado, como por exemplo, raio x móvel' ;
+COMMENT ON COLUMN sr_equip.flg_hemo_yn IS 'Indica se se trata de Hemoderivados' ;
+
+
+--Rui Batista 2007/09/13
+--Consumos do Bloco
+
+--Adiciona coluna de indicação de R- Reserva, C - Consumo ou T- Todos
+alter table sr_equip add flg_type varchar2(1) default 'T';
+COMMENT ON COLUMN sr_equip.flg_type IS 'Tipo de registo. R- Reservas, C- Consumos, T- Todos';
+
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 15/01/2010 09:29
+-- CHANGE REASON: [ALERT-67372] Added id_content
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE sr_equip ADD id_content varchar2(200 char)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN sr_equip.id_content IS ''content identifier''';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 02/12/2010 16:48
+-- CHANGE REASON: [ALERT-146441] Associate a surgical procedure to supplies
+alter table SR_EQUIP add ID_CONTENT_NEW varchar2(200 char);
+COMMENT ON COLUMN sr_equip.ID_CONTENT_NEW IS 'content identifier -> this column has been created to help the content migration';
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 17:41
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table SR_EQUIP
+  is 'Content of surgery equipment and their availability';
+-- Add comments to the columns 
+comment on column SR_EQUIP.id_sr_equip
+  is 'Primary key';
+comment on column SR_EQUIP.id_sr_equip_parent
+  is 'Id of equipment parent in this table (used to define an hierarchical equipment behaviour)';
+comment on column SR_EQUIP.code_equip
+  is 'Translation code';
+comment on column SR_EQUIP.flg_available
+  is 'Is the register availabel (Yes/No)';
+comment on column SR_EQUIP.flg_schedule_yn
+  is 'The equipment is schedulable or is in limited number like i.e. x-ray (Yes/No)';
+comment on column SR_EQUIP.flg_hemo_yn
+  is 'Blood products (Yes/No)';
+comment on column SR_EQUIP.rank
+  is 'Relevance order';
+comment on column SR_EQUIP.adw_last_update
+  is 'Last date update : deprecated';
+comment on column SR_EQUIP.flg_type
+  is 'Register type : R- Reservs, C- Consumes, T- All';
+comment on column SR_EQUIP.create_user
+  is 'Creation User';
+comment on column SR_EQUIP.create_time
+  is 'Creation Time';
+comment on column SR_EQUIP.create_institution
+  is 'Creation Institution';
+comment on column SR_EQUIP.update_user
+  is 'Update User';
+comment on column SR_EQUIP.update_time
+  is 'Update Time';
+comment on column SR_EQUIP.update_institution
+  is 'Update Institution';
+comment on column SR_EQUIP.id_content
+  is 'Content identifier';
+comment on column SR_EQUIP.id_content_new
+  is 'Content identifier ( this column has been created to help the content migration )';
+-- CHANGE END: Renato Nunes

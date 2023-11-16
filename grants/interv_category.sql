@@ -1,0 +1,37 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 30/01/2012 12:03
+-- CHANGE REASON: [ALERT-216286] 
+grant references on INTERV_CATEGORY to ALERT_DEFAULT;
+-- CHANGE END:  Rui Gomes
+
+
+-- CHANGED BY: Vitor Oliveira
+-- CHANGED DATE: 2014-12-18
+-- CHANGED REASON: ALERT-299057
+
+grant select on ALERT.INTERV_CATEGORY to ALERT_DEFAULT;
+
+-- CHANGE END: Vitor Oliveira
+
+
+
+-- CHANGED BY: Vitor Oliveira
+-- CHANGED DATE: 2014-12-18
+-- CHANGED REASON: ALERT-299057
+
+grant select on ALERT.INTERV_CATEGORY to ALERT_DEFAULT;
+
+-- CHANGE END: Vitor Oliveira
+
+
+
+-- CHANGED BY: Ana Moita
+-- CHANGED DATE: 2018-5-28
+-- CHANGED REASON: CEMR-1467
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 2018-05-08
+-- CHANGE REASON: [CEMR-1437] [Subtask] [CNT] DB alert_core_cnt_api.pk_cnt_intervention and alert_core_cnt.pk_cnt_intervention
+GRANT SELECT ON ALERT.INTERV_CATEGORY to ALERT_CORE_CNT WITH GRANT OPTION;
+-- CHANGE END: Amanda Lee
+-- CHANGE END: Ana Moita

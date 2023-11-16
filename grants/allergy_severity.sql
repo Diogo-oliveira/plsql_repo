@@ -1,0 +1,1 @@
+grant select on allergy_severity to alert_viewer; 

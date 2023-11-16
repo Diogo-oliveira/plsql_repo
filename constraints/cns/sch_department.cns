@@ -1,0 +1,25 @@
+ALTER TABLE sch_department ADD CONSTRAINT sch_department_PK PRIMARY KEY(id_sch_department) ENABLE;
+ALTER TABLE sch_department MODIFY (id_department NOT NULL ENABLE);
+ALTER TABLE sch_department MODIFY (flg_dep_type NOT NULL ENABLE);
+ALTER TABLE sch_department ADD CONSTRAINT sdep_flgdeptype_ck CHECK(flg_dep_type IN ('E', 'C') ) ENABLE;
+alter table SCH_DEPARTMENT
+  drop constraint SDEP_FLGDEPTYPE_CK;
+alter table SCH_DEPARTMENT
+  add constraint SDEP_FLGDEPTYPE_CK
+  check (flg_dep_type IN ('E', 'C','A'));
+
+
+-- CHANGED BY: Telmo Castro
+-- CHANGED DATE: 04-07-2008
+-- CHANGE REASON: alteracoes no deepnav tipos de agendamento disponiveis
+alter table SCH_DEPARTMENT
+  add constraint SCH_DEPARTMENT_PK primary key (ID_DEPARTMENT, FLG_DEP_TYPE);
+
+--END
+
+-- CHANGED BY: Telmo Castro
+-- CHANGED DATE: 11-07-2008
+-- CHANGE REASON: esta CK foi tornada redundante pela FK SD_SDT_FK
+alter table SCH_DEPARTMENT
+  drop constraint SDEP_FLGDEPTYPE_CK;
+--END

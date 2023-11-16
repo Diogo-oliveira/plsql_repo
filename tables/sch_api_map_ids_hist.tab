@@ -1,0 +1,42 @@
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 12-03-2010
+-- CHANGE REASON: SCH-386
+create table SCH_API_MAP_IDS_HIST
+(
+  id_schedule_pfh     number not null,
+  id_schedule_ext     number not null,
+  dt_create_date      timestamp with local time zone,
+  create_user        varchar2(24),
+  create_time        timestamp with local time zone,
+  create_institution number,
+  update_user        varchar2(24),
+  update_time        timestamp with local time zone,
+  update_institution number
+);
+
+comment on table SCH_API_MAP_IDS_HIST is 'History of mapping between new scheduler IDs and the pfh schedulerIDs';
+comment on column SCH_API_MAP_IDS_HIST.id_schedule_pfh is 'pfh id_schedule (local)';
+comment on column SCH_API_MAP_IDS_HIST.id_schedule_ext is 'external id_schedule';
+comment on column SCH_API_MAP_IDS_HIST.dt_create_date is 'Create date supplied by invoker';
+comment on column SCH_API_MAP_IDS_HIST.create_user is 'Creation User';
+comment on column SCH_API_MAP_IDS_HIST.create_time is 'Creation Time';
+comment on column SCH_API_MAP_IDS_HIST.create_institution is 'Creation Institution';
+comment on column SCH_API_MAP_IDS_HIST.update_user is 'Update User';
+comment on column SCH_API_MAP_IDS_HIST.update_time is 'Update Time';
+comment on column SCH_API_MAP_IDS_HIST.update_institution is 'Update Institution';
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 06-02-2013
+-- CHANGE REASON: ALERT-251133
+ALTER TABLE SCH_API_MAP_IDS_HIST add id_schedule_procedure number(24);
+
+COMMENT ON COLUMN SCH_API_MAP_IDS_HIST.id_schedule_procedure is 'external SCHEDULE_PROCEDURE primary key';
+-- CHANGE END: Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-06-2014
+-- CHANGE REASON: alert-286564
+alter table SCH_API_MAP_IDS_HIST add dt_created TIMESTAMP(6) WITH LOCAL TIME ZONE;
+comment on column SCH_API_MAP_IDS_HIST.dt_created is 'Creation time (non-audit)';
+--CHANGE END: Telmo

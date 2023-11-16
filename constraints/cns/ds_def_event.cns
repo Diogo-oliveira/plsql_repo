@@ -1,0 +1,82 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:22
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE ds_def_event ADD CONSTRAINT dsde_pk PRIMARY KEY(id_ds_cmpt_mkt_rel, flg_event_type);
+--
+ALTER TABLE ds_def_event ADD CONSTRAINT dsde_dsde_uk UNIQUE(id_def_event);
+--
+ALTER TABLE ds_def_event ADD CONSTRAINT dsde_et_chk CHECK(flg_event_type IN ('I', 'A', 'M', 'E'));
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:22
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER INDEX dsde_pk          REBUILD TABLESPACE index_m;
+ALTER INDEX dsde_dsde_uk     REBUILD TABLESPACE index_m;
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 24/07/2019 16:35
+-- CHANGE REASON: [ARCH-7603] Changes on DB Model
+--                
+declare
+  l_Sql varchar2(4000);
+begin
+  l_Sql := 'alter table ds_def_event drop constraint DSDE_PK';
+  pk_versioning.run( l_sql );
+end;
+/
+
+
+declare
+  l_Sql varchar2(4000);
+begin
+
+  l_Sql := 'alter table ds_def_event drop constraint DSDE_DSDE_UK';
+  pk_versioning.run( l_sql );
+end;
+/
+  
+declare
+  l_Sql varchar2(4000);
+begin
+  l_Sql := 'alter table ds_def_event drop constraint DS_DF_VNT_UK';
+  pk_versioning.run( l_sql );
+end;
+/
+
+declare
+  l_Sql varchar2(4000);
+begin
+  l_Sql := 'alter table DS_DEF_EVENT add constraint DS_DF_VNT_UK unique (ID_DS_CMPT_MKT_REL, ID_ACTION)   using index   tablespace ALERT_IDX';
+  pk_versioning.run( l_sql );
+end;  
+/
+
+declare
+  l_Sql varchar2(4000);
+begin
+  l_Sql := 'alter table DS_DEF_EVENT add constraint DSDE_PK primary key (ID_DEF_EVENT) using index tablespace ALERT_IDX';
+  pk_versioning.run( l_sql );
+end;  
+/
+
+-- cmf 09-07-2019
+declare
+  l_Sql varchar2(4000);
+begin
+  l_sql := q'[alter table DS_DEF_EVENT drop constraint DSDE_ET_CHK]';
+  pk_versioning.run( l_sql );
+end;
+/
+
+-- cmf 09-07-2019
+declare
+  l_Sql varchar2(4000);
+begin
+  l_sql := q'[alter table DS_DEF_EVENT add constraint DSDE_ET_CHK check (flg_event_type IN ('I', 'A', 'M', 'E','H','S','R'))]';
+  pk_versioning.run( l_sql );
+end;
+/
+-- CHANGE END: Elisabete Bugalho

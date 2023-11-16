@@ -1,0 +1,78 @@
+-- Create table
+create table INTERV_PRESC_DET_CHANGE
+(
+  ID_INTERV_PRESC_DET NUMBER(24) not null,
+  ID_CHANGE           NUMBER not null,
+  DT_BEGIN_TSTZ       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  NUM_FREQ            NUMBER,
+  FLG_FREQ            VARCHAR2(1),
+  NUM_TAKE            NUMBER(3),
+  NUM_EXEC_SESS       NUMBER,
+  FLG_PRTY            VARCHAR2(1),
+  NOTES               VARCHAR2(4000),
+  FLG_STATUS_CHANGE   VARCHAR2(1),
+  ID_PROF_REQ         NUMBER(24),
+  DT_REQ              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROF_ACCEPT      NUMBER(24),
+  DT_ACCEPT           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROF_DECLINE     NUMBER(24),
+  DT_DECLINE          TIMESTAMP(6) WITH LOCAL TIME ZONE
+);
+-- Add comments to the table 
+comment on table INTERV_PRESC_DET_CHANGE
+  is 'Registo de pedidos de alteracoes de estados';
+-- Add comments to the columns 
+comment on column INTERV_PRESC_DET_CHANGE.ID_INTERV_PRESC_DET
+  is 'Id da prescricao de procedimentos correspondente';
+comment on column INTERV_PRESC_DET_CHANGE.ID_CHANGE
+  is 'Numero da alteracao';
+comment on column INTERV_PRESC_DET_CHANGE.DT_BEGIN_TSTZ
+  is 'Data de início do tratamento';
+comment on column INTERV_PRESC_DET_CHANGE.NUM_FREQ
+  is 'Frequência com que deve efectuar o tratamento';
+comment on column INTERV_PRESC_DET_CHANGE.FLG_FREQ
+  is 'Periodo de tempo em causa: (D) Dia, (S) Semana, (M) Mês';
+comment on column INTERV_PRESC_DET_CHANGE.NUM_TAKE
+  is 'Nº de tomas';
+comment on column INTERV_PRESC_DET_CHANGE.NUM_EXEC_SESS
+  is 'Numero de exec por sessao. Para ja esta em uso em MFR';
+comment on column INTERV_PRESC_DET_CHANGE.FLG_PRTY
+  is 'Prioridade do tratamento: (U) Urgente, (M) Muito Urgente, (N) Não Urgente';
+comment on column INTERV_PRESC_DET_CHANGE.NOTES
+  is 'Notas da proposta de alteracao';
+comment on column INTERV_PRESC_DET_CHANGE.FLG_STATUS_CHANGE
+  is 'Estado do pedido';
+comment on column INTERV_PRESC_DET_CHANGE.ID_PROF_REQ
+  is 'Profissional que requisitou a alteracao';
+comment on column INTERV_PRESC_DET_CHANGE.DT_REQ
+  is 'Data de requisição da alteracao';
+comment on column INTERV_PRESC_DET_CHANGE.ID_PROF_ACCEPT
+  is 'Profissional que aceitou a alteracao';
+comment on column INTERV_PRESC_DET_CHANGE.DT_ACCEPT
+  is 'Data da aceitação da alteracao';
+comment on column INTERV_PRESC_DET_CHANGE.ID_PROF_DECLINE
+  is 'Profissional que rejeitou a alteracao';
+comment on column INTERV_PRESC_DET_CHANGE.DT_DECLINE
+  is 'Data de rejeicao da alteracao';
+
+alter table interv_presc_det_change add NOTES_DECLINE VARCHAR2(4000);
+comment on column interv_presc_det_change.notes_decline is 'Notas de rejeicao de alteracao';
+
+-- CHANGE BY: Rita Lopes
+-- CHANGE DATE: 20080704
+-- CHANGE REASON: Definir tamanho dos campos do tipo number
+
+ ALTER TABLE interv_presc_det_change modify NUM_FREQ number(3);
+ ALTER TABLE interv_presc_det_change modify NUM_EXEC_SESS number(3);
+ ALTER TABLE interv_presc_det_change modify ID_CHANGE number(24);
+ 
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/03/2017 09:37
+-- CHANGE REASON: [ALERT-329532] 
+begin
+pk_frmw_objects.set_category_dpc(i_owner => 'ALERT', i_obj_name => 'INTERV_PRESC_DET_CHANGE');
+end;
+-- CHANGE END: Pedro Henriques

@@ -1,0 +1,209 @@
+
+
+  CREATE TABLE WL_MACHINE
+   (	ID_WL_MACHINE NUMBER(24,0) NOT NULL ENABLE,
+	INTERN_NAME_MACHINE VARCHAR2(30) NOT NULL ENABLE,
+	FLG_AUDIO_ACTIVE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_VIDEO_ACTIVE VARCHAR2(1) NOT NULL ENABLE,
+	ID_ROOM NUMBER(24,0) NOT NULL ENABLE,
+	DESC_MACHINE_VISUAL VARCHAR2(200) NOT NULL ENABLE,
+	DESC_MACHINE_AUDIO VARCHAR2(200) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE wl_machine IS 'Máquinas (PCs Alert e monitores onde são mostradas as informações aos utentes)' ;
+
+COMMENT ON COLUMN wl_machine.id_wl_machine IS 'Chave primária' ;
+COMMENT ON COLUMN wl_machine.intern_name_machine IS 'Nome interno (utilizado no código)' ;
+COMMENT ON COLUMN wl_machine.flg_audio_active IS 'Tipo de transmissão audio da máquina: N - none; B - bip; V - voice' ;
+COMMENT ON COLUMN wl_machine.flg_video_active IS 'Indicador de que a máq transmite info em vídeo' ;
+COMMENT ON COLUMN wl_machine.desc_machine_visual IS 'Descrição da máq, tal como aparece no ecrã' ;
+COMMENT ON COLUMN wl_machine.desc_machine_audio IS 'Descrição da máq, tal como é referida pelo sistema  de voz' ;
+
+ALTER TABLE WL_MACHINE ADD ID_WL_QUEUE_GROUP NUMBER(24);
+
+comment on column WL_MACHINE.ID_WL_QUEUE_GROUP is 'ID do grupo';
+
+-- CHANGED BY: marcio.dias
+-- CHANGE DATE: 29/11/2011 14:16
+-- CHANGE REASON: [ALERT-207676] Demo environment for Waiting room workflow
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE wl_machine add flg_demo VARCHAR2(1) DEFAULT ''N'' NOT NULL';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+COMMENT ON column wl_machine.flg_demo IS 'Flag specifying if it is a demo machine or not : (''Y''- Yes; ''N''- No)';
+
+DECLARE
+    e_column_already_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_null, -01451);
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE wl_machine modify id_room NUMBER(24) NULL';
+    EXCEPTION
+        WHEN e_column_already_null THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: marcio.dias
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table WL_MACHINE
+  is 'Machines (pcs aler and screens where are showed the patient information)
+';
+-- Add comments to the columns 
+comment on column WL_MACHINE.id_wl_machine
+  is 'ID of the Machine';
+comment on column WL_MACHINE.flg_audio_active
+  is 'Flag specifying if the corresponding machine has its audio output enabled. Possible values: N - No (disabled), B - Beep, V - Voice';
+comment on column WL_MACHINE.flg_video_active
+  is 'Flag specifying if the corresponding machine has its video output enabled. Possible values: Y - Yes, N - No';
+comment on column WL_MACHINE.id_room
+  is 'ID of the Room where the  machine is physically located.';
+comment on column WL_MACHINE.id_wl_queue_group
+  is 'ID of the machine''s Group. The machine will only interact with queues with the same Group ID.';
+comment on column WL_MACHINE.machine_name
+  is 'The Machine Name, essential in the process of identifying the Alert ID of the kiosk, screen, or any of the professional''s workstations. Must be an exact copy in upper case of the corresponding computer''s name.';
+comment on column WL_MACHINE.cod_desc_machine_visual
+  is 'Code of the video description of the machine. Must have a valid correspondence in the Translations table.';
+comment on column WL_MACHINE.cod_desc_machine_audio
+  is 'Code of the audio description of the machine. Must have a valid correspondence in the Translations table.';
+comment on column WL_MACHINE.create_user
+  is 'Creation User';
+comment on column WL_MACHINE.create_time
+  is 'Creation Time';
+comment on column WL_MACHINE.create_institution
+  is 'Creation Institution';
+comment on column WL_MACHINE.update_user
+  is 'Update User';
+comment on column WL_MACHINE.update_time
+  is 'Update Time';
+comment on column WL_MACHINE.update_institution
+  is 'Update Institution';
+comment on column WL_MACHINE.flg_demo
+  is 'Flag specifying if it is a demo machine or not : (''Y''- Yes; ''N''- No)';
+  
+-- CHANGE END: Pedro Fernandes
+
+
+-- CMF
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := 'alter table wl_machine add FLG_MACH_TYPE VARCHAR2(1 char) default 'P' not null;';
+	pk_versioning.run( l_sql);
+end;
+/
+
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := q'[alter table wl_machine add FLG_MACH_TYPE VARCHAR2(1 char) default 'P' not null]';
+	pk_versioning.run( l_sql);
+end;
+/
+
+-- cmf
+declare
+	l_sql varchar2(4000);
+begin
+
+	l_sql := q'[alter table wl_machine add MAX_TICKET_SHOWN number(1) default 3 not null]';
+	pk_versioning.run( l_sql);
+end;
+/
+
+----
+declare
+       l_sql varchar2(4000);
+begin
+       l_sql := q'[alter table wl_machine add TITLE_TEXT varchar2(4000)]';
+       pk_versioning.run(l_sql);
+       l_sql := q'[alter table wl_machine add HEADER_TEXT varchar2(4000)]';
+       pk_versioning.run(l_sql);
+       l_sql := q'[alter table wl_machine add FOOTER_TEXT varchar2(4000)]';
+       pk_versioning.run(l_sql);
+	   
+end;
+/
+
+declare
+       l_sql varchar2(4000);
+begin
+	   
+	l_sql := q'[alter table wl_machine add logo_img blob]';
+	pk_versioning.run(l_sql);
+
+	l_sql := 'ALTER TABLE wl_machine move lob(logo_img) store AS (tablespace alert_lob)';
+	pk_versioning.run(l_sql);
+	   
+end;
+/
+
+declare
+       l_sql varchar2(4000);
+begin
+       l_sql := q'[alter table wl_machine add flg_type_queue varchar2(0001 char) default 'A' not null]';
+       pk_versioning.run(l_sql);
+end;
+/
+
+
+COMMENT ON COLUMN wl_machine.flg_type_queue IS 'Type of workflow used: (A) adtm (M)edico';
+
+declare
+       l_sql varchar2(4000);
+begin
+       l_sql := q'[alter table wl_machine add header_bckg_color varchar2(0100 char)]';
+       pk_versioning.run(l_sql);
+end;
+/
+
+
+COMMENT ON COLUMN wl_machine.flg_type_queue IS 'Background color for special area of Monitors';
+
+-----------------
+declare
+       l_sql varchar2(4000);
+begin
+       l_sql := q'[alter table wl_machine add SECTION_TITLE_01 varchar2(1000 char)]';
+       pk_versioning.run(l_sql);
+end;
+/
+
+COMMENT ON COLUMN wl_machine.flg_type_queue IS 'Title of section 01 of monitor';
+
+-----------------
+declare
+       l_sql varchar2(4000);
+begin
+       l_sql := q'[alter table wl_machine add SECTION_TITLE_02 varchar2(1000 char)]';
+       pk_versioning.run(l_sql);
+end;
+/
+
+COMMENT ON COLUMN wl_machine.flg_type_queue IS 'Title of section 02 of monitor';
+
+-----------------
+declare
+       l_sql varchar2(4000);
+begin
+       l_sql := q'[alter table wl_machine add SECTION_TITLE_03 varchar2(1000 char)]';
+       pk_versioning.run(l_sql);
+end;
+/
+
+COMMENT ON COLUMN wl_machine.flg_type_queue IS 'Title of section 03 of monitor';

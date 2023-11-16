@@ -1,0 +1,16 @@
+declare
+l_sql varchar2(1000 char);
+begin
+L_SQL := 'ALTER TABLE VIEWER_CHECKLIST_ITEM ADD CONSTRAINT VWR_CHECKLIST_ITEM_PK PRIMARY KEY ( ID_VIEWER_CHECKLIST_ITEM ) USING INDEX TABLESPACE ALERT_DATA';
+pk_versioning.run(l_sql);
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+
+l_sql := 'ALTER TABLE VIEWER_CHECKLIST_ITEM ADD CONSTRAINT VWR_CHECKLIST_ITEM_UK UNIQUE ( ID_VIEWER_ITEM, ID_VIEWER_CHECKLIST )';
+pk_versioning.run(l_sql);
+end;
+/

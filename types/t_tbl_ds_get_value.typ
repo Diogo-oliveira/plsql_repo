@@ -1,0 +1,1 @@
+create or replace type t_tbl_ds_get_value as table of t_rec_ds_get_value;

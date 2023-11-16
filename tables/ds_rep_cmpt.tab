@@ -1,0 +1,35 @@
+declare
+
+	tbl_tables table_varchar := table_varchar( 'DS_REP_CMPT');
+
+begin
+
+	for i in 1..tbl_tables.count loop
+
+		pk_frmw_objects.insert_into_frmw_objects(
+			 i_owner            => 'ALERT',
+			 i_obj_name         => tbl_tables(i),
+			 i_obj_type         => 'TABLE',
+			 i_flg_category     => 'DSV',
+			 i_delete_script    => '',
+			 i_responsible_team => 'CDOC',
+			 i_flg_nzd          => 'N');
+	 
+	 end loop;
+	 
+END;
+/  
+
+
+CREATE TABLE ds_rep_cmpt(
+	section_name      	varchar2(0050 char) not null,
+	id_ds_cmpt_mkt_rel	number(24) not null,
+	rank				number(6) default 0,
+	code_ds_rep_cmpt    varchar2(0200 char),
+	create_user        	VARCHAR2(24 CHAR),
+	create_time        	TIMESTAMP(6) WITH LOCAL TIME ZONE,
+	create_institution 	NUMBER(24),
+	update_user        	VARCHAR2(24 CHAR),
+	update_time        	TIMESTAMP(6) WITH LOCAL TIME ZONE,
+	update_institution 	NUMBER(24)
+);

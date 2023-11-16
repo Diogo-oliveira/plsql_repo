@@ -1,0 +1,59 @@
+--Rui Batista 2008/03/19
+--Alertas v3.0
+alter table SYS_ALERT_EVENT
+  add constraint SAT_CSE_FK foreign key (ID_CLINICAL_SERVICE)
+  references CLINICAL_SERVICE (ID_CLINICAL_SERVICE);
+  
+alter table SYS_ALERT_EVENT
+  add constraint SAT_EPE_FK foreign key (ID_EPISODE)
+  references EPISODE (ID_EPISODE);
+  
+alter table SYS_ALERT_EVENT
+  add constraint SAT_INN_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION);
+  
+alter table SYS_ALERT_EVENT
+  add constraint SAT_PAT_FK foreign key (ID_PATIENT)
+  references PATIENT (ID_PATIENT);
+  
+alter table SYS_ALERT_EVENT
+  add constraint SAT_PRL_FK foreign key (ID_PROFESSIONAL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+  
+alter table SYS_ALERT_EVENT
+  add constraint SAT_ROM_FK foreign key (ID_ROOM)
+  references ROOM (ID_ROOM);
+  
+alter table SYS_ALERT_EVENT
+  add constraint SAT_SAT_FK foreign key (ID_SYS_ALERT)
+  references SYS_ALERT (ID_SYS_ALERT);
+  
+alter table SYS_ALERT_EVENT
+  add constraint SAT_SOE_FK foreign key (ID_SOFTWARE)
+  references SOFTWARE (ID_SOFTWARE);
+  
+alter table SYS_ALERT_EVENT
+  add constraint SAT_VIT_FK foreign key (ID_VISIT)
+  references VISIT (ID_VISIT);
+  
+alter table SYS_ALERT_EVENT  add constraint SAT_DCS_FK foreign key (ID_DEP_CLIN_SERV) references DEP_CLIN_SERV (ID_DEP_CLIN_SERV);
+
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); -- fk
+BEGIN
+    EXECUTE IMMEDIATE 'alter table SYS_ALERT_EVENT
+  add constraint SAT_IFTE_FK foreign key (ID_INTF_TYPE)
+  references INTF_TYPE (ID_INTF_TYPE)';
+
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    
+END;
+/
+-- CHANGE END: Joana Barroso

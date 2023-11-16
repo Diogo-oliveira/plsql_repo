@@ -1,0 +1,53 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGED DATE: 2009-ABR-02
+-- CHANGING REASON: create table
+create table IRREGULAR_DIRECTIONS_DCS_REL
+(
+  ID_IRREGULAR_DIRECTIONS       NUMBER(12),
+  ID_SOFTWARE               	NUMBER(12) not null,
+  ID_INSTITUTION            	NUMBER(12) not null,
+  ID_CLINICAL_SERVICE       	NUMBER(12) not null,
+  ID_IRREGULAR_DIRECTIONS_TIME  NUMBER(12) not null,
+  FLG_AVAILABLE             	VARCHAR2(1) not null
+)
+tablespace TABLE_S
+  pctfree 10
+  pctused 40
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+  
+alter table IRREGULAR_DIRECTIONS_DCS_REL
+  add constraint IDDCSR_PK primary key (ID_IRREGULAR_DIRECTIONS, ID_SOFTWARE, ID_INSTITUTION, ID_CLINICAL_SERVICE, ID_IRREGULAR_DIRECTIONS_TIME)
+  using index 
+  tablespace TABLE_S;
+
+
+  
+comment on table IRREGULAR_DIRECTIONS_DCS_REL is 'Tabela que relaciona o ID das posologias irregulares com as horas para administração definidas em cada posologia irregular, bem como as parametrizações por instituição, software e departamento clínico';  
+comment on column IRREGULAR_DIRECTIONS_DCS_REL.ID_IRREGULAR_DIRECTIONS is 'ID das posologias irregulares';
+comment on column IRREGULAR_DIRECTIONS_DCS_REL.ID_SOFTWARE is 'ID do software';
+comment on column IRREGULAR_DIRECTIONS_DCS_REL.ID_INSTITUTION is 'ID da instituição';
+comment on column IRREGULAR_DIRECTIONS_DCS_REL.ID_CLINICAL_SERVICE is 'ID do departamento clínico';
+comment on column IRREGULAR_DIRECTIONS_DCS_REL.ID_IRREGULAR_DIRECTIONS_TIME is 'ID da hora de administração definida em cada posologia irregular';
+comment on column IRREGULAR_DIRECTIONS_DCS_REL.FLG_AVAILABLE is 'Flag que indica a disponibilidade de uma determinada posologia irregular. Y -> disponível; N -> Não disponível';
+-- CHANGE END Pedro Albuquerque
+
+
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 26/10/2011 11:28
+-- CHANGE REASON: [ALERT-201797] Configuração de horário pré-definido default associado a uma frequência pré-definida para o tipo de toma "Horário-padrão"
+alter table irregular_directions_dcs_rel
+add
+  (
+  flg_default VARCHAR2(1 CHAR) DEFAULT 'N'
+);
+
+comment on column irregular_directions_dcs_rel.flg_default
+  is 'Default interval. Example: 1h - 5h - 9h - 13h - 17h - 21h';
+-- CHANGE END:  NUNO ANTUNES

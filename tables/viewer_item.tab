@@ -1,0 +1,28 @@
+create table VIEWER_ITEM
+(
+  id_viewer_item     NUMBER(24) not null,
+  code_viewer_item   VARCHAR2(1000 CHAR) not null,
+  item_internal_name VARCHAR2(1000 CHAR),
+  execute_api        VARCHAR2(200 CHAR),
+  flg_scope_type     VARCHAR2(1 CHAR) default 'E' not null,
+  create_user        VARCHAR2(30 CHAR),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(30 CHAR),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+)
+tablespace ALERT_DATA;
+
+COMMENT ON COLUMN ALERT.VIEWER_ITEM.CODE_VIEWER_ITEM is 'Description of Item';
+COMMENT ON COLUMN ALERT.VIEWER_ITEM.EXECUTE_API is 'Identifier for execution';
+COMMENT ON COLUMN ALERT.VIEWER_ITEM.FLG_SCOPE_TYPE is 'Scope of item: V-Visit, E-Episode, P-Patient';
+COMMENT ON COLUMN ALERT.VIEWER_ITEM.ID_VIEWER_ITEM is 'Viewer_item identifier';
+COMMENT ON COLUMN ALERT.VIEWER_ITEM.ITEM_INTERNAL_NAME is 'Internal name';
+
+comment on column ALERT.VIEWER_ITEM.CREATE_USER          is 'User that created the record';
+comment on column ALERT.VIEWER_ITEM.CREATE_TIME          is 'Time when the record was created';
+comment on column ALERT.VIEWER_ITEM.CREATE_INSTITUTION   is 'Institution where record was created';
+comment on column ALERT.VIEWER_ITEM.UPDATE_USER          is 'Last user that changed the record';
+comment on column ALERT.VIEWER_ITEM.UPDATE_INSTITUTION   is 'Last Institution where user made the change';
+comment on column ALERT.VIEWER_ITEM.UPDATE_TIME          is 'Time of Last change';

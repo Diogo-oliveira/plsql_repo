@@ -1,0 +1,62 @@
+
+
+  ALTER TABLE DISCH_REAS_DEST ADD CONSTRAINT DRD_PK PRIMARY KEY (ID_DISCH_REAS_DEST) ENABLE;
+
+  ALTER TABLE DISCH_REAS_DEST MODIFY (ID_DISCH_REAS_DEST NOT NULL ENABLE);
+
+  ALTER TABLE DISCH_REAS_DEST MODIFY (ID_DISCHARGE_REASON NOT NULL ENABLE);
+
+  ALTER TABLE DISCH_REAS_DEST MODIFY (FLG_ACTIVE NOT NULL ENABLE);
+
+  ALTER TABLE DISCH_REAS_DEST MODIFY (FLG_DIAG NOT NULL ENABLE);
+
+  ALTER TABLE DISCH_REAS_DEST MODIFY (ID_INSTIT_PARAM NOT NULL ENABLE);
+
+
+  ALTER TABLE DISCH_REAS_DEST MODIFY (ID_SOFTWARE_PARAM NOT NULL ENABLE);
+
+
+-- José Brito 07/03/2009 ALERT-10317
+ALTER TABLE disch_reas_dest ADD CONSTRAINT DRD_FLGSPECIFY_CHK CHECK(FLG_SPECIFY_DEST IN ('Y', 'N'));
+
+
+
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 22/09/2009 19:25
+-- CHANGE REASON: [ALERT-45400] Discharge improvements
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE disch_reas_dest add CONSTRAINT drd_flg_default_chk CHECK(flg_default IN (''Y'', ''N''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 11/03/2010 19:09
+-- CHANGE REASON: [ALERT-80873] Reason for pending discharge: DB developments
+alter table DISCH_REAS_DEST
+  add constraint DRD_FLG_RN_CHK
+  check (FLG_REP_NOTES IN ('Y','N'));
+-- CHANGE END: José Silva
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 04/09/2013 17:39
+-- CHANGE REASON: [ALERT-256742] 
+alter table DISCH_REAS_DEST
+  add constraint DRD_FLG_NEEDS_OVERALL_RESP_CHK
+  check (flg_needs_overall_resp IN ('Y', 'N'));
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 11/07/2016 16:18
+-- CHANGE REASON: [ALERT-322610 ] Automatic cancellation/discontinuation of active medication order after discharge
+--                
+BEGIN
+pk_versioning.run('ALTER TABLE disch_reas_dest ADD CONSTRAINT drd_flg_auto_presc_cancel_chk check(flg_auto_presc_cancel in(''Y'',''N''))');
+END;
+/
+-- CHANGE END: Elisabete Bugalho

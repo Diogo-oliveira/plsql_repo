@@ -1,0 +1,92 @@
+
+
+  CREATE TABLE SCH_CONSULT_VACANCY
+   (	ID_SCH_CONSULT_VACANCY NUMBER(24,0) NOT NULL ENABLE,
+	DT_SCH_CONSULT_VACANCY DATE DEFAULT SYSDATE NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_PROF NUMBER(24,0),
+	DT_BEGIN DATE NOT NULL ENABLE,
+	MAX_VACANCIES NUMBER(6,0),
+	USED_VACANCIES NUMBER(6,0),
+	DT_END DATE,
+	ID_DEP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	ID_ROOM NUMBER(24,0),
+	ID_SCH_EVENT NUMBER(24,0) NOT NULL ENABLE,
+
+	DURATION NUMBER(8,0)
+   );
+
+
+COMMENT ON TABLE sch_consult_vacancy IS 'Where the consultation vacants are stored. Eventualy it can support any kind of service, reason why there is a foreign key to sch_service.' ;
+
+COMMENT ON COLUMN sch_consult_vacancy.id_sch_consult_vacancy IS 'Primary Key' ;
+COMMENT ON COLUMN sch_consult_vacancy.dt_sch_consult_vacancy IS 'Registry Date' ;
+COMMENT ON COLUMN sch_consult_vacancy.id_institution IS 'Institution ID' ;
+COMMENT ON COLUMN sch_consult_vacancy.dt_begin IS 'Vacant begin date' ;
+COMMENT ON COLUMN sch_consult_vacancy.max_vacancies IS 'Total number of vacants.' ;
+COMMENT ON COLUMN sch_consult_vacancy.used_vacancies IS 'Number of used vacants. Not used by the application. This number is calculated on-the-fly' ;
+COMMENT ON COLUMN sch_consult_vacancy.id_room IS 'Default room for this vacant' ;
+
+COMMENT ON TABLE SCH_CONSULT_VACANCY IS 'Holds appointment vacancies, not just consult vacancies. This table should be renamed in the future.';
+
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.DURATION IS 'Deprecated column';
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.ID_SCH_EVENT IS 'Event identifier';
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.ID_DEP_CLIN_SERV IS 'Department-Clinical service identifier';
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.DT_END IS 'Vacancy end date';
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.USED_VACANCIES IS 'Number of used vacancies.';
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.MAX_VACANCIES IS 'Total number of vacancies.';
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.DT_BEGIN IS 'Vacancy begin date';
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.ID_PROF IS 'Professional identifier';
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.ID_INSTITUTION IS 'Institution identifier';
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.DT_SCH_CONSULT_VACANCY IS 'Record creation date';
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.ID_SCH_CONSULT_VACANCY IS 'Vacancy identifier';
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.ID_ROOM IS 'Default room for this vacancy';
+
+ALTER TABLE sch_consult_vacancy DROP COLUMN duration;
+
+ALTER TABLE SCH_CONSULT_VACANCY ADD DT_BEGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.DT_BEGIN_TSTZ IS 'Vacancy begin date';
+ALTER TABLE SCH_CONSULT_VACANCY ADD DT_END_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.DT_END_TSTZ IS 'Vacancy end date';
+ALTER TABLE SCH_CONSULT_VACANCY ADD DT_SCH_CONSULT_VACANCY_TSTZ TIMESTAMP WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP;	
+COMMENT ON COLUMN SCH_CONSULT_VACANCY.DT_SCH_CONSULT_VACANCY_TSTZ IS 'Record creation date';
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 23-09-2008
+-- CHANGE REASON: igualar datatype a institution.id_institution
+alter table SCH_CONSULT_VACANCY modify ID_INSTITUTION NUMBER(24);
+--END
+
+
+-- José Brito 22/09/2008 Eliminar colunas DATE
+alter table sch_consult_vacancy drop column dt_begin;
+alter table sch_consult_vacancy drop column dt_end;
+alter table sch_consult_vacancy drop column dt_sch_consult_vacancy;
+
+
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 30/07/2009 11:12
+-- CHANGE REASON: [ALERT-35850 ] 
+COMMENT ON TABLE SCH_CONSULT_VACANCY IS 'Main vacancy table. Vacancies for all kinds of scheduling types are stored here. For some kinds there is an aux table';
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 30/07/2009 11:14
+-- CHANGE REASON: [ALERT-35850 ] 
+ALTER TABLE SCH_CONSULT_VACANCY MOVE TABLESPACE TABLE_L;
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 30/07/2009 11:17
+-- CHANGE REASON: [ALERT-35850 ] 
+alter table SCH_CONSULT_VACANCY add FLG_STATUS varchar2(1) default 'A';
+alter table SCH_CONSULT_VACANCY add DT_CANCEL timestamp with local time zone;
+alter table SCH_CONSULT_VACANCY add ID_PROF_CANCEL number(24);
+alter table SCH_CONSULT_VACANCY add ID_CANCEL_REASON number(24);
+ 
+comment on column SCH_CONSULT_VACANCY.FLG_STATUS is 'A=active(normal); C=cancelled; B=blocked';
+comment on column SCH_CONSULT_VACANCY.DT_CANCEL is 'Cancel date';
+comment on column SCH_CONSULT_VACANCY.ID_PROF_CANCEL is 'Prof. who cancelled';
+comment on column SCH_CONSULT_VACANCY.ID_CANCEL_REASON is 'Cancel reason id';
+-- CHANGE END: Susana Silva

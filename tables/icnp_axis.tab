@@ -1,0 +1,87 @@
+
+
+  CREATE TABLE ICNP_AXIS
+   (	ID_AXIS NUMBER(12,0) NOT NULL ENABLE,
+	CODE_AXIS VARCHAR2(200) NOT NULL ENABLE,
+	ID_CLASSIFICATION NUMBER(12,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(3) NOT NULL ENABLE,
+	CODE_HELP_AXIS VARCHAR2(200),
+	RANK NUMBER(12,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_MANDATORY VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE icnp_axis IS 'Eixos' ;
+
+COMMENT ON COLUMN icnp_axis.code_axis IS 'Código para tradução do eixo' ;
+COMMENT ON COLUMN icnp_axis.code_help_axis IS 'Código para tradução da ajuda de contexto do eixo' ;
+COMMENT ON COLUMN icnp_axis.flg_mandatory IS 'Obrigatoriedade: Y - obrigatório; N - não obrigatório; M - obrigatório em alternância com outro' ;
+
+
+-- CHANGED BY: Pedro Lopes
+-- CHANGE DATE: 2009-JUN-30
+-- CHANGE REASON: ALERT-913
+
+ALTER TABLE icnp_axis DROP COLUMN ID_CLASSIFICATION;
+
+ALTER TABLE icnp_axis DROP COLUMN FLG_MANDATORY;
+
+ALTER TABLE icnp_axis DROP COLUMN RANK;
+
+ALTER TABLE icnp_axis RENAME COLUMN FLG_TYPE TO FLG_AXIS; 
+
+ALTER TABLE icnp_axis MODIFY ID_AXIS NUMBER(24);
+
+-- CHANGE END
+
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/10/2010 16:20
+-- CHANGE REASON: [ALERT-129405] ICNP Choice Version
+alter table icnp_axis add (id_icnp_version number(24), flg_type varchar2(1 char));
+comment on column icnp_axis.id_icnp_version is 'ICNP version ID';
+comment on column icnp_axis.flg_type is '(D)iagnosis or (I)ntervention';
+-- CHANGE END: João Martins
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 23/10/2013 11:47
+-- CHANGE REASON: [ALERT-267654] 
+alter table icnp_axis modify FLG_AXIS VARCHAR2(10 CHAR);
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 10:39
+-- CHANGE REASON: [ALERT-317702] 
+comment on table ICNP_AXIS
+  is 'ICNP axis catalogue';
+-- Add comments to the columns 
+comment on column ICNP_AXIS.id_axis
+  is 'Axis ID';
+comment on column ICNP_AXIS.code_axis
+  is 'Translation code';
+comment on column ICNP_AXIS.flg_axis
+  is 'Flag that indicates the type of axis';
+comment on column ICNP_AXIS.code_help_axis
+  is 'Translation code for context help';
+comment on column ICNP_AXIS.adw_last_update
+  is 'Update date';
+comment on column ICNP_AXIS.create_user
+  is 'Creation User';
+comment on column ICNP_AXIS.create_time
+  is 'Creation Time';
+comment on column ICNP_AXIS.create_institution
+  is 'Creation Institution';
+comment on column ICNP_AXIS.update_user
+  is 'Update User';
+comment on column ICNP_AXIS.update_time
+  is 'Update Time';
+comment on column ICNP_AXIS.update_institution
+  is 'Update Institution';
+comment on column ICNP_AXIS.id_icnp_version
+  is 'ICNP version ID';
+comment on column ICNP_AXIS.flg_type
+  is '(D)iagnosis or (I)ntervention';
+  
+  
+-- CHANGE END: Ana Matos

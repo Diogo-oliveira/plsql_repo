@@ -1,0 +1,104 @@
+-- CREATED BY: Pedro Pinheiro
+-- CREATE  DATE: 02/10/2014 16:30
+-- CREATE  REASON: [ALERT-297527]
+BEGIN
+    pk_lucene_index_admin.update_register_index(i_index_name       => 'PN_SIGNOFF_LIDX',
+                                                i_table_owner      => 'ALERT',
+                                                i_table_name       => 'EPIS_PN_SIGNOFF',
+                                                i_parameters       => 'LockMasterTable:false;LogLevel:SEVERE;FormatCols:dictionary(ANALYZED_WITH_POSITIONS_OFFSETS);PerFieldAnalyzer:PN_SIGNOFF_NOTE(org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords),dictionary(org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords);ExtraCols:pn_signoff_note "dictionary",(select to_char(pk_prog_notes_utils.get_pn_episode(''''''''EPIS_PN_SIGNOFF'''''''',id_epis_pn)) from dual) "id_episode",(select to_char(pk_prog_notes_utils.get_pn_patient(''''''''EPIS_PN_SIGNOFF'''''''',id_epis_pn)) from dual) "id_patient";Analyzer:org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords;MergeFactor:20;AutoTuneMemory:true;RewriteScore:true;SimilarityMethod:org.apache.lucene.search.WildcardSimilarity;DefaultOperator:AND;NormalizeScore:false;LobStorageParameters:TABLESPACE LUCENE_IDX PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS;OnLineFields:PN_SIGNOFF_NOTE;',
+                                                i_extra_parameters => 'SyncMode:OnLine;');
+END;
+/
+
+
+BEGIN
+    pk_lucene_index_admin.update_register_index(i_index_name       => 'PN_NOTE_TASK_LIDX',
+                                                i_table_owner      => 'ALERT',
+                                                i_table_name       => 'EPIS_PN_DET_TASK',
+                                                i_parameters       => 'LockMasterTable:false;LogLevel:SEVERE;FormatCols:dictionary(ANALYZED_WITH_POSITIONS_OFFSETS);PerFieldAnalyzer:PN_NOTE(org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords),dictionary(org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords);ExtraCols:pn_note "dictionary",(select to_char(pk_prog_notes_utils.get_pn_episode(''''''''EPIS_PN_DET_TASK'''''''',id_epis_pn_det)) from dual) "id_episode",(select to_char(pk_prog_notes_utils.get_pn_patient(''''''''EPIS_PN_DET_TASK'''''''',id_epis_pn_det)) from dual) "id_patient";Analyzer:org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords;MergeFactor:20;AutoTuneMemory:true;RewriteScore:true;SimilarityMethod:org.apache.lucene.search.WildcardSimilarity;DefaultOperator:AND;NormalizeScore:false;LobStorageParameters:TABLESPACE LUCENE_IDX PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS;OnLineFields:PN_NOTE;',
+                                                i_extra_parameters => 'SyncMode:OnLine;');
+END;
+/
+
+
+BEGIN
+    pk_lucene_index_admin.update_register_index(i_index_name       => 'PN_ADDENDUM_LIDX',
+                                                i_table_owner      => 'ALERT',
+                                                i_table_name       => 'EPIS_PN_ADDENDUM',
+                                                i_parameters       => 'LockMasterTable:false;LogLevel:SEVERE;FormatCols:dictionary(ANALYZED_WITH_POSITIONS_OFFSETS);PerFieldAnalyzer:PN_ADDENDUM(org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords),dictionary(org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords);ExtraCols:pn_addendum "dictionary",(select to_char(pk_prog_notes_utils.get_pn_episode(''''''''EPIS_PN_ADDENDUM'''''''',id_epis_pn)) from dual) "id_episode",(select to_char(pk_prog_notes_utils.get_pn_patient(''''''''EPIS_PN_ADDENDUM'''''''',id_epis_pn)) from dual) "id_patient";Analyzer:org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords;MergeFactor:20;AutoTuneMemory:true;RewriteScore:true;SimilarityMethod:org.apache.lucene.search.WildcardSimilarity;DefaultOperator:AND;NormalizeScore:false;LobStorageParameters:TABLESPACE LUCENE_IDX PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS;OnLineFields:PN_ADDENDUM;',
+                                                i_extra_parameters => 'SyncMode:OnLine;');
+END;
+/
+
+BEGIN
+    pk_lucene_index_admin.update_register_index(i_index_name       => 'PN_NOTE_LIDX',
+                                                i_table_owner      => 'ALERT',
+                                                i_table_name       => 'EPIS_PN_DET',
+                                                i_parameters       => 'LockMasterTable:false;LogLevel:SEVERE;FormatCols:dictionary(ANALYZED_WITH_POSITIONS_OFFSETS);PerFieldAnalyzer:PN_NOTE(org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords),dictionary(org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords);ExtraCols:pn_note "dictionary",(select to_char(pk_prog_notes_utils.get_pn_episode(''''''''EPIS_PN_DET'''''''',id_epis_pn)) from dual) "id_episode",(select to_char(pk_prog_notes_utils.get_pn_patient(''''''''EPIS_PN_DET'''''''',id_epis_pn)) from dual) "id_patient";Analyzer:org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords;MergeFactor:20;AutoTuneMemory:true;RewriteScore:true;SimilarityMethod:org.apache.lucene.search.WildcardSimilarity;DefaultOperator:AND;NormalizeScore:false;LobStorageParameters:TABLESPACE LUCENE_IDX PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS;OnLineFields:PN_NOTE;',
+                                                i_extra_parameters => 'SyncMode:OnLine;');
+END;
+/
+
+
+BEGIN
+    pk_lucene_index_admin.drop_index(i_index_name => 'PN_SIGNOFF_LIDX');
+    pk_lucene_index_admin.drop_index(i_index_name => 'PN_NOTE_TASK_LIDX');
+    pk_lucene_index_admin.drop_index(i_index_name => 'PN_ADDENDUM_LIDX');
+    pk_lucene_index_admin.drop_index(i_index_name => 'PN_NOTE_LIDX');
+END;
+/
+
+-- CREATED BY: Pedro Pinheiro
+
+
+-- CHANGED BY: Pedro Pinheiro
+-- CHANGED  DATE: 02/10/2014 16:30
+-- CHANGED  REASON: [ALERT-297527]
+BEGIN
+    pk_lucene_index_admin.update_register_index(i_index_name       => 'PN_SIGNOFF_LIDX',
+                                                i_table_owner      => 'ALERT',
+                                                i_table_name       => 'EPIS_PN_SIGNOFF',
+                                                i_parameters       => 'LockMasterTable:false;LogLevel:SEVERE;PerFieldAnalyzer:PN_SIGNOFF_NOTE(org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords);ExtraCols:(select to_char(pk_prog_notes_utils.get_pn_episode(''''''''EPIS_PN_SIGNOFF'''''''',id_epis_pn)) from dual) "id_episode",(select to_char(pk_prog_notes_utils.get_pn_patient(''''''''EPIS_PN_SIGNOFF'''''''',id_epis_pn)) from dual) "id_patient";Analyzer:org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords;MergeFactor:20;AutoTuneMemory:true;RewriteScore:true;SimilarityMethod:org.apache.lucene.search.WildcardSimilarity;DefaultOperator:AND;NormalizeScore:false;LobStorageParameters:TABLESPACE LUCENE_IDX PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS;OnLineFields:PN_SIGNOFF_NOTE;',
+                                                i_extra_parameters => 'SyncMode:OnLine;');
+END;
+/
+
+
+BEGIN
+    pk_lucene_index_admin.update_register_index(i_index_name       => 'PN_NOTE_TASK_LIDX',
+                                                i_table_owner      => 'ALERT',
+                                                i_table_name       => 'EPIS_PN_DET_TASK',
+                                                i_parameters       => 'LockMasterTable:false;LogLevel:SEVERE;PerFieldAnalyzer:PN_NOTE(org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords);ExtraCols:(select to_char(pk_prog_notes_utils.get_pn_episode(''''''''EPIS_PN_DET_TASK'''''''',id_epis_pn_det)) from dual) "id_episode",(select to_char(pk_prog_notes_utils.get_pn_patient(''''''''EPIS_PN_DET_TASK'''''''',id_epis_pn_det)) from dual) "id_patient";Analyzer:org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords;MergeFactor:20;AutoTuneMemory:true;RewriteScore:true;SimilarityMethod:org.apache.lucene.search.WildcardSimilarity;DefaultOperator:AND;NormalizeScore:false;LobStorageParameters:TABLESPACE LUCENE_IDX PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS;OnLineFields:PN_NOTE;',
+                                                i_extra_parameters => 'SyncMode:OnLine;');
+END;
+/
+
+
+BEGIN
+    pk_lucene_index_admin.update_register_index(i_index_name       => 'PN_ADDENDUM_LIDX',
+                                                i_table_owner      => 'ALERT',
+                                                i_table_name       => 'EPIS_PN_ADDENDUM',
+                                                i_parameters       => 'LockMasterTable:false;LogLevel:SEVERE;PerFieldAnalyzer:PN_ADDENDUM(org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords);ExtraCols:(select to_char(pk_prog_notes_utils.get_pn_episode(''''''''EPIS_PN_ADDENDUM'''''''',id_epis_pn)) from dual) "id_episode",(select to_char(pk_prog_notes_utils.get_pn_patient(''''''''EPIS_PN_ADDENDUM'''''''',id_epis_pn)) from dual) "id_patient";Analyzer:org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords;MergeFactor:20;AutoTuneMemory:true;RewriteScore:true;SimilarityMethod:org.apache.lucene.search.WildcardSimilarity;DefaultOperator:AND;NormalizeScore:false;LobStorageParameters:TABLESPACE LUCENE_IDX PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS;OnLineFields:PN_ADDENDUM;',
+                                                i_extra_parameters => 'SyncMode:OnLine;');
+END;
+/
+
+BEGIN
+    pk_lucene_index_admin.update_register_index(i_index_name       => 'PN_NOTE_LIDX',
+                                                i_table_owner      => 'ALERT',
+                                                i_table_name       => 'EPIS_PN_DET',
+                                                i_parameters       => 'LockMasterTable:false;LogLevel:SEVERE;PerFieldAnalyzer:PN_NOTE(org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords);ExtraCols:(select to_char(pk_prog_notes_utils.get_pn_episode(''''''''EPIS_PN_DET'''''''',id_epis_pn)) from dual) "id_episode",(select to_char(pk_prog_notes_utils.get_pn_patient(''''''''EPIS_PN_DET'''''''',id_epis_pn)) from dual) "id_patient";Analyzer:org.apache.lucene.analysis.MultilingualAnalyzerNonStopWords;MergeFactor:20;AutoTuneMemory:true;RewriteScore:true;SimilarityMethod:org.apache.lucene.search.WildcardSimilarity;DefaultOperator:AND;NormalizeScore:false;LobStorageParameters:TABLESPACE LUCENE_IDX PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS;OnLineFields:PN_NOTE;',
+                                                i_extra_parameters => 'SyncMode:OnLine;');
+END;
+/
+
+
+BEGIN
+    pk_lucene_index_admin.drop_index(i_index_name => 'PN_SIGNOFF_LIDX');
+    pk_lucene_index_admin.drop_index(i_index_name => 'PN_NOTE_TASK_LIDX');
+    pk_lucene_index_admin.drop_index(i_index_name => 'PN_ADDENDUM_LIDX');
+    pk_lucene_index_admin.drop_index(i_index_name => 'PN_NOTE_LIDX');
+END;
+/
+
+-- CHANGED BY: Pedro Pinheiro

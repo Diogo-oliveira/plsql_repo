@@ -1,0 +1,58 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:25
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'CDR_DEF_COND',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'PRM',
+                                             i_flg_alert_default => 'Y',
+                                             i_delete_script     => '',
+                                             i_flg_default_child => 'N');
+END;
+/
+
+create table CDR_DEF_COND
+(
+  id_cdr_def_cond    NUMBER(24) not null,
+  id_cdr_definition  NUMBER(24) not null,
+  id_cdr_condition   NUMBER(24) not null,
+  rank               NUMBER(6) not null,
+  flg_condition      VARCHAR2(1 CHAR) default 'O' not null,
+  flg_deny           VARCHAR2(1 CHAR) default 'N' not null,
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+);
+
+comment on table CDR_DEF_COND
+  is 'Clinical decision rule definition conditions. Associates a rule definition with its conditions.';
+
+comment on column CDR_DEF_COND.id_cdr_def_cond
+  is 'Primary key.';
+comment on column CDR_DEF_COND.id_cdr_definition
+  is 'Rule definition identifier.';
+comment on column CDR_DEF_COND.id_cdr_condition
+  is 'Rule condition identifier.';
+comment on column CDR_DEF_COND.rank
+  is 'Rule condition rank.';
+comment on column CDR_DEF_COND.flg_condition
+  is 'Rule condition operator: (A)nd, (O)r.';
+comment on column CDR_DEF_COND.flg_deny
+  is 'Deny the rule condition? Y/N';
+comment on column CDR_DEF_COND.create_user
+  is 'Creation User';
+comment on column CDR_DEF_COND.create_time
+  is 'Creation Time';
+comment on column CDR_DEF_COND.create_institution
+  is 'Creation Institution';
+comment on column CDR_DEF_COND.update_user
+  is 'Update User';
+comment on column CDR_DEF_COND.update_time
+  is 'Update Time';
+comment on column CDR_DEF_COND.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro

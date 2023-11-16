@@ -1,0 +1,218 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/04/2014 10:46
+-- CHANGE REASON: [ALERT-275664] 
+BEGIN
+  pk_versioning.run(i_sql => q'[create table COMM_ORDER_REQ_HIST
+(
+  id_comm_order_req_hist     number(24) not null,
+  id_comm_order_req      number(24) not null,
+  id_workflow             number(24) not null,
+  id_status               number(24) not null,
+  id_patient              number(24),
+  id_episode              number(24),
+  id_concept_type         number(24) not null,
+  id_concept_version      number(24),
+  id_cncpt_vrs_inst_owner number(24),
+  id_concept_term         number(24),
+  id_cncpt_trm_inst_owner number(24),
+  flg_free_text           varchar2(1 char) not null,
+  desc_concept_term       CLOB,
+  id_prof_req             number(24) not null,
+  id_inst_req             number(24) not null,
+  dt_req                  timestamp(6) with local time zone,
+notes                   clob,
+clinical_indication     clob,
+  flg_clinical_purpose    varchar2(30 char) not null,
+clinical_purpose_desc   varchar2(1000 CHAR),
+  flg_priority            varchar2(1 char) not null,
+  flg_prn                 varchar2(1 char) not null,
+  prn_condition           clob,
+  dt_begin                timestamp(6) with local time zone,
+  id_professional         number(24) not null,
+  id_institution          number(24) not null,
+  dt_status               timestamp(6) with local time zone not null,
+  id_order_type           number(24),
+id_prof_order           number(24),
+dt_order                timestamp(6) with local time zone,
+flg_co_sign             varchar2(1 char) default 'N' not null,
+  dt_co_sign              timestamp(6) with local time zone,
+  id_prof_co_sign         number(24),
+  notes_co_sign           clob,
+notes_cancel            clob,
+id_cancel_reason        number(24),
+  create_user             varchar2(30 char),
+  create_time             timestamp(6) with local time zone,
+  create_institution      number(24),
+  update_user             varchar2(30 char),
+  update_time             timestamp(6) with local time zone,
+  update_institution      number(24)
+)]');
+END;
+/
+
+comment on table COMM_ORDER_REQ_HIST is 'Communication orders request history info';
+comment on column COMM_ORDER_REQ_HIST.id_comm_order_req_hist is 'Communication orders request history identifier';
+comment on column COMM_ORDER_REQ_HIST.id_comm_order_req is 'Communication orders request identifier';
+comment on column COMM_ORDER_REQ_HIST.id_workflow is 'Workflow identifier';
+comment on column COMM_ORDER_REQ_HIST.id_status is 'Status identifier';
+comment on column COMM_ORDER_REQ_HIST.id_patient is 'Patient identifier';
+comment on column COMM_ORDER_REQ_HIST.id_episode is 'Episode identifier where the communication order was requested';
+comment on column COMM_ORDER_REQ_HIST.id_concept_type is 'Communication orders type identifier';
+comment on column COMM_ORDER_REQ_HIST.id_concept_version is 'Concept version identifier';
+comment on column COMM_ORDER_REQ_HIST.id_cncpt_vrs_inst_owner is 'Concept version inst owner';
+comment on column COMM_ORDER_REQ_HIST.id_concept_term is 'Concept term identifier';
+comment on column COMM_ORDER_REQ_HIST.id_cncpt_trm_inst_owner is 'Concept term inst owner';
+comment on column COMM_ORDER_REQ_HIST.flg_free_text is 'Flag indicating if this communication order is free text. Y- free text; N- otherwise';
+comment on column COMM_ORDER_REQ_HIST.desc_concept_term is 'Communication order request description (in case of free text)';
+comment on column COMM_ORDER_REQ_HIST.id_prof_req is 'Professional that requested the communication order';
+comment on column COMM_ORDER_REQ_HIST.id_inst_req is 'Institution where the communication order was requested';
+comment on column COMM_ORDER_REQ_HIST.dt_req is 'Date that indicates when the communication order was requested';
+comment on column COMM_ORDER_REQ_HIST.notes is 'Communication order notes';
+comment on column COMM_ORDER_REQ_HIST.clinical_indication is 'Clinical indication for communication orders';
+comment on column COMM_ORDER_REQ_HIST.flg_clinical_purpose is 'Flag that indicates the clinical purpose';
+comment on column COMM_ORDER_REQ_HIST.clinical_purpose_desc is 'Clinical purpose free text field (when flg_clinical_purpose = ''O'')';
+comment on column COMM_ORDER_REQ_HIST.flg_priority is 'Flag that indicates the priority';
+comment on column COMM_ORDER_REQ_HIST.flg_prn is 'Flag that indicates whether the communication order is PRN or not';
+comment on column COMM_ORDER_REQ_HIST.prn_condition is 'Notes to indicate the PRN conditions';
+comment on column COMM_ORDER_REQ_HIST.dt_begin is 'Start date';
+comment on column COMM_ORDER_REQ_HIST.id_professional is 'Professional that created/updated communication order';
+comment on column COMM_ORDER_REQ_HIST.id_institution is 'Institution where the communication order was created/updated';
+comment on column COMM_ORDER_REQ_HIST.dt_status is 'Last changing date';
+comment on column COMM_ORDER_REQ_HIST.id_order_type is 'Request order type (telephone, verbal, ...)';
+comment on column COMM_ORDER_REQ_HIST.id_prof_order is 'Professional that ordered the communication order request';
+comment on column COMM_ORDER_REQ_HIST.dt_order is 'Moment when the ordering professional asked the registering professional to request';
+comment on column COMM_ORDER_REQ_HIST.flg_co_sign is 'Co-sign flag. (Y)-comm order co-signed. (N)-comm order not co-signed.';
+comment on column COMM_ORDER_REQ_HIST.dt_co_sign is 'Co-sign date';
+comment on column COMM_ORDER_REQ_HIST.id_prof_co_sign is 'Co-sign professional';
+comment on column COMM_ORDER_REQ_HIST.notes_co_sign is 'Co-sign notes';
+comment on column COMM_ORDER_REQ_HIST.notes_cancel is 'Cancelation notes';
+comment on column COMM_ORDER_REQ_HIST.id_cancel_reason is 'Cancel reason identifier';
+comment on column COMM_ORDER_REQ_HIST.create_user is 'Creation User';
+comment on column COMM_ORDER_REQ_HIST.create_time is 'Creation Time';
+comment on column COMM_ORDER_REQ_HIST.create_institution is 'Creation Institution';
+comment on column COMM_ORDER_REQ_HIST.update_user is 'Update User';
+comment on column COMM_ORDER_REQ_HIST.update_time is 'Update Time';
+comment on column COMM_ORDER_REQ_HIST.update_institution is 'Update Institution';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/12/2014 08:14
+-- CHANGE REASON: [ALERT-304679] 
+BEGIN
+  pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ_HIST add flg_need_ack varchar2(1 CHAR) default 'N' not null]');
+  pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ_HIST add flg_action varchar2(30 CHAR)]');
+  pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ_HIST add id_previous_status number(24)]');
+  pk_versioning.run(i_sql => q'[comment on column COMM_ORDER_REQ_HIST.flg_need_ack is 'Comm order req needs to be acknowledge? Y- yes N- no']');
+  pk_versioning.run(i_sql => q'[comment on column COMM_ORDER_REQ_HIST.flg_action is 'Action performed over a communication order request']');
+  pk_versioning.run(i_sql => q'[comment on column COMM_ORDER_REQ_HIST.id_previous_status is 'Previous status identifier']');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/12/2014 08:20
+-- CHANGE REASON: [ALERT-304679] 
+BEGIN
+  pk_versioning.run(i_sql => q'[alter table comm_order_req_hist modify flg_action not null]');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 22/04/2015 09:11
+-- CHANGE REASON: [ALERT-310275] 
+DECLARE
+    e_column_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_not_exists, -00904);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table COMM_ORDER_REQ_HIST drop column id_order_type';
+EXCEPTION
+    WHEN e_column_not_exists THEN
+        dbms_output.put_line('column already dropped');
+END;
+/
+
+DECLARE
+    e_column_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_not_exists, -00904);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table COMM_ORDER_REQ_HIST drop column id_prof_order';
+EXCEPTION
+    WHEN e_column_not_exists THEN
+        dbms_output.put_line('column already dropped');
+END;
+/
+    
+DECLARE
+    e_column_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_not_exists, -00904);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table COMM_ORDER_REQ_HIST drop column dt_order';
+EXCEPTION
+    WHEN e_column_not_exists THEN
+        dbms_output.put_line('column already dropped');
+END;
+/
+
+DECLARE
+    e_column_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_not_exists, -00904);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table COMM_ORDER_REQ_HIST drop column flg_co_sign';
+EXCEPTION
+    WHEN e_column_not_exists THEN
+        dbms_output.put_line('column already dropped');
+END;
+/
+    
+DECLARE
+    e_column_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_not_exists, -00904);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table COMM_ORDER_REQ_HIST drop column dt_co_sign';
+EXCEPTION
+    WHEN e_column_not_exists THEN
+        dbms_output.put_line('column already dropped');
+END;
+/
+    
+DECLARE
+    e_column_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_not_exists, -00904);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table COMM_ORDER_REQ_HIST drop column id_prof_co_sign';
+EXCEPTION
+    WHEN e_column_not_exists THEN
+        dbms_output.put_line('column already dropped');
+END;
+/
+    
+DECLARE
+    e_column_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_not_exists, -00904);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table COMM_ORDER_REQ_HIST drop column notes_co_sign';
+EXCEPTION
+    WHEN e_column_not_exists THEN
+        dbms_output.put_line('column already dropped');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 21/08/2019 16:37
+-- CHANGE REASON: [EMR-19010] - New area for Medical Orders (DDL)
+ALTER TABLE comm_order_req_hist ADD task_duration NUMBER(24);
+ALTER TABLE COMM_ORDER_REQ_HIST ADD ID_ORDER_RECURR NUMBER(24);
+
+DECLARE
+BEGIN
+EXECUTE IMMEDIATE 'alter table COMM_ORDER_REQ_HIST add id_task_type number(24)';
+EXCEPTION
+WHEN others THEN
+dbms_output.put_line('Error adding column id_task_type to COMM_ORDER_REQ_HIST');
+END;
+/
+
+COMMENT ON COLUMN COMM_ORDER_REQ_HIST.id_task_type IS 'Task type identifier';
+-- CHANGE END: Diogo Oliveira

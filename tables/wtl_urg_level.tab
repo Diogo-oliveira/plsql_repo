@@ -1,0 +1,79 @@
+  CREATE TABLE "WTL_URG_LEVEL"
+(  
+  "ID_WTL_URG_LEVEL" NUMBER(24,0) NOT NULL,
+  "CODE" VARCHAR2(200) NOT NULL,  
+  "DESCRIPTION" VARCHAR2(200),
+  "ID_CONTENT" VARCHAR(200),
+  "FLG_AVAILABLE" VARCHAR2(1),
+  "CREATE_USER"  VARCHAR2(24),
+  "CREATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  "CREATE_INSTITUTION"  NUMBER(24),                         
+  "UPDATE_USER"  VARCHAR2(24),                       
+  "UPDATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,  
+  "UPDATE_INSTITUTION"  NUMBER(24)                  
+) ;
+
+
+
+
+COMMENT ON TABLE "WTL_URG_LEVEL"  IS 'This table stores the available urgency levels';
+COMMENT ON COLUMN "WTL_URG_LEVEL"."ID_WTL_URG_LEVEL"  IS 'Primary key';
+COMMENT ON COLUMN "WTL_URG_LEVEL"."CODE" IS 'Code for use on the waiting list';
+COMMENT ON COLUMN "WTL_URG_LEVEL"."DESCRIPTION" IS 'Description assoiated with this urgency level';
+COMMENT ON COLUMN "WTL_URG_LEVEL"."ID_CONTENT" IS 'Content unique identifier';
+COMMENT ON COLUMN "WTL_URG_LEVEL"."FLG_AVAILABLE" IS 'Indicates if urgency level is available: Y - available; N - Not Available';
+COMMENT ON COLUMN "WTL_URG_LEVEL"."CREATE_USER" IS 'ID of the professional who created the record';
+COMMENT ON COLUMN "WTL_URG_LEVEL"."CREATE_TIME" IS 'Date of record creation';
+COMMENT ON COLUMN "WTL_URG_LEVEL"."CREATE_INSTITUTION" IS 'ID of institution where record was created'; 
+COMMENT ON COLUMN "WTL_URG_LEVEL"."UPDATE_USER" IS 'ID of the professional who last updated the record';
+COMMENT ON COLUMN "WTL_URG_LEVEL"."UPDATE_TIME" IS 'Date when record was last updated';
+COMMENT ON COLUMN "WTL_URG_LEVEL"."UPDATE_INSTITUTION" IS 'ID of the institution where record was last updated'; 
+
+
+-- CHANGED BY: Jorge Canossa
+-- CHANGE DATE: 2009-07-02
+-- CHANGE REASON: ALERT-31102 
+ALTER TABLE WTL_URG_LEVEL ADD DURATION NUMBER(6);
+ALTER TABLE WTL_URG_LEVEL ADD ID_INSTITUTION NUMBER(24);
+ALTER TABLE WTL_URG_LEVEL ADD ID_GROUP NUMBER(24);
+COMMENT ON COLUMN "WTL_URG_LEVEL"."DURATION" IS 'Period required to inform the patient';
+COMMENT ON COLUMN "WTL_URG_LEVEL"."ID_INSTITUTION" IS 'Institution using urgency levels';
+COMMENT ON COLUMN "WTL_URG_LEVEL"."ID_GROUP" IS 'Group of institutions using urgency levels';
+
+alter table WTL_URG_LEVEL drop column description;
+alter table WTL_URG_LEVEL drop column id_content;
+-- CHANGE END
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 09/03/2010 09:57
+-- CHANGE REASON: [ALERT-79668] 
+ALTER TABLE WTL_URG_LEVEL ADD (ID_CONTENT VARCHAR2(200));
+comment on column WTL_URG_LEVEL.ID_CONTENT is 'Content identifier';
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/06/2010 14:22
+-- CHANGE REASON: [ALERT-105487] 
+ALTER TABLE WTL_URG_LEVEL ADD 
+(
+flg_status VARCHAR2(1 CHAR),
+flg_parameterization_type VARCHAR2(1 CHAR) default 'C',
+id_professional NUMBER(24),
+dt_creation TIMESTAMP WITH LOCAL TIME ZONE,
+dt_last_update TIMESTAMP WITH LOCAL TIME ZONE,
+desc_wtl_urg_level VARCHAR2(1000 CHAR)
+);
+
+COMMENT ON COLUMN WTL_URG_LEVEL.flg_status IS 'Status of this data: A - active, E - edited, C - canceled.';
+COMMENT ON COLUMN WTL_URG_LEVEL.flg_parameterization_type IS 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+COMMENT ON COLUMN WTL_URG_LEVEL.id_professional IS 'Id professional that creates the data, when using backoffice.';
+COMMENT ON COLUMN WTL_URG_LEVEL.dt_creation IS 'Creation date.';
+COMMENT ON COLUMN WTL_URG_LEVEL.dt_last_update IS 'Last date when this data was updated.';
+COMMENT ON COLUMN WTL_URG_LEVEL.desc_wtl_urg_level IS 'Urgency level description.';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 16/07/2010 08:54
+-- CHANGE REASON: [ALERT-112241] 
+alter table wtl_urg_level modify code null;
+-- CHANGE END: orlando.antunes

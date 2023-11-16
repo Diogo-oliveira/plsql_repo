@@ -1,0 +1,33 @@
+
+create table wfl_action
+(
+	id_action			number(4) not null,
+	action_name			varchar2(50) not null,
+	code_translation	varchar2(200),
+	icon				varchar2(200)
+) tablespace TABLE_S;
+
+comment on table wfl_action
+	is 'table of actions (all actions of all state scopes)';
+
+comment on column wfl_action.id_action
+	is 'id action';
+comment on column wfl_action.action_name
+	is 'name of the action';
+comment on column wfl_action.code_translation
+	is 'code to be use by translations';
+comment on column wfl_action.icon
+	is 'icon name';
+
+alter table wfl_action
+add flg_active char(1) default 'Y' not null;
+
+alter table wfl_action
+add constraint wfl_a_flg_active_chk
+check (flg_active in ('Y','N'));
+
+alter table wfl_action
+add flg_type varchar2(1) default 'A' not null;
+
+comment on column wfl_action.flg_type is
+	'type of pharmacy order (local, ambulatory, unit-dose)';

@@ -1,0 +1,32 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 04/07/2010 02:29
+-- CHANGE REASON: [ALERT-109296] TDE Core versioning (DDL)
+create table ORDER_SET_TASK_DEPENDENCY
+(
+  ID_RELATIONSHIP_TYPE       NUMBER(24) NOT NULL,
+  ID_ORDER_SET_TASK_FROM   NUMBER(24) NOT NULL,
+  ID_ORDER_SET_TASK_TO       NUMBER(24) NOT NULL,
+  LAG_MIN                    NUMBER(24),
+  LAG_MAX                    NUMBER(24),
+  ID_UNIT_MEASURE_LAG        NUMBER(24),
+  CREATE_USER                VARCHAR2(24),
+  CREATE_TIME                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION         NUMBER(24),
+  UPDATE_USER                VARCHAR2(24),
+  UPDATE_TIME                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION         NUMBER(24)
+);
+comment on table  ORDER_SET_TASK_DEPENDENCY                            is 'Order Set Task Relationship Dependencies table (OSTDP)';
+comment on column ORDER_SET_TASK_DEPENDENCY.ID_RELATIONSHIP_TYPE       is 'Task Relationship Type ID';
+comment on column ORDER_SET_TASK_DEPENDENCY.ID_ORDER_SET_TASK_FROM     is 'Order Set Task Dependency ("from" direction): Order Set Task ID, Currrent episode (-1), Future episode (-2)';
+comment on column ORDER_SET_TASK_DEPENDENCY.ID_ORDER_SET_TASK_TO       is 'Order Set Task Dependency ID ("to" direction)';
+comment on column ORDER_SET_TASK_DEPENDENCY.LAG_MIN                    is 'Minimum lag time between dependencies';
+comment on column ORDER_SET_TASK_DEPENDENCY.LAG_MAX                    is 'Maximum lag time between dependencies';
+comment on column ORDER_SET_TASK_DEPENDENCY.ID_UNIT_MEASURE_LAG        is 'Lag unit measure ID';
+comment on column ORDER_SET_TASK_DEPENDENCY.CREATE_USER                is 'Creation User';
+comment on column ORDER_SET_TASK_DEPENDENCY.CREATE_TIME                is 'Creation Time';
+comment on column ORDER_SET_TASK_DEPENDENCY.CREATE_INSTITUTION         is 'Creation Institution';
+comment on column ORDER_SET_TASK_DEPENDENCY.UPDATE_USER                is 'Update User';
+comment on column ORDER_SET_TASK_DEPENDENCY.UPDATE_TIME                is 'Update Time';
+comment on column ORDER_SET_TASK_DEPENDENCY.UPDATE_INSTITUTION         is 'Update Institution';
+-- CHANGE END: Carlos Loureiro

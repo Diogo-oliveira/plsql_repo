@@ -1,0 +1,76 @@
+create table location_tax
+(
+       id_location_tax      number(24),
+       code_location_tax    varchar2(200),
+       id_parent            number(24),
+       tax                  number(10,6),
+       code_desc_label      varchar2(200),
+       id_country 	    number(12),
+       flg_city		    varchar2(1)
+       flg_type   	    varchar2(6),
+       flg_available        varchar2(1),
+       adw_last_update      date   
+);
+
+comment on table location_tax is
+'Diversas zonas com diferentes impostos (Primeiro nível - Países)';
+------------------------------
+comment on column location_tax.id_location_tax is
+'ID da tabela';
+comment on column location_tax.code_location_tax is
+'Código para tradução da zona';
+comment on column location_tax.id_parent is
+'Zona pai';
+comment on column location_tax.tax is
+'Imposto a cobrar no zona';
+comment on column location_tax.code_desc_label is
+'Código para tradução da label a apresentar no próximo nível';
+comment on column location_tax.flg_available is
+'Disponibilidade do registo: Y - available; N - not available';
+comment on column location_tax.adw_last_update is
+'Data da última actualização efectuada sobre o registo';
+comment on column location_tax.flg_type is
+'Tipo de zona: C - país; S - estado/distrito; CO - county; CI - cidade';
+comment on column location_tax.flg_city is
+'Indica se possui o campo city: Y - available; N - not available';
+comment on column location_tax.id_country is
+'País correspondente a eta zona';
+
+
+
+alter table location_tax add
+(
+      id_timezone_region number(24)
+);
+
+comment on column location_tax.id_timezone_region is
+'Timezone da location_tax';
+
+-- CHANGED BY: Joao Sa
+-- CHANGE DATE: 11/01/2016
+-- ISSUE: Refactor: Table comments
+comment on table LOCATION_TAX
+  is 'Taxation zones';
+-- Add comments to the columns 
+comment on column LOCATION_TAX.id_location_tax
+  is 'Internal Id';
+comment on column LOCATION_TAX.code_location_tax
+  is 'Code to translate the zone name';
+comment on column LOCATION_TAX.id_parent
+  is 'Parent  zone';
+comment on column LOCATION_TAX.tax
+  is 'Tax charged';
+comment on column LOCATION_TAX.code_desc_label
+  is 'Code to translate the label shown in the next level';
+comment on column LOCATION_TAX.id_country
+  is 'Country';
+comment on column LOCATION_TAX.flg_city
+  is 'Has city field? Y/N';
+comment on column LOCATION_TAX.flg_type
+  is 'Zone type: (C)ountry; (S)tate; (CO)unty; (CI)ty';
+comment on column LOCATION_TAX.flg_available
+  is 'Available in this implementation? Y/N';
+comment on column LOCATION_TAX.adw_last_update
+  is 'Record last update (ADW)';
+comment on column LOCATION_TAX.id_timezone_region
+  is 'Timezone for this taxation zone';

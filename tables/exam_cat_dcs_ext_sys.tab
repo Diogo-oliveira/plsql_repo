@@ -1,0 +1,23 @@
+
+
+  CREATE TABLE EXAM_CAT_DCS_EXT_SYS
+   (	ID_EXAM_CAT_DCS_EXT_SYS NUMBER(24,0) NOT NULL ENABLE,
+	ID_EXAM_CAT_DCS NUMBER(24,0) NOT NULL ENABLE,
+	ID_EXTERNAL_SYS NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE exam_cat_dcs_ext_sys IS 'Sistema externo de facturação dos exames da categoria indicada e realizados no departamento / serv. clínico indicado' ;
+
+
+--29/10/2010 Rui Batista
+--[ALERT-136492] Database object Cleaning
+begin
+
+  execute immediate 'drop table EXAM_CAT_DCS_EXT_SYS';
+--	
+	exception
+	when others then --ORA-00942 Table or view does not exists
+	     null;
+end;
+

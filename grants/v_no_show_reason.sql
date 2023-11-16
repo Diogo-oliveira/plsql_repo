@@ -1,0 +1,5 @@
+-- CHANGED BY: Rita LOpes
+-- CHANGE DATE: 14/10/2010 10:31
+-- CHANGE REASON: [ALERT-131275] 
+grant select on V_NO_SHOW_REASON to INTF_ALERT;
+-- CHANGE END: Rita Lopes

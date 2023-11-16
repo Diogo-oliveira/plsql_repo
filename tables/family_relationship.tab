@@ -1,0 +1,52 @@
+
+
+  CREATE TABLE FAMILY_RELATIONSHIP
+   (	ID_FAMILY_RELATIONSHIP NUMBER(24,0) NOT NULL ENABLE,
+	CODE_FAMILY_RELATIONSHIP VARCHAR2(200) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	GENDER VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE family_relationship IS 'Graus de parentesco' ;
+
+comment on column FAMILY_RELATIONSHIP.GENDER
+  is 'Relationship Gender (e.g.: Father is related to Male)  
+Possible Values:  
+ - M (Male) 
+ - F (Female) 
+ - T (Everyone)';
+ 
+--CHANGED BY: Rui Spratley
+--CHANGE DATE: 2008/06/27
+--CHANGE REASON: Add new column
+ALTER TABLE FAMILY_RELATIONSHIP ADD (FLG_AVAILABLE VARCHAR2(1) DEFAULT 'Y' NOT NULL);
+COMMENT ON COLUMN FAMILY_RELATIONSHIP.FLG_AVAILABLE IS 'Is record available?';
+-- CHANGE END
+
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 2009-09-06
+-- CHANGE REASON: ADT-1147
+
+alter table family_relationship add id_content VARCHAR2(200);
+
+comment on column FAMILY_RELATIONSHIP.ID_CONTENT
+  is 'Content unique identifier';
+
+-- CHANGE END: Bruno Martins
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:50
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table FAMILY_RELATIONSHIP
+  is 'Next of Kin';
+-- Add comments to the columns 
+comment on column FAMILY_RELATIONSHIP.id_family_relationship
+  is 'Primary Key';
+comment on column FAMILY_RELATIONSHIP.code_family_relationship
+  is 'Translation code of next of kin';
+comment on column FAMILY_RELATIONSHIP.adw_last_update
+  is 'Date of last update';  
+-- CHANGE END: Elisabete Bugalho

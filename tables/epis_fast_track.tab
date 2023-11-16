@@ -1,0 +1,125 @@
+
+
+BEGIN
+EXECUTE IMMEDIATE 'create table epis_fast_track
+(
+  ID_EPIS_TRIAGE        NUMBER(24) NOT NULL,  
+  ID_FAST_TRACK         NUMBER(24) NOT NULL,
+	FLG_STATUS            VARCHAR2(1) NOT NULL,
+	ID_PROF_DISABLE       NUMBER(24),
+	DT_DISABLE            TIMESTAMP WITH LOCAL TIME ZONE,
+	ID_FAST_TRACK_DISABLE NUMBER(24),
+	NOTES_DISABLE         VARCHAR2(4000),
+  CREATE_USER           VARCHAR2(24),
+  CREATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24),
+  UPDATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+)';
+EXCEPTION
+  WHEN OTHERS THEN
+	 NULL;
+END;
+/
+
+COMMENT ON TABLE epis_fast_track IS 'Fast tracks associated with an episode.';
+COMMENT ON COLUMN epis_fast_track.id_epis_triage IS 'Triage that triggered the fast track.';
+COMMENT ON COLUMN epis_fast_track.id_fast_track IS 'Fast track ID.';
+COMMENT ON COLUMN epis_fast_track.flg_status IS 'Fast track status: A - active, D - disabled.';
+COMMENT ON COLUMN epis_fast_track.id_prof_disable IS 'Professional who disabled the fast track.';
+COMMENT ON COLUMN epis_fast_track.dt_disable IS 'Disable date.';
+COMMENT ON COLUMN epis_fast_track.id_fast_track_disable IS 'Disable reason.';
+COMMENT ON COLUMN epis_fast_track.notes_disable IS 'Disable notes.';
+
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:44
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column EPIS_FAST_TRACK.create_user
+  is 'Creation User';
+comment on column EPIS_FAST_TRACK.create_time
+  is 'Creation Time';
+comment on column EPIS_FAST_TRACK.create_institution
+  is 'Creation Institution';
+comment on column EPIS_FAST_TRACK.update_user
+  is 'Update User';
+comment on column EPIS_FAST_TRACK.update_time
+  is 'Update Time';
+comment on column EPIS_FAST_TRACK.update_institution
+  is 'Update Institution';  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 13/06/2016 15:37
+-- CHANGE REASON: [ALERT-322139] Issue Replication: Fast Tracks Manual Activation
+--                
+BEGIN
+pk_versioning.run('ALTER TABLE EPIS_FAST_TRACK ADD FLG_TYPE VARCHAR(1) DEFAULT ''P''');
+pk_versioning.run('ALTER TABLE EPIS_FAST_TRACK ADD CONSTRAINT EFT_FLG_TYPE_CHK CHECK (FLG_TYPE IN (''P'', ''S'')) ENABLE');
+pk_versioning.run('ALTER TABLE EPIS_FAST_TRACK ADD FLG_ACTIVATION_TYPE VARCHAR2(1) DEFAULT ''T''');
+pk_versioning.run('ALTER TABLE EPIS_FAST_TRACK ADD CONSTRAINT EFT_FLG_ACTIVATION_TYPE_CHK CHECK (FLG_ACTIVATION_TYPE IN (''T'', ''M'')) ENABLE');
+pk_versioning.run('ALTER TABLE EPIS_FAST_TRACK ADD DT_ENABLE TIMESTAMP(6) WITH LOCAL TIME ZONE');
+pk_versioning.run('ALTER TABLE EPIS_FAST_TRACK ADD ID_PROF_ENABLE NUMBER(24)');
+pk_versioning.run('alter table epis_fast_track add (notes_enable varchar2(4000 char))');
+--
+END;
+/
+
+COMMENT ON COLUMN ALERT.EPIS_FAST_TRACK.FLG_TYPE IS 'Type of fast track: P - Primary, S - Secundary';
+COMMENT ON COLUMN ALERT.EPIS_FAST_TRACK.FLG_ACTIVATION_TYPE IS 'Type of activation: ''M'' - manual, ''T'' - automatically triggered';
+COMMENT ON COLUMN ALERT.EPIS_FAST_TRACK.DT_ENABLE IS 'Fast track activation date';
+COMMENT ON COLUMN ALERT.EPIS_FAST_TRACK.ID_PROF_ENABLE IS 'Professional who enabled the fast track. Professional that did the triage if automatically triggered.';
+COMMENT ON COLUMN epis_fast_track.notes_enable   IS 'notes enable';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 26/06/2018 10:46
+-- CHANGE REASON: 
+--                [DB] Improvements on Fast-track functionality
+ALTER TABLE epis_fast_track ADD dt_activation TIMESTAMP WITH LOCAL TIME ZONE;
+
+COMMENT ON COLUMN EPIS_FAST_TRACK.FLG_TYPE is 'Type of fast track: P - Primary, S - Secundary, E - External';
+COMMENT ON COLUMN EPIS_FAST_TRACK.FLG_STATUS is 'Fast track status: A - active, D - disabled, C - Confirmed.';  
+COMMENT ON COLUMN EPIS_FAST_TRACK.dt_activation is 'Activation date'; 
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Alexander Camilo
+-- CHANGE DATE: 17/07/2018 11:52
+-- CHANGE REASON: [EMR-4797] Fast track replication
+begin
+ALTER TABLE epis_fast_track
+  ADD dt_activation TIMESTAMP WITH LOCAL TIME ZONE;
+
+ALTER TABLE epis_fast_track DROP CONSTRAINT EFT_FLG_TYPE_CHK;
+
+ALTER TABLE epis_fast_track ADD CONSTRAINT EFT_FLG_TYPE_CHK CHECK (FLG_TYPE IN ('P', 'S', 'E')); 
+
+COMMENT ON COLUMN EPIS_FAST_TRACK.FLG_TYPE is 'Type of fast track: P - Primary, S - Secundary, E - External';
+
+ALTER TABLE epis_fast_track DROP CONSTRAINT EFT_FLG_ST_CHK;
+
+ALTER TABLE epis_fast_track ADD CONSTRAINT EFT_FLG_ST_CHK CHECK (FLG_STATUS IN ('A', 'D', 'C')); 
+
+COMMENT ON COLUMN EPIS_FAST_TRACK.FLG_STATUS is 'Fast track status: A - active, D - disabled, C - Confirmed.';  
+end;
+/
+-- CHANGE END: Alexander Camilo
+
+-- CHANGED BY: Alexander Camilo
+-- CHANGE DATE: 17/07/2018 14:44
+-- CHANGE REASON: [EMR-4797] Fast Track 
+ALTER TABLE epis_fast_track
+  ADD dt_activation TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE epis_fast_track DROP CONSTRAINT EFT_FLG_TYPE_CHK;
+ALTER TABLE epis_fast_track ADD CONSTRAINT EFT_FLG_TYPE_CHK CHECK (FLG_TYPE IN ('P', 'S', 'E')); 
+COMMENT ON COLUMN EPIS_FAST_TRACK.FLG_TYPE is 'Type of fast track: P - Primary, S - Secundary, E - External';
+ALTER TABLE epis_fast_track DROP CONSTRAINT EFT_FLG_ST_CHK;
+ALTER TABLE epis_fast_track ADD CONSTRAINT EFT_FLG_ST_CHK CHECK (FLG_STATUS IN ('A', 'D', 'C')); 
+COMMENT ON COLUMN EPIS_FAST_TRACK.FLG_STATUS is 'Fast track status: A - active, D - disabled, C - Confirmed.';  
+/
+-- CHANGE END: Alexander Camilo

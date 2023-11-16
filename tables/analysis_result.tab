@@ -1,0 +1,253 @@
+  CREATE TABLE ANALYSIS_RESULT
+   (	ID_ANALYSIS_RESULT NUMBER(24,0) NOT NULL ENABLE,
+	ID_ANALYSIS NUMBER(12,0) NOT NULL ENABLE,
+	ID_ANALYSIS_REQ_DET NUMBER(24,0),
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	DT_ANALYSIS_RESULT DATE NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0),
+	ID_EPISODE NUMBER(24,0),
+	DT_CANCEL DATE,
+
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	LOINC_CODE VARCHAR2(200),
+	FLG_STATUS VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE analysis_result IS 'Resultados das análises.Se estão associados a uma requisição, correspondem ao utente do episódio. Mas este registo também pode estar directamente associado ao utente, nos casos em que existem resultados de análises não requisitadas na instituição.' ;
+
+COMMENT ON COLUMN analysis_result.id_episode IS 'ID do episódio em que foram lidos os resultados, pelo requisitante' ;
+COMMENT ON COLUMN analysis_result.flg_status IS 'Código LOINC associado ao resultado' ;
+COMMENT ON COLUMN analysis_result.dt_analysis_result IS 'Data / hora de registo' ;
+COMMENT ON COLUMN analysis_result.notes IS 'Descritivo do resultado (valor)' ;
+COMMENT ON COLUMN analysis_result.flg_type IS 'Registado por: D - médico; T - técnico' ;
+
+
+alter table analysis_result add (dt_analysis_result_tstz timestamp with local time zone);
+alter table analysis_result add (dt_cancel_tstz timestamp with local time zone);
+
+COMMENT ON COLUMN analysis_result.dt_analysis_result_tstz IS 'Data / hora de registo' ;
+
+-- Add/modify columns 
+alter table ANALYSIS_RESULT add DESC_LABORATORY varchar2(4000);
+-- Add comments to the columns 
+comment on column ANALYSIS_RESULT.DESC_LABORATORY
+  is 'Laboratório que realizou a análises';
+
+-- Add/modify columns 
+alter table ANALYSIS_RESULT add (DT_SAMPLE TIMESTAMP(6) WITH LOCAL TIME ZONE);
+-- Add comments to the columns 
+comment on column ANALYSIS_RESULT.DESC_LABORATORY
+  is 'Data do registo do resultado (Observações Periódicas, Histórico e Saúde Materna)';
+
+
+
+-- Add/modify columns 
+alter table ANALYSIS_RESULT add (DT_SAMPLE TIMESTAMP(6) WITH LOCAL TIME ZONE);
+-- Add comments to the columns 
+comment on column ANALYSIS_RESULT.DT_SAMPLE
+  is 'Data do registo do resultado (Observações Periódicas, Histórico e Saúde Materna)';
+  
+ALTER TABLE ANALYSIS_RESULT ADD ID_VISIT NUMBER(24,0) ;  
+COMMENT ON COLUMN "ALERT"."ANALYSIS_RESULT"."ID_VISIT" IS 'Visita';  
+
+
+alter table ANALYSIS_RESULT add ID_EXAM_CAT NUMBER(24);
+-- Add comments to the columns 
+comment on column ANALYSIS_RESULT.ID_EXAM_CAT
+  is 'Categoria da análise';
+
+-- CHANGED REASON: Adição da coluna flg_orig_analysis à tabela
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 12/11/2007
+ALTER TABLE analysis_result
+ADD flg_orig_analysis VARCHAR2(1);
+
+COMMENT ON COLUMN analysis_result.flg_orig_analysis IS 'Indicação da origem do resultado: O - observações periódicas; S - análises seriadas; M - saúde materna; X - outro .';
+--END
+
+
+-- Add/modify columns 
+alter table ANALYSIS_RESULT add ID_EPISODE_ORIG NUMBER(24);
+-- Add comments to the columns 
+comment on column ANALYSIS_RESULT.ID_EPISODE_ORIG
+  is 'ID do episódio de criação da requisição';
+
+-- Passed to analysis_result_par  
+ALTER TABLE ANALYSIS_RESULT DROP COLUMN DESC_LABORATORY;
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Desnormalização - Remover campos DATE para uso de TIMESTAMPS.
+ALTER TABLE ANALYSIS_RESULT DROP COLUMN DT_ANALYSIS_RESULT;
+ALTER TABLE ANALYSIS_RESULT DROP COLUMN DT_CANCEL;
+-- CHANGE END
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 2008-11-24
+-- CHANGE REASON: ALERT-9285
+ALTER TABLE ANALYSIS_RESULT 
+ ADD (ID_RESULT_STATUS NUMBER(24)
+ );
+-- CHANGE END
+
+-- CHANGED BY: Jose Castro
+-- CHANGE DATE: 2009-03-18
+-- CHANGE REASON: ALERT-1495: Cancelamento de análises seriadas
+alter table ANALYSIS_RESULT drop column ID_PROF_CANCEL;
+alter table ANALYSIS_RESULT drop column DT_CANCEL_TSTZ;
+alter table ANALYSIS_RESULT drop column NOTES_CANCEL;
+
+alter table ANALYSIS_RESULT add constraint ARES_FLG_ORIG_ANALYSIS_CHK check (FLG_ORIG_ANALYSIS IN ('O', 'M', 'S', 'X'));
+alter table ANALYSIS_RESULT add constraint ARES_FLG_STATUS_CHK check (FLG_STATUS IN ('A', 'C'));
+alter table ANALYSIS_RESULT add constraint ARES_FLG_TYPE_CHK check (FLG_TYPE IN ('D', 'N', 'T'));
+
+comment on column ANALYSIS_RESULT.ID_ANALYSIS_RESULT is 'Analysis Result ID';
+comment on column ANALYSIS_RESULT.ID_ANALYSIS is 'Analysis ID';
+comment on column ANALYSIS_RESULT.ID_ANALYSIS_REQ_DET is 'Analysis Requisition Detail ID';
+comment on column ANALYSIS_RESULT.ID_PROFESSIONAL is 'Professional ID';
+comment on column ANALYSIS_RESULT.ID_PATIENT is 'Patient ID';
+comment on column ANALYSIS_RESULT.ID_INSTITUTION is 'Institution ID';
+comment on column ANALYSIS_RESULT.FLG_STATUS is 'Result status (''A'' - Active, ''C'' - Canceled)';
+comment on column ANALYSIS_RESULT.DT_ANALYSIS_RESULT_TSTZ is 'Date of record insert';
+comment on column ANALYSIS_RESULT.ID_RESULT_STATUS is 'Result Status ID';
+-- CHANGE END
+
+-- CHANGED BY: Jose Castro
+-- CHANGE DATE: 2009-09-19
+-- CHANGE REASON: ALERT-8566
+-- Add/modify columns 
+alter table ANALYSIS_RESULT add FLG_RESULT_ORIGIN VARCHAR2(2);
+alter table ANALYSIS_RESULT add ID_PROF_REQ NUMBER(24,0);
+
+-- Add comments to the columns 
+comment on column ANALYSIS_RESULT.FLG_RESULT_ORIGIN
+  is 'Flag que indica a origem do resultado: I – Interfaces; P – Paciente: PC – Prestador de cuidados; O – Outro';
+comment on column ANALYSIS_RESULT.ID_PROF_REQ is 'Professional da Requisição';
+-- CHANGE END
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 16/02/2011 12:15
+-- CHANGE REASON: [ALERT-41171] 
+alter table analysis_result rename column notes to notes_old;
+
+alter table analysis_result add (notes clob);
+-- CHANGE END: Ana Matos
+-- CHANGED BY: Carlos Nogueira
+-- CHANGE DATE: 23/02/2011 16:23
+-- CHANGE REASON: [ALERT-842] 
+
+alter table analysis_result add (ID_HARVEST NUMBER(24));
+-- CHANGE END: Carlos Nogueira
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/12/2011 08:55
+-- CHANGE REASON: [ALERT-209155] 
+ALTER TABLE analysis_result DROP COLUMN NOTES_OLD;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/12/2011 09:20
+-- CHANGE REASON: [ALERT-209155] 
+ALTER TABLE analysis_result DROP COLUMN NOTES_OLD;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 14:57
+-- CHANGE REASON: [ALERT-246252] 
+ALTER TABLE analysis_result MODIFY (ID_SAMPLE_TYPE NUMBER(12) NOT NULL);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:11
+-- CHANGE REASON: [ALERT-246248] 
+ALTER TABLE ANALYSIS_RESULT ADD (ID_SAMPLE_TYPE NUMBER(12));
+
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_SAMPLE_TYPE IS 'Sample type id';
+
+COMMENT ON COLUMN ANALYSIS_RESULT.NOTES IS 'Descritivo do resultado (valor)';
+
+COMMENT ON COLUMN ANALYSIS_RESULT.LOINC_CODE IS 'Código LOINC associado ao resultado';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 27/05/2013 17:35
+-- CHANGE REASON: [ALERT-253722] 
+ALTER TABLE ANALYSIS_RESULT ADD (RESULT_ORIGIN_NOTES VARCHAR2(200));
+
+COMMENT ON COLUMN ANALYSIS_RESULT.RESULT_ORIGIN_NOTES IS 'Result origin notes';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 11/04/2014 16:50
+-- CHANGE REASON: [ALERT-280752 ] 
+-- Add/modify columns 
+alter table ANALYSIS_RESULT add flg_mult_result VARCHAR2(1);
+-- Add comments to the columns 
+comment on column ANALYSIS_RESULT.flg_mult_result
+  is 'Flag that indicates if exists multiple results for the same ID_RESULT and ID_ANALYSIS_PARAMETER (for different unit measures)';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:01
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS_RESULT IS 'Lab tests'' orders results table';
+
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_ANALYSIS_RESULT IS 'Lab test result ID';
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_ANALYSIS IS 'Lab test ID';
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_ANALYSIS_REQ_DET IS 'Lab test''s order detail ID';
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_PROFESSIONAL IS 'Professional ID';
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_PATIENT IS 'Patient ID';
+COMMENT ON COLUMN ANALYSIS_RESULT.FLG_TYPE IS 'Flag that indicates the professional''s category';
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_EPISODE IS 'Episode ID (when the results were read)';
+COMMENT ON COLUMN ANALYSIS_RESULT.LOINC_CODE IS 'Result loinc code';
+COMMENT ON COLUMN ANALYSIS_RESULT.FLG_STATUS IS 'Flag that indicates the result status';
+COMMENT ON COLUMN ANALYSIS_RESULT.DT_ANALYSIS_RESULT_TSTZ IS 'Date that indicates when the result was registered';
+COMMENT ON COLUMN ANALYSIS_RESULT.DT_SAMPLE IS 'Date of collection (when the result is registered manually)';
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_VISIT IS 'Visit ID';
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_EXAM_CAT IS 'Lab test''s category ID';
+COMMENT ON COLUMN ANALYSIS_RESULT.FLG_ORIG_ANALYSIS IS 'Functionality result origin:  S - Lab tests'' history, M - Woman health, O - Flowsheets';
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_EPISODE_ORIG IS 'Episode ID';
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_RESULT_STATUS IS 'Result status ID';
+COMMENT ON COLUMN ANALYSIS_RESULT.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ANALYSIS_RESULT.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ANALYSIS_RESULT.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ANALYSIS_RESULT.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ANALYSIS_RESULT.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ANALYSIS_RESULT.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN ANALYSIS_RESULT.FLG_RESULT_ORIGIN IS 'Flag that indicates the result origin: I ? Interfaces; P ? Paciente: PC ? Prestador de cuidados; O ? Outro';
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_PROF_REQ IS 'Professional that order the lab test (when the result is registered manually)';
+COMMENT ON COLUMN ANALYSIS_RESULT.NOTES IS 'Result notes';
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_HARVEST IS 'Harvest ID';
+COMMENT ON COLUMN ANALYSIS_RESULT.ID_SAMPLE_TYPE IS 'Sample type ID';
+COMMENT ON COLUMN ANALYSIS_RESULT.RESULT_ORIGIN_NOTES IS 'Result origin notes';
+COMMENT ON COLUMN ANALYSIS_RESULT.FLG_MULT_RESULT IS 'Flag that indicates if exists multiple results for the same ID_RESULT and ID_ANALYSIS_PARAMETER (for different unit measures)';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/01/2016 16:40
+-- CHANGE REASON: [ALERT-318048] 
+comment on column ANALYSIS_RESULT.FLG_RESULT_ORIGIN
+  is 'Flag that indicates the result origin: I ? Interfaces, P ? Patient, PC ? Healthcare provider, O ? Other';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.analysis_result move lob(notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

@@ -1,0 +1,25 @@
+ALTER TABLE EPIS_HHC_DISCH_DET  ADD CONSTRAINT EPIS_HHC_DISCH_DET_PK PRIMARY KEY (ID_HHC_DISCH_DET);
+
+declare
+	l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table EPIS_HHC_DISCH_DET  add constraint EPIS_HHC_DIS_DSC_FK   foreign key (id_hhc_discharge) references EPIS_HHC_DISCHARGE (id_hhc_discharge)';
+pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_sql varchar2(1000 char);
+begin
+	l_sql := 'alter table EPIS_HHC_DISCH_DET  add constraint EPIS_HHC_DIS_DET_TYPE_FK foreign key (id_hhc_det_type) references hhc_det_type (id_hhc_det_type)';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_sql varchar2(1000 char);
+begin
+	l_sql := 'alter table EPIS_HHC_DISCH_DET  add constraint EPIS_HHC_DIS_PROF_CREAT_FK foreign key (id_prof_creation) references professional (id_professional)';
+	pk_versioning.run(l_sql);
+end;
+/

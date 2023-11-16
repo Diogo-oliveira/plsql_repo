@@ -1,0 +1,36 @@
+-- CHANGED BY:  Mauro Sousa
+-- CHANGE DATE: 26/01/2011 11:48
+-- CHANGE REASON: [ALERT-157923] 
+grant references on DIAGRAM_LAYOUT to ALERT_DEFAULT;
+-- CHANGE END:  Mauro Sousa
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 04/07/2011 16:59
+-- CHANGE REASON: [ALERT-157923] grants needed to FK references
+grant references on DIAGRAM_LAYOUT to ALERT_DEFAULT;
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 20/09/2011 18:02
+-- CHANGE REASON: [ALERT-157923] grants
+grant references on DIAGRAM_LAYOUT to ALERT_DEFAULT;
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 28/10/2011 17:01
+-- CHANGE REASON: [ALERT-202443] 
+grant select on DIAGRAM_LAYOUT to alert_default;
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 27/01/2012 17:16
+-- CHANGE REASON: [ALERT-216286] 
+grant references on DIAGRAM_LAYOUT to ALERT_DEFAULT;
+-- CHANGE END:  Rui Gomes
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2017-1-03
+-- CHANGED REASON: ALERT-327486
+grant SELECT on ALERT.DIAGRAM_LAYOUT to ALERT_APEX_TOOLS;
+-- CHANGE END: Humberto Cardoso

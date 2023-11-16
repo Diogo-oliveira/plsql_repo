@@ -1,0 +1,58 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 25/01/2011 16:51
+-- CHANGE REASON: [ALERT-157333] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tables
+     WHERE table_name = 'REF_SPEC_INSTITUTION';
+
+    IF l_count <> 1
+    THEN
+        EXECUTE IMMEDIATE 'CREATE TABLE "REF_SPEC_INSTITUTION"(
+ID_SPECIALITY NUMBER(6,0) NOT NULL,
+ID_INSTITUTION NUMBER(24,0) NOT NULL,
+FLG_AVAILABLE VARCHAR2(1) NOT NULL,
+CREATE_USER VARCHAR2(24) ,
+CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+CREATE_INSTITUTION NUMBER(24,0) ,
+UPDATE_USER VARCHAR2(24) ,
+UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+UPDATE_INSTITUTION NUMBER(24,0) )';
+        EXECUTE IMMEDIATE 'COMMENT ON column "REF_SPEC_INSTITUTION"."ID_SPECIALITY" IS ''P1_speciality''';
+        EXECUTE IMMEDIATE 'COMMENT ON column "REF_SPEC_INSTITUTION"."CREATE_USER" IS ''Creation User''';
+        EXECUTE IMMEDIATE 'COMMENT ON column "REF_SPEC_INSTITUTION"."CREATE_TIME" IS ''Creation Time''';
+        EXECUTE IMMEDIATE 'COMMENT ON column "REF_SPEC_INSTITUTION"."CREATE_INSTITUTION" IS ''Creation Institution''';
+        EXECUTE IMMEDIATE 'COMMENT ON column "REF_SPEC_INSTITUTION"."UPDATE_USER" IS ''Update User''';
+        EXECUTE IMMEDIATE 'COMMENT ON column "REF_SPEC_INSTITUTION"."UPDATE_TIME" IS ''Update Time''';
+        EXECUTE IMMEDIATE 'COMMENT ON column "REF_SPEC_INSTITUTION"."UPDATE_INSTITUTION" IS ''Update Institution''';
+        EXECUTE IMMEDIATE 'COMMENT ON TABLE "REF_SPEC_INSTITUTION" IS ''P1_speciality available by  institution''';
+    END IF;
+END;
+/
+
+<
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 16/06/2015 16:38
+-- CHANGE REASON: [ALERT-312671] 
+begin
+pk_versioning.run(i_sql => 'ALTER TABLE REF_SPEC_INSTITUTION MODIFY ID_SPECIALITY NUMBER(24)');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on table REF_SPEC_INSTITUTION
+  is 'Referral specialties available by institution';
+-- Add comments to the columns 
+comment on column REF_SPEC_INSTITUTION.id_speciality
+  is 'Specialty';
+comment on column REF_SPEC_INSTITUTION.id_institution
+  is 'Institution';
+comment on column REF_SPEC_INSTITUTION.flg_available
+  is 'Is record available? Y/N';

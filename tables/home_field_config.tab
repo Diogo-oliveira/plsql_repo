@@ -1,0 +1,51 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 22/09/2011 09:03
+-- CHANGE REASON: [ALERT-192572] 
+DECLARE e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects('ALERT', 'HOME_FIELD_CONFIG', 'TABLE', 'PRM', 'N', '', 'N');
+
+    BEGIN
+        EXECUTE IMMEDIATE 'create table home_field_config (
+  id_home_field_config       number(24,0)                      not null,
+id_home_field              number(24,0)                      not null,
+  id_institution             number(24,0)                      not null,
+flg_active                 varchar2(1 char)                  not null,
+  flg_mandatory              varchar2(1 char)                  DEFAULT ''N'' not null,
+rank                       number(6)                         null,
+min_value                  number(12)                        null,
+max_value                  number(12)                        null,
+mask                       varchar2(100 char)                null,
+create_user                varchar2(24 char)                 null,
+  create_time                timestamp(6) with local time zone null,
+  create_institution         number(24,0)                      null,
+  update_user                varchar2(24 char)                 null,
+  update_time                timestamp(6) with local time zone null,
+  update_institution         number(24,0)                      null)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+
+COMMENT ON TABLE home_field_config IS 'Social - home field configuration';
+COMMENT ON column home_field_config.id_home_field_config IS 'home field config identifier';
+COMMENT ON column home_field_config.id_home_field IS 'home field identifier';
+COMMENT ON column home_field_config.id_institution IS 'institution identifier';
+COMMENT ON column home_field_config.flg_active IS 'flag active configuration Y/N';
+COMMENT ON column home_field_config.flg_mandatory IS 'mandatory flag Y/N';
+COMMENT ON column home_field_config.rank IS 'rank';
+COMMENT ON column home_field_config.min_value IS 'minimum value';
+COMMENT ON column home_field_config.max_value IS 'maximum value';
+COMMENT ON column home_field_config.mask IS 'mask';
+
+COMMENT ON column home_field_config.create_user IS 'Creation User';
+COMMENT ON column home_field_config.create_time IS 'Creation Time';
+COMMENT ON column home_field_config.create_institution IS 'Creation Institution';
+COMMENT ON column home_field_config.update_user IS 'Update User';
+COMMENT ON column home_field_config.update_time IS 'Update Time';
+COMMENT ON column home_field_config.update_institution IS 'Update Institution';
+-- CHANGE END: Paulo Teixeira

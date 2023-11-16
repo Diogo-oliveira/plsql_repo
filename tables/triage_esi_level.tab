@@ -1,0 +1,46 @@
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 24/01/2010 19:51
+-- CHANGE REASON: [ALERT-70160] Triage refactoring
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE TRIAGE_ESI_LEVEL( ' || --
+                      '  ID_TRIAGE_ESI_LEVEL NUMBER(24) NOT NULL, ' || --
+                      '  ESI_LEVEL NUMBER(6) NOT NULL, ' || --
+                      '  ID_TRIAGE_COLOR NUMBER(24) NOT NULL, ' || --
+                      '  ICON VARCHAR2(200), ' || --
+                      '  ICON_TRANSFER VARCHAR2(200), ' || --
+                      '  FLG_AVAILABLE VARCHAR2(1) NOT NULL, ' || --
+                      '  CREATE_USER VARCHAR2(24), ' || --
+                      '  CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE, ' || --
+                      '  CREATE_INSTITUTION NUMBER(24), ' || --
+                      '  UPDATE_USER VARCHAR2(24), ' || --
+                      '  UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE, ' || --
+                      '  UPDATE_INSTITUTION NUMBER(24) ' || --
+                      ') TABLESPACE TABLE_S';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+
+COMMENT ON TABLE TRIAGE_ESI_LEVEL IS 'Store the relation between ESI levels and triage colors';
+COMMENT ON COLUMN TRIAGE_ESI_LEVEL.ID_TRIAGE_ESI_LEVEL IS 'ESI level record identifier';
+COMMENT ON COLUMN TRIAGE_ESI_LEVEL.ESI_LEVEL IS 'ESI level number (1-5)';
+COMMENT ON COLUMN TRIAGE_ESI_LEVEL.ID_TRIAGE_COLOR IS 'Triage color ID, associated to the current ESI level';
+COMMENT ON COLUMN TRIAGE_ESI_LEVEL.ICON IS 'ESI level icon';
+COMMENT ON COLUMN TRIAGE_ESI_LEVEL.ICON_TRANSFER IS 'ESI level icon, with institution transfer';
+COMMENT ON COLUMN TRIAGE_ESI_LEVEL.FLG_AVAILABLE IS 'Availability? (Y)es (N)o';
+COMMENT ON COLUMN TRIAGE_ESI_LEVEL.CREATE_USER IS 'Creation user';
+COMMENT ON COLUMN TRIAGE_ESI_LEVEL.CREATE_TIME IS 'Creation date / time';
+COMMENT ON COLUMN TRIAGE_ESI_LEVEL.CREATE_INSTITUTION IS 'Creation institution';
+COMMENT ON COLUMN TRIAGE_ESI_LEVEL.UPDATE_USER IS 'Update user';
+COMMENT ON COLUMN TRIAGE_ESI_LEVEL.UPDATE_TIME IS 'Update date / time';
+COMMENT ON COLUMN TRIAGE_ESI_LEVEL.UPDATE_INSTITUTION IS 'Update institution';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 02/03/2010 10:50
+-- CHANGE REASON: [ALERT-77123] ESI Triage
+ALTER TABLE TRIAGE_ESI_LEVEL MODIFY ICON VARCHAR2(200 CHAR);
+ALTER TABLE TRIAGE_ESI_LEVEL MODIFY ICON_TRANSFER VARCHAR2(200 CHAR);
+ALTER TABLE TRIAGE_ESI_LEVEL MODIFY FLG_AVAILABLE VARCHAR2(1 CHAR);
+-- CHANGE END: José Brito

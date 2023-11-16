@@ -1,0 +1,46 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 21/12/2010 12:25
+-- CHANGE REASON: [ALERT-139534] 
+declare
+  e_protection EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_protection, -02260);
+begin
+BEGIN
+        EXECUTE IMMEDIATE 'alter table EPIS_ADDENDUM
+  add constraint EA_PK primary key (ID_EPIS_ADDENDUM)';
+    EXCEPTION
+        WHEN e_protection THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 21/12/2010 12:35
+-- CHANGE REASON: [ALERT-139534] 
+declare
+  e_protection EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_protection, -02443);
+begin
+BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE todo_task DROP CONSTRAINT TDT_FLGTASK_CHK';
+    EXCEPTION
+        WHEN e_protection THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+end;
+/
+declare
+  e_protection EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_protection, -02443);
+begin
+BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE todo_task ADD CONSTRAINT TDT_FLGTASK_CHK CHECK(FLG_TASK IN (''DP'', ''PR'', ''A'', ''E'', ''PE'', ''BR'', ''R'', ''PO'', ''B'', ''IO'', ''M'', ''MT'', ''HT'', ''PT'', ''FT'', ''AD'', ''CO'', ''I'', ''SO'', ''H'', ''IE'', ''IT'', ''TD'', ''AM'', ''AS'', ''AM'',''AS'',''BR'',''FT'',''IE'',''IO'',''IT'',''M'',''PE'',''PT'',''SO'',''TD'',''A'',''AD'',''B'',''E'',''FU'',''H'',''MT'',''PO'',''PR'',''HT'',''I'',''CO'',''DP''))';
+    EXCEPTION
+        WHEN e_protection THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

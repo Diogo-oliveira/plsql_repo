@@ -1,0 +1,21 @@
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 13/09/2011 08:59
+-- CHANGE REASON: [ALERT-194987] Alter Index to allow better performance on Lucene Index - Inpatient grids reformulation- Patient with discharge filter
+
+drop index EPIS_EPTP_FEHR_INST_FST_IDX;
+/
+create index EPIS_EPTP_FEHR_INST_FST_IDX on EPISODE (ID_EPIS_TYPE, FLG_EHR, ID_INSTITUTION, FLG_STATUS, ID_PATIENT)
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+/
+
+-- CHANGE END: António Neto

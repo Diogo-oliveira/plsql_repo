@@ -1,0 +1,12 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 13/06/2016 15:37
+-- CHANGE REASON: [ALERT-322139] Issue Replication: Fast Tracks Manual Activation
+--                
+BEGIN
+    pk_versioning.run('ALTER TABLE EPIS_FAST_TRACK_HIST ADD CONSTRAINT EFTH_PK PRIMARY KEY (ID_EPIS_FAST_TRACK_HIST)');
+    pk_versioning.run('alter table epis_fast_track_hist add constraint EFTH_FLG_ST_CHK check (FLG_STATUS IN (''A'',''D''))');
+    pk_versioning.run('ALTER TABLE epis_fast_track_hist ADD CONSTRAINT EFTH_FLG_ACTIVATION_TYPE_CHK CHECK (FLG_ACTIVATION_TYPE IN (''T'', ''M'')) ENABLE');
+    pk_versioning.run('ALTER TABLE epis_fast_track_hist ADD CONSTRAINT EFTH_FLG_TYPE_CHK CHECK (FLG_TYPE IN (''P'', ''S'')) ENABLE');
+END;
+/
+-- CHANGE END: Elisabete Bugalho

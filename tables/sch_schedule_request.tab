@@ -1,0 +1,114 @@
+
+
+  CREATE TABLE SCH_SCHEDULE_REQUEST
+   (	ID_SCH_SCHEDULE_REQUEST NUMBER(24,0) NOT NULL ENABLE,
+	ID_CONSULT_REQ NUMBER(24,0) NOT NULL ENABLE,
+	ID_SCHEDULE NUMBER(24,0),
+	ID_SCHEDULE_OUTP NUMBER(24,0),
+	ID_PROFESSIONAL NUMBER(24,0),
+	DT_TARGET DATE,
+	DT_BEGIN DATE,
+	DT_END DATE,
+	FLG_STATE VARCHAR2(240),
+	FLG_SCHED VARCHAR2(240),
+	FLG_URGENCY VARCHAR2(240),
+
+	ID_SOFTWARE NUMBER(24,0),
+	ID_EPIS_TYPE NUMBER(24,0),
+	FLG_TYPE VARCHAR2(240),
+	FLG_STATUS VARCHAR2(240),
+	NUM_AVAILABLE NUMBER(6,0),
+	FLG_VACANCY VARCHAR2(240),
+	NOTES VARCHAR2(240),
+	DT_SCHEDULE DATE,
+	ID_INSTIT_REQUESTS NUMBER(12,0),
+	ID_INSTIT_REQUESTED NUMBER(12,0),
+	ID_DCS_REQUESTS NUMBER(24,0),
+	ID_DCS_REQUESTED NUMBER(24,0),
+	ID_PROF_REQUESTS NUMBER(24,0),
+
+	ID_PROF_SCHEDULES NUMBER(24,0),
+	DT_REQUEST DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE
+   );
+
+
+COMMENT ON COLUMN sch_schedule_request.dt_target IS 'Data / hora agendada. Pode não ser preenchida, se se indicar uma data limite' ;
+COMMENT ON COLUMN sch_schedule_request.flg_state IS 'Estado: A - agendado, R - requisitado, E - efectivado, D - alta médica, M - alta administrativa, C - espera corredor, N - atendimento enfermagem pré-consulta, P - atendimento enfermagem pós-consulta, T - consulta' ;
+COMMENT ON COLUMN sch_schedule_request.flg_sched IS 'N - 1ª enfermagem, F - subsequente enfermagem, D - 1ª médica, M - subsequente médica, I - internamento, S - internamento para cirurgia, V - tratamento feridas, T - administração medicamentos, I - informações' ;
+COMMENT ON COLUMN sch_schedule_request.flg_urgency IS 'Indicação de urgência' ;
+COMMENT ON COLUMN sch_schedule_request.flg_type IS 'P - primeira consulta, S - subsequente' ;
+COMMENT ON COLUMN sch_schedule_request.flg_status IS '(O)pen - ready for scheduling (B)ooked - scheduled (C)anceled - canceled schedule' ;
+COMMENT ON COLUMN sch_schedule_request.flg_vacancy IS 'Tipo de marcação: (R)otina, (V)aga, (U)rgente' ;
+COMMENT ON COLUMN sch_schedule_request.notes IS 'Notas' ;
+COMMENT ON COLUMN sch_schedule_request.dt_schedule IS 'Data / hora do registo ou de confirmação / rejeição da requisição' ;
+
+comment on table SCH_SCHEDULE_REQUEST
+  is 'this table associates a consult request to a schedule... later on we can delete the schedule when the consult had been scheduled on SONHO';
+-- Add comments to the columns 
+comment on column SCH_SCHEDULE_REQUEST.ID_PROFESSIONAL
+  is 'id_professional da tabela sch_prof_outp';
+
+COMMENT ON TABLE SCH_SCHEDULE_REQUEST IS 'Associates a consult request to a schedule. Later on we can delete the schedule when the consult had been scheduled on SONHO';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.ID_SCH_SCHEDULE_REQUEST IS 'Appointment request identifier';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.DT_CANCEL IS 'Cancellation date';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.ID_SCHEDULE IS 'Appointment identifier';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.ID_SCHEDULE_OUTP IS 'Consult appointment identifier';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.ID_PROFESSIONAL IS 'Professional identifier (the one that is requested to carry out the schedule)';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.DT_TARGET IS 'Appointment date';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.DT_BEGIN IS 'Appointment begin date';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.DT_END IS 'Appointment end date';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.FLG_STATE IS 'Consult appointment''s patient state: ''A'' patient absent ''R'' requested, ''E'' - patient waiting, ''D'' - medical discharge, ''M'' - administrative discharge, ''C ''- waiting in the hallway, ''N'' - nurge triage, ''P'' - nursing end, ''T'' - ongoing appointment';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.FLG_SCHED IS 'Appointment type: ''F'' nursing follow-up, ''I'' inpatient, ''M'' physician follow-up, ''N'' 1st nursing, ''O'' information, ''S'' admission for surgery, ''T'' medications administration, ''V'' wound care, ''Q'' speciality follow-up, ''P'' 1st speciality, ''D'' 1st physician, ''R'' consult';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.FLG_URGENCY IS 'Is this an urgent appointment? ''Y'' yes, ''N'' no';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.ID_SOFTWARE IS 'Software identifier';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.ID_EPIS_TYPE IS 'Episode type';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.FLG_TYPE IS 'Consult type: ''P'' first appointment, ''S'' follow-up appointment';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.FLG_STATUS IS 'Request status: ''O'' open (ready for scheduling), ''B'' booked (scheduled), ''C'' cancelled';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.NUM_AVAILABLE IS 'Deprecated column';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.FLG_VACANCY IS 'Type of vacancy occupied: ''R'' routine, ''U'' urgent, ''V'' unplanned';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.NOTES IS 'Request''s notes';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.DT_SCHEDULE IS 'Request confirmation/rejection date';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.ID_INSTIT_REQUESTS IS 'Institution that requested the appointment';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.ID_INSTIT_REQUESTED IS 'Institution that is requested to carry out the appointment';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.ID_DCS_REQUESTS IS 'Department-Clinical service that requested the appointment';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.ID_DCS_REQUESTED IS 'Department-Clinical service that is requested to carry out the appointment';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.ID_PROF_REQUESTS IS 'Professional that requested the appointment';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.ID_PROF_SCHEDULES IS 'Professional that will create the appointment';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.DT_REQUEST IS 'Request date';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.ID_PROF_CANCEL IS 'Professional that requested the appointment''s cancellation';
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.ID_CONSULT_REQ IS 'Consult request identifier';
+
+ALTER TABLE SCH_SCHEDULE_REQUEST MODIFY ID_EPIS_TYPE NUMBER(12);
+
+ALTER TABLE SCH_SCHEDULE_REQUEST ADD DT_BEGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;	
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.DT_BEGIN_TSTZ IS 'Appointment begin date';
+ALTER TABLE SCH_SCHEDULE_REQUEST ADD DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;	
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.DT_CANCEL_TSTZ IS 'Cancellation date';
+ALTER TABLE SCH_SCHEDULE_REQUEST ADD DT_END_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;	
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.DT_END_TSTZ IS 'Appointment end date';
+ALTER TABLE SCH_SCHEDULE_REQUEST ADD DT_REQUEST_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;	
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.DT_REQUEST_TSTZ IS 'Request date';
+ALTER TABLE SCH_SCHEDULE_REQUEST ADD DT_SCHEDULE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;	
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.DT_SCHEDULE_TSTZ IS 'Request confirmation/rejection date';
+ALTER TABLE SCH_SCHEDULE_REQUEST ADD DT_TARGET_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;	
+COMMENT ON COLUMN SCH_SCHEDULE_REQUEST.DT_TARGET_TSTZ IS 'Appointment date';
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 23-09-2008
+-- CHANGE REASON: igualar datatype a institution.id_institution
+alter table SCH_SCHEDULE_REQUEST modify ID_INSTIT_REQUESTS NUMBER(24);
+alter table SCH_SCHEDULE_REQUEST modify ID_INSTIT_REQUESTED NUMBER(24);
+--END
+
+
+-- José Brito 22/09/2008 Eliminar colunas DATE
+alter table SCH_SCHEDULE_REQUEST drop column DT_BEGIN;
+alter table SCH_SCHEDULE_REQUEST drop column DT_CANCEL;
+alter table SCH_SCHEDULE_REQUEST drop column DT_END;
+alter table SCH_SCHEDULE_REQUEST drop column DT_REQUEST;
+alter table SCH_SCHEDULE_REQUEST drop column DT_SCHEDULE;
+alter table SCH_SCHEDULE_REQUEST drop column DT_TARGET;
+
+

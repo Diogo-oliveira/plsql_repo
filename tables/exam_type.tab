@@ -1,0 +1,49 @@
+CREATE TABLE EXAM_TYPE
+(
+ID_EXAM_TYPE NUMBER(24,0) NOT NULL ,
+ID_PARENT    NUMBER(24,0) ,
+FLG_TYPE     VARCHAR2(1)  NOT NULL ,
+GENDER VARCHAR2(1),
+AGE_MIN NUMBER(3),
+AGE_MAX NUMBER(3),
+ADW_LAST_UPDATE DATE
+);
+
+COMMENT ON TABLE  EXAM_TYPE           IS 'Tabela com os tipos de exames';
+
+COMMENT ON COLUMN EXAM_TYPE.ID_PARENT IS 'Exame pai do qual deriva este exame';
+COMMENT ON COLUMN EXAM_TYPE.FLG_TYPE  IS 'Tipo de exame. U - (Pregnant ultrasound) ecografia associada a gravidez. Outros estados a adicionar conforme necessidades';
+
+COMMENT on column exam_type.gender IS 'Sexo ao qual se aplica o tipo de exame';
+COMMENT on column exam_type.age_min IS 'Idade mínima à qual se aplica o tipo de exame';
+COMMENT on column exam_type.age_min IS 'Idade máxima à qual se aplica o tipo de exame';
+
+
+ALTER TABLE EXAM_TYPE ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN EXAM_TYPE.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:50
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EXAM_TYPE
+  is 'Table with the exam types';
+-- Add comments to the columns 
+comment on column EXAM_TYPE.id_exam_type
+  is 'Primary key';
+comment on column EXAM_TYPE.id_parent
+  is 'Exam Parent ID';
+comment on column EXAM_TYPE.flg_type
+  is 'Exam Type. U - (Pregnant ultrasound) ';
+comment on column EXAM_TYPE.gender
+  is 'Gender';
+comment on column EXAM_TYPE.age_min
+  is 'Minimum age';
+comment on column EXAM_TYPE.age_max
+  is 'Maximum age';
+comment on column EXAM_TYPE.adw_last_update
+  is 'Date of last change';
+comment on column EXAM_TYPE.id_content
+  is 'Unique ID content';  
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,101 @@
+
+    /*
+      * TABLE REPORT_AUTH_PRINT
+      @CREATOR MARCO FREIRE
+      @VERSION 
+      @SEE
+      @SINCE 20090508
+      @UPDATED <Responsible> (<Date>)
+    */
+
+--***********************************************************************
+
+CREATE TABLE REPORT_AUTH_PRINT
+(
+  ID_REPORT_AUTH_PRINT     NUMBER(24)  NOT NULL,
+  ID_REPORTS               NUMBER(24)  NOT NULL,
+  ID_REP_PROFILE_TEMPLATE  NUMBER(12)  NOT NULL,
+  ID_INSTITUTION           NUMBER(24)  NOT NULL,
+  ID_SOFTWARE              NUMBER(24)  NOT NULL,
+	PRINTER_NAME             VARCHAR2(30),
+	FLG_AUTH                 VARCHAR2(1) NOT NULL
+) 
+
+TABLESPACE TABLE_S;
+
+COMMENT ON TABLE REPORT_AUTH_PRINT IS 'Tabela que relaciona relatórios com os perfis dos profissionais REP_PROFILE_TEMPLATE. Permite atribuir o nome de uma impressora para cada perfil/relatório, assim como a autenticação antes de imprimir.';
+
+COMMENT ON COLUMN REPORT_AUTH_PRINT.ID_REPORT_AUTH_PRINT IS 'Chave primária.';
+COMMENT ON COLUMN REPORT_AUTH_PRINT.ID_REPORTS IS 'ID do relatório.';
+COMMENT ON COLUMN REPORT_AUTH_PRINT.ID_REP_PROFILE_TEMPLATE IS 'ID do perfil do profissional.';
+COMMENT ON COLUMN REPORT_AUTH_PRINT.ID_INSTITUTION IS 'ID da instituição.';
+COMMENT ON COLUMN REPORT_AUTH_PRINT.ID_SOFTWARE IS 'ID do software.';
+COMMENT ON COLUMN REPORT_AUTH_PRINT.PRINTER_NAME IS 'Contém o nome da impressora para a qual o report deve ser enviado. Se estiver a NULL significa que deve ser enviado para a impressora default.';
+COMMENT ON COLUMN REPORT_AUTH_PRINT.FLG_AUTH IS 'Flag que indica se a autenticação é necessária para imprimir o relatório (‘Y’ ou ‘N’).';
+
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON TABLE REPORT_AUTH_PRINT IS 'Relational table of professionals profiles (REP PROFILE TEMPLATE) and the reports. Allows the assigning a printer for each profile/report and authentication before printing';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON COLUMN REPORT_AUTH_PRINT.ID_REPORT_AUTH_PRINT IS 'Primary Key';
+COMMENT ON COLUMN REPORT_AUTH_PRINT.ID_REPORTS IS 'Report Identifier';
+COMMENT ON COLUMN REPORT_AUTH_PRINT.ID_INSTITUTION IS 'Institution Identifier';
+COMMENT ON COLUMN REPORT_AUTH_PRINT.ID_REP_PROFILE_TEMPLATE IS 'Report Templates Identifier';
+COMMENT ON COLUMN REPORT_AUTH_PRINT.PRINTER_NAME IS 'Printer name where the report should be sent. If NULL means default printer';
+COMMENT ON COLUMN REPORT_AUTH_PRINT.FLG_AUTH IS 'Flag about if the authentication is needed to print a report (Y/N)';
+COMMENT ON COLUMN REPORT_AUTH_PRINT.ID_SOFTWARE IS 'Software Identifier';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table REPORT_AUTH_PRINT add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column report_auth_print.create_user IS 'Creation User';
+COMMENT ON column report_auth_print.create_time IS 'Creation Time';
+COMMENT ON column report_auth_print.create_institution IS 'Creation Institution';
+COMMENT ON column report_auth_print.update_user IS 'Update User';
+COMMENT ON column report_auth_print.update_time IS 'Update Time';
+COMMENT ON column report_auth_print.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table report_auth_print add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column report_auth_print.create_user IS 'Creation User';
+COMMENT ON column report_auth_print.create_time IS 'Creation Time';
+COMMENT ON column report_auth_print.create_institution IS 'Creation Institution';
+COMMENT ON column report_auth_print.update_user IS 'Update User';
+COMMENT ON column report_auth_print.update_time IS 'Update Time';
+COMMENT ON column report_auth_print.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

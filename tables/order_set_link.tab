@@ -1,0 +1,40 @@
+CREATE TABLE ORDER_SET_LINK
+ (ID_ORDER_SET NUMBER(24) NOT NULL
+ ,ID_LINK NUMBER(24) NOT NULL
+ ,FLG_LINK_TYPE VARCHAR2(1) NOT NULL
+ );
+
+COMMENT ON TABLE ORDER_SET_LINK IS 'Links to other information associated with Order Sets';
+COMMENT ON COLUMN ORDER_SET_LINK.ID_ORDER_SET IS 'Order Set ID';
+COMMENT ON COLUMN ORDER_SET_LINK.ID_LINK IS 'Id of the link';
+COMMENT ON COLUMN ORDER_SET_LINK.FLG_LINK_TYPE IS 'Type of the link (E - environment; S - specialty)';
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 14/12/2010 15:41
+-- CHANGE REASON: [ALERT-149189] 
+comment on table ORDER_SET_LINK is 'Links table to contain information related with Order Sets [OSL]';
+comment on column ORDER_SET_LINK.FLG_LINK_TYPE is 'Link Type: (E)nvironment / (S)pecialty / (C)hief Complaint';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 18/02/2023 22:12
+-- CHANGE REASON: [EMR-56895] - HTML Migration - DDLs
+BEGIN
+pk_versioning.run(i_sql => 'alter table ORDER_SET_LINK
+drop constraint OSL_FLG_LINK_TYPE_CHK');
+END;
+/
+
+BEGIN
+pk_versioning.run(i_sql => 'alter table ORDER_SET_LINK
+add constraint OSL_FLG_LINK_TYPE_CHK
+check (FLG_LINK_TYPE in (''E'',''S'',''C'',''R'',''T'', ''I'', ''D''))');
+END;
+/
+
+begin
+pk_versioning.run('comment on column ORDER_SET_LINK.flg_link_type
+is ''Link Type: (E)nvironment / (S)pecialty / (C)hief Complaint / (R)eason for visit / (T)Order set type / (I)nstitution / (D)ep_clin_serv''');
+end;
+/
+-- CHANGE END: Diogo Oliveira

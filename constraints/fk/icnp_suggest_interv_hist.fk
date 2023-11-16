@@ -1,0 +1,16 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/02/2011 15:04
+-- CHANGE REASON: [ALERT-164319] Issue Replication: Atitudes terapêuticas
+-- Creating Foreign Key on 'ICNP_SUGGEST_INTERV_HIST'
+BEGIN
+
+EXECUTE IMMEDIATE 'ALTER TABLE ICNP_SUGGEST_INTERV_HIST ADD (CONSTRAINT
+ ISIH_ISV_FK FOREIGN KEY 
+  (ID_ICNP_SUG_INTERV) REFERENCES ICNP_SUGGEST_INTERV
+  (ID_ICNP_SUG_INTERV))';
+EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: Elisabete Bugalho

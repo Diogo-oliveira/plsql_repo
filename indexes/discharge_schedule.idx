@@ -1,0 +1,18 @@
+create index DISCH_SCHED_EPIS_FK_IDX on DISCHARGE_SCHEDULE (id_episode) tablespace INDEX_M;
+create index DISCH_SCHED_PAT_FK_IDX on DISCHARGE_SCHEDULE (id_patient) tablespace INDEX_M;
+create index DISCH_SCHED_PROF_FK_IDX on DISCHARGE_SCHEDULE (create_user) tablespace INDEX_M;
+
+create index alert.dd_sch_search01_idx on alert.discharge_schedule(id_episode,flg_status) tablespace alert_idx; 
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 24/08/2022 09:41
+-- CHANGE REASON: [EMR-54577] - Duplicidade de Paciente na Grelha (Somente em "Meus Pacientes")
+begin
+pk_versioning.run('create unique index DSCH_FSTAT_UK on discharge_schedule (
+CASE  WHEN (id_episode IS NOT NULL AND NVL(flg_status,''Y'') <> ''N'') THEN id_episode END,
+CASE  WHEN (id_episode IS NOT NULL AND NVL(flg_status,''Y'') <> ''N'') THEN flg_status END
+) tablespace alert_idx');
+end;
+/
+-- CHANGE END: Elisabete Bugalho

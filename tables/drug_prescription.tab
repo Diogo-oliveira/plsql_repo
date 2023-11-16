@@ -1,0 +1,164 @@
+
+
+  CREATE TABLE DRUG_PRESCRIPTION
+   (	ID_DRUG_PRESCRIPTION NUMBER(24,0) NOT NULL ENABLE,
+	DT_DRUG_PRESCRIPTION DATE NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	BARCODE VARCHAR2(30),
+	NUM_DAYS_EXPIRE NUMBER(6,0),
+	FLG_TIME VARCHAR2(1) NOT NULL ENABLE,
+	DT_BEGIN DATE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_CANCEL DATE,
+
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	ID_EPISODE_ORIGIN NUMBER(24,0),
+	ID_EPISODE_DESTINATION NUMBER(24,0),
+	ID_PROTOCOLS NUMBER(24,0),
+	ID_PREV_EPISODE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE drug_prescription IS 'Prescrição de medicamentos, interna ou externa (receitas)' ;
+
+COMMENT ON COLUMN drug_prescription.flg_type IS 'I - interna, E - externa' ;
+COMMENT ON COLUMN drug_prescription.barcode IS 'Código de barras' ;
+COMMENT ON COLUMN drug_prescription.num_days_expire IS 'Nº de dias de validade' ;
+COMMENT ON COLUMN drug_prescription.flg_time IS 'Realização: E - neste episódio; N - próximo episódio; B - até ao próximo episódio' ;
+COMMENT ON COLUMN drug_prescription.dt_begin IS 'Data pretendida para início da execução do exame (ie, ñ imediata)' ;
+COMMENT ON COLUMN drug_prescription.flg_status IS 'Estado da prescrição: D - pendente, R - requisitado, P - parcial, F - concluído, C - anulado, I - interrompido' ;
+COMMENT ON COLUMN drug_prescription.id_episode_origin IS 'ID do episódio em que foi registada a req. inicialmente (ie, se FLG_TIME = ''N'')' ;
+COMMENT ON COLUMN drug_prescription.id_episode_destination IS 'ID do episódio em que foi registada a req. destino (se FLG_TIME = ''N'')' ;
+COMMENT ON COLUMN drug_prescription.id_protocols IS 'ID do protocolo, caso tenha sido requesitado através de um protocolo.' ;
+COMMENT ON COLUMN drug_prescription.id_prev_episode IS 'ID do episódio em que foi registada a req. inicialmente' ;
+
+alter table drug_prescription 
+add (dt_drug_prescription_tstz timestamp with local time zone,
+dt_begin_tstz timestamp with local time zone,
+dt_cancel_tstz timestamp with local time zone);
+
+-- Add comments to the columns 
+comment on column DRUG_PRESCRIPTION.FLG_STATUS
+  is 'Estado da prescrição: D - pendente, R - requisitado, P - parcial, F - concluído, C - anulado, I - interrompido, X - descontinuado, N - Inactive';
+-- Add comments to the columns 
+comment on column DRUG_PRESCRIPTION.FLG_STATUS
+  is 'Estado da prescrição: D - pendente, R - requisitado, P - parcial, F - concluído, C - anulado, I - interrompido, X - descontinuado, N - Inactive, S - Suspenso';
+
+  
+alter table drug_prescription
+add (id_patient number(24));
+
+COMMENT ON COLUMN drug_prescription.id_patient IS 'ID do paciente.';
+
+
+-- CHANGED BY: Rafael Santos
+-- CHANGED DATE: 2008-AGO-28
+-- CHANGED REASON: WO17069 - Data Quality Control - DB Best Practices - 031
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.ID_DRUG_PRESCRIPTION is 'ID da prescrição de medicamentos';
+COMMENT ON COLUMN DRUG_PRESCRIPTION.DT_DRUG_PRESCRIPTION is 'Data da prescrição de medicamentos';
+COMMENT ON COLUMN DRUG_PRESCRIPTION.ID_EPISODE is 'ID do episodio';
+COMMENT ON COLUMN DRUG_PRESCRIPTION.ID_PROFESSIONAL is 'ID do profissional';
+COMMENT ON COLUMN DRUG_PRESCRIPTION.DT_CANCEL is 'Data de cancelamento da prescrição';
+COMMENT ON COLUMN DRUG_PRESCRIPTION.ID_PROF_CANCEL is 'ID do profissional que cancelou a prescrição';
+COMMENT ON COLUMN DRUG_PRESCRIPTION.NOTES_CANCEL is 'Notas de cancelamento';
+COMMENT ON COLUMN DRUG_PRESCRIPTION.DT_DRUG_PRESCRIPTION_TSTZ is 'Data/hora da prescrição com TIMEZONE';
+COMMENT ON COLUMN DRUG_PRESCRIPTION.DT_BEGIN_TSTZ is 'Data/hora pretendida para início da execução da prescrição com TIMEZONE';
+COMMENT ON COLUMN DRUG_PRESCRIPTION.DT_CANCEL_TSTZ is 'Data/hora do cancelamento da prescrição com TIMEZONE';
+COMMENT ON COLUMN DRUG_PRESCRIPTION.DT_BEGIN is 'Data/hora pretendida para início da execução da prescrição';
+COMMENT ON COLUMN DRUG_PRESCRIPTION.FLG_TYPE is 'I - interna';
+COMMENT ON COLUMN DRUG_PRESCRIPTION.FLG_STATUS is 'Estado da prescrição: D - pendente, R - requisitado, P - parcial, F - concluído, C - anulado, I - interrompido, S - suspenso, E - em curso';
+
+-- CHANGE END: Rafael Santos
+
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2008-SET-22
+-- CHANGE REASON: Drop de colunas DATE com correspondentes DATE_TSTZ
+
+ALTER TABLE DRUG_PRESCRIPTION DROP COLUMN DT_DRUG_PRESCRIPTION;
+ALTER TABLE DRUG_PRESCRIPTION DROP COLUMN DT_BEGIN;
+ALTER TABLE DRUG_PRESCRIPTION DROP COLUMN DT_CANCEL;
+
+-- CHANGE END
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 30/10/2013
+-- CHANGE REASON: ALERT-268016
+ALTER TABLE DRUG_PRESCRIPTION DROP CONSTRAINT DPN_EPIS_DEST_FK;
+ALTER TABLE DRUG_PRESCRIPTION DROP CONSTRAINT DPN_EPIS_FK;
+ALTER TABLE DRUG_PRESCRIPTION DROP CONSTRAINT DPN_EPIS_FK2;
+ALTER TABLE DRUG_PRESCRIPTION DROP CONSTRAINT DPN_EPIS_ORIGIN_FK;
+-- CHANGE END
+
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/05/2014 21:57
+-- CHANGE REASON: [ALERT-281683] 
+alter table drug_prescription add ID_PARENT NUMBER(24);
+comment on column drug_prescription.ID_PARENT is 'Parent Identifier';
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:22
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_PRESCRIPTION IS 'Medication prescription related with vaccination and immunization';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.ID_DRUG_PRESCRIPTION IS 'Prescription identifier';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.ID_EPISODE IS 'Episode identifier';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.Id_Professional IS 'Professional identifier';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.Flg_Type IS 'Prescription type (I-local prescription)';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.Barcode IS 'Barcode. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.NUM_DAYS_EXPIRE IS 'Barcode. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.FLG_TIME  IS 'To be performed: E - this episode; B - between episodes; N - next episode';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.Flg_Status  IS 'Prescription status: D - pending; P - partial; F - concluded; C - cancelled; S - on hold; E - on going';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.ID_PROF_CANCEL  IS 'Professional that cancelled the precription';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.NOTES_CANCEL   IS 'Cancellation notes';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.ID_EPISODE_ORIGIN IS 'Episode ID where order was registered. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.ID_EPISODE_DESTINATION IS 'Episode ID where order where the order is going to be performed. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.ID_PROTOCOLS  IS 'Protocols identifier, in case it was registered through a protocol. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.ID_PREV_EPISODE  IS 'Episode ID where the order was registered (when the visit has more than one episode). [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.DT_DRUG_PRESCRIPTION_TSTZ  IS 'Date that indicates when the order was registered';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.DT_BEGIN_TSTZ   IS 'Date for which the order is to be performed';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.DT_CANCEL_TSTZ  IS 'Cancellation date';
+/
+
+COMMENT ON COLUMN DRUG_PRESCRIPTION.ID_PATIENT   IS 'Patient ID';
+/
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,39 @@
+
+
+  CREATE TABLE DISCH_REA_TRANSP_ENT_INST
+   (	ID_DISCH_REA_TRANSP_ENT_INST NUMBER(24,0) NOT NULL ENABLE,
+	ID_DISCHARGE_REASON NUMBER(24,0) NOT NULL ENABLE,
+	ID_TRANSP_ENT_INST NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE disch_rea_transp_ent_inst IS 'RELATIONSHIP BETWEEN DISCHARGE_REASON AND TRANSP_ENT_INST' ;
+
+
+ALTER TABLE DISCH_REA_TRANSP_ENT_INST 
+ ADD (FLG_AVAILABLE  VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ );
+
+COMMENT ON COLUMN DISCH_REA_TRANSP_ENT_INST.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD';
+
+ALTER TABLE DISCH_REA_TRANSP_ENT_INST MODIFY FLG_AVAILABLE default null;
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table DISCH_REA_TRANSP_ENT_INST
+  is 'Relationship between discharge_reason and transp_ent_inst';
+-- Add comments to the columns 
+comment on column DISCH_REA_TRANSP_ENT_INST.id_disch_rea_transp_ent_inst
+  is 'Primary Key';
+comment on column DISCH_REA_TRANSP_ENT_INST.id_discharge_reason
+  is 'Discharge reason ID';
+comment on column DISCH_REA_TRANSP_ENT_INST.id_transp_ent_inst
+  is 'Transport entity ID';
+comment on column DISCH_REA_TRANSP_ENT_INST.flg_available
+  is 'Availability (Y/N)';  
+  
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,1 @@
+GRANT SELECT ON v_doc_comments to intf_alert;

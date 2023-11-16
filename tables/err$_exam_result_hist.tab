@@ -1,0 +1,22 @@
+DECLARE
+L_DEL_SCRIPT VARCHAR2(1000 CHAR) ;
+
+BEGIN
+
+L_DEL_SCRIPT:= '';
+PK_FRMW_OBJECTS.INSERT_INTO_FRMW_OBJECTS(I_OWNER              => 'ALERT',
+                                         I_OBJ_NAME           => 'ERR$_EXAM_RESULT_HIST',
+                                         I_OBJ_TYPE           => 'TABLE',
+                                         I_FLG_CATEGORY       => 'ERR',
+                                         I_FLG_ALERT_DEFAULT  => 'N',
+                                         I_DELETE_SCRIPT      => L_DEL_SCRIPT,
+                                         I_FLG_DEFAULT_CHILD  => 'N',
+                                         I_FLG_NZD            => 'N',
+                                         I_FLG_SENSITIVE_DATA => 'N');
+END;
+/
+
+begin
+dbms_errlog.create_error_log(dml_table_name => 'EXAM_RESULT_HIST', skip_unsupported => true);
+end;
+/

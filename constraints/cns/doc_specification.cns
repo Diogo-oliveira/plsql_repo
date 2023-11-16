@@ -1,0 +1,59 @@
+
+  ALTER TABLE DOC_SPECIFICATION ADD CONSTRAINT DSN_PK PRIMARY KEY (ID_DOC_SPECIFICATION) ENABLE;
+
+  ALTER TABLE DOC_SPECIFICATION MODIFY (ID_DOC_SPECIFICATION NOT NULL ENABLE);
+
+  ALTER TABLE DOC_SPECIFICATION MODIFY (ID_DOC_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE DOC_SPECIFICATION MODIFY (CODE_DOC_SPECIFICATION NOT NULL ENABLE);
+
+  ALTER TABLE DOC_SPECIFICATION MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE DOC_SPECIFICATION MODIFY (RANK NOT NULL ENABLE);
+
+  ALTER TABLE DOC_SPECIFICATION MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+  ALTER TABLE DOC_SPECIFICATION MODIFY (FLG_OTHER NOT NULL ENABLE);
+
+
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 2011-07-04
+-- CHANGE REASON: ALERT-187083
+
+DECLARE
+   e_object_exists EXCEPTION;
+                                 
+   PRAGMA EXCEPTION_INIT(e_object_exists, -02264);
+BEGIN
+                                 
+   BEGIN
+       EXECUTE IMMEDIATE 'alter table DOC_SPECIFICATION
+  add constraint DSN_FLG_AVAILABLE_CHK
+  check (FLG_AVAILABLE in (''Y'', ''N''))';
+   EXCEPTION
+       WHEN e_object_exists THEN
+           dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+   END;
+                                 
+END;
+/
+
+DECLARE
+   e_object_exists EXCEPTION;
+                                 
+   PRAGMA EXCEPTION_INIT(e_object_exists, -02264);
+BEGIN
+                                 
+   BEGIN
+       EXECUTE IMMEDIATE 'alter table DOC_SPECIFICATION
+  add constraint DSN_FLG_OTHER_CHK
+  check (FLG_OTHER in (''Y'', ''N''))';
+   EXCEPTION
+       WHEN e_object_exists THEN
+           dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+   END;
+                                 
+END;
+/
+
+-- CHANGED END: Bruno Martins

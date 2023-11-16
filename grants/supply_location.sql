@@ -1,0 +1,25 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 10:14
+-- CHANGE REASON: [ALERT-12334] 
+grant select, insert, update, delete, references, alter, index on SUPPLY_LOCATION to ALERT_VIEWER;
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 14/11/2011 10:44
+-- CHANGE REASON: [ALERT-204517] grants to needed tables
+grant references, select  on supply_location to ALERT_DEFAULT;
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Suelmar Zanetti Castro
+-- CHANGE DATE: 11/02/2014 09:48
+-- CHANGE REASON: CODING-1823
+GRANT SELECT, REFERENCES ON SUPPLY_LOCATION TO ALERT_CODING_TR;
+-- CHANGE END:  Suelmar Zanetti Castro
+
+
+-- CHANGED BY: Ana Moita
+-- CHANGED DATE: 2018-5-25
+-- CHANGED REASON: CEMR-1415
+
+GRANT SELECT ON ALERT.SUPPLY_LOCATION TO ALERT_CORE_CNT WITH GRANT OPTION;
+-- CHANGE END: Ana Moita

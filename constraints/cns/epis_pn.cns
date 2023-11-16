@@ -1,0 +1,68 @@
+--26/01/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+ALTER TABLE EPIS_PN
+ ADD (CONSTRAINT EPGN_PK PRIMARY KEY 
+  (ID_EPIS_PN))
+/
+
+
+ALTER TABLE EPIS_PN
+ ADD (CONSTRAINT EPN_TYPE_CHK CHECK (flg_type in ('P','L','CC','H')))
+/
+
+ALTER TABLE EPIS_PN ADD (CONSTRAINT EPN_STATUS_CHK CHECK (FLG_STATUS in ('D', 'S', 'C', 'M','F', 'T')));
+-- CHANGE END: Rui Spratley
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 26/05/2011 10:10
+-- CHANGE REASON: [ALERT-181620 ] Add one new option to Progress Notes functionality to insert information in free text
+alter table epis_pn drop constraint EPN_TYPE_CHK;
+
+alter table epis_pn add constraint EPN_TYPE_CHK CHECK
+(flg_type in ('P','L','CC','H', 'FT')) ENABLE;
+-- CHANGE END: Sofia Mendes
+
+declare
+	l_Sql  varchar2(4000);
+begin
+	l_sql := 'alter table EPIS_PN  DROP CONSTRAINT EPN_STATUS_CHK';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_Sql  varchar2(4000);
+	xpl    varchar2(0010 char) := '''';
+begin
+	l_Sql := '#D#, #S#, #C#, #M#,#F#, #T#, #V#, #B#, #W#';
+	l_sql := replace( l_sql, '#', xpl)
+	l_sql := 'alter table EPIS_PN  DROP CONSTRAINT EPN_STATUS_CHK check (FLG_STATUS in ('||l_sql||'))';
+	pk_versioning.run(l_sql);
+end;
+/
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 11/12/2017
+-- CHANGE REASON: CALERT-35
+ALTER TABLE EPIS_PN ADD CONSTRAINT EPN_SRN_FK FOREIGN KEY (ID_SUBMIT_REASON) REFERENCES ALERT.CANCEL_REASON (ID_CANCEL_REASON) ENABLE;
+-- CHANGE END: Pedro Teixeira
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 04/08/2021 11:50
+-- CHANGE REASON: [EMR-47840]
+begin
+pk_versioning.run('ALTER TABLE epis_pn ADD CONSTRAINT epn_epn_epis_fk UNIQUE (id_epis_pn, id_episode)');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 05/08/2021 14:25
+-- CHANGE REASON: [EMR-47840]
+begin
+pk_versioning.run('ALTER TABLE epis_pn ADD CONSTRAINT epn_epn_epis_fk UNIQUE (id_epis_pn, id_episode)');
+end;
+/
+-- CHANGE END: Ana Matos

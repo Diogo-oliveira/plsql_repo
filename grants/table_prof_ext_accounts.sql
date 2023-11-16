@@ -1,0 +1,1 @@
+grant select on PROF_EXT_ACCOUNTS to ALERT_VIEWER;

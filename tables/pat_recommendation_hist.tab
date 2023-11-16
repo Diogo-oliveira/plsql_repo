@@ -1,0 +1,41 @@
+-- CHANGED BY:  Álvaro Vasconcelos
+-- CHANGE DATE: 10/05/2011 19:59
+-- CHANGE REASON: [ALERT-177999] CDR - Recommendations
+CREATE TABLE PAT_RECOMMENDATION_HIST (
+       ID_PAT_RECOMMENDATION_HIST   NUMBER(24) NOT NULL,
+       ID_PAT_RECOMMENDATION_DET    NUMBER(24) NOT NULL,
+       ID_PAT_RECOMMENDATION        NUMBER(24) NOT NULL,
+       ID_CDR_INSTANCE              NUMBER(24) NOT NULL, 
+ DT_RECOMMENDATION            TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+ FLG_READ                     VARCHAR2(1 CHAR),
+ ID_PROFESSIONAL              NUMBER(24),
+ DT_READ                      TIMESTAMP(6) WITH LOCAL TIME ZONE,
+ DT_UPDATE                    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       --
+       CREATE_USER                  VARCHAR2(24 CHAR),
+       CREATE_TIME                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       CREATE_INSTITUTION           NUMBER(24),
+       UPDATE_USER                  VARCHAR2(24 CHAR),
+       UPDATE_TIME                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       UPDATE_INSTITUTION           NUMBER(24)
+);
+
+COMMENT ON TABLE PAT_RECOMMENDATION_HIST                              IS 'Patient recommendations detail table';
+
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.id_pat_recommendation_hist  IS 'Patient recommendation history ID';
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.id_pat_recommendation_det   IS 'Patient recommendation detail ID';
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.id_pat_recommendation       IS 'Patient recommendation ID';
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.id_cdr_instance             IS 'ID of the instance/rule that triggered the recommendation';
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.dt_recommendation           IS 'Date when the recommendation has been triggered';
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.flg_read                    IS 'Flag identifying if this patient recommendation has been readed - (Y)es (N)o';
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.id_professional             IS 'ID professional of the reader';
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.dt_read                     IS 'Date when the recommendation has been readed';
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.dt_update                   IS 'Date when the registry was last updated';
+--
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.create_user             IS 'Professional that created the registry';
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.create_time             IS 'Date of the registry creation';
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.create_institution      IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.update_user             IS 'Last professional that updated the registry';
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.update_time             IS 'Date of the last update to the registry';
+COMMENT ON COLUMN PAT_RECOMMENDATION_HIST.update_institution      IS 'Id of the last institution where the registry was updated';
+-- CHANGE END:  Álvaro Vasconcelos

@@ -1,0 +1,45 @@
+
+  CREATE TABLE P1_TASK
+   (	ID_TASK NUMBER(6,0) NOT NULL ENABLE,
+	CODE_TASK VARCHAR2(200) NOT NULL ENABLE,
+	DESC_TASK VARCHAR2(200),
+	RANK NUMBER(6,0),
+	FLG_TYPE VARCHAR2(1),
+	FLG_PURPOSE VARCHAR2(1),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+
+COMMENT ON COLUMN p1_task.code_task IS 'codigo do documento' ;
+COMMENT ON COLUMN p1_task.desc_task IS 'descritivo do documento' ;
+COMMENT ON COLUMN p1_task.flg_type IS 'C-Consultation; A-Analysis; E-Exam; I - Intervention' ;
+COMMENT ON COLUMN p1_task.flg_purpose IS 'Needed for Scheduling (S) or for the Consultation (C)' ;
+
+
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 09/12/2010 16:51
+-- CHANGE REASON: [ALERT-144578] 
+comment on column P1_TASK.FLG_TYPE is 'C-Appointment; A-Lab test; E-Exam; I-Imaging exams; P-Procedures; F-Physical Medicine and Rehabilitation; Z-Complete patient data; S-Surgery requests; N-Admission requests';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on table P1_TASK
+  is 'Tasks to associate with the referral';
+-- Add comments to the columns 
+comment on column P1_TASK.id_task
+  is 'Internal id';
+comment on column P1_TASK.code_task
+  is 'Code to translate task name';
+comment on column P1_TASK.desc_task
+  is 'Task description';
+comment on column P1_TASK.rank
+  is 'Rank';
+comment on column P1_TASK.flg_type
+  is 'C - Appointment; A - Lab test; E - Exam; I - Imaging exams; P - Procedures; F - Physical Medicine and Rehabilitation; Z - Complete patient data; S - Surgery requests; N - Admission requests';
+comment on column P1_TASK.flg_purpose
+  is 'Task must be completed before (S)cheduling or before the (C)onsultation?';
+comment on column P1_TASK.adw_last_update
+  is 'Record last update (ADW)';

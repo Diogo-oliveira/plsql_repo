@@ -1,0 +1,59 @@
+
+  CREATE TABLE PRESCRIPTION_PHARM_IT
+   (	ID_PRESCRIPTION_PHARM NUMBER(24,0) NOT NULL ENABLE,
+	DT_PRESCRIPTION_PHARM DATE NOT NULL ENABLE,
+	ID_PRESCRIPTION NUMBER(24,0) NOT NULL ENABLE,
+	EMB_ID NUMBER(10,0),
+	VIAS_ADMIN_ID NUMBER(3,0),
+	ID_DRUG NUMBER(12,0),
+	DESC_MANIP VARCHAR2(1000),
+	QTY NUMBER(2,0) NOT NULL ENABLE,
+	GENERICO VARCHAR2(1),
+	DOSAGE VARCHAR2(100),
+	DIPLOMA_ID NUMBER(2,0),
+	STOCK VARCHAR2(1),
+	NOTES VARCHAR2(4000),
+	FLG_STATUS VARCHAR2(1),
+	JUSTIF VARCHAR2(2000),
+	FLG_CI VARCHAR2(1) NOT NULL ENABLE,
+	FLG_CHEAPER VARCHAR2(1) NOT NULL ENABLE,
+	FLG_JUSTIF VARCHAR2(1) NOT NULL ENABLE,
+	FLG_ATTENTION VARCHAR2(2),
+	FLG_ATTENTION_PRINT VARCHAR2(1),
+	ID_DIETARY_DRUG NUMBER(24,0),
+	ID_MANIPULATED NUMBER(24,0),
+	DESC_DIETARY VARCHAR2(1000),
+	QTY_MANIP NUMBER(6,2),
+	UNIT_MANIP VARCHAR2(20)
+   );
+
+
+COMMENT ON TABLE prescription_pharm_it IS 'Prescrições para a farmácia enterna e farmácia do hospital.' ;
+
+COMMENT ON COLUMN prescription_pharm_it.id_prescription_pharm IS 'Chave primária.' ;
+COMMENT ON COLUMN prescription_pharm_it.dt_prescription_pharm IS 'Data em que o medicamento foi prescrito.' ;
+COMMENT ON COLUMN prescription_pharm_it.id_prescription IS 'ID da prescrição.' ;
+COMMENT ON COLUMN prescription_pharm_it.emb_id IS 'ID da embalagem.' ;
+COMMENT ON COLUMN prescription_pharm_it.desc_manip IS 'Medicamento prescrito quando não consta da BD do Infarmed nem da BD da instituição. (Medicamentos manipulados, dietéticos, fraldas e outros).' ;
+COMMENT ON COLUMN prescription_pharm_it.qty IS 'Nº de embalagens.' ;
+COMMENT ON COLUMN prescription_pharm_it.generico IS 'Autorização de genérico.' ;
+COMMENT ON COLUMN prescription_pharm_it.dosage IS 'Posologia.' ;
+COMMENT ON COLUMN prescription_pharm_it.stock IS 'Indicação se o medicamento prescrito (Administrar neste episódio) existe em stock (informação dada pela enfermeira).' ;
+COMMENT ON COLUMN prescription_pharm_it.notes IS 'Notas da requisição.' ;
+COMMENT ON COLUMN prescription_pharm_it.flg_status IS 'Estado da requisição: D - pendente, R - requisitado, E - em curso, F - concluído, C - anulado, I - interrompido' ;
+COMMENT ON COLUMN prescription_pharm_it.justif IS 'Justificação da prescrição.' ;
+COMMENT ON COLUMN prescription_pharm_it.flg_ci IS 'Chamada de atenção de contra-indicações: Y - sim; N - não; R - lida.' ;
+COMMENT ON COLUMN prescription_pharm_it.flg_cheaper IS 'Chamada de atenção de medicamentos mais baratos: Y - sim; N - não; R - lida.' ;
+COMMENT ON COLUMN prescription_pharm_it.flg_justif IS 'Chamada de atenção de justificação de prescrição: Y - sim; N - não; R - lida.' ;
+COMMENT ON COLUMN prescription_pharm_it.flg_attention IS 'Flag que indica a chamada de atenção prioritária: CI - contra-indicações; B - medicamentos mais baratos; J - justificação de prescrição; IM - interacções medicamentosas' ;
+COMMENT ON COLUMN prescription_pharm_it.flg_attention_print IS 'Flag que indica se o profissional prosseguiu (Y) ou não (N) com a impressão apesar das chamadas de atenção.' ;
+COMMENT ON COLUMN prescription_pharm_it.id_dietary_drug IS 'ID do dietético.' ;
+COMMENT ON COLUMN prescription_pharm_it.id_manipulated IS 'ID do manipulado (se a prescrição for feita através dos mais frequentes).' ;
+COMMENT ON COLUMN prescription_pharm_it.desc_dietary IS 'Descritivo do dietético.' ;
+COMMENT ON COLUMN prescription_pharm_it.qty_manip IS 'Quantidade a preparar (só existe nos manipulados).' ;
+COMMENT ON COLUMN prescription_pharm_it.unit_manip IS 'Unidade da quantidade a preparar, QTY_MANIP (só existe para manipulados)' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PRESCRIPTION_PHARM_IT ADD DT_PRESCRIPTION_PHARM_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PRESCRIPTION_PHARM_IT.DT_PRESCRIPTION_PHARM_TSTZ IS 'Data em que o medicamento foi prescrito.'; 

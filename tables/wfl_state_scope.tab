@@ -1,0 +1,43 @@
+
+create table wfl_state_scope
+(
+	id_scope		number(3) not null,
+	scope_name		varchar2(30) not null,
+	market			varchar2(10) not null
+) tablespace TABLE_S;
+
+--comments
+comment on table wfl_state_scope
+	is 'Table of state scopes (like pharmacy supply, pharmacy requisition or medication order...)';
+
+comment on column wfl_state_scope.id_scope
+	is 'id of scope';
+comment on column wfl_state_scope.scope_name
+	is 'name of the scope';
+comment on column wfl_state_scope.market
+	is 'market of the scope (PT, BR, USA, ...)';
+
+alter table wfl_state_scope
+add mk_temp varchar2(10) null;
+
+alter table wfl_state_scope
+modify market varchar2(10) null;
+
+alter table wfl_state_scope
+modify market number(24);
+
+alter table wfl_state_scope
+drop column mk_temp;
+
+alter table wfl_state_scope
+modify market number(24) not null;
+
+alter table wfl_state_scope
+add constraint wfl_ss_mkt_fk foreign key (market)
+references market (id_market);
+
+alter table wfl_state_scope
+add flg_type varchar2(1) default 'A' null;
+
+comment on column wfl_state_scope.flg_type is
+	'type of pharmacy order (local, ambulatory, unit-dose)';

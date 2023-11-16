@@ -1,0 +1,105 @@
+  CREATE TABLE TRANSPORTATION
+   (	ID_TRANSPORTATION NUMBER(24,0) NOT NULL ENABLE,
+	DT_TRANSPORTATION DATE NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0),
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_TRANSP_ENTITY NUMBER(24,0) NOT NULL ENABLE,
+	ID_TRANSP_REQ NUMBER(24,0),
+	FLG_TIME VARCHAR2(1) NOT NULL ENABLE,
+	NOTES VARCHAR2(200)
+   );
+
+
+COMMENT ON TABLE transportation IS 'Se está associado à tabela EPISODE: transporte a partir da instituição onde decorreu o episódio (indicado na alta administrativa), ou transporte de chegada do doente à instituição onde decorreu o episódio.Se o transporte não está incluído em nenhum episódio (como é o caso das requisições dos CS para transporte de utentes ao hospital), o registo não está associado a EPISODE, mas sim a TRANSP_REQ.' ;
+
+COMMENT ON COLUMN transportation.dt_transportation IS 'Data de registo' ;
+COMMENT ON COLUMN transportation.flg_time IS 'E - início do episódio, S - alta administrativa, T - transporte s/ episódio' ;
+
+alter table TRANSPORTATION modify ID_EPISODE not null;
+
+comment on column TRANSPORTATION.ID_TRANSPORTATION
+  is 'Chave primaria';
+comment on column TRANSPORTATION.ID_EPISODE
+  is 'Episódio';
+comment on column TRANSPORTATION.ID_PROFESSIONAL
+  is 'Profissional';
+comment on column TRANSPORTATION.ID_TRANSP_ENTITY
+  is 'Transporte entidade';
+comment on column TRANSPORTATION.NOTES
+  is 'Notas';
+
+alter table TRANSPORTATION add (dt_arrival date);
+
+alter table TRANSPORTATION add (dt_pickup date);
+
+comment on column TRANSPORTATION.dt_arrival
+  is 'Data de chegada';
+
+comment on column TRANSPORTATION.dt_pickup
+  is 'Data de recolha';
+
+
+--Emilia Taborda 2007/07/24
+--Aumento do tamanho da coluna NOTES
+alter table TRANSPORTATION modify NOTES VARCHAR2(2000);
+
+--João Eiras, 29-80-2007
+--Timezone
+ALTER TABLE transportation add dt_transportation_tstz TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE transportation add dt_arrival_tstz TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE transportation add dt_pickup_tstz TIMESTAMP WITH LOCAL TIME ZONE;
+
+COMMENT ON column transportation.dt_transportation IS 'Data de registo';
+COMMENT ON column transportation.dt_arrival_tstz IS 'Data de chegada';
+COMMENT ON column transportation.dt_pickup_tstz IS 'Data de recolha';
+
+ALTER TABLE transportation drop (dt_transportation, dt_arrival, dt_pickup);
+	
+
+
+-- José Brito 29/05/2009 ALERT-30519 CCHIT: add history to "Arrived by"	
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE transportation ADD id_origin NUMBER(24)';
+EXCEPTION WHEN OTHERS THEN NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE transportation ADD id_external_cause NUMBER(24)';
+EXCEPTION WHEN OTHERS THEN NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE transportation ADD companion VARCHAR2(200)';
+EXCEPTION WHEN OTHERS THEN NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE transportation ADD dt_creation TIMESTAMP(6) WITH LOCAL TIME ZONE';
+EXCEPTION WHEN OTHERS THEN NULL;
+END;
+/
+
+COMMENT ON COLUMN transportation.id_origin IS 'Origin ID';
+COMMENT ON COLUMN transportation.id_external_cause IS 'External cause ID';
+COMMENT ON COLUMN transportation.companion IS 'Accompanying person';
+COMMENT ON COLUMN transportation.dt_creation IS 'Record creation date';
+-- END
+
+
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 20/01/2016 16:05
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON TABLE TRANSPORTATION IS 'If associated to an episode: it is a table about the transport between the institution where it occured the episode, or trasport of the pacient to the institution. If not related to an episode (requisitions case for example), it is related with TRANSP_REQ.';
+COMMENT ON COLUMN  TRANSPORTATION.DT_TRANSPORTATION_TSTZ IS 'Traportation Date';      
+COMMENT ON COLUMN  TRANSPORTATION.ID_TRANSP_REQ IS 'TRANSP_REQ Identifier';       
+COMMENT ON COLUMN  TRANSPORTATION.ID_TRANSPORTATION IS 'Primary Key';   
+COMMENT ON COLUMN  TRANSPORTATION.DT_ARRIVAL_TSTZ IS 'Arrival Date ';   
+COMMENT ON COLUMN  TRANSPORTATION.DT_PICKUP_TSTZ IS 'Pickup Date';    
+COMMENT ON COLUMN  TRANSPORTATION.FLG_TIME IS 'Flag Time  (E - beginning of the episode, S - administrative discharge, T - transport without episode)';        
+COMMENT ON COLUMN  TRANSPORTATION.ID_EPISODE IS 'Episode Identifier ';  
+COMMENT ON COLUMN  TRANSPORTATION.ID_EXTERNAL_CAUSE IS 'External Cause Identifier';  
+COMMENT ON COLUMN  TRANSPORTATION.NOTES IS 'Notes ';     
+COMMENT ON COLUMN  TRANSPORTATION.ID_PROFESSIONAL IS 'Professional Identifier';   
+COMMENT ON COLUMN  TRANSPORTATION.ID_TRANSP_ENTITY IS 'Transport Entity';     
+-- CHANGE END:  ruben.araujo

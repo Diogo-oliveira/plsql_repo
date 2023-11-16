@@ -1,0 +1,19 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 25/01/2011 16:51
+-- CHANGE REASON: [ALERT-157333] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_indexes
+     WHERE index_name = 'RSIN_PK'
+       AND table_name = 'REF_SPEC_INSTITUTION';
+
+    IF l_var <> 1
+    THEN
+        EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX "RSIN_PK" ON "REF_SPEC_INSTITUTION" ("ID_SPECIALITY", "ID_INSTITUTION")';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso

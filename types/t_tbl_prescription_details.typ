@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_tbl_prescription_details IS TABLE OF t_prescription_details;

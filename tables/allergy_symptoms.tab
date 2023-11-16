@@ -1,0 +1,27 @@
+CREATE TABLE allergy_symptoms 
+(
+    id_allergy_symptoms   NUMBER(24) NOT NULL,
+    id_allergy            NUMBER(24),
+    code_allergy_symptoms VARCHAR2(200) NOT NULL,
+    flg_status            VARCHAR2(1)
+);
+
+-- COMMENTS
+COMMENT ON TABLE allergy_symptoms IS 'This table holds the symptoms associated with allergies';
+COMMENT ON COLUMN allergy_symptoms.id_allergy_symptoms IS 'Primary key';
+COMMENT ON COLUMN allergy_symptoms.id_allergy IS 'Foreign key';
+COMMENT ON COLUMN allergy_symptoms.code_allergy_symptoms IS 'Code for translation';
+COMMENT ON COLUMN allergy_symptoms.flg_status IS 'A: Active - I: Inactive';
+
+-- CONSTRAINTS
+ALTER TABLE allergy_symptoms ADD CONSTRAINT AS_ID_ALLERGY_SYMPTOMS_PK PRIMARY KEY (id_allergy_symptoms);
+ALTER TABLE allergy_symptoms ADD CONSTRAINT AS_ID_ALLERGY_FK FOREIGN KEY (id_allergy) REFERENCES allergy (id_allergy);
+ALTER TABLE allergy_symptoms ADD CONSTRAINT AS_FLG_STATUS_CHK CHECK (flg_status IN ('A', 'I'));
+
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 11/04/2011 15:33
+-- CHANGE REASON: [ALERT-89773] Retirar a obrigatoriedade do preenchimento de campos nas alergias (v2.6.1)
+alter table ALLERGY_SYMPTOMS add id_content VARCHAR2(24 CHAR);
+comment on column ALLERGY_SYMPTOMS.id_content is 'ID content';
+-- CHANGE END: Filipe Machado

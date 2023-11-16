@@ -1,0 +1,69 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 11:32
+-- CHANGE REASON: [ALERT-38908] Versionamento.
+-- Create table
+create table PRESC_FREQUENCY_TYPE
+(
+  ID_PRESC_FREQUENCY_TYPE   NUMBER(24) not null,
+  ID_PARENT                 NUMBER(24),
+  FLG_AVAILABLE             VARCHAR2(1) not null,
+  INTERNAL_NAME             VARCHAR2(255),
+  CODE_PRESC_FREQUENCY_TYPE VARCHAR2(50) not null
+)
+tablespace TABLE_M;
+-- Add comments to the table 
+comment on table PRESC_FREQUENCY_TYPE
+  is 'Definição dos tipos de frequência usados na prescrição.';
+-- Add comments to the columns 
+comment on column PRESC_FREQUENCY_TYPE.ID_PRESC_FREQUENCY_TYPE
+  is 'CHAVE PRIMÁRIA';
+comment on column PRESC_FREQUENCY_TYPE.ID_PARENT
+  is 'CASO TENHA UM PAI, DEVE SER AQUI INDICADO O SEU CÓDIGO';
+comment on column PRESC_FREQUENCY_TYPE.FLG_AVAILABLE
+  is 'DISPONIBILIZAÇÃO DO REGISTO';
+comment on column PRESC_FREQUENCY_TYPE.INTERNAL_NAME
+  is 'DESCRITIVO INTERNO';
+comment on column PRESC_FREQUENCY_TYPE.CODE_PRESC_FREQUENCY_TYPE
+  is 'codigo do descritivo';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 15:17
+-- CHANGE REASON: [ALERT-38908] add audit columns
+-- Create table
+create table PRESC_FREQUENCY_TYPE
+(
+  ID_PRESC_FREQUENCY_TYPE   NUMBER(24) not null,
+  ID_PARENT                 NUMBER(24),
+  FLG_AVAILABLE             VARCHAR2(1) not null,
+  INTERNAL_NAME             VARCHAR2(255),
+  CODE_PRESC_FREQUENCY_TYPE VARCHAR2(50) not null,
+  CREATE_USER           VARCHAR2(24),
+  CREATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24),
+  UPDATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+)
+tablespace TABLE_M;
+-- Add comments to the table 
+comment on table PRESC_FREQUENCY_TYPE
+  is 'Definição dos tipos de frequência usados na prescrição.';
+-- Add comments to the columns 
+comment on column PRESC_FREQUENCY_TYPE.ID_PRESC_FREQUENCY_TYPE
+  is 'CHAVE PRIMÁRIA';
+comment on column PRESC_FREQUENCY_TYPE.ID_PARENT
+  is 'CASO TENHA UM PAI, DEVE SER AQUI INDICADO O SEU CÓDIGO';
+comment on column PRESC_FREQUENCY_TYPE.FLG_AVAILABLE
+  is 'DISPONIBILIZAÇÃO DO REGISTO';
+comment on column PRESC_FREQUENCY_TYPE.INTERNAL_NAME
+  is 'DESCRITIVO INTERNO';
+comment on column PRESC_FREQUENCY_TYPE.CODE_PRESC_FREQUENCY_TYPE
+  is 'codigo do descritivo';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_FREQUENCY_TYPE IS 'Definição dos tipos de frequência usados na prescrição. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

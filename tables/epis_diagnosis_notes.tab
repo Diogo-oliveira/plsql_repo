@@ -1,0 +1,189 @@
+
+
+  CREATE TABLE EPIS_DIAGNOSIS_NOTES
+   (	ID_EPIS_DIAGNOSIS_NOTES NUMBER NOT NULL ENABLE,
+	NOTES VARCHAR2(4000) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN epis_diagnosis_notes.id_epis_diagnosis_notes IS 'Chave primária' ;
+COMMENT ON COLUMN epis_diagnosis_notes.notes IS 'Notas' ;
+COMMENT ON COLUMN epis_diagnosis_notes.flg_available IS 'Disponibilidade do registo' ;
+COMMENT ON COLUMN epis_diagnosis_notes.adw_last_update IS 'Data da última alteração' ;
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 16:16
+-- CHANGE REASON: [ALERT-229222] VERSIONING TRANSACTIONAL MODEL - SCHEMA ALERT - DDL
+DECLARE
+    e_col_already_exists EXCEPTION;
+    e_decrease_precision EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_col_already_exists, -1430);
+    PRAGMA EXCEPTION_INIT(e_decrease_precision, -1440);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_NOTES MODIFY ID_EPIS_DIAGNOSIS_NOTES NUMBER(24)';
+    EXCEPTION
+        WHEN e_decrease_precision THEN
+            dbms_output.put_line('Column ID_EPISODE already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_NOTES ADD ID_EPISODE NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column ID_EPISODE already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_NOTES ADD DT_EPIS_DIAGNOSIS_NOTES TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column DT_EPIS_DIAGNOSIS_NOTES already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_NOTES ADD DT_CREATE TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column DT_CREATE already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_NOTES ADD ID_PROF_CREATE NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column ID_PROF_CREATE already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_NOTES ADD ID_CANCEL_REASON NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column ID_CANCEL_REASON already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_NOTES ADD NOTES_CANCEL VARCHAR2(1000 CHAR)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column NOTES_CANCEL already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_NOTES ADD ID_PROF_CANCEL NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column ID_PROF_CREATE already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_NOTES ADD DT_CANCEL TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column DT_EPIS_DIAGNOSIS_NOTES already created.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_NOTES.ID_EPISODE IS ''Episode id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_NOTES.DT_EPIS_DIAGNOSIS_NOTES IS ''Record creation date''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_NOTES.DT_CREATE IS ''First episode creation date''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_NOTES.ID_PROF_CREATE IS ''Professional which created the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_NOTES.ID_CANCEL_REASON IS ''Cancel reason id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_NOTES.NOTES_CANCEL IS ''Notes when canceling the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_NOTES.ID_PROF_CANCEL IS ''Professional wich cancelled the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_NOTES.DT_CANCEL IS ''Cancelation date''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 16:19
+-- CHANGE REASON: [ALERT-229222] VERSIONING TRANSACTIONAL MODEL - SCHEMA ALERT - DDL
+DECLARE
+    e_already_notnull EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_already_notnull, -1442);
+BEGIN
+    BEGIN
+      EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_NOTES MODIFY ID_EPISODE NOT NULL';
+    EXCEPTION
+        WHEN e_already_notnull THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+      EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_NOTES MODIFY DT_EPIS_DIAGNOSIS_NOTES NOT NULL';
+    EXCEPTION
+        WHEN e_already_notnull THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+      EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_NOTES MODIFY DT_CREATE NOT NULL';
+    EXCEPTION
+        WHEN e_already_notnull THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+      EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_NOTES MODIFY ID_PROF_CREATE NOT NULL';
+    EXCEPTION
+        WHEN e_already_notnull THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 12/06/2015 17:30
+-- CHANGE REASON: [ALERT-309826] Boa tarde,Por favor abram issue para Desenvolvimento.While (truncated)
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_diagnosis_notes ADD notes_tmp CLOB';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR ADDING NEW COLUMN');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'UPDATE epis_diagnosis_notes SET notes_tmp = notes';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR MAPPING RECORDS');
+    END;
+
+BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_diagnosis_notes DROP COLUMN notes';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR DROPING NOTES COLUMN');
+    END;
+
+BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_diagnosis_notes RENAME COLUMN notes_tmp TO notes';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERROR RENAMING NEW NOTES COLUMN');
+    END;
+END;
+/
+-- CHANGE END: Renato Nunes
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column EPIS_DIAGNOSIS_NOTES.id_epis_diagnosis_notes
+  is 'Primary key';
+comment on column EPIS_DIAGNOSIS_NOTES.notes
+  is 'Notes';  
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:30
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.epis_diagnosis_notes move lob(notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

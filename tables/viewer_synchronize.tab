@@ -1,0 +1,78 @@
+
+
+  CREATE TABLE VIEWER_SYNCHRONIZE
+   (	ID_VIEWER_SYNCHRONIZE NUMBER(24,0) NOT NULL ENABLE,
+	ID_VIEWER NUMBER(24,0) NOT NULL ENABLE,
+	OPERATION VARCHAR2(30) NOT NULL ENABLE,
+	HOST_SCREEN VARCHAR2(200) NOT NULL ENABLE,
+	VIEWER_SCREEN VARCHAR2(200),
+	LEAF_SYS_BUTTON NUMBER(24,0),
+	BINARY_FLAGS NUMBER(38,0) DEFAULT 1 NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFILE_TEMPLATE NUMBER(12,0) DEFAULT 0 NOT NULL ENABLE
+   );
+
+
+
+COMMENT ON TABLE viewer_synchronize IS 'Define as condições de sincronismo entre os ecrãs de uma aplicação host e de um viewer.' ;
+
+COMMENT ON COLUMN viewer_synchronize.id_viewer_synchronize IS 'Identificador.' ;
+COMMENT ON COLUMN viewer_synchronize.id_viewer IS 'Identificador do viewer.' ;
+COMMENT ON COLUMN viewer_synchronize.operation IS 'Operação a realizar: HIDE, SHOW' ;
+COMMENT ON COLUMN viewer_synchronize.host_screen IS 'Nome do ecrã da aplicação host do viewer.' ;
+COMMENT ON COLUMN viewer_synchronize.viewer_screen IS 'Nome do ecrã do viewer.' ;
+COMMENT ON COLUMN viewer_synchronize.leaf_sys_button IS 'Sys_Button folha associado ao viewer_screen' ;
+COMMENT ON COLUMN viewer_synchronize.binary_flags IS 'Flags binárias. [0] 1ª consulta. [1] consulta subsequente.' ;
+COMMENT ON COLUMN viewer_synchronize.id_institution IS 'Instituição a que se aplica a configuração. Zero significa todas as instituições.' ;
+COMMENT ON COLUMN viewer_synchronize.id_software IS 'Host software a que se aplica a configuração. Zero significa todos os softwares.' ;
+
+-- cmf 24-03-2011
+ALTER TABLE VIEWER_SYNCHRONIZE ADD FLG_STATE VARCHAR2(2 CHAR) DEFAULT 'NL' NOT NULL;
+
+comment on column viewer_synchronize.FLG_STATE is 'State for fullscreen synchronization';
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 21/01/2016 11:18
+-- CHANGE REASON: [ALERT-318028]  ALERT-318028 CDOC Functionalities V7
+-- Add comments to the table 
+comment on table VIEWER_SYNCHRONIZE
+  is 'Table to define the conditions for shynchronization between the host application and the viewer.
+
+';
+-- Add comments to the columns 
+comment on column VIEWER_SYNCHRONIZE.id_viewer_synchronize
+  is 'Viewer synchronize identifier';
+comment on column VIEWER_SYNCHRONIZE.id_viewer
+  is 'Viewer identifier';
+comment on column VIEWER_SYNCHRONIZE.operation
+  is 'Operation, this field indicates if is to show or hide the viewer. Values:  HIDE,  SHOW';
+comment on column VIEWER_SYNCHRONIZE.host_screen
+  is 'Application Screen Name that will interact with the viewer';
+comment on column VIEWER_SYNCHRONIZE.viewer_screen
+  is 'Viewer screen name';
+comment on column VIEWER_SYNCHRONIZE.leaf_sys_button
+  is 'Sys button identifier  associated to viewer screen';
+comment on column VIEWER_SYNCHRONIZE.binary_flags
+  is 'Binary Flags: Values  [0] 1ª Consult. [1] Follow up consults. By default is follow up consult.';
+comment on column VIEWER_SYNCHRONIZE.id_institution
+  is 'Institution identifier. Zero means that is applicable to all institutions';
+comment on column VIEWER_SYNCHRONIZE.id_software
+  is 'Host software identifier. Zero means that is applicable to all softwares';
+comment on column VIEWER_SYNCHRONIZE.id_profile_template
+  is 'Profile template identifier, ';
+comment on column VIEWER_SYNCHRONIZE.create_user
+  is 'Creation User';
+comment on column VIEWER_SYNCHRONIZE.create_time
+  is 'Creation Time';
+comment on column VIEWER_SYNCHRONIZE.create_institution
+  is 'Creation Institution';
+comment on column VIEWER_SYNCHRONIZE.update_user
+  is 'Update User';
+comment on column VIEWER_SYNCHRONIZE.update_time
+  is 'Update Time';
+comment on column VIEWER_SYNCHRONIZE.update_institution
+  is 'Update Institution';
+comment on column VIEWER_SYNCHRONIZE.flg_state
+  is 'State for fullscreen synchronization';
+-- CHANGE END: Pedro Fernandes

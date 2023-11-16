@@ -1,0 +1,73 @@
+CREATE TABLE ACCOUNTS 
+(
+  ID_ACCOUNT NUMBER(24,0),
+	CODE_ACCOUNT VARCHAR2(200) NOT NULL,
+	FILL_TYPE VARCHAR2(1) NOT NULL,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL,
+	SYS_DOMAIN_IDENTIFIER VARCHAR2(200)
+);
+
+comment on table ACCOUNTS is 'Contas genéricas';
+
+comment on column ACCOUNTS.CODE_ACCOUNT is 'Descritivo da Conta';
+comment on column ACCOUNTS.FILL_TYPE is 'Tipo de preenchimento dos dados - K: keypade, M: Multichoice, T: Texto';
+comment on column ACCOUNTS.FLG_AVAILABLE is 'Disponibilidade do registo na instituição onde está instalada a BD';	
+comment on column ACCOUNTS.SYS_DOMAIN_IDENTIFIER is 'Identificardor na tabela SYS_DOMAIN (no caso do FILL_TYPE = ''M'')';
+
+DROP TABLE ACCOUNTS;
+
+create table ACCOUNTS
+(
+  ID_ACCOUNT            NUMBER(24) not null,
+  CODE_ACCOUNT          VARCHAR2(200) not null,
+  FILL_TYPE             VARCHAR2(1) not null,
+  FLG_AVAILABLE         VARCHAR2(1) not null,
+  SYS_DOMAIN_IDENTIFIER VARCHAR2(200),
+	FLG_TYPE              VARCHAR2(1) NOT NULL
+)
+tablespace TABLE_M;
+-- Add comments to the table 
+comment on table ACCOUNTS is 'Affiliations';
+-- Add comments to the columns 
+comment on column ACCOUNTS.ID_ACCOUNT is 'Affiliation ID';
+comment on column ACCOUNTS.CODE_ACCOUNT is 'Affiliation translation code';
+comment on column ACCOUNTS.FILL_TYPE is 'Affiliation value fill type - K: keypade, M: Multichoice, T: Text';
+comment on column ACCOUNTS.FLG_AVAILABLE is 'Affiliation available? Y/N';
+comment on column ACCOUNTS.SYS_DOMAIN_IDENTIFIER is 'SYS_DOMAIN Identifier (FILL_TYPE = ''M'')';
+comment on column ACCOUNTS.FLG_TYPE is 'Affiliation value applicable to -  I: Institution, P: Professiona, B: Both';
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 24/09/2012 14:23
+-- CHANGE REASON: [ALERT-240388] new fields in accounts model
+DECLARE
+    e_already_not_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01442);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE accounts modify fill_type VARCHAR2(2 CHAR)';
+EXCEPTION
+    WHEN e_already_not_null THEN
+        dbms_output.put_line('Not able to change column');
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 28/11/2013 10:40
+-- CHANGE REASON: [ALERT-268987] new fields and content tbls
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE accounts_country add(flg_editable varchar2(1 char) default ''Y'')';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('Columns Already there');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column alert.accounts_country.flg_editable IS ''Is this account editable in Backoffice Application?''';
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

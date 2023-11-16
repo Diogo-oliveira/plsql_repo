@@ -1,0 +1,126 @@
+
+
+  ALTER TABLE EPIS_DIAGNOSIS_HIST ADD CONSTRAINT EDH_EDN_FK FOREIGN KEY (ID_EPIS_DIAGNOSIS_NOTES)
+	  REFERENCES EPIS_DIAGNOSIS_NOTES (ID_EPIS_DIAGNOSIS_NOTES) ENABLE;
+
+  ALTER TABLE EPIS_DIAGNOSIS_HIST ADD CONSTRAINT EDH_EDS_FK FOREIGN KEY (ID_EPIS_DIAGNOSIS)
+	  REFERENCES EPIS_DIAGNOSIS (ID_EPIS_DIAGNOSIS) ENABLE;
+
+  ALTER TABLE EPIS_DIAGNOSIS_HIST ADD CONSTRAINT EDH_PROF_FK FOREIGN KEY (ID_PROFESSIONAL)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+--CHANGED BY: Carlos Silva
+--CHANGE DATE: 2009-MAR-28
+--CHANGE REASON: ALERT-12181
+ALTER TABLE EPIS_DIAGNOSIS_HIST ADD CONSTRAINT EDH_CRE_FK FOREIGN KEY (id_cancel_reason)
+	  REFERENCES cancel_reason (id_cancel_reason) ENABLE;
+--CHANGE END: Carlos Silva
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 25/02/2010 11:21
+-- CHANGE REASON: [ALERT-70086] Transfer of information: The information recorded as final diagnosi (truncated) 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); --fk
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD CONSTRAINT EDH_EPIS_ORI_FK FOREIGN KEY (ID_EPISODE_ORIGIN) REFERENCES EPISODE (ID_EPISODE) ENABLE';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 11/05/2011 08:04
+-- CHANGE REASON: [ALERT-175003] [EDIS DB] Add id_cdr_call to Pregnancy and Diagnosis areas
+DECLARE
+    e_fk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_exists, -02275);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_diagnosis_hist ADD CONSTRAINT EDH_ICC_FK FOREIGN KEY (ID_CDR_CALL) REFERENCES CDR_CALL (ID_CDR_CALL)';
+EXCEPTION
+    WHEN e_fk_already_exists THEN
+        dbms_output.put_line('FK already exists.');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 16:16
+-- CHANGE REASON: [ALERT-229222] VERSIONING TRANSACTIONAL MODEL - SCHEMA ALERT - DDL
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD CONSTRAINT EDH_CNCPTTR_FK FOREIGN KEY(ID_DIAG_BASIS, ID_DBASIS_INST_OWNER) REFERENCES CONCEPT_TERM(ID_CONCEPT_TERM, ID_INST_OWNER)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 30/08/2013 18:27
+-- CHANGE REASON: [ALERT-264219] DB Versioning - SCHEMA ALERT TABLE CHANGES (ALERT_251640)
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD CONSTRAINT EDSH_SUB_ANALY_FK FOREIGN KEY(ID_SUB_ANALYSIS, ID_SUBANALY_INST_OWNER) REFERENCES CONCEPT_TERM(ID_CONCEPT_TERM, ID_INST_OWNER)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD CONSTRAINT EDSH_ANAT_AREA_FK FOREIGN KEY(ID_ANATOMICAL_AREA, ID_ANATAREA_INST_OWNER) REFERENCES CONCEPT_TERM(ID_CONCEPT_TERM, ID_INST_OWNER)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD CONSTRAINT EDSH_ANAT_SIDE_FK FOREIGN KEY(ID_ANATOMICAL_SIDE, ID_ANATSIDE_INST_OWNER) REFERENCES CONCEPT_TERM(ID_CONCEPT_TERM, ID_INST_OWNER)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 18/11/2013 14:06
+-- CHANGE REASON: [ALERT-269873] A&E diagnoses_Some diagnosis are not giving the option to document "anatomical side". (ALERT_268880)
+--                BSUH - Diagnosis/Problems/Past history - possibility to define the classification to be used in each functional area (ALERT_265471)
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD CONSTRAINT EDSH_DIAG_COND_FK FOREIGN KEY(ID_DIAGNOSIS_CONDITION, ID_DIAGCOND_INST_OWNER) REFERENCES CONCEPT_TERM(ID_CONCEPT_TERM, ID_INST_OWNER)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 06/12/2016 10:10
+-- CHANGE REASON: [ALERT-326911] Ability to document the type of lesion and place where the lesion occurred, associated to a diagnoses from the Chapter XIX - "Injury, poisoning and certain other consequences of external causes (S00-T98)" --- CIE-10 catalogue diagnosis.
+--                
+alter table epis_diagnosis_hist
+  add constraint EDSH_LES_LOC_FK foreign key (ID_LESION_LOCATION, ID_LESION_LOCAT_INST_OWNER)
+  references ALERT_CORE_DATA.CONCEPT_TERM (ID_CONCEPT_TERM, ID_INST_OWNER);
+alter table epis_diagnosis_hist
+  add constraint EDSH_LES_TYP_FK foreign key (ID_LESION_TYPE, ID_LESION_TYPE_INST_OWNER)
+  references ALERT_CORE_DATA.CONCEPT_TERM (ID_CONCEPT_TERM, ID_INST_OWNER);
+-- CHANGE END: Elisabete Bugalho

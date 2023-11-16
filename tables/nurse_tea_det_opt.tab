@@ -1,0 +1,66 @@
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 19/03/2010 20:00
+-- CHANGE REASON: [ALERT-81916] Data model
+CREATE TABLE NURSE_TEA_DET_OPT (
+ID_NURSE_TEA_DET_OPT NUMBER(24),
+ID_NURSE_TEA_DET NUMBER(24),
+ID_NURSE_TEA_OPT NUMBER(24),
+SUBJECT VARCHAR2(200 CHAR),
+NOTES CLOB,
+DT_NURSE_TEA_DET_OPT TIMESTAMP(6) WITH LOCAL TIME ZONE,
+CREATE_USER VARCHAR2(24 CHAR),
+CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION NUMBER(24),
+UPDATE_USER VARCHAR2(24 CHAR),
+UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION NUMBER(24));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 17:25
+-- CHANGE REASON: [ALERT-317702] 
+comment on column NURSE_TEA_DET_OPT.id_nurse_tea_det_opt
+  is 'Primary key';
+comment on column NURSE_TEA_DET_OPT.id_nurse_tea_det
+  is 'Patient education order detail ID';
+comment on column NURSE_TEA_DET_OPT.id_nurse_tea_opt
+  is 'Patient education execution option ID';
+comment on column NURSE_TEA_DET_OPT.subject
+  is 'Subject';
+comment on column NURSE_TEA_DET_OPT.notes
+  is 'Notes';
+comment on column NURSE_TEA_DET_OPT.dt_nurse_tea_det_opt
+  is 'Date that indicates when the record was registered';
+comment on column NURSE_TEA_DET_OPT.create_user
+  is 'Creation User';
+comment on column NURSE_TEA_DET_OPT.create_time
+  is 'Creation Time';
+comment on column NURSE_TEA_DET_OPT.create_institution
+  is 'Creation Institution';
+comment on column NURSE_TEA_DET_OPT.update_user
+  is 'Update User';
+comment on column NURSE_TEA_DET_OPT.update_time
+  is 'Update Time';
+comment on column NURSE_TEA_DET_OPT.update_institution
+  is 'Update Institution';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 10:47
+-- CHANGE REASON: [ALERT-317912] 
+comment on table NURSE_TEA_DET_OPT is 'Patient education''s execution options table';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:32
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.nurse_tea_det_opt move lob(notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

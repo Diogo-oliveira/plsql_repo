@@ -1,0 +1,12 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/04/2015 16:17
+-- CHANGE REASON: [ALERT-31026901] CO-SIGN  - Database model Versioning
+
+BEGIN
+    pk_versioning.run(i_sql => q'[ALTER TABLE co_sign_hist add CONSTRAINT co_sign_hist_pk primary key(id_co_sign_hist)]');
+pk_versioning.run(i_sql => q'[ALTER TABLE co_sign_hist add CONSTRAINT csh_flg_status_chk CHECK(flg_status IN ('P', 'CS', 'NA','D','O'))]');
+pk_versioning.run(i_sql => q'[ALTER TABLE co_sign_hist add CONSTRAINT csh_flg_made_auth_chk CHECK(flg_made_auth IN ('Y', 'N') OR
+                                                                    flg_made_auth IS NULL)]');
+END;
+/
+-- CHANGE END: Elisabete Bugalho

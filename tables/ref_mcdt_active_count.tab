@@ -1,0 +1,73 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 13/09/2011 09:54
+-- CHANGE REASON: [ALERT-195015 ] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tables ut
+     WHERE ut.table_name = 'REF_MCDT_ACTIVE_COUNT';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'CREATE TABLE ref_mcdt_active_count(
+id_mcdt NUMBER(24) NOT NULL, 
+flg_mcdt VARCHAR2(1) NOT NULL, 
+active_num_days NUMBER(24) NOT NULL, 
+flg_available VARCHAR2(1) NOT NULL, 
+create_user VARCHAR2(24), 
+create_time TIMESTAMP(6)WITH LOCAL TIME ZONE,
+create_institution NUMBER(24,0),
+update_user VARCHAR2(24),
+update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+update_institution NUMBER(24,0))';
+    END IF;
+END;
+/
+
+COMMENT ON column ref_mcdt_active_count.id_mcdt IS 'Id_analysis, id_exam or id_intervention';
+COMMENT ON column ref_mcdt_active_count.flg_mcdt IS '''A''-analysis, ''I''- Image, ''E''- other exams, ''P'' Interventions, ''F'' MFR';
+COMMENT ON column ref_mcdt_active_count.active_num_days IS 'Number of days to an active referral';
+COMMENT ON column ref_mcdt_active_count.create_user IS 'Creation User';
+COMMENT ON column ref_mcdt_active_count.create_time IS 'Creation Time';
+COMMENT ON column ref_mcdt_active_count.create_institution IS 'Creation Institution';
+COMMENT ON column ref_mcdt_active_count.update_user IS 'Update User';
+COMMENT ON column ref_mcdt_active_count.update_time IS 'Update Time';
+COMMENT ON column ref_mcdt_active_count.update_institution IS 'Update Institution';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tables
+     WHERE table_name = 'REF_MCDT_ACTIVE_COUNT';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'CREATE TABLE ref_mcdt_active_count(id_mcdt NUMBER(24) NOT NULL, flg_mcdt VARCHAR2(1) NOT NULL, active_num_days NUMBER(24) NOT NULL, flg_available VARCHAR2(1) NOT NULL, create_user VARCHAR2(24), create_time TIMESTAMP(6)
+    WITH LOCAL TIME ZONE,
+    create_institution NUMBER(24,
+    0),
+    update_user VARCHAR2(24),
+    update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    update_institution NUMBER(24,
+    0))';
+    END IF;
+
+END;
+/
+
+COMMENT ON column ref_mcdt_active_count.id_mcdt IS 'Id_analysis, id_exam or id_intervention';
+COMMENT ON column ref_mcdt_active_count.flg_mcdt IS '''A''-analysis, ''I''- Image, ''E''- other exams, ''P'' Interventions, ''F'' MFR';
+COMMENT ON column ref_mcdt_active_count.active_num_days IS 'Number of days to an active referral';
+COMMENT ON column ref_mcdt_active_count.create_user IS 'Creation User';
+COMMENT ON column ref_mcdt_active_count.create_time IS 'Creation Time';
+COMMENT ON column ref_mcdt_active_count.create_institution IS 'Creation Institution';
+COMMENT ON column ref_mcdt_active_count.update_user IS 'Update User';
+COMMENT ON column ref_mcdt_active_count.update_time IS 'Update Time';
+COMMENT ON column ref_mcdt_active_count.update_institution IS 'Update Institution';
+-- CHANGE END: Joana Barroso

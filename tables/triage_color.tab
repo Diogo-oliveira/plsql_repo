@@ -1,0 +1,65 @@
+
+
+  CREATE TABLE TRIAGE_COLOR
+   (	ID_TRIAGE_COLOR NUMBER(12,0) NOT NULL ENABLE,
+	CODE_TRIAGE_COLOR VARCHAR2(200) NOT NULL ENABLE,
+	ALERT_TIME NUMBER(6,0) NOT NULL ENABLE,
+	OBS_TIME NUMBER(6,0) NOT NULL ENABLE,
+	SCALE_TIME NUMBER(6,0) NOT NULL ENABLE,
+	SCALE_TIME_INTERV NUMBER(6,0),
+	LENGTH_COLOR NUMBER(6,0),
+	FLG_REF_LINE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+
+	COLOR VARCHAR2(240),
+	RANK NUMBER,
+	FLG_SHOW VARCHAR2(1),
+	ID_TRIAGE_TYPE NUMBER(12,0),
+	CODE_ACCUITY VARCHAR2(200),
+	COLOR_TEXT VARCHAR2(200)
+   );
+
+
+COMMENT ON COLUMN triage_color.id_triage_color IS 'Chave primária' ;
+COMMENT ON COLUMN triage_color.code_triage_color IS 'Código para tradução do nome da cor' ;
+COMMENT ON COLUMN triage_color.alert_time IS 'Tempo a partir do qual a aplicação envia alertas para avisar q o doente ainda ñ foi observado' ;
+COMMENT ON COLUMN triage_color.obs_time IS 'Tempo máximo para observação' ;
+COMMENT ON COLUMN triage_color.scale_time IS 'Escala' ;
+COMMENT ON COLUMN triage_color.scale_time_interv IS 'Intervalo entre cada escala' ;
+COMMENT ON COLUMN triage_color.length_color IS 'Tamanho da cor' ;
+COMMENT ON COLUMN triage_color.flg_type IS 'Tipo: M - manchester, N - N/A, S - sem cor, W - branco' ;
+COMMENT ON COLUMN triage_color.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN triage_color.adw_last_update IS 'Última actualização' ;
+COMMENT ON COLUMN triage_color.color IS 'Código da cor' ;
+COMMENT ON COLUMN triage_color.rank IS 'Ordenação' ;
+COMMENT ON COLUMN triage_color.flg_show IS 'Visualização da côr. Y- Sim; N- não' ;
+
+COMMENT ON COLUMN triage_color.id_triage_type IS 'Tipo de triagem' ;
+COMMENT ON COLUMN triage_color.code_accuity IS 'Descrição da acuidade' ;
+COMMENT ON COLUMN triage_color.color_text IS 'Côr atribuida ao texto associado a cada tipo de triagem' ;
+
+alter table triage_color add len_color_tracking number(6);
+
+COMMENT ON COLUMN triage_color.len_color_tracking IS 'Tamanho da cor para o tracking view';
+
+
+-- José Brito 14/05/2009 ALERT-20512 Triage T5 improvements
+COMMENT ON COLUMN triage_color.alert_time IS 'Deprecated. Column not in use.';
+COMMENT ON COLUMN triage_color.obs_time IS 'Deprecated. Use TRIAGE_COLOR_TIME_SOFT_INST instead.';
+COMMENT ON COLUMN triage_color.scale_time IS 'Deprecated. Use TRIAGE_COLOR_TIME_SOFT_INST instead.';
+COMMENT ON COLUMN triage_color.scale_time_interv IS 'Deprecated. Use TRIAGE_COLOR_TIME_SOFT_INST instead.';
+-- END
+
+
+
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 17/09/2009 14:31
+-- CHANGE REASON: [ALERT-44274] Group triage colors
+-- José Brito 17/09/2009 ALERT-42214  Group triage colors
+ALTER TABLE TRIAGE_COLOR ADD ID_TRIAGE_COLOR_GROUP NUMBER(24);
+
+COMMENT ON COLUMN TRIAGE_COLOR.ID_TRIAGE_COLOR_GROUP IS 'Group ID';
+-- CHANGE END: José Brito

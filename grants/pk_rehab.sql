@@ -1,0 +1,20 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 08-10-2012
+-- CHANGE REASON: [ALERT-241270] 
+grant execute on PK_REHAB to ALERT_RESET;
+-- CHANGE END: Gustavo Serrano
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 05-01-2017
+-- CHANGE REASON: [ALERT-327537] 
+GRANT EXECUTE  ON pk_rehab TO ALERT_INTER;
+-- CHANGE END: Pedro Henriques
+
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 20-04-2017
+-- CHANGE REASON: [ALERT-330395] 
+GRANT EXECUTE  ON pk_rehab TO ALERT_CORE_TECH;
+-- CHANGE END: Pedro Henriques

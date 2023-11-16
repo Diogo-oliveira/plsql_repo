@@ -1,0 +1,47 @@
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/10/2020 14:49
+-- CHANGE REASON: [EMR-36954]
+create table external_link
+(
+id_external_link            NUMBER(24) not null,
+internal_name               VARCHAR2(200 CHAR) not null,
+code_external_link          as ('EXTERNAL_LINK.CODE_EXTERNAL_LINK.'||TO_CHAR("ID_EXTERNAL_LINK")),
+code_external_link_subtitle as ('EXTERNAL_LINK.CODE_EXTERNAL_LINK_SUBTITLE.'||TO_CHAR("ID_EXTERNAL_LINK")),
+id_parent                   NUMBER(24),
+id_content                  VARCHAR2(200 CHAR) not null,
+flg_type                    VARCHAR2(3 CHAR) not null,
+flg_available               VARCHAR2(1 CHAR) not null,
+create_user                 VARCHAR2(24 CHAR),
+create_time                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+create_institution          NUMBER(24),
+update_user                 VARCHAR2(24 CHAR),
+update_time                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+update_institution          NUMBER(24)
+);
+
+-- Add comments to the table
+comment on table external_link is 'External links';
+-- Add comments to the columns
+comment on column external_link.id_external_link is 'Primary key';
+comment on column external_link.internal_name is 'Internal description';
+comment on column external_link.code_external_link is 'Translation code';
+comment on column external_link.code_external_link_subtitle is 'Translation code (subtitle)';
+comment on column external_link.id_parent is 'Parent id';
+comment on column external_link.id_content is 'Content id';
+comment on column external_link.flg_type is 'Flag that indicates the link type: L - Link; LIA - Link with InterAlert event; LAPI - Link with API call; F - Folder; I - Infobutton';
+comment on column external_link.flg_available is 'Flag that indicates if the record is available or not';
+comment on column external_link.create_user is 'Creation User';
+comment on column external_link.create_time is 'Creation Time';
+comment on column external_link.create_institution is 'Creation Institution';
+comment on column external_link.update_user is 'Update User';
+comment on column external_link.update_time is 'Update Time';
+comment on column external_link.update_institution is 'Update Institution';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/10/2020 15:07
+-- CHANGE REASON: [EMR-36954]
+alter table external_link modify FLG_TYPE VARCHAR2(4 CHAR);
+-- CHANGE END: Ana Matos

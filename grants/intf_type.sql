@@ -1,0 +1,5 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+grant select on INTF_TYPE to ALERT_INTER;
+-- CHANGE END: Joana Barroso

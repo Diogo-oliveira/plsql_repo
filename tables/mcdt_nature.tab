@@ -1,0 +1,102 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 12/09/2011 17:13
+-- CHANGE REASON: [ALERT-194915 ] 
+CREATE TABLE mcdt_nature(id_mcdt NUMBER(24) NOT NULL,
+                         flg_mcdt VARCHAR2(1) NOT NULL,
+                         flg_nature VARCHAR2(1) NOT NULL,
+                         flg_available VARCHAR2(1) NOT NULL);
+
+ALTER TABLE mcdt_nature 
+add(create_user VARCHAR2(24), 
+    create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    create_institution NUMBER(24,0),
+    update_user VARCHAR2(24),
+    update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    update_institution NUMBER(24,0));
+
+COMMENT ON TABLE mcdt_nature IS 'Categorização utilizada no Formulário 330.10';
+COMMENT ON column mcdt_nature.id_mcdt IS 'Id_analysis, id_exam or id_intervention';
+COMMENT ON column mcdt_nature.flg_mcdt IS '''A''-analysis, ''I''- Image, ''E''- other exams, ''P'' Interventions, ''F'' MFR';
+COMMENT ON column mcdt_nature.flg_nature IS '''A'' Análises Clínicas, ''B'' Anatomia Pat., ''C''- ''Cardiologia'', ''D''- Medicina Nuclear, ''E''-Electroencefalografia, ''F''-Endoscopia Gast. ''G''- Medicina Fisica e reabilit. ''H''- Otorrinolaringologia ,''I'' Pneuno e Imunoalerg, ''J'' Urologia, ''L'' Neurofisiologia, ''M'' Radiologia, ''N'' Consultas, ''O'' Psicologia';
+COMMENT ON column mcdt_nature.create_user IS 'Creation User';
+COMMENT ON column mcdt_nature.create_time IS 'Creation Time';
+COMMENT ON column mcdt_nature.create_institution IS 'Creation Institution';
+COMMENT ON column mcdt_nature.update_user IS 'Update User';
+COMMENT ON column mcdt_nature.update_time IS 'Update Time';
+COMMENT ON column mcdt_nature.update_institution IS 'Update Institution';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 12/09/2011 17:51
+-- CHANGE REASON: [ALERT-194915 ] 
+
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tables
+     WHERE table_name = 'MCDT_NATURE';
+
+    IF l_var = 0
+    THEN
+    
+        EXECUTE IMMEDIATE 'CREATE TABLE mcdt_nature(id_mcdt NUMBER(24) NOT NULL,
+                         flg_mcdt VARCHAR2(1) NOT NULL,
+                         flg_nature VARCHAR2(1) NOT NULL,
+                         flg_available VARCHAR2(1) NOT NULL)';
+    
+        EXECUTE IMMEDIATE 'ALTER TABLE mcdt_nature 
+add(create_user VARCHAR2(24), 
+    create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    create_institution NUMBER(24,0),
+    update_user VARCHAR2(24),
+    update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    update_institution NUMBER(24,0))';
+    END IF;
+END;
+/
+
+COMMENT ON TABLE mcdt_nature IS 'Categorização utilizada no Formulário 330.10';
+COMMENT ON column mcdt_nature.id_mcdt IS 'Id_analysis, id_exam or id_intervention';
+COMMENT ON column mcdt_nature.flg_mcdt IS '''A''-analysis, ''I''- Image, ''E''- other exams, ''P'' Interventions, ''F'' MFR';
+COMMENT ON column mcdt_nature.flg_nature IS '''A'' Análises Clínicas, ''B'' Anatomia Pat., ''C''- ''Cardiologia'', ''D''- Medicina Nuclear, ''E''-Electroencefalografia, ''F''-Endoscopia Gast. ''G''- Medicina Fisica e reabilit. ''H''- Otorrinolaringologia ,''I'' Pneuno e Imunoalerg, ''J'' Urologia, ''L'' Neurofisiologia, ''M'' Radiologia, ''N'' Consultas, ''O'' Psicologia';
+COMMENT ON column mcdt_nature.create_user IS 'Creation User';
+COMMENT ON column mcdt_nature.create_time IS 'Creation Time';
+COMMENT ON column mcdt_nature.create_institution IS 'Creation Institution';
+COMMENT ON column mcdt_nature.update_user IS 'Update User';
+COMMENT ON column mcdt_nature.update_time IS 'Update Time';
+COMMENT ON column mcdt_nature.update_institution IS 'Update Institution';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tables
+     WHERE table_name = 'MCDT_NATURE';
+    IF l_var = 0
+    THEN
+    
+        EXECUTE IMMEDIATE 'CREATE TABLE mcdt_nature(id_mcdt NUMBER(24) NOT NULL, flg_mcdt VARCHAR2(1) NOT NULL, flg_nature VARCHAR2(1) NOT NULL, flg_available VARCHAR2(1) NOT NULL)';
+        EXECUTE IMMEDIATE 'ALTER TABLE mcdt_nature add(create_user VARCHAR2(24), 
+    create_time TIMESTAMP(6) WITH LOCAL TIME ZONE, create_institution NUMBER(24,0), update_user VARCHAR2(24),
+    update_time TIMESTAMP(6) WITH LOCAL TIME ZONE, update_institution NUMBER(24,0))';
+    END IF;
+END;
+/
+
+COMMENT ON TABLE mcdt_nature IS 'Categorização utilizada no Formulário 330.10';
+COMMENT ON column mcdt_nature.id_mcdt IS 'Id_analysis, id_exam or id_intervention';
+COMMENT ON column mcdt_nature.flg_mcdt IS '''A''-analysis, ''I''- Image, ''E''- other exams, ''P'' Interventions, ''F'' MFR';
+COMMENT ON column mcdt_nature.flg_nature IS '''A'' Análises Clínicas, ''B'' Anatomia Pat., ''C''- ''Cardiologia'', ''D''- Medicina Nuclear, ''E''-Electroencefalografia, ''F''-Endoscopia Gast. ''G''- Medicina Fisica e reabilit. ''H''- Otorrinolaringologia ,''I'' Pneuno e Imunoalerg, ''J'' Urologia, ''L'' Neurofisiologia, ''M'' Radiologia, ''N'' Consultas, ''O'' Psicologia';
+COMMENT ON column mcdt_nature.create_user IS 'Creation User';
+COMMENT ON column mcdt_nature.create_time IS 'Creation Time';
+COMMENT ON column mcdt_nature.create_institution IS 'Creation Institution';
+COMMENT ON column mcdt_nature.update_user IS 'Update User';
+COMMENT ON column mcdt_nature.update_time IS 'Update Time';
+COMMENT ON column mcdt_nature.update_institution IS 'Update Institution';
+-- CHANGE END: Joana Barroso

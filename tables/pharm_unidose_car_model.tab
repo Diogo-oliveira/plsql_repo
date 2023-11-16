@@ -1,0 +1,51 @@
+
+create table pharm_unidose_car_model(
+	id_unidose_car_model number(24) not null,
+	id_car_type number(24) not null,
+	car_model_name varchar2(100) not null,
+	id_dep_clin_serv number(24) not null,
+	number_of_slots number(3) not null,
+	flg_active varchar2(1) default 'Y' not null,
+	notes varchar2(1000)
+) tablespace TABLE_M;
+
+--comments
+comment on table pharm_unidose_car_model
+	is 'Table for unidose car models';
+
+comment on column pharm_unidose_car_model.id_unidose_car_model
+	is 'PK: pharm_unidose_car_model';
+comment on column pharm_unidose_car_model.id_car_type
+	is 'car type (days for car)';
+comment on column pharm_unidose_car_model.car_model_name
+	is 'car model name';
+comment on column pharm_unidose_car_model.id_dep_clin_serv
+	is 'departamento e serviço que o carro vai servir';
+comment on column pharm_unidose_car_model.number_of_slots
+	is 'número de gavetas do carro';
+comment on column pharm_unidose_car_model.flg_active
+	is 'car model active? (Y|N)';
+comment on column pharm_unidose_car_model.notes
+	is 'notas';
+
+
+alter table pharm_unidose_car_model
+add (
+	id_prof_upd	number(24),
+	car_model_date timestamp with local time zone
+);
+
+comment on column pharm_unidose_car_model.flg_active is
+	'car model active? (Y|N|D) - D = deleted';
+comment on column pharm_unidose_car_model.id_prof_upd is
+	'professional that updated the unitdose car model';
+comment on column pharm_unidose_car_model.car_model_date is
+	'model date';
+
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:57
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PHARM_UNIDOSE_CAR_MODEL IS 'Table for unidose car models [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

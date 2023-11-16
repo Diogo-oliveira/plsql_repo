@@ -1,0 +1,5 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 07/05/2012 14:11
+-- CHANGE REASON: [ALERT-229217] VERSIONING TERMINOLOGY SERVER - SCHEMA ALERT - PACKAGES (Needed for migration) AND MIGRATION SCRIPT
+GRANT EXECUTE ON alert.pk_mig_diagnosis TO alert_viewer;
+-- CHANGE END: Alexandre Santos

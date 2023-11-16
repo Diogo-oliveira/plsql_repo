@@ -1,0 +1,127 @@
+
+
+  CREATE TABLE SCH_EVENT
+   (	ID_SCH_EVENT NUMBER(24,0) NOT NULL ENABLE,
+	CODE_SCH_EVENT VARCHAR2(200) NOT NULL ENABLE,
+	INTERN_NAME VARCHAR2(256),
+	DURATION NUMBER(6,0),
+	FLG_AVAILABLE VARCHAR2(1) DEFAULT 'Y' NOT NULL ENABLE,
+	RANK NUMBER(6,0),
+	FLG_CONSULT VARCHAR2(1) DEFAULT 'N' NOT NULL ENABLE,
+	FLG_SURGERY VARCHAR2(1) DEFAULT 'N' NOT NULL ENABLE,
+	FLG_PERSONAL VARCHAR2(1) DEFAULT 'N' NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE DEFAULT SYSDATE NOT NULL ENABLE,
+	FLG_VACATIONS VARCHAR2(1) DEFAULT 'N' NOT NULL ENABLE,
+
+	FLG_IMG VARCHAR2(2) DEFAULT 'A' NOT NULL ENABLE,
+	FLG_EXAM VARCHAR2(1) DEFAULT 'N' NOT NULL ENABLE,
+	FLG_SCHEDULE_OUTP_TYPE VARCHAR2(1) DEFAULT NULL,
+	FLG_TARGET_PROFESSIONAL VARCHAR2(1) DEFAULT 'N' NOT NULL ENABLE,
+	FLG_TARGET_DEP_CLIN_SERV VARCHAR2(1) DEFAULT 'N' NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER DEFAULT 0 NOT NULL ENABLE,
+	CODE_SCH_EVENT_ABRV VARCHAR2(200) DEFAULT ' ' NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN sch_event.flg_img IS 'flag to decode image in sys_domain' ;
+COMMENT ON COLUMN sch_event.flg_exam IS 'is this event an exam? Yes or No' ;
+COMMENT ON COLUMN sch_event.flg_schedule_outp_type IS 'only use for interfaces' ;
+COMMENT ON COLUMN sch_event.flg_target_professional IS 'does this event targets a profesisonal? Yes or No' ;
+COMMENT ON COLUMN sch_event.flg_target_dep_clin_serv IS 'does thi event targets a dcs? Yes or No' ;
+COMMENT ON COLUMN sch_event.id_software IS 'only use for interfaces' ;
+COMMENT ON COLUMN sch_event.id_sch_event IS 'event identifier' ;
+COMMENT ON COLUMN sch_event.code_sch_event IS 'for translation purposes' ;
+COMMENT ON COLUMN sch_event.intern_name IS 'for development purposes' ;
+COMMENT ON COLUMN sch_event.duration IS 'deprecated' ;
+COMMENT ON COLUMN sch_event.flg_available IS 'Yes or No' ;
+COMMENT ON COLUMN sch_event.flg_consult IS 'is this event a consult? Yes or No' ;
+COMMENT ON COLUMN sch_event.flg_surgery IS 'is this event a surgery? Yes or No' ;
+
+COMMENT ON COLUMN sch_event.flg_personal IS 'is this a personal event' ;
+COMMENT ON COLUMN sch_event.flg_vacations IS 'is this event Vacations? Yes or No' ;
+
+ALTER TABLE sch_event ADD flg_occurrence VARCHAR2(1);
+COMMENT ON COLUMN sch_event.flg_occurrence IS 'Determines if it is a first, subsequent, both (generic events) or other event (that does not have this characteristic).';
+
+COMMENT ON COLUMN SCH_EVENT.FLG_PERSONAL IS 'Indicates if this is a personal event: ''Y'' yes, ''N'' no';
+COMMENT ON COLUMN SCH_EVENT.FLG_SURGERY IS 'Indicates if this is a surgery event: ''Y'' yes, ''N'' no';
+COMMENT ON COLUMN SCH_EVENT.FLG_CONSULT IS 'Indicates if this is a consult event: ''Y'' yes, ''N'' no';
+COMMENT ON COLUMN SCH_EVENT.RANK IS 'Sorting order for showing results';
+COMMENT ON COLUMN SCH_EVENT.FLG_AVAILABLE IS 'Indicates if this record can be used: ''Y'' yes, ''N'' no';
+COMMENT ON COLUMN SCH_EVENT.INTERN_NAME IS 'Event name';
+COMMENT ON COLUMN SCH_EVENT.CODE_SCH_EVENT IS 'Event translation code';
+COMMENT ON COLUMN SCH_EVENT.ID_SCH_EVENT IS 'Event identifer';
+COMMENT ON COLUMN SCH_EVENT.FLG_OCCURRENCE IS 'Determines if it is a first ''F'', subsequent ''S'', both (generic events) ''B'' or other event ''O''.';
+COMMENT ON COLUMN SCH_EVENT.ADW_LAST_UPDATE IS 'Record modification date';
+COMMENT ON COLUMN SCH_EVENT.CODE_SCH_EVENT_ABRV IS 'Abbreviated event translation code';
+COMMENT ON COLUMN SCH_EVENT.ID_SOFTWARE IS 'Software identifier';
+COMMENT ON COLUMN SCH_EVENT.FLG_TARGET_DEP_CLIN_SERV IS 'Indicates if this event targets a department-clinical service: ''Y'' yes, ''N'' no';
+COMMENT ON COLUMN SCH_EVENT.FLG_TARGET_PROFESSIONAL IS 'Indicates if this event targets a professional: ''Y'' yes, ''N'' no';
+COMMENT ON COLUMN SCH_EVENT.FLG_SCHEDULE_OUTP_TYPE IS 'Appointment type for this event: ''F'' nursing follow-up, ''I'' inpatient, ''M'' physician follow-up, ''N'' 1st nursing, ''O'' information, ''S'' admission for surgery, ''T'' medications administration, ''V'' wound care, ''Q'' speciality follow-up, ''P'' 1st speciality, ''D'' 1st physician, ''R'' consult';
+COMMENT ON COLUMN SCH_EVENT.FLG_EXAM IS 'Indicates if this is an exam event: ''Y'' yes, ''N'' no';
+COMMENT ON COLUMN SCH_EVENT.FLG_IMG IS 'Flag that is used to get the image that represents this event from SYS_DOMAIN';
+COMMENT ON COLUMN SCH_EVENT.FLG_VACATIONS IS 'Indicates if this is a vacation event: ''Y'' yes, ''N'' no';
+
+COMMENT ON TABLE SCH_EVENT IS 'Holds the different events that can be scheduled or have vacancies for it';
+
+ALTER TABLE SCH_EVENT MODIFY ID_SOFTWARE NUMBER(24);
+
+ALTER TABLE sch_event DROP COLUMN id_software;
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 21-04-2008
+-- CHANGE REASON: Drop columns. The type(s) of event is now present in table sch_event_type
+
+alter table SCH_EVENT drop column FLG_CONSULT;
+alter table SCH_EVENT drop column FLG_SURGERY;
+alter table SCH_EVENT drop column FLG_PERSONAL;
+alter table SCH_EVENT drop column FLG_VACATIONS;
+alter table SCH_EVENT drop column FLG_EXAM;
+
+--END
+
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 08-10-2008
+-- CHANGE REASON: nova coluna dep_type que vem substituir a tabela sch_event_type
+
+alter table SCH_EVENT add DEP_TYPE varchar2(2);
+
+comment on column SCH_EVENT.DEP_TYPE
+  is 'to which scheduling type this event belongs';
+--END
+
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 31/07/2009 11:53
+-- CHANGE REASON: [ALERT-35850] 
+alter table SCH_EVENT add FLG_IMG_BLOCKED VARCHAR2(2);
+comment on column SCH_EVENT.FLG_IMG_BLOCKED is 'Flag that is used to get the image that represents this event from SYS_DOMAIN (for blocked vacancies)';
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 30-04-2010
+-- CHANGE REASON: ALERT-92868
+alter table SCH_EVENT add NUM_MAX_PATIENTS number(6) default 1;
+alter table SCH_EVENT add NUM_MAX_PROFS number(6) default 1;
+alter table SCH_EVENT add NUM_MIN_PROFS number(6) default 1 not null;
+
+comment on column SCH_EVENT.NUM_MAX_PATIENTS is 'Indicate maximum number of patients per schedule with this event. NULL = unlimited';
+comment on column SCH_EVENT.NUM_MAX_PROFS is 'Indicate maximum number of professionals that will perform schedules with this event. NULL = unlimited';
+comment on column SCH_EVENT.NUM_MIN_PROFS is 'Indicate minimum number of professionals that must exists in each schedule with this event. ';
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 22-03-2011
+-- CHANGE REASON: ALERT-168180
+alter table SCH_EVENT add ID_CONTENT varchar2(200);
+comment on column SCH_EVENT.ID_CONTENT is 'content id';
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY: Telmo
+-- CHANGED DATE: 19-06-2014
+-- CHANGED REASON: ALERT-286905
+alter table SCH_EVENT add flg_is_group varchar2(1) default 'N' not null;
+comment on column SCH_EVENT.flg_is_group is 'Y=this is a group appointment (more than 1 patient)';
+-- CHANGE END: Telmo
+

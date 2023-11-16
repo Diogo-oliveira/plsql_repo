@@ -1,0 +1,31 @@
+ALTER TABLE ORDER_TYPE ADD CONSTRAINT OTP_PK PRIMARY KEY (ID_ORDER_TYPE);
+
+
+
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 25/07/2013 09:48
+-- CHANGE REASON: [ALERT-262388] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists1, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table order_type  add constraint OT_flg_co_sign_wf_CHK  check (flg_co_sign_wf in (''Y'', ''N''))';
+    EXCEPTION
+        WHEN e_object_exists1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table order_type  add constraint OT_flg_default_ob_CHK  check (flg_default_ob in (''AP'', ''CU'', ''NA'', ''EX''))';
+    EXCEPTION
+        WHEN e_object_exists1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

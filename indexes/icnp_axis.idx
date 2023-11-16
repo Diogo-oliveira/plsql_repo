@@ -1,0 +1,17 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 12/03/2012 09:56
+-- CHANGE REASON: [ALERT-222673] 
+DECLARE
+    e_object_exists EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'create index icnp_axis_def_search_idx on alert.icnp_axis(id_axis,id_icnp_version)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Index already there');      
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

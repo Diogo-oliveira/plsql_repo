@@ -1,0 +1,20 @@
+CREATE GLOBAL TEMPORARY TABLE sch_mult_resched_msg_aux (
+  id_msg                NUMBER(24),
+	id_schedule           NUMBER(24),
+	flg_type              VARCHAR2(1),
+	msg                   VARCHAR2(4000)
+) ON COMMIT DELETE ROWS;
+
+COMMENT ON TABLE sch_mult_resched_msg_aux IS 'Temporarily stores reschedule messages';
+COMMENT ON COLUMN sch_mult_resched_msg_aux.id_msg IS 'Reschedule message';
+COMMENT ON COLUMN sch_mult_resched_msg_aux.id_schedule IS 'Schedule identifier';
+COMMENT ON COLUMN sch_mult_resched_msg_aux.flg_type IS 'Type of message: ''E'' error, ''W'' warning, ''I'' information';
+
+COMMENT ON COLUMN SCH_MULT_RESCHED_MSG_AUX.ID_MSG IS 'Reschedule message sequence identifier';
+COMMENT ON COLUMN SCH_MULT_RESCHED_MSG_AUX.MSG IS 'Reschedule message';
+
+ALTER TABLE SCH_MULT_RESCHEDULE_AUX ADD DT_BEGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;	
+COMMENT ON COLUMN SCH_MULT_RESCHEDULE_AUX.DT_BEGIN_TSTZ IS 'Start date';
+ALTER TABLE SCH_MULT_RESCHEDULE_AUX ADD DT_END_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;	
+COMMENT ON COLUMN SCH_MULT_RESCHEDULE_AUX.DT_END_TSTZ IS 'End date';
+

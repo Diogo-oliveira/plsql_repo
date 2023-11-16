@@ -1,0 +1,6 @@
+CREATE OR REPLACE TYPE TABLE_T_SEARCH AS TABLE OF T_SEARCH;
+/
+
+
+-- cmf 18-12-2012
+drop type table_t_search;

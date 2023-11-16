@@ -1,0 +1,94 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/01/2010 12:06
+-- CHANGE REASON: [ALERT-31116] 
+ALTER TABLE REF_PIO_TRACKING ADD CONSTRAINT RPG_ACTION_CHK CHECK (ACTION in ('N','C','T','U')) ENABLE;
+ALTER TABLE REF_PIO_TRACKING ADD CONSTRAINT RPG_PK PRIMARY KEY (ID_EXTERNAL_REQUEST, DT_REF_PIO_TRACKING_TSTZ) ENABLE;
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/01/2010 18:00
+-- CHANGE REASON: [ALERT-58261] 
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'RPG_ACTION_CHK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+l_sql := q'[ALTER TABLE REF_PIO_TRACKING ADD CONSTRAINT RPG_ACTION_CHK CHECK (ACTION in ('N','C','T','U')) ENABLE]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'RPG_PK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+l_sql := q'[ALTER TABLE REF_PIO_TRACKING ADD CONSTRAINT RPG_PK PRIMARY KEY (ID_EXTERNAL_REQUEST, DT_REF_PIO_TRACKING_TSTZ) ENABLE]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/03/2010 14:06
+-- CHANGE REASON: [ALERT-79864] 
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'RPG_ACTION_CHK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := q'[ALTER TABLE REF_PIO_TRACKING ADD CONSTRAINT RPG_ACTION_CHK CHECK (ACTION in ('N','C','T','U')) ENABLE]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'RPG_PK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := q'[ALTER TABLE REF_PIO_TRACKING ADD CONSTRAINT RPG_PK PRIMARY KEY (ID_EXTERNAL_REQUEST, DT_REF_PIO_TRACKING_TSTZ) ENABLE]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro

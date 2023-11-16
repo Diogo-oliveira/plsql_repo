@@ -1,0 +1,20 @@
+
+ALTER TABLE PROTOCOL_ADV_INPUT_VALUE ADD CONSTRAINT PAIV_PK PRIMARY KEY (ID_PROTOCOL_ADV_INPUT_VALUE);
+
+ALTER TABLE PROTOCOL_ADV_INPUT_VALUE ADD CONSTRAINT PAIV_UK UNIQUE (ID_ADV_INPUT_LINK, FLG_TYPE, ID_ADVANCED_INPUT, ID_ADVANCED_INPUT_FIELD, ID_ADVANCED_INPUT_FIELD_DET);
+
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 28/03/2011 09:23
+-- CHANGE REASON: [ALERT-168339] Insert constraints for flag_status columns defined in sys_domain
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -02264); -- name already used by an existing constraint
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PROTOCOL_ADV_INPUT_VALUE add constraint PAIV_FLG_TYPE_CHK check (FLG_TYPE in (''C'', ''T''))';
+EXCEPTION
+    WHEN e_already_exists THEN
+        NULL;
+END;
+/
+-- CHANGE END: Carlos Loureiro

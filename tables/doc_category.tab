@@ -1,0 +1,35 @@
+DECLARE
+    l_owner VARCHAR2(200) := upper('alert');
+    l_table VARCHAR2(200) := upper('DOC_CATEGORY');
+    l_cat   VARCHAR2(30) := upper('CNT');
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => l_owner,
+                                             i_obj_name          => l_table,
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => l_cat,
+                                             i_flg_alert_default => 'Y',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N',
+                                             i_responsible_team  => 'CDOC');
+
+END;
+/
+
+-- Create table
+CREATE TABLE doc_category(id_doc_category NUMBER(24) NOT NULL, internal_name VARCHAR2(240), code_doc_category VARCHAR2(200) NOT NULL, flg_available VARCHAR2(1) NOT NULL, id_content VARCHAR2(200) NOT NULL, create_user VARCHAR2(24 CHAR), create_time TIMESTAMP(6) WITH LOCAL TIME ZONE, create_institution NUMBER(24), update_user VARCHAR2(24 CHAR), update_time TIMESTAMP(6) WITH LOCAL TIME ZONE, update_institution NUMBER(24)) 
+tablespace alert_data;
+
+-- Add comments to the table 
+COMMENT ON TABLE doc_category IS 'Documentation category';
+-- Add comments to the columns 
+COMMENT ON column doc_category.id_doc_category IS 'Primary key - id documentation category';
+COMMENT ON column doc_category.flg_available IS 'Flag that indicates if the documentation category is available or not (Y/N) ';
+COMMENT ON column doc_category.internal_name IS 'Internal description';
+COMMENT ON column doc_category.code_doc_category IS 'Translation code';
+COMMENT ON column doc_category.id_content IS 'Content identifier';
+COMMENT ON column doc_category.create_user IS 'Creation User';
+COMMENT ON column doc_category.create_time IS 'Creation Time';
+COMMENT ON column doc_category.create_institution IS 'Creation Institution';
+COMMENT ON column doc_category.update_user IS 'Update User';
+COMMENT ON column doc_category.update_time IS 'Update Time';
+COMMENT ON column doc_category.update_institution IS 'Update Institution';

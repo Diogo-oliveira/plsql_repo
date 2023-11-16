@@ -1,0 +1,63 @@
+-- Create table
+create table SCHEDULE_INTERVENTION
+(
+  ID_SCHEDULE_INTERVENTION NUMBER(24) not null,
+  ID_SCHEDULE              NUMBER(24),
+  ID_INTERV_PRESC_DET      NUMBER(24) not null,
+  ID_PROF_ASSIGNED         NUMBER(24) not null,
+  FLG_STATE                VARCHAR2(1) not null,
+  RANK                     NUMBER(6)
+);
+-- Add comments to the table 
+comment on table SCHEDULE_INTERVENTION
+  is 'Contains specific information for intervention schedules';
+-- Add comments to the columns 
+comment on column SCHEDULE_INTERVENTION.ID_SCHEDULE_INTERVENTION
+  is 'Intervention schedule identifier';
+comment on column SCHEDULE_INTERVENTION.ID_SCHEDULE
+  is 'Schedule identifier';
+comment on column SCHEDULE_INTERVENTION.ID_INTERV_PRESC_DET
+  is 'Intervention details identifier';
+comment on column SCHEDULE_INTERVENTION.ID_PROF_ASSIGNED
+  is 'Professional assigned to the scheduled intervention';
+comment on column SCHEDULE_INTERVENTION.FLG_STATE
+  is 'Session patient state: A agendado, R requisitado, E - efectivado, M - administrative discharge, C - Espera no corredor, T - ongoing appointment, P - Professional assigned';
+
+
+-- CHANGE BY: Rita Lopes
+-- CHANGE REASON: Alteracoes aos valores possiveis da flg_state
+-- CHANGE DATE: 20080701
+comment on column SCHEDULE_INTERVENTION.FLG_STATE
+  is 'Session patient state: A agendado, C - sessao cancelada, E - efectivado, F - Falta a sessao, M - Alta administrativa, O - Alta sessao, S - Sessao, P - Professional assigned';
+
+-- CHANGE END
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 09-01-2009
+-- CHANGE REASON: agenda MFR
+
+alter table SCHEDULE_INTERVENTION add ID_PHYSIATRY_AREA number(24);
+
+comment on column SCHEDULE_INTERVENTION.ID_PHYSIATRY_AREA 
+is 'physiatry area. Placed here for convenience. Should always have same value as sch_consult_vac_mfr_slot.id_physiatry_area (if this schedule has a related vacancy)';
+
+--END
+
+-- CHANGED BY: Jose Antunes
+-- CHANGE DATE: 17-03-2009
+-- CHANGE REASON: ALERT-18965
+
+alter table SCHEDULE_INTERVENTION add FLG_ORIGINAL VARCHAR2(1) default 'Y';
+
+comment on column SCHEDULE_INTERVENTION.FLG_ORIGINAL
+is 'Y = original schedule. N = schedule added later';
+
+--END
+
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 15/01/2016 17:23
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON COLUMN SCHEDULE_INTERVENTION.RANK IS 'Rank';
+COMMENT ON COLUMN SCHEDULE_INTERVENTION.FLG_STATE IS 'A(scheduled),C(canceled), E(completed), F(missing the session), M(administrative discharge), O(session discharge), S(session), P(professional assigned)';
+-- CHANGE END:  jose.m.silva

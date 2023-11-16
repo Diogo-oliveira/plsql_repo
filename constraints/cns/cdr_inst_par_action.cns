@@ -1,0 +1,25 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:26
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+alter table CDR_INST_PAR_ACTION
+  add constraint CDRIPA_PK primary key (ID_CDR_INST_PARAM, ID_CDR_ACTION);
+alter table CDR_INST_PAR_ACTION
+  add constraint CDRIPA_UK unique (ID_CDR_INST_PAR_ACTION);
+alter table CDR_INST_PAR_ACTION
+  add constraint CDRIPA_FLG_FIRST_TIME_CHK
+  check (FLG_FIRST_TIME in ('Y', 'N'));
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 28/05/2014 17:15
+-- CHANGE REASON: [ALERT-286312] 
+declare
+  others exception;
+  pragma exception_init(others, -02260);
+begin
+  execute immediate 'alter TABLE CDR_INST_PAR_ACTION ADD CONSTRAINT CDRIPA_DOC_INSTANCE FOREIGN KEY (ID_CDR_DOC_INSTANCE) REFERENCES CDR_DOC_INSTANCE (ID_CDR_DOC_INSTANCE)';
+exception when others then
+  dbms_output.put_line('unique key CDRIPA_DOC_INSTANCE exists!');
+end;
+/
+-- CHANGE END: mario.mineiro

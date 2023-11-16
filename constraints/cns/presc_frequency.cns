@@ -1,0 +1,16 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 11:32
+-- CHANGE REASON: [ALERT-38908] Versionamento.
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table PRESC_FREQUENCY
+  add constraint PFRT_PK primary key (ID_PRESC_FREQUENCY)
+  using index 
+  tablespace INDEX_S;
+-- Create/Recreate check constraints 
+alter table PRESC_FREQUENCY
+  add constraint PFRT_FLG_MEAL_CHK
+  check (FLG_MEAL in ('Y','N'));
+alter table PRESC_FREQUENCY
+  add constraint PFRT_PARITY_CHK
+  check (PARITY in ('E','O'));
+-- CHANGE END: Pedro Albuquerque

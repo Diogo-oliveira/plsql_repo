@@ -1,0 +1,23 @@
+
+  CREATE TABLE GUIDELINE_BATCH
+   (	ID_BATCH NUMBER(24,0) NOT NULL ENABLE,
+	BATCH_DESC VARCHAR2(200),
+	BATCH_TYPE VARCHAR2(1),
+	DT_GUIDELINE_BATCH DATE
+   );
+
+COMMENT ON COLUMN guideline_batch.id_batch IS 'ID of batch processing' ;
+COMMENT ON COLUMN guideline_batch.batch_desc IS 'Batch description' ;
+COMMENT ON COLUMN guideline_batch.batch_type IS 'Batch Type : single or for all episodes' ;
+COMMENT ON COLUMN guideline_batch.dt_guideline_batch IS 'Date at which this batch run' ;
+
+alter table GUIDELINE_BATCH modify batch_type not null;
+alter table GUIDELINE_BATCH modify dt_guideline_batch not null;
+
+alter table guideline_batch modify (dt_guideline_batch timestamp with local time zone);
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 10:00
+-- CHANGE REASON: [ALERT-317912] 
+comment on table GUIDELINE_BATCH is 'Guidelines association to a batch process';
+-- CHANGE END: Ana Matos

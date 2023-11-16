@@ -1,0 +1,54 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 17/03/2010 10:46
+-- CHANGE REASON: [ALERT-76057 ] SOAP
+CREATE TABLE TAB_BUTTON
+ (ID_TAB_BUTTON NUMBER(24) NOT NULL,
+ ID_TAB NUMBER(24) NOT NULL,
+ ID_SYS_BUTTON NUMBER(24) NOT NULL,
+ FLG_IDENTIFIER VARCHAR2(1 CHAR),
+ RANK NUMBER(6),
+ FLG_AVAILABLE VARCHAR2(1 CHAR)
+ );
+
+comment on column TAB_BUTTON.ID_TAB_BUTTON
+  is 'Unique ID';
+comment on column TAB_BUTTON.ID_TAB
+  is 'ID Tab ';
+comment on column TAB_BUTTON.ID_SYS_BUTTON
+  is 'ID Sys Button';
+comment on column TAB_BUTTON.FLG_IDENTIFIER
+  is 'Indicates a codification for this button, to be identified on flash';
+comment on column TAB_BUTTON.RANK
+  is 'Order of appearance';
+comment on column TAB_BUTTON.FLG_AVAILABLE
+  is 'If it is available';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/03/2010 14:06
+-- CHANGE REASON: [ALERT-81866 ] Colunas de auditoria
+ALTER TABLE TAB_BUTTON ADD (
+   CREATE_USER VARCHAR2(24),
+   CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+   CREATE_INSTITUTION NUMBER(24,0),
+   UPDATE_USER VARCHAR2(24),
+   UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+   UPDATE_INSTITUTION NUMBER(24,0)
+);
+ 
+COMMENT ON COLUMN TAB_BUTTON.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN TAB_BUTTON.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN TAB_BUTTON.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN TAB_BUTTON.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN TAB_BUTTON.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN TAB_BUTTON.UPDATE_INSTITUTION IS 'Update Institution';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table TAB_BUTTON
+  is 'Configuration os buttons for each tab';  
+-- CHANGE END: Elisabete Bugalho

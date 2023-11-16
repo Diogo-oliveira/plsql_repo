@@ -1,0 +1,51 @@
+
+
+  CREATE TABLE SR_POS_EVAL_DET
+   (	ID_SR_POS_EVAL_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_SR_POS_EVAL_VISIT NUMBER(24,0) NOT NULL ENABLE,
+	DT_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_AW_AWAKE VARCHAR2(1),
+	FLG_AW_PAIN VARCHAR2(1),
+	FLG_AW_COLD VARCHAR2(1),
+	FLG_AW_VOMIT VARCHAR2(1),
+	FLG_PR_PAIN VARCHAR2(1),
+	FLG_PR_HEMO VARCHAR2(1),
+	FLG_PR_INFEC VARCHAR2(1),
+
+	FLG_PR_VOMIT VARCHAR2(1),
+	FLG_PR_HIPERT VARCHAR2(1),
+	NOTES VARCHAR2(4000)
+   );
+
+
+COMMENT ON TABLE sr_pos_eval_det IS 'Tabela de detalhes das visitas pós-operatórias' ;
+
+COMMENT ON COLUMN sr_pos_eval_det.id_sr_pos_eval_det IS 'ID único' ;
+COMMENT ON COLUMN sr_pos_eval_det.id_sr_pos_eval_visit IS 'ID da visita pós-operatória' ;
+COMMENT ON COLUMN sr_pos_eval_det.dt_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN sr_pos_eval_det.id_professional IS 'ID do profissional' ;
+COMMENT ON COLUMN sr_pos_eval_det.flg_aw_awake IS '(Acordar) Acordar calmo' ;
+COMMENT ON COLUMN sr_pos_eval_det.flg_aw_pain IS '(Acordar) Sentiu dores' ;
+COMMENT ON COLUMN sr_pos_eval_det.flg_aw_cold IS '(Acordar) Sentiu frio' ;
+COMMENT ON COLUMN sr_pos_eval_det.flg_aw_vomit IS '(Acordar) Teve vómitos' ;
+COMMENT ON COLUMN sr_pos_eval_det.flg_pr_pain IS '(problemas após cirurgia) Sentiu dor' ;
+COMMENT ON COLUMN sr_pos_eval_det.flg_pr_hemo IS '(problemas após cirurgia) Teve hemorragias' ;
+COMMENT ON COLUMN sr_pos_eval_det.flg_pr_infec IS '(problemas após cirurgia) Teve infecção' ;
+COMMENT ON COLUMN sr_pos_eval_det.flg_pr_vomit IS '(problemas após cirurgia) Teve vómitos' ;
+COMMENT ON COLUMN sr_pos_eval_det.flg_pr_hipert IS '(problemas após cirurgia) Teve hipertermia' ;
+
+COMMENT ON COLUMN sr_pos_eval_det.notes IS 'Notas' ;
+
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 17:42
+-- CHANGE REASON: [ALERT-186888] Drop non used tables
+begin
+execute immediate 'drop table SR_POS_EVAL_DET';
+exception
+when others then
+dbms_output.put_line('ERRO tabela SR_POS_EVAL_DET já não existe.');
+end;
+/
+-- CHANGE END: António Neto

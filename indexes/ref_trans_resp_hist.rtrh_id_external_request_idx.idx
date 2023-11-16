@@ -1,0 +1,18 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/02/2013 12:19
+-- CHANGE REASON: [ALERT-251048] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_indexes i
+     WHERE i.index_name = 'RTRH_ID_EXTERNAL_REQUEST_IDX';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'create index RTRH_ID_EXTERNAL_REQUEST_IDX on REF_TRANS_RESP_HIST (ID_EXTERNAL_REQUEST)';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro

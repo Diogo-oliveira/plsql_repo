@@ -1,0 +1,43 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 17/01/2014 12:10
+-- CHANGE REASON: [ALERT-274026] New table for the detail of a message (related elements) CDR_EXTERNAL_DET
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create table CDR_EXTERNAL_DET
+(
+  ID_CDR_EXTERNAL_DET   NUMBER(24) not null,  
+  ID_CDR_EXTERNAL   NUMBER(24) not null,
+  ID_CDR_CALL       NUMBER(24) not null,
+
+  CED_ID       VARCHAR2(30 CHAR),
+  CED_TYPE         VARCHAR2(30 CHAR) not null, 
+  ID_PRODUCT_SUPPLIER VARCHAR2(30 CHAR),
+  
+  create_user         VARCHAR2(24 CHAR),
+  create_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution  NUMBER(24),
+  update_user         VARCHAR2(24 CHAR),
+  update_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution  NUMBER(24)
+)';
+exception when e_obj_exists then
+  dbms_output.put_line('table CDR_EXTERNAL_DET exists!');
+end;
+/
+
+comment on table CDR_EXTERNAL_DET  is 'CDR External Rule det';
+comment on column CDR_EXTERNAL_DET.ID_CDR_EXTERNAL_DET  is 'Primary key.';
+comment on column CDR_EXTERNAL_DET.ID_CDR_EXTERNAL  is 'External parent key.';
+comment on column CDR_EXTERNAL_DET.ID_CDR_CALL  is 'Rule engine call identifier.';
+comment on column CDR_EXTERNAL_DET.CED_ID  is 'When type is 1,2,3,70,80,85 id is filled (id_product,id_diagnosis,id_allergy)';
+comment on column CDR_EXTERNAL_DET.CED_TYPE  is '1 PRODUCT,2 UCD,3 PACK,,10 AGE,20 WEIGHT,30 PREGNANT,40 BREAST_FEEDING,50 CREATIN_CLEARANCE,60 GENDER,70 CIM10,80 ALLERGY,85 MOLECULE';
+comment on column CDR_EXTERNAL_DET.ID_PRODUCT_SUPPLIER is 'Related Product supplier ID';
+comment on column CDR_EXTERNAL_DET.create_user  is 'Creation User';
+comment on column CDR_EXTERNAL_DET.create_time  is 'Creation Time';
+comment on column CDR_EXTERNAL_DET.create_institution  is 'Creation Institution';
+comment on column CDR_EXTERNAL_DET.update_user  is 'Update User';
+comment on column CDR_EXTERNAL_DET.update_time  is 'Update Time';
+comment on column CDR_EXTERNAL_DET.update_institution  is 'Update Institution';
+-- CHANGE END: mario.mineiro

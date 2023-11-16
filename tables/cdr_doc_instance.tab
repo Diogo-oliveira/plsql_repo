@@ -1,0 +1,27 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 28/05/2014 16:20
+-- CHANGE REASON: [ALERT-286189] 
+begin
+  execute immediate 'create table CDR_DOC_INSTANCE
+(
+  ID_CDR_DOC_INSTANCE   NUMBER(24) not null,
+  create_user           VARCHAR2(24 CHAR),
+  create_time           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution    NUMBER(24),
+  update_user           VARCHAR2(24 CHAR),
+  update_time           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution    NUMBER(24)
+)';
+exception when others then
+  dbms_output.put_line('table CDR_DOC_INSTANCE exists!');
+end;
+/
+COMMENT ON TABLE CDR_DOC_INSTANCE IS 'Document Instances';
+COMMENT ON column CDR_DOC_INSTANCE.CREATE_INSTITUTION IS 'Institution where the record was created';
+COMMENT ON column CDR_DOC_INSTANCE.CREATE_TIME IS 'Time of creation';
+COMMENT ON column CDR_DOC_INSTANCE.CREATE_USER IS 'User that created the record';
+COMMENT ON column CDR_DOC_INSTANCE.ID_CDR_DOC_INSTANCE IS 'Primary key';
+COMMENT ON column CDR_DOC_INSTANCE.UPDATE_INSTITUTION IS 'Institution where the record was updated';
+COMMENT ON column CDR_DOC_INSTANCE.UPDATE_TIME IS 'Time of update';
+COMMENT ON column CDR_DOC_INSTANCE.UPDATE_USER IS 'User that updated the record';
+-- CHANGE END: mario.mineiro

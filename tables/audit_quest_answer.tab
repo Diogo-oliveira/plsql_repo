@@ -1,0 +1,44 @@
+
+create table AUDIT_QUEST_ANSWER
+(
+	ID_AUDIT_QUEST_ANSWER NUMBER,
+	ID_AUDIT_CRITERIA NUMBER,
+	ID_PROFESSIONAL NUMBER,
+	ID_AUDIT_REQ NUMBER,
+	ID_AUDIT_REQ_PROF NUMBER,
+	ID_AUDIT_REQ_PROF_EPIS NUMBER,
+	ANSWER VARCHAR2(4000),
+	DT_ANSWER DATE,
+	DT_ANSWER_TSTZ TIMESTAMP WITH LOCAL TIME ZONE,
+	ADW_LAST_UPDATE DATE DEFAULT SYSDATE
+);
+
+comment on table AUDIT_QUEST_ANSWER
+	is 'Respostas a perguntas numa auditoria';
+comment on column AUDIT_QUEST_ANSWER.ID_AUDIT_QUEST_ANSWER
+	is 'chave primária';
+comment on column AUDIT_QUEST_ANSWER.ID_AUDIT_CRITERIA
+	is 'id da questão';
+comment on column AUDIT_QUEST_ANSWER.ID_PROFESSIONAL
+	is 'id do profissional que respondeu à pergunta';
+comment on column AUDIT_QUEST_ANSWER.ID_AUDIT_REQ
+	is 'Indica que a resposta é sobre uma auditoria';
+comment on column AUDIT_QUEST_ANSWER.ID_AUDIT_REQ_PROF
+	is 'Indica que a resposta é sobre um profissional';
+comment on column AUDIT_QUEST_ANSWER.ID_AUDIT_REQ_PROF_EPIS
+	is 'Indica que a resposta é sobre um episódio';
+comment on column AUDIT_QUEST_ANSWER.ANSWER
+	is 'resposta tal como introduzida pelo auditor. O tipo da resposta verifica-se na tabela audit_CRITERIA';
+comment on column AUDIT_QUEST_ANSWER.DT_ANSWER
+	is 'data quando foi guardada a resposta';
+comment on column AUDIT_QUEST_ANSWER.DT_ANSWER_TSTZ
+	is 'data quando foi guardada a resposta';
+
+--Emilia Taborda 2007/09/22
+--Coluna id_professional pode ter valores nulos
+ALTER TABLE AUDIT_QUEST_ANSWER modify ID_PROFESSIONAL NUMBER null;
+
+-- JSILVA 22-10-2008
+ALTER TABLE audit_quest_answer DROP COLUMN dt_answer;
+-- END
+

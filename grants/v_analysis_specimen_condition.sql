@@ -1,0 +1,5 @@
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/05/2014 15:41
+-- CHANGE REASON: [ALERT-285477] 
+GRANT SELECT ON v_analysis_specimen_condition TO ALERT_INTER;
+-- CHANGE END: Ana Matos

@@ -1,0 +1,56 @@
+-->epis_hhc_discharge|alert|table
+BEGIN
+pk_frmw_objects.insert_into_frmw_objects(
+     i_owner            => 'ALERT',
+     i_obj_name         => 'EPIS_HHC_DISCH_DET_H',
+     i_obj_type         => 'TABLE',
+     i_flg_category     => 'TRS',
+     i_delete_script    => '',
+     i_responsible_team => 'CDOC',
+     i_flg_nzd          => 'Y');
+END;
+/  
+
+
+-- Create table
+create table EPIS_HHC_DISCH_DET_H
+(
+  id_hhc_disch_det    NUMBER(24) not null,
+  id_hhc_discharge    NUMBER(24) not null,
+  id_hhc_det_type     number(24) not null,
+  hhc_value           varchar2(200 char),
+  hhc_text            clob,
+  id_prof_creation    number(24),
+  dt_creation         TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  id_group        number(24),
+  create_user         VARCHAR2(30 CHAR),
+  create_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution  NUMBER(24),
+  update_user         VARCHAR2(30 CHAR),
+  update_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution  NUMBER(24)
+)
+lob(hhc_text ) STORE as HHC_DSC_h_HHC_TEXT ( tablespace ALERT_LOB ),
+tablespace ALERT_DATA;
+
+-- Add comments to the table 
+comment on table EPIS_HHC_DISCH_DET_H  is 'Home Health Care Discharge Journaling';
+-- Add comments to the columns 
+comment on column EPIS_HHC_DISCH_DET_H.id_hhc_disch_det   is 'PK of table, unique identifier';
+comment on column EPIS_HHC_DISCH_DET_H.id_hhc_discharge   is 'FK for discharge table, unique identifier';
+comment on column EPIS_HHC_DISCH_DET_H.id_hhc_det_type    is 'FK for HHC_DET_TYPE ( type of hhc component )';
+comment on column EPIS_HHC_DISCH_DET_H.hhc_value        is 'Value registered when lob not needed';
+comment on column EPIS_HHC_DISCH_DET_H.hhc_text       is 'Value registered when lob needed';
+comment on column EPIS_HHC_DISCH_DET_H.id_prof_creation   is 'professional that created record';
+comment on column EPIS_HHC_DISCH_DET_H.dt_creation      is 'date of record creation';
+comment on column EPIS_HHC_DISCH_DET_H.id_group         is 'number grouping records of same transaction';
+
+ALTER TABLE EPIS_HHC_DISCH_DET_H  ADD CONSTRAINT EPIS_HHC_DISCH_DET_H_PK PRIMARY KEY (ID_HHC_DISCH_DET, dt_Creation);
+
+  
+-- CHANGED BY: Pedro Teixeira
+-- CHANGED DATE: 28/03/2020
+-- CHANGED REASON: EMR-26299
+ALTER TABLE EPIS_HHC_DISCH_DET_H ADD HHC_DATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE;
+COMMENT ON COLUMN EPIS_HHC_DISCH_DET_H.HHC_DATE_TIME IS 'Value registered when date_time is needed';
+-- CHANGE END: Pedro Teixeira

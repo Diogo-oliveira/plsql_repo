@@ -1,0 +1,312 @@
+
+
+  CREATE TABLE EPIS_DIAGNOSIS_HIST
+   (	ID_EPIS_DIAGNOSIS_HIST NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPIS_DIAGNOSIS NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_CREATION DATE NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(2) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(2) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	NOTES VARCHAR2(200),
+	FLG_FINAL_TYPE VARCHAR2(240),
+	ID_EPIS_DIAGNOSIS_NOTES NUMBER
+   );
+
+
+
+COMMENT ON TABLE epis_diagnosis_hist IS 'Histórico dos episódios de diagnósticos' ;
+
+COMMENT ON COLUMN epis_diagnosis_hist.id_epis_diagnosis_hist IS 'Chave primária' ;
+COMMENT ON COLUMN epis_diagnosis_hist.id_epis_diagnosis IS 'Episódio do diagnóstico' ;
+COMMENT ON COLUMN epis_diagnosis_hist.id_professional IS 'Profissional' ;
+COMMENT ON COLUMN epis_diagnosis_hist.dt_creation IS 'Data de registo' ;
+COMMENT ON COLUMN epis_diagnosis_hist.flg_status IS 'Estado do episódio:A -Activo; C - Cancelar; D - Despiste; F - Confirmado; R - Declinar;B - Base' ;
+COMMENT ON COLUMN epis_diagnosis_hist.flg_type IS 'Tipo de diagnóstico. P - Provisório;D - Definitivo.Novo tipo de diagnóstico: B - Diagnóstico base, existe apenas para o ORIS.' ;
+COMMENT ON COLUMN epis_diagnosis_hist.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN epis_diagnosis_hist.flg_final_type IS 'Tipo de diagnóstico final: P - Primary;S - Secondary' ;
+
+
+--ET 2007/05/16
+alter table epis_diagnosis_hist modify notes varchar2(4000);
+
+alter table epis_diagnosis_hist 
+add (dt_creation_tstz timestamp with local time zone); 
+
+ALTER TABLE EPIS_DIAGNOSIS_HIST DROP COLUMN DT_CREATION;
+
+--CHANGED BY: Carlos Silva
+--CHANGE DATE: 2009-MAR-27
+--CHANGE REASON: ALERT-12181
+alter table epis_diagnosis_hist add id_cancel_reason number(24);
+comment on column epis_diagnosis_hist.id_cancel_reason is 'Cancelation reason';
+--CHANGE END: Carlos Silva
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 25/02/2010 11:21
+-- CHANGE REASON: [ALERT-70086] Transfer of information: The information recorded as final diagnosi (truncated) 
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD ID_EPISODE_ORIGIN NUMBER(24)';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.ID_EPISODE_ORIGIN IS ''Episode ID where the diagnosis was originally registered or altered.''';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('AVISO: A coluna "ID_EPISODE_ORIGIN" já foi adicionada anteriormente.');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 29/10/2010 17:29
+-- CHANGE REASON: [ALERT-136121] REPLICATION: Final diagnoses - SEARHC requirement (ALERT_136054)
+--                   Versioning table changes
+ALTER TABLE EPIS_DIAGNOSIS_HIST ADD FLG_ADD_PROBLEM VARCHAR2(1);
+COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.FLG_ADD_PROBLEM IS 'The diagnosis should be associated with problems list?';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 11/05/2011 08:04
+-- CHANGE REASON: [ALERT-175003] [EDIS DB] Add id_cdr_call to Pregnancy and Diagnosis areas
+DECLARE
+    e_col_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_col_already_there, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table epis_diagnosis_hist add (ID_CDR_CALL NUMBER(24))';
+EXCEPTION
+    WHEN e_col_already_there THEN
+        dbms_output.put_line('Column already added.');
+END;
+/
+
+COMMENT ON COLUMN epis_diagnosis_hist.ID_CDR_CALL IS 'Rule engine call identifier.' ;
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 16:16
+-- CHANGE REASON: [ALERT-229222] VERSIONING TRANSACTIONAL MODEL - SCHEMA ALERT - DDL
+DECLARE
+    e_col_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_col_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD DT_INITIAL_DIAG TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column DT_INITIAL_DIAG already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD ID_DIAG_BASIS NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column ID_DIAG_BASIS already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD ID_DBASIS_INST_OWNER NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column ID_DBASIS_INST_OWNER already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD DIAG_BASIS_SPEC VARCHAR2(1000 CHAR)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column DIAG_BASIS_SPEC already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD FLG_RECURRENCE VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column FLG_RECURRENCE already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD FLG_MULT_TUMORS VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column FLG_MULT_TUMORS already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD NUM_PRIMARY_TUMORS NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column NUM_PRIMARY_TUMORS already created.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.DT_INITIAL_DIAG IS ''Initial diagnosis date''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.ID_DIAG_BASIS IS ''Diagnosis basis id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.ID_DBASIS_INST_OWNER IS ''Institution owner of the diagnosis basis. Default 0 - ALERT''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.DIAG_BASIS_SPEC IS ''Diagnosis basis specification''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.FLG_RECURRENCE IS ''Recurrence diagnosis? Y -yes; N - otherwise''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.FLG_MULT_TUMORS IS ''Has multiple tumors? Y - yes; N - otherwise''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.NUM_PRIMARY_TUMORS IS ''Number of primary tumors''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 16/07/2012 16:00
+-- CHANGE REASON: [ALERT-235889] EDH_FLG_RECURR_CHK
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST DROP CONSTRAINT EDH_FLG_RECURR_CHK';
+EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD CONSTRAINT EDH_FLG_RECURR_CHK CHECK (FLG_RECURRENCE IN (''Y'',''N'',''U''))';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 30/08/2013 18:27
+-- CHANGE REASON: [ALERT-264219] DB Versioning - SCHEMA ALERT TABLE CHANGES (ALERT_251640)
+DECLARE
+    e_col_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_col_already_exists, -1430);
+BEGIN
+    --ID_SUB_ANALYSIS
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD ID_SUB_ANALYSIS NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column ID_SUB_ANALYSIS already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD ID_SUBANALY_INST_OWNER NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column ID_SUBANALY_INST_OWNER already created.');
+    END;
+    --ID_ANATOMICAL_AREA
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD ID_ANATOMICAL_AREA NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column ID_SUB_ANALYSIS already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD ID_ANATAREA_INST_OWNER NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column ID_SUBANALY_INST_OWNER already created.');
+    END;
+    --ID_ANATOMICAL_SIDE
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD ID_ANATOMICAL_SIDE NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column ID_SUB_ANALYSIS already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD ID_ANATSIDE_INST_OWNER NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column ID_SUBANALY_INST_OWNER already created.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.ID_SUB_ANALYSIS IS ''Sub analysis id. This field is only used in accident and emergency diagnosis.''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.ID_SUBANALY_INST_OWNER IS ''Institution owner of the sub analysis field. Default 0 - ALERT''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.ID_ANATOMICAL_AREA IS ''Anatomical area id. This field is only used in accident and emergency diagnosis.''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.ID_ANATAREA_INST_OWNER IS ''Institution owner of the anatomical area field. Default 0 - ALERT''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.ID_ANATOMICAL_SIDE IS ''Anatomical side id. This field is only used in accident and emergency diagnosis.''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.ID_ANATSIDE_INST_OWNER IS ''Institution owner of the anatomical side field. Default 0 - ALERT''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 18/11/2013 14:06
+-- CHANGE REASON: [ALERT-269873] A&E diagnoses_Some diagnosis are not giving the option to document "anatomical side". (ALERT_268880)
+--                BSUH - Diagnosis/Problems/Past history - possibility to define the classification to be used in each functional area (ALERT_265471)
+DECLARE
+    e_col_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_col_already_exists, -1430);
+BEGIN
+    --ID_DIAGNOSIS_CONDITION
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD ID_DIAGNOSIS_CONDITION NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column ID_DIAGNOSIS_CONDITION already created.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS_HIST ADD ID_DIAGCOND_INST_OWNER NUMBER(24)';
+    EXCEPTION
+        WHEN e_col_already_exists THEN
+            dbms_output.put_line('Column ID_DIAGCOND_INST_OWNER already created.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.ID_DIAGNOSIS_CONDITION IS ''Diagnosis condition id. This field is only used in accident and emergency diagnosis.''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAGNOSIS_HIST.ID_DIAGCOND_INST_OWNER IS ''Institution owner of the diagnosis condition field. Default 0 - ALERT''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EPIS_DIAGNOSIS_HIST
+  is 'History of change on diagnosis registered on episode';
+-- Add comments to the columns 
+comment on column EPIS_DIAGNOSIS_HIST.id_epis_diagnosis_hist
+  is 'Primary Key';
+comment on column EPIS_DIAGNOSIS_HIST.id_epis_diagnosis
+  is 'Episode Diagnosis ID';
+comment on column EPIS_DIAGNOSIS_HIST.id_professional
+  is 'Professional that made the change';
+comment on column EPIS_DIAGNOSIS_HIST.flg_status
+  is 'Status A -Active; C - Cancelled; D - Under investigation; F -Confirmed; R - Ruled out; B -Primary; p - Presumptive';
+comment on column EPIS_DIAGNOSIS_HIST.flg_type
+  is 'Type of diagnosis: Differential / Final. Differential diagnosis may become final and final may be changed to differential, nout usual.  B - Final diagnosis only on ORIS. X - Migrated records that were duplicated';
+comment on column EPIS_DIAGNOSIS_HIST.adw_last_update
+  is 'Date of last change';
+comment on column EPIS_DIAGNOSIS_HIST.notes
+  is 'Notes';
+comment on column EPIS_DIAGNOSIS_HIST.flg_final_type
+  is 'Final diagnosis type P - Primary;S - Secondary';
+comment on column EPIS_DIAGNOSIS_HIST.id_epis_diagnosis_notes
+  is 'Diagnosis notes';
+comment on column EPIS_DIAGNOSIS_HIST.dt_creation_tstz
+  is 'Cancel reason';
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 06/12/2016 10:10
+-- CHANGE REASON: [ALERT-326911] Ability to document the type of lesion and place where the lesion occurred, associated to a diagnoses from the Chapter XIX - "Injury, poisoning and certain other consequences of external causes (S00-T98)" --- CIE-10 catalogue diagnosis.
+--                
+-- Add/modify columns 
+alter table epis_diagnosis_hist add id_lesion_location number(24);
+alter table epis_diagnosis_hist add id_lesion_locat_inst_owner NUMBER(24);
+alter table epis_diagnosis_hist add id_lesion_type NUMBER(24);
+alter table epis_diagnosis_hist add id_lesion_type_inst_owner NUMBER(24);
+-- Add comments to the columns 
+comment on column epis_diagnosis_hist.id_lesion_location
+  is 'Diagnosis lesion location id. This field is only used in trauma diagnosis MX';
+comment on column epis_diagnosis_hist.id_lesion_locat_inst_owner
+  is 'Institution owner of the diagnosis lesion location field. Default 0 - ALERT';
+comment on column epis_diagnosis_hist.id_lesion_type
+  is 'Diagnosis lesion type  id. This field is only used in trauma diagnosis MX';
+comment on column epis_diagnosis_hist.id_lesion_type_inst_owner
+  is 'Institution owner of the diagnosis lesion type field. Default 0 - ALERT';
+-- CHANGE END: Elisabete Bugalho
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 11/10/2017
+-- CHANGE REASON: CALERT-148
+BEGIN
+    EXECUTE IMMEDIATE 'alter table epis_diagnosis_hist add rank NUMBER(24)';
+    EXECUTE IMMEDIATE 'alter table epis_diagnosis_hist add flg_is_complication VARCHAR2(1 CHAR)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('ERROR: analyse alter table.');
+END;
+/
+
+COMMENT ON COLUMN epis_diagnosis_hist.rank IS 'The rank of the discharge diagnosis ex.: 1-principal diagnosis, >1-secondary diagnosis';
+COMMENT ON COLUMN epis_diagnosis_hist.flg_is_complication IS 'This flag indicates if this id_diagnosis is used as complication in another diagnosis - in this situation this diagnosis should not show';
+-- CHANGE END: Pedro Teixeira

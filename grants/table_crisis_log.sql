@@ -1,0 +1,5 @@
+
+
+  GRANT SELECT ON ALERT.crisis_log TO ALERT_VIEWER;
+
+

@@ -1,0 +1,71 @@
+-- Create table
+create table PENDING_ISSUE_GROUP
+(
+  ID_PENDING_ISSUE   NUMBER(24) not null,
+  ID_PENDING_ISSUE_MESSAGE NUMBER(24) not null,
+  ID_GROUP          NUMBER(24) not null,
+  FLG_STATUS               VARCHAR2(1),
+  DT_READ                  TIMESTAMP(6) WITH TIME ZONE,
+  DT_CANCEL                TIMESTAMP(6) WITH TIME ZONE
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table PENDING_ISSUE_GROUP
+  is 'Tabela responsável pela relação entre as mensagens e os grupos responsáveis.';
+-- Add comments to the columns 
+comment on column PENDING_ISSUE_GROUP.ID_PENDING_ISSUE
+  is 'Part of the composite primary key - ID Pending Issue';
+comment on column PENDING_ISSUE_GROUP.ID_PENDING_ISSUE_MESSAGE
+  is 'Part of the composite primary key - Message Number';
+comment on column PENDING_ISSUE_GROUP.ID_GROUP
+  is 'Part of the composite primary key - Group ID';
+comment on column PENDING_ISSUE_GROUP.FLG_STATUS
+  is 'Message status: A - Active, C - Canceled';
+comment on column PENDING_ISSUE_GROUP.DT_READ
+  is 'Message''s read date';
+comment on column PENDING_ISSUE_GROUP.DT_CANCEL
+  is 'Message''s cancel date';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table PENDING_ISSUE_GROUP
+  add constraint PIG_ID_PIP_PK primary key (ID_PENDING_ISSUE, ID_PENDING_ISSUE_MESSAGE, ID_GROUP)
+  using index 
+  tablespace TABLE_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+alter table PENDING_ISSUE_GROUP
+  add constraint PIG_ID_PIM_FK foreign key (ID_PENDING_ISSUE_MESSAGE, ID_PENDING_ISSUE)
+  references PENDING_ISSUE_MESSAGE (ID_PENDING_ISSUE_MESSAGE, ID_PENDING_ISSUE); 
+alter table PENDING_ISSUE_GROUP
+  add constraint PIG_ID_PROF_FK foreign key (ID_GROUP)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+
+-- Create/Recreate check constraints 
+alter table PENDING_ISSUE_GROUP
+  add constraint PIG_FLG_STATUS_CHK
+  check (flg_status IN ('A', 'C'));  
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table PENDING_ISSUE_GROUP
+  is 'Table responsible for the relationship between the messages and the responsible groups.';  
+  
+-- CHANGE END: Elisabete Bugalho

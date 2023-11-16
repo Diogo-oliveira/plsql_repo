@@ -1,0 +1,46 @@
+CREATE TABLE disch_instructions_group
+( id_disch_instructions_group NUMBER(24) NOT NULL ENABLE,
+code_disch_instructions_group VARCHAR2(200) NOT NULL ENABLE,
+flg_available varchar2(1) not null enable,
+adw_last_update DATE NOT NULL ENABLE);
+
+
+COMMENT ON TABLE disch_instructions_group IS 'Grupo de instrucções da alta' ;
+
+COMMENT ON COLUMN disch_instructions_group.id_disch_instructions_group IS 'Chave primária' ;
+COMMENT ON COLUMN disch_instructions_group.code_disch_instructions_group IS 'Código para obter o grupo de instrucções da alta por língua' ;
+COMMENT ON COLUMN disch_instructions_group.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN disch_instructions_group.adw_last_update IS 'Data da última alteração' ;
+
+
+
+
+ALTER TABLE DISCH_INSTRUCTIONS_GROUP ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN DISCH_INSTRUCTIONS_GROUP.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:25
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.DISCH_INSTRUCTIONS_GROUP MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:43
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table DISCH_INSTRUCTIONS_GROUP
+  is 'Discharge instruction group';
+-- Add comments to the columns 
+comment on column DISCH_INSTRUCTIONS_GROUP.id_disch_instructions_group
+  is 'Primary Key';
+comment on column DISCH_INSTRUCTIONS_GROUP.code_disch_instructions_group
+  is 'Translation code for discharge instruction group';
+comment on column DISCH_INSTRUCTIONS_GROUP.flg_available
+  is 'Availabitily (Y/N)';
+comment on column DISCH_INSTRUCTIONS_GROUP.adw_last_update
+  is 'Date of last change';
+comment on column DISCH_INSTRUCTIONS_GROUP.id_content
+  is 'Content unique identifier';  
+  
+-- CHANGE END: Elisabete Bugalho

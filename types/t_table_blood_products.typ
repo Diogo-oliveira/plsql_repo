@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_table_blood_products AS TABLE OF t_rec_blood_product;

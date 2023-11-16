@@ -1,0 +1,48 @@
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 28/11/2016 11:06
+-- CHANGE REASON: [ALERT-326265] Add new fields in the discharge area - DB
+CREATE TABLE discharge_newborn_hist
+(
+  id_disch_newborn_hist  NUMBER(24) NOT NULL,
+  dt_disch_newborn_hist  TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+  id_discharge           NUMBER(24) NOT NULL,
+  id_pat_pregnancy       NUMBER(24) NOT NULL,
+  id_episode             NUMBER(24) NOT NULL,  
+  flg_condition          VARCHAR2(1 CHAR) NOT NULL,
+  flg_status             VARCHAR2(1 CHAR) NOT NULL,
+  id_prof_create         NUMBER(24) NOT NULL,
+  dt_create              TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+  id_prof_last_update    NUMBER(24),
+  dt_last_update         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  id_prof_cancel         NUMBER(24),
+  dt_cancel              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_user            VARCHAR2(24 CHAR),
+  create_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution     NUMBER(24),
+  update_user            VARCHAR2(24 CHAR),
+  update_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution     NUMBER(24)
+);
+-- CHANGE END: Vanessa Barsottelli
+
+comment on table ALERT.DISCHARGE_NEWBORN_HIST is 'DISCHARGE_NEWBORN_HIST history table';
+COMMENT ON COLUMN ALERT.DISCHARGE_NEWBORN_HIST.DT_CANCEL is 'Cancel date';
+COMMENT ON COLUMN ALERT.DISCHARGE_NEWBORN_HIST.DT_CREATE is 'Creation Date';
+COMMENT ON COLUMN ALERT.DISCHARGE_NEWBORN_HIST.DT_DISCH_NEWBORN_HIST is '';
+COMMENT ON COLUMN ALERT.DISCHARGE_NEWBORN_HIST.DT_LAST_UPDATE is 'Last Update date';
+COMMENT ON COLUMN ALERT.DISCHARGE_NEWBORN_HIST.FLG_CONDITION is 'Newborn condition: M - With mother ; H - Hospitalized ; D - Dead; U - Undefined';
+COMMENT ON COLUMN ALERT.DISCHARGE_NEWBORN_HIST.FLG_STATUS is 'Discharge newborn status: A - Active; C - Cancelled';
+COMMENT ON COLUMN ALERT.DISCHARGE_NEWBORN_HIST.ID_DISCHARGE is 'Discharge identifier';
+COMMENT ON COLUMN ALERT.DISCHARGE_NEWBORN_HIST.ID_DISCH_NEWBORN_HIST is 'Primary Key';
+COMMENT ON COLUMN ALERT.DISCHARGE_NEWBORN_HIST.ID_EPISODE is 'Episode identifier';
+COMMENT ON COLUMN ALERT.DISCHARGE_NEWBORN_HIST.ID_PAT_PREGNANCY is 'Patient pregnancy identifier';
+COMMENT ON COLUMN ALERT.DISCHARGE_NEWBORN_HIST.ID_PROF_CANCEL is 'Professional that cancelled the record';
+COMMENT ON COLUMN ALERT.DISCHARGE_NEWBORN_HIST.ID_PROF_CREATE is 'Professional that created the record';
+COMMENT ON COLUMN ALERT.DISCHARGE_NEWBORN_HIST.ID_PROF_LAST_UPDATE is 'Professional that performed the last update';
+
+comment on column ALERT.DISCHARGE_NEWBORN_HIST.CREATE_USER          is 'User that created the record';
+comment on column ALERT.DISCHARGE_NEWBORN_HIST.CREATE_TIME          is 'Time when the record was created';
+comment on column ALERT.DISCHARGE_NEWBORN_HIST.CREATE_INSTITUTION   is 'Institution where record was created';
+comment on column ALERT.DISCHARGE_NEWBORN_HIST.UPDATE_USER          is 'Last user that changed the record';
+comment on column ALERT.DISCHARGE_NEWBORN_HIST.UPDATE_INSTITUTION   is 'Last Institution where user made the change';
+comment on column ALERT.DISCHARGE_NEWBORN_HIST.UPDATE_TIME          is 'Time of Last change';

@@ -1,0 +1,39 @@
+
+
+  ALTER TABLE REP_SECTION ADD CONSTRAINT RSN_PK PRIMARY KEY (ID_REP_SECTION) ENABLE;
+
+  ALTER TABLE REP_SECTION MODIFY (ID_REP_SECTION NOT NULL ENABLE);
+
+  ALTER TABLE REP_SECTION MODIFY (CODE_REP_SECTION NOT NULL ENABLE);
+
+  ALTER TABLE REP_SECTION MODIFY (RANK NOT NULL ENABLE);
+
+  ALTER TABLE REP_SECTION MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 02/12/2009 21:11
+-- CHANGE REASON: [PIX-341] HIE XDS Content Creator module in Alert
+ALTER TABLE REP_SECTION 
+    ADD CONSTRAINT RSN_FLG_XDS_CLINICAL_ACT_CHK
+    CHECK(flg_xds_clinical_act IS NULL OR flg_xds_clinical_act IN ('Y', 'N'));
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 14-Dec-2011
+-- CHANGE REASON: ALERT-209886
+DECLARE
+    e_name_already_used_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_name_already_used_constraint, -02264);
+    l_table_name VARCHAR2(30) := 'REP_SECTION';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name ||
+                      ' ADD CONSTRAINT rs_iterable_chk CHECK (ITERABLE IN (''Y'',''N''))';
+EXCEPTION
+    WHEN e_name_already_used_constraint THEN
+        dbms_output.put_line('WARNING - Check constraint in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END

@@ -1,0 +1,2 @@
+GRANT SELECT ON ALERT.supplies_soft_inst TO ALERT_VIEWER;
+

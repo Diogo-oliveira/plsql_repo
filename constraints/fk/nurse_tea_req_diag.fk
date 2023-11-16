@@ -1,0 +1,21 @@
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 05/05/2011 11:41
+-- CHANGE REASON: [ALERT-176423] Patient education: tables and keys
+ALTER TABLE NURSE_TEA_REQ_DIAG ADD (CONSTRAINT
+ NTRD_NTR_FK FOREIGN KEY 
+  (ID_NURSE_TEA_REQ) REFERENCES NURSE_TEA_REQ
+  (ID_NURSE_TEA_REQ))
+/
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 05/12/2014 10:43
+-- CHANGE REASON: [ALERT-303860] Allow NANDA diagnoses being associated with patient education
+DECLARE
+    l_sql pk_types.t_huge_byte;
+BEGIN
+    l_sql := 'ALTER TABLE NURSE_TEA_REQ_DIAG ADD CONSTRAINT NTRD_NANDX_FK FOREIGN KEY( ID_NAN_DIAGNOSIS ) REFERENCES NAN_DIAGNOSIS( ID_NAN_DIAGNOSIS )';
+    pk_versioning.run(i_sql => l_sql);
+END;
+/
+-- CHANGE END: Ariel Machado

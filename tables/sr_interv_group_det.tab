@@ -1,0 +1,30 @@
+
+
+  CREATE TABLE SR_INTERV_GROUP_DET
+   (	ID_SR_INTERV_GROUP_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_SR_INTERV_GROUP NUMBER(14,0) NOT NULL ENABLE,
+	ID_SR_INTERVENTION NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE sr_interv_group_det IS 'Contém as cirurgias pertencentes a cada grupo de cirurgias' ;
+
+COMMENT ON COLUMN sr_interv_group_det.id_sr_interv_group_det IS 'ID único' ;
+COMMENT ON COLUMN sr_interv_group_det.id_sr_interv_group IS 'ID do grupo de cirurgias' ;
+COMMENT ON COLUMN sr_interv_group_det.id_sr_intervention IS 'ID da intervenção cirúrgica' ;
+
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 29/11/2011 09:31
+-- CHANGE REASON: [ALERT-207554] 
+DECLARE
+    e_col_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_col_already_there, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'drop table sr_interv_group_det';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already dropped.');
+END;
+/
+-- CHANGE END: Luís Maia

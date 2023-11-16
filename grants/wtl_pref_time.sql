@@ -1,0 +1,1 @@
+grant select on WTL_PREF_TIME  to ALERT_VIEWER;

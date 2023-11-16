@@ -1,0 +1,76 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 22/10/2014 19:48
+-- CHANGE REASON: [ALERT-297786] messaging support table
+DECLARE
+    i_sql VARCHAR2(1000 CHAR);
+BEGIN
+   BEGIN
+        pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                                 i_obj_name          => 'PENDING_ISSUE_SENDER',
+                                                 i_obj_type          => 'TABLE',
+                                                 i_flg_category      => 'TRS',
+                                                 i_flg_alert_default => 'N',
+                                                 i_delete_script     => NULL,
+                                                 i_flg_default_child => 'N',
+                                                 i_responsible_team => 'TOOLS');
+    END;
+    i_sql := 'create table pending_issue_sender(id_pending_issue_message number(24) not null, id_pending_issue number(24) not null, flg_sender varchar2(1 char) not null, representative_tag varchar2(1000 char),
+    flg_status_sender varchar2(1 char) not null, flg_status_receiver varchar2(1 char) not null,
+        create_user   VARCHAR2(24 char),
+                                   create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                                   create_institution NUMBER(24),
+                                   update_user        VARCHAR2(24 char),
+                                   update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                                   update_institution NUMBER(24)) tablespace alert_data';
+    pk_versioning.run(i_sql => i_sql);
+    -- comments
+    i_sql := 'COMMENT ON TABLE pending_issue_sender IS ''Table that Identifies message sender.''';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'COMMENT ON column pending_issue_sender.id_pending_issue_message IS ''Pending issue (msg) refference.''';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'COMMENT ON column pending_issue_sender.id_pending_issue IS ''Pending issue (msg) refference.''';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'COMMENT ON column pending_issue_sender.flg_sender IS ''Identifies Sender (P - patient, F - Facility professional).''';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'COMMENT ON column pending_issue_sender.representative_tag IS ''Message that identifies representative.''';
+    pk_versioning.run(i_sql => i_sql);
+     i_sql := 'COMMENT ON column pending_issue_sender.flg_status_sender IS ''Message status by entity who sent.''';
+    pk_versioning.run(i_sql => i_sql);
+     i_sql := 'COMMENT ON column pending_issue_sender.flg_status_receiver IS ''Message status by entity who will receive.''';
+    pk_versioning.run(i_sql => i_sql);
+    
+    -- audit
+    i_sql :=  'COMMENT ON column pending_issue_sender.create_user IS ''user identifier.''';
+    pk_versioning.run(i_sql => i_sql);
+       i_sql :=  'COMMENT ON column pending_issue_sender.create_institution IS ''institution identifier.''';
+    pk_versioning.run(i_sql => i_sql);
+        i_sql := 'COMMENT ON column pending_issue_sender.create_time IS ''Date of record creation.''';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'COMMENT ON column pending_issue_sender.update_user IS ''update user identifier.''';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'COMMENT ON column pending_issue_sender.update_time IS ''update institution identifier.''';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'COMMENT ON column pending_issue_sender.update_institution IS ''update record date.''';
+    pk_versioning.run(i_sql => i_sql);
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 29/10/2014 14:56
+-- CHANGE REASON: [ALERT-299659] new text field and state control
+DECLARE
+    i_sql VARCHAR2(1000 CHAR);
+BEGIN
+    i_sql := 'ALTER TABLE pending_issue_sender add flg_last_status_s VARCHAR2(1 CHAR)';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'ALTER TABLE pending_issue_sender add flg_last_status_r VARCHAR2(1 CHAR)';
+    pk_versioning.run(i_sql => i_sql);
+
+    i_sql := 'COMMENT ON column pending_issue_sender.flg_last_status_s IS ''Last sender status after change.''';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'COMMENT ON column pending_issue_sender.flg_last_status_r IS ''Last receiver status after change.''';
+    pk_versioning.run(i_sql => i_sql);
+END;
+/
+-- CHANGE END:  Rui Gomes

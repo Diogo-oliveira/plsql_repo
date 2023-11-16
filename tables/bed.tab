@@ -1,0 +1,110 @@
+
+
+  CREATE TABLE BED
+   (	ID_BED NUMBER(24,0) NOT NULL ENABLE,
+	CODE_BED VARCHAR2(200) NOT NULL ENABLE,
+	ID_ROOM NUMBER(24,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE,
+	DESC_BED VARCHAR2(100),
+	NOTES VARCHAR2(4000),
+	RANK NUMBER(6,0)
+   );
+
+
+COMMENT ON TABLE bed IS 'Camas existentes na instituição. Podem ser permanentes ou temporárias (por exemplo, macas).' ;
+
+COMMENT ON COLUMN bed.id_bed IS 'Chave primária' ;
+COMMENT ON COLUMN bed.code_bed IS 'Código do nome da cama' ;
+COMMENT ON COLUMN bed.flg_type IS 'Tipo de cama: P - Permanente, T - Temporária' ;
+COMMENT ON COLUMN bed.flg_status IS 'Estado da cama: V - vago, O - ocupado' ;
+COMMENT ON COLUMN bed.adw_last_update IS 'Data da última alteração' ;
+
+ALTER TABLE BED 
+ ADD (FLG_AVAILABLE  VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ );
+
+COMMENT ON COLUMN BED.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD';
+
+ALTER TABLE BED MODIFY FLG_AVAILABLE default null;
+
+
+ALTER TABLE BED ADD ID_BED_TYPE NUMBER(24) ;
+COMMENT ON COLUMN BED.ID_BED_TYPE IS 'Type of bed';
+
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/07/2009 08:59
+-- CHANGE REASON: [ALERT-38601] Modifications to table BED
+ALTER TABLE BED ADD "DT_CREATION" TIMESTAMP(6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+--
+ALTER TABLE BED DROP COLUMN ADW_LAST_UPDATE;
+--
+ALTER TABLE BED MODIFY FLG_TYPE VARCHAR2(1) DEFAULT 'T';
+ALTER TABLE BED MODIFY FLG_STATUS VARCHAR2(1) DEFAULT 'O';
+ALTER TABLE BED MODIFY FLG_AVAILABLE VARCHAR2(1) DEFAULT 'Y';
+
+-- Table Comment
+COMMENT ON TABLE BED IS 'All beds existents in one institution. These beds can be permanent or temporary';
+
+-- Collumns Comments
+COMMENT ON COLUMN "ALERT"."BED"."ID_BED" IS 'Bed identifier (Primary key)';
+COMMENT ON COLUMN "ALERT"."BED"."CODE_BED" IS 'Bed description code into translations table';
+COMMENT ON COLUMN "ALERT"."BED"."DESC_BED" IS 'Description of temporary beds';
+COMMENT ON COLUMN "ALERT"."BED"."ID_ROOM" IS 'Room identifier where bed is located physicaly';
+COMMENT ON COLUMN "ALERT"."BED"."FLG_TYPE" IS 'Type of bed: (''P''- Permanent bed; ''T''- Temporary bed) (DEFAULT: ''T'')';
+COMMENT ON COLUMN "ALERT"."BED"."FLG_STATUS" IS 'Main bed status: (''O''- Occupied bed; ''V''- Free bed; ''D''- Depracated registry/released temporary bed) (DEFAULT: ''O'')';
+COMMENT ON COLUMN "ALERT"."BED"."FLG_AVAILABLE" IS 'Is this bed available: (''Y''- Yes; ''N''- No) (DEFAULT: ''Y'')';
+COMMENT ON COLUMN "ALERT"."BED"."NOTES" IS 'Bed notes (temporary beds only)';
+COMMENT ON COLUMN "ALERT"."BED"."RANK" IS 'Bed ranking inside correspondent room';
+COMMENT ON COLUMN "ALERT"."BED"."ID_BED_TYPE" IS 'Type of bed identifier';
+COMMENT ON COLUMN "ALERT"."BED"."DT_CREATION" IS 'Date in which this bed was created';
+--
+COMMENT ON COLUMN "ALERT"."BED"."CREATE_USER" IS 'Professional ID that creates the registry';
+COMMENT ON COLUMN "ALERT"."BED"."CREATE_TIME" IS 'Date of registry creation';
+COMMENT ON COLUMN "ALERT"."BED"."CREATE_INSTITUTION" IS 'Institution ID where registry was created';
+COMMENT ON COLUMN "ALERT"."BED"."UPDATE_USER" IS 'Professional ID that last updates the registry';
+COMMENT ON COLUMN "ALERT"."BED"."UPDATE_TIME" IS 'Date of registry last update';
+COMMENT ON COLUMN "ALERT"."BED"."UPDATE_INSTITUTION" IS 'Institution ID where registry was last updated';
+--
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 12-03-2010
+-- CHANGE REASON: SCH-386
+alter table BED add FLG_SCHEDULABLE varchar2(1);
+comment on column BED.FLG_SCHEDULABLE is 'Y - this bed can receive new scheduler appointments';
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/06/2010 14:32
+-- CHANGE REASON: [ALERT-105487] 
+ALTER TABLE BED ADD 
+(
+flg_bed_status VARCHAR2(1 CHAR),
+flg_parameterization_type VARCHAR2(1 CHAR) default 'C',
+id_professional NUMBER(24),
+dt_last_update TIMESTAMP WITH LOCAL TIME ZONE,
+flg_selected_specialties VARCHAR2(1 CHAR)
+);
+
+
+COMMENT ON COLUMN BED.flg_bed_status IS 'Status of this data: A - active, E - edited, C - canceled.';
+COMMENT ON COLUMN BED.flg_parameterization_type IS 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+COMMENT ON COLUMN BED.id_professional IS 'Id professional that creates the data, when using backoffice.';
+COMMENT ON COLUMN BED.dt_last_update IS 'Last date when this data was updated.';
+COMMENT ON COLUMN BED.flg_selected_specialties IS 'Flag that indicates the type of selection of specialties: A - all, N - none, O - other';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 28/06/2010 17:42
+-- CHANGE REASON: [ALERT-107787] 
+COMMENT ON COLUMN "ALERT"."BED"."FLG_STATUS" IS 'Main bed status: (''O''- Occupied bed; ''V''- Free bed; ''D''- Depracated registry/released temporary bed) (DEFAULT: ''O'')';
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 07/07/2010 14:07
+-- CHANGE REASON: [ALERT-109496] 
+ALTER table bed modify flg_schedulable default 'Y';
+-- CHANGE END: Luís Maia

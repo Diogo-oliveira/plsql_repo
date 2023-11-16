@@ -1,0 +1,75 @@
+
+
+  ALTER TABLE HIDRICS_TYPE ADD CONSTRAINT HIDT_PK PRIMARY KEY (ID_HIDRICS_TYPE) ENABLE;
+
+  ALTER TABLE HIDRICS_TYPE MODIFY (ID_HIDRICS_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE HIDRICS_TYPE MODIFY (CODE_HIDRICS_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE HIDRICS_TYPE MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE HIDRICS_TYPE MODIFY (ACRONYM NOT NULL ENABLE);
+
+-- INPATIENT LMAIA 07-02-2009
+ALTER TABLE hidrics_type ADD (CONSTRAINT FLG_TI_TYPE_CC CHECK (FLG_TI_TYPE IN ('BH', 'RD')));
+-- END
+
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 22:36
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+BEGIN
+execute immediate 'alter table HIDRICS_TYPE drop constraint FLG_TI_TYPE_CC';
+execute immediate 'alter table HIDRICS_TYPE add constraint FLG_TI_TYPE_CC check (FLG_TI_TYPE IN (''BH'', ''RD'',''HI''))';
+EXCEPTION
+WHEN others THEN
+     dbms_output.put_line('ERRO.');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE HIDRICS_TYPE ADD CONSTRAINT HIDT_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint HIDT_FLG_AVAILABLE_CHK table HIDRICS_TYPE column FLG_AVAILABLE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE HIDRICS_TYPE ADD CONSTRAINT HIDT_FLG_TI_TYPE_CHK CHECK (FLG_TI_TYPE IN (''I'', ''ME'', ''ML'', ''MH'', ''MR'', ''AR'', ''AD'', ''AH'', ''O'', ''D'', ''VS'', ''MN'', ''PR'', ''BH'', ''RD'', ''BD'', ''SR'', ''HI'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint HIDT_FLG_TI_TYPE_CHK table HIDRICS_TYPE column FLG_TI_TYPE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 02/10/2013 15:31
+-- CHANGE REASON: [ALERT-266183 ] Intake and output improvements
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE hidrics_type drop constraint HIDT_ACRON_CHK';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE hidrics_type
+ADD (CONSTRAINT HIDT_ACRON_CHK CHECK (ACRONYM IN (''D'',''I'',''A'',''O'',''H'',''R'',''G'')))';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

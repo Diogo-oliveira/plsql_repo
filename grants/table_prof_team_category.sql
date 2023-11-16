@@ -1,0 +1,1 @@
+grant select on PROF_TEAM_CATEGORY to ALERT_VIEWER;

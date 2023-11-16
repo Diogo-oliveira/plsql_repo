@@ -1,0 +1,1 @@
+grant select on PROF_TEAM_CLIN_SERV to ALERT_VIEWER;

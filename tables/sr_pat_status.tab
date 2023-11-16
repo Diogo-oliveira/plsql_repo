@@ -1,0 +1,42 @@
+
+
+  CREATE TABLE SR_PAT_STATUS
+   (	ID_SR_PAT_STATUS NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_PAT_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_STATUS DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN sr_pat_status.id_sr_pat_status IS 'ID único' ;
+COMMENT ON COLUMN sr_pat_status.id_episode IS 'ID do episódio' ;
+COMMENT ON COLUMN sr_pat_status.id_professional IS 'ID do profissional que definiu o estado' ;
+COMMENT ON COLUMN sr_pat_status.flg_pat_status IS 'Estado do paciente. Valores possíveis: A-Ausente, W- Em espera, L- Pedido de transporte para o bloco, T- Em transporte para o bloco, V- Acolhido no bloco, P- Em preparação, R- Preparado para a cirurgia, S- Em cirurgia, F- Terminou a cirurgia, Y- No recobro, D- Alta do Recobro, O- Em transporte para outro local no hospital ou noutra instituição' ;
+COMMENT ON COLUMN sr_pat_status.dt_status IS 'Data do estado' ;
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização SR - eliminação de colunas
+ALTER TABLE SR_PAT_STATUS drop column DT_STATUS;
+-- CHANGE END
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 20/01/2016 11:33
+-- CHANGE REASON: [ALERT-317944 ] 
+-- Add comments to the table 
+comment on table SR_PAT_STATUS
+  is 'This table contains the State of the patient';
+-- Add comments to the columns 
+comment on column SR_PAT_STATUS.id_sr_pat_status
+  is 'Primary Key';
+comment on column SR_PAT_STATUS.id_episode
+  is 'Episode Id';
+comment on column SR_PAT_STATUS.id_professional
+  is 'Professional ID that defined the state';
+comment on column SR_PAT_STATUS.flg_pat_status
+  is 'Possible values: A-Away, W-Standby, L-transport request for the block, T-In transportation to the block, V-Nestled in the block, P-In preparation, R-Prepared for surgery, S-In surgery, F-finished the surgery, Y-in the recovery room, D-the recovery room High, O-in transport to another location in the hospital or other institution';
+comment on column SR_PAT_STATUS.dt_status_tstz
+  is 'Status date';
+-- CHANGE END: cristina.oliveira

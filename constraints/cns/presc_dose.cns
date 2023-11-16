@@ -1,0 +1,13 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 11:32
+-- CHANGE REASON: [ALERT-38908] Versionamento.
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table PRESC_DOSE
+  add constraint PDOT_PK primary key (ID_PRESC_DOSE)
+  using index 
+  tablespace INDEX_M;
+-- Create/Recreate check constraints 
+alter table PRESC_DOSE
+  add constraint PDOT_FLG_DOSE_TYPE_CHK
+  check (FLG_DOSE_TYPE in ('V','R','S'));
+-- CHANGE END: Pedro Albuquerque

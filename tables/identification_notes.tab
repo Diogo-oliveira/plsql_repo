@@ -1,0 +1,36 @@
+
+
+  CREATE TABLE IDENTIFICATION_NOTES
+   (	ID_IDENTIFICATION_NOTES NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(240) NOT NULL ENABLE,
+	ID_DOCUMENT_AREA NUMBER(24,0),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	DT_NOTES DATE NOT NULL ENABLE,
+	ID_DOC_AREA NUMBER
+   );
+
+
+COMMENT ON COLUMN identification_notes.id_identification_notes IS 'Chave primária' ;
+COMMENT ON COLUMN identification_notes.id_patient IS 'Patiente' ;
+COMMENT ON COLUMN identification_notes.id_episode IS 'Episódio' ;
+COMMENT ON COLUMN identification_notes.id_professional IS 'Profissional' ;
+COMMENT ON COLUMN identification_notes.notes IS 'Notas' ;
+COMMENT ON COLUMN identification_notes.id_document_area IS 'Chave primária' ;
+COMMENT ON COLUMN identification_notes.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN identification_notes.dt_notes IS 'Data da nota' ;
+COMMENT ON COLUMN identification_notes.id_doc_area IS 'Àrea' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE IDENTIFICATION_NOTES ADD DT_NOTES_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN IDENTIFICATION_NOTES.DT_NOTES_TSTZ IS 'Data da nota'; 
+
+
+-- INPATIENT LMAIA 22-09-2008
+-- DROP das colunas DT_... que não são Timezone (desnormalização)
+alter table identification_notes drop (DT_NOTES);
+-- END
+

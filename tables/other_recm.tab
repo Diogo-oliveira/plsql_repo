@@ -1,0 +1,61 @@
+-- CHANGED BY: Bruno Martins
+-- CHANGE DATE: 2014-06-27
+-- CHANGE REASON: ADT-6591
+
+DECLARE
+      e_object_exists EXCEPTION;
+  
+      PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+  BEGIN
+  
+      BEGIN
+          EXECUTE IMMEDIATE 'create table OTHER_RECM
+(
+  id_OTHER_RECM   NUMBER(24) not null,
+  code_OTHER_RECM VARCHAR2(200) not null,
+  flg_available        VARCHAR2(1) not null,
+  rank                 NUMBER(3) not null,
+  create_user          VARCHAR2(50 CHAR),
+  update_user          VARCHAR2(50 CHAR),
+  create_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  id_content           VARCHAR2(200 CHAR),
+  create_institution   NUMBER(24),
+  update_institution   NUMBER(24)
+)
+tablespace TABLE_S';
+      EXCEPTION
+          WHEN e_object_exists THEN
+              dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+      END;
+  
+END;
+/
+
+comment on table OTHER_RECM
+  is 'Other types of recm';
+
+comment on column OTHER_RECM.id_OTHER_RECM
+  is 'Record unique identifier';
+comment on column OTHER_RECM.code_OTHER_RECM
+  is 'Ohter RECM code';
+comment on column OTHER_RECM.flg_available
+  is 'Availability of the record in the institution';
+comment on column OTHER_RECM.rank
+  is 'Ranking order';
+comment on column OTHER_RECM.create_user
+  is 'User that created the record';
+comment on column OTHER_RECM.update_user
+  is 'User that updated the record';
+comment on column OTHER_RECM.create_time
+  is 'Time of creation';
+comment on column OTHER_RECM.update_time
+  is 'Time of update';
+comment on column OTHER_RECM.id_content
+  is 'Content identifier';
+comment on column OTHER_RECM.create_institution
+  is 'Institution where the record was created';
+comment on column OTHER_RECM.update_institution
+  is 'Institution where the record was updated';
+
+-- CHANGE END: Bruno Martins

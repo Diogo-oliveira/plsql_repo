@@ -1,0 +1,48 @@
+
+
+  CREATE TABLE PAT_PERMISSION
+   (	ID_PAT_PERMISSION NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0),
+	FLG_TRANSFUSION VARCHAR2(1),
+	FLG_OPERATION VARCHAR2(1),
+	FLG_ORGAN_DONER VARCHAR2(1),
+	FLG_BLOOD_DONER VARCHAR2(1),
+	FLG_LIFE_SUPPORT VARCHAR2(1),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_CANCEL DATE,
+	NOTES_CANCEL VARCHAR2(4000),
+
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE pat_permission IS 'Permissões sobre actos médicos.A relação com a tabela PATIENT é de 1 p/ muitos, para manutenção de histórico.Se for registado pelo próprio utente, ID_PROFESSIONAL não está preenchido.' ;
+
+COMMENT ON COLUMN pat_permission.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_permission.flg_transfusion IS 'Pode receber transfusões sanguíneas' ;
+COMMENT ON COLUMN pat_permission.flg_operation IS 'Pode ser operado' ;
+COMMENT ON COLUMN pat_permission.flg_organ_doner IS 'Dados de órgãos' ;
+COMMENT ON COLUMN pat_permission.flg_blood_doner IS 'Dador de sangue' ;
+COMMENT ON COLUMN pat_permission.flg_life_support IS 'Pode ser ligado a máq. de suporte de vida' ;
+COMMENT ON COLUMN pat_permission.flg_status IS 'Estado: A - activo, C - cancelado pelo prof., U - cancelado pelo utente' ;
+COMMENT ON COLUMN pat_permission.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN pat_permission.notes_cancel IS 'Notas de cancelamento' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_PERMISSION ADD DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_PERMISSION.DT_CANCEL_TSTZ IS 'Data de cancelamento'; 
+
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table PAT_PERMISSION drop (DT_CANCEL);
+-- CHANGE END
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table PAT_PERMISSION drop (DT_CANCEL);
+-- CHANGE END

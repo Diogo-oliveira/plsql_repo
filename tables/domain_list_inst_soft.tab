@@ -1,0 +1,58 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 21/04/2010 11:26
+-- CHANGE REASON: [ALERT-91154] Registration POS
+create table DOMAIN_LIST_INST_SOFT
+(
+DOMAIN_LIST                VARCHAR2(200) NOT NULL,
+  VAL                        VARCHAR2(1000 CHAR) NOT NULL,
+CODE_DOMAIN_LIST           VARCHAR2(200) NOT NULL,
+ID_MARKET                  NUMBER(24) NOT NULL,
+ID_INSTITUTION             NUMBER(24) NOT NULL,
+ID_SOFTWARE                NUMBER(24) NOT NULL,
+ID_DEP_CLIN_SERV           NUMBER(24) NOT NULL,
+RANK                       NUMBER(24) NOT NULL,
+FLG_AVAILABLE              VARCHAR2(1) NOT NULL,
+  CREATE_USER                VARCHAR2(24),
+  CREATE_TIME                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION         NUMBER(24),
+  UPDATE_USER                VARCHAR2(24),
+  UPDATE_TIME                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION         NUMBER(24)
+);
+
+comment on table DOMAIN_LIST_INST_SOFT
+  is 'Parametrization of a domain list of values for a specific market\institution\software\dep_clin_serv';
+comment on column DOMAIN_LIST_INST_SOFT.DOMAIN_LIST
+  is 'Domain identifier (like CODE_DOMAIN from SYS_DOMAIN)';
+comment on column DOMAIN_LIST_INST_SOFT.VAL
+  is 'Value';
+comment on column DOMAIN_LIST_INST_SOFT.CODE_DOMAIN_LIST
+  is 'Translation code';
+comment on column DOMAIN_LIST_INST_SOFT.ID_MARKET
+  is 'Market identifier (0 for all)';
+comment on column DOMAIN_LIST_INST_SOFT.ID_INSTITUTION
+  is 'Institution identifier (0 for all)';
+comment on column DOMAIN_LIST_INST_SOFT.ID_SOFTWARE
+  is 'Software identifier (0 for all)';
+comment on column DOMAIN_LIST_INST_SOFT.ID_DEP_CLIN_SERV
+  is 'Dep Clin Serv identifier (0 for all)';
+comment on column DOMAIN_LIST_INST_SOFT.RANK
+  is 'Rank';
+comment on column DOMAIN_LIST_INST_SOFT.FLG_AVAILABLE
+  is 'Is record available? (Y, N)';
+comment on column DOMAIN_LIST_INST_SOFT.CREATE_USER
+  is 'ID of the professional who created the record';
+comment on column DOMAIN_LIST_INST_SOFT.CREATE_TIME
+  is 'Date of record creation';
+comment on column DOMAIN_LIST_INST_SOFT.CREATE_INSTITUTION
+  is 'ID of institution where record was created';
+comment on column DOMAIN_LIST_INST_SOFT.UPDATE_USER
+  is 'ID of the professional who last updated the record';
+comment on column DOMAIN_LIST_INST_SOFT.UPDATE_TIME
+  is 'Date when record was last updated';
+comment on column DOMAIN_LIST_INST_SOFT.UPDATE_INSTITUTION
+  is 'ID of the institution where record was last updated';
+-- CHANGE END: Gustavo Serrano
+
+alter table domain_list_inst_soft      add domain_owner varchar2(0030 char) default 'ALERT' not null;
+COMMENT ON COLUMN domain_list_inst_soft.domain_owner IS 'Owner of domain: ALERT, ALERT_PHARMACY_FUNC';

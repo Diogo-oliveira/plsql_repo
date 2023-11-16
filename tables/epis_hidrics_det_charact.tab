@@ -1,0 +1,39 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 22:34
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+CREATE TABLE EPIS_HIDRICS_DET_CHARACT
+(
+   ID_EPIS_HIDRICS_DET         NUMBER(24) NOT NULL,
+   ID_HIDRICS_CHARACT          NUMBER(24) NOT NULL,
+   CREATE_USER                 VARCHAR2(24),
+   CREATE_TIME                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   CREATE_INSTITUTION          NUMBER(24),
+   UPDATE_USER                 VARCHAR2(24),
+   UPDATE_TIME                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   UPDATE_INSTITUTION          NUMBER(24),
+   ID_PROF_LAST_CHANGE         NUMBER(24),
+   DT_EH_DET_CHARACT           TIMESTAMP(6) WITH LOCAL TIME ZONE
+);
+
+ALTER TABLE EPIS_HIDRICS_DET_CHARACT MOVE TABLESPACE TABLE_M;
+
+comment on table EPIS_HIDRICS_DET_CHARACT is 'Epis hidrics detail characteristics';
+
+comment on column EPIS_HIDRICS_DET_CHARACT.ID_EPIS_HIDRICS_DET is 'Epis Hidrics detail ID';
+comment on column EPIS_HIDRICS_DET_CHARACT.ID_HIDRICS_CHARACT is 'Hidrics characteristics ID';
+comment on column EPIS_HIDRICS_DET_CHARACT.CREATE_USER is 'Creation User';
+comment on column EPIS_HIDRICS_DET_CHARACT.CREATE_TIME is 'Creation Time';
+comment on column EPIS_HIDRICS_DET_CHARACT.CREATE_INSTITUTION is 'Creation Institution';
+comment on column EPIS_HIDRICS_DET_CHARACT.UPDATE_USER is 'Update User';
+comment on column EPIS_HIDRICS_DET_CHARACT.UPDATE_TIME is 'Update Time';
+comment on column EPIS_HIDRICS_DET_CHARACT.UPDATE_INSTITUTION is 'Update Institution';
+comment on column EPIS_HIDRICS_DET_CHARACT.ID_PROF_LAST_CHANGE is 'Professional who entered or last edited the record';
+comment on column EPIS_HIDRICS_DET_CHARACT.DT_EH_DET_CHARACT is 'Insertion date or date of last update';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 16/06/2011 11:17
+-- CHANGE REASON: [ALERT-185056 ] Intake and Output: It is not possible to use a created free text in more than one line
+ALTER TABLE epis_hidrics_det_charact ADD ID_EPIS_HID_FTXT_CHAR NUMBER(24);
+COMMENT ON COLUMN epis_hidrics_det_charact.ID_EPIS_HID_FTXT_CHAR IS 'Free Text Id of the characterístics (if the characterístics is inserted in free text)';
+-- CHANGE END: Sofia Mendes

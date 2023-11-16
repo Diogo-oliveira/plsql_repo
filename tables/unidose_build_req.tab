@@ -1,0 +1,92 @@
+create taBLE         unidose_build_req
+				(
+				Episode        number(24),
+        paTient        number(24),
+        drug           number(24),
+        qty_req        number(24,4),
+        notes          varchar2(2000),
+        drug_presc_det number(24),
+        dt_begin  date,
+				dt_end date,
+				day_qty number(24,4),
+				status  varchar2(1),
+				dt_status date);
+				
+				
+
+-- Add/modify columns 
+alter table UNIDOSE_BUILD_REQ add id_professional number(24);
+alter table UNIDOSE_BUILD_REQ add ID_INSTITUTION number(12);
+alter table UNIDOSE_BUILD_REQ add ID_SOFTWARE number(24);
+alter table UNIDOSE_BUILD_REQ add ID_LANGUAGE number(6);
+alter table UNIDOSE_BUILD_REQ add PROF_CAT_TYPE varchar2(1);
+ALTER TABLE unidose_build_req ADD (ID_DRUG_REQ   NUMBER(24));
+
+
+
+
+ALTER TABLE UNIDOSE_BUILD_REQ ADD DT_BEGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+
+
+
+
+ALTER TABLE UNIDOSE_BUILD_REQ ADD DT_END_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+
+
+
+
+ALTER TABLE UNIDOSE_BUILD_REQ ADD DT_STATUS_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGED DATE: 2008-SEPT-22
+-- CHANGING REASON: Remoção de colunas do tipo DATE que tenham equivalentes do tipo TIMESTAMP WITH LOCAL TIME ZONE
+ALTER TABLE UNIDOSE_BUILD_REQ DROP COLUMN dt_begin; 
+ALTER TABLE UNIDOSE_BUILD_REQ DROP COLUMN dt_end; 
+ALTER TABLE UNIDOSE_BUILD_REQ DROP COLUMN dt_status;
+-- CHANGE END
+
+
+--RUI MARANTE
+--2009-03-25
+--script to add PK to unidose tables + seq's   (required CCHIT)
+
+-- UNIDOSE_BUILD_REQ
+alter table unidose_build_req
+add id_unidose_build_req number(24);
+
+update unidose_build_req ubr
+set ubr.id_unidose_build_req = rownum;
+
+commit;
+
+alter table unidose_build_req
+modify id_unidose_build_req number(24) not null;
+
+alter table unidose_build_req
+add constraint unidose_build_req_pk primary key (id_unidose_build_req)
+using index tablespace INDEX_M;
+
+
+declare
+	l_seq_next_value number(24) := 0;
+begin
+	select nvl(max(ubr.id_unidose_build_req),0) + 1
+	into l_seq_next_value
+	from unidose_build_req ubr;
+
+	execute immediate 'create sequence seq_unidose_build_req minvalue 1 maxvalue 999999999999999999999999 start with ' || to_char(l_seq_next_value) || ' increment by 1';
+end;
+/
+
+--comment
+comment on column unidose_build_req.id_unidose_build_req is
+	'this column is the table primary key (sequence to use: seq_unidose_build_req)';
+
+-- CHANGE END
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE UNIDOSE_BUILD_REQ IS ' [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

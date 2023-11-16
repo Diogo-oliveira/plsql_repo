@@ -1,0 +1,475 @@
+
+
+  ALTER TABLE ROOM ADD CONSTRAINT ROOM_PK PRIMARY KEY (ID_ROOM) ENABLE;
+
+  ALTER TABLE ROOM MODIFY (ID_ROOM NOT NULL ENABLE);
+
+  ALTER TABLE ROOM MODIFY (FLG_PROF NOT NULL ENABLE);
+
+  ALTER TABLE ROOM MODIFY (ID_DEPARTMENT NOT NULL ENABLE);
+
+  ALTER TABLE ROOM MODIFY (CODE_ROOM NOT NULL ENABLE);
+
+  ALTER TABLE ROOM MODIFY (FLG_RECOVERY NOT NULL ENABLE);
+
+
+  ALTER TABLE ROOM MODIFY (FLG_LAB NOT NULL ENABLE);
+
+  ALTER TABLE ROOM MODIFY (RANK NOT NULL ENABLE);
+
+  ALTER TABLE ROOM MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+  ALTER TABLE ROOM MODIFY (FLG_WAIT NOT NULL ENABLE);
+
+  ALTER TABLE ROOM MODIFY (FLG_WL NOT NULL ENABLE);
+
+  ALTER TABLE ROOM MODIFY (CODE_ABBREVIATION NOT NULL ENABLE);
+
+
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 12-03-2010
+-- CHANGE REASON: SCH-386
+alter table ROOM add constraint ROOM_FLGSCH_UK check (flg_schedulable in ('Y','N'));
+-- CHANGE END: Telmo Castro
+    
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 14-04-2010
+-- CHANGE REASON: SCH-529
+ALTER TABLE ROOM DROP CONSTRAINT ROOM_FLGSCH_UK;
+
+ALTER TABLE ROOM ADD CONSTRAINT ROOM_FLG_SCHED_CHK check (flg_schedulable in ('Y','N'));
+-- CHANGE END: Telmo Castro
+
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/06/2010 14:40
+-- CHANGE REASON: [ALERT-105487] 
+ALTER TABLE ROOM 
+ADD CONSTRAINT R_FLG_STATUS_CHK CHECK (FLG_STATUS IN ('A', 'C', 'E')) ENABLE;
+
+ALTER TABLE ROOM 
+ADD CONSTRAINT R_FLG_PARAM_TYPE_CHK CHECK (FLG_PARAMETERIZATION_TYPE IN ('B', 'C')) ENABLE;
+
+ALTER TABLE ROOM 
+ADD CONSTRAINT R_FLG_SEL_SPECIALTIES_CHK CHECK (FLG_SELECTED_SPECIALTIES IN ('A', 'N', 'O')) ENABLE;
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 07/07/2010 15:49
+-- CHANGE REASON: [ALERT-109496] 
+ALTER TABLE room DROP CONSTRAINT ROOM_FLG_SCHED_CHK;
+alter table room ADD constraint ROOM_FLG_SCHED_CHK check (flg_schedulable in ('Y'));
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:44
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_LAB_CHK check ( FLG_LAB in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:44
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_WL_CHK check ( FLG_WL in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:44
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_WAIT_CHK check ( FLG_WAIT in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:44
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_PROF_CHK check ( FLG_PROF in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:45
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_RECOVERY_CHK check ( FLG_RECOVERY in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:45
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_TRANSP_CHK check ( FLG_TRANSP in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:46
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_AVAILABLE_CHK check ( FLG_AVAILABLE in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 11/07/2011 17:49
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_WAIT_CHK check ( FLG_WAIT in (''N'',''Y'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 11/07/2011 17:49
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_TRANSP_CHK check ( FLG_TRANSP in (''N'',''Y'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 12/07/2011 12:24
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_LAB_CHK check ( FLG_LAB in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 12/07/2011 12:24
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_WL_CHK check ( FLG_WL in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 12/07/2011 12:25
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_PROF_CHK check ( FLG_PROF in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 12/07/2011 12:25
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_RECOVERY_CHK check ( FLG_RECOVERY in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 12/07/2011 12:25
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_AVAILABLE_CHK check ( FLG_AVAILABLE in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/07/2011 12:02
+-- CHANGE REASON: [ALERT-187577] grouping changes with novalidate
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_LAB_CHK check ( FLG_LAB in (''N'',''Y'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_WL_CHK check ( FLG_WL in (''N'',''Y'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_WAIT_CHK check ( FLG_WAIT in (''N'',''Y'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_PROF_CHK check ( FLG_PROF in (''N'',''Y'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_RECOVERY_CHK check ( FLG_RECOVERY in (''N'',''Y'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_TRANSP_CHK check ( FLG_TRANSP in (''N'',''Y'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+
+
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ROOM add constraint ROOM_FLG_AVAILABLE_CHK check ( FLG_AVAILABLE in (''N'',''Y'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 21/1/2018
+-- CHANGE REASON: [CALERT-1265] Progress notes Calendar view - Phase 2
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE ROOM ADD CONSTRAINT ROOM_FLG_ICU_CHK CHECK ( FLG_ICU IN (''N'',''Y'')) NOVALIDATE';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+-- CHANGE END:  Amanda Lee

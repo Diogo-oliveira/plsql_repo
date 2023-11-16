@@ -1,0 +1,129 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 21/07/2014 08:42
+-- CHANGE REASON: [ALERT-290969] Nursing Care Plan: NANDA, NIC, NOC - Data Model for History tracking
+
+BEGIN
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'NNN_EPIS_OUTCOME_EVAL_H', i_obj_type => 'TABLE', i_flg_category => 'HST', i_flg_alert_default => 'N', i_delete_script => '', i_flg_default_child => 'N', i_flg_nzd => 'Y', i_responsible_team => 'NURSING');
+END;
+/
+CREATE TABLE NNN_EPIS_OUTCOME_EVAL_H
+  (
+    ID_NNN_EPIS_OUTCOME_EVAL_H NUMBER (24) NOT NULL ,
+    ID_NNN_EPIS_OUTCOME_EVAL   NUMBER (24) NOT NULL ,
+    ID_NNN_EPIS_OUTCOME        NUMBER (24) NOT NULL ,
+    ID_PATIENT                 NUMBER (24) NOT NULL ,
+    ID_EPISODE                 NUMBER (24) ,
+    ID_VISIT                   NUMBER (24) ,
+    ID_PROFESSIONAL            NUMBER (24) ,
+    ID_CANCEL_REASON           NUMBER (24) ,
+    CANCEL_NOTES               VARCHAR2 (1000 CHAR) ,
+    DT_PLAN                    TIMESTAMP WITH LOCAL TIME ZONE ,
+    ID_ORDER_RECURR_PLAN       NUMBER (24) ,
+    EXEC_NUMBER                NUMBER (24) ,
+    FLG_STATUS                 VARCHAR2 (1 CHAR) NOT NULL ,
+    DT_EVALUATION              TIMESTAMP WITH LOCAL TIME ZONE ,
+    TARGET_VALUE               NUMBER (24) ,
+    OUTCOME_VALUE              NUMBER (24) ,
+    NOTES CLOB ,
+    DT_TRS_TIME_START  TIMESTAMP WITH LOCAL TIME ZONE NOT NULL ,
+    DT_TRS_TIME_END    TIMESTAMP WITH LOCAL TIME ZONE NOT NULL ,
+    CREATE_USER        VARCHAR2 (30 CHAR) ,
+    CREATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE ,
+    CREATE_INSTITUTION NUMBER (24) ,
+    UPDATE_USER        VARCHAR2 (30 CHAR) ,
+    UPDATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE ,
+    UPDATE_INSTITUTION NUMBER (24)
+  )
+  TABLESPACE ALERT_DATA LOB
+  (
+    NOTES
+  )
+  STORE AS
+  (
+    TABLESPACE ALERT_LOB PCTVERSION 10 ENABLE STORAGE IN ROW NOCACHE
+  ) ;
+COMMENT ON TABLE NNN_EPIS_OUTCOME_EVAL_H
+IS
+  'Evaluations of NOC Outcomes in the context of a patient''s nursing care plan' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.ID_NNN_EPIS_OUTCOME_EVAL_H
+IS
+  'Surrogate key' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.ID_NNN_EPIS_OUTCOME_EVAL
+IS
+  'Outcome Evaluation ID (Surrogate key)' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.ID_NNN_EPIS_OUTCOME
+IS
+  'Episode''s NOC Outcome ID' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.ID_PATIENT
+IS
+  'Patient ID' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.ID_EPISODE
+IS
+  'Episode ID' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.ID_VISIT
+IS
+  'Visit ID' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.ID_PROFESSIONAL
+IS
+  'Professional ID who did the evaluation' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.ID_CANCEL_REASON
+IS
+  'Cancel reason ID' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.CANCEL_NOTES
+IS
+  'Cancelation notes' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.DT_PLAN
+IS
+  'Planned date for the outcome evaluation' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.ID_ORDER_RECURR_PLAN
+IS
+  'Order recurrence plan ID for defined frequency in the instructions' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.EXEC_NUMBER
+IS
+  'The order of the execution within the plan as specified by the recurrence mechanism' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.FLG_STATUS
+IS
+  'Evaluation status:
+C Cancelled
+E Expired
+F Finished
+O Ongoing
+P Suspended
+R Requested' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.DT_EVALUATION
+IS
+  'Evaluation date' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.TARGET_VALUE
+IS
+  'Outcome Target rating: Likert scale (1 to 5)' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.OUTCOME_VALUE
+IS
+  'Outcome overall rating: Likert scale (1 to 5)' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.NOTES
+IS
+  'Notes about outcome evaluation performed by the professional' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.DT_TRS_TIME_START
+IS
+  'Transaction time start' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.DT_TRS_TIME_END
+IS
+  'Transaction time end' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.CREATE_USER
+IS
+  'Creation User' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.CREATE_TIME
+IS
+  'Creation Time' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.CREATE_INSTITUTION
+IS
+  'Creation Institution' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.UPDATE_USER
+IS
+  'Update User' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.UPDATE_TIME
+IS
+  'Update Time' ;
+  COMMENT ON COLUMN NNN_EPIS_OUTCOME_EVAL_H.UPDATE_INSTITUTION
+IS
+  'Update Institution' ;
+-- CHANGE END: Ariel Machado

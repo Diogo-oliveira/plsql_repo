@@ -1,0 +1,39 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:19
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+CREATE TABLE organ_tissue_market (
+       id_organ_tissue_market NUMBER(24) NOT NULL,
+       id_organ_tissue        NUMBER(24) NOT NULL,
+       id_market              NUMBER(24) NOT NULL,
+       --
+       create_user            VARCHAR2(24 CHAR),
+       create_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution     NUMBER(24),
+       update_user            VARCHAR2(24 CHAR),
+       update_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution     NUMBER(24)
+);
+
+--
+
+COMMENT ON TABLE organ_tissue_market IS 'Table for configuring the organ/tissues for each market';
+--
+COMMENT ON COLUMN organ_tissue_market.id_organ_tissue_market IS 'Organ/tissue market Id';
+COMMENT ON COLUMN organ_tissue_market.id_organ_tissue        IS 'Organ/tissue Id';
+COMMENT ON COLUMN organ_tissue_market.id_market              IS 'Market Id';
+--
+COMMENT ON COLUMN organ_tissue_market.create_user            IS 'Professional that created the registry';
+COMMENT ON COLUMN organ_tissue_market.create_time            IS 'Date of the registry creation';
+COMMENT ON COLUMN organ_tissue_market.create_institution     IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN organ_tissue_market.update_user            IS 'Last professional that updated the registry';
+COMMENT ON COLUMN organ_tissue_market.update_time            IS 'Date of the last update to the registry';
+COMMENT ON COLUMN organ_tissue_market.update_institution     IS 'Id of the last institution where the registry was updated';
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:20
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE organ_tissue_market MOVE TABLESPACE table_s;
+--
+-- CHANGE END: Filipe Machado

@@ -1,0 +1,28 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/10/2014 13:36
+-- CHANGE REASON: [ALERT-298852] 
+BEGIN
+  pk_versioning.run(i_sql => q'[create unique index EPIS_PATIENT_EPISODE_UK on EPISODE (ID_PATIENT,ID_EPISODE)]');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+
+--
+BEGIN
+  pk_versioning.run(i_sql => q'[create index alert.EPIS_SEARCH02_IDX on alert.episode(id_epis_type, flg_ehr, flg_status) tablespace alert_idx]');
+END;
+/
+
+
+-- CHANGED BY: Cristina Oliveira
+-- CHANGE DATE: 21/01/2022 08:36
+-- CHANGE REASON: [EMR-51222]
+create index alert.EPIS_SEARCH10_IDX on alert.episode(flg_status,id_institution) tablespace alert_idx;
+-- CHANGE END: Cristina Oliveira
+
+-- CHANGED BY: Cristina Oliveira
+-- CHANGE DATE: 21/01/2022 08:37
+-- CHANGE REASON: [EMR-51222] - Performance: Pharmacy Patients Grid (My and All) improvements
+create index alert.EPIS_SEARCH11_IDX on alert.episode(nvl(dt_end_tstz, dt_begin_tstz),flg_status,id_institution) tablespace alert_idx;
+-- CHANGE END: Cristina Oliveira

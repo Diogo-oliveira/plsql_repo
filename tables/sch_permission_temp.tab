@@ -1,0 +1,39 @@
+
+
+  CREATE TABLE SCH_PERMISSION_TEMP
+   (	ID_CONSULT_PERMISSION NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_AGENDA NUMBER(24,0),
+	FLG_PERMISSION VARCHAR2(1) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_DEP_CLIN_SERV NUMBER(24,0),
+	ID_SCH_EVENT NUMBER(24,0)
+   );
+
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-01-2013
+-- CHANGE REASON: ALERT-246442
+begin
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', 
+                                           i_obj_name => 'SCH_PERMISSION_TEMP', 
+                                           i_obj_type => 'TABLE', 
+                                           i_flg_category => 'JNK', 
+                                           i_flg_nzd => 'N');
+end;
+/
+--CHANGE END:Telmo
+
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 21/01/2016 10:29
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON TABLE SCH_PERMISSION_TEMP IS 'Holds the professionals permissions for accessing self/other professionals/dcs schedules.(Temporary table)';
+COMMENT ON COLUMN SCH_PERMISSION_TEMP.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN SCH_PERMISSION_TEMP.ID_DEP_CLIN_SERV IS 'Department clinical service ID';
+COMMENT ON COLUMN SCH_PERMISSION_TEMP.ID_SCH_EVENT IS 'Event schedule ID';
+COMMENT ON COLUMN SCH_PERMISSION_TEMP.FLG_PERMISSION IS 'S(schedule),R(read),N(none)';
+COMMENT ON COLUMN SCH_PERMISSION_TEMP.ID_CONSULT_PERMISSION IS 'Permission ID';
+COMMENT ON COLUMN SCH_PERMISSION_TEMP.ID_PROFESSIONAL IS 'Professional ID';
+COMMENT ON COLUMN SCH_PERMISSION_TEMP.ID_PROF_AGENDA IS 'Target professional identifier (or NULL if this permission has a Department-Clinical services schedule as a target)';
+-- CHANGE END:  jose.m.silva

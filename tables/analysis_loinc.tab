@@ -1,0 +1,54 @@
+
+
+  CREATE TABLE ANALYSIS_LOINC
+   (	ID_ANALYSIS_LOINC NUMBER(24,0) NOT NULL ENABLE,
+	ID_ANALYSIS NUMBER(12,0) NOT NULL ENABLE,
+	LOINC_CODE VARCHAR2(200) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(12,0) NOT NULL ENABLE,
+	FLG_DEFAULT VARCHAR2(1) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE analysis_loinc IS 'Definição dos códigos LOINC associados às análises, conforme decidido pela instituição' ;
+
+COMMENT ON COLUMN analysis_loinc.id_analysis IS 'Análise' ;
+COMMENT ON COLUMN analysis_loinc.loinc_code IS 'Código LOINC' ;
+COMMENT ON COLUMN analysis_loinc.id_institution IS 'Instituição para a qual é válido o registo' ;
+COMMENT ON COLUMN analysis_loinc.id_software IS 'Aplicação para a qual é válido o registo' ;
+COMMENT ON COLUMN analysis_loinc.flg_default IS 'Caso uma análise seja mapeada para mais do que um código LOINC (na mesma instituição / software), só um código pode ser enviado por interface - o default. Valores Y / N' ;
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 14:57
+-- CHANGE REASON: [ALERT-246252] 
+ALTER TABLE analysis_loinc MODIFY (ID_SAMPLE_TYPE NUMBER(12) NOT NULL);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:11
+-- CHANGE REASON: [ALERT-246248] 
+ALTER TABLE ANALYSIS_LOINC ADD (ID_SAMPLE_TYPE NUMBER(12));
+
+COMMENT ON COLUMN ANALYSIS_LOINC.ID_SAMPLE_TYPE IS 'Sample type id';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:00
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS_LOINC IS 'Lab test loinc configuration';
+
+COMMENT ON COLUMN ANALYSIS_LOINC.ID_ANALYSIS_LOINC IS 'Primary key';
+COMMENT ON COLUMN ANALYSIS_LOINC.ID_ANALYSIS IS 'Lab test ID';
+COMMENT ON COLUMN ANALYSIS_LOINC.LOINC_CODE IS 'Loinc code';
+COMMENT ON COLUMN ANALYSIS_LOINC.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN ANALYSIS_LOINC.ID_SOFTWARE IS 'Software ID';
+COMMENT ON COLUMN ANALYSIS_LOINC.FLG_DEFAULT IS 'Flag that indicates if the loinc code is the default one (Y/N)';
+COMMENT ON COLUMN ANALYSIS_LOINC.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ANALYSIS_LOINC.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ANALYSIS_LOINC.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ANALYSIS_LOINC.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ANALYSIS_LOINC.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ANALYSIS_LOINC.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN ANALYSIS_LOINC.ID_SAMPLE_TYPE IS 'Sample type ID';
+-- CHANGE END: Ana Matos

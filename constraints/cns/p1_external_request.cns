@@ -1,0 +1,296 @@
+
+
+  ALTER TABLE P1_EXTERNAL_REQUEST ADD CONSTRAINT ERTX_PK PRIMARY KEY (ID_EXTERNAL_REQUEST) ENABLE;
+
+  ALTER TABLE P1_EXTERNAL_REQUEST MODIFY (ID_EXTERNAL_REQUEST NOT NULL ENABLE);
+
+  ALTER TABLE P1_EXTERNAL_REQUEST MODIFY (ID_PATIENT NOT NULL ENABLE);
+
+  ALTER TABLE P1_EXTERNAL_REQUEST MODIFY (ID_PROF_REQUESTED NOT NULL ENABLE);
+
+  ALTER TABLE P1_EXTERNAL_REQUEST MODIFY (NUM_REQ NOT NULL ENABLE);
+
+  ALTER TABLE P1_EXTERNAL_REQUEST MODIFY (DT_REQUESTED NOT NULL ENABLE);
+
+
+  ALTER TABLE P1_EXTERNAL_REQUEST MODIFY (FLG_MAIL NOT NULL ENABLE);
+
+  ALTER TABLE P1_EXTERNAL_REQUEST MODIFY (FLG_PRIORITY NOT NULL ENABLE);
+
+  ALTER TABLE P1_EXTERNAL_REQUEST MODIFY (FLG_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE P1_EXTERNAL_REQUEST MODIFY (ID_INST_ORIG NOT NULL ENABLE);
+
+  ALTER TABLE P1_EXTERNAL_REQUEST MODIFY (REQ_TYPE NOT NULL ENABLE);
+  
+  -- CHANGED BY: Pedro Santos
+  -- CHANGE DATE: 2008-OCT-22
+  -- CHANGE REASON: ALERT-1340
+  
+  ALTER TABLE P1_EXTERNAL_REQUEST MODIFY (ID_EPISODE NOT NULL enable);
+
+  -- CHANGE END
+  
+  
+
+
+
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 11/09/2009 13:56
+-- CHANGE REASON: [ALERT-910] 
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(4000);
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints
+     WHERE constraint_name = 'ERTX_FLG_STATUS_CHK';
+
+    IF l_count = 1
+    THEN
+        l_sql := 'alter table P1_EXTERNAL_REQUEST drop constraint ERTX_FLG_STATUS_CHK';
+        EXECUTE IMMEDIATE l_sql;
+dbms_output.put_line('DROP');
+    END IF;
+
+    l_sql := q'[ALTER TABLE p1_external_request add CONSTRAINT ertx_flg_status_chk CHECK(flg_status IN ('O', 'N', 'I', 'B', 'T', 'D', 'R', 'A', 'S', 'M', 'E', 'F', 'W', 'K', 'X', 'C', 'L', 'P', 'J', 'H', 'G'))]';
+EXECUTE IMMEDIATE l_sql;
+dbms_output.put_line('CREATE');
+
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 06/11/2009 22:54
+-- CHANGE REASON: [ALERT-55140] 
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(4000);
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints
+     WHERE constraint_name = 'ERTX_FLG_STATUS_CHK';
+
+    IF l_count = 1
+    THEN
+        l_sql := 'alter table P1_EXTERNAL_REQUEST drop constraint ERTX_FLG_STATUS_CHK';
+        EXECUTE IMMEDIATE l_sql;
+        dbms_output.put_line('DROP');
+    END IF;
+
+    l_sql := q'[ALTER TABLE p1_external_request add CONSTRAINT ertx_flg_status_chk CHECK(flg_status IN ('O', 'N', 'I', 'B', 'T', 'D', 'R', 'A', 'S', 'M', 'E', 'F', 'W', 'K', 'X', 'C', 'L', 'P', 'J', 'H', 'G','Q','U'))]';
+    EXECUTE IMMEDIATE l_sql;
+    dbms_output.put_line('CREATE');
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/03/2010 14:07
+-- CHANGE REASON: [ALERT-79864] 
+alter table P1_EXTERNAL_REQUEST drop constraint ERTX_FLG_STATUS_CHK;
+alter table P1_EXTERNAL_REQUEST add constraint ERTX_FLG_STATUS_CHK
+  check (flg_status IN ('O', 'N', 'I', 'B', 'T', 'D', 'R', 'A', 'S', 'M', 'E', 'F', 'W', 'K', 'X', 'C', 'L', 'P', 'J', 'H', 'G', 'Q', 'U', 'V'));
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 06/10/2010 09:27
+-- CHANGE REASON: [ALERT-129275] 
+alter table P1_EXTERNAL_REQUEST drop constraint ERTX_FLG_STATUS_CHK;
+alter table P1_EXTERNAL_REQUEST add constraint ERTX_FLG_STATUS_CHK
+  check (flg_status IN ('O', 'N', 'I', 'B', 'T', 'D', 'R', 'A', 'S', 'M', 'E', 'F', 'W', 'K', 'X', 'C', 'L', 'P', 'J', 'H', 'G', 'Q', 'U', 'V','Z'));
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 09/12/2010 16:51
+-- CHANGE REASON: [ALERT-144578] 
+alter table P1_EXTERNAL_REQUEST add constraint ERTX_FLG_DIGITAL_DOC_CHK check (FLG_DIGITAL_DOC in ('Y','N'));
+alter table P1_EXTERNAL_REQUEST add constraint ERTX_FLG_HOME_CHK check (FLG_HOME in ('Y','N'));
+alter table P1_EXTERNAL_REQUEST add constraint ERTX_FLG_IMPORT_CHK check (FLG_IMPORT in ('Y','N'));
+alter table P1_EXTERNAL_REQUEST add constraint ERTX_FLG_MAIL_CHK check (FLG_MAIL in ('Y','N'));
+alter table P1_EXTERNAL_REQUEST add constraint ERTX_FLG_PAPER_DOC_CHK check (FLG_PAPER_DOC in ('Y','N'));
+alter table P1_EXTERNAL_REQUEST add constraint ERTX_FLG_PRIORITY_CHK check (FLG_PRIORITY in ('Y','N'));
+alter table P1_EXTERNAL_REQUEST add constraint ERTX_FLG_TYPE_CHK check (FLG_TYPE in ('S','N','I','C','E','P','F','A'));
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 12/09/2011 16:35
+-- CHANGE REASON: [ALERT-194915 ] 
+DECLARE
+ l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'P1_EXTERNAL_REQUEST'
+       AND constraint_name = 'ERTX_FLG_MIGRATED_CHK';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE P1_EXTERNAL_REQUEST ADD (CONSTRAINT ERTX_FLG_MIGRATED_CHK CHECK (FLG_MIGRATED IN (''Y'', ''N'')))';
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'P1_EXTERNAL_REQUEST'
+       AND constraint_name = 'ERTX_FLG_MIGRATED_CHK';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE P1_EXTERNAL_REQUEST ADD (CONSTRAINT ERTX_FLG_MIGRATED_CHK CHECK (FLG_MIGRATED IN (''Y'', ''N'')))';
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 21/12/2012 16:39
+-- CHANGE REASON: [ALERT-248066 ] 
+DECLARE
+     e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_external_request add CONSTRAINT ertx_flg_priority_chk CHECK(flg_priority IN (''N'', ''Y'', ''0'', ''1'', ''2'', ''3''))';
+    EXCEPTION
+        WHEN e_constraint_already_there THEN        
+            EXECUTE IMMEDIATE 'ALTER TABLE p1_external_request drop CONSTRAINT ertx_flg_priority_chk';
+            EXECUTE IMMEDIATE 'ALTER TABLE p1_external_request add CONSTRAINT ertx_flg_priority_chk CHECK(flg_priority IN(''N'', ''Y'', ''0'', ''1'', ''2'', ''3''))';
+    END;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/02/2013 14:42
+-- CHANGE REASON: [ALERT-248636] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'ERTX_DT_BEGIN_CHK'
+       AND table_name = 'P1_EXTERNAL_REQUEST';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table P1_EXTERNAL_REQUEST add constraint ERTX_DT_BEGIN_CHK check ((YEAR_BEGIN is not null) or (YEAR_BEGIN is not null and MONTH_BEGIN is not null) or (YEAR_BEGIN is not null and MONTH_BEGIN is not null and DAY_BEGIN is not null) or (YEAR_BEGIN is null and MONTH_BEGIN is null and DAY_BEGIN is null))';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 11/02/2013 16:11
+-- CHANGE REASON: [ALERT-248636] 
+DECLARE
+ l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'P1_EXTERNAL_REQUEST'
+       AND constraint_name = 'ERTX_FLG_MIGRATED_CHK';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE P1_EXTERNAL_REQUEST ADD (CONSTRAINT ERTX_FLG_MIGRATED_CHK CHECK (FLG_MIGRATED IN (''Y'', ''N'')))';
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 11/02/2013 16:51
+-- CHANGE REASON: [ALERT-248636] 
+DECLARE
+ l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'P1_EXTERNAL_REQUEST'
+       AND constraint_name = 'ERTX_FLG_MIGRATED_CHK';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE P1_EXTERNAL_REQUEST ADD (CONSTRAINT ERTX_FLG_MIGRATED_CHK CHECK (FLG_MIGRATED IN (''Y'', ''N'')))';
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 13/08/2013 16:21
+-- CHANGE REASON: [ALERT-263123] 
+DECLARE
+     e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_external_request add CONSTRAINT ertx_flg_priority_chk CHECK(flg_priority IN (''N'', ''Y'',''W'',''U'', ''R'', ''0'', ''1'', ''2'', ''3''))';
+    EXCEPTION
+        WHEN e_constraint_already_there THEN        
+            EXECUTE IMMEDIATE 'ALTER TABLE p1_external_request drop CONSTRAINT ertx_flg_priority_chk';
+            EXECUTE IMMEDIATE 'ALTER TABLE p1_external_request add CONSTRAINT ertx_flg_priority_chk CHECK(flg_priority IN(''N'', ''Y'', ''W'',''U'', ''R'', ''0'', ''1'', ''2'', ''3''))';
+    END;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 16/09/2013 17:02
+-- CHANGE REASON: [ALERT-265105 ] 
+DECLARE
+     e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_external_request add CONSTRAINT ertx_flg_priority_chk CHECK(flg_priority IN (''N'', ''Y'',''W''''U'', ''R'', ''0'', ''1'', ''2'', ''3'', ''X'',''Z''))';
+    EXCEPTION
+        WHEN e_constraint_already_there THEN        
+            EXECUTE IMMEDIATE 'ALTER TABLE p1_external_request drop CONSTRAINT ertx_flg_priority_chk';
+            EXECUTE IMMEDIATE 'ALTER TABLE p1_external_request add CONSTRAINT ertx_flg_priority_chk CHECK(flg_priority IN(''N'', ''Y'', ''W'',''U'', ''R'', ''0'', ''1'', ''2'', ''3'', ''X'', ''Z''))';
+    END;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/01/2015 14:36
+-- CHANGE REASON: [ALERT-280039] 
+BEGIN
+pk_versioning.run(i_sql => q'[alter TABLE P1_EXTERNAL_REQUEST ADD CONSTRAINT ERTX_FLG_FORWARD_DCS_CHK CHECK ( FLG_FORWARD_DCS IN ('Y','N')) ENABLE]');
+pk_versioning.run(i_sql => q'[alter TABLE P1_EXTERNAL_REQUEST ADD CONSTRAINT ERTX_FLG_INTERFACE_CHK CHECK ( FLG_INTERFACE IN ('S','C')) ENABLE]');
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01442);
+BEGIN
+    EXECUTE IMMEDIATE q'[alter table P1_EXTERNAL_REQUEST modify flg_home not null]';
+EXCEPTION
+    WHEN e_exception THEN
+        dbms_output.put_line('Coluna ja está not null');
+END;
+/
+-- CHANGE END: Ana Monteiro

@@ -1,0 +1,137 @@
+
+
+  CREATE TABLE "ALERT"."CRISIS_LOG" 
+(	"ID_CRISIS_LOG" NUMBER(24,0),  
+	"LOG_COMMAND" VARCHAR2(4000),
+	"FLG_STATUS" VARCHAR2(1), 
+	"ID_CRISIS_MACHINE" NUMBER(24,0),  
+	"FLG_TYPE" VARCHAR2(1),
+	"DATE_EXPECTED_TSTZ" TIMESTAMP (6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP, 
+	"DATE_TRANSF_TSTZ" TIMESTAMP (6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP 
+) ;
+
+
+-- Para adicionar colunas pode ser usado código comentado
+-- De momento só são suportados os tipos de dados mais comuns. 
+-- ALTER TABLE CRISIS_LOG ADD ID_CRISIS_LOG NUMBER(24,0) NOT NULL;
+-- ALTER TABLE CRISIS_LOG ADD LOG_COMMAND VARCHAR2(4000) ;  
+-- ALTER TABLE CRISIS_LOG ADD FLG_STATUS VARCHAR2(1) NOT NULL; 
+-- ALTER TABLE CRISIS_LOG ADD ID_CRISIS_MACHINE NUMBER(24,0) NOT NULL;  
+-- ALTER TABLE CRISIS_LOG ADD FLG_TYPE VARCHAR2(1) NOT NULL;
+-- ALTER TABLE CRISIS_LOG ADD DATE_EXPECTED_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE ;
+-- ALTER TABLE CRISIS_LOG ADD DATE_TRANSF_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL;
+
+COMMENT ON COLUMN "ALERT"."CRISIS_LOG"."ID_CRISIS_LOG" IS 'Log da máquina de crise';
+
+
+
+COMMENT ON COLUMN "ALERT"."CRISIS_LOG"."LOG_COMMAND" IS 'Commando a fazer LOG';  
+
+
+
+COMMENT ON COLUMN "ALERT"."CRISIS_LOG"."FLG_STATUS" IS 'Retorno do comando RSYNC';  
+
+
+
+COMMENT ON COLUMN "ALERT"."CRISIS_LOG"."ID_CRISIS_MACHINE" IS 'Máquina de Crise';
+
+
+
+COMMENT ON COLUMN "ALERT"."CRISIS_LOG"."FLG_TYPE" IS 'Tipo de LOG R-Rsync / S-SWF / X-XML';  
+
+
+
+COMMENT ON COLUMN "ALERT"."CRISIS_LOG"."DATE_EXPECTED_TSTZ" IS 'Data esperada para a transferência';  
+
+
+
+COMMENT ON COLUMN "ALERT"."CRISIS_LOG"."DATE_TRANSF_TSTZ" IS 'Data real da transferência';
+
+
+
+COMMENT ON TABLE "ALERT"."CRISIS_LOG"  IS 'Episódios já transferidos com sucesso';  
+
+
+-- Add/modify columns 
+alter table CRISIS_LOG modify DATE_TRANSF_TSTZ null;
+
+-- Add/modify columns 
+alter table CRISIS_LOG modify DATE_EXPECTED_TSTZ null;
+
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 03/10/2013 10:57
+-- CHANGE REASON: [ALERT-266179] Crisis Machine frameword performance changes
+BEGIN
+		EXECUTE IMMEDIATE 'alter table CRISIS_LOG add reports_generated NUMBER(6)';
+		EXECUTE IMMEDIATE 'alter table CRISIS_LOG add reports_not_generated NUMBER(6)';
+		EXECUTE IMMEDIATE 'alter table CRISIS_LOG rename column date_expected_tstz to dt_gen_start_tstz';
+		EXECUTE IMMEDIATE 'alter table CRISIS_LOG modify dt_gen_start_tstz default null';
+		EXECUTE IMMEDIATE 'alter table CRISIS_LOG add dt_rep_cleanup_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE';
+		EXECUTE IMMEDIATE 'alter table CRISIS_LOG rename column date_transf_tstz to dt_rep_gen_tstz';
+		EXECUTE IMMEDIATE 'alter table CRISIS_LOG modify dt_rep_gen_tstz default null';
+		EXECUTE IMMEDIATE 'alter table CRISIS_LOG add dt_xml_gen_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE';
+		EXECUTE IMMEDIATE 'alter table CRISIS_LOG add dt_gen_end_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE';
+
+		EXECUTE IMMEDIATE 'comment on column CRISIS_LOG.reports_generated is ''Number of reports successfully generated''';
+		EXECUTE IMMEDIATE 'comment on column CRISIS_LOG.reports_not_generated is ''Number of reports not generated''';
+		EXECUTE IMMEDIATE 'comment on column CRISIS_LOG.dt_gen_start_tstz is ''Start time of crisis machine run''';
+		EXECUTE IMMEDIATE 'comment on column CRISIS_LOG.dt_rep_cleanup_tstz is ''Split time of crisis machine reports cleanup step''';
+		EXECUTE IMMEDIATE 'comment on column CRISIS_LOG.dt_rep_gen_tstz is ''Split time of crisis machine reports generation step''';
+		EXECUTE IMMEDIATE 'comment on column CRISIS_LOG.dt_xml_gen_tstz is ''Split time of crisis machine xml generation step''';
+		EXECUTE IMMEDIATE 'comment on column CRISIS_LOG.dt_gen_end_tstz is ''End time of crisis machine run''';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('ALTER TABLE crisis_log - Error (' || SQLCODE || '), resuming execution...');
+END;
+/
+	
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 13/01/2016 15:51
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON TABLE CRISIS_LOG IS 'Crisis machine logs for episodes transferred successfully';
+COMMENT ON COLUMN CRISIS_LOG.REPORTS_GENERATED IS 'Number of reports successfully generated';
+COMMENT ON COLUMN CRISIS_LOG.REPORTS_NOT_GENERATED IS 'Number of reports not generated';
+COMMENT ON COLUMN CRISIS_LOG.DT_GEN_END_TSTZ IS 'Completion time of crisis machine execution';
+COMMENT ON COLUMN CRISIS_LOG.LOG_COMMAND IS 'Command to be stored in log';
+COMMENT ON COLUMN CRISIS_LOG.ID_CRISIS_LOG IS 'Crisis_log ID';
+COMMENT ON COLUMN CRISIS_LOG.FLG_STATUS IS 'Flag about rsync return comment';
+COMMENT ON COLUMN CRISIS_LOG.ID_CRISIS_MACHINE IS 'Crisis_machine ID';
+COMMENT ON COLUMN CRISIS_LOG.FLG_TYPE IS 'Log Type(R-Rsync / S-SWF / X-XML)';
+COMMENT ON COLUMN CRISIS_LOG.CREATE_USER IS 'User that create this record';
+COMMENT ON COLUMN CRISIS_LOG.CREATE_TIME IS 'Time of the creation';
+COMMENT ON COLUMN CRISIS_LOG.CREATE_INSTITUTION IS 'Instituiton that create this record';
+COMMENT ON COLUMN CRISIS_LOG.UPDATE_USER IS 'User that updated this record';
+COMMENT ON COLUMN CRISIS_LOG.UPDATE_TIME IS 'Time of the update';
+COMMENT ON COLUMN CRISIS_LOG.UPDATE_INSTITUTION IS 'Instituiton that updated this record';
+-- CHANGE END:  jose.m.silva
+
+-- CHANGED BY:  anna.kurowska
+-- CHANGE DATE: 12/10/2018 16:26
+-- CHANGE REASON: [EMR-7301] 
+-- Add/modify columns 
+alter table CRISIS_LOG add crisis_machine_address VARCHAR2(200 CHAR);
+-- Add comments to the columns 
+comment on column CRISIS_LOG.crisis_machine_address
+  is 'Crisis machine adress by clone';
+-- CHANGE END:  anna.kurowska
+
+
+-- CHANGED BY: Gilberto Rocha
+-- CHANGE DATE: 03/12/2019 12:09
+-- CHANGE REASON: [EMR-22927]
+begin
+  pk_versioning.run('ALTER TABLE CRISIS_LOG RENAME COLUMN DT_GEN_START_TSTZ TO DT_UPD_START_TSTZ');
+  pk_versioning.run('ALTER TABLE CRISIS_LOG RENAME COLUMN DT_REP_GEN_TSTZ TO DT_REP_UPD_TSTZ');
+  pk_versioning.run('ALTER TABLE CRISIS_LOG RENAME COLUMN DT_GEN_END_TSTZ TO DT_UPD_END_TSTZ');
+  pk_versioning.run('ALTER TABLE CRISIS_LOG ADD DT_STA_UPD_TSTZ TIMESTAMP (6) WITH LOCAL TIME ZONE');
+end;
+/
+
+COMMENT ON COLUMN CRISIS_LOG.DT_UPD_START_TSTZ IS 'Start time of crisis machine update';
+COMMENT ON COLUMN CRISIS_LOG.DT_REP_UPD_TSTZ IS 'Split time of crisis machine crisis_epis update step';
+COMMENT ON COLUMN CRISIS_LOG.DT_UPD_END_TSTZ IS 'Completion time of crisis machine update';
+COMMENT ON COLUMN CRISIS_LOG.DT_STA_UPD_TSTZ IS 'Split time of crisis machine status update';
+-- CHANGE END: Gilberto Rocha

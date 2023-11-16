@@ -1,0 +1,34 @@
+
+
+CREATE TABLE disch_prof_notes (
+       id_discharge NUMBER(24,0) NOT NULL,
+       dt_creation TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
+			 id_prof_create NUMBER(24,0) NOT NULL,
+			 notes VARCHAR2(4000),
+			 flg_type VARCHAR2(1) NOT NULL
+);
+
+COMMENT ON TABLE disch_prof_notes IS 'Stores administrative or medical discharge notes.';
+
+COMMENT ON COLUMN disch_prof_notes.id_discharge IS 'Discharge ID';
+COMMENT ON COLUMN disch_prof_notes.dt_creation IS 'Creation date';
+COMMENT ON COLUMN disch_prof_notes.id_prof_create IS 'Professional who created notes';
+COMMENT ON COLUMN disch_prof_notes.notes IS 'Notes';
+COMMENT ON COLUMN disch_prof_notes.flg_type IS 'Medical (D) or administrative (A) discharge notes';
+
+
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 26/08/2010 22:29
+-- CHANGE REASON: [ALERT-119364] Administrative discharge cancellation
+ALTER TABLE disch_prof_notes ADD ID_CANCEL_REASON NUMBER(24);
+COMMENT ON COLUMN disch_prof_notes.ID_CANCEL_REASON IS 'Cancel Reason ID';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+comment on table DISCH_PROF_NOTES
+  is 'Stores administrative or medical discharge notes. ( ONLY FOR PREVIOUS VERSIONS)';  
+-- CHANGE END: Elisabete Bugalho

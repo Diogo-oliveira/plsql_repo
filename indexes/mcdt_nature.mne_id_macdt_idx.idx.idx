@@ -1,0 +1,26 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 12/09/2011 17:13
+-- CHANGE REASON: [ALERT-194915 ] 
+CREATE INDEX mne_id_mcdt_idx ON mcdt_nature(id_mcdt) tablespace index_m;
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 12/09/2011 17:51
+-- CHANGE REASON: [ALERT-194915 ] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_ind_columns
+     WHERE table_name = 'MCDT_NATURE'
+       AND index_name = 'MNE_ID_MCDT_IDX'
+       AND column_name = 'ID_MCDT';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'CREATE INDEX mne_id_mcdt_idx ON mcdt_nature(id_mcdt) ';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso

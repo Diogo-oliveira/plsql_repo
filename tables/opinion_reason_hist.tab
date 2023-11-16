@@ -1,0 +1,48 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 16/04/2010 16:00
+-- CHANGE REASON: [ALERT-86898] opinion_reason_hist
+create table opinion_reason_hist
+(
+  id_opinion_hist      number(24) not null,
+  id_diagnosis         number(24) not null,
+  id_prof_created_hist number(24),
+  dt_created_hist      timestamp with local time zone,
+  create_user          varchar2(24 char),
+  create_time          timestamp with local time zone,
+  create_institution   number(24),
+  update_user          varchar2(24 char),
+  update_time          timestamp with local time zone,
+  update_institution   number(24)
+);
+
+comment on table opinion_reason_hist
+  is 'History for opinion_reason.';
+
+comment on column opinion_reason_hist.id_opinion_hist
+  is 'Opinion history identifier.';
+comment on column opinion_reason_hist.id_diagnosis
+  is 'Diagnosis identifier.';
+comment on column opinion_reason_hist.id_prof_created_hist
+  is 'Record created by.';
+comment on column opinion_reason_hist.dt_created_hist
+  is 'Record creation date.';
+comment on column opinion_reason_hist.create_user
+  is 'Create User';
+comment on column opinion_reason_hist.create_time
+  is 'Create Time';
+comment on column opinion_reason_hist.create_institution
+  is 'Create Institution';
+comment on column opinion_reason_hist.update_user
+  is 'Update User';
+comment on column opinion_reason_hist.update_time
+  is 'Update Time';
+comment on column opinion_reason_hist.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 20/03/2020 09:11
+-- CHANGE REASON: [EMR-28148] - Reason for request field doesn't have the expected behavior
+alter table opinion_reason_hist add diagnosis_desc varchar2(200);
+COMMENT ON COLUMN opinion_reason_hist.diagnosis_desc IS 'Diagnosis description (free text record)';
+-- CHANGE END: Diogo Oliveira

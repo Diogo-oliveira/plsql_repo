@@ -1,0 +1,9 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/10/2014 13:35
+-- CHANGE REASON: [ALERT-298852] 
+BEGIN
+    pk_versioning.run(i_sql => q'[alter table PRINT_LIST_JOB add constraint PLJ_PK primary key (ID_PRINT_LIST_JOB)]');
+    pk_versioning.run(i_sql => q'[alter table PRINT_LIST_JOB add constraint PLJ_PRINT_ARGUMENTS_CHK check ((print_arguments is null and id_status in (516,515,513)) or print_arguments is not null)]');
+END;
+/
+-- CHANGE END: Ana Monteiro

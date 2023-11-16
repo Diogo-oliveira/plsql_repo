@@ -1,0 +1,28 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 29/02/2012 11:58
+-- CHANGE REASON: [ALERT-219213] add market to cds data model (262)
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table CDR_DEF_INST
+  add constraint CDRDI_PK primary key (ID_CDR_DEFINITION, ID_CATEGORY, ID_SOFTWARE, ID_INSTITUTION)
+';
+exception when e_pk_exists then
+  dbms_output.put_line('primary key cdrdi_pk already exists!');
+end;
+/
+
+declare
+  e_chk_exists exception;
+  pragma exception_init(e_chk_exists, -02264);
+begin
+  execute immediate 'alter table CDR_DEF_INST
+  add constraint CDRDI_FLG_ADD_REMOVE_CHK
+  check (FLG_ADD_REMOVE in (''A'', ''R''))
+';
+exception when e_chk_exists then
+  dbms_output.put_line('check constraint cdrdi_flg_add_remove_chk already exists!');
+end;
+/
+-- CHANGE END: Pedro Carneiro

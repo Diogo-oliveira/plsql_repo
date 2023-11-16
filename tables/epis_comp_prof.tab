@@ -1,0 +1,58 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 25/03/2010 14:10
+-- CHANGE REASON: [ALERT-63591] Registration of complications through templates in use at JBZ (JBZ will provide the templates).
+CREATE TABLE EPIS_COMP_PROF
+(
+  ID_EPIS_COMP_PROF      NUMBER(24) NOT NULL,
+  ID_EPIS_COMPLICATION   NUMBER(24) NOT NULL,
+  ID_PROFESSIONAL        NUMBER(24) NOT NULL,  
+  DT_EPIS_COMP_PROF      TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
+ID_EPIS_COMP_HIST      NUMBER(24),
+  CREATE_USER            VARCHAR2(24 CHAR),
+  CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION     NUMBER(24),
+  UPDATE_USER            VARCHAR2(24 CHAR),
+  UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION     NUMBER(24)
+);
+
+ALTER TABLE EPIS_COMP_PROF MOVE TABLESPACE TABLE_M;
+
+COMMENT ON TABLE EPIS_COMP_PROF IS 'Complication episode professionals.';
+COMMENT ON COLUMN EPIS_COMP_PROF.ID_EPIS_COMP_PROF IS 'Primary key.';
+COMMENT ON COLUMN EPIS_COMP_PROF.ID_EPIS_COMPLICATION IS 'Complication episode id';
+COMMENT ON COLUMN EPIS_COMP_PROF.ID_PROFESSIONAL IS 'Professional id';
+COMMENT ON COLUMN EPIS_COMP_PROF.DT_EPIS_COMP_PROF IS 'Registry date';
+COMMENT ON COLUMN EPIS_COMP_PROF.ID_EPIS_COMP_HIST IS 'If the value is NULL means that is a current epis_comp professional otherwise is a history value';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 10:27
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table EPIS_COMP_PROF
+  is 'Complication episode professionals.';
+-- Add comments to the columns 
+comment on column EPIS_COMP_PROF.id_epis_comp_prof
+  is 'Primary key.';
+comment on column EPIS_COMP_PROF.id_epis_complication
+  is 'Complication episode id';
+comment on column EPIS_COMP_PROF.id_professional
+  is 'Professional id';
+comment on column EPIS_COMP_PROF.dt_epis_comp_prof
+  is 'Registry date';
+comment on column EPIS_COMP_PROF.id_epis_comp_hist
+  is 'If the value is NULL means that is a current epis_comp professional otherwise is a history value';
+comment on column EPIS_COMP_PROF.create_user
+  is 'Creation User';
+comment on column EPIS_COMP_PROF.create_time
+  is 'Creation Time';
+comment on column EPIS_COMP_PROF.create_institution
+  is 'Creation Institution';
+comment on column EPIS_COMP_PROF.update_user
+  is 'Update User';
+comment on column EPIS_COMP_PROF.update_time
+  is 'Update Time';
+comment on column EPIS_COMP_PROF.update_institution
+  is 'Update Institution';
+-- CHANGE END: Renato Nunes

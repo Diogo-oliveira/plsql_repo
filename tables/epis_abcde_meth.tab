@@ -1,0 +1,58 @@
+CREATE TABLE epis_abcde_meth (
+       id_epis_abcde_meth NUMBER(24) NOT NULL,
+       id_abcde_meth NUMBER(24) NOT NULL,
+       id_episode NUMBER(24) NOT NULL,
+			 flg_status VARCHAR2(1) NOT NULL,
+			 id_prof_create NUMBER(24) NOT NULL,
+			 dt_create TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+			 create_user VARCHAR2(24),
+			 create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 create_institution NUMBER(24),
+			 update_user VARCHAR2(24),
+			 update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 update_institution NUMBER(24)
+) TABLESPACE TABLE_M;
+
+COMMENT ON TABLE epis_abcde_meth IS 'ABCDE methodology short assessments for an episode';
+COMMENT ON COLUMN epis_abcde_meth.id_epis_abcde_meth IS 'ABCDE Methodology assessment identifier';
+COMMENT ON COLUMN epis_abcde_meth.id_abcde_meth IS 'ABCDE Methodology assessment identifier';
+COMMENT ON COLUMN epis_abcde_meth.id_episode IS 'Episode identifier';
+COMMENT ON COLUMN epis_abcde_meth.flg_status IS 'Record status: (A) Active (O) Outdated';
+COMMENT ON COLUMN epis_abcde_meth.id_prof_create IS 'Creation user (showed in ALERT®)';
+COMMENT ON COLUMN epis_abcde_meth.dt_create IS 'Creation date (showed in ALERT®)';
+COMMENT ON COLUMN epis_abcde_meth.create_user IS 'Creation user';
+COMMENT ON COLUMN epis_abcde_meth.create_time IS 'Creation date / time';
+COMMENT ON COLUMN epis_abcde_meth.create_institution IS 'Creation institution';
+COMMENT ON COLUMN epis_abcde_meth.update_user IS 'Update user';
+COMMENT ON COLUMN epis_abcde_meth.update_time IS 'Update date / time';
+COMMENT ON COLUMN epis_abcde_meth.update_institution IS 'Update institution';
+
+
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 16/03/2010 11:25
+-- CHANGE REASON: [ALERT-79224] Trauma: Cancellation of ABCDE assessments
+ALTER TABLE epis_abcde_meth ADD id_prof_cancel NUMBER(24);
+ALTER TABLE epis_abcde_meth ADD dt_cancel TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE epis_abcde_meth ADD id_cancel_reason NUMBER(24);
+ALTER TABLE epis_abcde_meth ADD notes_cancel CLOB;
+
+COMMENT ON COLUMN epis_abcde_meth.id_prof_cancel IS 'User (showed in ALERT®)';
+COMMENT ON COLUMN epis_abcde_meth.dt_cancel IS 'Creation date (showed in ALERT®)';
+COMMENT ON COLUMN epis_abcde_meth.id_cancel_reason IS 'Cancel reason ID';
+COMMENT ON COLUMN epis_abcde_meth.notes_cancel IS 'Cancellation notes';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.epis_abcde_meth move lob(notes_cancel) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

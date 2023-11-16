@@ -1,0 +1,178 @@
+
+
+  CREATE TABLE VITAL_SIGN_UNIT_MEASURE
+   (	ID_VITAL_SIGN_UNIT_MEASURE NUMBER(24,0) NOT NULL ENABLE,
+	ID_VITAL_SIGN NUMBER(12,0) NOT NULL ENABLE,
+	ID_UNIT_MEASURE NUMBER(24,0),
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	VAL_MIN NUMBER(10,3),
+	VAL_MAX NUMBER(10,3),
+	FORMAT_NUM VARCHAR2(20),
+	DECIMALS NUMBER(1,0),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+
+COMMENT ON COLUMN vital_sign_unit_measure.id_vital_sign_unit_measure IS 'Chave primária' ;
+COMMENT ON COLUMN vital_sign_unit_measure.id_vital_sign IS 'Sinal Vital' ;
+COMMENT ON COLUMN vital_sign_unit_measure.id_unit_measure IS 'Unidade de medida' ;
+COMMENT ON COLUMN vital_sign_unit_measure.id_institution IS 'Instituição' ;
+COMMENT ON COLUMN vital_sign_unit_measure.id_software IS 'Software' ;
+COMMENT ON COLUMN vital_sign_unit_measure.val_min IS 'Valor mínimo aceitável' ;
+COMMENT ON COLUMN vital_sign_unit_measure.val_max IS 'Valor máximo aceitável' ;
+COMMENT ON COLUMN vital_sign_unit_measure.format_num IS 'Formato para apresentar ao utilizador' ;
+COMMENT ON COLUMN vital_sign_unit_measure.decimals IS 'Número de decimais admissíveis para o registo de valores. valor entre 0 e 3, de acordo com o número de decimais do valor de leitura. Se definido, usar nas conversões entre unidades, tendo preferência sobre o valor indicado na tabela de conversões.' ;
+COMMENT ON COLUMN vital_sign_unit_measure.adw_last_update IS 'Data da última alteração' ;
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 17/02/2014 16:52
+-- CHANGE REASON: [ALERT-276205] new fields
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table vital_sign_unit_measure add age_min NUMBER(12)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+            
+                BEGIN
+        EXECUTE IMMEDIATE 'alter table vital_sign_unit_measure add age_max NUMBER(12)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+
+
+END;
+/
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column vital_sign_unit_measure.age_min IS ''Idade minima em meses''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column vital_sign_unit_measure.age_max IS ''Idade maxima em meses''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 18/02/2014 11:51
+-- CHANGE REASON: [ALERT-275609] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table vital_sign_unit_measure add age_min NUMBER(24)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+BEGIN EXECUTE IMMEDIATE 'alter table vital_sign_unit_measure add age_max NUMBER(24)';
+    EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+BEGIN EXECUTE IMMEDIATE 'alter table VITAL_SIGN_UNIT_MEASURE modify ID_INSTITUTION number(24)';
+    EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN EXECUTE IMMEDIATE 'alter table VITAL_SIGN_UNIT_MEASURE modify ID_VITAL_SIGN number(24)';
+    EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN EXECUTE IMMEDIATE 'alter table VITAL_SIGN_UNIT_MEASURE modify CREATE_USER varchar2(24 CHAR)';
+    EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN EXECUTE IMMEDIATE 'alter table VITAL_SIGN_UNIT_MEASURE modify FORMAT_NUM varchar2(24 CHAR)';
+    EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN EXECUTE IMMEDIATE 'alter table VITAL_SIGN_UNIT_MEASURE modify UPDATE_USER varchar2(24 CHAR)';
+    EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN EXECUTE IMMEDIATE 'alter table VITAL_SIGN_UNIT_MEASURE modify VAL_MAX number(24,3)';
+    EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN EXECUTE IMMEDIATE 'alter table VITAL_SIGN_UNIT_MEASURE modify VAL_MIN number(24,3)';
+    EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+BEGIN EXECUTE IMMEDIATE 'alter  table VITAL_SIGN_UNIT_MEASURE modify DECIMALS number(24)';
+    EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+
+COMMENT ON column vital_sign_unit_measure.age_min IS 'Idade minima em meses';
+COMMENT ON column vital_sign_unit_measure.age_max IS 'Idade maxima em meses';
+COMMENT ON table VITAL_SIGN_UNIT_MEASURE IS 'Vital sign configuration table';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table VITAL_SIGN_UNIT_MEASURE
+  is 'Vital sign unit measure configuration table';
+-- Add comments to the columns 
+comment on column VITAL_SIGN_UNIT_MEASURE.id_vital_sign_unit_measure
+  is 'Vital Sign unit measure identifier';
+comment on column VITAL_SIGN_UNIT_MEASURE.id_vital_sign
+  is 'Vital sign identifier';
+comment on column VITAL_SIGN_UNIT_MEASURE.id_unit_measure
+  is 'Unit measure identifier';
+comment on column VITAL_SIGN_UNIT_MEASURE.id_institution
+  is 'Institution identifier';
+comment on column VITAL_SIGN_UNIT_MEASURE.id_software
+  is 'Software identifier';
+comment on column VITAL_SIGN_UNIT_MEASURE.val_min
+  is 'Minimum value accepted';
+comment on column VITAL_SIGN_UNIT_MEASURE.val_max
+  is 'Maximum values accepted';
+comment on column VITAL_SIGN_UNIT_MEASURE.format_num
+  is 'Format mask to show to user.(e.g. 99 or 999/999) ';
+comment on column VITAL_SIGN_UNIT_MEASURE.decimals
+  is 'Define decimals number to be used.Values between 0 and 3.
+If defined, it is used in conversions between units, 
+has priority over the value indicated int the conversions table
+';
+comment on column VITAL_SIGN_UNIT_MEASURE.adw_last_update
+  is 'Date of last update used by adw';
+comment on column VITAL_SIGN_UNIT_MEASURE.create_user
+  is 'Creation User';
+comment on column VITAL_SIGN_UNIT_MEASURE.create_time
+  is 'Creation Time';
+comment on column VITAL_SIGN_UNIT_MEASURE.create_institution
+  is 'Creation Institution';
+comment on column VITAL_SIGN_UNIT_MEASURE.update_user
+  is 'Update User';
+comment on column VITAL_SIGN_UNIT_MEASURE.update_time
+  is 'Update Time';
+comment on column VITAL_SIGN_UNIT_MEASURE.update_institution
+  is 'Update Institution';
+comment on column VITAL_SIGN_UNIT_MEASURE.age_min
+  is 'Minimum age in months, criteria of appliance';
+comment on column VITAL_SIGN_UNIT_MEASURE.age_max
+  is 'Maximum age in months, critera of appliance';
+  
+-- CHANGE END: Pedro Fernandes

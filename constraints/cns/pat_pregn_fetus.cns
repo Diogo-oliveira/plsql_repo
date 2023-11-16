@@ -1,0 +1,40 @@
+
+
+  ALTER TABLE PAT_PREGN_FETUS ADD CONSTRAINT PPF_PK PRIMARY KEY (ID_PAT_PREGN_FETUS) ENABLE;
+
+  ALTER TABLE PAT_PREGN_FETUS MODIFY (ID_PAT_PREGN_FETUS NOT NULL ENABLE);
+
+  ALTER TABLE PAT_PREGN_FETUS MODIFY (ID_PAT_PREGNANCY NOT NULL ENABLE);
+  
+  
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/11/2016 16:41
+-- CHANGE REASON: [ALERT-326382]
+
+ALTER TABLE pat_pregn_fetus ADD CONSTRAINT flg_present_health_chk CHECK (flg_present_health in ('Y','N','I','U'));
+ALTER TABLE pat_pregn_fetus DROP CONSTRAINT PPF_FLG_STATUS_CHK;
+ALTER TABLE pat_pregn_fetus ADD CONSTRAINT PPF_FLG_STATUS_CHK CHECK (flg_status IN ('A', 'AN', 'AT', 'C', 'D', 'DI', 'DP', 'U', 'SI'));
+
+-- CHANGE END: Pedro Henriques 
+ 
+
+
+
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 23/12/2016 11:26
+-- CHANGE REASON: [ALERT-326777] Ability to document details regarding the newborn and the birth certificate
+ALTER TABLE pat_pregn_fetus DROP CONSTRAINT PPF_FLG_CHILDB_TP_CHK;
+ALTER TABLE pat_pregn_fetus ADD CONSTRAINT PPF_FLG_CHILDB_TP_CHK CHECK (flg_childbirth_type IN ('C','CF','CP','CS','DC','DE','DF','DP','DT','DV','E','F','T','U','VD','VE','VF','VM','VN','VP','O','N'));
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY:  Anna Kurowska
+-- CHANGE DATE: 31/08/2017 18:02
+-- CHANGE REASON: [ALERT-332724] NOM024 - Additional needs related to guide "SAEH" Pregnancy process
+-- Create/Recreate check constraints 
+alter table PAT_PREGN_FETUS
+  drop constraint PPF_FLG_STATUS_CHK;
+alter table PAT_PREGN_FETUS
+  add constraint PPF_FLG_STATUS_CHK
+  check (flg_status IN ('A', 'AN', 'AT', 'C', 'D', 'DI', 'DP', 'U', 'SI', 'DA'));
+-- CHANGE END:  Anna Kurowska

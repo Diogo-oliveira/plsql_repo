@@ -1,0 +1,482 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:31
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+CREATE TABLE EPIS_PN_DET_TASK
+ (ID_EPIS_PN_DET_TASK NUMBER(24) NOT NULL
+ ,ID_EPIS_PN_DET NUMBER(24) NOT NULL
+ ,ID_TASK NUMBER(24) NOT NULL
+ ,ID_TASK_TYPE NUMBER(24) NOT NULL
+ ,FLG_STATUS VARCHAR2(1 CHAR) DEFAULT 'A' NOT NULL
+ ,PN_NOTE CLOB 
+ ,DT_LAST_UPDATE TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_PROF_LAST_UPDATE NUMBER(24)
+ ,FLG_TABLE_ORIGIN VARCHAR2(1 CHAR)
+ ,CREATE_USER VARCHAR2(30 CHAR)
+ ,CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,CREATE_INSTITUTION NUMBER(24)
+ ,UPDATE_USER VARCHAR2(30 CHAR)
+ ,UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ )
+/
+
+COMMENT ON TABLE EPIS_PN_DET_TASK IS 'Progress note task details.'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.ID_EPIS_PN_DET_TASK IS 'PN task detail id'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.ID_EPIS_PN_DET IS 'Progress note detail ID'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.ID_TASK IS 'Task Id. To be used in data blocks associated to some task (ex: templates).'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.ID_TASK_TYPE IS 'Task type Id.'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.FLG_STATUS IS 'Progress note detail status. R-removed from the note; A- Active'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.PN_NOTE IS 'Text of the template.'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.DT_LAST_UPDATE IS 'Date of last update'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.ID_PROF_LAST_UPDATE IS 'Last update professional.'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.CREATE_USER IS 'Professional ID that creates the registry'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.CREATE_TIME IS 'Date of registry creation'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.CREATE_INSTITUTION IS 'Institution ID where registry was created'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.UPDATE_USER IS 'Professional ID that last updates the registry'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.UPDATE_TIME IS 'Date of registry last update'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.UPDATE_INSTITUTION IS 'Institution ID where registry was last updated'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.FLG_TABLE_ORIGIN IS 'Template origin table. To be used on templates';
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+CREATE TABLE EPIS_PN_DET_TASK
+ (ID_EPIS_PN_DET_TASK NUMBER(24) NOT NULL
+ ,ID_EPIS_PN_DET NUMBER(24) NOT NULL
+ ,ID_TASK NUMBER(24) NOT NULL
+ ,ID_TASK_TYPE NUMBER(24) NOT NULL
+ ,FLG_STATUS VARCHAR2(1 CHAR) DEFAULT 'A' NOT NULL
+ ,PN_NOTE CLOB 
+ ,DT_LAST_UPDATE TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_PROF_LAST_UPDATE NUMBER(24)
+ ,FLG_TABLE_ORIGIN VARCHAR2(1 CHAR)
+ ,CREATE_USER VARCHAR2(30 CHAR)
+ ,CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,CREATE_INSTITUTION NUMBER(24)
+ ,UPDATE_USER VARCHAR2(30 CHAR)
+ ,UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ )
+/
+
+COMMENT ON TABLE EPIS_PN_DET_TASK IS 'Progress note task details.'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.ID_EPIS_PN_DET_TASK IS 'PN task detail id'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.ID_EPIS_PN_DET IS 'Progress note detail ID'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.ID_TASK IS 'Task Id. To be used in data blocks associated to some task (ex: templates).'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.ID_TASK_TYPE IS 'Task type Id.'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.FLG_STATUS IS 'Progress note detail status. R-removed from the note; A- Active'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.PN_NOTE IS 'Text of the template.'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.DT_LAST_UPDATE IS 'Date of last update'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.ID_PROF_LAST_UPDATE IS 'Last update professional.'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.CREATE_USER IS 'Professional ID that creates the registry'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.CREATE_TIME IS 'Date of registry creation'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.CREATE_INSTITUTION IS 'Institution ID where registry was created'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.UPDATE_USER IS 'Professional ID that last updates the registry'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.UPDATE_TIME IS 'Date of registry last update'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.UPDATE_INSTITUTION IS 'Institution ID where registry was last updated'
+/
+COMMENT ON COLUMN EPIS_PN_DET_TASK.FLG_TABLE_ORIGIN IS 'Template origin table. To be used on templates';
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/01/2012 14:48
+-- CHANGE REASON: [[ALERT-211833]] Fix findings - Solve findings identified by Technical Arq. BD
+begin
+execute immediate ('Alter table EPIS_PN_DET_TASK move lob(PN_NOTE) store as ( tablespace ALERT_LOB)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/01/2012 16:30
+-- CHANGE REASON: [ALERT-216664] 
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_pn_det_task add(ID_TASK_AGGREGATOR NUMBER(24))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/02/2012 11:02
+-- CHANGE REASON: [ALERT-216664] BD - Versioning DDL (Tables) - Directions of meds are not being imported
+begin
+execute immediate ('COMMENT ON column EPIS_PN_DET_TASK.ID_TASK_AGGREGATOR IS ''Id that groups several task of the same type. It should be used preferentially to group information by recurrence. This option can only be inserted when ID_REF_GROUP is already used.''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:45
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    execute immediate 'alter table epis_pn_det_task add (dt_task TIMESTAMP(6) WITH LOCAL TIME ZONE)';
+EXCEPTION
+    WHEN others THEN
+       dbms_output.put_line('Operação já executada anteriormente');
+END;
+/
+
+COMMENT ON COLUMN epis_pn_det_task.dt_task IS 'Task date. Date in which the task was created.';
+COMMENT ON COLUMN EPIS_PN_DET_TASK.FLG_STATUS IS 'Progress note detail status. R-removed from the note; A- Active; S-active Suggested record; I-removed suggested record. Z-automatically removed record';
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:55
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+BEGIN
+    execute immediate 'alter table epis_pn_det_task add (id_prof_task NUMBER(24))';
+EXCEPTION
+    WHEN others THEN
+       dbms_output.put_line('Operação já executada anteriormente');
+END;
+/
+
+COMMENT ON COLUMN epis_pn_det_task.id_prof_task IS 'Professional ID that created the task';
+
+BEGIN
+    execute immediate 'alter table epis_pn_det_task add (rank_task NUMBER(24))';
+EXCEPTION
+    WHEN others THEN
+       dbms_output.put_line('Operação já executada anteriormente');
+END;
+/
+
+COMMENT ON COLUMN epis_pn_det_task.rank_task IS 'Task rank. To be possible to sort tasks acording to a category that has a defined rank. F.e, principal diagnosis and confirmed ones.';
+
+BEGIN
+    execute immediate 'alter table epis_pn_det_task add (id_parent NUMBER(24))';
+EXCEPTION
+    WHEN others THEN
+       dbms_output.put_line('Operação já executada anteriormente');
+END;
+/
+
+COMMENT ON COLUMN epis_pn_det_task.id_parent IS 'Parent task Id';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 28/08/2012 11:15
+-- CHANGE REASON: [ALERT-238815 ] Vital signs presentation in table within the Current visit single page
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table epis_pn_det_task add dt_group_import timestamp(6) with local time zone';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table epis_pn_det_task add id_group_import number(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table epis_pn_det_task add code_desc_group VARCHAR2(200 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_pn_det_task add(ID_SUB_GROUP_IMPORT NUMBER(24))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_pn_det_task add(CODE_DESC_SUB_GROUP VARCHAR2(200 CHAR))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_pn_det_task add(ID_GROUP_TABLE NUMBER(24))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+comment on column epis_pn_det_task.dt_task
+  is 'Last update date of the task, in the moment it was imported to the note.';  
+comment on column epis_pn_det_task.dt_group_import
+  is 'Task date. First level of agregation (in the areas that support data agregation)';  
+comment on column epis_pn_det_task.CODE_DESC_SUB_GROUP
+  is 'Code translation to be used in the title of sub group of the aggregated info in the data import (H and P)';  
+comment on column epis_pn_det_task.ID_SUB_GROUP_IMPORT
+  is 'Id to be used to the sub group of the aggregate info in the data import(H and P)';  
+COMMENT ON COLUMN epis_pn_det_task.id_group_import IS 'Id to be used to aggregate info in the data import(H and P)';
+COMMENT ON COLUMN epis_pn_det_task.code_desc_group IS 'Code translation to be used in the title of the aggregated info in the data import (H and P)';
+COMMENT ON COLUMN epis_pn_det_task.ID_GROUP_TABLE IS 'ID of each row of the table (to be used on vital signs table).';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 30/08/2012 17:18
+-- CHANGE REASON: [ALERT-239073] Current visit: Vital signs table is not sorted by the rank of the vital signs (v2 view)
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table epis_pn_det_task add table_position number(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+comment on column epis_pn_det_task.dt_task
+  is 'Table position (to the vital signs table). Indicated the column in which the record will appear';  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/09/2012 12:14
+-- CHANGE REASON: [ALERT-240212 ] Order sets in Single Page - bug fixing
+comment on column epis_pn_det_task.dt_task
+  is 'Last update date of the task, in the moment it was imported to the note.';  
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/10/2012 16:02
+-- CHANGE REASON: [ALERT-242379 ] Single page note for Discharge Summary
+BEGIN
+    execute immediate 'alter table epis_pn_det_task add (FLG_ACTION VARCHAR2(1 CHAR) default ''A'')';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN epis_pn_det_task.FLG_ACTION IS ''I-task associated to the note througth the Import screen. S-task created by Shortcut. A - Auto-populated task''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN epis_pn_det_task.table_position IS ''Identifies the column of the table (to be used in the vital signs table)''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/11/2012 16:39
+-- CHANGE REASON: [ALERT-244902] 
+BEGIN
+    execute immediate 'alter table epis_pn_det_task add (id_prof_review number(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN epis_pn_det_task.id_prof_review IS ''Id professional that performed the last review''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table epis_pn_det_task add (dt_review timestamp(6) with local time zone)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN epis_pn_det_task.dt_review IS ''Last review date''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2012 17:00
+-- CHANGE REASON: [ALERT-245542 ] Current visit: the procedures request is not disappearing from the page when the executions are preformed
+BEGIN
+    execute immediate 'alter table epis_pn_det_task modify (FLG_ACTION VARCHAR2(1 CHAR) default ''A'' not null enable novalidate)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 10/12/2012 16:52
+-- CHANGE REASON: [ALERT-246978 ] Change Singlepage and Timeline to adapt to body parts development
+BEGIN
+    execute immediate 'ALTER TABLE epis_pn_det_task ADD (ID_SAMPLE_TYPE NUMBER(12), CODE_DESC_SAMPLE_TYPE VARCHAR2(200 CHAR))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON COLUMN epis_pn_det_task.ID_SAMPLE_TYPE IS 'Sample type id';
+/
+
+COMMENT ON COLUMN epis_pn_det_task.CODE_DESC_SAMPLE_TYPE IS 'Sample type code for translation';
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 04/01/2013 09:38
+-- CHANGE REASON: [ALERT-248498] Current visit - Plan data block - Lab tests/Other studies (requested with recorrency) - the records organization is not done properly
+BEGIN
+    execute immediate 'alter table epis_pn_det_task add (dt_req_task TIMESTAMP(6) WITH LOCAL TIME ZONE)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN epis_pn_det_task.dt_req_task IS ''Task request date. Date that appears in the import screen and it is used to sort the records in the data block''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/05/2013 16:26
+-- CHANGE REASON: [ALERT-259145] Triage single page
+BEGIN
+    execute immediate 'alter table epis_pn_det_task modify (FLG_ACTION VARCHAR2(1 CHAR) not null)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/11/2021 16:11
+-- CHANGE REASON: [EMR-48698] - Single page: improvements on lab tests results presentation
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[alter table EPIS_PN_DET_TASK add code_desc_group_parent VARCHAR2(200 CHAR)]';
+pk_versioning.run(l_sql);
+end;
+/
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[alter table EPIS_PN_DET_TASK add instructions_hash VARCHAR2(200 CHAR)]';
+pk_versioning.run(l_sql);
+end;
+/
+-- Add comments to the columns
+comment on column EPIS_PN_DET_TASK.code_desc_group_parent
+is 'Code translation to be used in the title of the aggregated when group has parent';
+comment on column EPIS_PN_DET_TASK.instructions_hash
+is 'Used for instructions task group ';
+-- CHANGE END: Elisabete Bugalho

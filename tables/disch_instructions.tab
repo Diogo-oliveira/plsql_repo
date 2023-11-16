@@ -1,0 +1,54 @@
+CREATE TABLE disch_instructions
+( id_disch_instructions NUMBER(24) NOT NULL ENABLE,
+id_disch_instructions_group NUMBER(24) NOT NULL ENABLE,
+code_disch_instructions VARCHAR2(200) NOT NULL ENABLE,
+code_disch_instructions_title VARCHAR2(200) NOT NULL ENABLE,
+flg_available varchar2(1) not null enable,
+adw_last_update DATE NOT NULL ENABLE);
+
+
+COMMENT ON TABLE disch_instructions IS 'Instruções da alta' ;
+
+COMMENT ON COLUMN disch_instructions.id_disch_instructions IS 'Chave primária' ;
+COMMENT ON COLUMN disch_instructions.id_disch_instructions_group IS 'Id do grupo de instruções da alta' ;
+COMMENT ON COLUMN disch_instructions.code_disch_instructions IS 'Código para obter a instrução da alta por língua' ;
+COMMENT ON COLUMN disch_instructions.code_disch_instructions_title IS 'Código para obter o título da instrução da alta por língua' ;
+COMMENT ON COLUMN disch_instructions.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN disch_instructions.adw_last_update IS 'Data da última alteração' ;
+
+ALTER TABLE disch_instructions DROP COLUMN id_disch_instructions_group;
+
+
+
+
+ALTER TABLE DISCH_INSTRUCTIONS ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN DISCH_INSTRUCTIONS.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:25
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.DISCH_INSTRUCTIONS MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:43
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table DISCH_INSTRUCTIONS
+  is 'Discharge instruction';
+-- Add comments to the columns 
+comment on column DISCH_INSTRUCTIONS.id_disch_instructions
+  is 'Primary Key';
+comment on column DISCH_INSTRUCTIONS.code_disch_instructions
+  is 'Translation code for discharge instruction';
+comment on column DISCH_INSTRUCTIONS.code_disch_instructions_title
+  is 'Translation code for discharge instruction title';
+comment on column DISCH_INSTRUCTIONS.flg_available
+  is 'Availabitily (Y/N)';
+comment on column DISCH_INSTRUCTIONS.adw_last_update
+  is 'Date of last change';
+comment on column DISCH_INSTRUCTIONS.id_content
+  is 'Content unique identifier';  
+  
+-- CHANGE END: Elisabete Bugalho

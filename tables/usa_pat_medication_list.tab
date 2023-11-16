@@ -1,0 +1,48 @@
+
+  CREATE TABLE USA_PAT_MEDICATION_LIST
+   (	ID_PAT_MEDICATION_LIST NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_MEDICATION_LIST DATE NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0),
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	MEDID NUMBER(10,0),
+	YEAR_BEGIN NUMBER(4,0),
+	MONTH_BEGIN NUMBER(2,0),
+	DAY_BEGIN NUMBER(2,0),
+	QTY NUMBER(5,3),
+	FREQUENCY VARCHAR2(30),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	FLG_PRESC VARCHAR2(1) NOT NULL ENABLE,
+	ID_PRESCRIPTION_PHARM NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE usa_pat_medication_list IS 'Relatos de medicação. - VERSÃO USA' ;
+
+COMMENT ON COLUMN usa_pat_medication_list.id_pat_medication_list IS 'Chave primária' ;
+COMMENT ON COLUMN usa_pat_medication_list.dt_pat_medication_list IS 'Data de registo' ;
+COMMENT ON COLUMN usa_pat_medication_list.id_episode IS 'ID do episódio em que foi feito o registo.' ;
+COMMENT ON COLUMN usa_pat_medication_list.id_patient IS 'ID do paciente.' ;
+COMMENT ON COLUMN usa_pat_medication_list.id_institution IS 'ID da instituição onde foi feito o registo.' ;
+COMMENT ON COLUMN usa_pat_medication_list.id_software IS 'ID do software onde foi feito o registo.' ;
+COMMENT ON COLUMN usa_pat_medication_list.medid IS 'ID do medicamento.' ;
+COMMENT ON COLUMN usa_pat_medication_list.year_begin IS 'Ano (aproximado) de inicio da medicação' ;
+COMMENT ON COLUMN usa_pat_medication_list.month_begin IS 'Mês (aproximado) de inicio da medicação' ;
+COMMENT ON COLUMN usa_pat_medication_list.day_begin IS 'Dia (aproximado) de inicio da medicação' ;
+COMMENT ON COLUMN usa_pat_medication_list.qty IS 'Quantidade.' ;
+COMMENT ON COLUMN usa_pat_medication_list.frequency IS 'Frequência' ;
+COMMENT ON COLUMN usa_pat_medication_list.flg_status IS 'A - activo, P - passivo, C - cancelado' ;
+COMMENT ON COLUMN usa_pat_medication_list.id_professional IS 'ID do profissional que registou.' ;
+COMMENT ON COLUMN usa_pat_medication_list.notes IS 'Notas.' ;
+COMMENT ON COLUMN usa_pat_medication_list.flg_presc IS 'Flag que indica se é um relato de um medicamento prescrito (Y) ou não (N).' ;
+COMMENT ON COLUMN usa_pat_medication_list.id_prescription_pharm IS 'Se for relato de uma prescrição, preenche esta coluna com o ID_PRESCRIPTION_PHARM correspondente a essa prescrição. Caso contrário, é NULL' ;
+
+
+
+
+
+ALTER TABLE USA_PAT_MEDICATION_LIST ADD DT_PAT_MEDICATION_LIST_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN USA_PAT_MEDICATION_LIST.DT_PAT_MEDICATION_LIST_TSTZ IS 'Data de registo'; 

@@ -1,0 +1,48 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'BDNP_PRESC_TRACKING'
+       AND constraint_name = 'BPTG_PK';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE BDNP_PRESC_TRACKING add constraint BPTG_PK primary key (ID_PRESC_TRACKING)';
+    END IF;
+END;
+/
+
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'BDNP_PRESC_TRACKING'
+       AND constraint_name = 'BPTG_FLG_EVENT_TYPE_CHK';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE BDNP_PRESC_TRACKING
+  add constraint BPTG_FLG_EVENT_TYPE_CHK check (FLG_EVENT_TYPE in (''I'', ''C'', ''RI'', ''RC''))';
+    END IF;
+END;
+/
+
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'BDNP_PRESC_TRACKING'
+       AND constraint_name = 'BPTG_FLG_MESSAGE_TYPE_CHK';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE BDNP_PRESC_TRACKING
+  add constraint BPTG_FLG_MESSAGE_TYPE_CHK check (FLG_MESSAGE_TYPE in (''S'',''E'', ''W''))';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso

@@ -1,0 +1,36 @@
+
+
+  CREATE TABLE EPIS_OBS_EXAM
+   (	ID_EPIS_OBS_EXAM NUMBER(24,0) NOT NULL ENABLE,
+	DT_EPIS_OBS_EXAM DATE NOT NULL ENABLE,
+	DESC_EPIS_OBS_EXAM VARCHAR2(4000),
+	ID_PERIODIC_EXAM_EDUC NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_BRD VARCHAR2(1),
+	FLG_NA VARCHAR2(1),
+	FLG_TEMP VARCHAR2(1),
+	FLG_NAV VARCHAR2(1)
+   );
+
+
+
+COMMENT ON TABLE epis_obs_exam IS 'Observações relativas aos exames periódicos' ;
+
+COMMENT ON COLUMN epis_obs_exam.dt_epis_obs_exam IS 'Data de registo' ;
+COMMENT ON COLUMN epis_obs_exam.desc_epis_obs_exam IS 'Observação' ;
+COMMENT ON COLUMN epis_obs_exam.flg_brd IS 'Classificação abreviada do parâmetro examinado (PERIODIC_EXAM): B - bom, R - regular, D - deficiente' ;
+COMMENT ON COLUMN epis_obs_exam.flg_na IS 'Classificação abreviada do parâmetro examinado: N - normal, A - anormal' ;
+COMMENT ON COLUMN epis_obs_exam.flg_temp IS 'Indica se o registo está temporaria/ gravado(Auto Save), ou é definitivo: T - temporário; D - definitivo' ;
+COMMENT ON COLUMN epis_obs_exam.flg_nav IS 'Classificação abreviada do parâmetro examinado(ecografias): N - normal, A - anormal, V - não visualizado' ;
+
+alter table epis_obs_exam 
+add (dt_epis_obs_exam_tstz timestamp with local time zone); 
+
+
+
+-- CHANGED BY: Sérgio Santos (sergio.santos)
+-- CHANGE DATE: 03/12/2008 09:16
+-- CHANGE REASON: ALERT-11133 Remoção de colunas com tipo DATE quando existe a equivalente TSTZ
+ALTER TABLE EPIS_OBS_EXAM DROP COLUMN DT_EPIS_OBS_EXAM;
+-- CHANGE END

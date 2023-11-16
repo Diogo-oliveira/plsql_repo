@@ -1,0 +1,141 @@
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 05/03/2009 18:39
+-- CHANGE REASON: [ALERT-16591] Criação das tabelas view_option e view_option_config
+CREATE TABLE VIEW_OPTION_CONFIG (  
+       ID_VIEW_OPTION           NUMBER(24,0) NOT NULL ENABLE,
+ ID_SYS_BUTTON_PROP       NUMBER(24,0) NOT NULL ENABLE,
+ ID_PROFILE_TEMPLATE      NUMBER(24,0) NOT NULL ENABLE,
+ FLG_AVAILABLE            VARCHAR2(1) DEFAULT 'Y' NOT NULL
+);
+/
+-- Table Comment
+COMMENT ON TABLE VIEW_OPTION_CONFIG IS 'This table has the configuration of all the view options that can be found in VIEW button, for now, available only in timeline functionality. (Relation between view options with different profiles, software?s, institutions and buttons).';
+
+-- Column Comments
+COMMENT ON COLUMN VIEW_OPTION_CONFIG.ID_VIEW_OPTION IS 'Primary key of table VIEW_OPTION.';
+COMMENT ON COLUMN VIEW_OPTION_CONFIG.ID_SYS_BUTTON_PROP IS 'Primary key of table SYS_BUTTON_PROP.';
+COMMENT ON COLUMN VIEW_OPTION_CONFIG.ID_PROFILE_TEMPLATE IS 'Primary key of table PROFILE_TEMPLATE.';
+COMMENT ON COLUMN VIEW_OPTION_CONFIG.FLG_AVAILABLE IS 'Inform if this view option should be available or not for a specific professional (?Y? ? Yes; ?N? ? No)(default option: ?Y?).';
+-- CHANGE END
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 06/03/2009 15:23
+-- CHANGE REASON: [ALERT-16591] Acrescentado o campo RANK à tabela VIEW_OPTION_CONFIG
+ALTER TABLE view_option_config add rank NUMBER(24) NOT NULL ENABLE;
+COMMENT ON column view_option_config.rank IS 'Gives the order that should be used to present options to professional';
+-- CHANGE END
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 07/03/2009 14:27
+-- CHANGE REASON: [ALERT-16591] Actualização do modelo de dados para responder às necessidades do FLASH
+ALTER TABLE view_option_config MODIFY rank NUMBER(24) NULL;
+COMMENT ON column view_option_config.rank IS 'Gives the order that should be used to present options to professional (this option should only be introduced if an profile needs a different order of default order specified in view_option table).';
+--
+ALTER TABLE view_option_config ADD id_sys_button_prop_parent NUMBER(24) NOT NULL ENABLE;
+COMMENT ON column view_option_config.id_sys_button_prop_parent IS 'Primary key of table SYS_BUTTON_PROP (Parent of the other ID_SYS_BUTTON_PROP).';
+-- CHANGE END
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 16/03/2009 17:48
+-- CHANGE REASON: [ALERT-16591] Correcção ao modelo de dados original.
+ALTER TABLE view_option_config DROP COLUMN id_sys_button_prop;
+ALTER TABLE view_option_config DROP COLUMN id_sys_button_prop_parent;
+-- CHANGE END
+
+-- CHANGED BY: Fábio Oliveira
+-- CHANGE DATE: 26/02/2010
+-- CHANGE REASON: [ALERT-70302] Possible to specify access to each view
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table view_option_config add (FLG_ACCESS VARCHAR2(1 CHAR), 
+FLG_CREATE              VARCHAR2(1 CHAR),
+  FLG_CANCEL              VARCHAR2(1 CHAR),
+  FLG_SEARCH              VARCHAR2(1 CHAR),
+  FLG_PRINT               VARCHAR2(1 CHAR),
+  FLG_OK                  VARCHAR2(1 CHAR),
+  FLG_DETAIL              VARCHAR2(1 CHAR),
+  FLG_CONTENT             VARCHAR2(1 CHAR),
+  FLG_HELP                VARCHAR2(1 CHAR),
+  FLG_GRAPH               VARCHAR2(1 CHAR),
+  FLG_VISION              VARCHAR2(1 CHAR),
+  FLG_DIGITAL             VARCHAR2(240 CHAR),
+  FLG_FREQ                VARCHAR2(1 CHAR),
+  FLG_NO                  VARCHAR2(240 CHAR),
+  FLG_ACTION              VARCHAR2(1 CHAR),
+  FLG_VIEW                VARCHAR2(1 CHAR))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+COMMENT ON column view_option_config.flg_access IS 'Flag that indicates whether one must use the access specified in this table (''Y'') or use the access inherited from the default view (''N'')';
+COMMENT ON column view_option_config.flg_create IS 'Criação: N - não aplicável, I - inactivo, A - activo';
+COMMENT ON column view_option_config.flg_cancel IS 'Cancelamento: N - não aplicável, I - inactivo, A - activo';
+COMMENT ON column view_option_config.flg_search IS 'Pesquisa: N - não aplicável, I - inactivo, A - activo';
+COMMENT ON column view_option_config.flg_print IS 'Impressão: N - não aplicável, I - inactivo, A - activo';
+COMMENT ON column view_option_config.flg_ok IS 'Avançar: N - não aplicável, I - inactivo, A - activo';
+COMMENT ON column view_option_config.flg_detail IS 'Detalhe: N - não aplicável, I - inactivo, A - activo';
+COMMENT ON column view_option_config.flg_content IS 'Conteúdo: N - não aplicável, I - inactivo, A - activo';
+COMMENT ON column view_option_config.flg_help IS 'Ajuda: N - não aplicável, I - inactivo, A - activo';
+COMMENT ON column view_option_config.flg_graph IS 'Ajuda: N - não aplicável, I - inactivo, A - activo';
+COMMENT ON column view_option_config.flg_vision IS 'Ajuda: N - não aplicável, I - inactivo, A - activo';
+COMMENT ON column view_option_config.flg_digital IS 'Ajuda: N - não aplicável, I - inactivo, A - activo';
+COMMENT ON column view_option_config.flg_freq IS 'Ajuda: N - não aplicável, I - inactivo, A - activo';
+COMMENT ON column view_option_config.flg_no IS 'Ajuda: N - não aplicável, I - inactivo, A - activo';
+COMMENT ON column view_option_config.flg_action IS 'Acções: N - não aplicável, I - inactivo, A - activo';
+COMMENT ON column view_option_config.flg_view IS 'Views: N - not applicable, I - inactive, A - active';
+-- CHANGE END: Fábio Oliveira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 29/04/2013 10:18
+-- CHANGE REASON: [ALERT-256937] 
+begin
+BEGIN INSERT INTO view_option_config (id_view_option, id_profile_template, flg_available, flg_access) VALUES (4004, 156, 'Y', 'N'); EXCEPTION WHEN dup_val_on_index THEN dbms_output.put_line('4004, 924'); END;
+BEGIN INSERT INTO view_option_config (id_view_option, id_profile_template, flg_available, flg_access) VALUES (4005, 156, 'Y', 'N'); EXCEPTION WHEN dup_val_on_index THEN dbms_output.put_line('4005, 924'); END;
+BEGIN INSERT INTO view_option_config (id_view_option, id_profile_template, flg_available, flg_access) VALUES (4006, 156, 'Y', 'N'); EXCEPTION WHEN dup_val_on_index THEN dbms_output.put_line('4006, 924'); END;
+BEGIN INSERT INTO view_option_config (id_view_option, id_profile_template, flg_available, flg_access) VALUES (4007, 156, 'Y', 'N'); EXCEPTION WHEN dup_val_on_index THEN dbms_output.put_line('4007, 924'); END;
+BEGIN INSERT INTO view_option_config (id_view_option, id_profile_template, flg_available, flg_access) VALUES (5001, 156, 'Y', 'N'); EXCEPTION WHEN dup_val_on_index THEN dbms_output.put_line('5001, 924'); END;
+end;
+/    
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:50
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column VIEW_OPTION_CONFIG.flg_create
+  is 'Create: N - not applicable, I - inactive, A - active';
+comment on column VIEW_OPTION_CONFIG.flg_cancel
+  is 'Cancel: N - not applicable, I - inactive, A - active';
+comment on column VIEW_OPTION_CONFIG.flg_search
+  is 'Search: N - not applicable, I - inactive, A - active';
+comment on column VIEW_OPTION_CONFIG.flg_print
+  is 'Print: N - not applicable, I - inactive, A - active';
+comment on column VIEW_OPTION_CONFIG.flg_ok
+  is 'OK: N - not applicable, I - inactive, A - active';
+comment on column VIEW_OPTION_CONFIG.flg_detail
+  is 'Detail: N - not applicable, I - inactive, A - active';
+comment on column VIEW_OPTION_CONFIG.flg_content
+  is 'Content: N - not applicable, I - inactive, A - active';
+comment on column VIEW_OPTION_CONFIG.flg_help
+  is 'Help: N - not applicable, I - inactive, A - active';
+comment on column VIEW_OPTION_CONFIG.flg_graph
+  is 'Graph: N - not applicable, I - inactive, A - active';
+comment on column VIEW_OPTION_CONFIG.flg_vision
+  is 'Vision: N - not applicable, I - inactive, A - active';
+comment on column VIEW_OPTION_CONFIG.flg_digital
+  is 'Digital: N - not applicable, I - inactive, A - active';
+comment on column VIEW_OPTION_CONFIG.flg_freq
+  is 'Most Frequent: N - not applicable, I - inactive, A - active';
+comment on column VIEW_OPTION_CONFIG.flg_no
+  is 'No ( Triage ): N - not applicable, I - inactive, A - active';
+comment on column VIEW_OPTION_CONFIG.flg_action
+  is 'Actions: N - not applicable, I - inactive, A - active';  
+-- CHANGE END: Elisabete Bugalho

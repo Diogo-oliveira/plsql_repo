@@ -1,0 +1,28 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 06/07/2010 21:24
+-- CHANGE REASON: [ALERT-109293] DB Versioning - TS_PACKAGES
+ALTER TABLE EPIS_HIDRICS_LINE_HIST ADD CONSTRAINT EHLH_PK PRIMARY KEY (ID_EPIS_HIDRICS_LINE, DT_EPIS_HID_LINE_HIST) ENABLE;
+
+alter table EPIS_HIDRICS_LINE_HIST
+  add constraint EHLH_FLG_ST_CHK
+  check (FLG_STATUS IN ('A','C'));
+  
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 19/11/2010 14:55
+-- CHANGE REASON: [ALERT-142990] Problem type:Bug Area: Patient Grid/Intakes & Outputs Expected Be (truncated)
+alter table epis_hidrics_line_hist drop constraint EHLH_FLG_ST_CHK;
+alter table epis_hidrics_line_hist add constraint EHLH_FLG_ST_CHK check (FLG_STATUS IN ('A','C','E'));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 11:24
+-- CHANGE REASON: [ALERT-153427] Intake and Output-Have the possibility to register bowel movements.
+ALTER TABLE EPIS_HIDRICS_LINE_HIST ADD CONSTRAINT HLINEHIST_FLGACSTATE_CHK CHECK (FLG_ACTION IN ('A','E', 'C', 'I'));
+
+alter table epis_hidrics_line_hist drop constraint EHLH_FLG_ST_CHK;
+update epis_hidrics_line_hist e
+set e.flg_action = e.flg_status, e.flg_status = 'A'
+where e.flg_status = 'E';
+-- CHANGE END: Sofia Mendes

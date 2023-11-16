@@ -1,0 +1,103 @@
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 02/12/2010 11:58
+-- CHANGE REASON: [ALERT-146258]  A rede de referenciação inter-hositalar deverá suportar que uma instituição seja destino dentro e fora da rede de referenciação conforme a especialidade em causa. (ALERT142962)
+ALTER TABLE REF_DEST_INSTITUTION_SPEC
+ ADD (CONSTRAINT RDIS_PK PRIMARY KEY 
+  (ID_DEST_INSTITUTION_SPEC)
+ USING INDEX 
+ STORAGE
+ (
+   INITIAL 65536
+   MINEXTENTS 1
+   MAXEXTENTS UNLIMITED
+ )
+ TABLESPACE INDEX_L)
+/
+
+PROMPT Creating Check Constraint on 'REF_DEST_INSTITUTION_SPEC'
+ALTER TABLE REF_DEST_INSTITUTION_SPEC
+ ADD (CONSTRAINT RDIS_FLG_INSIDE_REF_AREA CHECK (FLG_INSIDE_REF_AREA in ('Y','N')))
+/
+
+PROMPT Creating Check Constraint on 'REF_DEST_INSTITUTION_SPEC'
+ALTER TABLE REF_DEST_INSTITUTION_SPEC
+ ADD (CONSTRAINT RDIS_FLG_AVAILABLE CHECK (FLG_AVAILABLE in ('Y','N')))
+/
+
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 09/12/2010 17:24
+-- CHANGE REASON: [ALERT-146258]  A rede de referenciação inter-hositalar deverá suportar que uma instituição seja destino dentro e fora da rede de referenciação conforme a especialidade em causa. (ALERT142962)
+DECLARE
+already_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(already_exists, -00955);
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE REF_DEST_INSTITUTION_SPEC
+ ADD (CONSTRAINT RDIS_PK PRIMARY KEY 
+  (ID_DEST_INSTITUTION_SPEC)
+ USING INDEX 
+ STORAGE
+ (
+   INITIAL 65536
+   MINEXTENTS 1
+   MAXEXTENTS UNLIMITED
+ )
+ TABLESPACE INDEX_L)';
+
+EXECUTE IMMEDIATE 'PROMPT Creating Check Constraint on ''REF_DEST_INSTITUTION_SPEC''
+ALTER TABLE REF_DEST_INSTITUTION_SPEC
+ ADD (CONSTRAINT RDIS_FLG_INSIDE_REF_AREA CHECK (FLG_INSIDE_REF_AREA in (''Y'',''N'')))';
+
+EXECUTE IMMEDIATE 'PROMPT Creating Check Constraint on ''REF_DEST_INSTITUTION_SPEC''
+ALTER TABLE REF_DEST_INSTITUTION_SPEC
+ ADD (CONSTRAINT RDIS_FLG_AVAILABLE CHECK (FLG_AVAILABLE in (''Y'',''N'')));
+EXCEPTION
+WHEN already_exists THEN
+dbms_output.put_line('Already exists.');
+END;
+/
+
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 04/07/2011 15:01
+-- CHANGE REASON: [ALERT-187010 ] 
+DECLARE
+    l_aux PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_aux
+      FROM user_constraints u
+     WHERE u.table_name = 'REF_DEST_INSTITUTION_SPEC'
+       AND u.constraint_name = 'RDIS_UNIQUE';
+
+    IF l_aux = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE ref_dest_institution_spec
+ADD CONSTRAINT RDIS_UNIQUE UNIQUE 
+(id_dest_institution,id_speciality,flg_available, flg_inside_ref_area )';    
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 08/09/2011 10:33
+-- CHANGE REASON: [ALERT-194425] 
+ALTER TABLE  ref_dest_institution_spec DROP CONSTRAINT RDIS_UNIQUE;
+
+ALTER TABLE ref_dest_institution_spec ADD CONSTRAINT RDIS_UNIQUE UNIQUE 
+(id_dest_institution,id_speciality);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 11/02/2014 08:35
+-- CHANGE REASON: [ALERT-276023] 
+BEGIN
+    pk_versioning.run(i_sql => q'[alter table REF_DEST_INSTITUTION_SPEC add constraint RDIS_FLG_REF_LINE_CHK check (FLG_REF_LINE in ('1','2','3'))]');
+END;
+/
+-- CHANGE END: Ana Monteiro

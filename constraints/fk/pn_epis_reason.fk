@@ -1,0 +1,21 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 02/12/2010 16:15
+-- CHANGE REASON: [ALERT-146429] ddl.sql
+alter table pn_epis_reason
+  add constraint per_comp_fk foreign key (id_epis_anamnesis)
+  references epis_anamnesis (id_epis_anamnesis);
+alter table pn_epis_reason
+  add constraint per_ecomp_fk foreign key (id_epis_complaint)
+  references epis_complaint (id_epis_complaint);
+alter table pn_epis_reason
+  add constraint per_epis_fk foreign key (id_episode)
+  references episode (id_episode);
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/12/2010 15:59
+-- CHANGE REASON: [ALERT-146429] ddl_to_ddl2.sql
+alter table pn_epis_reason
+  add constraint per_per_fk foreign key (id_parent)
+  references pn_epis_reason (id_pn_epis_reason);
+-- CHANGE END: Pedro Carneiro

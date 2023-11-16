@@ -1,0 +1,51 @@
+-- Create table
+create table DRUG_COMPOSITION
+(
+  ID_DRUG_COMPOSITION number(24) not null,
+  ID_DRUG_MASTER      number(24) not null,
+  ID_DRUG_COMPONENT   number(24) not null,
+  QTY                 number(12,4),
+  UNIT_MEASURE        number(24),
+  RANK                number(6)
+)
+tablespace TABLE_M
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table DRUG_COMPOSITION
+  is 'Tabela de composição de drogas';
+-- Add comments to the columns 
+comment on column DRUG_COMPOSITION.ID_DRUG_COMPOSITION
+  is 'Chave primária';
+comment on column DRUG_COMPOSITION.ID_DRUG_MASTER
+  is 'ID da droga resultante da composição';
+comment on column DRUG_COMPOSITION.ID_DRUG_COMPONENT
+  is 'ID do componente ';
+comment on column DRUG_COMPOSITION.QTY
+  is 'Quantidade do componente na solução final';
+comment on column DRUG_COMPOSITION.UNIT_MEASURE
+  is 'ID da unidade de medida ( relativa à QTY )';
+comment on column DRUG_COMPOSITION.RANK
+  is 'Ordem pela qual são mostrados os componentes';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table DRUG_COMPOSITION
+  add constraint DRUG_COMPOSITION_PK primary key (ID_DRUG_COMPOSITION);
+alter table DRUG_COMPOSITION
+  add constraint DRUG_COMPOSITION_FK1 foreign key (ID_DRUG_MASTER)
+  references drug (ID_DRUG);
+alter table DRUG_COMPOSITION
+  add constraint DRUG_COMPOSITION_FK2 foreign key (ID_DRUG_COMPONENT)
+  references drug (ID_DRUG);
+alter table DRUG_COMPOSITION
+  add constraint DRUG_COMPOSITION_FK3 foreign key (UNIT_MEASURE)
+  references unit_measure (ID_UNIT_MEASURE);
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:32
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_COMPOSITION IS 'Tabela de composição de drogas [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

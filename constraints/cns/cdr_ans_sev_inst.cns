@@ -1,0 +1,15 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 11/04/2012 11:30
+-- CHANGE REASON: [ALERT-226949] cds popup improvements (ddl changes)
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table CDR_ANS_SEV_INST
+  add constraint CDRASI_PK primary key (ID_CDR_ANSWER, ID_CDR_SEVERITY, ID_INSTITUTION)
+';
+exception when e_pk_exists then
+  dbms_output.put_line('primary key cdrasi_pk already exists!');
+end;
+/
+-- CHANGE END: Pedro Carneiro

@@ -1,0 +1,18 @@
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table EPIS_PROB
+  add constraint EPB_PK primary key (ID_EPIS_PROBLEM);
+
+-- Create check constraints
+alter table EPIS_PROB
+ add constraint EPB_FLG_TYPE_CHK check (FLG_TYPE IN ('D', 'P'));
+
+alter table EPIS_PROB
+ add constraint EPB_FLG_STAT_CHK
+ check (flg_status IN ('A', 'C', 'N', 'P', 'R', 'U', 'NR'));
+ 
+-- CHANGED BY: Lillian Lu
+-- CHANGE DATE: 2018-03-13
+-- CHANGE REASON: [CEMR-6] Improvements Episode problems list view
+--Remove constraint
+alter table EPIS_PROB drop constraint EPB_EPBG_FK;
+-- CHANGE END: Lillian Lu

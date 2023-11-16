@@ -1,0 +1,25 @@
+--26/01/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+ALTER TABLE EPIS_PN_ADDENDUM
+ ADD (CONSTRAINT EPMA_PK PRIMARY KEY  
+  (ID_EPIS_PN_ADDENDUM))
+/
+
+ALTER TABLE EPIS_PN_ADDENDUM
+ ADD (CONSTRAINT EPMA_STATUS_CHK CHECK (FLG_STATUS in ('D', 'S','C','F')))
+/
+
+-- CHANGED BY: rui.mendonca
+-- CHANGE DATE: 15/12/2017 16:06
+-- CHANGE REASON: [CALERT-1149] DB changes for comments screen
+BEGIN
+    pk_versioning.run(q'#
+ALTER TABLE 
+  epis_pn_addendum 
+ADD 
+  CONSTRAINT epa_flg_type_chk CHECK (
+    flg_type IN ('A', 'C')
+  )#');
+END;
+/
+-- CHANGE END: rui.mendonca

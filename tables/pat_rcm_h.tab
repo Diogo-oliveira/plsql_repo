@@ -1,0 +1,55 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/05/2012 11:21
+-- CHANGE REASON: [ALERT-217767] 
+CREATE TABLE PAT_RCM_H
+(
+ID_PATIENT    NUMBER(24) NOT NULL,
+ID_INSTITUTION           NUMBER(24) NOT NULL,
+ID_RCM   NUMBER(24) NOT NULL,
+ID_RCM_DET  NUMBER(24) NOT NULL,
+DT_STATUS                TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+ID_RCM_DET_H  NUMBER(24) NOT NULL,
+ID_WORKFLOW              NUMBER(24) NOT NULL,
+ID_STATUS                NUMBER(24) NOT NULL,
+ID_WORKFLOW_ACTION       NUMBER(24),
+ID_PROF_STATUS           NUMBER(24) NOT NULL,
+ID_EPIS_CREATED          NUMBER(24),
+NOTES                    CLOB,
+CRM_KEY                  varchar2(50 char)
+CREATE_USER              VARCHAR2(0024 CHAR),
+CREATE_TIME              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION       NUMBER(0024),
+UPDATE_USER              VARCHAR2(0024 CHAR),
+UPDATE_TIME              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION       NUMBER(0024));
+
+
+comment on table PAT_RCM_H  is 'Recommendation detail history';
+COMMENT ON COLUMN PAT_RCM_H.ID_PATIENT         IS 'Identifier of patient';
+COMMENT ON COLUMN PAT_RCM_H.ID_INSTITUTION      IS 'Institution identifier where the rcm is valid';
+COMMENT ON COLUMN PAT_RCM_H.ID_RCM       IS 'Identifier of recomendation';
+COMMENT ON COLUMN PAT_RCM_H.ID_RCM_DET      IS 'Identifier of detail';
+COMMENT ON COLUMN PAT_RCM_H.DT_STATUS           IS 'Date of change';
+COMMENT ON COLUMN PAT_RCM_H.ID_RCM_DET_H      IS 'Number of detail history';
+COMMENT ON COLUMN PAT_RCM_H.ID_WORKFLOW    IS 'workflow identifier';
+COMMENT ON COLUMN PAT_RCM_H.ID_STATUS           IS 'Status identifier';
+COMMENT ON COLUMN PAT_RCM_H.ID_WORKFLOW_ACTION  IS 'Workflow action identifier';
+COMMENT ON COLUMN PAT_RCM_H.ID_PROF_STATUS      IS 'Professional Identifier that made the change';
+COMMENT ON COLUMN PAT_RCM_H.ID_EPIS_CREATED     IS 'Episode identifier used to create this record';
+COMMENT ON COLUMN PAT_RCM_H.NOTES               IS 'Notes';
+comment on column PAT_RCM_H.crm_key is 'CRM key identifier';
+comment on column PAT_RCM_H.CREATE_USER  is 'Creation User';
+comment on column PAT_RCM_H.CREATE_TIME  is 'Creation Time';
+comment on column PAT_RCM_H.CREATE_INSTITUTION  is 'Creation Institution';
+comment on column PAT_RCM_H.UPDATE_USER  is 'Update User';
+comment on column PAT_RCM_H.UPDATE_TIME  is 'Update Time';
+comment on column PAT_RCM_H.UPDATE_institution  is 'Update Institution';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 11/05/2012 08:52
+-- CHANGE REASON: [ALERT-217767] 
+alter  table PAT_RCM_H modify CRM_KEY VARCHAR2(0200 char);
+COMMENT ON COLUMN PAT_RCM_H.ID_PATIENT IS 'Patient identifier';
+COMMENT ON COLUMN PAT_RCM_H.NOTES IS 'Notes related to this status change';
+-- CHANGE END: Ana Monteiro

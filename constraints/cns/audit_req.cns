@@ -1,0 +1,31 @@
+
+
+alter table AUDIT_REQ modify(ID_AUDIT_REQ not null);
+alter table AUDIT_REQ modify(ID_AUDIT_TYPE not null);
+alter table AUDIT_REQ modify(DT_REQ not null);
+alter table AUDIT_REQ modify(DT_REQ_TSTZ not null);
+alter table AUDIT_REQ modify(FLG_STATUS not null);
+alter table AUDIT_REQ modify(DT_BEGIN_TSTZ not null);
+alter table AUDIT_REQ modify(DT_END_TSTZ not null);
+alter table AUDIT_REQ modify(ID_PROF_REQ not null);
+alter table AUDIT_REQ modify(ID_INSTITUTION not null);
+alter table AUDIT_REQ modify(ADW_LAST_UPDATE not null);
+
+alter table AUDIT_REQ
+	add constraint ADT_REQ_PK primary key (ID_AUDIT_REQ);
+	
+alter table AUDIT_REQ
+   add constraint ADT_REQ_FLG_ST_CHK
+   check (FLG_STATUS IN ('R', 'A','C','I','F'));
+   
+alter table AUDIT_REQ
+   add constraint ADT_REQ_DT_INTR_CHK
+   check (DT_BEGIN < DT_END);
+
+alter table AUDIT_REQ
+   add constraint ADT_REQ_DT_INTR_TSTZ_CHK
+   check (DT_BEGIN_TSTZ < DT_END_TSTZ);
+
+alter table AUDIT_REQ modify(DT_BEGIN not null);
+alter table AUDIT_REQ modify(DT_END not null);
+

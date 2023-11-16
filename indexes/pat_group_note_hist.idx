@@ -1,0 +1,12 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 05/09/2012 14:28
+-- CHANGE REASON: [ALERT-239422] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE INDEX pgnh_group_idx ON pat_group_note_hist (id_patient,id_episode) TABLESPACE index_m';
+    EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.'); 
+END;
+/
+-- CHANGE END: Paulo Teixeira

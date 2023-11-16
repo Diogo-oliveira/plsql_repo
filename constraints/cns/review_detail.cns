@@ -1,0 +1,116 @@
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 23/10/2009 08:27
+-- CHANGE REASON: New developments,  provide the ability to document that the information was reviewed in the current visit or episode (v2.5.0.7)
+alter table review_detail
+add ( constraint revd_pk primary key (id_record_area, flg_context, id_professional, dt_review)
+) ;
+
+alter table review_detail
+add constraint revd_flgctx_chk check(flg_context in ('PR', 'AL', 'HA', 'ME', 'BT', 'AD', 'PH'));
+-- CHANGE END: Rui Duarte
+
+
+-- change by: rui.baeta
+-- change date: 23/10/2009 08:26
+-- change reason: ALERT-870: provide the ability to document that the information was reviewed in the current visit or episode
+alter table review_detail
+add ( constraint revd_pk primary key (id_record_area, flg_context, id_professional, dt_review)
+) ;
+
+alter table review_detail
+add constraint revd_flgctx_chk check(flg_context in ('PR', 'AL', 'HA', 'ME', 'BT', 'AD', 'PH'));
+-- change end: rui.baeta
+
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 22/11/2010 10:39
+-- CHANGE REASON: [ALERT-139330] 
+DECLARE
+    e_already_not_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -02264);
+BEGIN
+    BEGIN
+        dbms_output.put_line('ALTER TABLE review_detail add CONSTRAINT revd_flgproblem_chk CHECK(flg_problem_review IN (''Y'', ''N''))');
+        EXECUTE IMMEDIATE 'ALTER TABLE review_detail add CONSTRAINT revd_flgproblem_chk CHECK(flg_problem_review IN (''Y'', ''N''))';
+
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/11/2010 11:54
+-- CHANGE REASON: [ALERT-71181] 
+DECLARE
+    e_already_not_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE review_detail add CONSTRAINT revd_flgproblem_chk CHECK(flg_problem_review IN (''Y'', ''N''))';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table REVIEW_DETAIL  add constraint REVD_FLGAUTO_CHK  check (flg_auto in(''Y'', ''N''))';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 24/01/2011 14:50
+-- CHANGE REASON: [ALERT-157301] New developments in PastHistory, free text values added(DML STEP 1)(v.2.6.0.5)
+--                
+alter table review_detail
+drop constraint revd_flgctx_chk;
+
+alter table review_detail
+add constraint revd_flgctx_chk check(flg_context in ('PR', 'AL', 'HA', 'ME', 'BT', 'AD', 'PH', 'PT'));
+-- CHANGE END: Rui Duarte
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 28/04/2011 16:24
+-- CHANGE REASON: [ALERT-170534] Reconciliation - Constraint
+ALTER TABLE REVIEW_DETAIL DROP CONSTRAINT REVD_FLGCTX_CHK;
+
+alter table REVIEW_DETAIL
+  add constraint REVD_FLGCTX_CHK
+   check (flg_context in ('PR', 'AL', 'HA', 'ME', 'BT', 'AD', 'PH', 'PT', 'VS', 'RM', 'MR'));
+  
+comment on column REVIEW_DETAIL.FLG_CONTEXT
+  is 'Record context flag (PR, AL, HA, ME, BT, AD, PH, VS, RM, MR)';
+-- CHANGE END:  Pedro Morais
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 17/08/2011 18:47
+-- CHANGE REASON: [ALERT-190780] 
+ALTER TABLE REVIEW_DETAIL
+DROP CONSTRAINT REVD_FLGCTX_CHK;
+
+alter table REVIEW_DETAIL
+add constraint REVD_FLGCTX_CHK
+check (flg_context in ('PR', 'AL', 'HA', 'ME', 'BT', 'AD', 'PH', 'PT', 'VS', 'RM', 'MR', 'TM'));
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 11/11/2014 15:25
+-- CHANGE REASON: [ALERT-301386] 
+BEGIN
+    EXECUTE IMMEDIATE 'alter table REVIEW_DETAIL drop constraint REVD_FLGCTX_CHK';
+    EXECUTE IMMEDIATE 'alter table REVIEW_DETAIL  add constraint REVD_FLGCTX_CHK check (flg_context in (''PR'', ''AL'', ''HA'', ''ME'', ''BT'', ''AD'', ''PH'', ''PT'', ''VS'', ''RM'', ''MR'', ''TM'',''VA''));';
+
+exception when others then
+  dbms_output.put_line('ALTER TABLE mtos_param ADD constraint ERROR!');
+end;
+/
+-- CHANGE END: mario.mineiro

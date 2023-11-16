@@ -1,0 +1,53 @@
+CREATE TABLE PREGNANCY_REGISTER
+ (  ID_PREGNANCY_REGISTER NUMBER(24,0) NOT NULL ENABLE,
+    DT_PREGN_REGISTER DATE NOT NULL ENABLE,
+		DESC_REGISTER VARCHAR2(4000) NOT NULL ENABLE,
+		ID_PAT_PREGNANCY NUMBER(24,0) NOT NULL ENABLE,
+		ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+		FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+		ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+		ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE
+ );
+
+
+COMMENT ON TABLE pregnancy_register IS 'Tabela com os registos associados a uma gravidez';
+
+COMMENT ON COLUMN pregnancy_register.dt_pregn_register IS 'Data do registo';
+COMMENT ON COLUMN pregnancy_register.desc_register IS 'Informação registada';
+COMMENT on column pregnancy_register.id_pat_pregnancy IS 'Gravidez associada';
+COMMENT on column pregnancy_register.id_professional IS 'Profissional que efectuou o registo';
+COMMENT on column pregnancy_register.flg_type IS 'Tipo de registo. C - Cardiotocográfico';
+COMMENT on column pregnancy_register.id_institution IS 'Instituição onde foi efectuado o registo';
+COMMENT on column pregnancy_register.id_software IS 'Software onde foi efectuado o registo';
+
+alter table pregnancy_register 
+add (dt_pregn_register_tstz timestamp with local time zone); 
+
+ALTER TABLE pregnancy_register drop column dt_pregn_register;
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:49
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table PREGNANCY_REGISTER
+  is 'Table with cardiotocographic records associated with a pregnancy';
+-- Add comments to the columns 
+comment on column PREGNANCY_REGISTER.id_pregnancy_register
+  is 'Primary key ';
+comment on column PREGNANCY_REGISTER.desc_register
+  is 'Pregnancy information ';
+comment on column PREGNANCY_REGISTER.id_pat_pregnancy
+  is 'Patient pregnancy information ';
+comment on column PREGNANCY_REGISTER.id_professional
+  is 'Professional ID';
+comment on column PREGNANCY_REGISTER.flg_type
+  is 'Record Type. C - cardiotocographic';
+comment on column PREGNANCY_REGISTER.id_institution
+  is 'Institution ID';
+comment on column PREGNANCY_REGISTER.id_software
+  is 'Software ID';
+comment on column PREGNANCY_REGISTER.dt_pregn_register_tstz
+  is 'Register date';
+-- CHANGE END: Elisabete Bugalho

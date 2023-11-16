@@ -1,0 +1,50 @@
+
+
+  CREATE TABLE LANGUAGE
+   (	ID_LANGUAGE NUMBER(6,0) NOT NULL ENABLE,
+	DESC_LANGUAGE VARCHAR2(30) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	NLS_CODE VARCHAR2(30),
+	LOCALE VARCHAR2(30)
+   );
+
+
+COMMENT ON COLUMN language.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN language.nls_code IS 'Código NLS para, por exemplo, conversão de datas' ;
+COMMENT ON COLUMN language.locale IS 'Identificação do locale java associado à língua. Nesta coluna indica-se a língua, país e variante. Deve obedecer à seguinte sintaxe: [língua]_[país]_[variante]. Ex: pt_PT' ;
+
+alter table language add flg_available_online varchar2(2) default 'N';
+comment on column language.flg_available_online is 'Languages available on the ALERT ONLINE software';
+
+
+
+
+--
+-- CHANGED BY: THIAGO BRITO
+-- CHANGE DATE: 2009-Nov-24
+-- CHANGE REASON: ALERT-58879
+
+ALTER TABLE LANGUAGE add intern_name VARCHAR2(200);
+
+-- CHANGE END: THIAGO BRITO
+--
+
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 14/10/2010 18:42
+-- CHANGE REASON: [ALERT-129567] Touch-Option formatting text rules
+ALTER TABLE LANGUAGE 
+ADD FLG_QUANTIF_PLACEMENT VARCHAR2(1 CHAR);
+
+COMMENT ON COLUMN language.flg_quantif_placement IS 'Adjective placement. This flag is used to identify the rule that is applied in this language for adjective placement before/after the noun. Used for compatibility purposes in Touch-option templates in order to define the position of element''s quantification. Allowable values: B- Quantification is placed before the element; A-Quantification is placed after the element';
+-- CHANGE END: Ariel Machado
+
+-- 07-01-2016
+COMMENT ON COLUMN ALERT.LANGUAGE.FLG_AVAILABLE         IS 'Availability of record' ;
+COMMENT ON COLUMN ALERT.LANGUAGE.NLS_CODE              IS 'Oracle NLS_CODE for date conversions' ;
+COMMENT ON COLUMN ALERT.LANGUAGE.LOCALE                IS 'Java locale associated to language. Must follow following pattern: [language]_[country]_[variante]. Ex: pt_PT' ;
+comment on column ALERT.LANGUAGE.FLG_AVAILABLE_ONLINE  IS 'Language available on the ALERT ONLINE software';
+COMMENT ON COLUMN ALERT.LANGUAGE.FLG_QUANTIF_PLACEMENT IS 'Adjective placement. This flag is used to identify the rule that is applied in this language for adjective placement before/after the noun. Used for compatibility purposes in Touch-option templates in order to define the position of element''s quantification. Allowable values: B- Quantification is placed before the element; A-Quantification is placed after the element';
+
+COMMENT ON TABLE ALERT.LANGUAGE IS 'Languages that may be used in PFH.' ;

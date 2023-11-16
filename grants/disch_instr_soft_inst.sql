@@ -1,0 +1,1 @@
+grant select on disch_instr_soft_inst to alert_viewer; 

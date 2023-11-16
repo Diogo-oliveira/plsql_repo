@@ -1,0 +1,15 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/04/2015 16:17
+-- CHANGE REASON: [ALERT-31026901] CO-SIGN  - Database model Versioning
+
+BEGIN
+pk_versioning.run(i_sql => q'[ALTER TABLE co_sign add CONSTRAINT cs_episode_fk foreign key(id_episode) references episode(id_episode)]');
+pk_versioning.run(i_sql => q'[ALTER TABLE co_sign add CONSTRAINT cs_order_type_fk foreign key(id_order_type) references order_type(id_order_type)]');
+pk_versioning.run(i_sql => q'[ALTER TABLE co_sign add CONSTRAINT cs_prof_consigned_fk foreign key(id_prof_co_signed) references professional(id_professional)]');
+pk_versioning.run(i_sql => q'[ALTER TABLE co_sign add CONSTRAINT cs_prof_created_fk foreign key(id_prof_created) references professional(id_professional)]');
+pk_versioning.run(i_sql => q'[ALTER TABLE co_sign add CONSTRAINT cs_prof_ord_by_fk foreign key(id_prof_ordered_by) references professional(id_professional)]');
+pk_versioning.run(i_sql => q'[ALTER TABLE co_sign add CONSTRAINT cs_task_type_action_fk foreign key(id_task_type, id_action) references task_type_actions(id_task_type,
+                                                                                                                                  id_action)]');
+END;
+/
+-- CHANGE END: Elisabete Bugalho

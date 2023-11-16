@@ -1,0 +1,11 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 13/06/2016 15:37
+-- CHANGE REASON: [ALERT-322139] Issue Replication: Fast Tracks Manual Activation
+--                
+
+BEGIN
+    pk_versioning.run('ALTER TABLE fast_track_reason ADD CONSTRAINT fast_track_reason_pk PRIMARY KEY (id_fast_track_reason) USING INDEX TABLESPACE ALERT_IDX');
+    pk_versioning.run('alter table fast_track_reason add constraint FTR_FLG_AV_CHK check (FLG_AVAILABLE IN (''Y'',''N''))');
+END;
+/
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,29 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 17/01/2014 12:11
+-- CHANGE REASON: [ALERT-274026] New table for the detail of a message (related elements) CDR_EXTERNAL_DET
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create index CDRED_CALL_FK_IDX on CDR_EXTERNAL_DET (ID_CDR_CALL)
+';
+exception when others then
+  dbms_output.put_line('index CDRED_CALL_FK_IDX exists!');
+end;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 17/01/2014 12:11
+-- CHANGE REASON: [ALERT-274026] New table for the detail of a message (related elements) CDR_EXTERNAL_DET
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create index CDRED_EXTERNAL_FK_IDX on CDR_EXTERNAL_DET (ID_CDR_EXTERNAL)
+';
+exception when others then
+  dbms_output.put_line('index CDRED_EXTERNAL_FK_IDX exists!');
+end;
+/
+-- CHANGE END: mario.mineiro

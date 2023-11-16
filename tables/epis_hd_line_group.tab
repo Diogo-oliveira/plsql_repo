@@ -1,0 +1,62 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 02/10/2013 15:31
+-- CHANGE REASON: [ALERT-266183 ] Intake and output improvements
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -00955);
+BEGIN
+    --i_flg_category
+    --DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'EPIS_HD_LINE_GROUP',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'TRS',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+
+    BEGIN
+        EXECUTE IMMEDIATE '
+CREATE TABLE EPIS_HD_LINE_GROUP
+(
+ID_EPIS_HD_LINE_GROUP     NUMBER(24) NOT NULL,
+ID_EPIS_HIDRICS_GROUP     NUMBER(24) NOT NULL, 
+ID_EPIS_HIDRICS_LINE      NUMBER(24) NOT NULL,
+ID_EPIS_HDL_GROUP_CHILD   NUMBER(24),
+FLG_SHOW_PARAMETERS_GRID  VARCHAR2(24 CHAR) NOT NULL,
+CREATE_USER VARCHAR2(30 CHAR),
+CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION NUMBER(24),
+UPDATE_USER VARCHAR2(30 CHAR),
+UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION NUMBER(24)
+) TABLESPACE TABLE_L';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+COMMENT ON TABLE EPIS_HD_LINE_GROUP IS 'Association of lines to groups';
+COMMENT ON COLUMN EPIS_HD_LINE_GROUP.ID_EPIS_HD_LINE_GROUP IS 'Epis hidrics line group id';
+COMMENT ON COLUMN EPIS_HD_LINE_GROUP.ID_EPIS_HIDRICS_GROUP IS 'Epis hidrics group id';
+COMMENT ON COLUMN EPIS_HD_LINE_GROUP.ID_EPIS_HIDRICS_LINE IS 'Epis hidrics line id';
+COMMENT ON COLUMN EPIS_HD_LINE_GROUP.ID_EPIS_HDL_GROUP_CHILD IS 'Id to be used when it is pretended to create a group with a result of an irrigation (that is already a group)';
+COMMENT ON COLUMN EPIS_HD_LINE_GROUP.FLG_SHOW_PARAMETERS_GRID IS 'Y-The group result should be shown in the parameters grid (Y to the irrigations groups). N-Otherwise';
+COMMENT ON COLUMN EPIS_HD_LINE_GROUP.CREATE_USER IS 'Professional ID that creates the registry';
+COMMENT ON COLUMN EPIS_HD_LINE_GROUP.CREATE_TIME IS 'Date of registry creation';
+COMMENT ON COLUMN EPIS_HD_LINE_GROUP.CREATE_INSTITUTION IS 'Institution ID where registry was created';
+COMMENT ON COLUMN EPIS_HD_LINE_GROUP.UPDATE_USER IS 'Professional ID that last updates the registry';
+COMMENT ON COLUMN EPIS_HD_LINE_GROUP.UPDATE_TIME IS 'Date of registry last update';
+COMMENT ON COLUMN EPIS_HD_LINE_GROUP.UPDATE_INSTITUTION IS 'Institution ID where registry was last updated';
+
+BEGIN
+    EXECUTE IMMEDIATE ('alter table epis_hd_line_group add FLG_STATUS VARCHAR2(1 CHAR) default ''A'' NOT NULL');
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('operacao ja executada anteriormente');
+END;
+/
+-- CHANGE END: Sofia Mendes

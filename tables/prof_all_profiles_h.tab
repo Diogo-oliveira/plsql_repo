@@ -1,0 +1,52 @@
+DECLARE
+L_DEL_SCRIPT VARCHAR2(1000 CHAR) ;
+BEGIN
+L_DEL_SCRIPT:= 'DELETE FROM ALERT.PROF_PROFILES_H WHERE (:PRM = 1 AND ID_INSTITUTION != 0)';
+PK_FRMW_OBJECTS.INSERT_INTO_FRMW_OBJECTS(I_OWNER              => 'ALERT',
+                                         I_OBJ_NAME           => 'PROF_ALL_PROFILES_H',
+                                         I_OBJ_TYPE           => 'TABLE',
+                                         I_FLG_CATEGORY       => 'PRM',
+                                         I_FLG_ALERT_DEFAULT  => 'N',
+                                         I_DELETE_SCRIPT      => L_DEL_SCRIPT,
+                                         I_FLG_DEFAULT_CHILD  => 'N',
+                                         I_FLG_NZD            => 'Y',
+                                         I_FLG_SENSITIVE_DATA => 'N');
+END;
+/
+
+-- TABLE
+CREATE TABLE ALERT.PROF_ALL_PROFILES_H
+(
+DT_ACTION                   TIMESTAMP WITH LOCAL TIME ZONE default current_timestamp not null,
+ID_PROFESSIONAL             NUMBER(24) NOT NULL,
+ID_PROFILE_TEMPLATE         NUMBER(24) NOT NULL,
+ID_INSTITUTION              NUMBER(24) NOT NULL,
+ID_SOFTWARE                 NUMBER(24) NOT NULL,
+FLG_SHOW_VIEWER             VARCHAR2(0001 CHAR) NOT NULL,
+FLG_ACTION                  VARCHAR2(0001 CHAR) NOT NULL,
+ID_PK                       NUMBER(24)          NOT NULL,
+CREATE_USER                 VARCHAR2(24),
+CREATE_TIME                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION          NUMBER(24),
+UPDATE_USER                 VARCHAR2(24),
+UPDATE_TIME                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION          NUMBER(24)
+)
+tablespace ALERT_DATA
+;
+
+COMMENT ON TABLE  ALERT.PROF_ALL_PROFILES_H                      IS 'Table where all profiles for a professional are configured';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES_H.DT_ACTION            IS 'Date of record creation';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES_H.ID_PROFESSIONAL      IS 'Professional identifier';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES_H.ID_PROFILE_TEMPLATE  IS 'Profile to be available for use';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES_H.ID_INSTITUTION       IS 'Institution where configuration is to be located';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES_H.ID_SOFTWARE          IS 'Software of profile';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES_H.FLG_SHOW_VIEWER      IS 'Flag that hides/show viewer';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES_H.FLG_ACTION           IS 'Operation performed: (G)rant, (R)evoke and (X) for current profile';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES_H.ID_PK                IS 'Flag that hides/show viewer';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES_H.CREATE_USER          IS 'User that created the record';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES_H.CREATE_TIME          IS 'Time when the record was created';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES_H.CREATE_INSTITUTION   IS 'Institution where record was created';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES_H.UPDATE_USER          IS 'Last user that changed the record';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES_H.UPDATE_INSTITUTION   IS 'Last Institution where user made the change';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES_H.UPDATE_TIME          IS 'Time of Last change';

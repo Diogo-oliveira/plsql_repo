@@ -1,0 +1,60 @@
+ALTER TABLE WL_TOPICS ADD 
+      CONSTRAINT WT_PK    
+      PRIMARY    KEY (ID_TOPICS);
+      
+      
+
+-- CHANGED BY: RicardoNunoAlmeida
+-- CHANGE DATE: 23/04/2010 17:53
+-- CHANGE REASON: [ALERT-91338] 
+ALTER TABLE wl_topics ADD CONSTRAINT WT_PK (file_name, id_department, id_wl_queue_group);
+
+alter table WL_TOPICS
+  add constraint WT_WLQG_FK foreign key (ID_WL_QUEUE_GROUP)
+  references WL_QUEUE_GROUP (ID_WL_QUEUE_GROUP);
+-- CHANGE END: RicardoNunoAlmeida
+
+-- CHANGED BY: RicardoNunoAlmeida
+-- CHANGE DATE: 23/04/2010 19:27
+-- CHANGE REASON: [ALERT-91338] 
+ALTER TABLE wl_topics ADD CONSTRAINT WT_PK (file_name, id_department, id_wl_queue_group);
+
+alter table WL_TOPICS
+  add constraint WT_WLQG_FK foreign key (ID_WL_QUEUE_GROUP)
+  references WL_QUEUE_GROUP (ID_WL_QUEUE_GROUP);
+-- CHANGE END: RicardoNunoAlmeida
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 26/04/2010 12:18
+-- CHANGE REASON: [ALERT-92744] 
+ALTER TABLE wl_topics ADD CONSTRAINT WT_PK PRIMARY KEY (file_name, id_department, id_wl_queue_group);
+
+alter table WL_TOPICS
+  add constraint WT_WLQG_FK foreign key (ID_WL_QUEUE_GROUP)
+  references WL_QUEUE_GROUP (ID_WL_QUEUE_GROUP);
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 12/04/2011 09:35
+-- CHANGE REASON: [ALERT-172399] 
+BEGIN
+    EXECUTE IMMEDIATE '
+    ALTER TABLE wl_topics ADD CONSTRAINT WT_PK PRIMARY KEY (file_name, id_department, id_wl_queue_group) ENABLE NOVALIDATE';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already exists.');
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:30
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE WL_TOPICS ADD CONSTRAINT WT_FLG_ACTIVE_CHK CHECK (FLG_ACTIVE IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint WT_FLG_ACTIVE_CHK table WL_TOPICS column FLG_ACTIVE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto

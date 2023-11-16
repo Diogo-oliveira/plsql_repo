@@ -1,0 +1,93 @@
+-- Create table
+create table DRUG_PRESC_RESULT
+(
+  ID_DRUG_PRESC_RESULT NUMBER(12) not null,
+  ID_DRUG_PRESC_PLAN   NUMBER(24) not null,
+  DT_DRUG_PRESC_RESULT TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  VALUE                VARCHAR2(100),
+  EVALUATION           VARCHAR2(100),
+  NOTES_ADVERS_REACT   VARCHAR2(2000),
+  ID_PROF_RESP         NUMBER(24) not null,
+  NOTES                VARCHAR2(2000),
+  ADW_LAST_UPDATE      DATE not null
+)
+;
+
+comment on table DRUG_PRESC_RESULT
+  is 'Esta tabela actualmente permite o registo de resultados de administração de medicamentos para as provas à tuberculina.';
+-- Add comments to the columns 
+comment on column DRUG_PRESC_RESULT.ID_DRUG_PRESC_RESULT
+  is 'Chave primária da tabela';
+comment on column DRUG_PRESC_RESULT.ID_DRUG_PRESC_PLAN
+  is 'ID do plano a que o resultado está associado';
+comment on column DRUG_PRESC_RESULT.DT_DRUG_PRESC_RESULT
+  is 'Data da leitura';
+comment on column DRUG_PRESC_RESULT.VALUE
+  is 'Valor do resultado';
+comment on column DRUG_PRESC_RESULT.EVALUATION
+  is 'Avaliação do resultado';
+comment on column DRUG_PRESC_RESULT.NOTES_ADVERS_REACT
+  is 'Registo das reacções adversas';
+comment on column DRUG_PRESC_RESULT.ID_PROF_RESP
+  is 'ID do profissional responsável pela leitura';
+comment on column DRUG_PRESC_RESULT.NOTES
+  is 'Notas desta leitura';
+comment on column DRUG_PRESC_RESULT.ADW_LAST_UPDATE
+  is 'Registo da data da última alteração';
+
+-- CHANGED REASON: Adição de uma coluna para o id da avaliação nos resultados das tuberculinas 
+-- APPLICATION: CARE (3)
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 11/01/2008 
+ALTER TABLE DRUG_PRESC_RESULT
+ADD ID_EVALUATION  VARCHAR2(1);
+COMMENT ON COLUMN DRUG_PRESC_RESULT.ID_EVALUATION IS 'Identifica o resultado da avaliação.';
+--END
+
+-- CHANGED REASON: Adição de uma coluna para registar o responsável pelo registo de leitura
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 02/09/2008 
+ALTER TABLE DRUG_PRESC_RESULT ADD ID_PROF_RESP_ADM NUMBER(24);
+COMMENT ON COLUMN DRUG_PRESC_RESULT.ID_PROF_RESP_ADM IS 'ID do profissional que regista a leitura.';
+--END
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:22
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_PRESC_RESULT IS 'Information about administration results to the tuberculin tests';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_RESULT.ID_DRUG_PRESC_RESULT  IS 'Administration result ID';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_RESULT.ID_DRUG_PRESC_PLAN  IS 'Administration plan ID associated to the result';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_RESULT.DT_DRUG_PRESC_RESULT IS 'Resust date';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_RESULT.VALUE  IS 'Resust value';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_RESULT.EVALUATION  IS 'Resust evaluation';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_RESULT.NOTES_ADVERS_REACT   IS 'Adverse reactions registration';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_RESULT.ID_PROF_RESP   IS 'Professional ID responsable for reading the result';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_RESULT.NOTES    IS 'Result notes';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_RESULT.ADW_LAST_UPDATE IS 'Last update date. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_RESULT.ID_EVALUATION   IS 'Identifies if there is the evalution result.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_RESULT.ID_PROF_RESP_ADM    IS 'Professional ID that registers the result.';
+/
+-- CHANGE END: Sofia Mendes

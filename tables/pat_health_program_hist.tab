@@ -1,0 +1,83 @@
+-- Create table
+create table PAT_HEALTH_PROGRAM_HIST
+(
+  ID_PAT_HEALTH_PROGRAM      NUMBER(24) not null,
+  ID_PATIENT                 NUMBER(24) not null,
+  ID_HEALTH_PROGRAM          NUMBER(24) not null,
+  DT_PAT_HPG_TSTZ            TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  ID_PROFESSIONAL            NUMBER(24) not null,
+  ID_INSTITUTION             NUMBER(24) not null,
+  ID_SOFTWARE                NUMBER(24) not null,
+  FLG_STATUS                 VARCHAR2(1) not null,
+  FLG_MONITOR_LOC            VARCHAR2(1) not null,
+  DT_BEGIN_TSTZ              TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  DT_END_TSTZ                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  NOTES                      VARCHAR2(4000),
+  ID_CANCEL_REASON           NUMBER(24),
+  CANCEL_NOTES               VARCHAR2(4000),
+  DT_PAT_HPG_HIST_TSTZ       TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  FLG_OPERATION              VARCHAR2(1) not null,
+  CREATE_USER                VARCHAR2(24),
+  CREATE_TIME                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION         NUMBER(24),
+  UPDATE_USER                VARCHAR2(24),
+  UPDATE_TIME                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION         NUMBER(24)
+)
+;
+-- Add comments to the table 
+comment on table PAT_HEALTH_PROGRAM_HIST
+  is 'History of patient''s association with health programs.';
+-- Add comments to the columns 
+comment on column PAT_HEALTH_PROGRAM_HIST.ID_PAT_HEALTH_PROGRAM
+  is 'Patient''s association with health program unique identifier.';
+comment on column PAT_HEALTH_PROGRAM_HIST.ID_PATIENT
+  is 'Patient identifier.';
+comment on column PAT_HEALTH_PROGRAM_HIST.ID_HEALTH_PROGRAM
+  is 'Health program identifier.';
+comment on column PAT_HEALTH_PROGRAM_HIST.DT_PAT_HPG_TSTZ
+  is 'Patient''s association with health program registry date.';
+comment on column PAT_HEALTH_PROGRAM_HIST.ID_PROFESSIONAL
+  is 'Changed by (professional identifier).';
+comment on column PAT_HEALTH_PROGRAM_HIST.ID_INSTITUTION
+  is 'Institution the patient is associated with health program.';
+comment on column PAT_HEALTH_PROGRAM_HIST.ID_SOFTWARE
+  is 'Software the patient is associated with health program.';
+comment on column PAT_HEALTH_PROGRAM_HIST.FLG_STATUS
+  is 'Status of patient in health program: (A)ctive, (I)nactive or (C)ancelled.';
+comment on column PAT_HEALTH_PROGRAM_HIST.FLG_MONITOR_LOC
+  is 'Health program monitoring location: t(H)is institution, (O)ther location.';
+comment on column PAT_HEALTH_PROGRAM_HIST.DT_BEGIN_TSTZ
+  is 'Patient health program signup date.';
+comment on column PAT_HEALTH_PROGRAM_HIST.DT_END_TSTZ
+  is 'Patient health program removal date.';
+comment on column PAT_HEALTH_PROGRAM_HIST.NOTES
+  is 'Register notes.';
+comment on column PAT_HEALTH_PROGRAM_HIST.ID_CANCEL_REASON
+  is 'Cancel reason identifier.';
+comment on column PAT_HEALTH_PROGRAM_HIST.CANCEL_NOTES
+  is 'Register cancellation notes.';
+comment on column PAT_HEALTH_PROGRAM_HIST.DT_PAT_HPG_HIST_TSTZ
+  is 'Registry date.';
+comment on column PAT_HEALTH_PROGRAM_HIST.FLG_OPERATION
+  is 'Type of change made: (S)tate change, (E)dit.';
+comment on column PAT_HEALTH_PROGRAM_HIST.CREATE_USER
+  is 'Creation User';
+comment on column PAT_HEALTH_PROGRAM_HIST.CREATE_TIME
+  is 'Creation Time';
+comment on column PAT_HEALTH_PROGRAM_HIST.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column PAT_HEALTH_PROGRAM_HIST.UPDATE_USER
+  is 'Update User';
+comment on column PAT_HEALTH_PROGRAM_HIST.UPDATE_TIME
+  is 'Update Time';
+comment on column PAT_HEALTH_PROGRAM_HIST.UPDATE_INSTITUTION
+  is 'Update Institution';
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 2009/07/06 11:50
+-- CHANGE REASON: ALERT-34833
+comment on column PAT_HEALTH_PROGRAM_HIST.FLG_OPERATION
+  is 'Type of change made: (S)tate change (removals, cancellations), (E)dit (editions), (A)dd (aditions and past inscriptions)';
+-- CHANGE END: Pedro Carneiro

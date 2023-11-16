@@ -1,0 +1,39 @@
+-- Create table vacc_dep_clin_serv
+create table VACC_DEP_CLIN_SERV
+(
+  ID_VACC_DEP_CLIN_SERV NUMBER(24) not null,
+  ID_VACC_MED_EXT       NUMBER(12) not null,
+  ID_DEP_CLIN_SERV      NUMBER(24),
+  FLG_TYPE              VARCHAR2(1),
+  ID_INSTITUTION        NUMBER(24),
+  ID_SOFTWARE           NUMBER(24),
+  ID_PROFESSIONAL       NUMBER(24),
+  ADW_LAST_UPDATE       DATE
+)
+
+-- Add comments to the table 
+comment on table VACC_DEP_CLIN_SERV
+  is 'Tabela de parametrização das vacinas por instituição / aplicação: vacinas / grupos de vacinas mais frequentes por departamento e serviço clínico';
+-- Add comments to the columns 
+comment on column VACC_DEP_CLIN_SERV.ID_VACC_DEP_CLIN_SERV
+  is 'Chave primária';
+comment on column VACC_DEP_CLIN_SERV.ID_VACC_MED_EXT
+  is 'Medicamento parametrizado para uma determinada vacina.';
+comment on column VACC_DEP_CLIN_SERV.ID_DEP_CLIN_SERV
+  is 'Departamento + serv. clínico para o qual a vacina é mais frequente';
+comment on column VACC_DEP_CLIN_SERV.FLG_TYPE
+  is 'Tipo de acção do departamento e serv clínico: R ¿ fornecimento, P ¿ pode requisitar, M ¿ mais frequentes';
+comment on column VACC_DEP_CLIN_SERV.ID_INSTITUTION
+  is 'Instituição para a qual o medicamento é requisitável';
+comment on column VACC_DEP_CLIN_SERV.ID_SOFTWARE
+  is 'Aplicação Alert para a qual se verifica o registo';
+comment on column VACC_DEP_CLIN_SERV.ID_PROFESSIONAL
+  is 'Profissional para o qual a vacina é mais frequente';
+  
+  
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2009-06-01
+-- CHANGE REASON: ALERT-30829
+alter table vacc_dep_clin_serv drop column adw_last_update;
+-- CHANGE END

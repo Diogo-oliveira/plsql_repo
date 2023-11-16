@@ -1,0 +1,20 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 22:34
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+alter table EPIS_HIDRICS_DET_HIST add constraint EHDH_PK primary key (ID_EPIS_HIDRICS_DET,DT_EPIS_HIDRICS_DET_HIST);
+alter table EPIS_HIDRICS_DET_HIST add constraint EHDH_FLG_ST_CHK check (FLG_STATUS IN ('A','C'));
+alter table EPIS_HIDRICS_DET_HIST add constraint EHDH_FLG_TYP_CHK check (FLG_TYPE IN ('A','P'));
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 19/11/2010 14:55
+-- CHANGE REASON: [ALERT-142990] Problem type:Bug Area: Patient Grid/Intakes & Outputs Expected Be (truncated)
+alter table EPIS_HIDRICS_DET_HIST drop constraint EHDH_FLG_ST_CHK;
+alter table EPIS_HIDRICS_DET_HIST add constraint EHDH_FLG_ST_CHK check (FLG_STATUS IN ('A','C','E'));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 11:24
+-- CHANGE REASON: [ALERT-153427] Intake and Output-Have the possibility to register bowel movements.
+alter table EPIS_HIDRICS_DET_HIST drop constraint EHDH_FLG_ST_CHK;
+-- CHANGE END: Sofia Mendes

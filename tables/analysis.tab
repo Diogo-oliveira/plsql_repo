@@ -1,0 +1,150 @@
+
+
+  CREATE TABLE ANALYSIS
+   (	ID_ANALYSIS NUMBER(12,0) NOT NULL ENABLE,
+	CODE_ANALYSIS VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_SAMPLE_RECIPIENT NUMBER(12,0) NOT NULL ENABLE,
+	ID_SAMPLE_TYPE NUMBER(12,0) NOT NULL ENABLE,
+	QTY_HARVEST NUMBER(10,2),
+	GENDER VARCHAR2(1),
+	AGE_MIN NUMBER(3,0),
+	AGE_MAX NUMBER(3,0),
+
+	ID_EXAM_CAT NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE analysis IS 'Parametrização de análises' ;
+
+COMMENT ON COLUMN analysis.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN analysis.rank IS 'Ordem de apresentação' ;
+COMMENT ON COLUMN analysis.qty_harvest IS 'Quantidade necessária na colheita, na unidade de medida do recipiente' ;
+COMMENT ON COLUMN analysis.gender IS 'Género ao qual se aplica' ;
+COMMENT ON COLUMN analysis.age_min IS 'Idade mínima à qual se aplica' ;
+COMMENT ON COLUMN analysis.age_max IS 'Idade máxima à qual se aplica' ;
+
+alter table ANALYSIS add MDM_CODING NUMBER(12);
+
+ALTER TABLE ANALYSIS 
+ ADD (CPT_CODE VARCHAR2(100));
+
+COMMENT ON COLUMN ANALYSIS.CPT_CODE IS 'Analysis CPT CODE';
+
+
+ALTER TABLE ANALYSIS ADD (REF_FORM_CODE VARCHAR2(1))
+/
+COMMENT ON COLUMN ANALYSIS.REF_FORM_CODE IS 'Categorização utilizada no formulário de P1 ‘MOD 330.10’'
+/
+
+ALTER TABLE ANALYSIS ADD (ID_CONTENT VARCHAR2(200));
+
+COMMENT ON COLUMN analysis.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+
+COMMENT ON COLUMN ANALYSIS.ID_ANALYSIS IS 'id da análise';
+COMMENT ON COLUMN ANALYSIS.CODE_ANALYSIS IS 'Código para tradução';
+COMMENT ON COLUMN ANALYSIS.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD: Y / N';
+COMMENT ON COLUMN ANALYSIS.ADW_LAST_UPDATE IS 'Data da última actualização';
+COMMENT ON COLUMN ANALYSIS.ID_SAMPLE_TYPE IS 'Id do tipo de amostra';
+COMMENT ON COLUMN ANALYSIS.GENDER IS 'Género ao qual se aplica: F/ M. NULL se não for específica para determinado sexo';
+COMMENT ON COLUMN ANALYSIS.MDM_CODING IS 'Codificação de  MDM "Medical Decision Making"';
+COMMENT ON COLUMN ANALYSIS.ID_CONTENT IS 'Identificador único de conteúdo';
+
+
+ALTER TABLE ANALYSIS ADD (BARCODE VARCHAR2(30))
+/
+COMMENT ON COLUMN ANALYSIS.BARCODE IS 'Analysis barcode'
+/
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:24
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.ANALYSIS MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:11
+-- CHANGE REASON: [ALERT-246248] 
+ALTER TABLE ANALYSIS 
+ ADD (FLG_LEGACY VARCHAR2(1 CHAR))
+ MODIFY (ID_SAMPLE_TYPE NUMBER(12) NULL);
+
+COMMENT ON COLUMN ANALYSIS.FLG_LEGACY IS 'Flag that indicates if the lab test is outdated or not';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:00
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS IS 'Lab tests catalogue';
+
+COMMENT ON COLUMN ANALYSIS.ID_ANALYSIS IS 'Lab test ID';
+COMMENT ON COLUMN ANALYSIS.CODE_ANALYSIS IS 'Translation code';
+COMMENT ON COLUMN ANALYSIS.FLG_AVAILABLE IS 'Flag that indicates if the record is available or not (Y/N)';
+COMMENT ON COLUMN ANALYSIS.RANK IS 'Rank';
+COMMENT ON COLUMN ANALYSIS.ADW_LAST_UPDATE IS 'Update date';
+COMMENT ON COLUMN ANALYSIS.ID_SAMPLE_TYPE IS 'Sample type ID';
+COMMENT ON COLUMN ANALYSIS.GENDER IS 'Gender';
+COMMENT ON COLUMN ANALYSIS.AGE_MIN IS 'Minimum age';
+COMMENT ON COLUMN ANALYSIS.AGE_MAX IS 'Maximum age';
+COMMENT ON COLUMN ANALYSIS.MDM_CODING IS 'MDM code';
+COMMENT ON COLUMN ANALYSIS.CPT_CODE IS 'CPT code';
+COMMENT ON COLUMN ANALYSIS.REF_FORM_CODE IS 'Referral code';
+COMMENT ON COLUMN ANALYSIS.ID_CONTENT IS 'Content unique ID';
+COMMENT ON COLUMN ANALYSIS.BARCODE IS 'Lab test barcode';
+COMMENT ON COLUMN ANALYSIS.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ANALYSIS.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ANALYSIS.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ANALYSIS.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ANALYSIS.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ANALYSIS.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN ANALYSIS.FLG_LEGACY IS 'Flag that indicates if the lab test is outdated or not';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 2017-12-15
+-- CHANGE REASON: [CALERT-1262] DDL Versioning
+ALTER TABLE ANALYSIS 
+ ADD (FLG_TYPE VARCHAR2(24 CHAR));
+
+COMMENT ON COLUMN ANALYSIS.FLG_TYPE IS 'Flg type of analysis';
+-- CHANGE END: Amanda Lee
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 2018-01-30
+-- CHANGE REASON: [CEMR-201] Lab test Pending datablock improvements
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE ANALYSIS drop column FLG_TYPE';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+-- CHANGE END: Amanda Lee
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/12/2022 13:16
+-- CHANGE REASON: [EMR-56553]
+begin
+pk_versioning.run('ALTER TABLE analysis DROP COLUMN mdm_coding');
+end;
+/
+begin
+pk_versioning.run('ALTER TABLE analysis DROP COLUMN cpt_code');
+end;
+/
+begin
+pk_versioning.run('ALTER TABLE analysis DROP COLUMN ref_form_code');
+end;
+/
+begin
+pk_versioning.run('ALTER TABLE analysis DROP COLUMN barcode');
+end;
+/
+-- CHANGE END: Ana Matos

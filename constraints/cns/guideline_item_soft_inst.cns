@@ -1,0 +1,37 @@
+    
+  ALTER TABLE GUIDELINE_ITEM_SOFT_INST ADD CONSTRAINT GIT_PK PRIMARY KEY (ID_GUIDELINE_ITEM_SOFT_INST);
+ 
+  ALTER TABLE GUIDELINE_ITEM_SOFT_INST ADD CONSTRAINT GIT_UK UNIQUE (FLG_ITEM_TYPE, ITEM, ID_SOFTWARE, ID_INSTITUTION);
+  
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 08/10/2010 09:36
+-- CHANGE REASON: [ALERT-128165] 
+alter table GUIDELINE_ITEM_SOFT_INST drop constraint GIT_UK drop index;
+alter table GUIDELINE_ITEM_SOFT_INST add constraint GIT_UK unique (FLG_ITEM_TYPE, ITEM, ID_SOFTWARE, ID_INSTITUTION, ID_MARKET);
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 28/03/2011 09:23
+-- CHANGE REASON: [ALERT-168339] Insert constraints for flag_status columns defined in sys_domain
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -02264); -- name already used by an existing constraint
+BEGIN
+    EXECUTE IMMEDIATE 'alter table GUIDELINE_ITEM_SOFT_INST add constraint GIT_FLG_ITEM_TYPE_CHK check (FLG_ITEM_TYPE in (''C'', ''T''))';
+EXCEPTION
+    WHEN e_already_exists THEN
+        NULL;
+END;
+/
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -02264); -- name already used by an existing constraint
+BEGIN
+    EXECUTE IMMEDIATE 'alter table GUIDELINE_ITEM_SOFT_INST add constraint GIT_FLG_AVAILABLE_CHK check (FLG_AVAILABLE in (''Y'', ''N''))';
+EXCEPTION
+    WHEN e_already_exists THEN
+        NULL;
+END;
+/
+-- CHANGE END: Carlos Loureiro

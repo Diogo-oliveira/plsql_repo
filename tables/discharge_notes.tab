@@ -1,0 +1,237 @@
+  CREATE TABLE DISCHARGE_NOTES
+   (	ID_DISCHARGE_NOTES NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_CREATION DATE NOT NULL ENABLE,
+	EPIS_COMPLAINT VARCHAR2(400),
+	EPIS_DIAGNOSIS VARCHAR2(400),
+	EPIS_TESTS VARCHAR2(400),
+	EPIS_DRUGS VARCHAR2(400),
+	RECOMMENDED VARCHAR2(4000),
+	FLG_STATUS VARCHAR2(2) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE
+   );
+
+
+COMMENT ON COLUMN discharge_notes.epis_drugs IS 'Texto associado à medicação' ;
+COMMENT ON COLUMN discharge_notes.recommended IS 'Recomendações (texto livre)' ;
+COMMENT ON COLUMN discharge_notes.flg_status IS 'Estado:NP - Não imprimido;P - Imprimido; C - cencelado' ;
+COMMENT ON COLUMN discharge_notes.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN discharge_notes.id_prof_cancel IS 'Profissional que cancelou a nota da alta' ;
+COMMENT ON COLUMN discharge_notes.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN discharge_notes.id_discharge_notes IS 'Chave primária' ;
+COMMENT ON COLUMN discharge_notes.id_episode IS 'Episódio' ;
+COMMENT ON COLUMN discharge_notes.id_professional IS 'Professional' ;
+COMMENT ON COLUMN discharge_notes.dt_creation IS 'Data de criação' ;
+COMMENT ON COLUMN discharge_notes.epis_complaint IS 'Texto associado à queixa' ;
+COMMENT ON COLUMN discharge_notes.epis_diagnosis IS 'Texto associado ao diagnóstico final' ;
+COMMENT ON COLUMN discharge_notes.epis_tests IS 'Texto associado aos testes(análises e exames de imagem comcluídos)' ;
+
+alter table discharge_notes 
+add (dt_creation_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+
+
+alter table discharge_notes add (release_from varchar2(4),
+dt_from TIMESTAMP(6) WITH LOCAL TIME ZONE,
+dt_until TIMESTAMP(6) WITH LOCAL TIME ZONE,
+notes_release varchar2(2000));
+
+
+COMMENT ON COLUMN discharge_notes.release_from IS 'A quem se destina a justificação';
+COMMENT ON COLUMN discharge_notes.dt_from IS 'Data desde ';
+COMMENT ON COLUMN discharge_notes.dt_until IS 'Data até';
+COMMENT ON COLUMN discharge_notes.notes_release IS 'Notas da justificação';
+
+
+alter table discharge_notes add (follow_up_with number(24),
+follow_up_in VARCHAR2(20),
+instructions_discussed VARCHAR2(4),
+id_follow_up_type number(24));
+
+
+COMMENT ON COLUMN discharge_notes.follow_up_with IS 'Profissional que acompanha o paciente numa proxima intervenção';
+COMMENT ON COLUMN discharge_notes.follow_up_in IS 'Data ou número de dias em que o paciente deve ser acompanhado pelo profissional';
+COMMENT ON COLUMN discharge_notes.instructions_discussed IS 'A quem foi comunicado as instruções';
+COMMENT ON COLUMN discharge_notes.id_follow_up_type IS 'Tipo de acompanhamento do paciente. D - Date; DY - Days; S - SOS';
+
+alter table discharge_notes add id_epis_report number(24);
+COMMENT ON COLUMN discharge_notes.id_epis_report IS 'Relatorio associado ao registo';
+
+--CHANGED BY: Ariel Geraldo Machado
+--CHANGE DATE: 2008-SEP-16
+--CHANGE REASON: Database denormalization
+ALTER TABLE discharge_notes add id_patient NUMBER(24);
+COMMENT ON column discharge_notes.id_patient IS 'Patient ID';
+--CHANGE END
+
+
+-- INPATIENT LMAIA 22-09-2008
+-- DROP das colunas DT_... que não são Timezone (desnormalização)
+alter table discharge_notes drop (DT_CREATION, DT_CANCEL);
+-- END
+
+-- CHANGE BY: Fábio Oliveira
+-- CHANGE DATE: 28-01-2009
+-- CHANGE REASON: [ALERT-15353] "Este episódio foi devido a" e "Foi diagnosticado com" das instruções para o utente não aceitam mais que 400 caracteres
+alter table
+   discharge_notes
+modify
+(
+   EPIS_DIAGNOSIS    varchar2(4000),
+	 EPIS_COMPLAINT    varchar2(4000)
+);
+-- CHANGE END
+
+-- CHANGE BY: Fábio Oliveira
+-- CHANGE DATE: 28-01-2009
+-- CHANGE REASON: [ALERT-15353] "Este episódio foi devido a" e "Foi diagnosticado com" das instruções para o utente não aceitam mais que 400 caracteres
+alter table
+   discharge_notes
+modify
+(
+   NOTES_RELEASE    varchar2(4000)
+);
+-- CHANGE END
+
+
+-- José Brito 07/03/2009 ALERT-10317
+ALTER TABLE discharge_notes ADD flg_pending_issue VARCHAR2(1);
+
+COMMENT ON COLUMN discharge_notes.flg_pending_issue IS 'Create pending issue associated to discharge instructions (Y) or not (N)';
+
+
+
+-- José Brito 01/04/2009 ALERT-10317
+ALTER TABLE discharge_notes ADD id_pending_issue NUMBER(24);
+ALTER TABLE discharge_notes ADD id_issue_assign_prof NUMBER(24);
+ALTER TABLE discharge_notes ADD id_issue_assign_group NUMBER(24);
+
+COMMENT ON COLUMN discharge_notes.id_pending_issue IS 'Pending issue ID';
+COMMENT ON COLUMN discharge_notes.id_issue_assign_prof IS 'Pending issue assignee ID: professional';
+COMMENT ON COLUMN discharge_notes.id_issue_assign_group IS 'Pending issue assignee ID: group';
+
+
+
+
+-- José Brito 01/04/2009 ALERT-10317
+ALTER TABLE discharge_notes DROP COLUMN id_issue_assign_prof;
+ALTER TABLE discharge_notes DROP COLUMN id_issue_assign_group;
+
+ALTER TABLE discharge_notes ADD flg_issue_assign VARCHAR2(1);
+COMMENT ON COLUMN discharge_notes.flg_issue_assign IS 'Pending issue is assigned to: (G) Groups (P) Professionals';
+
+COMMENT ON COLUMN discharge_notes.follow_up_in IS 'DEPRECATED. Use DISCHARGE_NOTES_FOLLOW_UP.FOLLOW_UP_IN';
+COMMENT ON COLUMN discharge_notes.id_follow_up_type IS 'DEPRECATED. Use DISCHARGE_NOTES_FOLLOW_UP.ID_FOLLOW_UP_TYPE';
+-- END
+
+
+
+
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 19/09/2013 15:05
+-- CHANGE REASON: [ALERT-104571] 
+alter table discharge_notes
+add discharge_instructions CLOB;
+
+comment on column discharge_notes.discharge_instructions IS 'Discharge instructions';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 30/10/2014 10:36
+-- CHANGE REASON: [ALERT-300285] 
+BEGIN
+  pk_versioning.run(i_sql => q'[alter table DISCHARGE_NOTES add
+(
+  FLG_CSG_PATIENT             varchar2(1 char),
+DT_CSG_PATIENT              TIMESTAMP(6) WITH LOCAL TIME ZONE
+)]');
+END;
+/
+comment on column DISCHARGE_NOTES.FLG_CSG_PATIENT is 'null - no response - Y - YES , N - NO, D - PATIENT DECLINED - Field on discharge Clinical Summary Given to Patient - SYS_DOMAIN: DISCHARGE.FLG_CSG_PATIENT - ALERT-298571';
+comment on column DISCHARGE_NOTES.DT_CSG_PATIENT is 'Field on discharge instruction - Clinical summary given on - ALERT-298571';
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:43
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table DISCHARGE_NOTES
+  is 'Discharge notes ';
+-- Add comments to the columns 
+comment on column DISCHARGE_NOTES.id_discharge_notes
+  is 'Primary key';
+comment on column DISCHARGE_NOTES.id_episode
+  is 'Episode ID';
+comment on column DISCHARGE_NOTES.id_professional
+  is 'Professional ID';
+comment on column DISCHARGE_NOTES.epis_complaint
+  is 'Text associated to patient complaint ';
+comment on column DISCHARGE_NOTES.epis_diagnosis
+  is 'Text associated to final diagnosis';
+comment on column DISCHARGE_NOTES.epis_tests
+  is 'Text with exams (DEPRECATED)';
+comment on column DISCHARGE_NOTES.epis_drugs
+  is 'Text with medication (DEPRECATED)';
+comment on column DISCHARGE_NOTES.recommended
+  is 'Recommendation (DEPRECATED use DISCHARGE_INSTRUCTIONS )';
+comment on column DISCHARGE_NOTES.flg_status
+  is 'Status :NP - Not printed;P - Printed; C - Cancelled';
+comment on column DISCHARGE_NOTES.adw_last_update
+  is 'Date of last change';
+comment on column DISCHARGE_NOTES.id_prof_cancel
+  is 'Professional ID that cancelled the discharge instruction';
+comment on column DISCHARGE_NOTES.dt_creation_tstz
+  is 'Creation date';
+comment on column DISCHARGE_NOTES.dt_cancel_tstz
+  is 'Cancel date';
+comment on column DISCHARGE_NOTES.release_from
+  is 'Release from. W - Work, S  - School';
+comment on column DISCHARGE_NOTES.dt_from
+  is 'Release begin date';
+comment on column DISCHARGE_NOTES.dt_until
+  is 'Release end date';
+comment on column DISCHARGE_NOTES.notes_release
+  is 'Restrict activity notes';
+comment on column DISCHARGE_NOTES.follow_up_with
+  is 'DEPRECATED. Use DISCHARGE_NOTES_FOLLOW_UP.ID_FOLLOW_UP_WITH';
+comment on column DISCHARGE_NOTES.instructions_discussed
+  is 'Insctuctions discussed with. P - Patient, F - Family, C - Caretaker, O  - Other';
+comment on column DISCHARGE_NOTES.id_epis_report
+  is 'Report ID associated to thes information';
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 12/02/2016 12:08
+-- CHANGE REASON: [ALERT-318449] Discharge instructions - change visit reason field to CLOB
+DECLARE
+    l_sql VARCHAR2(4000);
+BEGIN  
+    l_sql := 'ALTER TABLE DISCHARGE_NOTES ADD CODE_EPIS_COMPLAINT VARCHAR2(200 CHAR)GENERATED ALWAYS AS (''ALERT.DISCHARGE_NOTES.EPIS_COMPLAINT.''|| TO_CHAR(ID_DISCHARGE_NOTES)) VIRTUAL';
+    pk_versioning.run(l_sql);
+END;
+/
+
+COMMENT ON COLUMN DISCHARGE_NOTES.CODE_EPIS_COMPLAINT IS 'Patient complaint text';
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.discharge_notes move lob(discharge_instructions) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

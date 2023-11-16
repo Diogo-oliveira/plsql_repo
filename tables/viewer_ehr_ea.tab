@@ -1,0 +1,305 @@
+CREATE TABLE VIEWER_EHR_EA
+(ID_PATIENT NUMBER(24) NOT NULL
+,NUM_ALLERGY INTEGER
+,DESC_ALLERGY VARCHAR2(4000)
+,DT_ALLERGY TIMESTAMP WITH LOCAL TIME ZONE
+,DT_ALLERGY_FMT VARCHAR2(30)
+,NUM_LAB INTEGER
+,DESC_LAB VARCHAR2(4000)
+,DT_LAB TIMESTAMP WITH LOCAL TIME ZONE
+,NUM_DIAG_ICNP INTEGER
+,DESC_DIAG_ICNP VARCHAR2(4000)
+,DT_DIAG_ICNP TIMESTAMP WITH LOCAL TIME ZONE
+,NUM_EPISODE INTEGER
+,DESC_EPISODE VARCHAR2(4000)
+,DT_EPISODE TIMESTAMP WITH LOCAL TIME ZONE
+,NUM_EXAM INTEGER
+,DESC_EXAM VARCHAR2(4000)
+,DT_EXAM TIMESTAMP WITH LOCAL TIME ZONE
+,NUM_MED INT
+,DESC_MED VARCHAR2(4000)
+,DT_MED TIMESTAMP WITH LOCAL TIME ZONE
+,NUM_PROBLEM INTEGER
+,DESC_PROBLEM VARCHAR2(4000)
+,DT_PROBLEM TIMESTAMP WITH LOCAL TIME ZONE
+,DT_PROBLEM_FMT VARCHAR2(30)
+,NUM_INTERV INTEGER
+,DESC_INTERV VARCHAR2(4000)
+,DT_INTERV TIMESTAMP WITH LOCAL TIME ZONE
+,DT_DG_LAST_UPDATE TIMESTAMP WITH LOCAL TIME ZONE default current_timestamp
+);
+
+COMMENT ON TABLE VIEWER_EHR_EA IS 'Viewer Electronic Health Record Easy Access Table';
+COMMENT ON COLUMN VIEWER_EHR_EA.ID_PATIENT IS 'Patient ID';
+COMMENT ON COLUMN VIEWER_EHR_EA.NUM_ALLERGY IS 'Number of allergies';
+COMMENT ON COLUMN VIEWER_EHR_EA.DESC_ALLERGY IS '1st allergy description';
+COMMENT ON COLUMN VIEWER_EHR_EA.DT_ALLERGY IS '1st allergy date';
+COMMENT ON COLUMN VIEWER_EHR_EA.DT_ALLERGY_FMT IS 'Allergy date format ''Y'' (year), ''M'' (month) e ''D'' (day). ';
+COMMENT ON COLUMN VIEWER_EHR_EA.NUM_LAB IS 'Number of lab test''s requests';
+COMMENT ON COLUMN VIEWER_EHR_EA.DESC_LAB IS '1st lab test''s request''s description';
+COMMENT ON COLUMN VIEWER_EHR_EA.DT_LAB IS '1st lab test''s request''s date';
+COMMENT ON COLUMN VIEWER_EHR_EA.NUM_DIAG_ICNP IS 'Number of icnp diagnoses';
+COMMENT ON COLUMN VIEWER_EHR_EA.DESC_DIAG_ICNP IS '1st icnp diagnosis description';
+COMMENT ON COLUMN VIEWER_EHR_EA.DT_DIAG_ICNP IS '1st icnp diagnosis date';
+COMMENT ON COLUMN VIEWER_EHR_EA.NUM_EPISODE IS 'Number of episode';
+COMMENT ON COLUMN VIEWER_EHR_EA.DESC_EPISODE IS '1st episode type description';
+COMMENT ON COLUMN VIEWER_EHR_EA.DT_EPISODE IS '1st episode date';
+COMMENT ON COLUMN VIEWER_EHR_EA.NUM_EXAM IS 'Number of exams requests';
+COMMENT ON COLUMN VIEWER_EHR_EA.DESC_EXAM IS '1st exam''s request''s description';
+COMMENT ON COLUMN VIEWER_EHR_EA.DT_EXAM IS '1st exam''s request''s date';
+COMMENT ON COLUMN VIEWER_EHR_EA.NUM_MED IS 'Number of prescriptions';
+COMMENT ON COLUMN VIEWER_EHR_EA.DESC_MED IS '1st prescritpion description';
+COMMENT ON COLUMN VIEWER_EHR_EA.DT_MED IS '1st prescription date';
+COMMENT ON COLUMN VIEWER_EHR_EA.NUM_PROBLEM IS 'Number of problems';
+COMMENT ON COLUMN VIEWER_EHR_EA.DESC_PROBLEM IS '1st problem description';
+COMMENT ON COLUMN VIEWER_EHR_EA.DT_PROBLEM IS '1st problem date';
+COMMENT ON COLUMN VIEWER_EHR_EA.DT_PROBLEM_FMT IS 'Problems date format ''Y'' (year), ''M'' (month) e ''D'' (day). ';
+COMMENT ON COLUMN VIEWER_EHR_EA.NUM_INTERV IS 'Number of intervention requests';
+COMMENT ON COLUMN VIEWER_EHR_EA.DESC_INTERV IS '1st intervention''s request''s description';
+COMMENT ON COLUMN VIEWER_EHR_EA.DT_INTERV IS '1st intervention''s request''s date';
+COMMENT ON COLUMN VIEWER_EHR_EA.DT_DG_LAST_UPDATE IS 'Used to do information validation';
+
+
+
+ALTER TABLE viewer_ehr_ea add code_allergy VARCHAR2(200);
+COMMENT ON column viewer_ehr_ea.code_allergy IS 'Translation code of allergy';
+
+ALTER TABLE viewer_ehr_ea add code_episode VARCHAR2(200);
+COMMENT ON column viewer_ehr_ea.code_episode IS 'Translation code of episode';
+
+ALTER TABLE viewer_ehr_ea add code_exam VARCHAR2(200);
+COMMENT ON column viewer_ehr_ea.code_exam IS 'Translation code of exam';
+
+ALTER TABLE viewer_ehr_ea add code_med VARCHAR2(200);
+COMMENT ON column viewer_ehr_ea.code_med IS 'Translation code of med';
+
+ALTER TABLE viewer_ehr_ea add code_problem VARCHAR2(200);
+COMMENT ON column viewer_ehr_ea.code_problem IS 'Translation code of problem';
+
+ALTER TABLE viewer_ehr_ea add code_lab VARCHAR2(200);
+COMMENT ON column viewer_ehr_ea.code_lab IS 'Translation code of lab';
+
+ALTER TABLE viewer_ehr_ea add code_diag_icnp VARCHAR2(200);
+COMMENT ON column viewer_ehr_ea.code_diag_icnp IS 'Translation code of diag_icnp';
+
+ALTER TABLE viewer_ehr_ea add code_interv VARCHAR2(200);
+COMMENT ON column viewer_ehr_ea.code_interv IS 'Translation code of interv';
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/01/2009 09:51
+-- CHANGE REASON: ALERT-1304 Desnormalização VIEWER_EHR_EA
+alter table
+   VIEWER_EHR_EA
+add
+   (
+   CODE_ALLERGY varchar2(200),  
+   CODE_LAB varchar2(200),
+   CODE_DIAG_ICNP varchar2(200),
+   CODE_EPISODE varchar2(200),
+   CODE_EXAM varchar2(200),
+   CODE_MED varchar2(200),
+   CODE_PROBLEM varchar2(200),
+   CODE_INTERV varchar2(200)
+   );
+   
+COMMENT ON COLUMN VIEWER_EHR_EA.CODE_ALLERGY IS 'Allergy translation code';
+COMMENT ON COLUMN VIEWER_EHR_EA.CODE_LAB IS 'Lab translation code';
+COMMENT ON COLUMN VIEWER_EHR_EA.CODE_DIAG_ICNP IS 'Diag ICNP translation code';
+COMMENT ON COLUMN VIEWER_EHR_EA.CODE_EPISODE IS 'Episode translation code';
+COMMENT ON COLUMN VIEWER_EHR_EA.CODE_EXAM IS 'Exam translation code';
+COMMENT ON COLUMN VIEWER_EHR_EA.CODE_MED IS 'Medication translation code';
+COMMENT ON COLUMN VIEWER_EHR_EA.CODE_PROBLEM IS 'Problem translation code';
+COMMENT ON COLUMN VIEWER_EHR_EA.CODE_INTERV IS 'Intervention translation code';
+-- CHANGE END
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 11/03/2010 15:16
+-- CHANGE REASON: [ALERT-73258] 
+alter TABLE VIEWER_EHR_EA add
+ (
+      FLG_EXCLAMATION VARCHAR2(1) DEFAULT 'N' NOT NULL
+      ,FLG_INFECTIVE VARCHAR2(1) DEFAULT 'N' NOT NULL
+ );
+
+COMMENT ON COLUMN VIEWER_EHR_EA.FLG_EXCLAMATION IS 'Patient has header warning indicators';
+COMMENT ON COLUMN VIEWER_EHR_EA.FLG_INFECTIVE IS 'Patient has infectious deceases';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 05/12/2011 09:58
+-- CHANGE REASON: [ALERT-208258 ] 
+alter table viewer_ehr_ea add (
+  NUM_VS             INTEGER,
+  DESC_VS            VARCHAR2(4000),
+  DT_VS              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CODE_VS            VARCHAR2(200),
+  NUM_NOTE           INTEGER,
+  DESC_NOTE          VARCHAR2(4000),
+  DT_NOTE            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CODE_NOTE          VARCHAR2(200));
+
+comment on column VIEWER_EHR_EA.NUM_VS
+  is 'Number of vital signs';
+comment on column VIEWER_EHR_EA.DESC_VS
+  is '1st vital sign description';
+comment on column VIEWER_EHR_EA.DT_VS
+  is '1st vital sign date';
+comment on column VIEWER_EHR_EA.CODE_VS
+  is 'Vital sign translation code';
+comment on column VIEWER_EHR_EA.NUM_NOTE
+  is 'Number of notes';
+comment on column VIEWER_EHR_EA.DESC_NOTE
+  is '1st note description';
+comment on column VIEWER_EHR_EA.DT_NOTE
+  is '1st note date';
+comment on column VIEWER_EHR_EA.CODE_NOTE
+  is 'Note translation code';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 25/03/2014 10:48
+-- CHANGE REASON: [ALERT-280015] change table viewer_ehr_ea add new fields
+BEGIN
+    EXECUTE IMMEDIATE 'alter table viewer_ehr_ea add (num_archive        INTEGER,
+desc_archive       VARCHAR2(4000),
+dt_archive         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+code_archive       VARCHAR2(200),
+
+num_epis_archive        INTEGER,
+desc_epis_archive       VARCHAR2(4000),
+dt_epis_archive         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+code_epis_archive       VARCHAR2(200)
+
+)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: This already exists.');
+END;
+/
+
+comment on column VIEWER_EHR_EA.num_archive  is 'Number of Archive';
+comment on column VIEWER_EHR_EA.desc_archive  is '1st Archive description';
+comment on column VIEWER_EHR_EA.dt_archive  is '1st Archive date';
+comment on column VIEWER_EHR_EA.code_archive  is 'Archive translation code';
+
+
+comment on column VIEWER_EHR_EA.num_epis_archive  is 'Number of Episode/Archive';
+comment on column VIEWER_EHR_EA.desc_epis_archive  is '1st Episode/Archive description';
+comment on column VIEWER_EHR_EA.dt_epis_archive  is '1st Episode/Archive date';
+comment on column VIEWER_EHR_EA.code_epis_archive  is 'Episode/Archive translation code';
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 16/10/2018 14:43
+-- CHANGE REASON: [EMR-7721] 
+ALTER TABLE viewer_ehr_ea ADD num_BP INTEGER;
+ALTER TABLE viewer_ehr_ea ADD desc_BP VARCHAR2(4000);
+ALTER TABLE viewer_ehr_ea ADD dt_BP TIMESTAMP(6) WITH LOCAL TIME ZONE;
+ALTER TABLE viewer_ehr_ea ADD code_BP VARCHAR2(200);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 26/05/2020 12:12
+-- CHANGE REASON: [EMR-32257] - Viewer
+ALTER TABLE viewer_ehr_ea add id_problem NUMBER(24);
+
+comment on column viewer_ehr_ea.id_problem
+is 'id_concept_term for the registered problem';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 03/06/2020 16:44
+-- CHANGE REASON: [EMR-32678] - HHC > Error in patient when acessing to HHC referrals
+-- Add/modify columns
+alter table VIEWER_EHR_EA add id_task_type number(24);
+-- Add comments to the columns
+comment on column VIEWER_EHR_EA.id_task_type
+is 'id_task_type for registered problem';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 05/01/2021 14:30
+-- CHANGE REASON: [EMR-40155]
+ALTER TABLE viewer_ehr_ea MODIFY desc_allergy VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY dt_allergy_fmt VARCHAR2(30 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_lab VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_diag_icnp VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_episode VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_exam VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_med VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_problem VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY dt_problem_fmt VARCHAR2(30 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_interv VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_allergy VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_episode VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_exam VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_med VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_problem VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_lab VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_diag_icnp VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_interv VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY create_user VARCHAR2(30 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY update_user VARCHAR2(30 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY flg_exclamation VARCHAR2(1 CHAR) default 'N' not null;
+ALTER TABLE viewer_ehr_ea MODIFY flg_infective VARCHAR2(1 CHAR) default 'N' not null;
+ALTER TABLE viewer_ehr_ea MODIFY desc_vs VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_vs VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_note VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_note VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_archive VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_archive VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_epis_archive VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_epis_archive VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_bp VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_bp VARCHAR2(1000 CHAR);
+
+
+COMMENT ON COLUMN VIEWER_EHR_EA.NUM_BP IS 'Number of blood product';
+COMMENT ON COLUMN VIEWER_EHR_EA.DESC_BP IS '1st blood product description';
+COMMENT ON COLUMN VIEWER_EHR_EA.DT_BP IS '1st blood product date';
+COMMENT ON COLUMN VIEWER_EHR_EA.CODE_BP IS 'Blood product translation code';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 05/01/2021 15:36
+-- CHANGE REASON: [EMR-40155]
+ALTER TABLE viewer_ehr_ea MODIFY desc_allergy VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY dt_allergy_fmt VARCHAR2(30 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_lab VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_diag_icnp VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_episode VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_exam VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_med VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_problem VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY dt_problem_fmt VARCHAR2(30 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_interv VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_allergy VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_episode VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_exam VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_med VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_problem VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_lab VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_diag_icnp VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_interv VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY create_user VARCHAR2(30 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY update_user VARCHAR2(30 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY flg_exclamation VARCHAR2(1 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY flg_infective VARCHAR2(1 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_vs VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_vs VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_note VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_note VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_archive VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_archive VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_epis_archive VARCHAR2(1000 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_epis_archive VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY code_bp VARCHAR2(200 CHAR);
+ALTER TABLE viewer_ehr_ea MODIFY desc_bp VARCHAR2(1000 CHAR);
+
+
+COMMENT ON COLUMN VIEWER_EHR_EA.NUM_BP IS 'Number of blood product';
+COMMENT ON COLUMN VIEWER_EHR_EA.DESC_BP IS '1st blood product description';
+COMMENT ON COLUMN VIEWER_EHR_EA.DT_BP IS '1st blood product date';
+COMMENT ON COLUMN VIEWER_EHR_EA.CODE_BP IS 'Blood product translation code';
+-- CHANGE END: Ana Matos

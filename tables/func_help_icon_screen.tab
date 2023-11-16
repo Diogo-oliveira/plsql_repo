@@ -1,0 +1,50 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 16/12/2014 18:20
+-- CHANGE REASON: [ALERT-304404] 
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner            => 'ALERT',
+                                             i_obj_name         => 'FUNC_HELP_ICON_SCREEN',
+                                             i_obj_type         => 'TABLE',
+                                             i_flg_category     => 'DSV',
+                                             i_responsible_team => 'TOOLS');
+
+    pk_versioning.run(i_sql => 'CREATE TABLE FUNC_HELP_ICON_SCREEN (
+    ID_FUNC_HELP_ICON_SCREEN NUMBER(24) NOT NULL,
+    ID_FUNC_HELP_ICON        NUMBER(24) NOT NULL,
+    ID_FUNC_HELP_ICON_GROUP  NUMBER(24) NOT NULL,
+    SCREEN_NAME              VARCHAR2(200 CHAR) NOT NULL,
+    CODE_FH_ICON_SCREEN      AS (''FUNC_HELP_ICON_SCREEN.CODE_FH_ICON_SCREEN.''||TO_CHAR(ID_FUNC_HELP_ICON_SCREEN)),
+    ID_SOFTWARE              NUMBER(24) NOT NULL,
+    RANK                     NUMBER(24) NOT NULL,
+    FLG_AVAILABLE            VARCHAR2(1 CHAR) NOT NULL,
+    ICON_BG_COLOR            VARCHAR2(6 CHAR),
+    ICON_FG_COLOR            VARCHAR2(6 CHAR),    
+    CREATE_USER              VARCHAR2(200 CHAR),
+    CREATE_TIME              TIMESTAMP WITH LOCAL TIME ZONE,
+    CREATE_INSTITUTION       NUMBER(24),
+    UPDATE_USER              VARCHAR2(200 CHAR),
+    UPDATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE,
+    UPDATE_INSTITUTION       NUMBER(24))');
+    
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE FUNC_HELP_ICON_SCREEN IS ''Functionality help icon screen registration''';
+    
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.ID_FUNC_HELP_ICON_SCREEN IS ''Functionality help icon screen unique identifier''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.ID_FUNC_HELP_ICON        IS ''Functionality help icon unique identifier''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.ID_FUNC_HELP_ICON_GROUP  IS ''Functionality help icon group unique identifier''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.SCREEN_NAME              IS ''Screen Identifier''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.CODE_FH_ICON_SCREEN      IS ''Override code Functionality Help used in translation''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.ID_SOFTWARE              IS ''Software''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.RANK                     IS ''Rank used for order by''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.FLG_AVAILABLE            IS ''Flag available (Y\N)''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.ICON_BG_COLOR            IS ''Override icon background color (Hex format: 000000)''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.ICON_FG_COLOR            IS ''Override icon foreground color (Hex format: 000000)''';
+    --
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.create_user        IS ''Professional that created the registry''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.create_time        IS ''Date of the registry creation''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.create_institution IS ''Id of the institution where the registry was created''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.update_user        IS ''Last professional that updated the registry''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.update_time        IS ''Date of the last update to the registry''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_SCREEN.update_institution IS ''Id of the last institution where the registry was updated''';         
+END;
+/
+-- CHANGE END: Gustavo Serrano

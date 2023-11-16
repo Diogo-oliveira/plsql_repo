@@ -1,0 +1,159 @@
+
+
+  CREATE TABLE SAMPLE_RECIPIENT
+   (	ID_SAMPLE_RECIPIENT NUMBER(12,0) NOT NULL ENABLE,
+	CODE_SAMPLE_RECIPIENT VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	CAPACITY NUMBER(10,2),
+	CODE_CAPACITY_MEASURE VARCHAR2(200)
+   );
+
+
+COMMENT ON TABLE sample_recipient IS 'Recipientes para colheita de amostras' ;
+
+COMMENT ON COLUMN sample_recipient.code_sample_recipient IS 'Código para nome' ;
+COMMENT ON COLUMN sample_recipient.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN sample_recipient.rank IS 'Ordem de apresentação' ;
+COMMENT ON COLUMN sample_recipient.capacity IS 'Capacidade do recipiente' ;
+COMMENT ON COLUMN sample_recipient.code_capacity_measure IS 'Código para tradução da unidade de medida da capacidade' ;
+
+
+ALTER TABLE SAMPLE_RECIPIENT  ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN SAMPLE_RECIPIENT.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:24
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.SAMPLE_RECIPIENT MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 07/07/2014 10:50
+-- CHANGE REASON: [ALERT-289537 ] 
+DECLARE e_column_already_there EXCEPTION;
+e_invalid_identifier EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SAMPLE_RECIPIENT 
+ ADD (STANDARD_CODE VARCHAR2(200)
+ ,ID_UNIT_MEASURE NUMBER(24))';
+        EXECUTE IMMEDIATE 'ALTER TABLE SAMPLE_RECIPIENT MODIFY CODE_CAPACITY_MEASURE VARCHAR2(200 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE SAMPLE_RECIPIENT MODIFY CODE_SAMPLE_RECIPIENT VARCHAR2(200 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE SAMPLE_RECIPIENT MODIFY CREATE_USER VARCHAR2(24 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE SAMPLE_RECIPIENT MODIFY STANDARD_CODE VARCHAR2(200 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE SAMPLE_RECIPIENT MODIFY UPDATE_USER VARCHAR2(24 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE SAMPLE_RECIPIENT MODIFY ID_SAMPLE_RECIPIENT NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN SAMPLE_RECIPIENT.ID_SAMPLE_RECIPIENT IS ''Primary key''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN SAMPLE_RECIPIENT.CODE_SAMPLE_RECIPIENT IS ''Translation code''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN SAMPLE_RECIPIENT.STANDARD_CODE IS ''Standard code''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN SAMPLE_RECIPIENT.ID_UNIT_MEASURE IS ''Unit measure ID''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN SAMPLE_RECIPIENT.CODE_CAPACITY_MEASURE IS ''Translation code''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN SAMPLE_RECIPIENT.RANK IS ''Rank''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN SAMPLE_RECIPIENT.FLG_AVAILABLE IS ''Flag that indicates if the record is available or not (Y/N)''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN SAMPLE_RECIPIENT.ADW_LAST_UPDATE IS ''Last update date''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN SAMPLE_RECIPIENT.ID_CONTENT IS ''Content unique ID''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 14/01/2016 10:51
+-- CHANGE REASON: [ALERT-317702] 
+comment on table SAMPLE_RECIPIENT
+  is 'Lab tests'' sample recipient catalogue';
+-- Add comments to the columns 
+comment on column SAMPLE_RECIPIENT.id_sample_recipient
+  is 'Sample recipient ID';
+comment on column SAMPLE_RECIPIENT.code_sample_recipient
+  is 'Translation code';
+comment on column SAMPLE_RECIPIENT.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column SAMPLE_RECIPIENT.rank
+  is 'Rank';
+comment on column SAMPLE_RECIPIENT.adw_last_update
+  is 'Last update date';
+comment on column SAMPLE_RECIPIENT.capacity
+  is 'Recipient capacity';
+comment on column SAMPLE_RECIPIENT.code_capacity_measure
+  is 'Translation code (unit measure)';
+comment on column SAMPLE_RECIPIENT.id_content
+  is 'Content unique ID';
+comment on column SAMPLE_RECIPIENT.create_user
+  is 'Creation User';
+comment on column SAMPLE_RECIPIENT.create_time
+  is 'Creation Time';
+comment on column SAMPLE_RECIPIENT.create_institution
+  is 'Creation Institution';
+comment on column SAMPLE_RECIPIENT.update_user
+  is 'Update User';
+comment on column SAMPLE_RECIPIENT.update_time
+  is 'Update Time';
+comment on column SAMPLE_RECIPIENT.update_institution
+  is 'Update Institution';
+comment on column SAMPLE_RECIPIENT.standard_code
+  is 'Standard code';
+comment on column SAMPLE_RECIPIENT.id_unit_measure
+  is 'Unit measure ID';
+  
+  
+  
+-- CHANGE END: Ana Matos

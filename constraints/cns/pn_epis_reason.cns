@@ -1,0 +1,35 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 02/12/2010 16:15
+-- CHANGE REASON: [ALERT-146429] ddl.sql
+alter table pn_epis_reason
+  add constraint per_pk primary key (id_pn_epis_reason);
+alter table pn_epis_reason
+  add constraint per_uk unique (id_pn_epis_reason, id_episode, id_epis_complaint, id_epis_anamnesis);
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/12/2010 15:59
+-- CHANGE REASON: [ALERT-146429] ddl_to_ddl2.sql
+alter table pn_epis_reason
+  add constraint per_flg_status_chk
+  check (flg_status in ('A', 'O'));
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 11/01/2011 17:01
+-- CHANGE REASON: [ALERT-154579] added cancelled status
+alter table pn_epis_reason
+  drop constraint per_flg_status_chk;
+alter table pn_epis_reason
+  add constraint per_flg_status_chk
+  check (flg_status in ('A', 'O', 'C'));
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 05/04/2011 16:00
+-- CHANGE REASON: [ALERT-171317] H&P - Review database dvelopment with notes of DB Arch. - part2
+ALTER TABLE pn_epis_reason
+    ADD CONSTRAINT per_idcomp_idanam_chk
+    CHECK(case when id_epis_complaint is null and id_epis_anamnesis is null then null else 1
+    end is not null);
+-- CHANGE END: Sofia Mendes

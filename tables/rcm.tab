@@ -1,0 +1,48 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/05/2012 11:21
+-- CHANGE REASON: [ALERT-217767] 
+create TABLE RCM
+(
+ID_RCM           NUMBER(24) NOT NULL,
+CODE_RCM_SUMM       VARCHAR2(0200 CHAR) NOT NULL,
+CODE_RCM_DESC       VARCHAR2(0200 CHAR) NOT NULL,
+ID_RCM_TYPE           NUMBER(24) NOT NULL,
+ID_CONTENT           VARCHAR2(0200 CHAR) ,
+CREATE_USER              VARCHAR2(0024 CHAR),
+CREATE_TIME              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION       NUMBER(0024),
+UPDATE_USER              VARCHAR2(0024 CHAR),
+UPDATE_TIME              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION       NUMBER(0024));
+
+comment on table RCM is 'Recommendations table';
+comment on column RCM.id_RCM  is 'RCM ID';
+comment on column RCM.code_RCM_summ  is 'RCM summary code';
+comment on column RCM.code_RCM_desc  is 'RCM summary desc';
+comment on column RCM.ID_RCM_TYPE    is 'RCM type identifier';
+comment on column RCM.id_content     is 'Content unique ID';
+comment on column RCM.CREATE_USER  is 'Creation User';
+comment on column RCM.CREATE_TIME  is 'Creation Time';
+comment on column RCM.CREATE_INSTITUTION  is 'Creation Institution';
+comment on column RCM.UPDATE_USER  is 'Update User';
+comment on column RCM.UPDATE_TIME  is 'Update Time';
+comment on column RCM.UPDATE_institution  is 'Update Institution';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 23/08/2013 14:53
+-- CHANGE REASON: [ALERT-262898] 
+BEGIN
+   BEGIN
+    EXECUTE IMMEDIATE 'alter table RCM add color VARCHAR2(0200 CHAR)';
+   exception when others then
+      dbms_output.put_line('ALTER TABLE RCM add color ERROR!');		
+	END;
+	BEGIN
+    EXECUTE IMMEDIATE 'comment on column RCM.color is ''Color in hexadecimal for flash with 0x for the respective description''';
+   exception when others then
+      dbms_output.put_line('comment on column RCM.color ERROR!');    
+  END;
+end;
+/
+-- CHANGE END: mario.mineiro

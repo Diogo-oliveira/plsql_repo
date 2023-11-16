@@ -1,0 +1,17 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+declare
+   e_pk_already_there EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260); -- table already there
+begin
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_DCS
+  add constraint ICSD_PK primary key (ID_SOFTWARE, ID_DEP_CLIN_SERV, ID_CPLAN_STAND)';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

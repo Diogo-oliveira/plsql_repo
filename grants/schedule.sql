@@ -1,0 +1,29 @@
+-- CHANGED BY: Bruno Martins
+-- CHANGE DATE: 26-06-2009
+-- CHANGE REASON: ADT-1057
+grant select on schedule to alert_adtcod;
+-- CHANGED END: Bruno Martins
+
+-- CHANGED BY: Bruno Martins
+-- CHANGE DATE: 2011-06-27
+-- CHANGE REASON: ADT-4760
+grant references on schedule to alert_adtcod;
+-- CHANGED END: Bruno Martins
+
+-- CHANGED BY: André Silva
+-- CHANGE DATE: 18/01/2017 
+-- CHANGE REASON: ALERT-326669 
+GRANT SELECT  ON ALERT.SCHEDULE to ALERT_INTER;
+-- CHANGE END: André Silva
+
+-- CHANGED BY: Ruben Araujo
+-- CHANGE DATE: 24/05/2016 
+-- CHANGE REASON: [ALERT-320400] 
+GRANT SELECT  ON ALERT.SCHEDULE to ALERT_PRODUCT_TR ;
+-- CHANGE END: Ruben Araujo
+
+-- CHANGED BY: Nuno Amorim
+-- CHANGE DATE: 27/03/2018
+-- CHANGE REASON: [EMR-2005] 
+GRANT SELECT ON ALERT.SCHEDULE to ALERT_APSSCHDLR_TR;
+-- CHANGE END: Nuno Amorim

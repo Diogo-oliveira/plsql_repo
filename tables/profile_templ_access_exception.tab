@@ -1,0 +1,187 @@
+--Rui Batista 2008/04/30 
+--Excepções nos acessos
+create table profile_templ_access_exception
+(
+  ID_PROF_TEMPL_ACCESS_EXCEPTION    NUMBER(24) not null,
+  ID_PROFILE_TEMPLATE    						NUMBER(12),
+  FLG_TYPE													VARCHAR2(1) not null,
+  ID_INSTITUTION										NUMBER(24) not null,
+  RANK                    					NUMBER(6),
+  ID_SYS_BUTTON_PROP      					NUMBER(24),
+  FLG_CREATE              					VARCHAR2(1),
+  FLG_CANCEL              					VARCHAR2(1),
+  FLG_SEARCH              					VARCHAR2(1),
+  FLG_PRINT               					VARCHAR2(1),
+  FLG_OK                  					VARCHAR2(1),
+  FLG_DETAIL              					VARCHAR2(1),
+  FLG_CONTENT             					VARCHAR2(1),
+  FLG_HELP                					VARCHAR2(1),
+  ID_SYS_SHORTCUT         					NUMBER(24),
+  ID_SOFTWARE             					NUMBER(24),
+  ID_SHORTCUT_PK          					NUMBER(24),
+  ID_SOFTWARE_CONTEXT     					NUMBER(24),
+  FLG_GRAPH               					VARCHAR2(1),
+  FLG_VISION              					VARCHAR2(1),
+  FLG_DIGITAL             					VARCHAR2(240),
+  FLG_FREQ                					VARCHAR2(1),
+  FLG_NO                  					VARCHAR2(240),
+  POSITION                					NUMBER(3),
+  TOOLBAR_LEVEL           					NUMBER(2),
+  FLG_ACTION												VARCHAR2(1)
+);
+-- Add comments to the table 
+comment on table PROFILE_TEMPL_ACCESS_EXCEPTION is 'Excepções aos acessos dos templates aos botões. As flags não são preenchidas para os botões com deepnavs.';
+-- Add comments to the columns 
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.ID_PROF_TEMPL_ACCESS_EXCEPTION is 'Chave única';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.ID_PROFILE_TEMPLATE is 'ID do template';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_TYPE is 'Tipo de excepção: A- Add, R- Remove';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.ID_INSTITUTION is 'ID da instituição onde a excepção se aplica (0 para todas)';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.RANK is 'Ordem de apresentação';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.ID_SYS_BUTTON_PROP is 'ID do menu / deepnav';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_CREATE is 'Criação: N - não aplicável, I - inactivo, A - activo';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_CANCEL is 'Cancelamento: N - não aplicável, I - inactivo, A - activo';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_SEARCH is 'Pesquisa: N - não aplicável, I - inactivo, A - activo';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_PRINT is 'Impressão: N - não aplicável, I - inactivo, A - activo';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_OK is 'Avançar: N - não aplicável, I - inactivo, A - activo';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_DETAIL is 'Detalhe: N - não aplicável, I - inactivo, A - activo';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_CONTENT is 'Conteúdo: N - não aplicável, I - inactivo, A - activo';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_HELP is 'Ajuda: N - não aplicável, I - inactivo, A - activo';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.ID_SYS_SHORTCUT is 'ID do shortcut';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.ID_SOFTWARE is 'ID do software';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.ID_SHORTCUT_PK is 'ID do shortcut (PK)';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.ID_SOFTWARE_CONTEXT is 'Quando se acede numa aplicação (ex:OUTP) a funcionalidades de outra (ex: ORIS), a coluna ID_SOFTWARE deve ser preenchida com a aplicação acedida (ex:OUTP), mas ID_SOFTWARE_CONTEXT é preenchida com o ID da outra aplicação (ex: ORIS)';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_GRAPH is 'Ajuda: N - não aplicável, I - inactivo, A - activo';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_VISION is 'Ajuda: N - não aplicável, I - inactivo, A - activo';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_DIGITAL is 'Ajuda: N - não aplicável, I - inactivo, A - activo';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_FREQ is 'Ajuda: N - não aplicável, I - inactivo, A - activo';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_NO is 'Ajuda: N - não aplicável, I - inactivo, A - activo';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.POSITION is 'Posição do menu na toolbar (apenas para menus)';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.TOOLBAR_LEVEL is 'Nível da toolbar';
+comment on column PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_ACTION is 'acções: n - não aplicável, i - inactivo, a - activo';
+
+
+alter table profile_templ_access_exception 
+add (FLG_VIEW VARCHAR2(1));
+
+COMMENT ON COLUMN PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_VIEW IS 'Views: N - not applicable, I - inactive, A - active';
+
+
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 26/09/2012 08:57
+-- CHANGE REASON: [ARCHDB-1217] 
+ALTER TABLE profile_templ_access_exception add flg_global_shortcut VARCHAR2(1 CHAR) DEFAULT 'A';
+
+comment on column profile_templ_access_exception.flg_global_shortcut is 'Global shortcut flag';
+-- CHANGE END: Rui Spratley
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 14/02/2014 10:16
+-- CHANGE REASON: [ALERT-276435] 
+begin
+  pk_versioning.run('alter table profile_templ_access_exception add flg_info_button varchar2(1) default ''N'' not null');
+end;
+/
+
+begin
+  pk_versioning.run('comment on column profile_templ_access_exception.flg_info_button is ''Views: N - not applicable, I - inactive, A - active''');
+end;
+/
+-- CHANGE END: Rui Spratley
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 17/02/2014 10:50
+-- CHANGE REASON: [ALERT-276435] 
+begin
+  pk_versioning.run('alter table profile_templ_access_exception add flg_info_button varchar2(1 char) default ''N'' not null');
+end;
+/
+
+begin
+  pk_versioning.run('comment on column profile_templ_access_exception.flg_info_button is ''Info button: N - not applicable, I - inactive, A - active''');
+end;
+/
+-- CHANGE END: Rui Spratley
+
+-- 07-01-2016 CMF
+comment on table  ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION is 'Exceptions to permissions from profile_templ_access.';
+comment on column ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.ID_PROF_TEMPL_ACCESS_EXCEPTION is 'Primary Key';
+comment on column ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.ID_PROFILE_TEMPLATE            is 'ID of template';
+comment on column ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_TYPE                       is 'Exception Type: A- Add, R- Remove';
+comment on column ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.ID_INSTITUTION                 is 'ID of institution where exception is to be applied (0 para todas)';
+comment on column ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.ID_SYS_BUTTON_PROP             is 'ID of menu/Deepnav';
+comment on column ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_CREATE                     is 'Create: N - not applicable, I - inactive, A - active' ;
+comment on column ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_CANCEL                     is 'Cancel: N - not applicable, I - inactive, A - active' ;
+comment on column ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_SEARCH                     is 'Search: N - not applicable, I - inactive, A - active' ;
+comment on column ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_PRINT                      is 'Print: N - not applicable, I - inactive, A - active' ;
+comment on column ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_OK                         is 'OK: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_DETAIL  		              IS 'Detail: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_CONTENT 		              IS 'Content: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_HELP    		              IS 'Help: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.ID_SOFTWARE_CONTEXT            IS 'when you start a functionality originating from one app to another, the column ID_SOFTWARE must be filled with the origin software, but the ID_SOFTWARE_CONTEXT is filled with the destination software' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.ID_SYS_SHORTCUT                IS 'ID of shortcut';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.ID_SOFTWARE                    IS 'ID of software';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.ID_SHORTCUT_PK                 IS 'ID of shortcut';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_GRAPH                      IS 'Graph: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_VISION                     IS 'Vision: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_DIGITAL                    IS 'Digital: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_FREQ                       IS 'Most Frequent: N - not applicable, I - inactive, A - active' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_NO                         IS 'No ( Triage ): N - not applicable, I - inactive, A - active' ;
+comment on column ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.RANK                           is 'Ordering value';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.POSITION                       IS 'Position of button on upper toolbar' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.TOOLBAR_LEVEL                  IS 'Level where button is included on upper toolbar' ;
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_ACTION                     IS 'Actions: N - not applicable, I - inactive, A - active';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_VIEW                       IS 'Views: N - not applicable, I - inactive, A - active';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_GLOBAL_SHORTCUT            IS 'Global shortcut flag';
+COMMENT ON COLUMN ALERT.PROFILE_TEMPL_ACCESS_EXCEPTION.FLG_INFO_BUTTON                IS 'Info button: N - not applicable, I - inactive, A - active';
+
+--profile_templ_access_exception
+declare
+  l_sql varchar2(4000);
+begin
+  l_sql := 'alter table profile_templ_access_exception add AGE_MIN number(3)';
+  pk_versioning.run( l_sql );
+end;
+/
+
+declare
+  l_sql varchar2(4000);
+begin
+  l_sql := 'alter table profile_templ_access_exception add GENDER  varchar2(2 char)';
+  pk_versioning.run( l_sql );
+end;
+/
+
+
+declare
+  l_sql varchar2(4000);
+begin
+  l_sql := 'alter table profile_templ_access_exception add id_epis_type  number(24)';
+  pk_versioning.run( l_sql );
+end;
+/
+
+begin
+	pk_versioning.run('alter table profile_templ_access_exception drop column flg_info_button');
+end;
+/
+begin
+	pk_versioning.run('alter table profile_templ_access_exception drop column flg_vision');
+end;
+/
+begin
+	pk_versioning.run('alter table profile_templ_access_exception drop column flg_graph');
+end;
+/
+begin
+	pk_versioning.run('alter table profile_templ_access_exception drop column flg_digital');
+end;
+/
+
+declare
+         l_sql varchar2(4000);
+begin
+         l_sql := q'[alter table alert.profile_templ_access_exception add age_max number(3)]';
+         pk_versioning.run(l_sql);
+end;
+/

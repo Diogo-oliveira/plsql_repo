@@ -1,0 +1,36 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 04/07/2010 02:29
+-- CHANGE REASON: [ALERT-109296] TDE Core versioning (DDL)
+create table TDE_TASK_REL_DEPENDENCY
+(
+  ID_RELATIONSHIP_TYPE       NUMBER(24) NOT NULL,
+  ID_TASK_DEPENDENCY_FROM    NUMBER(24) NOT NULL,
+  ID_TASK_DEPENDENCY_TO      NUMBER(24) NOT NULL,
+  LAG_MIN                    NUMBER(24),
+  LAG_MAX                    NUMBER(24),
+  ID_UNIT_MEASURE_LAG        NUMBER(24),
+  FLG_RESOLVED               VARCHAR2(1 CHAR) NOT NULL,
+  RESOLVED_TIMESTAMP         TIMESTAMP(6) WITH LOCAL TIME ZONE, 
+  CREATE_USER                VARCHAR2(24),
+  CREATE_TIME                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION         NUMBER(24),
+  UPDATE_USER                VARCHAR2(24),
+  UPDATE_TIME                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION         NUMBER(24)
+);
+comment on table  TDE_TASK_REL_DEPENDENCY                         is 'Task Relationship Dependencies table (TDERD)';
+comment on column TDE_TASK_REL_DEPENDENCY.ID_RELATIONSHIP_TYPE    is 'Task Relationship Type ID';
+comment on column TDE_TASK_REL_DEPENDENCY.ID_TASK_DEPENDENCY_FROM is 'Task Dependency ID ("from" direction)';
+comment on column TDE_TASK_REL_DEPENDENCY.ID_TASK_DEPENDENCY_TO   is 'Task Dependency ID ("to" direction)';
+comment on column TDE_TASK_REL_DEPENDENCY.LAG_MIN                 is 'Minimum lag time between dependencies';
+comment on column TDE_TASK_REL_DEPENDENCY.LAG_MAX                 is 'Maximum lag time between dependencies';
+comment on column TDE_TASK_REL_DEPENDENCY.ID_UNIT_MEASURE_LAG     is 'Lag unit measure ID';
+comment on column TDE_TASK_REL_DEPENDENCY.FLG_RESOLVED            is 'Flag that indicates if this dependency is resolved: (Y)es, (N)o';
+comment on column TDE_TASK_REL_DEPENDENCY.RESOLVED_TIMESTAMP      is 'Timestamp when dependencies relationship was resolved';
+comment on column TDE_TASK_REL_DEPENDENCY.CREATE_USER             is 'Creation User';
+comment on column TDE_TASK_REL_DEPENDENCY.CREATE_TIME             is 'Creation Time';
+comment on column TDE_TASK_REL_DEPENDENCY.CREATE_INSTITUTION      is 'Creation Institution';
+comment on column TDE_TASK_REL_DEPENDENCY.UPDATE_USER             is 'Update User';
+comment on column TDE_TASK_REL_DEPENDENCY.UPDATE_TIME             is 'Update Time';
+comment on column TDE_TASK_REL_DEPENDENCY.UPDATE_INSTITUTION      is 'Update Institution';
+-- CHANGE END: Carlos Loureiro

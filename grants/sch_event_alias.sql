@@ -1,0 +1,5 @@
+-- CHANGED BY: Telmo
+-- CHANGED DATE: 15-09-2014
+-- CHANGED REASON: alert-293762
+grant select on ALERT.SCH_EVENT_ALIAS to DSV;
+-- CHANGE END: Telmo

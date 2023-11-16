@@ -1,0 +1,74 @@
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 15/10/2010
+-- CHANGE REASON: ALERT-130840
+DECLARE
+    e_obj_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_obj_exists, -00955);
+
+BEGIN
+
+    EXECUTE IMMEDIATE 'CREATE TABLE vs_patient_ea (' || --
+                      '       id_patient           NUMBER(24) NOT NULL,' || --
+                      '       id_vital_sign        NUMBER(12) NOT NULL,' || --
+                      '       id_unit_measure      NUMBER(24) NOT NULL,' || --
+                      '       id_vital_sign_scales NUMBER(24),' || --
+                      '       n_records            NUMBER(24) NOT NULL,' || --
+                     --
+                      '       id_first_vsr         NUMBER(24) NOT NULL,' || --
+                      '       id_min_vsr           NUMBER(24),' || --
+                      '       id_max_vsr           NUMBER(24),' || --
+                      '       id_last_1_vsr        NUMBER(24) NOT NULL,' || --
+                      '       id_last_2_vsr        NUMBER(24),' || --
+                      '       id_last_3_vsr        NUMBER(24),' || --
+                     --
+                      '       create_user          VARCHAR2(24 CHAR),' || --
+                      '       create_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,' || --
+                      '       create_institution   NUMBER(24),' || --
+                      '       update_user          VARCHAR2(24 CHAR),' || --
+                      '       update_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,' || --
+                      '       update_institution   NUMBER(24)' || --
+                      ')';
+
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE vs_patient_ea IS ''Easy access table that holds vital signs readings per patient''' ;
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.id_patient           IS ''Patient id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.id_vital_sign        IS ''Vital sign id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.id_unit_measure      IS ''Unit measure id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.id_vital_sign_scales IS ''Vital Signs Scales id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.n_records            IS ''Number of records''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.id_first_vsr         IS ''Id vital sign read - first reading''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.id_min_vsr           IS ''Id vital sign read - minimum value reading''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.id_max_vsr           IS ''Id vital sign read - maximum value reading''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.id_last_1_vsr        IS ''Id vital sign read - ultimate reading''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.id_last_2_vsr        IS ''Id vital sign read - penultimate reading''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.id_last_3_vsr        IS ''Id vital sign read - antepenultimate reading''';
+--
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.create_user          IS ''User that has created the register''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.create_time          IS ''Timestamp that defines when the register has been created''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.create_institution   IS ''Institution id where the register has been created''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.update_user          IS ''Latest user that has updated the register''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.update_time          IS ''Latest Timestamp that defines when the register has been updated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vs_patient_ea.update_institution   IS ''Latest Institution id where the register has been updated''';
+    
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_patient_ea MOVE TABLESPACE table_m';
+
+EXCEPTION
+    WHEN e_obj_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+-- CHANGE END: Paulo Fonseca
+
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 22/11/2011 15:59
+-- CHANGE REASON: [ALERT-206175] fix packages and related tables - Issue Replication: [2.6.2] Fix the problem of multiple scales for one Vital Sign inside the PFH
+BEGIN
+    EXECUTE IMMEDIATE 'alter table vs_patient_ea drop column ID_VITAL_SIGN_SCALES';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto

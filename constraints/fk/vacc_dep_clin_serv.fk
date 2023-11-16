@@ -1,0 +1,23 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 17/02/2011 17:55
+-- CHANGE REASON: [ALERT-157960] added missing foreign keys
+alter table vacc_dep_clin_serv
+  add constraint vadcs_dcs_fk foreign key (id_dep_clin_serv)
+  references dep_clin_serv (id_dep_clin_serv);
+alter table vacc_dep_clin_serv
+  add constraint vadcs_inst_fk foreign key (id_institution)
+  references institution (id_institution);
+alter table vacc_dep_clin_serv
+  add constraint vadcs_s_fk foreign key (id_software)
+  references software (id_software);
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 11/11/2014 15:27
+-- CHANGE REASON: [ALERT-301386] 
+BEGIN
+pk_versioning.run(i_sql => q'[alter   TABLE VACC_DEP_CLIN_SERV ADD CONSTRAINT VADCS_PROF_FK FOREIGN KEY (ID_PROFESSIONAL) REFERENCES  professional (ID_PROFESSIONAL)]');
+pk_versioning.run(i_sql => q'[alter   TABLE VACC_DEP_CLIN_SERV ADD CONSTRAINT VADCS_MED_EXT_FK FOREIGN KEY (ID_VACC_MED_EXT) REFERENCES  vacc_med_ext (ID_VACC_MED_EXT)]');
+END;
+/
+-- CHANGE END: mario.mineiro

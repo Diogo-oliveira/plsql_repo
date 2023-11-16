@@ -1,0 +1,65 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/11/2011 10:04
+-- CHANGE REASON: [ALERT-206660] Issue Replication: Chile | GES; Emergency Law; Billing System Red UC (ALERT_206659)
+--                Versioning DDL
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -00955);
+BEGIN
+    --i_flg_category
+    --DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'EPIS_GES_MSG',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'TRS',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+
+    BEGIN
+        EXECUTE IMMEDIATE '
+CREATE TABLE EPIS_GES_MSG
+(
+  ID_EPIS_GES_MSG          NUMBER(24) NOT NULL,
+  DT_EPIS_GES_MSG          TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
+  ID_EPISODE               NUMBER(24) NOT NULL,
+  ID_PAT_HISTORY_DIAGNOSIS NUMBER(24),
+  ID_EPIS_DIAGNOSIS        NUMBER(24),
+  FLG_ORIGIN               VARCHAR2(1 CHAR) NOT NULL,
+  FLG_MSG_STATUS           VARCHAR2(1 CHAR) NOT NULL,
+  FLG_STATUS               VARCHAR2(1 CHAR) NOT NULL,
+  ID_PROF_CREATE           NUMBER(24) NOT NULL,
+  CREATE_USER              VARCHAR2(24 CHAR),
+  CREATE_TIME              TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION       NUMBER(24),
+  UPDATE_USER              VARCHAR2(24 CHAR),
+  UPDATE_TIME              TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION       NUMBER(24)
+)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_GES_MSG MOVE TABLESPACE TABLE_M';
+
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE EPIS_GES_MSG IS ''Manage GES messages''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.ID_EPIS_GES_MSG IS ''Primary key''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.DT_EPIS_GES_MSG is ''Date of record creation''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.ID_EPISODE IS ''Episode id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.ID_PAT_HISTORY_DIAGNOSIS IS ''Pat history diagnosis id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.ID_EPIS_DIAGNOSIS IS ''Epis diagnosis id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.FLG_ORIGIN IS ''Area where diagnosis was registered. D - Differential diagnosis; F - Final diagnosis; M - Past medical history; S - Past surgical history; P - Problems''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.FLG_MSG_STATUS IS ''Message status. S - Message sent to external system; R - Message received from the external system''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.FLG_STATUS IS ''Record status. A - Active; O - Outdated; C - Cancelled''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.ID_PROF_CREATE is ''Professional ID which created the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.CREATE_USER is ''Professional ID which created the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.CREATE_TIME is ''Date of record creation''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.CREATE_INSTITUTION is ''Institution ID where record was created''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.UPDATE_USER is ''Professional ID who last updated the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.UPDATE_TIME is ''Date when record was last updated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_GES_MSG.UPDATE_INSTITUTION is ''Institution ID where record was last updated''';
+END;
+/
+-- CHANGE END: Alexandre Santos

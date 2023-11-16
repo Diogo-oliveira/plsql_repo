@@ -1,0 +1,23 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 05/09/2012 14:28
+-- CHANGE REASON: [ALERT-239422] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_group_note  ADD CONSTRAINT pgn_pat_fk FOREIGN KEY (id_patient) REFERENCES patient (id_patient)';
+EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_group_note  ADD CONSTRAINT pgn_epis_fk FOREIGN KEY (id_episode) REFERENCES episode (id_episode)';
+EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_group_note  ADD CONSTRAINT pgn_gn_fk FOREIGN KEY (id_group_note) REFERENCES group_note (id_group_note)';
+EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+END;
+/
+    
+-- CHANGE END: Paulo Teixeira

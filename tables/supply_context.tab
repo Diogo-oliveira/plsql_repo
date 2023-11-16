@@ -1,0 +1,119 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 10:04
+-- CHANGE REASON: [ALERT-12334] 
+create table SUPPLY_CONTEXT
+(
+  ID_SUPPLY_CONTEXT  NUMBER(24) not null,
+  ID_SUPPLY          NUMBER(24),
+  QUANTITY           NUMBER(10,3),
+  ID_UNIT_MEASURE    NUMBER(24),
+  ID_CONTEXT         NUMBER(24),
+  FLG_CONTEXT        VARCHAR2(2 CHAR),
+  ID_SOFTWARE        NUMBER(24),
+  ID_INSTITUTION     NUMBER(24),
+  ID_DEPT            NUMBER(24),
+  ID_PROFESSIONAL    NUMBER(24),
+  CREATE_USER        VARCHAR2(24 CHAR),
+  CREATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER        VARCHAR2(24 CHAR),
+  UPDATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table SUPPLY_CONTEXT
+  is 'Association between supplies and request contexts (surgery, medication, procedure, etc.)';
+-- Add comments to the columns 
+comment on column SUPPLY_CONTEXT.ID_SUPPLY_CONTEXT
+  is 'Primary Key';
+comment on column SUPPLY_CONTEXT.ID_SUPPLY
+  is 'Supply?s ID';
+comment on column SUPPLY_CONTEXT.QUANTITY
+  is 'Quantity';
+comment on column SUPPLY_CONTEXT.ID_UNIT_MEASURE
+  is 'Unit measure identification';
+comment on column SUPPLY_CONTEXT.ID_CONTEXT
+  is 'Generic field for context ID';
+comment on column SUPPLY_CONTEXT.FLG_CONTEXT
+  is 'Flag for context: M-Medication, P- Interventions, F- MFR, I-  Nursing interventions, A- Lab testd, E- Image exams, O- Others exams';
+comment on column SUPPLY_CONTEXT.ID_SOFTWARE
+  is 'ID for the software';
+comment on column SUPPLY_CONTEXT.ID_INSTITUTION
+  is 'ID for the institution';
+comment on column SUPPLY_CONTEXT.ID_DEPT
+  is 'ID for the department';
+comment on column SUPPLY_CONTEXT.ID_PROFESSIONAL
+  is 'ID for the professional';
+comment on column SUPPLY_CONTEXT.CREATE_USER
+  is 'Creation user';
+comment on column SUPPLY_CONTEXT.CREATE_TIME
+  is 'Creation time';
+comment on column SUPPLY_CONTEXT.CREATE_INSTITUTION
+  is 'Creation institution';
+comment on column SUPPLY_CONTEXT.UPDATE_USER
+  is 'Update user';
+comment on column SUPPLY_CONTEXT.UPDATE_TIME
+  is 'Update time';
+comment on column SUPPLY_CONTEXT.UPDATE_INSTITUTION
+  is 'Update institution';
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 02/12/2010 16:48
+-- CHANGE REASON: [ALERT-146441] Associate a surgical procedure to supplies
+comment on column SUPPLY_CONTEXT.FLG_CONTEXT
+is 'Flag for context: M-Medication, P- Interventions, F- MFR, I-  Nursing interventions, A- Lab testd, E- Image exams, O- Others exams, S- Surgical procedure';
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/01/2016 11:20
+-- CHANGE REASON: [ALERT-317912] 
+comment on table SUPPLY_CONTEXT
+  is 'Supply association to other functional areas';
+-- Add comments to the columns 
+comment on column SUPPLY_CONTEXT.id_supply_context
+  is 'Primary key';
+comment on column SUPPLY_CONTEXT.id_supply
+  is 'Supply ID';
+comment on column SUPPLY_CONTEXT.quantity
+  is 'Quantity';
+comment on column SUPPLY_CONTEXT.id_unit_measure
+  is 'Unit measure ID';
+comment on column SUPPLY_CONTEXT.id_context
+  is 'Context ID';
+comment on column SUPPLY_CONTEXT.flg_context
+  is 'Flag that indicates the context association: M - Medication, P - Interventions, F - Rehabilitation, I -  Nursing interventions, A - Lab tests, E - Image exams, O - Others exams, S - Surgical procedure';
+comment on column SUPPLY_CONTEXT.id_software
+  is 'Software ID';
+comment on column SUPPLY_CONTEXT.id_institution
+  is 'Institution ID';
+comment on column SUPPLY_CONTEXT.id_dept
+  is 'Department ID';
+comment on column SUPPLY_CONTEXT.id_professional
+  is 'Professional ID';
+comment on column SUPPLY_CONTEXT.create_user
+  is 'Creation User';
+comment on column SUPPLY_CONTEXT.create_time
+  is 'Creation Time';
+comment on column SUPPLY_CONTEXT.create_institution
+  is 'Creation Institution';
+comment on column SUPPLY_CONTEXT.update_user
+  is 'Update User';
+comment on column SUPPLY_CONTEXT.update_time
+  is 'Update Time';
+comment on column SUPPLY_CONTEXT.update_institution
+  is 'Update Institution';
+  
+  
+  
+-- CHANGE END: Ana Matos

@@ -1,0 +1,8 @@
+-- CHANGED BY: Pedro Maia
+-- CHANGED DATE: 2010-JUL-29
+-- CHANGING REASON: ALERT-94678
+
+CREATE OR REPLACE TYPE "T_TAB_TIMELINE_DATA"                                          AS TABLE OF T_TIMELINE_DATA
+/
+
+-- CHANGE END: Pedro Maia 

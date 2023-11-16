@@ -1,0 +1,57 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 07/04/2011 14:06
+-- CHANGE REASON: [ALERT-171724] Trials
+/*****************************************************************
+                  Follow-ups
+****************************************************************/
+CREATE TABLE PAT_TRIAL_FOLLOW_UP (
+  ID_PAT_TRIAL_FOLLOW_UP        NUMBER(24) NOT NULL,
+  ID_PAT_TRIAL        NUMBER(24) NOT NULL,
+  ID_PAT_TRIAL_HIST   NUMBER(24) NOT NULL,
+  DT_RECORD           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROF_RECORD      NUMBER(24),
+  DT_CREATE           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROF_CREATE      NUMBER(24),
+  FLG_STATUS          VARCHAR2(1 CHAR) NOT NULL,
+  ID_EPISODE_RECORD   NUMBER(24),
+  NOTES               CLOB,
+  ID_CANCEL_INFO_DET  NUMBER(24),
+  CREATE_USER         VARCHAR2(24 CHAR),
+  CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24 CHAR),
+  UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24)
+);  
+  
+COMMENT ON TABLE PAT_TRIAL_FOLLOW_UP IS 'Table for register the follow up notes for a given patient''s trial';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.ID_PAT_TRIAL_FOLLOW_UP IS 'ID pat_trial_follow_up';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.ID_PAT_TRIAL IS 'ID PAT_TRIAL';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.ID_PAT_TRIAL IS 'ID PAT_TRIAL_HIST';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.DT_RECORD IS 'Follow up creation/edition date';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.ID_PROF_RECORD IS 'Professional that creates/edit the follow up';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.DT_CREATE IS 'Date of follow up creation';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.ID_PROF_CREATE IS 'Professional that created the follow up';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.FLG_STATUS IS 'Follow up status: A - active, C - cancel, E - edit';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.NOTES IS 'Notes';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.ID_CANCEL_INFO_DET IS 'Cancel information details.';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN PAT_TRIAL_FOLLOW_UP.ID_EPISODE_RECORD is 'ID  episode where it was registered';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:34
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column PAT_TRIAL_FOLLOW_UP.id_pat_trial
+  is 'ID PAT_TRIAL';
+comment on column PAT_TRIAL_FOLLOW_UP.id_pat_trial_hist
+  is 'ID PAT_TRIAL_HIST';  
+  
+-- CHANGE END: Elisabete Bugalho

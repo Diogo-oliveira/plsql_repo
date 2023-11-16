@@ -1,0 +1,130 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 11/12/2009 00:23
+-- CHANGE REASON: [ALERT-61939] CPOE 2nd phase: versioning of CPOE feature for Diets and Hidrics
+CREATE TABLE CPOE_PERIOD
+(
+  ID_INSTITUTION               NUMBER(24)         NOT NULL,
+ID_SOFTWARE                  NUMBER(24)         NOT NULL,
+EXPIRE_TIME                  VARCHAR2(5 CHAR)   NOT NULL,
+  PLANNING_PERIOD              NUMBER(3,1)        NOT NULL,
+FLG_AVAILABLE                VARCHAR2(1 CHAR)   NOT NULL,
+  CREATE_USER                  VARCHAR2(24 CHAR)  ,
+  CREATE_TIME                  TIMESTAMP(6)       WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION           NUMBER(24)         ,
+  UPDATE_USER                  VARCHAR2(24 CHAR)  ,
+  UPDATE_TIME                  TIMESTAMP(6)       WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION           NUMBER(24)
+);
+comment on table  CPOE_PERIOD is                              'Computerized Physician Order Entry (CPOE) prescription periods configuration';
+comment on column CPOE_PERIOD.ID_INSTITUTION is               'Institution ID';
+comment on column CPOE_PERIOD.ID_SOFTWARE is                  'Software ID';
+comment on column CPOE_PERIOD.EXPIRE_TIME is                  'Expire time in <HH24>h<MI> format';
+comment on column CPOE_PERIOD.PLANNING_PERIOD is              'CPOE next prescription planning period (in hours)';
+comment on column CPOE_PERIOD.FLG_AVAILABLE is                'CPOE record setup availability: (Y)es (N)o';
+comment on column CPOE_PERIOD.CREATE_USER is                  'Creation user';
+comment on column CPOE_PERIOD.CREATE_TIME is                  'Creation time';
+comment on column CPOE_PERIOD.CREATE_INSTITUTION is           'Creation institution';
+comment on column CPOE_PERIOD.UPDATE_USER is                  'Update user';
+comment on column CPOE_PERIOD.UPDATE_TIME is                  'Update time';
+comment on column CPOE_PERIOD.UPDATE_INSTITUTION is           'Update institution';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 12/10/2010 10:06
+-- CHANGE REASON: [ALERT-128784] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_PERIOD add REFRESH_PERIOD number(3,1) default 5 not null';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+comment on column CPOE_PERIOD.REFRESH_PERIOD is 'CPOE next prescription auto copy2draft or refresh action period (in hours)';
+comment on table CPOE_PERIOD is 'Computerized Prescription Order Entry (CPOE) prescription periods configuration [CPOEPR]';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 27/09/2011 12:10
+-- CHANGE REASON: [ALERT-185453] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_PERIOD add ID_DEP_CLIN_SERV number(24)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+
+comment on column CPOE_PERIOD.ID_DEP_CLIN_SERV is 'Department clinical service';
+
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_PERIOD add ID_CPOE_PERIOD number(24)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+
+comment on column CPOE_PERIOD.ID_CPOE_PERIOD is 'CPOE period ID';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 27/09/2011 12:13
+-- CHANGE REASON: [ALERT-185453] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01442); -- when ORA-01442: column to be modified to NOT NULL is already NOT NULL
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_PERIOD modify id_cpoe_period not null';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+   
+-- CHANGE END: Tiago Silva
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 21/10/2016 08:41
+-- CHANGE REASON: [ALERT-325483]
+
+BEGIN
+   ALTER TABLE CPOE_PERIOD ADD NEXT_PRESC_PERIOD NUMBER DEFAULT 24;
+END;
+
+/
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 26/10/2016 10:41
+-- CHANGE REASON: [ALERT-325820]
+
+  COMMENT ON COLUMN CPOE_PERIOD.NEXT_PRESC_PERIOD IS 'Period (in hours) to next CPOE process in which the user is able to add next prescriptions';
+
+
+/
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 19/12/2016 09:41
+-- CHANGE REASON: [ALERT-325129]
+ALTER TABLE cpoe_period ADD CANCEL_TASK_EXPIRED NUMBER;
+COMMENT ON COLUMN cpoe_period.cancel_task_expired is 'TIME TO CANCEL EXPIRED TASKS';
+
+ALTER TABLE cpoe_task_type ADD FLG_OUT_OF_CPOE_PROCESS VARCHAR2(1 CHAR) DEFAULT 'N';
+COMMENT ON COLUMN cpoe_task_type.FLG_OUT_OF_CPOE_PROCESS is 'Task types that are out of cpoe workflow (advanced_mode)';
+
+-- CHANGE END: Pedro Henriques
+
+

@@ -1,0 +1,207 @@
+
+
+  ALTER TABLE DRUG_PRESC_PLAN ADD CONSTRAINT DRPRP_DRGPR_FK FOREIGN KEY (ID_DRUG_PRESC_DET)
+	  REFERENCES DRUG_PRESC_DET (ID_DRUG_PRESC_DET) ENABLE;
+
+  ALTER TABLE DRUG_PRESC_PLAN ADD CONSTRAINT DRPRP_DRTKT_FK FOREIGN KEY (ID_DRUG_TAKE_TIME)
+	  REFERENCES DRUG_TAKE_TIME (ID_DRUG_TAKE_TIME) ENABLE;
+
+  ALTER TABLE DRUG_PRESC_PLAN ADD CONSTRAINT DRPRP_EPIS_FK FOREIGN KEY (ID_EPISODE)
+	  REFERENCES EPISODE (ID_EPISODE) ENABLE;
+
+  ALTER TABLE DRUG_PRESC_PLAN ADD CONSTRAINT DRPRP_PROF_CANCEL_FK FOREIGN KEY (ID_PROF_CANCEL)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+
+  ALTER TABLE DRUG_PRESC_PLAN ADD CONSTRAINT DRPRP_PROF_WRITES_FK FOREIGN KEY (ID_PROF_WRITES)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+alter table DRUG_PRESC_PLAN
+  add constraint DRPRP_VACC_FK foreign key (ID_VACC_MED_EXT)
+  references VACC_MED_EXT (ID_VACC_MED_EXT);
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-JUNE-09
+-- CHANGE REASON: Foreign key for Unit measure
+ALTER TABLE DRUG_PRESC_PLAN ADD (CONSTRAINT
+ DPP_UME_FK FOREIGN KEY 
+  (DOSAGE_UNIT_MEASURE) REFERENCES UNIT_MEASURE
+  (ID_UNIT_MEASURE))
+/
+--CHANGE END
+
+
+
+-- CHANGED BY: Sérgio Cunha
+-- CHANGE DATE: 07/09/2009 17:23
+-- CHANGE REASON: [ALERT-42180] 
+
+  ALTER TABLE ALERT.DRUG_PRESC_PLAN ADD CONSTRAINT DRPRP_DRGPR_FK FOREIGN KEY (ID_DRUG_PRESC_DET)
+  REFERENCES ALERT.DRUG_PRESC_DET (ID_DRUG_PRESC_DET) ENABLE;
+
+  ALTER TABLE ALERT.DRUG_PRESC_PLAN ADD CONSTRAINT DRPRP_DRTKT_FK FOREIGN KEY (ID_DRUG_TAKE_TIME)
+  REFERENCES ALERT.DRUG_TAKE_TIME (ID_DRUG_TAKE_TIME) ENABLE;
+
+  ALTER TABLE ALERT.DRUG_PRESC_PLAN ADD CONSTRAINT DRPRP_EPIS_FK FOREIGN KEY (ID_EPISODE)
+  REFERENCES ALERT.EPISODE (ID_EPISODE) ENABLE;
+
+  ALTER TABLE ALERT.DRUG_PRESC_PLAN ADD CONSTRAINT DRPRP_PROF_CANCEL_FK FOREIGN KEY (ID_PROF_CANCEL)
+  REFERENCES ALERT.PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE ALERT.DRUG_PRESC_PLAN ADD CONSTRAINT DRPRP_PROF_WRITES_FK FOREIGN KEY (ID_PROF_WRITES)
+  REFERENCES ALERT.PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE ALERT.DRUG_PRESC_PLAN ADD CONSTRAINT DRPRP_VACC_FK FOREIGN KEY (ID_VACC_MED_EXT)
+  REFERENCES ALERT.VACC_MED_EXT (ID_VACC_MED_EXT) ENABLE;
+-- CHANGE END: Sérgio Cunha
+
+-- CHANGED BY: Patricia Neto
+-- CHANGE DATE: 28/10/2009 18:21
+-- CHANGE REASON: [ ALERT-20754  ] medication_uk - witness controlled drugs
+  alter table DRUG_PRESC_PLAN
+  add constraint DPN_PRL_FK foreign key (ID_PROF_WITNESS)
+  references PROFESSIONAL (ID_PROFESSIONAL);  
+-- CHANGE END: Patricia Neto
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 29/10/2009 00:30
+-- CHANGE REASON: [ALERT-49774] 
+alter table DRUG_PRESC_PLAN add constraint DRPRP_UNITM_FK foreign key (RATE_UNIT_MEASURE) references unit_measure (ID_UNIT_MEASURE);
+-- CHANGE END: Tiago Silva
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195]
+declare
+  l_count pls_integer;
+begin
+  select count(1)
+  into l_count
+  from all_constraints where owner = 'ALERT' and constraint_name = 'DRPRP_PDDOSEFREQ_FK';
+
+  if l_count = 0 then
+    execute immediate ( 'alter table drug_presc_plan add constraint DRPRP_PDDOSEFREQ_FK foreign key (ID_PRESC_DIR_DOSEFREQ)
+  references PRESC_DIR_DOSEFREQ (ID_PRESC_DIR_DOSEFREQ)' );
+  end if;
+
+end;
+/
+-- CHANGE END: Nuno Ferreira
+
+-- CHANGED BY: Sérgio Cunha
+-- CHANGE DATE: 05/03/2010 15:09
+-- CHANGE REASON: [ALERT-78201] 
+declare
+  l_count pls_integer;
+ l_sql_stat varchar2(4000):='alter table drug_presc_plan  add constraint DRPRP_UNITMEASURE_FK foreign key (id_unit_reference_value)
+  references UNIT_MEASURE (ID_UNIT_MEASURE)';
+
+begin
+  select count(1)
+  into l_count
+  from all_constraints where owner = 'ALERT' and constraint_name = 'DRPRP_UNITMEASURE_FK';
+
+  if l_count = 0 then
+   execute immediate (l_sql_stat);
+ end if;
+
+end;
+/
+-- CHANGE END: Sérgio Cunha
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/05/2014 21:56
+-- CHANGE REASON: [ALERT-281683] 
+alter table drug_presc_plan
+  add constraint id_vacc_funding_cat_cvx foreign key (id_vacc_funding_cat)
+  references vacc_funding_eligibility (id_vacc_funding_eligibility);
+  
+alter table drug_presc_plan
+  add constraint vacc_funding_source_cvx foreign key (id_vacc_funding_source)
+  references vacc_funding_source (id_vacc_funding_source);
+  
+alter table drug_presc_plan
+  add constraint vacc_doc_vis_cvx foreign key (id_vacc_doc_vis)
+  references vacc_doc_vis (id_vacc_doc_vis);
+  
+alter table drug_presc_plan
+  add constraint vacc_origin_cvx foreign key (id_vacc_origin)
+  references vacc_origin (id_vacc_origin);
+
+alter table drug_presc_plan
+  add constraint vacc_adv_reaction_cvx foreign key (id_vacc_adv_reaction)
+  references vacc_adverse_reaction (id_vacc_adverse_reaction);
+  
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/05/2014 21:56
+-- CHANGE REASON: [ALERT-281683] 
+ALTER TABLE drug_presc_plan DROP CONSTRAINT DPP_PROF_EDIT_DISCONTINUE_FK;
+alter table drug_presc_plan add constraint dpp_prof_edit_disc_fk foreign key (ID_PROF_EDIT_DISC) REFERENCES professional(id_professional);
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 21/05/2014 12:02
+-- CHANGE REASON: [ALERT-285464] 
+alter table drug_presc_plan
+  add constraint id_vacc_funding_cat_cvx foreign key (id_vacc_funding_cat)
+  references vacc_funding_eligibility (id_vacc_funding_eligibility);
+  
+alter table drug_presc_plan
+  add constraint vacc_funding_source_cvx foreign key (id_vacc_funding_source)
+  references vacc_funding_source (id_vacc_funding_source);
+  
+alter table drug_presc_plan
+  add constraint vacc_doc_vis_cvx foreign key (id_vacc_doc_vis)
+  references vacc_doc_vis (id_vacc_doc_vis);
+  
+alter table drug_presc_plan
+  add constraint vacc_origin_cvx foreign key (id_vacc_origin)
+  references vacc_origin (id_vacc_origin);
+
+alter table drug_presc_plan
+  add constraint vacc_adv_reaction_cvx foreign key (id_vacc_adv_reaction)
+  references vacc_adverse_reaction (id_vacc_adverse_reaction);
+  
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 21/05/2014 12:03
+-- CHANGE REASON: [ALERT-285464] 
+ALTER TABLE drug_presc_plan DROP CONSTRAINT DPP_PROF_EDIT_DISCONTINUE_FK;
+alter table drug_presc_plan add constraint dpp_prof_edit_disc_fk foreign key (ID_PROF_EDIT_DISC) REFERENCES professional(id_professional);
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 21/05/2014 12:48
+-- CHANGE REASON: [ALERT-281683] 
+alter table drug_presc_plan
+  add constraint id_vacc_funding_cat_cvx foreign key (id_vacc_funding_cat)
+  references vacc_funding_eligibility (id_vacc_funding_elig);
+  
+alter table drug_presc_plan
+  add constraint vacc_funding_source_cvx foreign key (id_vacc_funding_source)
+  references vacc_funding_source (id_vacc_funding_source);
+  
+alter table drug_presc_plan
+  add constraint vacc_doc_vis_cvx foreign key (id_vacc_doc_vis)
+  references vacc_doc_vis (id_vacc_doc_vis);
+  
+alter table drug_presc_plan
+  add constraint vacc_origin_cvx foreign key (id_vacc_origin)
+  references vacc_origin (id_vacc_origin);
+
+alter table drug_presc_plan
+  add constraint vacc_adv_reaction_cvx foreign key (id_vacc_adv_reaction)
+  references vacc_adverse_reaction (id_vacc_adverse_reaction);
+  
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 21/05/2014 12:50
+-- CHANGE REASON: [ALERT-281683] 
+ALTER TABLE drug_presc_plan DROP CONSTRAINT DPP_PROF_EDIT_DISCONTINUE_FK;
+alter table drug_presc_plan add constraint dpp_prof_edit_disc_fk foreign key (ID_PROF_EDIT_DISC) REFERENCES professional(id_professional);
+-- CHANGE END: Jorge Silva

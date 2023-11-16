@@ -1,0 +1,25 @@
+declare
+l_sql       varchar2(4000);
+begin
+l_sql := 'CREATE INDEX PPT_PROF_INST_SOFT_UK_I ON ALERT.PROF_PROFILE_TEMPLATE( ID_PROFESSIONAL, ID_INSTITUTION, ID_SOFTWARE )';
+pk_versioning.run(l_sql);
+end;
+/
+
+declare
+t_sql       table_Varchar := table_Varchar(
+                             'DROP INDEX PTE_UK'
+                            ,'DROP INDEX PTE_INST_FK_IDX'
+                            ,'DROP INDEX PTE_PROF_FK_I'   
+                            ,'DROP INDEX PTE_S_FK_IDX'    
+                            ,'DROP INDEX PTE_SPT_FK_I'    
+                             );
+begin
+
+<<LUP_THRU_DROPS>>
+for idx in 1..t_sql.count loop
+    pk_versioning.run( t_sql(idx));
+end loop LUP_THRU_DROPS;
+
+end;
+/

@@ -1,0 +1,61 @@
+-- CHANGED BY: filipe.f.pereira
+-- CHANGE DATE: 18/07/2013
+-- CHANGE REASON: ALERT-217073
+
+DECLARE
+  e_name_already_used EXCEPTION;
+  l_table_name VARCHAR2(30) := 'REP_EDITABLE_TEXT_MKT';
+  PRAGMA EXCEPTION_INIT(e_name_already_used, -00955);
+BEGIN
+
+execute immediate 'CREATE TABLE REP_EDITABLE_TEXT_MKT
+ (ID_REP_EDITABLE_TEXT_MKT NUMBER(24) NOT NULL
+ ,ID_REPORTS NUMBER(24) NOT NULL
+ ,ID_MARKET NUMBER(24) NOT NULL
+ ,ID_LANGUAGE NUMBER(6) NOT NULL
+ ,TEXT CLOB NOT NULL
+ ,CREATE_USER VARCHAR2(24)
+ ,CREATE_TIME TIMESTAMP
+ ,CREATE_INSTITUTION VARCHAR2(24)
+ ,UPDATE_USER VARCHAR2(24)
+ ,UPDATE_TIME TIMESTAMP
+ ,UPDATE_INSTITUTION VARCHAR2(24)
+ )';
+
+
+execute immediate 'COMMENT ON TABLE REP_EDITABLE_TEXT_MKT IS ''Contains the text to be used by editable reports''';
+
+execute immediate 'COMMENT ON COLUMN REP_EDITABLE_TEXT_MKT.ID_REP_EDITABLE_TEXT_MKT IS ''Primary Key''';
+
+execute immediate 'COMMENT ON COLUMN REP_EDITABLE_TEXT_MKT.ID_REPORTS IS ''Configuration: Reports ID Key''';
+
+execute immediate 'COMMENT ON COLUMN REP_EDITABLE_TEXT_MKT.ID_MARKET IS ''Configuration: Market ID Key''';
+
+execute immediate 'COMMENT ON COLUMN REP_EDITABLE_TEXT_MKT.ID_LANGUAGE IS ''Configuration: Language ID Key''';
+
+execute immediate 'COMMENT ON COLUMN REP_EDITABLE_TEXT_MKT.TEXT IS ''Text to be edited''';
+
+execute immediate 'COMMENT ON COLUMN REP_EDITABLE_TEXT_MKT.CREATE_USER IS ''Creation User''';
+
+execute immediate 'COMMENT ON COLUMN REP_EDITABLE_TEXT_MKT.CREATE_TIME IS ''Creation Time''';
+
+execute immediate 'COMMENT ON COLUMN REP_EDITABLE_TEXT_MKT.CREATE_INSTITUTION IS ''Creation Institution''';
+
+execute immediate 'COMMENT ON COLUMN REP_EDITABLE_TEXT_MKT.UPDATE_USER IS ''Update user''';
+
+execute immediate 'COMMENT ON COLUMN REP_EDITABLE_TEXT_MKT.UPDATE_TIME IS ''Update Time''';
+
+execute immediate 'COMMENT ON COLUMN REP_EDITABLE_TEXT_MKT.UPDATE_INSTITUTION IS ''Update Institution''';
+
+execute immediate 'ALTER TABLE REP_EDITABLE_TEXT_MKT MOVE TABLESPACE TABLE_M';
+
+execute immediate 'ALTER TABLE REP_EDITABLE_TEXT_MKT MOVE LOB(TEXT) STORE AS (tablespace ALERT_LOB)';
+
+EXCEPTION
+  WHEN e_name_already_used THEN
+    dbms_output.put_line('WARNING - Table ' || l_table_name ||
+                         ' already created in previous version.');
+END;
+/
+
+-- CHANGE END: filipe.f.pereira

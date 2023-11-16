@@ -1,0 +1,48 @@
+  CREATE TABLE BUILDING
+   (	ID_BUILDING NUMBER(24,0) NOT NULL ENABLE,
+	CODE_BUILDING VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+COMMENT ON COLUMN building.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN building.id_building IS 'Chave primária' ;
+COMMENT ON COLUMN building.code_building IS 'Código para obter os edíficios por língua' ;
+COMMENT ON COLUMN building.flg_available IS 'Disponibilidade do registo' ;
+
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model -birds eye view
+-- Add comments to the table 
+comment on table BUILDING
+  is 'Parametrization table for buildings in application. Each building is associated to your description which will be read by Bird''s Eye View';
+-- Add comments to the columns 
+comment on column BUILDING.id_building
+  is 'Building identifier';
+comment on column BUILDING.code_building
+  is 'Translate code building identifier,used to obtain the description by language ';
+comment on column BUILDING.flg_available
+  is 'Record availability. Y- Yes; N - No ';
+comment on column BUILDING.adw_last_update
+  is 'Date of last update, used by adw. ';
+comment on column BUILDING.create_user
+  is 'Creation User';
+comment on column BUILDING.create_time
+  is 'Creation Time';
+comment on column BUILDING.create_institution
+  is 'Creation Institution';
+comment on column BUILDING.update_user
+  is 'Update User';
+comment on column BUILDING.update_time
+  is 'Update Time';
+comment on column BUILDING.update_institution
+  is 'Update Institution';
+  
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Luis Fernandes
+-- CHANGE DATE: 08/02/2017 16:43
+-- CHANGE REASON: [ALERT-328671]
+ALTER TABLE alert.building ADD (ID_INSTITUTION number(24));
+-- CHANGE END: Luis Fernandes

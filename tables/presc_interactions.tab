@@ -1,0 +1,75 @@
+create table PRESC_INTERACTIONS
+(
+  ID_PRESC_INTERACTIONS      NUMBER(24) not null,
+  ID_PRESC_PHARM_SOURCE      NUMBER(24) not null,
+  ID_PRESC_PHARM_DEST        NUMBER(24),
+  ID_PAT_MEDIC_LIST_DEST     NUMBER(24),
+  ID_PATIENT                 NUMBER(24) not null,
+  ID_PROFESSIONAL            NUMBER(24) not null,
+  DT_PRESC_INTERACTIONS_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE not null
+);
+
+-- Add comments to the table 
+comment on table PRESC_INTERACTIONS
+  is 'Tabela onde se registam as intercções medicamentosas de cada prescrição.';
+-- Add comments to the columns 
+comment on column PRESC_INTERACTIONS.ID_PRESC_INTERACTIONS
+  is 'Chave primária.';
+comment on column PRESC_INTERACTIONS.ID_PRESC_PHARM_SOURCE
+  is 'Prescrição com interacções medicamentosas.';
+comment on column PRESC_INTERACTIONS.ID_PRESC_PHARM_DEST
+  is 'Prescrição com a qual o medicamento prescrito interage. É NULL se a interacção é com um relato de medicação.';
+comment on column PRESC_INTERACTIONS.ID_PAT_MEDIC_LIST_DEST
+  is 'Relato de medicação com o qual o medicamento prescrito interage. É NULL se a interacção é com uma prescrição.';
+comment on column PRESC_INTERACTIONS.ID_PATIENT
+  is 'ID do paciente.';
+comment on column PRESC_INTERACTIONS.ID_PROFESSIONAL
+  is 'Profissional que regista a associação.';
+comment on column PRESC_INTERACTIONS.DT_PRESC_INTERACTIONS_TSTZ
+  is 'Data de registo.';
+  
+alter table presc_interactions
+add (severity_level_id number(2));
+
+comment on column PRESC_INTERACTIONS.severity_level_id is 'Grau de interacção.';
+
+alter table presc_interactions
+modify (severity_level_id number(2) not null); 
+
+
+alter table presc_interactions
+add (id_drug_presc_det_source number(24),
+id_drug_req_det_source number(24),
+id_drug_presc_det_dest number(24),
+id_drug_req_det_dest number(24)
+);
+
+comment on column PRESC_INTERACTIONS.ID_DRUG_PRESC_DET_SOURCE
+  is 'Requisição de medicação interna com interacções medicamentosas.';
+comment on column PRESC_INTERACTIONS.ID_DRUG_REQ_DET_SOURCE
+  is 'Requisição à farmácia com interacções medicamentosas.';	
+comment on column PRESC_INTERACTIONS.ID_DRUG_PRESC_DET_DEST
+  is 'Requisição de medicação interna com a qual o medicamento prescrito interage.';
+comment on column PRESC_INTERACTIONS.ID_DRUG_REQ_DET_DEST
+  is 'Requisição à farmácia com a qual o medicamento prescrito interage.';
+comment on column PRESC_INTERACTIONS.ID_PRESC_PHARM_DEST
+  is 'Prescrição com a qual o medicamento prescrito interage.';
+comment on column PRESC_INTERACTIONS.ID_PAT_MEDIC_LIST_DEST
+  is 'Relato de medicação com o qual o medicamento prescrito interage.';
+ 
+
+
+alter table presc_interactions
+	modify (ID_PRESC_PHARM_SOURCE NUMBER(24) null);
+
+alter table PRESC_INTERACTIONS add flg_status varchar2(1);
+	 
+-- Add comments to the columns 
+comment on column PRESC_INTERACTIONS.flg_status
+  is 'Estado da associação: A - activo, C - cancelado.';
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_INTERACTIONS IS 'Tabela onde se registam as intercções medicamentosas de cada prescrição. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

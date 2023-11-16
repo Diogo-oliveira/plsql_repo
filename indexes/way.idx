@@ -1,0 +1,37 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 21/05/2013 16:59
+-- CHANGE REASON: [ALERT-248672] New frmw objs
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    execute immediate 'CREATE UNIQUE INDEX way_cnt_uk ON way(CASE WHEN(id_content IS NOT NULL AND nvl(flg_available, ''Y'') <> ''N'') THEN
+                                          id_content END,
+                                          CASE WHEN(id_content IS NOT NULL AND nvl(flg_available, ''Y'') <> ''N'') THEN
+                                          flg_available END)';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('INDEX ALREADY INSTALLED');
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 08/10/2013 14:21
+-- CHANGE REASON: [ALERT-265030] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX way_idx_flgs
+  ON way (
+    flg_available,flg_type
+  )';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

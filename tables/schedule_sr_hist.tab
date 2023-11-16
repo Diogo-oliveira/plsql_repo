@@ -1,0 +1,145 @@
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 06-02-2013
+-- CHANGE REASON: ALERT-251133
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 06-02-2013
+-- CHANGE REASON: ALERT-251133
+DECLARE
+  e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'SCHEDULE_SR_HIST', i_obj_type => 'TABLE',i_flg_category => 'HST', i_flg_nzd => 'N');
+
+  EXECUTE IMMEDIATE 'CREATE TABLE SCHEDULE_SR_HIST
+             (ID_SCHEDULE_SR NUMBER(24) NOT NULL
+             ,ID_SCHED_SR_PARENT NUMBER(24)
+             ,ID_SCHEDULE NUMBER(24)
+             ,ID_EPISODE NUMBER(24)
+             ,ID_PATIENT NUMBER(24) NOT NULL
+             ,DURATION NUMBER(24)
+             ,ID_DIAGNOSIS NUMBER(24)
+             ,ID_SPECIALITY NUMBER(24)
+             ,FLG_STATUS VARCHAR2(1 CHAR) NOT NULL
+             ,FLG_SCHED VARCHAR2(1 CHAR) NOT NULL
+             ,ID_DEPT_DEST NUMBER(24)
+             ,PREV_RECOVERY_TIME NUMBER(24)
+             ,ID_SR_CANCEL_REASON NUMBER(24)
+             ,ID_PROF_CANCEL NUMBER(24)
+             ,NOTES_CANCEL CLOB
+             ,ID_PROF_REG NUMBER(24)
+             ,ID_INSTITUTION NUMBER(24) NOT NULL
+             ,ADW_LAST_UPDATE DATE DEFAULT sysdate
+             ,DT_TARGET TIMESTAMP(6) WITH LOCAL TIME ZONE
+             ,DT_INTERV_PREVIEW TIMESTAMP(6) WITH LOCAL TIME ZONE
+             ,DT_CANCEL TIMESTAMP(6) WITH LOCAL TIME ZONE
+             ,CREATE_USER VARCHAR2(24 CHAR)
+             ,CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+             ,CREATE_INSTITUTION NUMBER(24)
+             ,UPDATE_USER VARCHAR2(24 CHAR)
+             ,UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+             ,UPDATE_INSTITUTION NUMBER(24)
+             ,ICU VARCHAR2(1 CHAR) DEFAULT ''N''
+             ,NOTES CLOB
+             ,ID_WAITING_LIST NUMBER(24)
+             ,ADM_NEEDED VARCHAR2(1 CHAR)
+             ,FLG_TEMPORARY VARCHAR2(1 CHAR)
+             ,FLG_DUR_CONTROL VARCHAR2(4 CHAR)
+             ,ID_DIAG_INST_OWNER NUMBER(24)
+             ,DT_UPDATE TIMESTAMP WITH LOCAL TIME ZONE DEFAULT current_timestamp
+             )
+                      tablespace TABLE_L';
+            
+  EXECUTE IMMEDIATE 'alter table SCHEDULE_SR_HIST move lob(NOTES) store as ( tablespace ALERT_LOB)';
+  EXECUTE IMMEDIATE 'alter table SCHEDULE_SR_HIST move lob(NOTES_CANCEL) store as ( tablespace ALERT_LOB)';
+EXCEPTION
+  WHEN e_object_exists THEN dbms_output.put_line('Tentativa de criação da tabela SCHEDULE_SR_HIST falhou porque já existe');
+END;
+/
+
+COMMENT ON TABLE SCHEDULE_SR_HIST IS 'History table for updates support';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_SCHEDULE_SR IS 'Id único';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_SCHED_SR_PARENT IS 'Id do agendamento "pai". Preenchida apenas em reagendamentos';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_SCHEDULE IS 'ID do agendamento. Pode não estar preenchido, nos casos em que o agendamento ainda não tenha sido efetuado (episódios temporários).';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_EPISODE IS 'ID do episódio';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_PATIENT IS 'patient id';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.DURATION IS 'Duração da cirurgia (em minutos)';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_DIAGNOSIS IS 'ID do diagnóstico';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_SPECIALITY IS 'ID da especialidade';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.FLG_STATUS IS 'Estado do agendamento. Valores possíveis: A- Activo, I- Inactivo (alta), C- Cancelado';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.FLG_SCHED IS 'Estado do agendamento. Valores possíveis: A- agendada, N- não agendada';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_DEPT_DEST IS 'ID do departamento de destino previsto. Não é obrigatório preencher.';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.PREV_RECOVERY_TIME IS 'Tempo previsto de permanência no recobro';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_SR_CANCEL_REASON IS 'ID do motivo de cancelamento da cirurgia';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_PROF_CANCEL IS 'ID do profissional que cancelou a intervenção';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.NOTES_CANCEL IS 'Notas de cancelamento';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_PROF_REG IS 'ID do profissional que iniciou o registo. Deve ser utilizado para Cirurgias ainda não agendadas';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_INSTITUTION IS 'ID da instituição onde será realizada a cirurgia';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ADW_LAST_UPDATE IS 'Data da última alteração';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.DT_TARGET IS 'Data de agendamento da cirurgia';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.DT_INTERV_PREVIEW IS 'Data prevista de realização da intervenção. pode não estar preenchido, nos casos em que o agendamento ainda não tenha sido efetuado (episódios temporários).';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.DT_CANCEL IS 'Data de cancelamento';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ICU IS 'Need of Intensive Care Unit';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.NOTES IS 'Free text notes';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_WAITING_LIST IS 'ID of the surgery request';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ADM_NEEDED IS 'Indicates if this surgery requires inpatient admission, possible values Yes/No';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.FLG_TEMPORARY IS 'Temporary flag - Y-Yes; N-No';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.FLG_DUR_CONTROL IS 'flag that controls if the duration was calculated in seconds to minutes (Y) otherwise the flag is N';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.DT_UPDATE IS 'date of update occurrence';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_DIAG_INST_OWNER IS 'Institution owner of the concept. Default 0 - ALERT';
+-- CHANGE END:  Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 20-08-2013
+-- CHANGE REASON: ALERT-263450
+begin 
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT',i_obj_name => 'SCHEDULE_SR_HIST', i_obj_type => 'TABLE', i_flg_category => 'HST', i_flg_nzd => 'Y');
+end;
+/
+-- CHANGE END: Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-01-2015
+-- CHANGE REASON: ALERT-303513
+alter table SCHEDULE_SR_HIST add id_prof_update number(24);
+comment on column SCHEDULE_SR_HIST.id_prof_update is 'prof. responsible for the update occurring at dt_update';
+-- CHANGE END: Telmo
+
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 21/01/2016 10:29
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ADW_LAST_UPDATE IS 'Date of the last update';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.DT_TARGET IS 'Date of surgery scheduling';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.DT_CANCEL IS 'Cancellation date';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.DT_INTERV_PREVIEW IS 'Expected date for performing the surgery';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.FLG_STATUS IS 'A(active),I(inactive),C(cancelled)';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.FLG_SCHED IS 'A(scheduled),N(unscheduled)';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.DURATION IS 'Duration(minutes)';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_SPECIALITY IS 'Speciality ID';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_SCHED_SR_PARENT IS 'Schedule id "father"';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_SCHEDULE IS 'Schedule ID';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_DEPT_DEST IS 'Destination department ID';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_DIAGNOSIS IS 'Diagnosis ID';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_SR_CANCEL_REASON IS 'Cancel reason ID';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_PROF_CANCEL IS 'ID of the professional that canceled the intervention';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_PROF_REG IS 'Professional ID, that started the registration, should be used for surgerys not scheduled';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.NOTES_CANCEL IS 'Cancelling notes';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.ID_SCHEDULE_SR IS 'Schedule sr ID';
+COMMENT ON COLUMN SCHEDULE_SR_HIST.PREV_RECOVERY_TIME IS 'Expected recovery time';
+-- CHANGE END:  jose.m.silva
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 30/08/2018 11:41
+-- CHANGE REASON: [EMR-5186] 
+ALTER TABLE schedule_sr_hist ADD need_global_anesth VARCHAR2(1 CHAR);
+ALTER TABLE schedule_sr_hist ADD need_local_anesth VARCHAR2(1 CHAR);
+ALTER TABLE schedule_sr_hist ADD icu_pos VARCHAR2(1);
+-- CHANGE END: Pedro Henriques

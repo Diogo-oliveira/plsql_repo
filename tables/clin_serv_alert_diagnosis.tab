@@ -1,0 +1,61 @@
+create table CLIN_SERV_ALERT_DIAGNOSIS
+(
+  ID_CLIN_SERV_ALERT_DIAGNOSIS NUMBER(12) not null,
+  ID_CLINICAL_SERVICE                 NUMBER(12) not null,
+  ID_ALERT_DIAGNOSIS           NUMBER(12) not null,
+  FLG_AVAILABLE                VARCHAR2(2),
+  ADW_LAST_UPDATE              DATE,
+  ID_SOFTWARE                  NUMBER(12),
+  ID_PROFILE_TEMPLATE          NUMBER(12),
+  ID_INSTITUTION               NUMBER(12)
+);
+ 
+comment on column CLIN_SERV_ALERT_DIAGNOSIS.ID_CLIN_SERV_ALERT_DIAGNOSIS
+  is 'PK for the cliical service ALERT diagnosis';
+comment on column CLIN_SERV_ALERT_DIAGNOSIS.ID_CLINICAL_SERVICE
+  is 'CLINICAL_SERVICE ID';
+comment on column CLIN_SERV_ALERT_DIAGNOSIS.ID_ALERT_DIAGNOSIS
+  is 'ALERT_DIAGNOSIS ID';
+comment on column CLIN_SERV_ALERT_DIAGNOSIS.FLG_AVAILABLE
+  is 'If it is available (Y) Yes, (N) No';
+comment on column CLIN_SERV_ALERT_DIAGNOSIS.ADW_LAST_UPDATE
+  is 'Last update';
+comment on column CLIN_SERV_ALERT_DIAGNOSIS.ID_SOFTWARE
+  is 'Software ID';
+comment on column CLIN_SERV_ALERT_DIAGNOSIS.ID_PROFILE_TEMPLATE
+  is 'Profile template ID';
+comment on column CLIN_SERV_ALERT_DIAGNOSIS.ID_INSTITUTION
+  is 'Institution ID';
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:43
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table CLIN_SERV_ALERT_DIAGNOSIS
+  is 'Association between clinical service and diagnosis (Most frequent diagnosis by clinical service)';  
+-- CHANGE END: Elisabete Bugalho
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2018-07-12
+-- CHANGED REASON: EMR-4688
+DECLARE
+  e_ex EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_ex, -01430);
+BEGIN
+  -- Add/modify columns 
+  EXECUTE IMMEDIATE 'alter table CLIN_SERV_ALERT_DIAGNOSIS add migration_status VARCHAR2(400 CHAR)';
+EXCEPTION
+  WHEN e_ex THEN
+    NULL;
+END;
+/
+
+-- Add comments to the columns 
+comment on column CLIN_SERV_ALERT_DIAGNOSIS.migration_status
+  is 'Current status of this record in the migration for terminology server configurations.';
+
+-- CHANGE END: Humberto Cardoso

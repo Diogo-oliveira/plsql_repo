@@ -1,0 +1,20 @@
+CREATE OR REPLACE VIEW v_sys_alert_event AS
+SELECT id_sys_alert_event,
+       id_sys_alert,
+       id_software,
+       id_institution,
+       id_patient,
+       id_visit,
+       id_episode,
+       id_record,
+       dt_record,
+       id_professional,
+       id_room,
+       id_clinical_service,
+       flg_visible,
+       replace1,
+       replace2,
+       id_dep_clin_serv,
+       id_intf_type,
+       id_prof_order
+  FROM sys_alert_event;

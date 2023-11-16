@@ -1,0 +1,1 @@
+DROP TYPE t_rec_gen_area_rank_lab_tmp;

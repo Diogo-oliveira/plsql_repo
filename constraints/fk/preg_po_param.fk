@@ -1,0 +1,37 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 26/08/2013 14:49
+-- CHANGE REASON: [ALERT-263008] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+    BEGIN
+      EXECUTE IMMEDIATE 'ALTER TABLE preg_po_param  ADD CONSTRAINT ppp_pat_preg_fk FOREIGN KEY (id_pat_pregnancy) REFERENCES pat_pregnancy (id_pat_pregnancy)';
+      EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+      EXECUTE IMMEDIATE 'ALTER TABLE preg_po_param  ADD CONSTRAINT ppp_po_param_fk FOREIGN KEY (id_po_param,id_inst_owner) REFERENCES po_param (id_po_param,id_inst_owner)';
+      EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 26/08/2013 15:40
+-- CHANGE REASON: [ALERT-263008] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+		BEGIN
+			EXECUTE IMMEDIATE 'ALTER TABLE preg_po_param  ADD CONSTRAINT ppp_pat_preg_fk FOREIGN KEY (id_pat_pregnancy) REFERENCES pat_pregnancy (id_pat_pregnancy)';
+			EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+		END;
+		BEGIN
+			EXECUTE IMMEDIATE 'ALTER TABLE preg_po_param  ADD CONSTRAINT ppp_po_param_fk FOREIGN KEY (id_po_param,id_inst_owner) REFERENCES po_param (id_po_param,id_inst_owner)';
+			EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+		END;
+END;
+/
+-- CHANGE END: mario.mineiro

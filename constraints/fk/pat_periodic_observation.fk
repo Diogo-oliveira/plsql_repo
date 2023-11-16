@@ -1,0 +1,20 @@
+--FKs pat_periodic_observation.fk
+
+alter table PAT_PERIODIC_OBSERVATION add constraint PAT_PER_OBS_CLIN_SERV_FK foreign key (ID_CLINICAL_SERVICE) references CLINICAL_SERVICE (ID_CLINICAL_SERVICE) ENABLE;
+
+alter table PAT_PERIODIC_OBSERVATION add constraint PAT_PER_OBS_PER_OBS_DESC_FK foreign key (ID_PERIODIC_OBSERVATION_DESC) references PERIODIC_OBSERVATION_DESC (ID_PERIODIC_OBSERVATION_DESC) ENABLE;
+
+alter table PAT_PERIODIC_OBSERVATION add constraint PAT_PER_OBS_PER_OBS_PARAM_FK foreign key (ID_PERIODIC_OBSERVATION_PARAM) references PERIODIC_OBSERVATION_PARAM (ID_PERIODIC_OBSERVATION_PARAM) ENABLE;
+
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 17/02/2011 17:55
+-- CHANGE REASON: [ALERT-157960] added missing foreign keys
+alter table pat_periodic_observation
+  add constraint ppo_inst_fk foreign key (id_institution)
+  references institution (id_institution);
+alter table pat_periodic_observation
+  add constraint ppo_pat_fk foreign key (id_patient)
+  references patient (id_patient);
+-- CHANGE END: Pedro Carneiro

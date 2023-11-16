@@ -1,0 +1,21 @@
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 06/04/2011 10:20
+-- CHANGE REASON: [ALERT-171418] 
+DECLARE
+
+ e_column_already_there EXCEPTION;
+
+ PRAGMA EXCEPTION_INIT(e_column_already_there, -02260); -- add column
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE VACC_ADVERS_REACT ADD CONSTRAINT VAR_PK PRIMARY KEY (ID_REG, dt_prof_write) ENABLE';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Rita Lopes

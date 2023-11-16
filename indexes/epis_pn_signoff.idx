@@ -1,0 +1,16 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 17/03/2014 09:35
+-- CHANGE REASON: [ALERT-276209] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'create index EPFS_idx on epis_pn_signoff(id_epis_pn,id_pn_soap_block) tablespace index_l';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

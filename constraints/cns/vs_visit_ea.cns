@@ -1,0 +1,31 @@
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 25/10/2010
+-- CHANGE REASON: ALERT-130841
+DECLARE
+    e_pk_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_exists, -02260);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_visit_ea ADD CONSTRAINT vvea_pk PRIMARY KEY (id_visit, id_vital_sign, id_unit_measure)';
+    EXECUTE IMMEDIATE 'ALTER INDEX vvea_pk REBUILD TABLESPACE index_m';
+
+EXCEPTION
+    WHEN e_pk_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+-- CHANGE END: Paulo Fonseca
+
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 22/11/2011 15:59
+-- CHANGE REASON: [ALERT-206175] fix packages and related tables - Issue Replication: [2.6.2] Fix the problem of multiple scales for one Vital Sign inside the PFH
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vs_visit_ea DROP CONSTRAINT  VVEA_VSS_FK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto

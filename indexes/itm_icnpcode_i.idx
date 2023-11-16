@@ -1,0 +1,14 @@
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 03/12/2012 15:15
+-- CHANGE REASON: [ALERT-246307] 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -01418);
+BEGIN
+   EXECUTE IMMEDIATE 'drop index ITM_ICNPCODE_I';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('AVISO: índice especificado não existe');
+end;
+/
+-- CHANGE END:  Nuno Neves

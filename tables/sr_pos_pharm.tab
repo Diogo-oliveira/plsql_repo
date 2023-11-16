@@ -1,0 +1,52 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 21/04/2010 11:25
+-- CHANGE REASON: [ALERT-91154] Registration POS
+create table SR_POS_PHARM
+(
+  ID_SR_POS_PHARM      NUMBER(24) NOT NULL,
+ID_SR_POS_SCHEDULE      NUMBER(24) NOT NULL,
+  FLG_STATUS              VARCHAR2(1) NOT NULL,
+NOTES_EVALUATION        VARCHAR2(1000 CHAR),
+  ID_CANCEL_REASON        NUMBER(24),
+  NOTES_CANCEL            VARCHAR2(1000 CHAR),
+  ID_PROF_REG             NUMBER(24) NOT NULL,
+  DT_REG                  TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+  CREATE_USER             VARCHAR2(24),
+  CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION      NUMBER(24),
+  UPDATE_USER             VARCHAR2(24),
+  UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION      NUMBER(24)
+);
+
+comment on table SR_POS_PHARM
+  is 'Pharmacist POS evaluation records';
+comment on column SR_POS_PHARM.ID_SR_POS_PHARM
+  is 'Primary Key';
+comment on column SR_POS_PHARM.ID_SR_POS_SCHEDULE
+  is 'SR_POS_SCHEDULE Primary Key';
+comment on column SR_POS_PHARM.FLG_STATUS
+  is 'Evaluation status flag: A - Active, O - Outdated, C - Canceled';
+comment on column SR_POS_PHARM.NOTES_EVALUATION
+  is 'Global assessment notes';
+comment on column SR_POS_PHARM.ID_CANCEL_REASON
+  is 'Cancel reason identifier';
+comment on column SR_POS_PHARM.NOTES_CANCEL
+  is 'Cancelling notes';
+comment on column SR_POS_PHARM.ID_PROF_REG
+  is 'Professional ID - person who inserted data';
+comment on column SR_POS_PHARM.DT_REG
+  is 'date of insertion/update';
+comment on column SR_POS_PHARM.CREATE_USER
+  is 'ID of the professional who created the record';
+comment on column SR_POS_PHARM.CREATE_TIME
+  is 'Date of record creation';
+comment on column SR_POS_PHARM.CREATE_INSTITUTION
+  is 'ID of institution where record was created';
+comment on column SR_POS_PHARM.UPDATE_USER
+  is 'ID of the professional who last updated the record';
+comment on column SR_POS_PHARM.UPDATE_TIME
+  is 'Date when record was last updated';
+comment on column SR_POS_PHARM.UPDATE_INSTITUTION
+  is 'ID of the institution where record was last updated';
+-- CHANGE END: Gustavo Serrano

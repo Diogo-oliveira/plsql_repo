@@ -1,0 +1,22 @@
+-- CHANGED BY: João Almeida
+-- CHANGE DATE: 09/03/2010 10:26
+-- CHANGE REASON: [ALERT-79864] 
+DECLARE
+    l_sql   VARCHAR2(1000 CHAR);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM all_indexes u
+     WHERE u.index_name = 'REA_ID_PROF_ORIG_FK_I';
+
+    IF l_count = 0
+    THEN
+        l_sql := q'[create index REA_ID_PROF_ORIG_FK_I on REFERRAL_EA (ID_PROF_ORIG)]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: João Almeida

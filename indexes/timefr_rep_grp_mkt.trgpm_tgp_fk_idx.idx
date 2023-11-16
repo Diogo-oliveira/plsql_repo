@@ -1,0 +1,14 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/03/2011 14:13
+-- CHANGE REASON: [ALERT-170459 ] Review H&P database dvelopment with notes of DB Arch.
+DECLARE e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE INDEX TRGPM_TGP_FK_IDX ON TIMEFRAME_REP_GRP_MKT
+ (ID_TIMEFRAME_GROUP)';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

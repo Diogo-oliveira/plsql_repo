@@ -1,0 +1,30 @@
+
+
+  ALTER TABLE "ALERT"."CRISIS_MACHINE" ADD CONSTRAINT "CRISIS_PK" PRIMARY KEY ("ID_CRISIS_MACHINE") ENABLE; 
+
+
+
+  ALTER TABLE "ALERT"."CRISIS_MACHINE" MODIFY ("ID_CRISIS_MACHINE" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."CRISIS_MACHINE" MODIFY ("FLG_SYS_MESSAGE" NOT NULL ENABLE);  
+
+
+
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 02/05/2014 09:30
+-- CHANGE REASON: [ALERT-157914] Introduce crisis machine clone concept
+DECLARE
+    l_ddl_tbl table_varchar := table_varchar('ALTER TABLE CRISIS_MACHINE ADD CONSTRAINT CM_FLG_UPD_UI_CHK CHECK(FLG_UPD_UI IN (''Y'', ''N''))',
+    'ALTER TABLE CRISIS_MACHINE ADD CONSTRAINT CM_FLG_AVAILABLE_CHK CHECK(FLG_AVAILABLE IN (''Y'', ''N''))');
+
+BEGIN
+    FOR i IN l_ddl_tbl.first .. l_ddl_tbl.last
+    LOOP
+        pk_versioning.run(i_sql => l_ddl_tbl(i));
+    END LOOP;
+END;
+/
+-- CHANGE END: Gustavo Serrano

@@ -1,0 +1,92 @@
+
+    /*
+      * TABLE REP_AUTH_EXCEPTION
+      @CREATOR MARCO FREIRE
+      @VERSION 
+      @SEE
+      @SINCE 20090508
+      @UPDATED <Responsible> (<Date>)
+    */
+
+--***********************************************************************
+
+CREATE TABLE REP_AUTH_EXCEPTION
+(
+  ID_REP_AUTH_EXCEPTION     NUMBER(24)  NOT NULL,
+  ID_REPORT_AUTH_PRINT      NUMBER(24)  NOT NULL,
+  ID_PROFESSIONAL           NUMBER(24)  NOT NULL,
+  FLG_AUTH                  VARCHAR2(1) NOT NULL
+) 
+
+TABLESPACE TABLE_S;
+
+COMMENT ON TABLE REP_AUTH_EXCEPTION IS 'Tabela de excepções, por profissional, sobre a necessidade de se autenticar antes de imprimir um relatório.';
+
+COMMENT ON COLUMN REP_AUTH_EXCEPTION.ID_REP_AUTH_EXCEPTION IS 'Chave primária.';
+COMMENT ON COLUMN REP_AUTH_EXCEPTION.ID_REPORT_AUTH_PRINT IS 'ID do par relatório/perfil ao qual se vai atribuir uma excepção.';
+COMMENT ON COLUMN REP_AUTH_EXCEPTION.ID_PROFESSIONAL IS 'ID do perfil do profissional.';
+COMMENT ON COLUMN REP_AUTH_EXCEPTION.FLG_AUTH IS 'Flag que indica se a autenticação é necessária para imprimir o relatório (‘Y’ ou ‘N’)';
+
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON TABLE REP_AUTH_EXCEPTION IS 'Exception table, by professional, about the authentication before printing a reports';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON COLUMN REP_AUTH_EXCEPTION.ID_REP_AUTH_EXCEPTION IS 'Primary Key';
+COMMENT ON COLUMN REP_AUTH_EXCEPTION.ID_PROFESSIONAL IS 'Professional Identifier';
+COMMENT ON COLUMN REP_AUTH_EXCEPTION.ID_REPORT_AUTH_PRINT IS 'Report/Profile ID to attribute an exception';
+COMMENT ON COLUMN REP_AUTH_EXCEPTION.FLG_AUTH IS 'Flag about if the authentication is needed to print a report (Y/N)';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table REP_AUTH_EXCEPTION add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column rep_auth_exception.create_user IS 'Creation User';
+COMMENT ON column rep_auth_exception.create_time IS 'Creation Time';
+COMMENT ON column rep_auth_exception.create_institution IS 'Creation Institution';
+COMMENT ON column rep_auth_exception.update_user IS 'Update User';
+COMMENT ON column rep_auth_exception.update_time IS 'Update Time';
+COMMENT ON column rep_auth_exception.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table rep_auth_exception add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column rep_auth_exception.create_user IS 'Creation User';
+COMMENT ON column rep_auth_exception.create_time IS 'Creation Time';
+COMMENT ON column rep_auth_exception.create_institution IS 'Creation Institution';
+COMMENT ON column rep_auth_exception.update_user IS 'Update User';
+COMMENT ON column rep_auth_exception.update_time IS 'Update Time';
+COMMENT ON column rep_auth_exception.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

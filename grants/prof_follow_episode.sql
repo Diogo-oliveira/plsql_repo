@@ -1,0 +1,1 @@
+grant select, delete, update on PROF_FOLLOW_EPISODE to alert_reset;

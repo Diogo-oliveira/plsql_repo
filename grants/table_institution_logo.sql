@@ -1,0 +1,1 @@
+grant select on INSTITUTION_LOGO to ALERT_VIEWER;

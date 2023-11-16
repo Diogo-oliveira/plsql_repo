@@ -1,0 +1,31 @@
+
+create global temporary table WTL_ADM_SURG_TMPTAB
+(
+  ID_WTLIST NUMBER(24) not null,
+  BLOCO     VARCHAR2(4000),
+  LABEL     VARCHAR2(4000),
+  DATA      VARCHAR2(2000),
+  ORDEM     NUMBER(3) not null
+)
+on commit preserve rows;
+-- Add comments to the table 
+comment on table WTL_ADM_SURG_TMPTAB
+  is 'Tabela temporária para auxilio à resposta da função get_summary_all';
+-- Add comments to the columns 
+comment on column WTL_ADM_SURG_TMPTAB.ID_WTLIST
+  is 'ID da waiting list.';
+comment on column WTL_ADM_SURG_TMPTAB.BLOCO
+  is 'Titulo do bloco da página sumário.';
+comment on column WTL_ADM_SURG_TMPTAB.LABEL
+  is 'Cada uma das labels do bloco.';
+comment on column WTL_ADM_SURG_TMPTAB.DATA
+  is 'Informação associada a cada uma das Labels.';
+comment on column WTL_ADM_SURG_TMPTAB.ORDEM
+  is 'Ordem pela qual devem surgir os registos.';
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 12-03-2010
+-- CHANGE REASON: SCH-386
+alter table WTL_ADM_SURG_TMPTAB add ID_LABEL number;
+comment on column WTL_ADM_SURG_TMPTAB.ID_LABEL is 'id da label. util para o scheduler 3 que precisa de indicar quais as colunas que quer receber';
+-- CHANGE END: Telmo castro

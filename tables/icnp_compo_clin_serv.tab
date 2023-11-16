@@ -1,0 +1,28 @@
+
+
+  CREATE TABLE ICNP_COMPO_CLIN_SERV
+   (	ID_ICNP_COMPO_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	ID_COMPOSITION NUMBER(12,0) NOT NULL ENABLE,
+	ID_CLINICAL_SERVICE NUMBER(12,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(12,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE icnp_compo_clin_serv IS 'This table is for maintainig content. It does not influence the icnp tool. This is to be considered the repository. In here we associate compositions to clinical services so then we can populate institutions with icnp content.' ;
+
+COMMENT ON COLUMN icnp_compo_clin_serv.id_icnp_compo_clin_serv IS 'Primary key' ;
+COMMENT ON COLUMN icnp_compo_clin_serv.id_composition IS 'Composition id' ;
+COMMENT ON COLUMN icnp_compo_clin_serv.id_clinical_service IS 'The clinical service associated with the composition' ;
+COMMENT ON COLUMN icnp_compo_clin_serv.id_software IS 'The associated software' ;
+
+--29/10/2010 Rui Batista
+--[ALERT-136492] Database object Cleaning
+begin
+
+  execute immediate 'drop table ICNP_COMPO_CLIN_SERV';
+--	
+	exception
+	when others then --ORA-00942 Table or view does not exists
+	     null;
+end;
+

@@ -1,0 +1,169 @@
+create table SUMMARY_PAGE_SECTION
+(
+  ID_SUMMARY_PAGE_SECTION NUMBER(24) not null,
+  ID_SUMMARY_PAGE NUMBER(24) not null,
+  INTERNAL_NAME     VARCHAR2(200) not null,
+  CODE_SUMMARY_PAGE_SECTION  VARCHAR2(200) not null,
+  RANK NUMBER(6) not null,
+  HEIGHT NUMBER(4) not null,
+  ID_DOC_AREA NUMBER(24),
+  SCREEN_NAME VARCHAR2(200),
+  ID_SYS_SHORTCUT NUMBER(24)
+);
+
+
+COMMENT ON COLUMN summary_page_section.id_summary_page_section IS 'Chave primária' ;
+COMMENT ON COLUMN summary_page_section.id_summary_page IS 'ID de summary page' ;
+COMMENT ON COLUMN summary_page_section.internal_name IS 'Nome interno' ;
+COMMENT ON COLUMN summary_page_section.code_summary_page_section IS 'Suporte para descrição multi-língua de summary_page_section' ;
+COMMENT ON COLUMN summary_page_section.rank IS 'Número de ordem' ;
+COMMENT ON COLUMN summary_page_section.height IS 'Altura da página' ;
+COMMENT ON COLUMN summary_page_section.id_doc_area IS 'ID de doc_area' ;
+COMMENT ON COLUMN summary_page_section.screen_name IS 'Nome do ecrã' ;
+COMMENT ON COLUMN summary_page_section.id_sys_shortcut IS 'ID de sys_shortcut' ;
+
+-- RdSN 2007/07/23
+alter table summary_page_section add FLG_TYPE VARCHAR2(2);
+comment on column summary_page_section.FLG_TYPE
+  is 'To select the context for this doc area. Same domain as DOC_TEMPLATE_CONTEXT.FLG_TYPE.';
+
+alter table summary_page_section add     ID_INSTITUTION        NUMBER default 0;
+alter table summary_page_section add     ID_SOFTWARE           NUMBER  default 0;
+
+comment on column summary_page_section.ID_INSTITUTION
+  is 'Parametrização por instituição. 0 significa todas';
+comment on column summary_page_section.ID_SOFTWARE
+  is 'Parametrização por software. 0 significa todos';
+
+-- CHANGED REASON: Criação de novas colunas para definir o nome do ecrã que vai ser carregado quando a informação for gravada
+-- de uma página de resumo na documentação e simplificar o processo no flash
+-- APPLICATION: CARE (3)
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 07/09/2007
+ALTER TABLE SUMMARY_PAGE_SECTION
+ADD SCREEN_NAME_AFTER_SAVE VARCHAR2(200);
+
+--Comments
+COMMENT ON COLUMN SUMMARY_PAGE_SECTION.SCREEN_NAME_AFTER_SAVE IS 'Nome do ecrã que vai ser carregado quando a informação for gravada.';
+--END
+
+-- CHANGED REASON: Criação de uma nova coluna para definir um subtítulo para o ecrã
+-- APPLICATION: CARE (3)
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 07/09/2007
+ALTER TABLE SUMMARY_PAGE_SECTION
+ADD CODE_PAGE_SECTION_SUBTITLE VARCHAR2(200);
+
+COMMENT ON COLUMN SUMMARY_PAGE_SECTION.CODE_PAGE_SECTION_SUBTITLE IS 'Subtítulo a ser usado na secção, quando o cabeçalho tem mais que uma linha.';
+--END
+
+
+--Emilia Taborda 2007/09/11
+alter table summary_page_section add (screen_name_free_text varchar2(200));
+
+comment on column SUMMARY_PAGE_SECTION.screen_name_free_text
+  is 'Nome do ecrã que vai ser carregado em modo free text';
+--END
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 29/11/2011 12:32
+-- CHANGE REASON: [ALERT-48130] Summary page: must be able to allow automatically calculate the section's height
+-- Removes not null contraint in order to be able set NULL as AutoSize 
+--(Determines the section should automatically size based on its content and available space)
+
+DECLARE
+    l_allow_null VARCHAR2(1 CHAR);
+BEGIN
+    -- Does column allow NULL values?
+    SELECT ut.nullable
+      INTO l_allow_null
+      FROM user_tab_cols ut
+     WHERE ut.table_name = 'SUMMARY_PAGE_SECTION'
+       AND ut.column_name = 'HEIGHT';
+
+    IF l_allow_null = 'N'
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE summary_page_section MODIFY (height NUMBER(4) NULL)';
+    END IF;
+END;
+/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 07/02/2012 10:12
+-- CHANGE REASON: [ALERT-217682] Columns ID_INSTITUTION/ID_SOFTWARE in SUMMARY_PAGE_SECTION are deprecated and need to be removed from the data model
+-- Refactory to remove references to these columns.
+
+DECLARE
+    l_exists NUMBER(24);
+BEGIN
+    -- Exists column ID_INSTITUTION
+    SELECT COUNT(*)
+      INTO l_exists
+      FROM user_tab_cols ut
+     WHERE ut.table_name = 'SUMMARY_PAGE_SECTION'
+       AND ut.column_name = 'ID_INSTITUTION';
+    IF l_exists > 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE SUMMARY_PAGE_SECTION DROP (ID_INSTITUTION)';
+    END IF;
+
+    -- Exists column ID_SOFTWARE
+    SELECT COUNT(*)
+      INTO l_exists
+      FROM user_tab_cols ut
+     WHERE ut.table_name = 'SUMMARY_PAGE_SECTION'
+       AND ut.column_name = 'ID_SOFTWARE';
+    IF l_exists > 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE SUMMARY_PAGE_SECTION DROP (ID_SOFTWARE)';
+    END IF;
+END;
+/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 10:59
+-- CHANGE REASON: [ALERT-317912] 
+comment on table SUMMARY_PAGE_SECTION
+  is 'Summary page section catalogue';
+-- Add comments to the columns 
+comment on column SUMMARY_PAGE_SECTION.id_summary_page_section
+  is 'Summary page section ID';
+comment on column SUMMARY_PAGE_SECTION.id_summary_page
+  is 'Summary page ID';
+comment on column SUMMARY_PAGE_SECTION.internal_name
+  is 'Internal description';
+comment on column SUMMARY_PAGE_SECTION.code_summary_page_section
+  is 'Translation code';
+comment on column SUMMARY_PAGE_SECTION.rank
+  is 'Rank';
+comment on column SUMMARY_PAGE_SECTION.height
+  is 'Height';
+comment on column SUMMARY_PAGE_SECTION.id_doc_area
+  is 'Documentation area ID';
+comment on column SUMMARY_PAGE_SECTION.screen_name
+  is 'Screen name';
+comment on column SUMMARY_PAGE_SECTION.id_sys_shortcut
+  is 'Shortcut ID';
+comment on column SUMMARY_PAGE_SECTION.flg_type
+  is 'To select the context for this doc area (DOC_TEMPLATE_CONTEXT.FLG_TYPE)';
+comment on column SUMMARY_PAGE_SECTION.screen_name_free_text
+  is 'Free text screen name';
+comment on column SUMMARY_PAGE_SECTION.screen_name_after_save
+  is 'After saving screen name';
+comment on column SUMMARY_PAGE_SECTION.code_page_section_subtitle
+  is 'Translation code (subtitle)';
+comment on column SUMMARY_PAGE_SECTION.create_user
+  is 'Creation User';
+comment on column SUMMARY_PAGE_SECTION.create_time
+  is 'Creation Time';
+comment on column SUMMARY_PAGE_SECTION.create_institution
+  is 'Creation Institution';
+comment on column SUMMARY_PAGE_SECTION.update_user
+  is 'Update User';
+comment on column SUMMARY_PAGE_SECTION.update_time
+  is 'Update Time';
+comment on column SUMMARY_PAGE_SECTION.update_institution
+  is 'Update Institution';
+-- CHANGE END: Ana Matos

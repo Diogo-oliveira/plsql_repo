@@ -1,0 +1,1 @@
+grant select on v_stg_institution_field_data to intf_alert;

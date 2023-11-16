@@ -1,0 +1,1 @@
+grant select on ALERT_HIE.SEQ_patient_ehr to ALERT_VIEWER;

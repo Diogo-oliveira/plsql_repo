@@ -1,0 +1,18 @@
+
+--PK
+alter table wfl_state
+add constraint wfl_st_pk primary key (id_state)
+using index tablespace INDEX_S;
+
+--UK
+alter table wfl_state
+add constraint wfl_st_state_uk unique (state_name, scope)
+using index tablespace INDEX_S;
+
+--CHKs
+alter table wfl_state
+add constraint wfl_st_flg_active_chk check (flg_active in ('Y','N'));
+
+alter table wfl_state
+add constraint wfl_st_scope_gen_name_uk unique (scope, generic_name)
+using index tablespace INDEX_S;

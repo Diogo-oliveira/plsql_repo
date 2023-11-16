@@ -1,0 +1,72 @@
+--CHANGED BY: Rita Lopes
+--CHANGE DATE: 08-01-2009
+--CHANGE REASON: Alert-12914
+alter table PERIODIC_OBSERVATION_PARAM
+  add constraint PER_OBS_PAR_EVENT_FK foreign key (ID_EVENT)
+  references event (ID_EVENT);
+--CHANGE END
+
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 17/02/2011 17:55
+-- CHANGE REASON: [ALERT-157960] added missing foreign keys
+alter table periodic_observation_param
+  add constraint pop_inst_fk foreign key (id_institution)
+  references institution (id_institution);
+alter table periodic_observation_param
+  add constraint pop_s_fk foreign key (id_software)
+  references software (id_software);
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 03/03/2011 09:05
+-- CHANGE REASON: [ALERT-157960] added missing fks with no validate
+alter table periodic_observation_param
+  add constraint pop_cse_fk foreign key (id_clinical_service)
+  references clinical_service (id_clinical_service)
+  novalidate;
+alter table periodic_observation_param
+  add constraint pop_pat_fk foreign key (id_patient)
+  references patient (id_patient)
+  novalidate;
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/03/2011 16:54
+-- CHANGE REASON: [ALERT-157960] added missing fks
+declare
+cannot_validate exception;
+pragma exception_init(cannot_validate, -02298);
+begin
+begin
+  execute immediate '
+alter table periodic_observation_param
+  add constraint pop_teg_fk foreign key (id_time_event_group)
+  references time_event_group (id_time_event_group)
+';
+exception when cannot_validate then
+  execute immediate '
+alter table periodic_observation_param
+  add constraint pop_teg_fk foreign key (id_time_event_group)
+  references time_event_group (id_time_event_group)
+  novalidate
+';
+end;
+begin
+  execute immediate '
+alter table periodic_observation_param
+  add constraint pop_unitm_fk foreign key (id_unit_measure)
+  references unit_measure (id_unit_measure)
+';
+exception when cannot_validate then
+  execute immediate '
+alter table periodic_observation_param
+  add constraint pop_unitm_fk foreign key (id_unit_measure)
+  references unit_measure (id_unit_measure)
+  novalidate
+';
+end;
+end;
+/
+-- CHANGE END: Pedro Carneiro

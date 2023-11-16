@@ -1,0 +1,79 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 09/10/2012 12:08
+-- CHANGE REASON: [ALERT-240846 ] 
+DECLARE
+    e_table_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_table_already_there, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'create table INTERV_BODY_STRUCTURE
+(
+  id_intervention             NUMBER(24) not null,
+  id_body_structure   NUMBER(24) not null,
+  flg_available       VARCHAR2(1 CHAR) not null,
+  flg_main_laterality VARCHAR2(1 CHAR),
+  create_user         VARCHAR2(24 CHAR),
+  create_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution  NUMBER(24),
+  update_user         VARCHAR2(24 CHAR),
+  update_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution  NUMBER(24)
+)';
+
+EXCEPTION
+    WHEN e_table_already_there THEN
+        dbms_output.put_line('Table INTERV_BODY_STRUCTURE already there.');    
+END;
+/
+
+comment ON COLUMN INTERV_BODY_STRUCTURE.id_intervention
+  IS 'Intervention ID';
+comment ON COLUMN INTERV_BODY_STRUCTURE.id_body_structure
+  IS 'Body Structure ID';
+comment ON COLUMN INTERV_BODY_STRUCTURE.flg_available
+  IS 'Flag that indicates if this record is available';
+comment ON COLUMN INTERV_BODY_STRUCTURE.flg_main_laterality
+  IS 'Laterality options available for this exam on this body structure. Possible values are NULL, All (O)ptions, (N)ot Applicable, (B)ilateral, (A)ny laterality, (L)eft, (R)ight, (U)nilateral [left and rigth will be available to be selected]';
+comment ON COLUMN INTERV_BODY_STRUCTURE.create_user
+  IS 'Creation User';
+comment ON COLUMN INTERV_BODY_STRUCTURE.create_time
+  IS 'Creation Time';
+comment ON COLUMN INTERV_BODY_STRUCTURE.create_institution
+  IS 'Creation Institution';
+comment ON COLUMN INTERV_BODY_STRUCTURE.update_user
+  IS 'Update User';
+comment ON COLUMN INTERV_BODY_STRUCTURE.update_time
+  IS 'Update Time';
+comment ON COLUMN INTERV_BODY_STRUCTURE.update_institution
+  IS 'Update Institution'; 
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 11/01/2016 16:36
+-- CHANGE REASON: [ALERT-317702] 
+comment on table INTERV_BODY_STRUCTURE
+  is 'Procedures body structure';
+-- Add comments to the columns 
+comment on column INTERV_BODY_STRUCTURE.id_intervention
+  is 'Procedure ID';
+comment on column INTERV_BODY_STRUCTURE.id_body_structure
+  is 'Body structure ID';
+comment on column INTERV_BODY_STRUCTURE.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column INTERV_BODY_STRUCTURE.flg_main_laterality
+  is 'Laterality options available for the exam on this body structure. Possible values are NULL, All (O)ptions, (N)ot Applicable, (B)ilateral, (A)ny laterality, (L)eft, (R)ight, (U)nilateral [left and rigth will be available to be selected]';
+comment on column INTERV_BODY_STRUCTURE.create_user
+  is 'Creation User';
+comment on column INTERV_BODY_STRUCTURE.create_time
+  is 'Creation Time';
+comment on column INTERV_BODY_STRUCTURE.create_institution
+  is 'Creation Institution';
+comment on column INTERV_BODY_STRUCTURE.update_user
+  is 'Update User';
+comment on column INTERV_BODY_STRUCTURE.update_time
+  is 'Update Time';
+comment on column INTERV_BODY_STRUCTURE.update_institution
+  is 'Update Institution';
+
+  
+  
+-- CHANGE END: Ana Matos

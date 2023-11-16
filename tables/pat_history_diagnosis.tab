@@ -1,0 +1,433 @@
+CREATE TABLE PAT_HISTORY_DIAGNOSIS
+ (ID_PAT_HISTORY_DIAGNOSIS  NUMBER(12) NOT NULL
+ ,DT_PAT_HISTORY_DIAGNOSIS  DATE NOT NULL
+ ,ID_PROFESSIONAL  NUMBER(12) NOT NULL
+ ,YEAR_BEGIN  NUMBER(4)
+ ,MONTH_BEGIN  NUMBER(2)
+ ,DAY_BEGIN  NUMBER(2)
+ ,FLG_STATUS  VARCHAR2(2) NOT NULL
+ ,FLG_NATURE  VARCHAR2(2)
+ ,ID_DIAGNOSIS  NUMBER(12)
+ ,ID_SR_INTERVENTION  NUMBER(12)
+ ,ID_EPIS_COMPLAINT  NUMBER(12) NOT NULL
+ );
+
+
+comment on column pat_history_diagnosis.flg_status is 'Status: (A) Active, (C) Canceled, (P) Passive, (R) Resolved, (N) None, (U) Unknown';
+
+alter table pat_history_diagnosis
+add id_pat_history_diagnosis_new number(12);
+comment on column pat_history_diagnosis.id_pat_history_diagnosis_new is 'ID of the record that makes it outdated';
+
+alter table pat_history_diagnosis
+add flg_compl varchar2(2);
+comment on column PAT_HISTORY_DIAGNOSIS.Flg_Compl is 'If patient has complications associated to the past surgical history entry (Y/N)';
+
+alter table pat_history_diagnosis
+add desc_compl varchar2(200);
+comment on column pat_history_diagnosis.desc_compl is 'Complications description';
+
+ALTER TABLE pat_history_diagnosis
+MODIFY id_epis_complaint null;
+
+alter table pat_history_diagnosis
+add id_alert_diagnosis number(12);
+comment on column pat_history_diagnosis.id_alert_diagnosis is 'ALERT_DIAGNOSIS ID';
+
+alter table pat_history_diagnosis
+add flg_recent_diag varchar2(2);
+comment on column pat_history_diagnosis.flg_recent_diag is 'If this record is the more recent diagnosis for the current ID_DIAGNOSIS (used on the Past Surgical): (Y) Yes, (N) No';
+
+alter table pat_history_diagnosis
+add flg_type varchar2(2);
+comment on column pat_history_diagnosis.flg_type is 'Type of special diagnosis: (M) Medical or (S) Surgical';
+
+alter table pat_history_diagnosis
+add id_patient number(12);
+alter table pat_history_diagnosis
+add id_episode number(12);
+alter table pat_history_diagnosis
+add id_institution number(12);
+
+alter table PAT_HISTORY_DIAGNOSIS
+drop column desc_compl;
+
+
+alter table pat_history_diagnosis 
+add (dt_pat_history_diagnosis_tstz timestamp with local time zone);
+
+
+alter table pat_history_diagnosis
+add notes varchar2(4000);
+comment on column pat_history_diagnosis.notes is 'Field to save the notes registered on the relevant diseases feature. New records don''t have notes';
+
+alter table pat_history_diagnosis
+add id_pat_problem_mig varchar2(4000);
+comment on column pat_history_diagnosis.id_pat_problem_mig is 'Field to save the corresponding id_pat_problem following the migration of the relevant diseases records';
+
+alter table pat_history_diagnosis
+add flg_aproved_mig varchar2(2);
+comment on column pat_history_diagnosis.flg_aproved_mig is 'Field to save the state of aproval following the migration of the relevant diseases records';
+
+alter table pat_history_diagnosis
+add desc_pat_history_diagnosis varchar2(2000);
+comment on column pat_history_diagnosis.desc_pat_history_diagnosis is 'Description concerning a problem written by the user and not corresponding to a coding';
+
+alter table pat_history_diagnosis
+drop column id_sr_intervention;
+
+alter table pat_history_diagnosis
+add id_pat_problem_hist_mig number;
+comment on column pat_history_diagnosis.id_pat_problem_hist_mig is 'Pat_problem_hist ID (migration)';
+
+comment on column pat_history_diagnosis.flg_type is 'Type of special diagnosis: (M) Medical, (S) Surgical, (A) Congenital anomalies';
+
+
+
+
+
+
+
+---- DROP DATE TYPE
+ALTER table PAT_HISTORY_DIAGNOSIS DROP COLUMN DT_PAT_HISTORY_DIAGNOSIS;
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 30/03/2009 10:28
+-- CHANGE REASON: [ALERT-12181] Notes Problems / Cancelation reason
+--                CCHIT: ED 25.01
+alter table pat_history_diagnosis
+add id_cancel_reason number(24);
+comment on column pat_history_diagnosis.id_cancel_reason is 'Cancel reason ID';
+-- CHANGE END
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 2009-MAR-30
+-- CHANGE REASON: Added cancel_notes column
+alter table pat_history_diagnosis add cancel_notes varchar2(4000);
+comment on column pat_history_diagnosis.cancel_notes is 'Cancelation notes';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 08/03/2010 15:55
+-- CHANGE REASON: [ALERT-73258] 
+ALTER TABLE PAT_HISTORY_DIAGNOSIS ADD (
+  DT_RESOLUTION VARCHAR2(8 char)
+ );
+
+COMMENT ON COLUMN PAT_HISTORY_DIAGNOSIS.DT_RESOLUTION IS 'Resolution date';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 11/03/2010 15:16
+-- CHANGE REASON: [ALERT-73258] 
+CREATE TABLE PAT_HISTORY_DIAGNOSIS
+ (
+ FLG_WARNING VARCHAR2(1) DEFAULT 'N' NOT NULL
+ );
+
+COMMENT ON COLUMN PAT_HISTORY_DIAGNOSIS.FLG_WARNING IS 'Problem has a header warning indicator';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 11/03/2010 15:56
+-- CHANGE REASON: [ALERT-73258] 
+alter TABLE PAT_HISTORY_DIAGNOSIS add
+ (
+ FLG_WARNING VARCHAR2(1) DEFAULT 'N' NOT NULL
+ );
+
+COMMENT ON COLUMN PAT_HISTORY_DIAGNOSIS.FLG_WARNING IS 'Problem has a header warning indicator';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 30/04/2011 21:11
+-- CHANGE REASON: [ALERT-172825] PFSH (Past Family Social History) reformulation (v2.6.1.0.1)
+alter table PAT_HISTORY_DIAGNOSIS modify flg_status null;
+
+alter table PAT_HISTORY_DIAGNOSIS add id_intervention NUMBER(24);
+alter table PAT_HISTORY_DIAGNOSIS add id_exam NUMBER(24);
+alter table PAT_HISTORY_DIAGNOSIS add dt_execution TIMESTAMP(6) WITH LOCAL TIME ZONE;
+
+comment on table PAT_HISTORY_DIAGNOSIS is 'Past history of the patient (Illnesses, Surgeries, Social history, Family history, Injuries, Treatments, Gynecological history, Obstetric history, Birth history)';
+COMMENT on column PAT_HISTORY_DIAGNOSIS.id_intervention is 'ID of the intervention (procedure)';
+COMMENT on column PAT_HISTORY_DIAGNOSIS.id_exam is 'ID of the exam'; 
+comment on column PAT_HISTORY_DIAGNOSIS.dt_execution is 'Date of the execution either procedure or exam';
+
+
+--  
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 11/05/2011 13:24
+-- CHANGE REASON: [ALERT-175588 ] 
+alter table pat_history_diagnosis add id_cdr_call number(24);
+
+comment on column PAT_HISTORY_DIAGNOSIS.id_cdr_call
+  is 'CDR engine call identifier';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 17/08/2011 18:47
+-- CHANGE REASON: [ALERT-190780] 
+alter table PAT_HISTORY_DIAGNOSIS
+add (
+    id_prof_cancel           NUMBER(24),
+    dt_cancel                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    dt_execution_precision           VARCHAR2(1)
+    )
+;
+
+comment on column PAT_HISTORY_DIAGNOSIS.id_prof_cancel
+  is 'Cancel professional ID';
+comment on column PAT_HISTORY_DIAGNOSIS.dt_cancel
+  is 'Cancel date';
+comment on column PAT_HISTORY_DIAGNOSIS.DT_EXECUTION_PRECISION
+  is 'Exectution date precision. Values:D-day, M-month, Y-Year';
+ 
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 29/08/2011 17:25
+-- CHANGE REASON: [ALERT-191228] 
+alter table PAT_HISTORY_DIAGNOSIS
+add (
+  dt_diagnosis                  VARCHAR2(8 CHAR),
+  id_intervention               NUMBER(24),
+  id_exam                       NUMBER(24),
+  dt_execution                  TIMESTAMP(6) WITH LOCAL TIME ZONE
+  );
+  
+
+comment on column PAT_HISTORY_DIAGNOSIS.dt_diagnosis
+  is 'diagnosis date';
+comment on column PAT_HISTORY_DIAGNOSIS.id_intervention
+  is 'ID of the intervention (procedure)';
+comment on column PAT_HISTORY_DIAGNOSIS.id_exam
+  is 'ID of the exam';
+comment on column PAT_HISTORY_DIAGNOSIS.dt_execution
+  is 'Date of the execution either procedure or exam';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 25/06/2012 16:35
+-- CHANGE REASON: [ALERT-234225] 
+alter TABLE PAT_HISTORY_DIAGNOSIS add
+ (
+      FLG_AREA VARCHAR2(1)
+ );
+COMMENT ON COLUMN PAT_HISTORY_DIAGNOSIS.FLG_AREA IS 'Flag that indicates where the record was created. Values ''H'' - Past History, ''P'' - Problems, ''N'' - Not available';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 25/06/2012 16:36
+-- CHANGE REASON: [ALERT-234227] 
+alter table
+   pat_history_diagnosis
+modify
+   (
+   FLG_AREA VARCHAR2(1) NOT NULL
+   );
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 03/10/2013 11:47
+-- CHANGE REASON: [ALERT-266236] DEMOS FR - FR9002 - erro ao adicionar problemas, antecedentes médicos e antecedents cirúrgicos
+--                
+alter table ALERT.PAT_HISTORY_DIAGNOSIS modify ID_PROFESSIONAL number(24); 
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 25/03/2014 16:10
+-- CHANGE REASON: [ALERT-278319] 
+comment on column PAT_HISTORY_DIAGNOSIS.flg_area
+  is 'Flag that indicates the record type. Values ''H'' - Past Medical History, ''P'' - Problems, ''N'' - Not available, ''S'' - Past Surgical History';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  joel.lopes
+-- CHANGE DATE: 29/05/2014 16:35
+-- CHANGE REASON: [ALERT-286361] 
+ALTER TABLE PAT_HISTORY_DIAGNOSIS add (FLG_CDA_RECONCILIATION VARCHAR2(1)default 'N');
+COMMENT ON COLUMN PAT_HISTORY_DIAGNOSIS.FLG_CDA_RECONCILIATION IS 'Defines if the problem record was created by CDA or PFH. Y-Yes, N-No';
+-- CHANGE END:  joel.lopes
+
+-- CHANGED BY:  joel.lopes
+-- CHANGE DATE: 16/06/2014 09:35
+-- CHANGE REASON: [ALERT-286361] 
+ALTER TABLE PAT_HISTORY_DIAGNOSIS MODIFY (FLG_CDA_RECONCILIATION VARCHAR2(1 CHAR) default 'N' NOT NULL);
+-- CHANGE END:  joel.lopes
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 04/07/2014 16:10
+-- CHANGE REASON: [ALERT-289454]
+ALTER TABLE pat_history_diagnosis ADD 
+(
+      dt_diagnosed TIMESTAMP(6) WITH LOCAL TIME ZONE,
+      dt_diagnosed_precision VARCHAR2(1 CHAR),
+      dt_resolved  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+      dt_resolved_precision VARCHAR2(1 CHAR)
+);
+  
+COMMENT ON COLUMN PAT_HISTORY_DIAGNOSIS.dt_diagnosed IS 'Date when the problem was diagnosed.';
+COMMENT ON COLUMN PAT_HISTORY_DIAGNOSIS.dt_diagnosed_precision IS 'Diagnosed date precision. Values: Y-Year, M-month, D-day, H-hour(always with minutes and seconds), U-unknown date';
+COMMENT ON COLUMN PAT_HISTORY_DIAGNOSIS.dt_resolved IS 'Date when the problem was resolved';
+COMMENT ON COLUMN PAT_HISTORY_DIAGNOSIS.dt_resolved_precision IS 'Problem resolution date precision. Values: Y-Year, M-month, D-day, H-hour(always with minutes and seconds), U-unknown date';
+
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_DT_DIAG_PREC_CHK
+  check (DT_DIAGNOSED_PRECISION IN ('D', 'M', 'Y', 'H', 'U'));
+  
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_DT_RESO_PREC_CHK
+  check (DT_RESOLVED_PRECISION IN ('D', 'M', 'Y', 'H', 'U'));  
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 04/07/2014 16:10
+-- CHANGE REASON: [ALERT-289455]
+ALTER TABLE pat_history_diagnosis
+DROP (year_begin, month_begin, day_begin, dt_resolution);
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 11:06
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table PAT_HISTORY_DIAGNOSIS
+  is 'Table with content of patient past history and their diagnosis';
+-- Add comments to the columns 
+comment on column PAT_HISTORY_DIAGNOSIS.id_pat_history_diagnosis
+  is 'Pat_history_diagnosis id';
+comment on column PAT_HISTORY_DIAGNOSIS.id_professional
+  is 'Professional';
+comment on column PAT_HISTORY_DIAGNOSIS.flg_status
+  is 'Status: (A) Active, (C) Canceled, (P) Passive, (R) Resolved, (N) None, (U) Unknown';
+comment on column PAT_HISTORY_DIAGNOSIS.flg_nature
+  is 'Problem nature (A-acute, C-chronic, S-Self-limiting)';
+comment on column PAT_HISTORY_DIAGNOSIS.id_diagnosis
+  is 'Pat_history_diagnosis id of diagnosis';
+comment on column PAT_HISTORY_DIAGNOSIS.id_epis_complaint
+  is 'Epis complaint id';
+comment on column PAT_HISTORY_DIAGNOSIS.id_pat_history_diagnosis_new
+  is 'ID of the record that makes it outdated';
+comment on column PAT_HISTORY_DIAGNOSIS.flg_compl
+  is 'If patient has complications associated to the past surgical history entry (Y/N)';
+comment on column PAT_HISTORY_DIAGNOSIS.id_alert_diagnosis
+  is 'ALERT_DIAGNOSIS ID';
+comment on column PAT_HISTORY_DIAGNOSIS.flg_recent_diag
+  is 'If this record is the more recent diagnosis for the current ID_DIAGNOSIS (used on the Past Surgical): (Y) Yes, (N) No';
+comment on column PAT_HISTORY_DIAGNOSIS.flg_type
+  is 'Type of special diagnosis: (M) Medical, (S) Surgical, (A) Congenital anomalies';
+comment on column PAT_HISTORY_DIAGNOSIS.id_patient
+  is 'Patient id';
+comment on column PAT_HISTORY_DIAGNOSIS.id_episode
+  is 'Episode id';
+comment on column PAT_HISTORY_DIAGNOSIS.id_institution
+  is 'Institution id';
+comment on column PAT_HISTORY_DIAGNOSIS.dt_pat_history_diagnosis_tstz
+  is 'Date timestamp of pat_history_diagnosis';
+comment on column PAT_HISTORY_DIAGNOSIS.notes
+  is 'Field to save the notes registered on the relevant diseases feature. New records don''t have notes';
+comment on column PAT_HISTORY_DIAGNOSIS.id_pat_problem_mig
+  is 'Field to save the corresponding id_pat_problem following the migration of the relevant diseases records';
+comment on column PAT_HISTORY_DIAGNOSIS.flg_aproved_mig
+  is 'Field to save the state of aproval following the migration of the relevant diseases records';
+comment on column PAT_HISTORY_DIAGNOSIS.desc_pat_history_diagnosis
+  is 'Description concerning a problem written by the user and not corresponding to a coding';
+comment on column PAT_HISTORY_DIAGNOSIS.id_pat_problem_hist_mig
+  is 'Pat_problem_hist ID (migration)';
+comment on column PAT_HISTORY_DIAGNOSIS.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column PAT_HISTORY_DIAGNOSIS.cancel_notes
+  is 'Cancelation notes';
+comment on column PAT_HISTORY_DIAGNOSIS.create_user
+  is 'Creation User';
+comment on column PAT_HISTORY_DIAGNOSIS.create_time
+  is 'Creation Time';
+comment on column PAT_HISTORY_DIAGNOSIS.create_institution
+  is 'Creation Institution';
+comment on column PAT_HISTORY_DIAGNOSIS.update_user
+  is 'Update User';
+comment on column PAT_HISTORY_DIAGNOSIS.update_time
+  is 'Update Time';
+comment on column PAT_HISTORY_DIAGNOSIS.update_institution
+  is 'Update Institution';
+comment on column PAT_HISTORY_DIAGNOSIS.flg_warning
+  is 'Problem has a header warning indicator';
+comment on column PAT_HISTORY_DIAGNOSIS.id_cdr_call
+  is 'CDR engine call identifier';
+comment on column PAT_HISTORY_DIAGNOSIS.id_prof_cancel
+  is 'Cancel professional ID';
+comment on column PAT_HISTORY_DIAGNOSIS.dt_cancel
+  is 'Cancel date';
+comment on column PAT_HISTORY_DIAGNOSIS.dt_execution_precision
+  is 'Exectution date precision. Values:D-day, M-month, Y-Year';
+comment on column PAT_HISTORY_DIAGNOSIS.dt_diagnosis
+  is 'diagnosis date';
+comment on column PAT_HISTORY_DIAGNOSIS.id_intervention
+  is 'ID of the intervention (procedure)';
+comment on column PAT_HISTORY_DIAGNOSIS.id_exam
+  is 'ID of the exam';
+comment on column PAT_HISTORY_DIAGNOSIS.dt_execution
+  is 'Date of the execution either procedure or exam';
+comment on column PAT_HISTORY_DIAGNOSIS.id_adiag_inst_owner
+  is 'Institution owner of the concept. Default 0 - ALERT';
+comment on column PAT_HISTORY_DIAGNOSIS.id_diag_inst_owner
+  is 'Institution owner of the concept. Default 0 - ALERT';
+comment on column PAT_HISTORY_DIAGNOSIS.flg_area
+  is 'Flag that indicates the record type. Values ''H'' - Past Medical History, ''P'' - Problems, ''N'' - Not available, ''S'' - Past Surgical History';
+comment on column PAT_HISTORY_DIAGNOSIS.flg_cda_reconciliation
+  is 'Defines if the problem record was created by CDA or PFH. Y-Yes, N-No';
+comment on column PAT_HISTORY_DIAGNOSIS.dt_diagnosed
+  is 'Date when the problem was diagnosed.';
+comment on column PAT_HISTORY_DIAGNOSIS.dt_diagnosed_precision
+  is 'Diagnosed date precision. Values: Y-Year, M-month, D-day, H-hour(always with minutes and seconds), U-unknown date';
+comment on column PAT_HISTORY_DIAGNOSIS.dt_resolved
+  is 'Date when the problem was resolved';
+comment on column PAT_HISTORY_DIAGNOSIS.dt_resolved_precision
+  is 'Problem resolution date precision. Values: Y-Year, M-month, D-day, H-hour(always with minutes and seconds), U-unknown date';
+-- CHANGE END: Renato Nunes
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 28/11/2016 12:06
+-- CHANGE REASON: [ALERT-326394] 
+begin
+pk_versioning.run('ALTER TABLE PAT_HISTORY_DIAGNOSIS ADD (id_location NUMBER(24))');
+end;
+/
+
+
+COMMENT ON COLUMN PAT_HISTORY_DIAGNOSIS.ID_LOCATION IS 'Diagnosis location ID';
+COMMENT ON COLUMN PAT_HISTORY_DIAGNOSIS.ID_LOCATION_INST_OWNER IS 'Institution owner of the diagnosis location field. Default 0 - ALERT';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: André Silva
+-- CHANGE DATE: 12/10/2017
+-- CHANGE REASON: ALERT-333554
+ALTER TABLE pat_history_diagnosis ADD id_family_relationship NUMBER(24);
+
+comment on column PAT_HISTORY_DIAGNOSIS.id_family_relationship
+  is 'ID of the Family Relationship for Family History Diagnosis';
+  
+ALTER TABLE pat_history_diagnosis
+  ADD flg_death_cause VARCHAR2(1);
+  
+ comment on column PAT_HISTORY_DIAGNOSIS.flg_death_cause
+  is 'Diagnosis was the cause of death';
+  
+ ALTER TABLE pat_history_diagnosis
+  ADD familiar_age NUMBER(5);
+  
+ comment on column PAT_HISTORY_DIAGNOSIS.familiar_age
+  is 'Age at which the family member was diagnosed';
+  
+-- CHANGE END: André Silva
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/10/2017 09:45
+-- CHANGE REASON: [    ALERT-333545] NOM024 - Resumen Clínico -- Allow the user to register codified diagnosis in Past Family History
+--                
+-- Add comments to the columns 
+comment on column PAT_HISTORY_DIAGNOSIS.flg_type
+  is 'Type of special diagnosis: (M) Medical, (S) Surgical, (A) Congenital anomalies (F) Family';
+-- CHANGE END: Elisabete Bugalho

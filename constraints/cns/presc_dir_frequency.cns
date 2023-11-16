@@ -1,0 +1,40 @@
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195]
+declare
+  l_count pls_integer;
+begin
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PD_FREQUENCY_PK';
+  if l_count = 0 then
+    execute immediate ('ALTER TABLE ALERT.PRESC_DIR_FREQUENCY ADD CONSTRAINT PD_FREQUENCY_PK PRIMARY KEY (ID_PRESC_DIR_FREQUENCY) ENABLE');
+  end if;
+
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDF_EVENODD_CHK';
+  if l_count = 0 then
+    execute immediate ('ALTER TABLE ALERT.PRESC_DIR_FREQUENCY ADD CONSTRAINT PDF_EVENODD_CHK CHECK (FLG_FREQ_EVEN_ODD IN (''E'', ''O'', ''B'', ''A'')) ENABLE');
+  end if;
+
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDF_MONTHDAY_CHK';
+  if l_count = 0 then
+    execute immediate ('ALTER TABLE ALERT.PRESC_DIR_FREQUENCY ADD CONSTRAINT PDF_MONTHDAY_CHK CHECK (FREQ_MONTH_DAY between 1 and 31) ENABLE');
+  end if;
+
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDF_WEEKDAY_CHK';
+  if l_count = 0 then
+    execute immediate ('ALTER TABLE ALERT.PRESC_DIR_FREQUENCY ADD CONSTRAINT PDF_WEEKDAY_CHK CHECK (FREQ_WEEK_DAY between 1 and 7) ENABLE');
+  end if;
+
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDF_WEEKDAY_CHK';
+  if l_count = 0 then
+    execute immediate ('ALTER TABLE ALERT.PRESC_DIR_FREQUENCY ADD CONSTRAINT PDF_WEEKDAY_CHK CHECK (FREQ_WEEK_DAY between 1 and 7) ENABLE');
+  end if;
+
+
+
+end;
+/
+-- CHANGE END: Nuno Ferreira

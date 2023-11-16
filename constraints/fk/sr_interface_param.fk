@@ -1,0 +1,299 @@
+-- CHANGED BY: Jorge Canossa
+-- CHANGE DATE: 07/02/2011 17:38
+-- CHANGE REASON: [ALERT-160488] 
+alter table SR_INTERFACE_PARAM
+  add constraint SRIP_ID_EPISODE_FK foreign key (ID_EPISODE)
+  references ALERT.EPISODE(ID_EPISODE);
+
+alter table SR_INTERFACE_PARAM
+  add constraint SRIP_ID_VISIT_FK foreign key (ID_VISIT)
+  references ALERT.VISIT(ID_VISIT);  
+-- CHANGE END: Jorge Canossa
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 15:45
+-- CHANGE REASON: [ALERT-160874] [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_EPIS_AN0973_FK 
+FOREIGN KEY (ID_EPISODE) REFERENCES EPISOSE (ID_EPISODE) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_EPIS_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 15:45
+-- CHANGE REASON: [ALERT-160874] [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_INST_AN0973_FK 
+FOREIGN KEY (ID_INSTITUTION) REFERENCES INSTITUTION (ID_INSTITUTION) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_INST_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 15:45
+-- CHANGE REASON: [ALERT-160874] [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_PAT_AN0973_FK 
+FOREIGN KEY (ID_PATIENT) REFERENCES PATIENT (ID_PATIENT) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_PAT_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 15:45
+-- CHANGE REASON: [ALERT-160874] [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_S_AN0973_FK 
+FOREIGN KEY (ID_SOFTWARE) REFERENCES SOFTWARE (ID_SOFTWARE) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_S_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 15:45
+-- CHANGE REASON: [ALERT-160874] [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_VIS_AN0973_FK 
+FOREIGN KEY (ID_VISIT) REFERENCES VISIT (ID_VISIT) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_VIS_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:02
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_EPIS_FK 
+FOREIGN KEY (ID_EPISODE) REFERENCES EPISOSE (ID_EPISODE) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_EPIS_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:02
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_INST_FK 
+FOREIGN KEY (ID_INSTITUTION) REFERENCES INSTITUTION (ID_INSTITUTION) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_INST_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:02
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_PAT_FK 
+FOREIGN KEY (ID_PATIENT) REFERENCES PATIENT (ID_PATIENT) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_PAT_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:02
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_S_FK 
+FOREIGN KEY (ID_SOFTWARE) REFERENCES SOFTWARE (ID_SOFTWARE) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_S_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:02
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_VIS_FK 
+FOREIGN KEY (ID_VISIT) REFERENCES VISIT (ID_VISIT) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_VIS_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:46
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_EPIS_FK 
+FOREIGN KEY (ID_EPISODE) REFERENCES EPISODE (ID_EPISODE) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_EPIS_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:55
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_EPIS_FK 
+FOREIGN KEY (ID_EPISODE) REFERENCES EPISODE (ID_EPISODE) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_EPIS_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:55
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_INST_FK 
+FOREIGN KEY (ID_INSTITUTION) REFERENCES INSTITUTION (ID_INSTITUTION) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_INST_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:55
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_PAT_FK 
+FOREIGN KEY (ID_PATIENT) REFERENCES PATIENT (ID_PATIENT) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_PAT_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:55
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_S_FK 
+FOREIGN KEY (ID_SOFTWARE) REFERENCES SOFTWARE (ID_SOFTWARE) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_S_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:55
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_INTERFACE_PARAM ADD CONSTRAINT SRIP_VIS_FK 
+FOREIGN KEY (ID_VISIT) REFERENCES VISIT (ID_VISIT) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SRIP_VIS_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto

@@ -1,0 +1,78 @@
+-- Create table
+create table DISCHARGE_SCHEDULE
+(
+  ID_DISCHARGE_SCHEDULE      number(24) not null,
+  ID_EPISODE                 number(24) not null,
+  ID_PATIENT                 number(24) not null,
+  DT_DISCHARGE_SCHEDULE      timestamp with local time zone not null,
+  FLG_STATUS                 varchar2(1) not null,
+  CREATE_TIME 				 timestamp with local time zone not null,
+  CREATE_USER             	 number(24) not null
+)
+tablespace TABLE_M
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comment to the table
+comment on table DISCHARGE_SCHEDULE
+  is 'Has information about the scheduled discharge date for an episode';
+-- Add comments to the columns 
+comment on column DISCHARGE_SCHEDULE.ID_DISCHARGE_SCHEDULE
+  is 'Entity primary key';
+comment on column DISCHARGE_SCHEDULE.ID_EPISODE
+  is 'Episode';
+comment on column DISCHARGE_SCHEDULE.ID_PATIENT
+  is 'Patient';
+comment on column DISCHARGE_SCHEDULE.DT_DISCHARGE_SCHEDULE
+  is 'Discharge Schedule Date';
+comment on column DISCHARGE_SCHEDULE.FLG_STATUS
+  is '''Y'' is the current Schedule Date, otherwise ''N''';
+comment on column DISCHARGE_SCHEDULE.CREATE_TIME
+  is 'Registry date';
+comment on column DISCHARGE_SCHEDULE.CREATE_USER
+  is 'Professional who created the registry';
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2010 08:57
+-- CHANGE REASON: [ALERT-65895] 
+alter table
+   discharge_schedule
+add
+   (FLG_HOUR_ORIGIN VARCHAR2(2));
+
+COMMENT ON COLUMN discharge_schedule.FLG_HOUR_ORIGIN IS 'Flag that indicates if the inserted hour refers to the date (?D?) or date and hour (?DH?).';
+ 
+alter table discharge_schedule add constraint DISCH_SCHED_FLGH_CHK  check (FLG_HOUR_ORIGIN IN ('D','DH'));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/01/2010 17:11
+-- CHANGE REASON: [  ALERT-65895] [Revision INP 22-09-2009] In Discharge plan area it should be possible only put date if the user wants to
+alter table
+   discharge_schedule
+add
+   (FLG_HOUR_ORIGIN VARCHAR2(2 char));
+
+COMMENT ON COLUMN discharge_schedule.FLG_HOUR_ORIGIN IS 'Flag that indicates if the inserted hour refers to the date (D) or date and hour (DH).';
+ 
+alter table discharge_schedule add constraint DISCH_SCHED_FLGH_CHK  check (FLG_HOUR_ORIGIN IN ('D','DH'));
+-- CHANGE END: Sofia Mendes
+
+-- cmf 01-02-2017
+
+ALTER TABLE discharge_schedule ADD id_prof_req NUMBER(24);
+ALTER TABLE discharge_schedule ADD dt_req      TIMESTAMP(6) WITH LOCAL TIME ZONE;
+
+comment on column DISCHARGE_SCHEDULE.id_prof_req  is 'Professional that requested scheduling';
+comment on column DISCHARGE_SCHEDULE.dt_req       IS 'Date of request';
+
+
+comment on column ALERT.DISCHARGE_SCHEDULE.CREATE_USER          is 'User that created the record';
+comment on column ALERT.DISCHARGE_SCHEDULE.CREATE_TIME          is 'Time when the record was created';
+comment on column ALERT.DISCHARGE_SCHEDULE.CREATE_INSTITUTION   is 'Institution where record was created';
+comment on column ALERT.DISCHARGE_SCHEDULE.UPDATE_USER          is 'Last user that changed the record';
+comment on column ALERT.DISCHARGE_SCHEDULE.UPDATE_INSTITUTION   is 'Last Institution where user made the change';
+comment on column ALERT.DISCHARGE_SCHEDULE.UPDATE_TIME          is 'Time of Last change';

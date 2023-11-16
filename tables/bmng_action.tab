@@ -1,0 +1,75 @@
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/07/2009 10:57
+-- CHANGE REASON: [ALERT-38623] Added database model associated with table BMNG_ACTION
+CREATE TABLE "ALERT"."BMNG_ACTION"(  
+    "ID_BMNG_ACTION" NUMBER(24,0) NOT NULL,
+"ID_DEPARTMENT" NUMBER(24,0) NOT NULL,
+"ID_ROOM" NUMBER(24,0),
+"ID_BED" NUMBER(24,0),
+    "ID_BMNG_REASON" NUMBER(24,0),
+"ID_BMNG_REASON_TYPE" NUMBER(24,0) NOT NULL,
+    "ID_BMNG_ALLOCATION_BED" NUMBER(24,0),
+"ID_CANCEL_REASON" NUMBER(24,0),
+--
+    "FLG_TARGET_ACTION" VARCHAR2(1) NOT NULL,
+"FLG_STATUS" VARCHAR2(1) DEFAULT 'A' NOT NULL,
+"FLG_ORIGIN_ACTION" VARCHAR2(2) NOT NULL,
+"FLG_ACTION" VARCHAR2(2) NOT NULL,
+--
+"FLG_BED_OCUPACITY_STATUS" VARCHAR2(1),
+    "FLG_BED_STATUS" VARCHAR2(1),
+    "FLG_BED_CLEANING_STATUS" VARCHAR2(2),
+--
+    "ID_PROF_CREATION" NUMBER(24,0) NOT NULL,
+    "DT_CREATION" TIMESTAMP(6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "NCH_CAPACITY" NUMBER(24,0),
+    "ACTION_NOTES" VARCHAR2(4000),
+    --
+    "DT_BEGIN_ACTION" TIMESTAMP(6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+"DT_END_ACTION" TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    --
+    "CREATE_USER"  VARCHAR2(24),
+    "CREATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    "CREATE_INSTITUTION"  NUMBER(24),
+    "UPDATE_USER"  VARCHAR2(24),
+    "UPDATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    "UPDATE_INSTITUTION"  NUMBER(24)
+);
+
+-- Table Comment
+COMMENT ON TABLE BMNG_ACTION IS 'This table associates actions to each bed/room/service. In this table is possible to find all historic changes made for each bed/room/service.';
+
+-- Collumns Comments
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."ID_BMNG_ACTION" IS 'Bed/Room/Service management action identifier (Primary Key)';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."ID_DEPARTMENT" IS 'Department identifier';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."ID_ROOM" IS 'Room identifier';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."ID_BED" IS 'Bed identifier';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."ID_BMNG_REASON" IS 'Reason identifier associated with current action';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."ID_BMNG_REASON_TYPE" IS 'Reason type identifier associated with current action';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."ID_BMNG_ALLOCATION_BED" IS 'Allocation bed identifier. Not NULL if there is a patient allocated in current bed (only used in bed actions)';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."ID_CANCEL_REASON" IS 'Cancel reason identifier associated with current cancelation action';
+--
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."FLG_TARGET_ACTION" IS 'Target of current action: (''S''- Service/ward; ''R''- Room; ''B''- Bed)';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."FLG_STATUS" IS 'Action current state: (''A''- Active; ''C''- Cancelled; ''O''- Outdated) (DEFAULT: ''A'')';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."FLG_ORIGIN_ACTION" IS 'Action origin: (''NB''- NCH Backoffice (institution backoffice); ''NT''- NCH inserted by chiefe nurse (in tools); ''ND''- NCH information inserted in dashboard; ''BT''- Blocking interval inserted by chiefe nurse (in tools); ''BD''- Blocking interval information inserted in dashboard; ''OD''- Other origins)';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."FLG_ACTION" IS 'Action: (''B''- Block bed; ''U''- Unblock bed; ''V''- Free bed; ''O''- Occupy bed (after reserve); ''T''- Allocate patient to temporary bed; ''P''- Allocate patient to permanent bed; ''S''- Schedule bed; ''R''- Reserve bed; ''D''- Dirty bed; ''C''- Contaminate bed; ''I''- Start bed cleaning; ''L''- Cleaning conclueded; ''E''- Allocation edition; ''ND''- Episode NCH edition; ''NT''- Service NCH edition; ''BT''- Block beds in TOOLS; ''UT''- Unblock beds in TOOLS.)';
+
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."FLG_BED_OCUPACITY_STATUS" IS 'Current bed ocupacity status: (''O''- OCUPIED; ''V''- FREE)';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."FLG_BED_STATUS" IS 'Current bed status: (''R''- RESERVED; ''B''- BLOCKED; ''S''- SCHEDULE; ''N''- NORMAL)';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."FLG_BED_CLEANING_STATUS" IS 'Current bed cleaning status: (''D''- DIRTY; ''C''- CONTAMINED; ''I''- CLEANING IN PROCESS; ''L''- CLEANING CONCLUED; ''N''- NORMAL)';
+--
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."ID_PROF_CREATION" IS 'Professional identifier of professional that creates current registry';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."DT_CREATION" IS 'Date in which this registry was created';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."NCH_CAPACITY" IS 'NCH associated (in tools and backoffice) to institution services (only used in service actions)';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."ACTION_NOTES" IS 'Notes written by professional when creating current registry';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."DT_BEGIN_ACTION" IS 'Date in which this action start counting';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."DT_END_ACTION" IS 'Date in which this action became outdated';
+--
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."CREATE_USER" IS 'Professional ID that creates the registry';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."CREATE_TIME" IS 'Date of registry creation';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."CREATE_INSTITUTION" IS 'Institution ID where registry was created';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."UPDATE_USER" IS 'Professional ID that last updates the registry';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."UPDATE_TIME" IS 'Date of registry last update';
+COMMENT ON COLUMN "ALERT"."BMNG_ACTION"."UPDATE_INSTITUTION" IS 'Institution ID where registry was last updated';
+--
+-- CHANGE END: Luís Maia

@@ -1,0 +1,1 @@
+grant select on WTL_EPIS to ALERT_VIEWER ;

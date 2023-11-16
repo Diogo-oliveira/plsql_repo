@@ -1,0 +1,5 @@
+-- CHANGED BY: João Marques
+-- CHANGE DATE: 01/07/2010 10:22
+-- CHANGE REASON: [ALERT-101292] Added grant to package pk_api_analysis
+GRANT EXECUTE ON ALERT.PK_API_ANALYSIS TO INTF_ALERT;
+-- CHANGE END: João Marques

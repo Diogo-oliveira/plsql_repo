@@ -1,0 +1,131 @@
+ALTER TABLE pat_history_diagnosis
+add CONSTRAINT phi_pk PRIMARY KEY (id_pat_history_diagnosis);
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 30/03/2009 10:28
+-- CHANGE REASON: [ALERT-12181] Notes Problems / Cancelation reason
+--                CCHIT: ED 25.01
+ ALTER TABLE pat_history_diagnosis ADD CONSTRAINT PHD_CR_FK FOREIGN KEY (id_cancel_reason)
+ REFERENCES cancel_reason (id_cancel_reason) ENABLE;
+ 
+-- CHANGE END
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 11/03/2010 15:16
+-- CHANGE REASON: [ALERT-73258] 
+ALTER TABLE PAT_HISTORY_DIAGNOSIS
+ ADD (CONSTRAINT PHD_FLG_WARNING_CHK CHECK (FLG_WARNING IN ('Y', 'N')));
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 30/04/2011 21:11
+-- CHANGE REASON: [ALERT-172825] PFSH (Past Family Social History) reformulation (v2.6.1.0.1)
+alter table PAT_HISTORY_DIAGNOSIS add constraint PHD_EXAM_FK foreign key (ID_EXAM) REFERENCES exam (ID_EXAM);
+alter table PAT_HISTORY_DIAGNOSIS add constraint PHD_INT_FK  foreign key (ID_INTERVENTION) references intervention (ID_INTERVENTION);
+alter table PAT_HISTORY_DIAGNOSIS add constraint PHD_FLG_STAUS_CHK check (CASE WHEN FLG_STATUS IS NULL  THEN FLG_TYPE  END ='S');
+alter table PAT_HISTORY_DIAGNOSIS add constraint PHD_ID_EXAM_CHK check (CASE WHEN ID_EXAM IS NOT NULL  THEN FLG_TYPE  END ='T');
+alter table PAT_HISTORY_DIAGNOSIS add constraint PHD_ID_INTERVENTION_CHK check (CASE WHEN ID_INTERVENTION IS NOT NULL  THEN FLG_TYPE  END ='T');
+alter table PAT_HISTORY_DIAGNOSIS add constraint PHD_DT_EXECUTION_CHK check (CASE WHEN DT_EXECUTION IS NOT NULL  THEN FLG_TYPE  END ='T');
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 17/08/2011 18:47
+-- CHANGE REASON: [ALERT-190780] 
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_DT_EXEC_PREC_CHK
+  check (DT_EXECUTION_PRECISION IN ('D', 'M', 'Y'));
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 29/08/2011 17:25
+-- CHANGE REASON: [ALERT-191228] 
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_ID_INTERVENTION_CHK
+  check (CASE WHEN ID_INTERVENTION IS NOT NULL  THEN FLG_TYPE  END ='T');
+
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_ID_EXAM_CHK
+  check (CASE WHEN ID_EXAM IS NOT NULL  THEN FLG_TYPE  END ='T');    
+  
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 01/09/2011 17:23
+-- CHANGE REASON: [ALERT-172825] 
+alter table PAT_HISTORY_DIAGNOSIS add constraint PHD_FLG_STAUS_CHK check (CASE WHEN FLG_STATUS IS NULL  THEN FLG_TYPE  END ='S');
+alter table PAT_HISTORY_DIAGNOSIS add constraint PHD_DT_EXECUTION_CHK check (CASE WHEN DT_EXECUTION IS NOT NULL  THEN FLG_TYPE  END ='T');
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 25/06/2012 16:35
+-- CHANGE REASON: [ALERT-234225] 
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_FLG_AREA_CHK
+  check (FLG_AREA IN ('H', 'P', 'N'));
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 25/03/2014 16:10
+-- CHANGE REASON: [ALERT-278319] 
+alter table PAT_HISTORY_DIAGNOSIS
+  drop constraint PHD_FLG_AREA_CHK;
+
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_FLG_AREA_CHK
+  check (FLG_AREA IN ('H', 'P', 'N', 'S'));
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  joel.lopes
+-- CHANGE DATE: 29/05/2014 16:35
+-- CHANGE REASON: [ALERT-286361] 
+ALTER TABLE PAT_HISTORY_DIAGNOSIS ADD (CONSTRAINT PHD_CDA_RECONCILIATION_CHK check (FLG_CDA_RECONCILIATION IN ('Y', 'N')));
+-- CHANGE END:  joel.lopes
+
+-- CHANGED BY: André Silva
+-- CHANGE DATE: 12/10/2017
+-- CHANGE REASON: ALERT-333554
+ alter table PAT_HISTORY_DIAGNOSIS
+ add constraint PHD_FLG_DEATH_CAUSE_CHK
+ check (FLG_DEATH_CAUSE IN ('Y', 'N'));
+
+alter table PAT_HISTORY_DIAGNOSIS
+  drop constraint PHD_FLG_AREA_CHK;
+
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_FLG_AREA_CHK
+  check (FLG_AREA IN ('H', 'P', 'N', 'S', 'F'));  
+-- CHANGE END: André Silva
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/10/2017 09:45
+-- CHANGE REASON: [    ALERT-333545] NOM024 - Resumen Clínico -- Allow the user to register codified diagnosis in Past Family History
+--                
+-- Create/Recreate check constraints 
+alter table PAT_HISTORY_DIAGNOSIS
+  drop constraint PHD_FLG_TYPE_CHK;
+alter table PAT_HISTORY_DIAGNOSIS
+  add constraint PHD_FLG_TYPE_CHK
+  check (flg_type IN ('A', 'M', 'S','T','F'));
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY:  rui.mendonca
+-- CHANGE DATE: 25/10/2017 15:15
+-- CHANGE REASON: [CALERT-420] Birth history improvements (Past history)
+BEGIN
+    pk_versioning.run('ALTER TABLE pat_history_diagnosis DROP CONSTRAINT PHD_FLT_STAT_CHK');
+    pk_versioning.run('ALTER TABLE pat_history_diagnosis ADD CONSTRAINT PHD_FLT_STAT_CHK CHECK (flg_status IN (''A'', ''C'', ''N'', ''P'', ''R'', ''U'', ''NR''))');
+END;
+/
+-- CHANGE END:  rui.mendonca
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 10/03/2021 17:00
+-- CHANGE REASON: [EMR-42859] - EHR > Gynecological history > select from list > diagnosis not displayed on the summary screen
+-- Create/Recreate check constraints
+alter table PAT_HISTORY_DIAGNOSIS
+drop constraint PHD_FLG_TYPE_CHK;
+alter table PAT_HISTORY_DIAGNOSIS
+add constraint PHD_FLG_TYPE_CHK
+check (flg_type IN ('A', 'M', 'S','T','F','G'));
+-- CHANGE END: Elisabete Bugalho

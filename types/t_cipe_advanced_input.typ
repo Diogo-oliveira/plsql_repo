@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_cipe_advanced_input IS TABLE OF t_rec_cipe_advanced_input;

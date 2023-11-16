@@ -1,0 +1,75 @@
+
+
+  CREATE TABLE SR_INTERV_DESC
+   (	ID_SR_INTERV_DESC NUMBER(24,0) NOT NULL ENABLE,
+	ID_SR_INTERVENTION NUMBER(24,0),
+	DT_INTERV_DESC DATE NOT NULL ENABLE,
+	INTERV_DESC VARCHAR2(4000) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	ID_LANGUAGE NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE
+   );
+
+
+COMMENT ON COLUMN sr_interv_desc.id_sr_interv_desc IS 'ID único' ;
+COMMENT ON COLUMN sr_interv_desc.dt_interv_desc IS 'Data da inserção da descrição' ;
+COMMENT ON COLUMN sr_interv_desc.interv_desc IS 'Descrição' ;
+COMMENT ON COLUMN sr_interv_desc.id_institution IS 'ID da instituição' ;
+COMMENT ON COLUMN sr_interv_desc.id_software IS 'ID do software' ;
+COMMENT ON COLUMN sr_interv_desc.flg_type IS 'Tipo de descrição: S- Cirurgica, A- Anestésica' ;
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização SR - eliminação de colunas
+ALTER TABLE SR_INTERV_DESC drop column DT_INTERV_DESC;
+-- CHANGE END
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 21/01/2016 11:19
+-- CHANGE REASON: [ALERT-318028] ALERT-318028 CDOC Functionalities V7
+-- Add comments to the table 
+comment on table SR_INTERV_DESC
+  is 'Parametrization table where intervention description are stored';
+-- Add comments to the columns 
+comment on column SR_INTERV_DESC.id_sr_interv_desc
+  is 'Surgical intervention description identifier';
+comment on column SR_INTERV_DESC.id_sr_intervention
+  is 'Surgical intervention identifier';
+comment on column SR_INTERV_DESC.interv_desc
+  is 'Surgical intervention description';
+comment on column SR_INTERV_DESC.id_institution
+  is 'Institution identifier';
+comment on column SR_INTERV_DESC.id_software
+  is 'Software identifer';
+comment on column SR_INTERV_DESC.flg_type
+  is 'Description type. Values: S - Surgery; A -Anestesic';
+comment on column SR_INTERV_DESC.id_language
+  is 'Language identifier';
+comment on column SR_INTERV_DESC.adw_last_update
+  is 'Date of last update, used by adw';
+comment on column SR_INTERV_DESC.dt_interv_desc_tstz
+  is 'Date ofinsertation of  intervention description';
+comment on column SR_INTERV_DESC.create_user
+  is 'Creation User';
+comment on column SR_INTERV_DESC.create_time
+  is 'Creation Time';
+comment on column SR_INTERV_DESC.create_institution
+  is 'Creation Institution';
+comment on column SR_INTERV_DESC.update_user
+  is 'Update User';
+comment on column SR_INTERV_DESC.update_time
+  is 'Update Time';
+comment on column SR_INTERV_DESC.update_institution
+  is 'Update Institution';
+  
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/07/2017 14:08
+-- CHANGE REASON: [ALERT-331061]
+ALTER TABLE SR_INTERV_DESC DROP CONSTRAINT SR_ITV_DES_SIN_FK;
+ALTER TABLE SR_INTERV_DESC ADD CONSTRAINT SR_ITV_DES_SIN_FK FOREIGN KEY (ID_SR_INTERVENTION) REFERENCES INTERVENTION (ID_INTERVENTION);
+-- CHANGE END: Pedro Henriques

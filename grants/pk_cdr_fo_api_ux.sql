@@ -1,0 +1,1 @@
+grant execute on pk_cdr_fo_api_ux to alert_viewer;

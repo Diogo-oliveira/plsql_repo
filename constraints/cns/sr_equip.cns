@@ -1,0 +1,58 @@
+
+
+  ALTER TABLE SR_EQUIP ADD CONSTRAINT SEP_PK PRIMARY KEY (ID_SR_EQUIP) ENABLE;
+
+  ALTER TABLE SR_EQUIP MODIFY (ID_SR_EQUIP NOT NULL ENABLE);
+
+  ALTER TABLE SR_EQUIP MODIFY (CODE_EQUIP NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SR_EQUIP ADD CONSTRAINT SREP_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SREP_FLG_AVAILABLE_CHK table SR_EQUIP column FLG_AVAILABLE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SR_EQUIP ADD CONSTRAINT SEP_FLG_HEMO_YN_CHK CHECK (FLG_HEMO_YN IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SEP_FLG_HEMO_YN_CHK table SR_EQUIP column FLG_HEMO_YN: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SR_EQUIP ADD CONSTRAINT SEP_FLG_SCHEDULE_YN_CHK CHECK (FLG_SCHEDULE_YN IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SEP_FLG_SCHEDULE_YN_CHK table SR_EQUIP column FLG_SCHEDULE_YN: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SR_EQUIP ADD CONSTRAINT SEP_FLG_TYPE_CHK CHECK (FLG_TYPE IN (''C'', ''R'', ''T'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SEP_FLG_TYPE_CHK table SR_EQUIP column FLG_TYPE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto

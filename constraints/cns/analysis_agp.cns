@@ -1,0 +1,85 @@
+
+
+  ALTER TABLE ANALYSIS_AGP ADD CONSTRAINT ANLG_PK PRIMARY KEY (ID_ANALYSIS_AGP) ENABLE;
+
+  ALTER TABLE ANALYSIS_AGP MODIFY (ID_ANALYSIS_AGP NOT NULL ENABLE);
+
+  ALTER TABLE ANALYSIS_AGP MODIFY (ID_ANALYSIS_GROUP NOT NULL ENABLE);
+
+  ALTER TABLE ANALYSIS_AGP MODIFY (ID_ANALYSIS NOT NULL ENABLE);
+
+  ALTER TABLE ANALYSIS_AGP MODIFY (RANK NOT NULL ENABLE);
+
+
+alter table ANALYSIS_AGP
+  add constraint ANLG_UK unique (ID_ANALYSIS_GROUP, ID_ANALYSIS);
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 20/09/2011 18:06
+-- CHANGE REASON: [ALERT-187042] constraints
+DECLARE
+e_pk_already_there EXCEPTION;
+    e_unique_already_there EXCEPTION;
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_Default.ANALYSIS_AGP
+  add constraint ANLG_UK unique (ID_ANALYSIS_GROUP, ID_ANALYSIS)
+  using index 
+  tablespace alert_default_idx';
+    EXCEPTION
+                WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2011 12:16
+-- CHANGE REASON: [ALERT-211693] 
+ALTER TABLE ANALYSIS_AGP ADD (CONSTRAINT ANLG_FLG_AVAILABLE_CHK CHECK (flg_available IN ('Y', 'N')));
+ALTER TABLE ANALYSIS_AGP MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:26
+-- CHANGE REASON: [ALERT-246248] 
+ALTER TABLE ANALYSIS_AGP ADD (CONSTRAINT ANLG_ASE_FK FOREIGN KEY (ID_ANALYSIS, ID_SAMPLE_TYPE) REFERENCES ANALYSIS_SAMPLE_TYPE (ID_ANALYSIS, ID_SAMPLE_TYPE));
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 26/12/2012 10:56
+-- CHANGE REASON: [ALERT-248112] 
+DROP CONSTRAINT ANLG_UK;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 26/12/2012 10:57
+-- CHANGE REASON: [ALERT-248112] 
+ALTER TABLE ANALYSIS_AGP ADD CONSTRAINT ANLG_UK UNIQUE (ID_ANALYSIS_GROUP, ID_ANALYSIS, ID_SAMPLE_TYPE);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 26/12/2012 15:35
+-- CHANGE REASON: [ALERT-248112] 
+ALTER TABLE ANALYSIS_AGP DROP CONSTRAINT ANLG_UK;
+-- CHANGE END: Ana Matos

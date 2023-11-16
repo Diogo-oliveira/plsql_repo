@@ -1,0 +1,98 @@
+-- CHANGED BY:  ricardo.pires
+-- CHANGE DATE: 19/12/2011 11:00
+-- CHANGE REASON: [ALERT-209988] 
+
+create table REP_PRESCRIPTION_MATCH
+(
+  id_rep_prescription_match   NUMBER(24) not null,
+  id_reports                  NUMBER(24) not null,
+  id_market                   NUMBER(24) not null,
+  id_software                 NUMBER(24) not null,
+  id_institution              NUMBER(24) not null,
+  presc_type                  VARCHAR2(5), 
+  drug_type                   VARCHAR2(5),
+  id_product                  VARCHAR2(30),
+  id_product_supplier         VARCHAR2(30),
+  adw_last_update             DATE default sysdate,
+  create_user                 VARCHAR2(24),
+  create_time                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution          NUMBER(24),
+  update_user                 VARCHAR2(24),
+  update_time                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution          NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table REP_PRESCRIPTION_MATCH
+  is 'Table to configure the type of prescription forms that can be printed according to a market/institution/software/drug/prescription type/drug type.';
+-- Add comments to the columns 
+comment on column REP_PRESCRIPTION_MATCH.id_rep_prescription_match
+  is 'Primary Key';
+comment on column REP_PRESCRIPTION_MATCH.id_reports
+  is 'Identifier of the report';
+comment on column REP_PRESCRIPTION_MATCH.id_market
+  is 'Market where this relationship applies';
+comment on column REP_PRESCRIPTION_MATCH.id_software
+  is 'Identifier of the software';
+comment on column REP_PRESCRIPTION_MATCH.id_institution
+  is 'Identifier of the institution';
+comment on column REP_PRESCRIPTION_MATCH.presc_type
+  is 'Type of the prescription';  
+comment on column REP_PRESCRIPTION_MATCH.drug_type
+  is 'Type of the drug';  
+comment on column REP_PRESCRIPTION_MATCH.id_product
+  is 'Identifies the product';    
+comment on column REP_PRESCRIPTION_MATCH.id_product_supplier
+  is 'Identifies the supplier of the product';     
+comment on column REP_SECTION_DET.adw_last_update
+  is 'Date of the last change on the row';
+comment on column REP_SECTION_DET.create_user
+  is 'Creation User';
+comment on column REP_SECTION_DET.create_time
+  is 'Creation Time';
+comment on column REP_SECTION_DET.create_institution
+  is 'Creation Institution';
+comment on column REP_SECTION_DET.update_user
+  is 'Update User';
+comment on column REP_SECTION_DET.update_time
+  is 'Update Time';
+comment on column REP_SECTION_DET.update_institution
+  is 'Update Institution';
+
+  
+  -- CHANGED BY: ricardo.pires
+-- CHANGE DATE: 22/10/2014 15:00
+-- CHANGE REASON: ALERT-297735
+BEGIN
+   ALTER TABLE REP_PRESCRIPTION_MATCH  ADD (ID_TASK_TYPE NUMBER(24));
+   COMMENT ON COLUMN REP_PRESCRIPTION_MATCH.ID_TASK_TYPE IS 'Identification of the task_type.';
+END;
+/
+
+alter table REP_PRESCRIPTION_MATCH
+  add constraint RPM_TT_FK foreign key (ID_TASK_TYPE)
+  references TASK_TYPE (ID_TASK_TYPE);  
+-- CHANGE END: ricardo.pires  
+
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON COLUMN REP_PRESCRIPTION_MATCH.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN REP_PRESCRIPTION_MATCH.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN REP_PRESCRIPTION_MATCH.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN REP_PRESCRIPTION_MATCH.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN REP_PRESCRIPTION_MATCH.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN REP_PRESCRIPTION_MATCH.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN REP_PRESCRIPTION_MATCH.ADW_LAST_UPDATE IS 'ADW Last Episode';
+-- CHANGE END:  ruben.araujo

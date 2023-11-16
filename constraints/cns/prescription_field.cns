@@ -1,0 +1,43 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGED DATE: 2009-JUL-27
+-- CHANGING REASON: posologias irregulares
+alter table PRESCRIPTION_FIELD
+  add constraint PFD_PK primary key (ID_PRESCRIPTION_FIELD)
+  using index 
+  tablespace INDEX_S
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+
+-- Create/Recreate check constraints 
+alter table PRESCRIPTION_FIELD
+  add constraint PFD_FIELD_TYPE_CHK
+  check (field_type IN ('P', 'D', 'F'));
+alter table PRESCRIPTION_FIELD
+  add constraint PFD_SHOW_TITLE_CHK
+  check (SHOW_TITLE IN ('Y', 'N'));
+
+
+-- CHANGE END Pedro Albuquerque
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 09:14
+-- CHANGE REASON: [ALERT-37067] Versionamento.
+alter table PRESCRIPTION_FIELD
+  add constraint PFD_PK primary key (ID_PRESCRIPTION_FIELD)
+  using index 
+  tablespace INDEX_S;
+alter table PRESCRIPTION_FIELD
+  add constraint PFD_FIELD_TYPE_CHK
+  check (field_type IN ('P', 'D', 'F'));
+alter table PRESCRIPTION_FIELD
+  add constraint PFD_SHOW_TITLE_CHK
+  check (SHOW_TITLE IN ('Y', 'N'));
+-- CHANGE END: Pedro Albuquerque

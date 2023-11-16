@@ -1,0 +1,371 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:21
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE ds_cmpt_mkt_rel ADD CONSTRAINT dscm_pk PRIMARY KEY(id_ds_cmpt_mkt_rel);
+--
+ALTER TABLE ds_cmpt_mkt_rel ADD CONSTRAINT dscm_m_cp_cc_uk UNIQUE(id_market, id_ds_component_parent, id_ds_component_child);
+ALTER TABLE ds_cmpt_mkt_rel ADD CONSTRAINT dscm_cp_r_uk    UNIQUE(id_market, id_ds_component_parent, rank);
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:21
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER INDEX dscm_pk         REBUILD TABLESPACE index_m;
+--
+ALTER INDEX dscm_m_cp_cc_uk REBUILD TABLESPACE index_m;
+ALTER INDEX dscm_cp_r_uk    REBUILD TABLESPACE index_m;
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 30/04/2012 15:26
+-- CHANGE REASON: [ALERT-228936] EST simplified triage
+DECLARE
+    e_already_dropped EXCEPTION;
+    e_uk1 EXCEPTION;
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_already_dropped, -2443);
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+      EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL DROP CONSTRAINT DSCM_CP_R_UK CASCADE';
+    EXCEPTION WHEN e_already_dropped THEN
+      dbms_output.put_line('AVISO: Já foi removida.');
+    END;
+    BEGIN
+      EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL ADD CONSTRAINT DSCM_CP_R_UK UNIQUE (ID_MARKET, ID_INSTITUTION, ID_SOFTWARE, ID_DS_COMPONENT_PARENT, RANK) USING INDEX TABLESPACE INDEX_M';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+          dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+          dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+      EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL DROP CONSTRAINT DSCM_M_CP_CC_UK CASCADE';
+    EXCEPTION WHEN e_already_dropped THEN
+      dbms_output.put_line('AVISO: Já foi removida.');
+    END;
+    BEGIN
+      EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL ADD CONSTRAINT DSCM_M_CP_CC_UK UNIQUE (ID_MARKET, ID_INSTITUTION, ID_SOFTWARE, ID_DS_COMPONENT_PARENT, ID_DS_COMPONENT_CHILD) USING INDEX  TABLESPACE INDEX_M';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+          dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+          dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 17:20
+-- CHANGE REASON: [ALERT-229222] VERSIONING TRANSACTIONAL MODEL - SCHEMA ALERT - DDL
+DECLARE
+    e_already_dropped EXCEPTION;
+    e_uk1 EXCEPTION;
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_already_dropped, -2443);
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+      EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL DROP CONSTRAINT DSCM_CP_R_UK CASCADE';
+    EXCEPTION WHEN e_already_dropped THEN
+      dbms_output.put_line('AVISO: Já foi removida.');
+    END;
+    BEGIN
+      EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL ADD CONSTRAINT DSCM_CP_R_UK UNIQUE (ID_MARKET, ID_INSTITUTION, ID_SOFTWARE, ID_DS_COMPONENT_PARENT, RANK) USING INDEX TABLESPACE INDEX_M';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+          dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+          dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+      EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL DROP CONSTRAINT DSCM_M_CP_CC_UK CASCADE';
+    EXCEPTION WHEN e_already_dropped THEN
+      dbms_output.put_line('AVISO: Já foi removida.');
+    END;
+    BEGIN
+      EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL ADD CONSTRAINT DSCM_M_CP_CC_UK UNIQUE (ID_MARKET, ID_INSTITUTION, ID_SOFTWARE, ID_DS_COMPONENT_PARENT, ID_DS_COMPONENT_CHILD) USING INDEX  TABLESPACE INDEX_M';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+          dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+          dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 16:48
+-- CHANGE REASON: [ARCH-7603] - [DB] Changes on DB Model
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL  drop constraint DSCM_INST_FK';
+pk_versioning.run( l_sql );
+end;
+/
+
+
+-- Create/Recreate primary, unique and foreign key constraints
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL  drop constraint DSCM_CP_R_UK cascade';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL add constraint DSCM_CP_R_UK unique (ID_MARKET, ID_SOFTWARE, ID_DS_COMPONENT_PARENT, RANK) using index tablespace alert_idx';
+pk_versioning.run( l_sql );
+end;
+/
+
+
+
+-- Create/Recreate check constraints
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[alter table DS_CMPT_MKT_REL add constraint DSCM_ET_CHK check (flg_def_event_type IN ('I', 'A', 'M', 'E','H'))]';
+pk_versioning.run( l_sql );
+end;
+/
+
+
+-- CMF
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[alter table DS_CMPT_MKT_REL add constraint DSCM_M_CP_CC_UK unique (ID_MARKET, ID_SOFTWARE, id_category, id_profile_template, ID_DS_COMPONENT_PARENT, ID_DS_COMPONENT_CHILD) using index tablespace ALERT_IDX]';
+pk_versioning.run( l_sql );
+end;
+/
+
+
+declare
+l_sql varchar2(4000);
+begin
+
+l_Sql := 'alter table DS_CMPT_MKT_REL';
+l_sql := l_Sql ||' add constraint DSCM_CC_UK unique ( ID_DS_CMPT_MKT_REL, ID_DS_COMPONENT_PARENT, ID_DS_COMPONENT_CHILD)';
+l_Sql := l_sql ||' using index tablespace ALERT_IDX';
+
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'alter table ds_cmpt_mkt_rel drop constraint DSCM_CP_R_UK';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table alert.DS_CMPT_MKT_REL drop constraint DSCM_M_CP_CC_UK';
+pk_versioning.run( l_sql);
+end;
+/
+
+declare
+xpl varchar2(0010 char) := '''';
+l_sql varchar2(1000 char);
+begin
+
+l_sql := q'['A', 'S', 'M','L']';
+L_SQL := 'ALTER TABLE DS_CMPT_MKT_REL ADD constraint DS_CMKT_COMP_SIZE  check (COMP_SIZE>=1 AND COMP_SIZE<=12)';
+pk_versioning.run( l_sql);
+end;
+/
+
+
+declare
+l_sql varchar2(1000 char);
+begin
+
+l_sql := q'['E','R', 'X']';
+L_SQL := 'ALTER TABLE DS_CMPT_MKT_REL ADD constraint DS_CMKT_FLG_EXP_TYPE check ( FLG_EXP_TYPE in ('||l_sql;
+l_sql := l_sql||') )';
+pk_versioning.run( l_sql);
+end;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 17:24
+-- CHANGE REASON: [ARCH-7603] - [DB] Changes on DB Model
+-- Create/Recreate primary, unique and foreign key constraints
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL  drop constraint DSCM_CP_R_UK cascade';
+pk_versioning.run( l_sql );
+end;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 17:30
+-- CHANGE REASON: [ARCH-7603] - [DB] Changes on DB Model
+-- Create/Recreate primary, unique and foreign key constraints
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL  drop constraint DSCM_M_CP_CC_UK cascade';
+pk_versioning.run( l_sql );
+end;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 17:38
+-- CHANGE REASON: [ARCH-7603] - [DB] Changes on DB Model
+
+declare
+l_sql varchar2(1000 char);
+begin
+
+l_sql := q'['E','R', 'N']';
+L_SQL := 'ALTER TABLE DS_CMPT_MKT_REL ADD constraint DS_CMKT_FLG_EXP_TYPE check ( FLG_EXP_TYPE in ('||l_sql;
+l_sql := l_sql||') )';
+pk_versioning.run( l_sql);
+end;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 17:43
+-- CHANGE REASON: [ARCH-7603] - [DB] Changes on DB Model
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL  drop constraint DSCM_INST_FK';
+pk_versioning.run( l_sql );
+end;
+/
+
+
+-- Create/Recreate primary, unique and foreign key constraints
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL  drop constraint DSCM_CP_R_UK cascade';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL add constraint DSCM_CP_R_UK unique (ID_MARKET, ID_SOFTWARE, ID_DS_COMPONENT_PARENT, RANK) using index tablespace alert_idx';
+pk_versioning.run( l_sql );
+end;
+/
+
+
+
+-- Create/Recreate check constraints
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[alter table DS_CMPT_MKT_REL add constraint DSCM_ET_CHK check (flg_def_event_type IN ('I', 'A', 'M', 'E','H'))]';
+pk_versioning.run( l_sql );
+end;
+/
+
+
+-- CMF
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[alter table DS_CMPT_MKT_REL add constraint DSCM_M_CP_CC_UK unique (ID_MARKET, ID_SOFTWARE, id_category, id_profile_template, ID_DS_COMPONENT_PARENT, ID_DS_COMPONENT_CHILD) using index tablespace ALERT_IDX]';
+pk_versioning.run( l_sql );
+end;
+/
+
+
+declare
+l_sql varchar2(4000);
+begin
+
+l_Sql := 'alter table DS_CMPT_MKT_REL';
+l_sql := l_Sql ||' add constraint DSCM_CC_UK unique ( ID_DS_CMPT_MKT_REL, ID_DS_COMPONENT_PARENT, ID_DS_COMPONENT_CHILD)';
+l_Sql := l_sql ||' using index tablespace ALERT_IDX';
+
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'alter table ds_cmpt_mkt_rel drop constraint DSCM_CP_R_UK';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table alert.DS_CMPT_MKT_REL drop constraint DSCM_M_CP_CC_UK';
+pk_versioning.run( l_sql);
+end;
+/
+
+declare
+xpl varchar2(0010 char) := '''';
+l_sql varchar2(1000 char);
+begin
+
+l_sql := q'['A', 'S', 'M','L']';
+L_SQL := 'ALTER TABLE DS_CMPT_MKT_REL ADD constraint DS_CMKT_COMP_SIZE  check (COMP_SIZE>=1 AND COMP_SIZE<=12)';
+pk_versioning.run( l_sql);
+end;
+/
+
+
+declare
+l_sql varchar2(1000 char);
+begin
+
+l_sql := q'['E','R', 'N']';
+L_SQL := 'ALTER TABLE DS_CMPT_MKT_REL ADD constraint DS_CMKT_FLG_EXP_TYPE check ( FLG_EXP_TYPE in ('||l_sql;
+l_sql := l_sql||') )';
+pk_versioning.run( l_sql);
+end;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 28/04/2021 14:42
+-- CHANGE REASON: [EMR-42646] - SA - EAGLE | FORM | CERTIFICATE OF CAUSE OF PERINATAL DEATH
+alter table DS_CMPT_MKT_REL
+drop constraint DSCM_M_CP_CC_UK cascade;
+alter table DS_CMPT_MKT_REL
+add constraint DSCM_M_CP_CC_UK unique (ID_MARKET, ID_SOFTWARE, ID_CATEGORY, ID_PROFILE_TEMPLATE, ID_DS_COMPONENT_PARENT, ID_DS_COMPONENT_CHILD,AGE_MIN_VALUE,AGE_MIN_UNIT_MEASURE)
+using index
+tablespace ALERT_IDX;
+-- CHANGE END: Elisabete Bugalho
+
+-- cmf
+declare
+	l_sql varchar2(1000 char);
+begin
+	l_sql := q'[ALTER TABLE DS_CMPT_MKT_REL ADD CONSTRAINT CMPT_MKT_REL_FLG_DATA_TYPE2_CHK CHECK ( flg_data_type2 in ( 'PD', 'LL', 'ML' ) )]';
+	pk_versioning.run(l_sql);  
+end;
+/

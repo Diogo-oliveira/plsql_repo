@@ -1,0 +1,116 @@
+-- Create table
+create table STD_PRESC_DIR_DOSEFREQ
+(
+  ID_PRESC_DIR_DOSEFREQ     NUMBER(24) not null,
+  ID_PRESC_DIR_INTERVAL     NUMBER(24) not null,
+  RANK                      NUMBER(6),
+  FLG_DOSE_TYPE             VARCHAR2(1 CHAR) not null,
+  DOSE                      NUMBER(24,4),
+  ID_UNIT_DOSE              NUMBER(24),
+  DOSE_RNG_MIN              NUMBER(24,4),
+  ID_UNIT_RNG_MIN           NUMBER(24),
+  DOSE_RNG_MAX              NUMBER(24,4),
+  ID_UNIT_RNG_MAX           NUMBER(24),
+  ID_SLIDING_SCALE          NUMBER(24),
+  FLG_FREQ_TYPE             VARCHAR2(2 CHAR),
+  ID_PRESC_DIR_FREQUENCY    NUMBER(24),
+  EDF_RI_AMOUNT             NUMBER(24,4),
+  EDF_RI_ID_UNIT            NUMBER(24),
+  EDF_EXACT_HOUR            INTERVAL DAY(3) TO SECOND(3),
+  DF_ID_PRESC_DIR_FREQUENCY NUMBER(24),
+  DF_RI_AMOUNT              NUMBER(24,4),
+  DF_RI_ID_UNIT             NUMBER(24),
+  CREATE_USER               VARCHAR2(24 CHAR),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24 CHAR),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24),
+  EDF_DAILY_TAKES           NUMBER(6),
+  ID_GROUP                  NUMBER(6),
+  DOSEFREQ_HOUR             INTERVAL DAY(3) TO SECOND(3)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table STD_PRESC_DIR_DOSEFREQ
+  is 'Prescription directions doses and frequencies';
+-- Add comments to the columns 
+comment on column STD_PRESC_DIR_DOSEFREQ.ID_PRESC_DIR_DOSEFREQ
+  is 'Prescription directions dose and frequency ID';
+comment on column STD_PRESC_DIR_DOSEFREQ.ID_PRESC_DIR_INTERVAL
+  is 'Prescription directions interval ID';
+comment on column STD_PRESC_DIR_DOSEFREQ.RANK
+  is 'Dose and Frequency rank';
+comment on column STD_PRESC_DIR_DOSEFREQ.FLG_DOSE_TYPE
+  is 'Flag Dose Type: V-Value; R-Range values; S-Sliding Scale';
+comment on column STD_PRESC_DIR_DOSEFREQ.DOSE
+  is 'Dose amount';
+comment on column STD_PRESC_DIR_DOSEFREQ.ID_UNIT_DOSE
+  is 'Dose unit measure ID';
+comment on column STD_PRESC_DIR_DOSEFREQ.DOSE_RNG_MIN
+  is 'Dose Interval - MIN amount';
+comment on column STD_PRESC_DIR_DOSEFREQ.ID_UNIT_RNG_MIN
+  is 'Dose Interval - unit measure ID for MIN value';
+comment on column STD_PRESC_DIR_DOSEFREQ.DOSE_RNG_MAX
+  is 'Dose Interval - MAX amount';
+comment on column STD_PRESC_DIR_DOSEFREQ.ID_UNIT_RNG_MAX
+  is 'Dose Interval - unit measure ID for MIN value';
+comment on column STD_PRESC_DIR_DOSEFREQ.ID_SLIDING_SCALE
+  is 'Sliding scale ID';
+comment on column STD_PRESC_DIR_DOSEFREQ.FLG_FREQ_TYPE
+  is 'Frequency Type';
+comment on column STD_PRESC_DIR_DOSEFREQ.ID_PRESC_DIR_FREQUENCY
+  is 'Most Frequent / Pre-Defined Hours - Prescription Directions Frequency ID';
+comment on column STD_PRESC_DIR_DOSEFREQ.EDF_RI_AMOUNT
+  is 'Each Day - Regular inteval amount';
+comment on column STD_PRESC_DIR_DOSEFREQ.EDF_RI_ID_UNIT
+  is 'Each Day - Regular interval amount unit measure ID';
+comment on column STD_PRESC_DIR_DOSEFREQ.EDF_EXACT_HOUR
+  is 'Each Day - Daily exact hour';
+comment on column STD_PRESC_DIR_DOSEFREQ.DF_ID_PRESC_DIR_FREQUENCY
+  is 'Daily - Prescription Directions Frequency ID';
+comment on column STD_PRESC_DIR_DOSEFREQ.DF_RI_AMOUNT
+  is 'Daily - Regular inteval amount';
+comment on column STD_PRESC_DIR_DOSEFREQ.DF_RI_ID_UNIT
+  is 'Daily - Regular interval amount unit measure ID';
+comment on column STD_PRESC_DIR_DOSEFREQ.CREATE_USER
+  is 'Creation User';
+comment on column STD_PRESC_DIR_DOSEFREQ.CREATE_TIME
+  is 'Creation Time';
+comment on column STD_PRESC_DIR_DOSEFREQ.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column STD_PRESC_DIR_DOSEFREQ.UPDATE_USER
+  is 'Update User';
+comment on column STD_PRESC_DIR_DOSEFREQ.UPDATE_TIME
+  is 'Update Time';
+comment on column STD_PRESC_DIR_DOSEFREQ.UPDATE_INSTITUTION
+  is 'Update Institution';
+comment on column STD_PRESC_DIR_DOSEFREQ.EDF_DAILY_TAKES
+  is 'Each Day - Daily takes';
+comment on column STD_PRESC_DIR_DOSEFREQ.ID_GROUP
+  is 'Aggregation id. This is necessary to aggregate each pre-defined frequency which has more than one time associated. |||| Example: id_presc_dir_frequency = 2. In this id_presc_dir_frequency, we have, for instance, 2 x day - 2h, 4h; It is necessary to insert a unique id_group value for this id_presc_dir_frequency in each id_presc_dir_freq_soft_inst for this frequency';
+comment on column STD_PRESC_DIR_DOSEFREQ.DOSEFREQ_HOUR
+  is 'Most frequent hour for date computation';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table STD_PRESC_DIR_DOSEFREQ
+  add constraint SPD_DOSEFREQ_PK primary key (ID_PRESC_DIR_DOSEFREQ)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );

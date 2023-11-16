@@ -1,0 +1,74 @@
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 13/03/2012 17:00
+-- CHANGE REASON: [ALERT-223084] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -02264); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ICNP_SUGGEST_INTERV_HIST
+add constraint ISIH_FLG_STATUS_REL_CHK
+--A - active, C - cancel, I - discontinued, H - hold, R - reactivated
+check (FLG_STATUS_REL IN (''A'',''C'',''I'',''H'', ''R''))';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('name already used by an existing constraint');
+END;
+/
+
+
+begin
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_M013', i_desc_message => 'Cancelamento:', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_M014', i_desc_message => 'Resolvido:', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_M015', i_desc_message => 'Suspenso:', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_M016', i_desc_message => 'Retomado:', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_T144', i_desc_message => 'Cancelamento da(s) intervenção(ões) de enfermagem', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_T145', i_desc_message => 'Dar termo á(s) intervenção(ões) de enfermagem', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_T146', i_desc_message => 'Suspender a(s) intervenção(ões) de enfermagem', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_M017', i_desc_message => 'Associação a diagnóstico(s) de enfermagem', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_M018', i_desc_message => 'Associação a atitude(s) terapêutica(s)', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_M019', i_desc_message => 'Cancelar intervenção de enfermagem', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_M020', i_desc_message => 'Dar termo á intervenção de enfermagem', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_M021', i_desc_message => 'Suspender a intervenção de enfermagem', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_M022', i_desc_message => 'Selecione se pretende cancelar a(s) intervenção(ões) de enfermagem ou cancelar a assicioção desta intervenção aos diferentes diagósticos de enfermagem e/ou atitudes terapêuticas?', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_M023', i_desc_message => 'Selecione se pretende dar termo á(s) intervenção(ões) de enfermagem ou cancelar a assicioção desta intervenção aos diferentes diagósticos de enfermagem e/ou atitudes terapêuticas?', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_M024', i_desc_message => 'Selecione se pretende suspender a(s) intervenção(ões) de enfermagem ou cancelar a assicioção desta intervenção aos diferentes diagósticos de enfermagem e/ou atitudes terapêuticas?', i_flg_type => 'A', i_software => 0, i_institution => 0);
+pk_message.insert_into_sys_message(i_lang => 1, i_code_message => 'CIPE_M025', i_desc_message => 'Associação á(s) intervenção(ões) de enfermagem', i_flg_type => 'A', i_software => 0, i_institution => 0);
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 13/03/2012 17:00
+-- CHANGE REASON: [ALERT-223084] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -02264); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAG_INTERV
+add constraint IEDI_FLG_TYPE_ASSOC_CHK
+--D - Diag, I - Interv
+check (flg_type_assoc IN (''D'',''I''))';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('name already used by an existing constraint');
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 13/03/2012 17:00
+-- CHANGE REASON: [ALERT-223084] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -02264); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'alter table icnp_epis_dg_int_hist
+add constraint IEDIH_FLG_TYPE_ASSOC_CHK
+--D - Diag, I - Interv
+check (flg_type_assoc IN (''D'',''I''))';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('name already used by an existing constraint');
+END;
+/
+-- CHANGE END:  Nuno Neves

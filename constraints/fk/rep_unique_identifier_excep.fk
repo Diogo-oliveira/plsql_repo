@@ -1,0 +1,23 @@
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 14-Jan-2011
+-- CHANGE REASON: ALERT-155489
+DECLARE
+    l_sql   VARCHAR2(4000);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'RUIE_MRK_FK';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := q'[ALTER TABLE rep_unique_identifier_excep ADD CONSTRAINT RUIE_MRK_FK FOREIGN KEY (ID_MARKET) REFERENCES MARKET (ID_MARKET) ENABLE]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END

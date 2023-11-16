@@ -1,0 +1,95 @@
+  ALTER TABLE DRUG_PRESC_DET ADD CONSTRAINT DPDT_PK PRIMARY KEY (ID_DRUG_PRESC_DET) ENABLE;
+
+  ALTER TABLE DRUG_PRESC_DET MODIFY (ID_DRUG_PRESC_DET NOT NULL ENABLE);
+
+  ALTER TABLE DRUG_PRESC_DET MODIFY (ID_DRUG NOT NULL ENABLE);
+
+  ALTER TABLE DRUG_PRESC_DET MODIFY (ID_DRUG_PRESCRIPTION NOT NULL ENABLE);
+
+  ALTER TABLE DRUG_PRESC_DET MODIFY (FLG_TAKE_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE DRUG_PRESC_DET MODIFY (FLG_STATUS NOT NULL ENABLE);
+
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-ABR-03
+-- CHANGING REASON: OVREDOSAGE MODULE
+alter table drug_presc_det
+  add constraint DPD_FLG_DOSAGE_CHECK_CHK
+  check FLG_DOSAGE_CHECK IN
+      (
+       'Y',
+       'N'
+      ));			
+-- CHANGE END Patrícia Neto
+
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGED DATE: 2009-SET-29
+-- CHANGED REASON: ALERT-46650
+
+ALTER TABLE DRUG_PRESC_DET ADD CONSTRAINT DPDT_FLG_CO_SIGN_CHK CHECK (FLG_CO_SIGN in ('Y', 'N')) ENABLE;
+
+-- CHANGE END: Ana Matos
+
+
+
+
+
+-- CHANGED BY: Sérgio Cunha
+-- CHANGE DATE: 29/10/2009 05:53
+-- CHANGE REASON: [ALERT-52263] 
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table DRUG_PRESC_DET drop constraint DPD_JRS_FK;
+alter table DRUG_PRESC_DET add constraint DPD_JRS_FK foreign key (ID_JUSTIFY_REASON)
+  references justify_reason (ID_JUSTIFY_REASON);
+-- CHANGE END: Sérgio Cunha
+
+-- CHANGED BY: Sérgio Cunha
+-- CHANGE DATE: 29/10/2009 15:45
+-- CHANGE REASON: [ALERT-52263] 
+alter table DRUG_PRESC_DET
+  add constraint DPD_JRS_FK foreign key (ID_JUSTIFY_REASON)
+  references justify_reason (ID_JUSTIFY_REASON);
+-- CHANGE END: Sérgio Cunha
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 19/03/2010 14:47
+-- CHANGE REASON: [ALERT-80419] 
+alter table DRUG_PRESC_DET
+add constraint DPDT_flg_free_text
+check (flg_free_text in ('Y', 'N'));
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Quinteiro
+-- CHANGE DATE: 27/08/2010 17:32
+-- CHANGE REASON: [ALERT-119226] 
+
+alter table DRUG_PRESC_DET
+  add constraint DPD_END_PRESCRIPTION_CHK
+  check ( 
+     flg_status <> 'F' OR (flg_status = 'F' AND DT_END_TSTZ IS NOT NULL)
+  );
+-- CHANGE END: Pedro Quinteiro  
+
+
+-- CHANGED BY: Pedro Quinteiro
+-- CHANGE DATE: 06/09/2010 12:34
+-- CHANGE REASON: [ALERT-119226] INV_ALL_036_DRUGP18834: Flag status = 'F' with no end date in table DRUG_PRESC_DET
+alter table DRUG_PRESC_DET
+  add constraint DPD_END_PRESCRIPTION_CHK
+  check ( 
+   flg_status <> 'F' OR (flg_status = 'F' AND DT_END_TSTZ IS NOT NULL)
+);
+-- CHANGE END: Pedro Quinteiro
+
+-- CHANGED BY: Pedro Quinteiro
+-- CHANGE DATE: 08/09/2010 17:33
+-- CHANGE REASON: [ALERT-123407] Issue Replication: INV_ALL_001_DRUGP74390: Begin date bigger than end date in table DRUG_PRESC_DET
+alter table DRUG_PRESC_DET
+  add constraint DPD_PRESCRIPTION_DATES_CHK
+  check ( 
+     DT_BEGIN_TSTZ <= DT_END_TSTZ
+  );
+-- CHANGE END: Pedro Quinteiro

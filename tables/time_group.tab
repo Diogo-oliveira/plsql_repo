@@ -1,0 +1,31 @@
+
+
+  CREATE TABLE TIME_GROUP
+   (	ID_TIME_EVENT_GROUP NUMBER(12,0),
+	ID_TIME_GROUP NUMBER(12,0) NOT NULL ENABLE,
+	DESC_TIME_GROUP VARCHAR2(240),
+	INTERN_NAME VARCHAR2(100)
+   );
+
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/03/2011 16:09
+-- CHANGE REASON: [ALERT-165887] [EDIS] INV_ALL_096: Missing Foreign Keys in Alert tables
+--                Create fk's
+DECLARE
+    e_name_already_exists EXCEPTION;
+    e_invalid_identifier EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -904);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE TIME_GROUP DROP COLUMN ID_TIME_EVENT_GROUP';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column ID_TIME_EVENT_GROUP doesn''t exists on table TIME_GROUP.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

@@ -1,0 +1,5 @@
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 14/12/2009 18:25
+-- CHANGE REASON: [ALERT-62424] Grants and synonyms for new packages
+GRANT EXECUTE ON ALERT.PK_SUP_STATUS TO ALERT_VIEWER;
+-- CHANGE END: João Martins

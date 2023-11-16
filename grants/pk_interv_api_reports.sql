@@ -1,0 +1,5 @@
+-- CHANGED BY: Teresa Coutinho
+-- CHANGE DATE: 20/10/2011 16:42
+-- CHANGE REASON: [ALERT-194273] 
+GRANT EXECUTE ON ALERT.pk_interv_api_reports TO ALERT_VIEWER;
+-- CHANGE END: Teresa Coutinho

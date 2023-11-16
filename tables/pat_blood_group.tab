@@ -1,0 +1,88 @@
+
+
+  CREATE TABLE PAT_BLOOD_GROUP
+   (	ID_PAT_BLOOD_GROUP NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_BLOOD_GROUP DATE NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_BLOOD_GROUP VARCHAR2(2) NOT NULL ENABLE,
+	FLG_BLOOD_RHESUS VARCHAR2(1) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DESC_OTHER_SYSTEM VARCHAR2(4000),
+	ID_INSTITUTION NUMBER(24,0),
+	ID_EPISODE NUMBER(24,0)
+   );
+
+
+
+COMMENT ON TABLE pat_blood_group IS 'Histórico de registo de grupo sanguíneo' ;
+
+COMMENT ON COLUMN pat_blood_group.dt_pat_blood_group IS 'Data de registo' ;
+COMMENT ON COLUMN pat_blood_group.flg_blood_group IS 'Grupo sanguineo: A, B, AB, O' ;
+COMMENT ON COLUMN pat_blood_group.flg_blood_rhesus IS 'Factor Rhesus: P - positivo, N - negativo' ;
+COMMENT ON COLUMN pat_blood_group.flg_status IS 'A - activo, I-  inactivo' ;
+COMMENT ON COLUMN pat_blood_group.desc_other_system IS 'Outros sistemas' ;
+
+comment on column PAT_BLOOD_GROUP.ID_EPISODE
+  is 'ID do episódio em que foi feito o registo.';
+alter table pat_blood_group 
+add (dt_pat_blood_group_tstz timestamp with local time zone); 
+
+alter table PAT_BLOOD_GROUP drop column DT_PAT_BLOOD_GROUP;
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:17
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column PAT_BLOOD_GROUP.id_pat_blood_group
+  is 'Patient blood group identifier';
+comment on column PAT_BLOOD_GROUP.id_patient
+  is 'Patient ID';
+comment on column PAT_BLOOD_GROUP.id_professional
+  is 'Professional ID';
+comment on column PAT_BLOOD_GROUP.flg_blood_group
+  is 'Blood group : A, B, AB, O';
+comment on column PAT_BLOOD_GROUP.flg_blood_rhesus
+  is 'Factor Rhesus: P -Rh+, N - Rh-';
+comment on column PAT_BLOOD_GROUP.flg_status
+  is 'Flag status A - Active, I-  Inactive';
+comment on column PAT_BLOOD_GROUP.desc_other_system
+  is 'Other groups description';
+comment on column PAT_BLOOD_GROUP.id_institution
+  is 'Institution ID';
+comment on column PAT_BLOOD_GROUP.id_episode
+  is 'Episode ID (ID Episode where the record was made)';
+comment on column PAT_BLOOD_GROUP.dt_pat_blood_group_tstz
+  is 'Record date';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2020 10:24
+-- CHANGE REASON: [EMR-33519]
+ALTER TABLE PAT_BLOOD_GROUP ADD ID_ANALYSIS_RESULT NUMBER(24);
+COMMENT ON COLUMN PAT_BLOOD_GROUP.ID_ANALYSIS_RESULT IS 'ID Analysis Result';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 10/11/2022 18:53
+-- CHANGE REASON: [EMR-55788]
+begin
+pk_versioning.run('ALTER TABLE pat_blood_group MODIFY (flg_blood_group VARCHAR(2 CHAR) NULL, flg_blood_rhesus VARCHAR(1 CHAR) NULL, desc_other_system VARCHAR(1000 CHAR))');
+end;
+/
+
+COMMENT ON TABLE pat_blood_group IS 'Patient blood type';
+
+COMMENT ON COLUMN pat_blood_group.id_pat_blood_group IS 'Primary key';
+COMMENT ON COLUMN pat_blood_group.id_patient IS 'Patient ID';
+COMMENT ON COLUMN pat_blood_group.id_professional IS 'Professional ID';
+COMMENT ON COLUMN pat_blood_group.flg_blood_group IS 'Flag that indicates the blood group: A; B; AB; O';
+COMMENT ON COLUMN pat_blood_group.flg_blood_rhesus IS 'Flag that indicates the rhesus factor: P - Rh+; N - Rh-';
+COMMENT ON COLUMN pat_blood_group.flg_status IS 'Flag that indicates the record status (A/I)';
+COMMENT ON COLUMN pat_blood_group.desc_other_system IS 'Other groups';
+COMMENT ON COLUMN pat_blood_group.id_institution IS 'Institution ID';
+COMMENT ON COLUMN pat_blood_group.id_episode IS 'Episode ID (where the record was registered)';
+COMMENT ON COLUMN pat_blood_group.dt_pat_blood_group_tstz IS 'Record date';
+COMMENT ON COLUMN pat_blood_group.id_analysis_result IS 'Lab test result ID';
+-- CHANGE END: Ana Matos

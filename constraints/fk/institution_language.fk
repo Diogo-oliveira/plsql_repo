@@ -1,0 +1,43 @@
+alter table INSTITUTION_LANGUAGE
+  add constraint ITLG_INST_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION);
+  
+alter table INSTITUTION_LANGUAGE
+  add constraint ITLG_LANG_FK foreign key (ID_LANGUAGE)
+  references LANGUAGE (ID_LANGUAGE);
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 15/07/2011 15:10
+-- CHANGE REASON: [ALERT-188516] missing FK on BO tables
+
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table INSTITUTION_LANGUAGE
+  add constraint INSTL_INST_FK foreign key (ID_INSTITUTION)
+  references ALERT.INSTITUTION(ID_INSTITUTION) novalidate';
+    
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table INSTITUTION_LANGUAGE
+  add constraint INSTL_LANG_FK foreign key (ID_LANGUAGE)
+  references ALERT.LANGUAGE(ID_LANGUAGE) novalidate';
+    
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

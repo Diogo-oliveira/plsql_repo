@@ -1,0 +1,81 @@
+
+CREATE TABLE PROTOCOL_PROCESS
+ (ID_PROTOCOL_PROCESS NUMBER(24) NOT NULL
+ ,ID_PROTOCOL_BATCH NUMBER(24) NOT NULL
+ ,ID_EPISODE NUMBER(24)
+ ,ID_PATIENT NUMBER(24) NOT NULL
+ ,ID_PROTOCOL NUMBER(24) NOT NULL
+ ,FLG_STATUS VARCHAR2(1)
+ ,DT_STATUS TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_PROFESSIONAL NUMBER(24) NOT NULL
+ ,FLG_NESTED_PROTOCOL VARCHAR2(1) NOT NULL
+ );
+ 
+COMMENT ON TABLE PROTOCOL_PROCESS IS 'Nested protocol (Y/N)';
+COMMENT ON COLUMN PROTOCOL_PROCESS.ID_PROTOCOL_PROCESS IS 'ID of protocol process';
+COMMENT ON COLUMN PROTOCOL_PROCESS.ID_PROTOCOL_BATCH IS 'ID of batch that originated this process';
+COMMENT ON COLUMN PROTOCOL_PROCESS.ID_EPISODE IS 'ID of episode to which this process applies';
+COMMENT ON COLUMN PROTOCOL_PROCESS.ID_PATIENT IS 'ID of the patient associated to this process';
+COMMENT ON COLUMN PROTOCOL_PROCESS.ID_PROTOCOL IS 'ID of protocol that generated this process';
+COMMENT ON COLUMN PROTOCOL_PROCESS.FLG_STATUS IS 'Status of process: active / inactive / canceled';
+COMMENT ON COLUMN PROTOCOL_PROCESS.DT_STATUS IS 'Date when status changed the last time';
+COMMENT ON COLUMN PROTOCOL_PROCESS.ID_PROFESSIONAL IS 'ID of professional associated to this process';
+COMMENT ON COLUMN PROTOCOL_PROCESS.FLG_NESTED_PROTOCOL IS 'Nested protocol (Y/N)';
+
+-- CHANGED BY:  Ines Azevedo
+-- CHANGE DATE: 15/11/2010 10:59
+-- CHANGE REASON: [ALERT-139930] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PROTOCOL_PROCESS add ID_CANCEL_REASON number(24)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+
+
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+   EXECUTE IMMEDIATE 'alter table PROTOCOL_PROCESS add CANCEL_NOTES varchar2(1000 char)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PROTOCOL_PROCESS add ID_PROF_CANCEL number(24)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+
+comment on column PROTOCOL_PROCESS.ID_CANCEL_REASON is 'Cancel reason ID';
+comment on column PROTOCOL_PROCESS.CANCEL_NOTES is 'Cancel notes';
+comment on column PROTOCOL_PROCESS.ID_PROF_CANCEL is 'ID professional that cancelled protocol';
+-- CHANGE END:  Ines Azevedo
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 28/03/2011 09:23
+-- CHANGE REASON: [ALERT-168339] Insert constraints for flag_status columns defined in sys_domain
+comment on column PROTOCOL_PROCESS.FLG_STATUS is 'Protocol process status:
+H - scheduled
+C - cancelled
+F - finished
+E - in progress
+P - pending
+R - recommended
+S - on hold';
+comment on column PROTOCOL_PROCESS.FLG_NESTED_PROTOCOL is 'Nested protocol process:
+Y - yes
+N - no';
+-- CHANGE END: Carlos Loureiro

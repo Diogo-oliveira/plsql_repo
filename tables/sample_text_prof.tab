@@ -1,0 +1,92 @@
+
+
+  CREATE TABLE SAMPLE_TEXT_PROF
+   (	ID_SAMPLE_TEXT_PROF NUMBER(24,0) NOT NULL ENABLE,
+	ID_SAMPLE_TEXT_TYPE NUMBER(12,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	TITLE_SAMPLE_TEXT_PROF VARCHAR2(200) NOT NULL ENABLE,
+	DESC_SAMPLE_TEXT_PROF VARCHAR2(4000) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE sample_text_prof IS 'Textos escritos pelos profissionais, para uso pessoal ou do serviço clínico' ;
+
+COMMENT ON COLUMN sample_text_prof.flg_status IS 'A - Activo; C - cancelado' ;
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 14/01/2016 10:04
+-- CHANGE REASON: [ALERT-317702] 
+comment on table SAMPLE_TEXT_PROF
+  is 'Predefined texts configuration';
+-- Add comments to the columns 
+comment on column SAMPLE_TEXT_PROF.id_sample_text_prof
+  is 'Primary key';
+comment on column SAMPLE_TEXT_PROF.id_sample_text_type
+  is 'Predefined text type ID';
+comment on column SAMPLE_TEXT_PROF.id_professional
+  is 'Professional ID';
+comment on column SAMPLE_TEXT_PROF.title_sample_text_prof
+  is 'Predefined text title';
+comment on column SAMPLE_TEXT_PROF.desc_sample_text_prof_bck
+  is 'Deprecated';
+comment on column SAMPLE_TEXT_PROF.rank
+  is 'Rank';
+comment on column SAMPLE_TEXT_PROF.flg_status
+  is 'Flag that indicates the predefined text status: A - Active, C - Cancelled';
+comment on column SAMPLE_TEXT_PROF.id_institution
+  is 'Institution ID';
+comment on column SAMPLE_TEXT_PROF.create_user
+  is 'Creation User';
+comment on column SAMPLE_TEXT_PROF.create_time
+  is 'Creation Time';
+comment on column SAMPLE_TEXT_PROF.create_institution
+  is 'Creation Institution';
+comment on column SAMPLE_TEXT_PROF.update_user
+  is 'Update User';
+comment on column SAMPLE_TEXT_PROF.update_time
+  is 'Update Time';
+comment on column SAMPLE_TEXT_PROF.update_institution
+  is 'Update Institution';
+comment on column SAMPLE_TEXT_PROF.desc_sample_text_prof
+  is 'Predefined text';
+  
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:30
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.sample_text_prof move lob(desc_sample_text_prof) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 20/10/2022 11:01
+-- CHANGE REASON: [EMR-54862] - Sample text change model
+begin
+pk_versioning.run('alter table SAMPLE_TEXT_PROF add id_software number(24)');
+end;
+/
+-- CHANGE END: Elisabete Bugalho
+
+DECLARE
+	l_sql varchar2(4000);
+begin
+
+	l_sql := q'[alter table sample_text_prof add dt_creation timestamp with local time zone default current_timestamp]';
+	pk_versioning.run(l_sql);
+
+end;
+/

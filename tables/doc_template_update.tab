@@ -1,0 +1,40 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 11/02/2013 17:34
+-- CHANGE REASON: [ALERT-250607] Method to migrate prefilled templates created by professionals when a template is updated
+BEGIN 
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'DOC_TEMPLATE_UPDATE',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'CNT',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => '',
+                                             i_flg_default_child => 'N',
+                                             i_flg_nzd           => 'N',
+                                             i_responsible_team  => 'DOC');
+END;
+/
+
+CREATE TABLE doc_template_update(
+ id_doc_area NUMBER (24) NOT NULL,
+ id_doc_template_source NUMBER (24) NOT NULL,
+ id_doc_template_target NUMBER (24) NOT NULL,
+ create_user        VARCHAR2(24),
+ create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+ create_institution NUMBER(24),
+ update_user        VARCHAR2(24),
+ update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+ update_institution NUMBER(24)
+);
+
+comment on table doc_template_update
+  is 'Mapping between templates that have been updated. This information is used to aid in the migration of prefilled templates (DOC_MACRO_VERSION) that were created using a template which has been replaced by another'; 
+comment on column doc_template_update.id_doc_area is 'Area ID'; 
+comment on column doc_template_update.id_doc_template_source is 'ID of template that is substituted'; 
+comment on column doc_template_update.id_doc_template_target is 'ID of template that replaces the previous one'; 
+comment on column doc_template_update.create_user is 'Creation User';
+comment on column doc_template_update.create_time is 'Creation Time';
+comment on column doc_template_update.create_institution is 'Creation Institution';
+comment on column doc_template_update.update_user is 'Update User';
+comment on column doc_template_update.update_time is 'Update Time';
+comment on column doc_template_update.update_institution is 'Update Institution';
+-- CHANGE END: Ariel Machado

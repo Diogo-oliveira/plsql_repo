@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_table_allergy_unawareness AS TABLE OF t_rec_allergy_unawareness

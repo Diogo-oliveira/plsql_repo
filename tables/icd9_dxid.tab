@@ -1,0 +1,37 @@
+create table ICD9_DXID
+(
+  DXID        VARCHAR2(255),
+  ICD9CM_CODE VARCHAR2(255),
+  ICD9CM_DESC VARCHAR2(255),
+  VERS        VARCHAR2(255)
+);
+
+comment on table ICD9_DXID
+  is 'FDB diseases and ICD9CM codes in which they are contraindicated';
+comment on column ICD9_DXID.DXID
+  is 'Disease ID (FDB internal code).';
+comment on column ICD9_DXID.ICD9CM_CODE
+  is 'ICD9CM code.';
+comment on column ICD9_DXID.ICD9CM_DESC
+  is 'ICD9CM description.';
+comment on column ICD9_DXID.VERS
+  is 'Version (PT, USA).';
+
+alter table icd9_dxid
+modify (DXID VARCHAR2(255) not null,
+        ICD9CM_CODE VARCHAR2(255) not null,
+        ICD9CM_DESC VARCHAR2(255) not null,
+        VERS VARCHAR2(255) not null);
+
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-MAR-14
+-- CHANGING REASON: IDCD9
+-- Add/modify columns 
+alter table ICD9_DXID add nav_code VARCHAR2(255);
+-- Add comments to the columns 
+comment on column ICD9_DXID.nav_code
+  is 'Identifies whether an ICD9-CM or DXID concept is a narrower concept, a broader concept, or an equal concept, relative to another DXID';
+-- CHANGE END Patrícia Neto	
+
+		

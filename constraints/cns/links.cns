@@ -1,0 +1,153 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/08/2011 09:00
+-- CHANGE REASON: [ALERT-190334] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -06512);
+    e_object_exists3 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists3, -02264);
+BEGIN    
+   BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE links
+  ADD CONSTRAINT links_pk PRIMARY KEY (id_links)
+  USING INDEX TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table links
+    add constraint links_fa_chk
+    check (flg_available IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table links
+    add constraint links_ft_chk
+    check (flg_type IN (''L'',''F''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table links
+    add constraint links_inst_chk
+    check (id_institution not IN (0))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table links
+    add constraint links_frf_chk
+    check (flg_required_fields IN (''P'',''E'',''B''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+ BEGIN
+        EXECUTE IMMEDIATE 'alter table links
+    add constraint links_iav3_chk
+    check (flg_iav3 IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 10/07/2013 15:41
+-- CHANGE REASON: [ALERT-261128] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -06512);
+    e_object_exists3 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists3, -02264);
+ BEGIN
+        EXECUTE IMMEDIATE 'alter table links drop constraint links_inst_chk;';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+       WHEN others THEN
+            dbms_output.put_line('ERRO A REMOVER CONSTRAINT : alter table links drop constraint links_inst_chk;');						
+    END;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 11/07/2013 08:31
+-- CHANGE REASON: [ALERT-261128] 
+begin
+execute immediate ('ALTER TABLE LINKS DROP CONSTRAINT LINKS_INST_CHK');
+exception
+when others then
+dbms_output.put_line('ERRO A REMOVER CONSTRAINT : alter table links drop constraint links_inst_chk;'); 
+end;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 12/05/2014 14:36
+-- CHANGE REASON: [ALERT-284329] 
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table LINKS drop constraint LINKS_FT_CHK';
+exception when others then
+  dbms_output.put_line('drop constraint LINKS_FT_CHK!');
+end;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 12/05/2014 14:37
+-- CHANGE REASON: [ALERT-284329] 
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table LINKS add constraint LINKS_FT_CHK check (flg_type IN (''L'',''F'',''I'')) enable novalidate';
+exception when others then
+  dbms_output.put_line('add constraint LINKS_FT_CHK');
+end;
+/
+-- CHANGE END: mario.mineiro

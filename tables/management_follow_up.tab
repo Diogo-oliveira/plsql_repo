@@ -1,0 +1,145 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 27/10/2009 12:08
+-- CHANGE REASON: Case Manager
+create table MANAGEMENT_FOLLOW_UP
+(
+  ID_MANAGEMENT_FOLLOW_UP NUMBER(24) not null,
+  ID_EPISODE              NUMBER(24) not null,
+  ID_EPIS_ENCOUNTER       NUMBER(24) not null,
+  TIME_SPENT              NUMBER(24,3),
+  FLG_STATUS              VARCHAR2(1) not null,
+  ID_UNIT_TIME            NUMBER(24),
+  DT_REGISTER             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  NOTES                   CLOB,
+  ID_CANCEL_REASON        NUMBER(24),
+  NOTES_CANCEL            VARCHAR2(4000),
+  ID_PARENT               NUMBER(24),
+  CREATE_USER             VARCHAR2(24),
+  CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION      NUMBER(24),
+  UPDATE_USER             VARCHAR2(24),
+  UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION      NUMBER(24),
+  ID_PROFESSIONAL         NUMBER(24) not null
+);
+-- Add comments to the table 
+comment on table MANAGEMENT_FOLLOW_UP
+  is 'Management follow-up of each encounter';
+-- Add comments to the columns 
+comment on column MANAGEMENT_FOLLOW_UP.ID_MANAGEMENT_FOLLOW_UP
+  is 'id management follow up';
+comment on column MANAGEMENT_FOLLOW_UP.ID_EPISODE
+  is 'Id CM Episode ';
+comment on column MANAGEMENT_FOLLOW_UP.ID_EPIS_ENCOUNTER
+  is 'Id epis encounter';
+comment on column MANAGEMENT_FOLLOW_UP.TIME_SPENT
+  is 'time spent in encounter';
+comment on column MANAGEMENT_FOLLOW_UP.FLG_STATUS
+  is 'status A - Active; O - Outdated; C - Canceled';
+comment on column MANAGEMENT_FOLLOW_UP.ID_UNIT_TIME
+  is 'Id unit time';
+comment on column MANAGEMENT_FOLLOW_UP.DT_REGISTER
+  is 'creation date';
+comment on column MANAGEMENT_FOLLOW_UP.NOTES
+  is 'notes';
+comment on column MANAGEMENT_FOLLOW_UP.ID_CANCEL_REASON
+  is 'id cancel reason';
+comment on column MANAGEMENT_FOLLOW_UP.NOTES_CANCEL
+  is 'cancelation notes';
+comment on column MANAGEMENT_FOLLOW_UP.ID_PARENT
+  is 'Id parent related';
+comment on column MANAGEMENT_FOLLOW_UP.CREATE_USER
+  is 'Creation User';
+comment on column MANAGEMENT_FOLLOW_UP.CREATE_TIME
+  is 'Creation Time';
+comment on column MANAGEMENT_FOLLOW_UP.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column MANAGEMENT_FOLLOW_UP.UPDATE_USER
+  is 'Update User';
+comment on column MANAGEMENT_FOLLOW_UP.UPDATE_TIME
+  is 'Update Time';
+comment on column MANAGEMENT_FOLLOW_UP.UPDATE_INSTITUTION
+  is 'Update Institution';
+comment on column MANAGEMENT_FOLLOW_UP.ID_PROFESSIONAL
+  is 'Follow up registered by (professional identifier)';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 22/03/2010 17:07
+-- CHANGE REASON: [ALERT-69945] social harmless ddl - management_follow_up
+alter table management_follow_up modify (id_epis_encounter null);
+alter table management_follow_up add (dt_start timestamp with local time zone, dt_next_encounter timestamp with local time zone);
+
+comment on column management_follow_up.dt_start
+  is 'Followup notes start date.';
+comment on column management_follow_up.dt_next_encounter
+  is 'Followup notes next encounter date.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 25/03/2014 14:18
+-- CHANGE REASON: [ALERT-279856] 
+alter table management_follow_up add (FLG_END_FOLLOWUP VARCHAR2(1));
+
+comment on column management_follow_up.FLG_END_FOLLOWUP
+  is 'Followup End (Y/N).';
+  
+
+alter table management_follow_up add (ID_OPINION_TYPE NUMBER(24));
+
+comment on column management_follow_up.ID_OPINION_TYPE
+  is 'Opinion Type';
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 17/09/2014 14:30
+-- CHANGE REASON: [ALERT-294551 ] 
+-- Add/modify columns 
+alter table MANAGEMENT_FOLLOW_UP add dt_next_enc_precision VARCHAR2(1 CHAR);
+-- Add comments to the columns 
+comment on column MANAGEMENT_FOLLOW_UP.dt_next_enc_precision
+  is 'Next encounter date precision Y-Year, M-month, D-day, H-hour(always with minutes and seconds), U-unknown date';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table MANAGEMENT_FOLLOW_UP modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table MANAGEMENT_FOLLOW_UP modify NOTES_CANCEL varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table MANAGEMENT_FOLLOW_UP modify FLG_STATUS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table MANAGEMENT_FOLLOW_UP modify FLG_END_FOLLOWUP varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table MANAGEMENT_FOLLOW_UP modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 11/03/2020 17:29
+-- CHANGE REASON: [EMR-27645] - DB Development US5
+alter table management_follow_up
+ADD  id_opinion number(24);
+/
+-- CHANGE END: Diogo Oliveira

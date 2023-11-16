@@ -1,0 +1,38 @@
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/10/2018 14:35
+-- CHANGE REASON: [EMR-7652] 
+ALTER TABLE BLOOD_PRODUCT_EXECUTION 
+ADD CONSTRAINT BPE_PK PRIMARY KEY (ID_BLOOD_PRODUCT_EXECUTION);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 11/02/2020 11:41
+-- CHANGE REASON: [EMR-26250] - Improvements in the transport starting and transfusions starting screens.
+DECLARE
+l_sql VARCHAR2(4000);
+BEGIN
+
+l_sql := q'[alter table blood_product_execution add constraint BPE_FC_CHK check (FLG_CONDITION IN ('Y','N'))
+novalidate]';
+
+pk_versioning.run(l_sql);
+
+END;
+/
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 17/02/2020 12:23
+-- CHANGE REASON: [EMR-26921] - Ability to automatically request a lab sample collection for the mother of a newborn (until 7 days old) needing a transfusion
+DECLARE
+l_sql VARCHAR2(4000);
+BEGIN
+
+l_sql := q'[alter table blood_product_execution add constraint BPE_FLM_CHK check (FLG_LAB_MOTHER IN ('Y','N'))
+novalidate]';
+
+pk_versioning.run(l_sql);
+
+END;
+/
+-- CHANGE END: Diogo Oliveira

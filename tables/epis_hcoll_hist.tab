@@ -1,0 +1,59 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 22:36
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+CREATE TABLE EPIS_HCOLL_HIST
+(
+   ID_EPIS_HID_COLLECTOR  NUMBER(24) NOT NULL,
+   DT_EPIS_HCOLL_HIST     TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+   ID_EPIS_HIDRICS        NUMBER(24) NOT NULL,
+   ID_EPIS_HIDRICS_LINE   NUMBER(24) NOT NULL,
+   FLG_LEVEL_CONTROL      VARCHAR2(1 CHAR) NOT NULL,
+   DT_BEGIN               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   DT_END                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   CURR_LEVEL             NUMBER(24),
+   FLG_RESTART            VARCHAR2(1 CHAR),
+   ID_PROF                NUMBER(24) NOT NULL,
+   DT_EPIS_HID_COLLECTOR  TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+   CREATE_USER            VARCHAR2(24),
+   CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   CREATE_INSTITUTION     NUMBER(24),
+   UPDATE_USER            VARCHAR2(24),
+   UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   UPDATE_INSTITUTION     NUMBER(24)
+);
+
+ALTER TABLE EPIS_HCOLL_HIST MOVE TABLESPACE TABLE_M;
+
+comment on table EPIS_HCOLL_HIST is 'Collector data';
+
+comment on column EPIS_HCOLL_HIST.ID_EPIS_HID_COLLECTOR is 'Part of primary key';
+comment on column EPIS_HCOLL_HIST.DT_EPIS_HCOLL_HIST is 'Part of primary key';
+comment on column EPIS_HCOLL_HIST.ID_EPIS_HIDRICS is 'Epis Hidrics';
+comment on column EPIS_HCOLL_HIST.ID_EPIS_HIDRICS_LINE is 'Epis Hidrics Line';
+comment on column EPIS_HCOLL_HIST.FLG_LEVEL_CONTROL is 'Is to performe level control? Y - Yes; N - No;';
+comment on column EPIS_HCOLL_HIST.DT_BEGIN is 'Begin date of collector';
+comment on column EPIS_HCOLL_HIST.DT_END is 'End date of collector';
+comment on column EPIS_HCOLL_HIST.CURR_LEVEL is 'Current level;';
+comment on column EPIS_HCOLL_HIST.FLG_RESTART is 'Collector was changed? Y - Yes; N - No;';
+comment on column EPIS_HCOLL_HIST.ID_PROF is 'User who create/changed the record';
+comment on column EPIS_HCOLL_HIST.DT_EPIS_HID_COLLECTOR is 'Record date';
+comment on column EPIS_HCOLL_HIST.CREATE_USER is 'Creation User';
+comment on column EPIS_HCOLL_HIST.CREATE_TIME is 'Creation Time';
+comment on column EPIS_HCOLL_HIST.CREATE_INSTITUTION is 'Creation Institution';
+comment on column EPIS_HCOLL_HIST.UPDATE_USER is 'Update User';
+comment on column EPIS_HCOLL_HIST.UPDATE_TIME is 'Update Time';
+comment on column EPIS_HCOLL_HIST.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:22
+-- CHANGE REASON: [ALERT-153427] Intake and Output-Have the possibility to register bowel movements.
+alter table epis_hcoll_hist modify ( create_user  varchar2(24 char));
+alter table epis_hcoll_hist modify ( update_user  varchar2(24 char));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 18/04/2016 12:03
+-- CHANGE REASON: [ALERT-320093] PIN Intake and Output improvements - DB Development
+ALTER TABLE epis_hcoll_hist MODIFY (curr_level NUMBER(26,2));
+-- CHANGE END: Vanessa Barsottelli

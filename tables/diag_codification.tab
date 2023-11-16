@@ -1,0 +1,74 @@
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 23/07/2012 10:51
+-- CHANGE REASON: [ALERT-236974] Associate ID_CODIFICATION with diagnoses standards
+BEGIN
+pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'DIAG_CODIFICATION', i_obj_type => 'TABLE', i_flg_category => 'CNT', i_flg_nzd => 'N');
+END;
+/
+
+BEGIN
+EXECUTE IMMEDIATE 'create table diag_codification
+(
+  FLG_DIAG_TYPE VARCHAR2(1 CHAR) NOT NULL,
+  ID_CODIFICATION NUMBER(24) NOT NULL
+) tablespace TABLE_S';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/ 
+
+
+COMMENT ON TABLE diag_codification IS 'Association between diagnosis codifications and generic codifications';
+
+COMMENT ON COLUMN diag_codification.FLG_DIAG_TYPE IS 'Diagnosis type (refers to FLG_TYPE column on DIAGNOSIS table)';
+COMMENT ON COLUMN diag_codification.ID_CODIFICATION IS 'Codification ID associated with the standard being used';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table DIAG_CODIFICATION add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column diag_codification.create_user IS 'Creation User';
+COMMENT ON column diag_codification.create_time IS 'Creation Time';
+COMMENT ON column diag_codification.create_institution IS 'Creation Institution';
+COMMENT ON column diag_codification.update_user IS 'Update User';
+COMMENT ON column diag_codification.update_time IS 'Update Time';
+COMMENT ON column diag_codification.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table diag_codification add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column diag_codification.create_user IS 'Creation User';
+COMMENT ON column diag_codification.create_time IS 'Creation Time';
+COMMENT ON column diag_codification.create_institution IS 'Creation Institution';
+COMMENT ON column diag_codification.update_user IS 'Update User';
+COMMENT ON column diag_codification.update_time IS 'Update Time';
+COMMENT ON column diag_codification.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

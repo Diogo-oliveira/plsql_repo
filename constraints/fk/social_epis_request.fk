@@ -1,0 +1,27 @@
+
+
+  ALTER TABLE SOCIAL_EPIS_REQUEST ADD CONSTRAINT SERT_PROF_FK FOREIGN KEY (ID_PROFESSIONAL)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE SOCIAL_EPIS_REQUEST ADD CONSTRAINT SERT_SEE_FK FOREIGN KEY (ID_SOCIAL_EPISODE)
+	  REFERENCES SOCIAL_EPISODE (ID_SOCIAL_EPISODE) ENABLE;
+
+
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 24/03/2010 11:18
+-- CHANGE REASON: [ALERT-83146] social_epis_request
+alter table social_epis_request
+  add constraint sert_epis_orig_fk foreign key (id_episode_origin)
+  references episode (id_episode);
+alter table social_epis_request
+  add constraint sert_prof_ans_fk foreign key (id_prof_answer)
+  references professional (id_professional);
+alter table social_epis_request
+  add constraint sert_cid_fk foreign key (id_cancel_info_det)
+  references cancel_info_det (id_cancel_info_det);
+alter table social_epis_request
+  add constraint sert_epis_fk foreign key (id_episode)
+  references episode (id_episode);
+-- CHANGE END: Pedro Carneiro

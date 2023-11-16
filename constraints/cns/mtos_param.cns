@@ -1,0 +1,29 @@
+ALTER TABLE mtos_param ADD CONSTRAINT MPM_PK PRIMARY KEY (id_mtos_param) ENABLE;
+ALTER TABLE mtos_param ADD CONSTRAINT MPM_FLGAVAILABLE_CHK CHECK(flg_available IN ('Y', 'N'));
+ALTER TABLE mtos_param ADD CONSTRAINT MPM_FLGFILLTYPE_CHK CHECK(flg_fill_type IN ('M', 'N', 'L', 'T'));
+
+-- Create/Recreate check constraints 
+alter table MTOS_PARAM drop constraint MPM_FLGFILLTYPE_CHK;
+alter table MTOS_PARAM add constraint MPM_FLGFILLTYPE_CHK check (flg_fill_type IN ('M', 'N', 'L', 'T', 'R'));
+alter table MTOS_PARAM add constraint MPM_MSG_FK foreign key (ID_MTOS_SCORE_GROUP) references MTOS_SCORE_GROUP (ID_MTOS_SCORE_GROUP);
+alter table MTOS_PARAM add constraint MPM_VSN_FK foreign key (ID_VITAL_SIGN) references VITAL_SIGN (ID_VITAL_SIGN);
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 05/11/2010 14:18
+-- CHANGE REASON: [ALERT-138136] 
+alter table MTOS_PARAM drop constraint MPM_FLGFILLTYPE_CHK;
+alter table MTOS_PARAM add constraint MPM_FLGFILLTYPE_CHK check (flg_fill_type IN ('M', 'N', 'L', 'T', 'R'));
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 23/08/2013 14:53
+-- CHANGE REASON: [ALERT-262898] 
+BEGIN
+    EXECUTE IMMEDIATE 'alter table MTOS_PARAM drop constraint MPM_FLGFILLTYPE_CHK';
+    EXECUTE IMMEDIATE 'alter table MTOS_PARAM add constraint MPM_FLGFILLTYPE_CHK check (flg_fill_type IN (''M'', ''N'', ''L'', ''T'', ''R'',''V'',''P'',''B''))';
+		
+exception when others then
+  dbms_output.put_line('ALTER TABLE mtos_param ADD constraint ERROR!');
+end;
+/
+-- CHANGE END: mario.mineiro

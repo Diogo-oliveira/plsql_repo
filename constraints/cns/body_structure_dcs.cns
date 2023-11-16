@@ -1,0 +1,43 @@
+-- ADDED BY: Jose Castro
+-- ADDED DATE: 25/05/2010
+-- ADDED REASON: ALERT-14487
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table BODY_STRUCTURE_DCS
+  add constraint BST_PK primary key (ID_BODY_STRUCTURE_DCS);
+
+alter table BODY_STRUCTURE_DCS
+  add constraint BST_UK unique (ID_BODY_STRUCTURE, ID_DEP_CLIN_SERV, ID_INSTITUTION, FLG_AVAILABLE, FLG_DEFAULT);
+
+-- Create/Recreate check constraints 
+alter table BODY_STRUCTURE_DCS
+  add constraint BST_FLG_AVAILABLE
+  check (FLG_AVAILABLE IN ('Y', 'N'));
+alter table BODY_STRUCTURE_DCS
+  add constraint BST_FLG_DEFAULT
+  check (FLG_DEFAULT IN ('Y', 'N'));
+-- ADDED END
+
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE BODY_STRUCTURE_DCS ADD CONSTRAINT BST_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint BST_FLG_AVAILABLE_CHK table BODY_STRUCTURE_DCS column FLG_AVAILABLE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE BODY_STRUCTURE_DCS ADD CONSTRAINT BST_FLG_DEFAULT_CHK CHECK (FLG_DEFAULT IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint BST_FLG_DEFAULT_CHK table BODY_STRUCTURE_DCS column FLG_DEFAULT: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto

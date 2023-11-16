@@ -1,0 +1,7 @@
+CREATE OR REPLACE FORCE VIEW ALERT.V_CMT_TRANSLATION_LOB AS
+SELECT tl."ID_TRANSLATION",tl."CODE_TRANSLATION",tl."DESC_LANG_1",tl."DESC_LANG_2",tl."DESC_LANG_3",tl."DESC_LANG_4",tl."DESC_LANG_5",tl."DESC_LANG_6",tl."DESC_LANG_7",tl."DESC_LANG_8",tl."DESC_LANG_9",tl."DESC_LANG_10",tl."DESC_LANG_11",tl."DESC_LANG_12",tl."DESC_LANG_13",tl."DESC_LANG_14",tl."DESC_LANG_15",tl."DESC_LANG_16",tl."DESC_LANG_17",tl."DESC_LANG_18",tl."DESC_LANG_19",tl."DESC_LANG_20",tl."DESC_LANG_21",tl."DESC_LANG_22",tl."TABLE_NAME"
+  FROM translation_lob tl
+  JOIN trl_versioning tv
+    ON tl.table_name = tv.table_name
+ WHERE tv.flg_translatable = 'Y';
+

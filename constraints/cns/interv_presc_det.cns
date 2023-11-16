@@ -1,0 +1,131 @@
+
+
+  ALTER TABLE INTERV_PRESC_DET ADD CONSTRAINT IPD_PK PRIMARY KEY (ID_INTERV_PRESC_DET) ENABLE;
+
+  ALTER TABLE INTERV_PRESC_DET MODIFY (ID_INTERV_PRESC_DET NOT NULL ENABLE);
+
+  ALTER TABLE INTERV_PRESC_DET MODIFY (ID_INTERV_PRESCRIPTION NOT NULL ENABLE);
+
+  ALTER TABLE INTERV_PRESC_DET MODIFY (ID_INTERVENTION NOT NULL ENABLE);
+
+  ALTER TABLE INTERV_PRESC_DET MODIFY (FLG_INTERV_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE INTERV_PRESC_DET MODIFY (FLG_STATUS NOT NULL ENABLE);
+
+
+
+-- CHANGE BY: Rita LOpes
+-- CHANGE REASON: Acrescentar check constraint
+-- CHANGE DATE: 20080704
+
+alter table INTERV_PRESC_DET
+  add constraint IPD_FLGSTATUSCHANGE_CK
+  check (flg_status_change IN ('B','H','Q','T','U'));
+
+-- CHANGE END
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/09/2009 17:45
+-- CHANGE REASON: [ALERT-42947] New feature ALERT 910 MCDT INTERNAL EXTERNAL
+alter table interv_presc_det add constraint IPD_FLG_REFERRAL_CHK check (flg_referral in ('A', 'R', 'S', 'I'));
+-- CHANGE END: João Martins
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 11/04/2011 15:19
+-- CHANGE REASON: [ALERT-163522] 
+begin
+alter table INTERV_PRESC_DET
+  add constraint IPD_CRN_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/04/2011 12:27
+-- CHANGE REASON: [ALERT-163522] 
+
+alter table INTERV_PRESC_DET
+  add constraint IPD_CRN_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/04/2011 12:28
+-- CHANGE REASON: [ALERT-163522] 
+
+alter table INTERV_PRESC_DET
+  add constraint IPD_CRN_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 01/10/2012 17:18
+-- CHANGE REASON: [ALERT-241269 ] 
+DECLARE
+    e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE interv_presc_det add CONSTRAINT IPD_FLG_LATERALITY_CHK CHECK(flg_laterality IN (''N'', ''B'', ''L'', ''R''))';
+
+EXCEPTION
+    WHEN e_constraint_already_there THEN
+        NULL;
+    
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/03/2013 16:28
+-- CHANGE REASON: [ALERT-253717 ] 
+DECLARE
+
+    e_cns_non_existent EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_cns_non_existent, -02443);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE ' ALTER TABLE interv_presc_det drop CONSTRAINT ipd_flg_laterality_chk';
+    
+    EXCEPTION
+        WHEN e_cns_non_existent THEN
+            NULL;
+    END;
+
+    EXECUTE IMMEDIATE ' ALTER TABLE interv_presc_det add CONSTRAINT ipd_flg_laterality_chk CHECK(flg_laterality IN
+                                                                             (''N'', ''B'', ''L'', ''R'', ''Z''))';
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 16/04/2013 15:46
+-- CHANGE REASON: [ALERT-255084] 
+DECLARE
+    e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE interv_presc_det add CONSTRAINT IPD_FLG_CLINICAL_PURPOSE_CHK CHECK(FLG_CLINICAL_PURPOSE IN (''N'', ''T'', ''S'', ''P'',''R'', ''O''))';
+
+EXCEPTION
+    WHEN e_constraint_already_there THEN
+        NULL;
+    
+END; 
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/11/2016 09:49
+-- CHANGE REASON: [ALERT-326507] 
+begin
+pk_versioning.run('ALTER TABLE INTERV_PRESC_DET DROP CONSTRAINT IPD_FLG_REQ_ORIGIN_MODULE_CHK');
+end;
+/
+
+begin
+pk_versioning.run('ALTER TABLE INTERV_PRESC_DET ADD CONSTRAINT IPD_FLG_REQ_ORIGIN_MODULE_CHK CHECK (flg_req_origin_module IN (''D'', ''E'', ''I'', ''S'', ''C'', ''P'', ''O'', ''R'', ''M''))');
+end;
+/
+-- CHANGE END: Ana Matos

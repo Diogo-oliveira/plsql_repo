@@ -1,0 +1,72 @@
+
+
+  CREATE TABLE EMB_DEP_CLIN_SERV
+   (	ID_EMB_DEP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	EMB_ID NUMBER(10,0),
+	QTY NUMBER(2,0),
+	DOSAGE VARCHAR2(100),
+	ID_DEP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	RANK NUMBER(2,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0),
+	GENERICO VARCHAR2(1),
+	ID_DIETARY_DRUG NUMBER(24,0),
+	ID_MANIPULATED NUMBER(24,0)
+
+   );
+
+
+COMMENT ON COLUMN emb_dep_clin_serv.id_emb_dep_clin_serv IS 'Chave primária.' ;
+COMMENT ON COLUMN emb_dep_clin_serv.emb_id IS 'ID da embalagem.' ;
+COMMENT ON COLUMN emb_dep_clin_serv.qty IS 'Quantidades mais frequentes dos medicamentos mais frequentes.' ;
+COMMENT ON COLUMN emb_dep_clin_serv.dosage IS 'Posologias mais frequentes dos medicamentos mais frequentes.' ;
+COMMENT ON COLUMN emb_dep_clin_serv.id_dep_clin_serv IS 'ID do departamento e serviço clínico para o qual a embalagem é mais frequente.' ;
+COMMENT ON COLUMN emb_dep_clin_serv.rank IS 'Rank.' ;
+COMMENT ON COLUMN emb_dep_clin_serv.id_software IS 'ID do software.' ;
+COMMENT ON COLUMN emb_dep_clin_serv.id_professional IS 'ID do profissional para o qual a embalagem é mais frequente.' ;
+COMMENT ON COLUMN emb_dep_clin_serv.generico IS 'Indicação se autoriza genérico (Y) ou não (N).' ;
+COMMENT ON COLUMN emb_dep_clin_serv.id_dietary_drug IS 'ID do dietético.' ;
+COMMENT ON COLUMN emb_dep_clin_serv.id_manipulated IS 'ID do manipulado.' ;
+
+ALTER TABLE EMB_DEP_CLIN_SERV 
+ ADD (ID_INSTITUTION NUMBER(12));
+
+COMMENT ON COLUMN EMB_DEP_CLIN_SERV.ID_INSTITUTION IS 'ID da instituição onde o medicamento é pesquisável; preenchida apenas quando FLG_TYPE = ''P''';
+
+alter table EMB_DEP_CLIN_SERV
+modify (ID_DEP_CLIN_SERV NUMBER(24,0) NULL);
+
+-- CHANGED REASON: Backoffice Medication 
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 28/03/2009
+ALTER TABLE emb_dep_clin_serv ADD QTY_INST NUMBER(24, 4);
+ALTER TABLE emb_dep_clin_serv ADD FREQUENCY NUMBER(24, 4);
+ALTER TABLE emb_dep_clin_serv ADD DURATION NUMBER(24, 4);
+ALTER TABLE emb_dep_clin_serv ADD UNIT_MEASURE_INST NUMBER(24);
+ALTER TABLE emb_dep_clin_serv ADD UNIT_MEASURE_FREQ NUMBER(24);
+ALTER TABLE emb_dep_clin_serv ADD UNIT_MEASURE_DUR NUMBER(24);
+
+COMMENT ON COLUMN emb_dep_clin_serv.QTY_INST IS 'Quantidade';
+COMMENT ON COLUMN emb_dep_clin_serv.UNIT_MEASURE_INST IS 'Unidade de medida da quantidade'; 
+COMMENT ON COLUMN emb_dep_clin_serv.FREQUENCY IS 'Frequência'; 
+COMMENT ON COLUMN emb_dep_clin_serv.UNIT_MEASURE_FREQ IS 'Unidade de medida da frequência'; 
+COMMENT ON COLUMN emb_dep_clin_serv.DURATION IS 'Duração'; 
+COMMENT ON COLUMN emb_dep_clin_serv.UNIT_MEASURE_DUR IS 'Unidade de medida da duração'; 
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 2009-JUL-10
+-- CHANGE REASON: ALERT-35531
+
+alter table EMB_DEP_CLIN_SERV modify EMB_ID VARCHAR2(255); 
+
+-- CHANGED END
+
+-- CHANGED BY:  NELSON CANASTRO
+-- CHANGE DATE: 17/08/2010 09:55
+-- CHANGE REASON: [ALERT-106585] 
+ALTER TABLE EMB_DEP_CLIN_SERV 
+ ADD (ID_PRESC_DIRECTIONS NUMBER(24));
+COMMENT ON COLUMN EMB_DEP_CLIN_SERV.ID_PRESC_DIRECTIONS IS 'Prescription directions ID';
+-- CHANGE END:  NELSON CANASTRO

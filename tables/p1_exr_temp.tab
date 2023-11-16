@@ -1,0 +1,202 @@
+
+  CREATE TABLE "ALERT"."P1_EXR_TEMP"
+   (	"ID_EXR_TEMP" NUMBER(24,0),
+	"ID_EXTERNAL_REQUEST" NUMBER(24,0),
+	"ID_INSTITUTION" NUMBER(24,0),
+	"FLG_PRIORITY" VARCHAR2(1),
+	"FLG_HOME" VARCHAR2(1),
+	"ID_ANALYSIS" NUMBER(12,0),
+	"ID_ANALYSIS_REQ_DET" NUMBER(24,0),
+	"ID_EXAM" NUMBER(12,0),
+	"ID_EXAM_REQ_DET" NUMBER(24,0),
+	"ID_INTERVENTION" NUMBER(24,0),
+	"ID_INTERV_PRESC_DET" NUMBER(24,0)
+   ) ;
+
+
+   COMMENT ON COLUMN "ALERT"."P1_EXR_TEMP"."ID_EXR_TEMP" IS 'Primary key';
+
+   COMMENT ON COLUMN "ALERT"."P1_EXR_TEMP"."ID_EXTERNAL_REQUEST" IS 'Id of p1_external_request';
+
+   COMMENT ON COLUMN "ALERT"."P1_EXR_TEMP"."ID_INSTITUTION" IS 'Id of institution';
+
+   COMMENT ON COLUMN "ALERT"."P1_EXR_TEMP"."FLG_PRIORITY" IS 'Priority Y/N';
+
+   COMMENT ON COLUMN "ALERT"."P1_EXR_TEMP"."FLG_HOME" IS 'Home (Y/N)';
+
+   COMMENT ON COLUMN "ALERT"."P1_EXR_TEMP"."ID_ANALYSIS" IS 'Id of analysis';
+
+   COMMENT ON COLUMN "ALERT"."P1_EXR_TEMP"."ID_ANALYSIS_REQ_DET" IS 'Id of analysis_req_det';
+
+   COMMENT ON COLUMN "ALERT"."P1_EXR_TEMP"."ID_EXAM" IS 'Id of exam';
+
+   COMMENT ON COLUMN "ALERT"."P1_EXR_TEMP"."ID_EXAM_REQ_DET" IS 'Id of exam_req_det';
+
+   COMMENT ON COLUMN "ALERT"."P1_EXR_TEMP"."ID_INTERVENTION" IS 'Id  of intervention';
+
+   COMMENT ON COLUMN "ALERT"."P1_EXR_TEMP"."ID_INTERV_PRESC_DET" IS 'Id of interv_presc_det';
+
+   COMMENT ON TABLE "ALERT"."P1_EXR_TEMP"  IS 'Temporary requests';
+
+
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 11/09/2009 19:33
+-- CHANGE REASON: [ALERT-910] 
+ALTER TABLE P1_EXR_TEMP ADD (CONSTRAINT
+ PEP_COF_FK FOREIGN KEY 
+  (ID_CODIFICATION) REFERENCES CODIFICATION
+  (ID_CODIFICATION));
+
+CREATE INDEX PEP_COF_FK_I ON P1_EXR_TEMP
+ (ID_CODIFICATION);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 14/09/2009 16:59
+-- CHANGE REASON: [ALERT-43086] 
+alter table P1_EXR_TEMP add id_codification NUMBER(24);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 16/06/2011 15:18
+-- CHANGE REASON: [ALERT-182176] 
+alter table P1_EXR_TEMP add id_rehab_presc NUMBER(24);
+comment on column P1_EXR_TEMP.id_rehab_presc is 'Rehabilitation procedures prescriptions ID';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 12/09/2011 16:36
+-- CHANGE REASON: [ALERT-194915 ] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns
+     WHERE table_name = 'P1_EXR_TEMP'
+       AND column_name = 'AMOUNT';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_temp ADD ( amount number(2) )';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 13/09/2011 09:31
+-- CHANGE REASON: [ALERT-194915 ] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns
+     WHERE table_name = 'P1_EXR_TEMP'
+       AND column_name = 'AMOUNT';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_temp ADD ( amount number(2) DEFAULT 1 )';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns
+     WHERE table_name = 'P1_EXR_TEMP'
+       AND column_name = 'AMOUNT';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_temp ADD ( amount number(2) DEFAULT 1 )';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 23/09/2012 22:36
+-- CHANGE REASON: [ALERT-240371] 
+Alter table p1_exr_temp add( flg_ALD VARCHAR2(1 CHAR) default 'N');
+Alter table p1_exr_temp MODIFY( flg_ALD VARCHAR2(1 CHAR) default 'N' not null);
+comment on column P1_EXR_TEMP.flg_ALD  is 'Chronic disease (Y/N)';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/11/2012 16:44
+-- CHANGE REASON: [ALERT-245662] 
+alter table p1_exr_temp add 
+  id_sample_type         NUMBER(12);
+  
+comment on column p1_exr_temp.id_sample_type
+  is  'Sample type id';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 03/12/2012 17:17
+-- CHANGE REASON: [ALERT-246252] 
+ALTER TABLE p1_exr_temp modify (ID_SAMPLE_TYPE NUMBER(12) NOT NULL);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 21/12/2012 16:39
+-- CHANGE REASON: [ALERT-248066 ] 
+comment on column p1_exr_temp.flg_priority
+  is 'Y-Urgent,  N-Not urgent, 0-Priority zero, 1-Priority one, 2-Priority two, 3-Priority tree';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 13/08/2013 16:21
+-- CHANGE REASON: [ALERT-263123] 
+comment on column p1_exr_temp.flg_priority
+  is 'Y-Urgent, N-Routine, W-2WW, U-urgent, R-Routine,  0-Priority zero, 1-Priority one, 2-Priority two, 3-Priority tree';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 16/09/2013 17:02
+-- CHANGE REASON: [ALERT-265105 ] 
+comment on column p1_exr_temp.flg_priority
+  is 'Y-Urgent, N-Routine, W-2WW, U-urgent, R-Routine,  0-Priority zero, 1-Priority one, 2-Priority two, 3-Priority tree, X-RTT - 62 day , Z - RTT - 18 week';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on column P1_EXR_TEMP.flg_priority
+  is 'Y - Urgent; N - Routine; W-2WW; U - Urgent; R - Routine; 0 - Priority zero; 1 - Priority one; 2 - Priority two; 3 - Priority tree; X-RTT - 62 day; Z - RTT - 18 week';
+comment on column P1_EXR_TEMP.id_codification
+  is 'Used code set';
+comment on column P1_EXR_TEMP.amount
+  is 'Number of items';
+comment on column P1_EXR_TEMP.flg_ald
+  is 'Is chronic disease? Y/N';
+
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 05/05/2021 15:02
+-- CHANGE REASON: [EMR-44727] - ESP Certification 2020
+alter table p1_exr_temp
+add REASON VARCHAR2(1000 CHAR);
+
+COMMENT ON COLUMN p1_exr_temp.REASON IS 'Reason field from the referral form';
+
+alter table p1_exr_temp
+add COMPLEMENTARY_INFORMATION VARCHAR2(1000 CHAR);
+
+COMMENT ON COLUMN p1_exr_temp.COMPLEMENTARY_INFORMATION IS 'Complementary information field from the referral form';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 05/05/2021 16:02
+-- CHANGE REASON: [EMR-44727]
+ALTER TABLE p1_exr_temp ADD id_group NUMBER(24);
+-- CHANGE END: Pedro Henriques

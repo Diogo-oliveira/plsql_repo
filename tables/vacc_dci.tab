@@ -1,0 +1,55 @@
+-- Create table
+create table VACC_DCI
+(
+  ID_VACC_DCI NUMBER(12) not null,
+  ID_VACC     NUMBER(12) not null,
+  ID_DCI      VARCHAR2(255) not null
+);
+-- Add comments to the table 
+comment on table VACC_DCI
+  is 'Esta tabela permite associar os registo da tabela VACC com os respectivos códigos DCI.';
+-- Add comments to the columns 
+comment on column VACC_DCI.ID_VACC_DCI
+  is 'Chave primária da tabela';
+comment on column VACC_DCI.ID_VACC
+  is 'ID da tabela VACC';
+comment on column VACC_DCI.ID_DCI
+  is 'DCI ID';
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2009-05-04
+-- CHANGE REASON: ALERT-26735
+alter table vacc_dci modify (ID_VACC NUMBER(24));
+alter table vacc_dci modify (ID_VACC_DCI NUMBER(24));
+-- CHANGE END
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 19/01/2011 12:39
+-- CHANGE REASON: [ALERT-156485] 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE alert.vacc_dci add CONSTRAINT vacc_dci_pk primary key(id_vacc_dci, id_vacc, id_dci) USING INDEX tablespace INDEX_M';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Teixeira
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 14:38
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON TABLE VACC_DCI IS 'Table with all associations between vaccines and INN codes';
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 14:40
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON COLUMN VACC_DCI.ID_VACC_DCI IS 'Configuration Key';
+/
+COMMENT ON COLUMN VACC_DCI.ID_VACC IS 'Vaccine ID';
+/
+COMMENT ON COLUMN VACC_DCI.ID_DCI IS 'International Nonproprietary Name ID';
+/
+-- CHANGE END: Sofia Mendes

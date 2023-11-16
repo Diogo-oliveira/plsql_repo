@@ -1,0 +1,35 @@
+-- Create table
+create table LOCATION
+(
+  ID_LOCATION   NUMBER(24) not null,
+  ID_INSTITUION NUMBER(24) not null,
+  ID_ROUTE      NUMBER(24) not null,
+  CODE_LOCATION VARCHAR2(200),
+  FLG_AVAILABLE VARCHAR2(1),
+  ADW_DATE      DATE
+)
+;
+-- Add comments to the table 
+comment on table LOCATION
+  is 'Tabela de localizações possiveis do carro unidose';
+-- Add comments to the columns 
+comment on column LOCATION.ID_LOCATION
+  is 'ID da tabela';
+comment on column LOCATION.ID_INSTITUION
+  is 'ID da intituição';
+omment on column LOCATION.ID_ROUTE
+  is 'ID dO cricuito';
+comment on column LOCATION.CODE_LOCATION
+  is 'Nome da localização';
+comment on column LOCATION.FLG_AVAILABLE
+  is 'Disponibilização do registo';
+comment on column LOCATION.ADW_DATE
+  is 'Data do registo';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table LOCATION
+  add constraint ID_LOCATION primary key (ID_LOCATION)
+  using index 
+;
+alter table LOCATION
+  add constraint ID_INSTITUION foreign key (ID_INSTITUION)
+  references INSTITUTION (ID_INSTITUTION);

@@ -1,0 +1,93 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 18/07/2014 16:41
+-- CHANGE REASON: [ALERT-290969] Nursing Care Plan: NANDA, NIC, NOC - Data Model
+
+BEGIN
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'NOC_OUTCOME', i_obj_type => 'TABLE', i_flg_category => 'CNT', i_flg_alert_default => 'N', i_delete_script => '', i_flg_default_child => 'N', i_flg_nzd => 'N', i_responsible_team => 'NURSING');
+END;
+/
+CREATE TABLE NOC_OUTCOME
+  (
+    ID_NOC_OUTCOME         NUMBER (24) NOT NULL ,
+    ID_TERMINOLOGY_VERSION NUMBER (24) NOT NULL ,
+    OUTCOME_CODE           NUMBER (24) NOT NULL ,
+    CODE_NAME              VARCHAR2 (200 CHAR) AS ( 'NOC_OUTCOME.CODE_NAME.'
+    ||TO_CHAR(ID_NOC_OUTCOME) ) VIRTUAL NOT NULL ,
+    CODE_DEFINITION VARCHAR2 (200 CHAR) AS ( 'NOC_OUTCOME.CODE_DEFINITION.'
+    ||TO_CHAR(ID_NOC_OUTCOME) ) VIRTUAL NOT NULL ,
+    REFERENCES CLOB ,
+    ID_INST_OWNER      NUMBER (24) ,
+    ID_CONCEPT_VERSION NUMBER (24) ,
+    ID_CONCEPT_TERM    NUMBER (24) ,
+    ID_NOC_CLASS       NUMBER (24) NOT NULL ,
+    ID_NOC_SCALE       NUMBER (24) NOT NULL ,
+    CREATE_USER        VARCHAR2 (30 CHAR) ,
+    CREATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE ,
+    CREATE_INSTITUTION NUMBER (24) ,
+    UPDATE_USER        VARCHAR2 (30 CHAR) ,
+    UPDATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE ,
+    UPDATE_INSTITUTION NUMBER (24)
+  )
+  TABLESPACE ALERT_DATA LOB
+  (
+    REFERENCES
+  )
+  STORE AS
+  (
+    TABLESPACE ALERT_LOB PCTVERSION 10 ENABLE STORAGE IN ROW NOCACHE
+  ) ;
+COMMENT ON TABLE NOC_OUTCOME
+IS
+  'NOC - Nursing Outcome' ;
+  COMMENT ON COLUMN NOC_OUTCOME.ID_NOC_OUTCOME
+IS
+  'NOC Outcome ID (surrogate key)' ;
+  COMMENT ON COLUMN NOC_OUTCOME.ID_TERMINOLOGY_VERSION
+IS
+  'NIC Version ID' ;
+  COMMENT ON COLUMN NOC_OUTCOME.OUTCOME_CODE
+IS
+  'NOC Outcome code in the standardized classification of nursing-sensitive patient outcomes.' ;
+  COMMENT ON COLUMN NOC_OUTCOME.CODE_NAME
+IS
+  'Translation code for NOC Outcome label' ;
+  COMMENT ON COLUMN NOC_OUTCOME.CODE_DEFINITION
+IS
+  'Translation code for NOC Outcome definition' ;
+  COMMENT ON COLUMN NOC_OUTCOME.REFERENCES
+IS
+  'Citation References related with the NOC Outcome' ;
+  COMMENT ON COLUMN NOC_OUTCOME.ID_INST_OWNER
+IS
+  'Institution owner of the concept. 0 - ALERT' ;
+  COMMENT ON COLUMN NOC_OUTCOME.ID_CONCEPT_VERSION
+IS
+  'Concept version ID' ;
+  COMMENT ON COLUMN NOC_OUTCOME.ID_CONCEPT_TERM
+IS
+  'Concept term ID' ;
+  COMMENT ON COLUMN NOC_OUTCOME.ID_NOC_CLASS
+IS
+  'NOC Class ID (surrogate key)' ;
+  COMMENT ON COLUMN NOC_OUTCOME.ID_NOC_SCALE
+IS
+  'Scale ID (surrogate key)' ;
+  COMMENT ON COLUMN NOC_OUTCOME.CREATE_USER
+IS
+  'Creation User' ;
+  COMMENT ON COLUMN NOC_OUTCOME.CREATE_TIME
+IS
+  'Creation Time' ;
+  COMMENT ON COLUMN NOC_OUTCOME.CREATE_INSTITUTION
+IS
+  'Creation Institution' ;
+  COMMENT ON COLUMN NOC_OUTCOME.UPDATE_USER
+IS
+  'Update User' ;
+  COMMENT ON COLUMN NOC_OUTCOME.UPDATE_TIME
+IS
+  'Update Time' ;
+  COMMENT ON COLUMN NOC_OUTCOME.UPDATE_INSTITUTION
+IS
+  'Update Institution' ;
+-- CHANGE END: Ariel Machado

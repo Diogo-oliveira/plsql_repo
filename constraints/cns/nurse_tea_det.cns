@@ -1,0 +1,41 @@
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 19/03/2010 20:00
+-- CHANGE REASON: [ALERT-81916] Data model
+ALTER TABLE NURSE_TEA_DET  ADD CONSTRAINT NTT_PK PRIMARY KEY (ID_NURSE_TEA_DET);
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Eduardo Reis
+-- CHANGE DATE: 28/04/2010
+-- CHANGE REASON: [ALERT-92954] Add column to save record creation date
+DECLARE
+    e_already_not_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01442); -- alter table modify
+BEGIN
+    execute immediate 'ALTER TABLE nurse_tea_det modify dt_nurse_tea_det_tstz NOT NULL';
+
+EXCEPTION
+    WHEN e_already_not_null THEN
+        NULL;
+END;
+/
+-- CHANGE END: Eduardo Reis
+
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 05/05/2011 11:43
+-- CHANGE REASON: [ALERT-176423] Patient education: check constraints
+alter table NURSE_TEA_DET add constraint NTD_FLG_STATUS_CHK check (FLG_STATUS IN ('D','E','C'));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 16/05/2013 16:40
+-- CHANGE REASON: [ALERT-250933] 
+begin
+pk_versioning.run(i_sql => 'ALTER TABLE NURSE_TEA_DET DROP CONSTRAINT NTD_FLG_STATUS_CHK');
+end;
+/
+begin
+pk_versioning.run(i_sql => 'ALTER TABLE NURSE_TEA_DET ADD (CONSTRAINT NTD_FLG_STATUS_CHK CHECK (FLG_STATUS IN (''D'', ''C'', ''E'', ''I'')))');
+end;
+/
+-- CHANGE END: Ana Matos

@@ -1,0 +1,23 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/04/2014 10:47
+-- CHANGE REASON: [ALERT-275664] 
+BEGIN
+pk_versioning.run(i_sql => q'[alter table COMM_ORDER_INSTR_DEF_MSI add constraint corsi_pk primary key (id_comm_order_instr_def_msi)]');
+pk_versioning.run(i_sql => q'[alter table COMM_ORDER_INSTR_DEF_MSI add constraint corsi_flg_priority_chk check (flg_priority in ('R','A','S'))]');
+pk_versioning.run(i_sql => q'[alter table COMM_ORDER_INSTR_DEF_MSI add constraint corsi_flg_prn_chk check (flg_prn in ('Y','N'))]');
+pk_versioning.run(i_sql => q'[alter table COMM_ORDER_INSTR_DEF_MSI add constraint corsi_prn_condition_chk check (flg_prn = 'Y' or (flg_prn = 'N' and (prn_condition is null or length(prn_condition) = 0)))]');
+pk_versioning.run(i_sql => q'[alter table COMM_ORDER_INSTR_DEF_MSI add constraint corsi_concept_chk check (
+(id_concept_type is not null and
+id_concept_version is not null and
+id_cncpt_vrs_inst_owner is not null and
+id_concept_term is not null and
+id_cncpt_trm_inst_owner is not null)
+or
+(id_concept_version is null and
+id_cncpt_vrs_inst_owner is null and
+id_concept_term is null and
+id_cncpt_trm_inst_owner is null)
+)]');
+END;
+/
+-- CHANGE END: Ana Monteiro

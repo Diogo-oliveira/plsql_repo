@@ -1,0 +1,53 @@
+create table ALERT.ADVANCED_INPUT_SOFT_INST
+(
+	ID_ADVANCED_INPUT_SOFT_INST NUMBER(24) not null,
+	ID_ADVANCED_INPUT NUMBER(24) not null,
+	ID_ADVANCED_INPUT_FIELD NUMBER(24) not null,
+	ID_INSTITUTION NUMBER(12) not null,
+	ID_SOFTWARE NUMBER(24) not null,
+	FLG_ACTIVE VARCHAR2(1) not null,
+	ERROR_MESSAGE VARCHAR2(200) null,
+	RANK NUMBER(6) not null
+);
+
+comment on table ALERT.ADVANCED_INPUT_SOFT_INST
+	is 'Advanced input access configuration by software and institution';
+comment on column ADVANCED_INPUT_SOFT_INST.ID_ADVANCED_INPUT_SOFT_INST
+	is 'Chave primária';
+comment on column ADVANCED_INPUT_SOFT_INST.ID_ADVANCED_INPUT
+	is 'ID do componente';
+comment on column ADVANCED_INPUT_SOFT_INST.ID_ADVANCED_INPUT_FIELD
+	is 'ID do campo';
+comment on column ADVANCED_INPUT_SOFT_INST.ID_INSTITUTION
+	is 'ID da instituição';
+comment on column ADVANCED_INPUT_SOFT_INST.ID_SOFTWARE
+	is 'ID do software';
+comment on column ADVANCED_INPUT_SOFT_INST.FLG_ACTIVE
+	is '''Y'' se o campo está activo';
+comment on column ADVANCED_INPUT_SOFT_INST.ERROR_MESSAGE
+	is 'CODE_MESSAGE da tabela SYS_MESSAGE correspondente à mensagem que o Flash irá apresentar no caso de erro. Aplicável a campos numéricos e de data';
+comment on column ADVANCED_INPUT_SOFT_INST.RANK
+	is 'ordenação dos campos no componente.';
+
+
+-- CHANGED REASON: New column in the table ADVANCED_INPUT_SOFT_INST
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 19/03/2009
+ALTER TABLE ADVANCED_INPUT_SOFT_INST
+ADD id_market NUMBER(24);
+
+comment on column ADVANCED_INPUT_SOFT_INST.id_market
+	is 'Market id.';
+-- CHANGE END
+
+
+
+comment on table  ALERT.ADVANCED_INPUT_SOFT_INST 						is 'Advanced input access configuration by software and institution';
+comment on column ALERT.ADVANCED_INPUT_SOFT_INST.ID_ADVANCED_INPUT_SOFT_INST	is 'Primary key';
+comment on column ALERT.ADVANCED_INPUT_SOFT_INST.ID_ADVANCED_INPUT			is 'component id';
+comment on column ALERT.ADVANCED_INPUT_SOFT_INST.ID_ADVANCED_INPUT_FIELD		is 'Field id';
+comment on column ALERT.ADVANCED_INPUT_SOFT_INST.ID_INSTITUTION				is 'Institution id';
+comment on column ALERT.ADVANCED_INPUT_SOFT_INST.ID_SOFTWARE					is 'Software id';
+comment on column ALERT.ADVANCED_INPUT_SOFT_INST.FLG_ACTIVE					is 'controls if field is active: Y/N';
+comment on column ALERT.ADVANCED_INPUT_SOFT_INST.ERROR_MESSAGE				is 'CODE_MESSAGE of table SYS_MESSAGE for message that UX will show in case of error. Only eligible for numeric and date fields';
+comment on column ALERT.ADVANCED_INPUT_SOFT_INST.RANK							is 'value for sorting purpose.';

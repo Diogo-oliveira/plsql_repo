@@ -1,0 +1,39 @@
+
+
+  CREATE TABLE PAT_PREGN_FETUS_DET
+   (	ID_PAT_PREGN_FETUS_DET NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_PREGN_FETUS_DET DATE NOT NULL ENABLE,
+	ID_PAT_PREGN_FETUS NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_CARDIAC_FREQ VARCHAR2(1),
+	FLG_CORP_MOV VARCHAR2(1),
+	FLG_PLACENTA VARCHAR2(2),
+	AMNIOTIC_LIQ VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE pat_pregn_fetus_det IS 'Leituras e registos acerca do feto' ;
+
+COMMENT ON COLUMN pat_pregn_fetus_det.flg_cardiac_freq IS 'Frequência cardíaca ausente / presente (Y / N)' ;
+COMMENT ON COLUMN pat_pregn_fetus_det.flg_corp_mov IS 'Movimentos corporais ausentes / presentes (Y / N)' ;
+COMMENT ON COLUMN pat_pregn_fetus_det.flg_placenta IS 'Placenta: B - baixa; NB - não baixa; P - prévia; NP - não prévia; T - total; P - parcial' ;
+COMMENT ON COLUMN pat_pregn_fetus_det.amniotic_liq IS 'Líquido amniótico: N - normal; O - oligoâmnios; H - hidrâmnios' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_PREGN_FETUS_DET ADD DT_PAT_PREGN_FETUS_DET_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+
+-- JSILVA 22-10-2008
+ALTER TABLE pat_pregn_fetus_det DROP COLUMN DT_PAT_PREGN_FETUS_DET;
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table PAT_PREGN_FETUS_DET
+  is 'DEPRECATED';  
+  
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,299 @@
+create table INST_ATTRIBUTES
+(
+  ID_COUNTRY             NUMBER(24),
+  ID_CITY                NUMBER(24),
+  ID_GEO_LOCATION        NUMBER(24),
+  ID_INSTITUTION         NUMBER(24) not null,
+  ID_INST_TYPE           NUMBER(6) not null,
+  ID_INST_ATTRIBUTES     NUMBER(24) not null,
+  ADDRESS                VARCHAR2(200),
+  SOCIAL_SECURITY_NUMBER VARCHAR2(100),
+  ADW_LAST_UPDATE        DATE not null
+);
+
+-- Add comments to the table 
+comment on table INST_ATTRIBUTES
+  is 'Atribútos de uma instituição';
+-- Add comments to the columns 
+comment on column INST_ATTRIBUTES.ID_COUNTRY
+  is 'País da instituição';
+comment on column INST_ATTRIBUTES.ID_CITY
+  is 'Cidade da instituição';
+comment on column INST_ATTRIBUTES.ID_GEO_LOCATION
+  is 'Zona geográfica da instituição';
+comment on column INST_ATTRIBUTES.ID_INSTITUTION
+  is 'ID da instituição';
+comment on column INST_ATTRIBUTES.ID_INST_TYPE
+  is 'ID do tipo da instituição';
+comment on column INST_ATTRIBUTES.ID_INST_ATTRIBUTES
+  is 'ID da tabela';
+comment on column INST_ATTRIBUTES.ADDRESS
+  is 'Morada da instituição';
+comment on column INST_ATTRIBUTES.SOCIAL_SECURITY_NUMBER
+  is 'Número de segurança social da instituição';
+comment on column INST_ATTRIBUTES.ADW_LAST_UPDATE
+  is 'Último update no registo';
+
+
+
+PROMPT Altering Table 'INST_ATTRIBUTES' 
+ALTER TABLE INST_ATTRIBUTES 
+ ADD (GEO_LOCATION_DESC  VARCHAR2(100)
+ ,CITY_DESC  VARCHAR2(100)
+ ,ID_CURRENCY  NUMBER(6)
+ ,PHONE  VARCHAR2(30)
+ ,FAX  VARCHAR2(30)
+ ,EMAIL  VARCHAR2(100)
+ ,LICENSE_MODEL  VARCHAR2(30)
+ ,FLG_AVAILABLE  VARCHAR2(1) NOT NULL
+ ,PAYMENT_SCHEDULE  VARCHAR2(30)
+ );
+
+COMMENT ON COLUMN INST_ATTRIBUTES.GEO_LOCATION_DESC IS 'Descrição da geo_location';
+COMMENT ON COLUMN INST_ATTRIBUTES.CITY_DESC IS 'Descrição da cidade';
+COMMENT ON COLUMN INST_ATTRIBUTES.ID_CURRENCY IS 'Moeda a ser usada para esta instituição';
+COMMENT ON COLUMN INST_ATTRIBUTES.PHONE IS 'Telefone da instituição';
+COMMENT ON COLUMN INST_ATTRIBUTES.FAX IS 'Fax da instituição';
+COMMENT ON COLUMN INST_ATTRIBUTES.EMAIL IS 'Email da instituição';
+COMMENT ON COLUMN INST_ATTRIBUTES.LICENSE_MODEL IS 'Tipon de pagamento efectuado (Licenças, Episódios, Paciente)';
+COMMENT ON COLUMN INST_ATTRIBUTES.FLG_AVAILABLE IS 'Disponibilidade do registo';
+COMMENT ON COLUMN INST_ATTRIBUTES.PAYMENT_SCHEDULE IS 'Periodicidade do pagamento';
+
+
+ALTER TABLE INST_ATTRIBUTES DROP COLUMN ADDRESS;
+ALTER TABLE INST_ATTRIBUTES DROP COLUMN PHONE;
+ALTER TABLE INST_ATTRIBUTES DROP COLUMN FAX;
+ALTER TABLE INST_ATTRIBUTES ADD (ID_INSTITUTION_LANGUAGE NUMBER(12));
+
+ALTER TABLE INST_ATTRIBUTES ADD (PAYMENT_OPTIONS VARCHAR2(30));
+
+comment on column INST_ATTRIBUTES.ID_INSTITUTION_LANGUAGE
+  is 'Língua por defeito';
+  
+comment on column INST_ATTRIBUTES.PAYMENT_OPTIONS
+  is 'Formas de Pagamento de Licenças: A - Automático, M - Manual';
+  
+ALTER TABLE inst_attributes DROP COLUMN id_inst_type;
+
+
+
+alter table inst_attributes add
+(
+      registration_details_pdf varchar2(200)
+);
+
+comment on column inst_attributes.registration_details_pdf is
+'URL para o pdf dos detalhes do registo';
+
+
+alter table inst_attributes add
+(
+      id_location_tax       number(24)
+);
+
+comment on column inst_attributes.id_location_tax is
+'zona a que a instituição pertence';
+
+-- CHANGED BY: Joao Sa
+-- CHANGE DATE: 11/01/2016
+-- ISSUE: Refactor: Table comments
+comment on table INST_ATTRIBUTES
+  is 'Institution attributes';
+-- Add comments to the columns 
+comment on column INST_ATTRIBUTES.id_country
+  is 'Country';
+comment on column INST_ATTRIBUTES.id_city
+  is 'City';
+comment on column INST_ATTRIBUTES.id_geo_location
+  is 'Geographic location';
+comment on column INST_ATTRIBUTES.id_institution
+  is 'Institution';
+comment on column INST_ATTRIBUTES.id_inst_attributes
+  is 'Internal id';
+comment on column INST_ATTRIBUTES.social_security_number
+  is 'Social security number for the institution';
+comment on column INST_ATTRIBUTES.adw_last_update
+  is 'Record last update (ADW)';
+comment on column INST_ATTRIBUTES.geo_location_desc
+  is 'Geographical localization description';
+comment on column INST_ATTRIBUTES.city_desc
+  is 'City description';
+comment on column INST_ATTRIBUTES.id_currency
+  is 'Currency used in the institution';
+comment on column INST_ATTRIBUTES.email
+  is 'Email address';
+comment on column INST_ATTRIBUTES.license_model
+  is 'Licensing model (Single license, by episode, by patient)';
+comment on column INST_ATTRIBUTES.flg_available
+  is 'Available in this implementation? Y/N';
+comment on column INST_ATTRIBUTES.id_institution_language
+  is 'Defaul language';
+comment on column INST_ATTRIBUTES.payment_options
+  is 'Process for licensing payment: (A)utomatic; (M)anual';
+comment on column INST_ATTRIBUTES.registration_details_pdf
+  is 'URL for the pdf containing the record details';
+comment on column INST_ATTRIBUTES.id_location_tax
+  is 'Taxation zone';
+
+  
+  
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 18/11/2016 11:36
+-- CHANGE REASON: [ALERT-326213] 
+	ALTER TABLE inst_attributes ADD HEALTH_LICENSE VARCHAR2(200 CHAR);
+-- CHANGE END: Pedro Henriques
+
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 06/01/2017
+-- CHANGE REASON: ALERT-326449
+
+ALTER TABLE inst_attributes ADD CLUES VARCHAR2(50 CHAR);
+COMMENT ON COLUMN INSTITUTION.CLUES IS 'Code Clues Institution';
+
+ALTER TABLE inst_attributes ADD JURISDICTION VARCHAR2(200 CHAR);
+COMMENT ON COLUMN INSTITUTION.JURISDICTION IS 'Jurisdiction Id (CATALOG JURISDICTION)';
+
+ALTER TABLE inst_attributes ADD id_entity NUMBER;
+COMMENT ON COLUMN INSTITUTION.id_entity IS 'Entity Id (CATALOG CLUES)';
+
+ALTER TABLE inst_attributes ADD ID_MUNICIP NUMBER;
+COMMENT ON COLUMN INSTITUTION.ID_MUNICIP IS 'Municip Id (CATALOG CLUES)';
+
+ALTER TABLE inst_attributes ADD ID_LOCALIDAD NUMBER;
+COMMENT ON COLUMN INSTITUTION.ID_LOCALIDAD IS 'Localidad Id (CATALOG CLUES)';
+
+ALTER TABLE inst_attributes ADD ID_POSTAL_CODE NUMBER;
+COMMENT ON COLUMN INSTITUTION.ID_POSTAL_CODE IS 'Postal Code Id (CATALOG CLUES)';
+
+
+ALTER TABLE inst_attributes ADD id_street_type NUMBER;
+COMMENT ON COLUMN INSTITUTION.id_street_type IS 'Street Type (CATALOG CLUES)';
+
+ALTER TABLE inst_attributes ADD street_name VARCHAR2(200 CHAR);
+COMMENT ON COLUMN INSTITUTION.street_name IS 'Street Name (CATALOG CLUES)';
+
+ALTER TABLE inst_attributes ADD outdoor_number VARCHAR2(200 CHAR);
+COMMENT ON COLUMN INSTITUTION.outdoor_number IS 'Outdoor Number';
+
+ALTER TABLE inst_attributes ADD indoor_number VARCHAR2(200 CHAR);
+COMMENT ON COLUMN INSTITUTION.indoor_number IS 'Indoor Number';
+
+ALTER TABLE inst_attributes ADD id_settlement_type NUMBER;
+COMMENT ON COLUMN INSTITUTION.id_settlement_type IS 'Settlement type (CATALOG CLUES)';
+
+ALTER TABLE inst_attributes ADD id_settlement_name NUMBER;
+COMMENT ON COLUMN INSTITUTION.id_settlement_name IS 'Settlement name (CATALOG CLUES)';
+-- CHANGE END: Pedro Henriques
+
+
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 06/01/2017
+-- CHANGE REASON: ALERT-326449
+
+ALTER TABLE inst_attributes ADD CLUES VARCHAR2(50 CHAR);
+COMMENT ON COLUMN INST_ATTRIBUTES.CLUES IS 'Code Clues Institution';
+
+ALTER TABLE inst_attributes ADD JURISDICTION VARCHAR2(200 CHAR);
+COMMENT ON COLUMN INST_ATTRIBUTES.JURISDICTION IS 'Jurisdiction Id (CATALOG JURISDICTION)';
+
+ALTER TABLE inst_attributes ADD id_entity NUMBER;
+COMMENT ON COLUMN INST_ATTRIBUTES.id_entity IS 'Entity Id (CATALOG CLUES)';
+
+ALTER TABLE inst_attributes ADD ID_MUNICIP NUMBER;
+COMMENT ON COLUMN INST_ATTRIBUTES.ID_MUNICIP IS 'Municip Id (CATALOG CLUES)';
+
+ALTER TABLE inst_attributes ADD ID_LOCALIDAD NUMBER;
+COMMENT ON COLUMN INST_ATTRIBUTES.ID_LOCALIDAD IS 'Localidad Id (CATALOG CLUES)';
+
+ALTER TABLE inst_attributes ADD ID_POSTAL_CODE NUMBER;
+COMMENT ON COLUMN INST_ATTRIBUTES.ID_POSTAL_CODE IS 'Postal Code Id (CATALOG CLUES)';
+
+
+ALTER TABLE inst_attributes ADD id_street_type NUMBER;
+COMMENT ON COLUMN INST_ATTRIBUTES.id_street_type IS 'Street Type (CATALOG CLUES)';
+
+ALTER TABLE inst_attributes ADD street_name VARCHAR2(200 CHAR);
+COMMENT ON COLUMN INST_ATTRIBUTES.street_name IS 'Street Name (CATALOG CLUES)';
+
+ALTER TABLE inst_attributes ADD outdoor_number VARCHAR2(200 CHAR);
+COMMENT ON COLUMN INST_ATTRIBUTES.outdoor_number IS 'Outdoor Number';
+
+ALTER TABLE inst_attributes ADD indoor_number VARCHAR2(200 CHAR);
+COMMENT ON COLUMN INST_ATTRIBUTES.indoor_number IS 'Indoor Number';
+
+ALTER TABLE inst_attributes ADD id_settlement_type NUMBER;
+COMMENT ON COLUMN INST_ATTRIBUTES.id_settlement_type IS 'Settlement type (CATALOG CLUES)';
+
+ALTER TABLE inst_attributes ADD id_settlement_name NUMBER;
+COMMENT ON COLUMN INST_ATTRIBUTES.id_settlement_name IS 'Settlement name (CATALOG CLUES)';
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 10/01/2017
+-- CHANGE REASON: ALERT-327673
+ALTER TABLE inst_attributes MODIFY JURISDICTION NUMBER; 
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 29/03/2018
+-- CHANGE REASON: EMR-2370 
+ALTER TABLE INST_ATTRIBUTES RENAME COLUMN JURISDICTION TO JURISDICTION_DEL;
+ALTER TABLE INST_ATTRIBUTES ADD JURISDICTION NUMBER(24);
+ALTER TABLE INST_ATTRIBUTES RENAME COLUMN ID_ENTITY TO ID_ENTITY_DEL;
+ALTER TABLE INST_ATTRIBUTES ADD ID_ENTITY NUMBER(24);
+ALTER TABLE INST_ATTRIBUTES RENAME COLUMN ID_MUNICIP TO ID_MUNICIP_DEL;
+ALTER TABLE INST_ATTRIBUTES ADD ID_MUNICIP NUMBER(24);
+ALTER TABLE INST_ATTRIBUTES RENAME COLUMN ID_LOCALIDAD TO ID_LOCALIDAD_DEL;
+ALTER TABLE INST_ATTRIBUTES ADD ID_LOCALIDAD NUMBER(24);
+ALTER TABLE INST_ATTRIBUTES RENAME COLUMN ID_POSTAL_CODE TO ID_POSTAL_CODE_DEL;
+ALTER TABLE INST_ATTRIBUTES ADD ID_POSTAL_CODE NUMBER(24);
+ALTER TABLE INST_ATTRIBUTES RENAME COLUMN ID_SETTLEMENT_TYPE TO ID_SETTLEMENT_TYPE_DEL;
+ALTER TABLE INST_ATTRIBUTES ADD ID_SETTLEMENT_TYPE NUMBER(24);
+ALTER TABLE INST_ATTRIBUTES RENAME COLUMN ID_SETTLEMENT_NAME TO ID_SETTLEMENT_NAME_DEL;
+ALTER TABLE INST_ATTRIBUTES ADD ID_SETTLEMENT_NAME NUMBER(24);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 29/03/2018
+-- CHANGE REASON: EMR-2370 
+ALTER TABLE INST_ATTRIBUTES DROP COLUMN JURISDICTION_DEL;
+ALTER TABLE INST_ATTRIBUTES DROP COLUMN ID_ENTITY_DEL;
+ALTER TABLE INST_ATTRIBUTES DROP COLUMN ID_MUNICIP_DEL;
+ALTER TABLE INST_ATTRIBUTES DROP COLUMN ID_LOCALIDAD_DEL;
+ALTER TABLE INST_ATTRIBUTES DROP COLUMN ID_POSTAL_CODE_DEL;
+ALTER TABLE INST_ATTRIBUTES DROP COLUMN ID_SETTLEMENT_TYPE_DEL;
+ALTER TABLE INST_ATTRIBUTES DROP COLUMN ID_SETTLEMENT_NAME_DEL;
+COMMENT ON COLUMN INST_ATTRIBUTES.HEALTH_LICENSE IS 'HEALTH LICENSE';
+COMMENT ON COLUMN INST_ATTRIBUTES.JURISDICTION IS 'Jurisdiction Id (CATALOG JURISDICTION)';
+COMMENT ON COLUMN INST_ATTRIBUTES.ID_ENTITY IS 'Entity Id (CATALOG CLUES)';
+COMMENT ON COLUMN INST_ATTRIBUTES.ID_MUNICIP IS 'Municip Id (CATALOG CLUES)';
+COMMENT ON COLUMN INST_ATTRIBUTES.ID_LOCALIDAD IS 'Localidad Id (CATALOG CLUES)';
+COMMENT ON COLUMN INST_ATTRIBUTES.ID_POSTAL_CODE IS 'Postal Code Id (CATALOG CLUES)';
+COMMENT ON COLUMN INST_ATTRIBUTES.ID_STREET_TYPE IS 'Street Type (CATALOG CLUES)';
+COMMENT ON COLUMN INST_ATTRIBUTES.STREET_NAME IS 'Street Name (CATALOG CLUES)';
+COMMENT ON COLUMN INST_ATTRIBUTES.OUTDOOR_NUMBER IS 'Outdoor Number';
+COMMENT ON COLUMN INST_ATTRIBUTES.INDOOR_NUMBER IS 'Indoor Number';
+COMMENT ON COLUMN INST_ATTRIBUTES.ID_SETTLEMENT_TYPE IS 'Settlement type (CATALOG CLUES)';
+COMMENT ON COLUMN INST_ATTRIBUTES.ID_SETTLEMENT_NAME IS 'Settlement name (CATALOG CLUES)';
+COMMENT ON COLUMN INST_ATTRIBUTES.CLUES IS 'Code Clues Institution';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Vitor Sa
+-- CHANGE DATE: 12/04/2018 09:41
+-- CHANGE REASON: [EMR-2357] EMR-2357
+ALTER TABLE inst_attributes ADD flg_street_type VARCHAR2(20 CHAR);
+COMMENT ON COLUMN inst_attributes.flg_street_type IS 'flg_street_type populated with from sys_domain CONTACT_ADDRESS_MX.ROAD_TYPE';
+-- CHANGE END: Vitor Sa
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/01/2021 11:58
+-- CHANGE REASON: [EMR-40571]
+ALTER TAbLE inst_attributes ADD website VARCHAR2(200 CHAR);
+CoMMENT ON COLUMN inst_attributes.website IS 'Website URL';
+-- CHANGE END: Pedro Henriques

@@ -1,0 +1,18 @@
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 06/12/2011 11:02
+-- CHANGE REASON: [ALERT-208518] 
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02260);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_PROF_TEAM_DET_HIST add constraint SR_PF_TEAMH_PK primary key (ID_SR_PROF_TEAM_DET_HIST)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Rita Lopes

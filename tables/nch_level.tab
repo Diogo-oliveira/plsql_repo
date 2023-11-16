@@ -1,0 +1,87 @@
+  CREATE TABLE NCH_LEVEL
+   (	ID_NCH_LEVEL NUMBER(24),
+	FIRST_VALUE NUMBER(2),
+	SECOND_VALUE NUMBER(2),
+	CHANGE NUMBER(3),
+	ID_CONTENT NUMBER(24),
+	CREATE_USER VARCHAR2(24),
+	CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	CREATE_INSTITUTION NUMBER(24),
+	UPDATE_USER VARCHAR2(24),
+	UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	UPDATE_INSTITUTION NUMBER(24)
+   ) ;
+
+
+
+COMMENT ON COLUMN NCH_LEVEL.ID_NCH_LEVEL IS 'Nursing care hours level table primary key';
+
+
+
+COMMENT ON COLUMN NCH_LEVEL.FIRST_VALUE IS 'Number of daily nursing care hours on the first period';
+
+
+
+COMMENT ON COLUMN NCH_LEVEL.SECOND_VALUE IS 'Number of daily nursing care hours on the second period';
+
+
+
+COMMENT ON COLUMN NCH_LEVEL.CHANGE IS 'Length of the first period (in days)';
+
+
+
+COMMENT ON COLUMN NCH_LEVEL.ID_CONTENT IS 'Content ID';
+
+
+
+COMMENT ON TABLE NCH_LEVEL  IS 'Nursing care hours level content table';
+
+ALTER TABLE nch_level add(VALUE NUMBER(2), duration NUMBER(3), id_previous NUMBER(24));
+COMMENT ON column nch_level.VALUE IS 'Number of daily nursing care hours on the current period';
+COMMENT ON column nch_level.duration IS 'Length of the current period (in days)';
+COMMENT ON column nch_level.id_previous IS 'Content ID';
+
+ALTER TABLE nch_level drop column first_value;
+ALTER TABLE nch_level drop column second_value;
+ALTER TABLE nch_level drop column change;
+ALTER TABLE nch_level drop column id_content;
+
+
+-- CHANGED BY: RicardoNunoAlmeida
+-- CHANGE DATE: 23/03/2010 12:33
+-- CHANGE REASON: [ALERT-82767] 
+ALTER TABLE nch_level MODIFY value NUMBER(24);
+ALTER TABLE nch_level MODIFY duration NUMBER(24);
+comment on column nch_level.value is 'Daily nursing care hours (expressed in minutes) on the current period';
+ 
+-- CHANGE END: RicardoNunoAlmeida
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:42
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table NCH_LEVEL
+  is 'Nursing care hours level content table';
+-- Add comments to the columns 
+comment on column NCH_LEVEL.id_nch_level
+  is 'Nursing care hours level table primary key';
+comment on column NCH_LEVEL.create_user
+  is 'Create User';
+comment on column NCH_LEVEL.create_time
+  is 'Create Time';
+comment on column NCH_LEVEL.create_institution
+  is 'Create Institution';
+comment on column NCH_LEVEL.update_user
+  is 'Update User';
+comment on column NCH_LEVEL.update_time
+  is 'Update Time';
+comment on column NCH_LEVEL.update_institution
+  is 'Update Institution';
+comment on column NCH_LEVEL.value
+  is 'Daily nursing care hours (expressed in minutes) on the current period';
+comment on column NCH_LEVEL.duration
+  is 'Length of the current period (in days)';
+comment on column NCH_LEVEL.id_previous
+  is 'Content ID';
+  
+-- CHANGE END: Pedro Fernandes

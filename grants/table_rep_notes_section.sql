@@ -1,0 +1,5 @@
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 11/03/2010 19:08
+-- CHANGE REASON: [ALERT-80873] Reason for pending discharge: DB developments
+GRANT SELECT ON ALERT.REP_NOTES_SECTION TO ALERT_VIEWER;
+-- CHANGE END: José Silva

@@ -1,0 +1,107 @@
+-- Create table
+create table DRUG_REQ_DET_UNIDOSE
+(
+  ID_DRUG_REQ_DET_UNIDOSE       NUMBER(24) not null,
+  ID_DRUG_REQ           NUMBER(24) not null,
+  ID_DRUG               NUMBER(12) not null,
+  QTY_REQ               NUMBER(6) not null,
+  QTY_SUPPLIED          NUMBER(6),
+  NOTES                 VARCHAR2(4000),
+  FLG_STATUS            VARCHAR2(1) not null,
+  DT_CANCEL             DATE,
+  ID_PROF_CANCEL        NUMBER(24),
+  NOTES_CANCEL          VARCHAR2(4000),
+  ID_DEP_CLIN_SERV      NUMBER(24),
+  DOSAGE                VARCHAR2(1000),
+  NOTES_JUSTIF          VARCHAR2(4000),
+  FLG_CI                VARCHAR2(1),
+  FLG_CHEAPER           VARCHAR2(1),
+  FLG_JUSTIF            VARCHAR2(1),
+  FLG_ATTENTION         VARCHAR2(2),
+  FLG_ATTENTION_PRINT   VARCHAR2(1),
+  ID_DRUG_DESPACHOS     NUMBER(24),
+  ID_PROF_PENDING       NUMBER(24),
+  DT_PENDING            DATE,
+  NOTES_PENDING         VARCHAR2(4000),
+  PHARMACIST_VALIDATION VARCHAR2(1),
+  FLG_INCIDENT          VARCHAR2(1),
+  DATE_INCIDENT         DATE,
+  INCIDENT_USER         VARCHAR2(200),
+  INCIDENT_QUANTITY     NUMBER(24,4),
+	STATUS               VARCHAR2(1),
+	DT_STATUS   DATE
+)
+;
+-- Add comments to the table 
+comment on table DRUG_REQ_DET_UNIDOSE
+  is 'Medicamentos requisitados';
+-- Add comments to the columns 
+comment on column DRUG_REQ_DET_UNIDOSE.ID_DRUG
+  is 'Medicamento requisitado';
+comment on column DRUG_REQ_DET_UNIDOSE.QTY_REQ
+  is 'Quantidade requisitada';
+comment on column DRUG_REQ_DET_UNIDOSE.QTY_SUPPLIED
+  is 'Quantidade fornecida';
+comment on column DRUG_REQ_DET_UNIDOSE.FLG_STATUS
+  is 'T - temporária; D - pendente; R - requisitado; E - em execução; P - fornecimento parcial; F - terminado; C - cancelado; J - pedido rejeitado';
+comment on column DRUG_REQ_DET_UNIDOSE.ID_DEP_CLIN_SERV
+  is 'Departamento e serv. clínico requisitado.No caso de estar parametrizado em DRUG_DEP_CLIN_SERV que o medicamento pode ser fornecido em mais do que um departamento e / ou serv. clínico, é necessário indicar na requisição qual o pretendido.';
+comment on column DRUG_REQ_DET_UNIDOSE.DOSAGE
+  is 'Posologia.';
+comment on column DRUG_REQ_DET_UNIDOSE.NOTES_JUSTIF
+  is 'Justificação da prescrição.';
+comment on column DRUG_REQ_DET_UNIDOSE.FLG_CI
+  is 'Chamada de atenção de contra-indicações: Y - sim; N - não; R - lida.';
+comment on column DRUG_REQ_DET_UNIDOSE.FLG_CHEAPER
+  is 'Chamada de atenção de medicamentos mais baratos: Y - sim; N - não; R - lida.';
+comment on column DRUG_REQ_DET_UNIDOSE.FLG_JUSTIF
+  is 'Chamada de atenção de justificação de prescrição: Y - sim; N - não; R - lida.';
+comment on column DRUG_REQ_DET_UNIDOSE.FLG_ATTENTION
+  is 'Flag que indica a chamada de atenção prioritária: CI - contra-indicações; B - medicamentos mais baratos; J - justificação de prescrição; IM - interacções medicamentosas';
+comment on column DRUG_REQ_DET_UNIDOSE.FLG_ATTENTION_PRINT
+  is 'Flag que indica se o profissional prosseguiu (Y) ou não (N) com a impressão apesar das chamadas de atenção.';
+comment on column DRUG_REQ_DET_UNIDOSE.ID_DRUG_DESPACHOS
+  is 'Despacho associado a esta requisição.';
+comment on column DRUG_REQ_DET_UNIDOSE.ID_PROF_PENDING
+  is 'ID do profissional que passou a requisição para pendente.';
+comment on column DRUG_REQ_DET_UNIDOSE.DT_PENDING
+  is 'Data em que a requisição passou para pendente.';
+comment on column DRUG_REQ_DET_UNIDOSE.NOTES_PENDING
+  is 'Notas de passagem para pendente.';
+comment on column DRUG_REQ_DET_UNIDOSE.PHARMACIST_VALIDATION
+  is 'Indicação se a receita foi validado pelo farmacêutico.';
+comment on column DRUG_REQ_DET_UNIDOSE.FLG_INCIDENT
+  is 'Y- Foi reportado um incidente, N- Não tem incidentes reportados';
+comment on column DRUG_REQ_DET_UNIDOSE.DATE_INCIDENT
+  is 'Data em que foi reportado o incidente';
+comment on column DRUG_REQ_DET_UNIDOSE.INCIDENT_USER
+  is 'User que reportou o incidente';
+comment on column DRUG_REQ_DET_UNIDOSE.INCIDENT_QUANTITY
+  is 'Quantidade em falta reportada no incidente';
+comment on column DRUG_REQ_DET_UNIDOSE.STATUS
+  is 'Estado do registo P - processado N- nao processado, C-cancelado';
+comment on column DRUG_REQ_DET_UNIDOSE.DT_STATUS
+  is 'Data do estado';
+	
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE DRUG_REQ_DET_UNIDOSE ADD DATE_INCIDENT_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN DRUG_REQ_DET_UNIDOSE.DATE_INCIDENT_TSTZ IS 'Data em que foi reportado o incidente'; 
+ALTER TABLE DRUG_REQ_DET_UNIDOSE ADD DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+ALTER TABLE DRUG_REQ_DET_UNIDOSE ADD DT_PENDING_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN DRUG_REQ_DET_UNIDOSE.DT_PENDING_TSTZ IS 'Data em que a requisi‡Æo passou para pendente.'; 
+ALTER TABLE DRUG_REQ_DET_UNIDOSE ADD DT_STATUS_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN DRUG_REQ_DET_UNIDOSE.DT_STATUS_TSTZ IS 'Data do estado'; 
+
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2008-SET-22
+-- CHANGE REASON: Drop de colunas DATE com correspondentes DATE_TSTZ
+
+ALTER TABLE DRUG_REQ_DET_UNIDOSE DROP COLUMN DT_CANCEL;
+ALTER TABLE DRUG_REQ_DET_UNIDOSE DROP COLUMN DT_PENDING;
+ALTER TABLE DRUG_REQ_DET_UNIDOSE DROP COLUMN DATE_INCIDENT;
+ALTER TABLE DRUG_REQ_DET_UNIDOSE DROP COLUMN DT_STATUS;
+
+-- CHANGE END

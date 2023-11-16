@@ -1,0 +1,47 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 30/04/2011 18:02
+-- CHANGE REASON: [ALERT-173229] Order recurrence core development
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE ORDER_RECURR_OPTION_TIME_MSI
+(
+  ID_ORDER_RECURR_OPTION          NUMBER(24) NOT NULL,
+  ID_MARKET                       NUMBER(24) NOT NULL,
+  ID_INSTITUTION                  NUMBER(24) NOT NULL,
+  ID_SOFTWARE                     NUMBER(24) NOT NULL,
+  ID_PROFILE_TEMPLATE             NUMBER(12) NOT NULL,
+  EXEC_TIME                       INTERVAL DAY(0) TO SECOND(0) NOT NULL,
+  EXEC_TIME_OFFSET                NUMBER(6),
+  ID_UNIT_MEAS_EXEC_TIME_OFFSET   NUMBER(24),
+  FLG_AVAILABLE                   VARCHAR2(1 CHAR) NOT NULL,
+  CREATE_USER                     VARCHAR2(24 CHAR),
+  CREATE_TIME                     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION              NUMBER(24),
+  UPDATE_USER                     VARCHAR2(24 CHAR),
+  UPDATE_TIME                     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION              NUMBER(24)     
+)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('ORDER_RECURR_OPTION_TIME_MSI table already exists');
+END;
+/
+comment on table ORDER_RECURR_OPTION_TIME_MSI is 'Order recurrence option time configurations table [ORCOTMSI]';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.ID_ORDER_RECURR_OPTION        is 'Order recurrence option ID';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.ID_MARKET                     is 'Market ID';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.ID_INSTITUTION                is 'Institution ID';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.ID_SOFTWARE                   is 'Software ID';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.ID_PROFILE_TEMPLATE           is 'Profile template ID';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.EXEC_TIME                     is 'Execution time';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.EXEC_TIME_OFFSET              is 'Execution time offset';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.ID_UNIT_MEAS_EXEC_TIME_OFFSET is 'Execution time ofsset unit measure';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.FLG_AVAILABLE                 is 'Record availability (Y - yes; N - no)';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.CREATE_USER                   is 'Creation User';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.CREATE_TIME                   is 'Creation Time';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.CREATE_INSTITUTION            is 'Creation Institution';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.UPDATE_USER                   is 'Update User';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.UPDATE_TIME                   is 'Update Time';
+comment on column ORDER_RECURR_OPTION_TIME_MSI.UPDATE_INSTITUTION            is 'Update Institution';
+-- CHANGE END: Carlos Loureiro

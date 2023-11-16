@@ -1,0 +1,45 @@
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 28/10/2009 19:28
+-- CHANGE REASON: [ALERT-52603] Taking responsibility over episode by multiple professionals
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE handoff_permission_inst drop CONSTRAINT HOP_PK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE handoff_permission_inst ADD CONSTRAINT HOP_PK '||
+                  'PRIMARY KEY (id_profile_template_req, id_institution, id_profile_template_dest) ENABLE';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 18/11/2010 14:16
+-- CHANGE REASON: [ALERT-142370] Hand-off NL refactoring - replication to 2.6.0.4
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE handoff_permission_inst DROP CONSTRAINT HOP_PK';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE handoff_permission_inst ADD CONSTRAINT HOP_PK PRIMARY KEY (ID_PROFILE_TEMPLATE_REQ, ID_INSTITUTION, ID_PROFILE_TEMPLATE_DEST, FLG_RESP_TYPE) ENABLE';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE handoff_permission_inst ADD CONSTRAINT HOP_FLGRESPTYPE_CHK CHECK(FLG_RESP_TYPE IN (''E'', ''O''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: José Brito

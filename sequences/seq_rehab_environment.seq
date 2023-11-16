@@ -1,0 +1,19 @@
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 29/09/2014 11:54
+-- CHANGE REASON: [ALERT-296577] 
+DECLARE
+    l_next_val rehab_environment.id_rehab_environment%TYPE;
+    l_sql      pk_types.t_huge_byte;
+BEGIN
+    SELECT MAX(re.id_rehab_environment) + 1
+      INTO l_next_val
+      FROM rehab_environment re;
+
+    l_sql := 'CREATE SEQUENCE SEQ_REHAB_ENVIRONMENT MINVALUE 1 MAXVALUE 999999999999999999999999 START WITH ' ||
+             to_char(l_next_val) || ' INCREMENT BY 1 CACHE 500';
+
+    pk_versioning.run(i_sql => l_sql);
+
+END;
+/
+-- CHANGE END: cristina.oliveira

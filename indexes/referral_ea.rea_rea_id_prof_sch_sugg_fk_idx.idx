@@ -1,0 +1,19 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 13/06/2012 11:45
+-- CHANGE REASON: [ALERT-232304] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_indexes c
+     WHERE c.INDEX_NAME = 'REA_ID_PROF_SCH_SUGG_FK_I'
+       AND c.TABLE_NAME = 'REFERRAL_EA';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'create index REA_id_prof_sch_sugg_FK_I on REFERRAL_EA (id_prof_sch_sugg)';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro

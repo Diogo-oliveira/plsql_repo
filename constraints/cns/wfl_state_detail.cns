@@ -1,0 +1,16 @@
+
+alter table wfl_state_detail
+add constraint wfl_st_det_pk primary key (state, prof_type)
+using index tablespace INDEX_S;
+
+--CHKs
+alter table wfl_state_detail
+add constraint wfl_stdet_flg_color_chk check (flg_color in ('R','G','X'));
+
+alter table wfl_state_detail
+add constraint wfl_stdet_delayed_chk
+check (state_can_be_delayed in ('Y','N'));
+
+alter table wfl_state_detail
+add constraint wfl_stdet_icon_type_chk
+check (icon_type in ('I','T','TI','D','DI'));

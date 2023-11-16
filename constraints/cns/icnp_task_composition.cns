@@ -1,0 +1,26 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/02/2011 14:41
+-- CHANGE REASON: [ALERT-164319] Issue Replication: Atitudes terapêuticas
+-- Creating Primary Key on 'ICNP_TASK_COMPOSITION'
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE ICNP_TASK_COMPOSITION
+ ADD (CONSTRAINT ITN_PK PRIMARY KEY 
+  (ID_TASK
+  ,ID_TASK_TYPE
+  ,ID_COMPOSITION))';
+EXCEPTION
+WHEN OTHERS THEN 
+            dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+
+-- Creating Check Constraint on 'ICNP_TASK_COMPOSITION'
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE ICNP_TASK_COMPOSITION
+ ADD (CONSTRAINT ITN_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'',''N'')))';
+EXCEPTION
+WHEN OTHERS THEN 
+            dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: Elisabete Bugalho

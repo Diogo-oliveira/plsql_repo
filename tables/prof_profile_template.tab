@@ -1,0 +1,35 @@
+
+
+  CREATE TABLE PROF_PROFILE_TEMPLATE
+   (	ID_PROF_PROFILE_TEMPLATE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFILE_TEMPLATE NUMBER(12,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE prof_profile_template IS 'Templates atribuídos aos profissionais.Uma vez q os acessos de cada profissional são registados em PROF_ACCESS, esta tabela é só informativa. Se o template de determinado perfil for alterado, é possível encontrar todos os profissionais a quem foi atribuído, de modo a actualizar os acessos de acordo com o novo template.' ;
+
+declare
+l_sql       varchar2(4000);
+begin
+
+L_SQL := 'ALTER TABLE PROF_PROFILE_TEMPLATE ADD FLG_SHOW_VIEW GENERATED ALWAYS AS ( PK_PROFILE.GET_FLG_VIEWER( ID_PROFESSIONAL, ID_SOFTWARE, ID_INSTITUTION, ID_PROFILE_TEMPLATE ))  VIRTUAL';
+pk_versioning.run(l_sql);
+
+end;
+/
+
+
+DECLARE
+    l_sql VARCHAR2(4000);
+BEGIN
+
+    l_sql := 'ALTER TABLE PROF_PROFILE_TEMPLATE ADD DT_LOGIN TIMESTAMP WITH LOCAL TIME ZONE';
+    pk_versioning.run(l_sql);
+
+    l_sql := 'COMMENT ON COLUMN PROF_PROFILE_TEMPLATE.DT_LOGIN is ''Login Date''';
+    pk_versioning.run(l_sql);
+END;
+/

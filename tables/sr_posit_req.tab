@@ -1,0 +1,62 @@
+
+
+  CREATE TABLE SR_POSIT_REQ
+   (	ID_SR_POSIT_REQ NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	DT_POSIT_REQ DATE NOT NULL ENABLE,
+	ID_PROF_REQ NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_SR_POSIT NUMBER(24,0) NOT NULL ENABLE,
+	FLG_VERIFY VARCHAR2(1),
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE,
+	NOTES_CANCEL VARCHAR2(2000),
+	ID_PROF_EXEC NUMBER(24,0),
+
+	DT_EXEC DATE,
+	ID_PROF_VERIFY NUMBER(24,0),
+	DT_VERIFY DATE
+   );
+
+
+COMMENT ON TABLE sr_posit_req IS 'Requisições de posicionamentos' ;
+
+COMMENT ON COLUMN sr_posit_req.id_sr_posit_req IS 'ID único' ;
+COMMENT ON COLUMN sr_posit_req.id_episode IS 'ID do episódio' ;
+COMMENT ON COLUMN sr_posit_req.dt_posit_req IS 'Data em que foi requisitado' ;
+COMMENT ON COLUMN sr_posit_req.id_prof_req IS 'ID do profissional que efectuou a requisição' ;
+COMMENT ON COLUMN sr_posit_req.flg_status IS 'Estado da requisição: Valores possíveis: R - Requisitado, P - Executado, F- Executado e Verificado, C- Cancelado' ;
+COMMENT ON COLUMN sr_posit_req.id_sr_posit IS 'ID do posicionamento' ;
+COMMENT ON COLUMN sr_posit_req.flg_verify IS 'Estado da verificação. Valores possíveis: Y- Verificado, N- Não Verificado' ;
+COMMENT ON COLUMN sr_posit_req.id_prof_cancel IS 'ID do profissional que cancelou a requisição' ;
+COMMENT ON COLUMN sr_posit_req.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN sr_posit_req.notes_cancel IS 'Notas de cancelamento' ;
+COMMENT ON COLUMN sr_posit_req.id_prof_exec IS 'ID do profissional que executou a requisição' ;
+COMMENT ON COLUMN sr_posit_req.dt_exec IS 'Data de execução' ;
+COMMENT ON COLUMN sr_posit_req.id_prof_verify IS 'ID do profissional que verificou a requisição' ;
+
+COMMENT ON COLUMN sr_posit_req.dt_verify IS 'Data de verificação' ;
+
+
+--Rui Batista 2007/12/05
+--TI: Pré-operatório
+alter table sr_posit_req add (id_episode_context number(24));
+
+COMMENT ON COLUMN sr_posit_req.id_episode_context IS 'ID do episódio de destino onde poderá ser consultada esta informação (TI)';
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização SR - eliminação de colunas
+ALTER TABLE SR_POSIT_REQ drop column dt_posit_req;
+ALTER TABLE SR_POSIT_REQ drop column dt_cancel;
+ALTER TABLE SR_POSIT_REQ drop column dt_exec;
+ALTER TABLE SR_POSIT_REQ drop column dt_verify;
+-- CHANGE END
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 27/03/2020 12:07
+-- CHANGE REASON: [EMR-28818] - Positioning >> Migrate transactional records from sr_positioning to positioning data model. Delete deprecated functions.
+ALTER TABLE sr_posit_req add flg_mig VARCHAR2(1) DEFAULT 'N';
+comment on column sr_posit_req.flg_mig is 'Flag that indicates if record has beem migrated to the positioning data model [Y-Yes / N-No]';
+-- CHANGE END: Diogo Oliveira

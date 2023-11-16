@@ -1,0 +1,142 @@
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 25/02/2011 17:31
+-- CHANGE REASON: [ALERT-164703] DDL Reports - H & P reformulation in INPATIENT
+DECLARE e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE TIMEFRAME_OPTION
+ (ID_TIMEFRAME_OPTION NUMBER(24) NOT NULL
+ ,ID_TIMEFRAME_GROUP NUMBER(24) NOT NULL
+ ,CODE_TIMEFRAME_REP_OPTION VARCHAR2(1000 CHAR) NOT NULL
+ ,FLG_TYPE VARCHAR2(1 CHAR) NOT NULL
+ ,RANK NUMBER(24) DEFAULT 0 NOT NULL
+ ,DT_BEGIN_CODE VARCHAR2(1000 CHAR)
+ ,DT_END_CODE VARCHAR2(1000 CHAR)
+ ,CREATE_USER VARCHAR2(24)
+ ,CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,CREATE_INSTITUTION NUMBER(24)
+ ,UPDATE_USER VARCHAR2(24)
+ ,UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ )';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON TABLE timeframe_option IS 'Table with all available options that can be chosen for diferent groups in timeframe report selection screen';
+/
+
+COMMENT ON column timeframe_option.id_timeframe_option IS 'Id of the options available in each group';
+/
+
+COMMENT ON column timeframe_option.id_timeframe_group IS 'Id of the group where this option belongs';
+/
+
+COMMENT ON column timeframe_option.code_timeframe_rep_option IS 'Code of the option';
+/
+
+COMMENT ON column timeframe_option.flg_type IS 'Type of option (''R'' - Radio button; ''D''  - Date input; ''I'' - Date interval; ''T'' - Text)';
+/
+
+COMMENT ON column timeframe_option.rank IS 'Rank in each option is presented inside it''s group';
+/
+
+COMMENT ON column timeframe_option.dt_begin_code IS 'SQL code for calculate begin date for this option';
+/
+
+COMMENT ON column timeframe_option.dt_end_code IS 'SQL code for calculate end date for this option';
+/
+
+COMMENT ON column timeframe_option.create_user IS 'Creation User';
+/
+
+COMMENT ON column timeframe_option.create_time IS 'Creation Time';
+/
+
+COMMENT ON column timeframe_option.create_institution IS 'Creation Institution';
+/
+
+COMMENT ON column timeframe_option.update_user IS 'Update User';
+/
+
+COMMENT ON column timeframe_option.update_time IS 'Update Time';
+/
+
+COMMENT ON column timeframe_option.update_institution IS 'Update Institution';
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Tiago Lourenço
+-- CHANGE DATE: 28/11/2011
+-- CHANGE REASON: [ALERT-207295] 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TIMEFRAME_OPTION  ADD (FLG_DATE_TYPE VARCHAR2(1 CHAR))';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+comment on column TIMEFRAME_OPTION.FLG_TYPE is 'Type of option (''R'' - Radio button; ''D''  - Date input; ''T'' - Text)';
+comment on column TIMEFRAME_OPTION.FLG_DATE_TYPE is 'Type of date (''D'' - Specific date; ''I'' - Interval; ''F'' - From)';
+
+-- CHANGE END: Tiago Lourenço
+
+
+-- CHANGED BY: Artur Costa
+-- CHANGE DATE: 15/06/2016
+-- CHANGE REASON: [ALERT-321711]
+ALTER TABLE TIMEFRAME_OPTION DROP CONSTRAINT TON_TYPE_CHK;
+  
+ALTER TABLE TIMEFRAME_OPTION
+  ADD CONSTRAINT TON_TYPE_CHK
+  CHECK (FLG_TYPE IN ('R', 'D', 'I', 'T', 'H'));
+  
+COMMENT ON COLUMN TIMEFRAME_OPTION.FLG_TYPE
+  IS 'Type of option (''R'' - Radio button; ''D''  - Date input; ''T'' - Text; ''H'' - Date and Time input)';
+-- CHANGED END: Artur Costa 
+
+
+-- CHANGED BY: Artur Costa
+-- CHANGE DATE: 01/07/2016
+-- CHANGE REASON: [ALERT-322718]
+ALTER TABLE TIMEFRAME_OPTION DROP CONSTRAINT TON_DATE_TYPE_CHK;
+  
+ALTER TABLE TIMEFRAME_OPTION
+  ADD CONSTRAINT TON_DATE_TYPE_CHK
+  CHECK (FLG_DATE_TYPE IN ('D','I','F','X'));
+  
+COMMENT ON COLUMN TIMEFRAME_OPTION.FLG_DATE_TYPE
+  IS 'Type of date (''D'' - Specific date; ''I'' - Interval; ''F'' - From; ''X''- Reference value)';
+-- CHANGED END: Artur Costa 
+
+
+
+-- CHANGED BY: Anna Kurowska
+-- CHANGE DATE: 02/06/2021 11:03
+-- CHANGE REASON: [EMR-45656] - [REPORTS-DB] Review medication report
+-- Add/modify columns
+alter table TIMEFRAME_OPTION add dt_default_code VARCHAR2(1000 CHAR);
+-- Add comments to the columns
+comment on column TIMEFRAME_OPTION.dt_default_code
+is 'SQL code for calculate default date for this option';
+-- CHANGE END: Anna Kurowska
+
+-- CHANGED BY: Anna Kurowska
+-- CHANGE DATE: 25/10/2021 15:47
+-- CHANGE REASON: [EMR-48564] - Lab results report
+-- Add comments to the columns
+comment on column TIMEFRAME_OPTION.flg_type
+is 'Type of option (''R'' - Radio button; ''D''  - Date input; ''T'' - Text; ''H'' - Date and Time input; ''L'' - List)';
+-- Create/Recreate check constraints
+alter table TIMEFRAME_OPTION
+drop constraint TON_TYPE_CHK;
+alter table TIMEFRAME_OPTION
+add constraint TON_TYPE_CHK
+check (FLG_TYPE IN ('R', 'D', 'I', 'T', 'H','L'));
+-- CHANGE END: Anna Kurowska

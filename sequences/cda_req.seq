@@ -1,0 +1,17 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/05/2014 11:59
+-- CHANGE REASON: [ALERT-282042] data export table
+DECLARE
+    e_sequence_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_sequence_not_exists, -02289);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE sequence seq_CDA_REQ minvalue 0 maxvalue 99999999999999999999 START
+        WITH 1 increment BY 1 cache 500';
+    EXCEPTION
+        WHEN e_sequence_not_exists THEN
+            dbms_output.put_line('Sequence already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

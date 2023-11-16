@@ -1,0 +1,124 @@
+
+create table prof_team_hist
+(
+  ID_PROF_TEAM_HIST   NUMBER(24) NOT NULL,  
+	ID_PROF_TEAM        NUMBER(24) NOT NULL,
+	ID_PROF_TEAM_LEADER NUMBER(24),
+	PROF_TEAM_NAME      VARCHAR2(200),
+	PROF_TEAM_DESC      VARCHAR2(2000),
+	FLG_AVAILABLE       VARCHAR2(1),
+	FLG_STATUS          VARCHAR2(1) NOT NULL,
+	ID_SOFTWARE         NUMBER(24),
+	ID_INSTITUTION      NUMBER(24),
+	FLG_TYPE            VARCHAR2(1),
+	DT_BEGIN_TSTZ       TIMESTAMP WITH LOCAL TIME ZONE,
+	DT_END_TSTZ         TIMESTAMP WITH LOCAL TIME ZONE,
+  id_department       NUMBER(24),
+  notes               VARCHAR2(4000),
+  create_time         TIMESTAMP WITH LOCAL TIME ZONE,
+  create_user         NUMBER(24),
+  flg_type_register   VARCHAR2(1) NOT NULL
+);
+
+
+COMMENT ON TABLE prof_team_hist IS 'History of all changes on medical teams.';
+COMMENT ON COLUMN prof_team_hist.flg_type_register IS 'Register type: C - creation, E edition';
+
+-- JSILVA 25-05-2009
+BEGIN
+     EXECUTE IMMEDIATE 'ALTER TABLE PROF_TEAM_HIST ADD ID_PROF_REGISTER NUMBER(24)';
+EXCEPTION
+  WHEN OTHERS THEN
+   NULL;
+END;
+/
+
+BEGIN
+     EXECUTE IMMEDIATE 'ALTER TABLE PROF_TEAM_HIST ADD DT_REGISTER TIMESTAMP WITH LOCAL TIME ZONE';
+EXCEPTION
+  WHEN OTHERS THEN
+   NULL;
+END;
+/
+
+COMMENT ON COLUMN prof_team_hist.dt_register IS 'Register date.';
+COMMENT ON COLUMN prof_team_hist.id_prof_register IS 'Professional who made the record.';
+-- END
+
+
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 03/07/2009 18:04
+-- CHANGE REASON: [ALERT-665] Alteracoes para as consultas de decisão terapeutica
+-- Altering Table 'PROF_TEAM_HIST' 
+ALTER TABLE PROF_TEAM_HIST 
+ ADD ID_TEAM_TYPE NUMBER(24) NULL;
+
+COMMENT ON COLUMN PROF_TEAM_HIST.ID_TEAM_TYPE IS 'id team type';
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 21/01/2016 11:19
+-- CHANGE REASON: [ALERT-318028] ALERT-318028 CDOC Functionalities V7
+-- Add comments to the table 
+comment on table PROF_TEAM_HIST
+  is 'History of all changes on medical teams.';
+-- Add comments to the columns 
+comment on column PROF_TEAM_HIST.id_prof_team_hist
+  is 'Professional team history identifier ';
+comment on column PROF_TEAM_HIST.id_prof_team
+  is 'Professional team identifier';
+comment on column PROF_TEAM_HIST.id_prof_team_leader
+  is 'Professional team leader identifier';
+comment on column PROF_TEAM_HIST.prof_team_name
+  is 'Team name ';
+comment on column PROF_TEAM_HIST.prof_team_desc
+  is 'Description of the team';
+comment on column PROF_TEAM_HIST.flg_available
+  is 'Record Availability. Values Y- Yes; N- No; ';
+comment on column PROF_TEAM_HIST.flg_status
+  is 'Record status: A - active, I - inactive, C - cancelled. ';
+comment on column PROF_TEAM_HIST.id_software
+  is 'Team software. ';
+comment on column PROF_TEAM_HIST.id_institution
+  is 'Team institution. ';
+comment on column PROF_TEAM_HIST.flg_type
+  is 'Type of team by software. O- Operating room; C -Care; ';
+comment on column PROF_TEAM_HIST.dt_begin_tstz
+  is 'Date of team begin ';
+comment on column PROF_TEAM_HIST.dt_end_tstz
+  is 'Date of end team activity ';
+comment on column PROF_TEAM_HIST.id_department
+  is ' Department where the team works.  ';
+comment on column PROF_TEAM_HIST.notes
+  is 'Team notes. ';
+comment on column PROF_TEAM_HIST.create_time
+  is 'Creation Time';
+comment on column PROF_TEAM_HIST.create_user
+  is 'Creation User';
+comment on column PROF_TEAM_HIST.flg_type_register
+  is 'Register type: C - creation, E edition';
+comment on column PROF_TEAM_HIST.create_institution
+  is 'Creation Institution';
+comment on column PROF_TEAM_HIST.update_user
+  is 'Update User';
+comment on column PROF_TEAM_HIST.update_time
+  is 'Update Time';
+comment on column PROF_TEAM_HIST.update_institution
+  is 'Update Institution';
+comment on column PROF_TEAM_HIST.id_prof_register
+  is 'Professional who made the record.';
+comment on column PROF_TEAM_HIST.dt_register
+  is 'Register date.';
+comment on column PROF_TEAM_HIST.id_team_type
+  is 'Team type identifier';
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 28/01/2020 12:14
+-- CHANGE REASON: [EMR-26001] - [Subtask] [DB] Versioning packages
+ALTER TABLE PROF_TEAM_HIST ADD ID_EPISODE NUMBER(24);
+
+comment on column PROF_TEAM_HIST.id_episode
+is 'Episode id';
+-- CHANGE END: Nuno Coelho

@@ -1,0 +1,9 @@
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 29/04/2014 08:36
+-- CHANGE REASON: [ALERT-283129] 
+BEGIN
+    pk_versioning.run(q'[create unique index IL_UK on INSTITUTION_LANGUAGE (case when ((id_institution is not null) and nvl(flg_available,'Y')<>'N') then id_institution end, 
+case when ((id_institution is not null) and nvl(flg_available,'Y')<>'N') then flg_available end) tablespace ALERT_IDX]');
+END;
+/
+-- CHANGE END: Rui Spratley

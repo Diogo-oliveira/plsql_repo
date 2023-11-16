@@ -1,0 +1,28 @@
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-MAR-28
+-- CHANGING REASON: OVERDOSAGE MODULE
+ALTER TABLE PRESC_ADVERSE_DOSAGE_HIST
+ ADD (CONSTRAINT PATH_PK PRIMARY KEY 
+  (ID_PRESC_ADVERSE_DOSAGE_HIST));
+-- CHANGE END Patrícia Neto
+
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-ABR-02
+-- CHANGING REASON: OVERDOSAGE MODULE
+alter table PRESC_ADVERSE_DOSAGE_HIST
+  add constraint PAT_DPP_FK foreign key (ID_DRUG_PRESC_PLAN)
+  references drug_PRESC_PLAN (ID_DRUG_PRESC_PLAN);
+alter table PRESC_ADVERSE_DOSAGE_HIST
+  add constraint PAT_DRD_FK foreign key (ID_DRUG_REQ_DET)
+  references drug_REQ_DET (ID_DRUG_REQ_DET);
+alter table PRESC_ADVERSE_DOSAGE_HIST
+  add constraint PAT_UME_FK foreign key (PRESC_DOSE_DAILY_UNIT)
+  references unit_measure (ID_UNIT_MEASURE);
+alter table PRESC_ADVERSE_DOSAGE_HIST
+  add constraint PAT_UME_FK2 foreign key (UNIT_MX_1DOSE)
+  references unit_measure (ID_UNIT_MEASURE);
+alter table PRESC_ADVERSE_DOSAGE_HIST
+  add constraint PAT_UME_FK3 foreign key (UNIT_MX_DOSE)
+  references unit_MEASURE (ID_UNIT_MEASURE);
+-- CHANGE END Patrícia Neto	

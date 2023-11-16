@@ -1,0 +1,190 @@
+
+ALTER TABLE doc_area_inst_soft
+	ADD CONSTRAINT doc_area_inst_soft_pk
+	PRIMARY KEY(id_doc_area_inst_soft);
+
+ALTER TABLE doc_area_inst_soft
+	ADD CONSTRAINT doc_area_inst_soft_flg_mod_chk
+	CHECK (flg_mode IN ('D','N'));
+	
+ALTER TABLE doc_area_inst_soft_prof
+	ADD CONSTRAINT doc_area_ins_sft_prf_3fk_uni
+	UNIQUE(id_doc_area,id_institution,id_software);
+	
+ALTER TABLE doc_area_inst_soft
+	ADD CONSTRAINT doc_area_ins_sft_3fk_uni
+	UNIQUE(id_doc_area,id_institution,id_software);
+	
+--João Eiras, 2008-01-29, Revisão de constraints
+--A pk só pode ter uma coluna
+ALTER TABLE doc_area_inst_soft
+  DROP CONSTRAINT DOC_AREA_INST_SOFT_PK;
+ALTER TABLE doc_area_inst_soft
+	ADD CONSTRAINT doc_area_inst_soft_pk
+	PRIMARY KEY(id_doc_area_inst_soft);
+--usar indices!
+ALTER TABLE doc_area_inst_soft
+    DROP CONSTRAINT doc_area_ins_sft_3fk_uni;
+ALTER TABLE doc_area_inst_soft_prof
+    DROP CONSTRAINT doc_area_ins_sft_prf_3fk_uni;
+	
+	
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 29/11/2010 15:48
+-- CHANGE REASON: [ALERT-140014] Data paging solution in summary pages
+
+--Market identifier. Required for default configurations and it should be NULL for custom configurations
+--Default configurations that have been made to date will be considered for all markets.
+DECLARE
+    l_exists     PLS_INTEGER;
+    l_constraint VARCHAR2(30) := 'DAIS_ID_MARKET_CHK';
+    l_dml        VARCHAR2(32767) := 'UPDATE doc_area_inst_soft dais SET dais.id_market = 0 WHERE dais.id_institution = 0 AND dais.id_market IS NULL';
+    l_ddl        VARCHAR2(32767) := 'ALTER TABLE DOC_AREA_INST_SOFT ADD CONSTRAINT DAIS_ID_MARKET_CHK CHECK( (ID_MARKET IS NULL AND ID_INSTITUTION!=0) OR (ID_MARKET IS NOT NULL AND ID_INSTITUTION=0) )';
+BEGIN
+    SELECT count(1)
+      INTO l_exists
+      FROM user_constraints uc
+     WHERE uc.constraint_name = l_constraint;
+    IF l_exists = 0
+    THEN
+        EXECUTE IMMEDIATE l_dml;
+        EXECUTE IMMEDIATE l_ddl;
+    ELSE
+        dbms_output.put_line('Info: Constraint already exists in DB: ' || l_constraint);
+    END IF;
+END;
+/
+
+
+
+--Type of scope used by area to retrieve information: (E)pisode; (V)isit; (P)atient
+DECLARE
+    l_exists     PLS_INTEGER;
+    l_constraint VARCHAR2(30) := 'DAIS_FLG_SCOPE_TYPE_CHK';
+    l_ddl        VARCHAR2(32767) := 'ALTER TABLE DOC_AREA_INST_SOFT ADD CONSTRAINT DAIS_FLG_SCOPE_TYPE_CHK CHECK ( FLG_SCOPE_TYPE IN (''E'',''V'',''P''))';
+BEGIN
+    SELECT count(1)
+      INTO l_exists
+      FROM user_constraints uc
+     WHERE uc.constraint_name = l_constraint;
+    IF l_exists = 0
+    THEN
+        EXECUTE IMMEDIATE l_ddl;
+    ELSE
+        dbms_output.put_line('Info: Constraint already exists in DB: ' || l_constraint);
+    END IF;
+END;
+/
+
+--Data paging support is enabled in the area: (Y)es; (N)o
+DECLARE
+    l_exists     PLS_INTEGER;
+    l_constraint VARCHAR2(30) := 'DAIS_FLG_PAGING_ENABLED_CHK';
+    l_ddl        VARCHAR2(32767) := 'ALTER TABLE DOC_AREA_INST_SOFT ADD CONSTRAINT DAIS_FLG_PAGING_ENABLED_CHK CHECK ( FLG_DATA_PAGING_ENABLED IN (''Y'',''N''))';
+BEGIN
+    SELECT count(1)
+      INTO l_exists
+      FROM user_constraints uc
+     WHERE uc.constraint_name = l_constraint;
+    IF l_exists = 0
+    THEN
+        EXECUTE IMMEDIATE l_ddl;
+    ELSE
+        dbms_output.put_line('Info: Constraint already exists in DB: ' || l_constraint);
+    END IF;
+END;
+/
+
+--Specifies how many items the area displays per page when data paging support is enabled
+DECLARE
+    l_exists     PLS_INTEGER;
+    l_constraint VARCHAR2(30) := 'DAIS_PAGE_SIZE_CHK';
+    l_ddl        VARCHAR2(32767) := 'ALTER TABLE DOC_AREA_INST_SOFT ADD CONSTRAINT DAIS_PAGE_SIZE_CHK CHECK ( (FLG_DATA_PAGING_ENABLED = ''Y'' AND nvl(PAGE_SIZE, 0) > 0) OR (FLG_DATA_PAGING_ENABLED = ''N'' AND PAGE_SIZE IS NULL))';
+BEGIN
+    SELECT count(1)
+      INTO l_exists
+      FROM user_constraints uc
+     WHERE uc.constraint_name = l_constraint;
+    IF l_exists = 0
+    THEN
+        EXECUTE IMMEDIATE l_ddl;
+    ELSE
+        dbms_output.put_line('Info: Constraint already exists in DB: ' || l_constraint);
+    END IF;
+END;
+/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 15/02/2011 15:43
+-- CHANGE REASON: [ALERT-162460] Insert constraints in FLG_STATUS columns
+DECLARE
+    constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(constraint_already_exists, -02264);
+    l_constraint_name VARCHAR2(30) := 'DAIS_FLG_MULTIPLE_CHK';
+    l_ddl             VARCHAR(32767) := 'ALTER TABLE DOC_AREA_INST_SOFT ADD CONSTRAINT DAIS_FLG_MULTIPLE_CHK CHECK (FLG_MULTIPLE IN (''Y'', ''N'') OR FLG_MULTIPLE IS NULL)';
+BEGIN
+    EXECUTE IMMEDIATE l_ddl;
+EXCEPTION
+    WHEN constraint_already_exists THEN
+        NULL;
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error creating constraint ' || l_constraint_name || ': ' || SQLERRM);
+END;
+/
+
+ 
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 20/09/2011 18:06
+-- CHANGE REASON: [ALERT-187042] constraints
+DECLARE
+    e_pk_already_there EXCEPTION;
+    e_unique_already_there EXCEPTION;
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_Default.DOC_AREA_INST_SOFT
+  add constraint DAIS_FLG_MULTIPLE_CHK
+  check (FLG_MULTIPLE IN (''Y'', ''N'') OR FLG_MULTIPLE IS NULL)';
+    EXCEPTION
+            WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_Default.DOC_AREA_INST_SOFT
+  add constraint DAIS_FLG_MOD_CHK
+  check (flg_mode IN (''D'',''N''))';
+    EXCEPTION
+            WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

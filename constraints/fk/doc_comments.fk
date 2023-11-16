@@ -1,0 +1,37 @@
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 2011-06-29
+-- CHANGE REASON: ALERT-186295
+
+DECLARE
+    e_object_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE DOC_COMMENTS ADD CONSTRAINT DC_PROF_FK FOREIGN KEY (ID_PROFESSIONAL) REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+    END;
+
+END;
+/
+
+DECLARE
+    e_object_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE DOC_COMMENTS ADD CONSTRAINT DC_DIG_FK FOREIGN KEY (ID_DOC_IMAGE) REFERENCES DOC_IMAGE (ID_DOC_IMAGE) ENABLE';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+    END;
+
+END;
+/
+
+-- CHANGED END: Bruno Martins

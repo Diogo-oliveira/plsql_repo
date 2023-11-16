@@ -1,0 +1,15 @@
+
+--PK
+alter table drug_req_supply_dev
+add constraint drs_dev_pk primary key (id_drug_req_supply_dev)
+using index tablespace INDEX_M;
+
+--CHKs
+alter table drug_req_supply_dev
+add constraint drs_dev_qt_dev_chk check (qty_dev > 0);
+
+alter table drug_req_supply_dev
+add constraint drs_dev_qt_stk_chk check (qty_for_stock >= 0);
+
+alter table drug_req_supply_dev
+add constraint drs_dev_qt_trsh_chk check (qty_for_trash >= 0);

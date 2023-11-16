@@ -1,0 +1,47 @@
+-- Create table vacc_type_group
+create table VACC_TYPE_GROUP
+(
+  ID_VACC_TYPE_GROUP   NUMBER(12) not null,
+  CODE_VACC_TYPE_GROUP VARCHAR2(200),
+  FLG_TYPE             VARCHAR2(1),
+  ADW_LAST_UPDATE      DATE not null,
+  FLG_PNV              VARCHAR2(1)
+)
+
+-- Add comments to the table 
+comment on table VACC_TYPE_GROUP
+  is 'Tabela com informacao dos descritivos e obrigatoriedade dos grupos de vacinas';
+-- Add comments to the columns 
+comment on column VACC_TYPE_GROUP.ID_VACC_TYPE_GROUP
+  is 'Chave primária';
+comment on column VACC_TYPE_GROUP.CODE_VACC_TYPE_GROUP
+  is 'Código do Grupo de Vacinas';
+comment on column VACC_TYPE_GROUP.FLG_TYPE
+  is 'Y - se grupo obrigatorio, N - caso contrario';
+comment on column VACC_TYPE_GROUP.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+comment on column VACC_TYPE_GROUP.FLG_PNV
+  is 'Y - O grupo faz parte do Plano Nacional de Vacinação; N - Outros';
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 2008-SEP-02
+-- CHANGE REASON: ID_CONTENT
+ALTER TABLE VACC_TYPE_GROUP ADD (ID_CONTENT VARCHAR2(200));
+comment on column VACC_TYPE_GROUP.ID_CONTENT is 'Identificador único de conteúdo';
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 22/04/2009
+-- CHANGE REASON: ALERT-25027 Actualização de dados na tabela vacc_type_group e inserção de novos registos na sys_domain de modo a suportar nova funcionalidade de vacinas
+alter table vacc_type_group add flg_presc_type varchar2(1);
+comment on column vacc_type_group.flg_presc_type is 'P - plano nacional de vacinação, T - provas tuberculina, O - outras vacinas';
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2009-05-04
+-- CHANGE REASON: ALERT-26735 - Implementação da Validação da Arquitectura Técnica DB
+alter table vacc_type_group modify (ID_VACC_TYPE_GROUP NUMBER(24));
+alter table vacc_type_group drop column ADW_LAST_UPDATE;
+-- CHANGE END

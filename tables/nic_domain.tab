@@ -1,0 +1,78 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 18/07/2014 16:36
+-- CHANGE REASON: [ALERT-290969] Nursing Care Plan: NANDA, NIC, NOC - Data Model
+
+BEGIN
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'NIC_DOMAIN', i_obj_type => 'TABLE', i_flg_category => 'CNT', i_flg_alert_default => 'N', i_delete_script => '', i_flg_default_child => 'N', i_flg_nzd => 'N', i_responsible_team => 'NURSING');
+END;
+/
+CREATE TABLE NIC_DOMAIN
+  (
+    ID_NIC_DOMAIN          NUMBER (24) NOT NULL ,
+    ID_TERMINOLOGY_VERSION NUMBER (24) NOT NULL ,
+    DOMAIN_CODE            VARCHAR2 (200 CHAR) NOT NULL ,
+    CODE_NAME              VARCHAR2 (200 CHAR) AS ( 'NIC_DOMAIN.CODE_NAME.'
+    ||TO_CHAR(ID_NIC_DOMAIN) ) VIRTUAL NOT NULL ,
+    CODE_DEFINITION VARCHAR2 (200 CHAR) AS ( 'NIC_DOMAIN.CODE_DEFINITION.'
+    ||TO_CHAR(ID_NIC_DOMAIN) ) VIRTUAL NOT NULL ,
+    RANK               NUMBER (6) ,
+    ID_INST_OWNER      NUMBER (24) ,
+    ID_CONCEPT_VERSION NUMBER (24) ,
+    ID_CONCEPT_TERM    NUMBER (24) ,
+    CREATE_USER        VARCHAR2 (30 CHAR) ,
+    CREATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE ,
+    CREATE_INSTITUTION NUMBER (24) ,
+    UPDATE_USER        VARCHAR2 (30 CHAR) ,
+    UPDATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE ,
+    UPDATE_INSTITUTION NUMBER (24)
+  )
+  TABLESPACE ALERT_DATA ;
+COMMENT ON TABLE NIC_DOMAIN
+IS
+  'NIC - Nursing Intervention Domain' ;
+  COMMENT ON COLUMN NIC_DOMAIN.ID_NIC_DOMAIN
+IS
+  'Domain ID (surrogate key)' ;
+  COMMENT ON COLUMN NIC_DOMAIN.ID_TERMINOLOGY_VERSION
+IS
+  'Release version of NIC' ;
+  COMMENT ON COLUMN NIC_DOMAIN.DOMAIN_CODE
+IS
+  'NIC Domain code' ;
+  COMMENT ON COLUMN NIC_DOMAIN.CODE_NAME
+IS
+  'Translation code for NIC Domain label' ;
+  COMMENT ON COLUMN NIC_DOMAIN.CODE_DEFINITION
+IS
+  'Translation code for NIC Domain definition' ;
+  COMMENT ON COLUMN NIC_DOMAIN.RANK
+IS
+  'Item order' ;
+  COMMENT ON COLUMN NIC_DOMAIN.ID_INST_OWNER
+IS
+  'Institution owner of the concept. 0 - ALERT' ;
+  COMMENT ON COLUMN NIC_DOMAIN.ID_CONCEPT_VERSION
+IS
+  'Concept version ID' ;
+  COMMENT ON COLUMN NIC_DOMAIN.ID_CONCEPT_TERM
+IS
+  'Concept term ID' ;
+  COMMENT ON COLUMN NIC_DOMAIN.CREATE_USER
+IS
+  'Creation User' ;
+  COMMENT ON COLUMN NIC_DOMAIN.CREATE_TIME
+IS
+  'Creation Time' ;
+  COMMENT ON COLUMN NIC_DOMAIN.CREATE_INSTITUTION
+IS
+  'Creation Institution' ;
+  COMMENT ON COLUMN NIC_DOMAIN.UPDATE_USER
+IS
+  'Update User' ;
+  COMMENT ON COLUMN NIC_DOMAIN.UPDATE_TIME
+IS
+  'Update Time' ;
+  COMMENT ON COLUMN NIC_DOMAIN.UPDATE_INSTITUTION
+IS
+  'Update Institution' ;
+-- CHANGE END: Ariel Machado

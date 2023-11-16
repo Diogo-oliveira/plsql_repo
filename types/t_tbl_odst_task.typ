@@ -1,0 +1,6 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGED DATE: 15-NOV-2013
+-- CHANGED REASON: [ALERT-269777]
+CREATE OR REPLACE TYPE t_tbl_odst_task AS TABLE OF t_rec_odst_task;
+/
+-- CHANGE END: Tiago Silva

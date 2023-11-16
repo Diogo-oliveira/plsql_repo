@@ -1,0 +1,1 @@
+GRANT SELECT ON vital_sign_conditions TO ALERT_VIEWER;

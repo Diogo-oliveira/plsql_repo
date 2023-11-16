@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_coll_sections IS TABLE OF t_rec_sections;

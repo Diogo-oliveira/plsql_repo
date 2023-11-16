@@ -1,0 +1,173 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 01/06/2009 15:42
+-- CHANGE REASON: [ALERT-889] Modelo de dados do nutricionista
+-- Creating Foreign Key on 'DIET_INSTIT_SOFT'
+ALTER TABLE DIET_INSTIT_SOFT ADD (CONSTRAINT
+ DIS_INST_FK FOREIGN KEY 
+  (ID_INSTITUTION) REFERENCES INSTITUTION
+  (ID_INSTITUTION));
+
+-- Creating Foreign Key on 'DIET_INSTIT_SOFT'
+ALTER TABLE DIET_INSTIT_SOFT ADD (CONSTRAINT
+ DIS_SOFT_FK FOREIGN KEY 
+  (ID_SOFTWARE) REFERENCES SOFTWARE
+  (ID_SOFTWARE));
+
+-- Creating Foreign Key on 'DIET_INSTIT_SOFT'
+ALTER TABLE DIET_INSTIT_SOFT ADD (CONSTRAINT
+ DIS_DIT_FK FOREIGN KEY 
+  (ID_DIET) REFERENCES DIET
+  (ID_DIET));
+-- CHANGE END: Elisabete Bugalho
+
+-- Rita Lopes
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 01/06/2009 15:42
+-- CHANGE REASON: [ALERT-889] Modelo de dados do nutricionista
+-- Creating Foreign Key on 'DIET_INSTIT_SOFT'
+ALTER TABLE DIET_INSTIT_SOFT ADD (CONSTRAINT
+ DIS_INST_FK FOREIGN KEY 
+  (ID_INSTITUTION) REFERENCES INSTITUTION
+  (ID_INSTITUTION));
+
+-- Creating Foreign Key on 'DIET_INSTIT_SOFT'
+ALTER TABLE DIET_INSTIT_SOFT ADD (CONSTRAINT
+ DIS_SOFT_FK FOREIGN KEY 
+  (ID_SOFTWARE) REFERENCES SOFTWARE
+  (ID_SOFTWARE));
+-- CHANGE END
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 
+-- CHANGE REASON: ALERT-889
+ALTER TABLE DIET_INSTIT_SOFT ADD (CONSTRAINT
+ DIS_DIT_FK FOREIGN KEY 
+  (ID_DIET) REFERENCES DIET
+  (ID_DIET));
+  
+ -- CHANGE END 
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 12/06/2018 09:11
+-- CHANGE REASON: [EMR-4036] 
+DECLARE
+    CURSOR xxx IS
+        SELECT id_software, id_institution, id_diet, COUNT(*)
+          FROM diet_instit_soft
+         GROUP BY id_software, id_institution, id_diet
+        HAVING COUNT(*) > 1;
+
+    xxx_row xxx%ROWTYPE;
+
+BEGIN
+
+    FOR xxx_row IN xxx
+    LOOP
+        DELETE FROM diet_instit_soft dis
+         WHERE dis.id_diet = xxx_row.id_diet
+           AND dis.id_software = xxx_row.id_software
+           AND dis.id_institution = xxx_row.id_institution
+           AND dis.flg_available = 'N';
+    END LOOP;
+
+    EXECUTE IMMEDIATE 'ALTER TABLE diet_instit_soft DROP CONSTRAINT DIST_PK CASCADE';
+    EXECUTE IMMEDIATE 'ALTER TABLE diet_instit_soft ADD CONSTRAINT DIST_PK PRIMARY KEY (ID_SOFTWARE, ID_INSTITUTION, ID_DIET)';
+
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 12/06/2018 09:44
+-- CHANGE REASON: [EMR-4036] 
+DECLARE
+    CURSOR xxx IS
+        SELECT id_software, id_institution, id_diet, COUNT(*)
+          FROM diet_instit_soft
+         GROUP BY id_software, id_institution, id_diet
+        HAVING COUNT(*) > 1;
+
+    xxx_row xxx%ROWTYPE;
+
+BEGIN
+
+    FOR xxx_row IN xxx
+    LOOP
+        DELETE FROM diet_instit_soft dis
+         WHERE dis.id_diet = xxx_row.id_diet
+           AND dis.id_software = xxx_row.id_software
+           AND dis.id_institution = xxx_row.id_institution
+           AND dis.flg_available = 'N';
+    END LOOP;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE diet_instit_soft DROP CONSTRAINT DIST_PK';
+    EXCEPTION
+        WHEN OTHERS THEN
+            NULL;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX DIST_PK';
+    EXCEPTION
+        WHEN OTHERS THEN
+            NULL;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE diet_instit_soft ADD CONSTRAINT DIST_PK PRIMARY KEY (ID_SOFTWARE, ID_INSTITUTION, ID_DIET)';
+    EXCEPTION
+        WHEN OTHERS THEN
+            NULL;
+    END;
+
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 12/06/2018 09:46
+-- CHANGE REASON: [EMR-4036] 
+DECLARE
+    CURSOR xxx IS
+        SELECT id_software, id_institution, id_diet, COUNT(*)
+          FROM diet_instit_soft
+         GROUP BY id_software, id_institution, id_diet
+        HAVING COUNT(*) > 1;
+
+    xxx_row xxx%ROWTYPE;
+
+BEGIN
+
+    FOR xxx_row IN xxx
+    LOOP
+        DELETE FROM diet_instit_soft dis
+         WHERE dis.id_diet = xxx_row.id_diet
+           AND dis.id_software = xxx_row.id_software
+           AND dis.id_institution = xxx_row.id_institution
+           AND dis.flg_available = 'N';
+    END LOOP;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE diet_instit_soft DROP CONSTRAINT DIST_PK';
+    EXCEPTION
+        WHEN OTHERS THEN
+            NULL;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX DIST_PK';
+    EXCEPTION
+        WHEN OTHERS THEN
+            NULL;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE diet_instit_soft ADD CONSTRAINT DIST_PK PRIMARY KEY (ID_SOFTWARE, ID_INSTITUTION, ID_DIET)';
+    EXCEPTION
+        WHEN OTHERS THEN
+            NULL;
+    END;
+
+END;
+-- CHANGE END: Pedro Henriques

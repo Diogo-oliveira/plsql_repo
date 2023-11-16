@@ -1,0 +1,143 @@
+
+create table drug_req_det_hist_modif
+(
+	id_drug_req_det	number(24) not null,
+	dt_modified		timestamp with local time zone not null,
+	id_prof_modify	number(24) not null,
+	id_drug			varchar2(255) not null,
+	vers			varchar2(10) not null,
+	qty				number(6) null,
+	id_unit_measure	number(24) null
+) tablespace TABLE_M;
+
+comment on table drug_req_det_hist_modif
+	is 'pharmacist modifications to pharmacy requests';
+
+comment on column drug_req_det_hist_modif.id_drug_req_det
+	is 'id drug_req_det';
+comment on column drug_req_det_hist_modif.dt_modified
+	is 'date';
+comment on column drug_req_det_hist_modif.id_prof_modify
+	is 'id professional = pharmacist';
+comment on column drug_req_det_hist_modif.id_drug
+	is 'id medication';
+comment on column drug_req_det_hist_modif.vers
+	is 'market';
+comment on column drug_req_det_hist_modif.qty
+	is 'quantity';
+comment on column drug_req_det_hist_modif.id_unit_measure
+	is 'unit for the quantity';
+
+--ALERT-86484
+alter table drug_req_det_hist_modif
+add id_other_product number(24);
+
+alter table drug_req_det_hist_modif
+modify id_drug varchar2(255 char) null;
+
+comment on column drug_req_det_hist_modif.id_other_product
+	is 'id other product';
+--
+
+
+-- CHANGED BY: Pedro Martins Santos
+-- CHANGE DATE: 21/04/2010
+-- CHANGE REASON: [ALERT-91236] 
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table drug_req_det_hist_modif
+add id_other_product number(24);';
+        EXECUTE IMMEDIATE  'comment on column drug_req_det_hist_modif.id_other_product
+	is ''id other product''';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+BEGIN
+        EXECUTE IMMEDIATE 'alter table drug_req_det_hist_modif
+modify id_drug varchar2(255 char) null';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+-- CHANGE END: Pedro Martins Santos
+
+
+-- CHANGED BY: Pedro Martins Santos
+-- CHANGE DATE: 21/04/2010
+-- CHANGE REASON: [ALERT-91236] 
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table drug_req_det_hist_modif
+add id_other_product number(24)';
+        EXECUTE IMMEDIATE  'comment on column drug_req_det_hist_modif.id_other_product
+	is ''id other product''';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('ERRO: '||);
+END;
+/
+BEGIN
+        EXECUTE IMMEDIATE 'alter table drug_req_det_hist_modif
+modify id_drug varchar2(255 char) null';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+-- CHANGE END: Pedro Martins Santos
+
+
+-- CHANGED BY: Pedro Martins Santos
+-- CHANGE DATE: 21/04/2010
+-- CHANGE REASON: [ALERT-91236] 
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table drug_req_det_hist_modif add id_other_product number(24)';
+        EXECUTE IMMEDIATE 'comment on column drug_req_det_hist_modif.id_other_product is ''id other product''';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: '||sqlerrm);
+END;
+/
+BEGIN
+        EXECUTE IMMEDIATE 'alter table drug_req_det_hist_modif modify id_drug varchar2(255 char) null';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: '||sqlerrm);
+END;
+/
+
+-- CHANGE END: Pedro Martins Santos
+
+-- CHANGED BY: Pedro Martins Santos
+-- CHANGE DATE: 21/04/2010
+-- CHANGE REASON: [ALERT-91236] 
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table drug_req_det_hist_modif add id_other_product number(24)';
+        EXECUTE IMMEDIATE 'comment on column drug_req_det_hist_modif.id_other_product is ''id other product''';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: operacao ja realizada');
+END;
+/
+BEGIN
+        EXECUTE IMMEDIATE 'alter table drug_req_det_hist_modif modify id_drug varchar2(255 char) null';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: operacao ja realizada');
+END;
+/
+
+-- CHANGE END: Pedro Martins Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:36
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_REQ_DET_HIST_MODIF IS 'pharmacist modifications to pharmacy requests [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,86 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 15:15
+-- CHANGE REASON: [ARCH-7603] Changes on DB Model
+BEGIN
+pk_frmw_objects.insert_into_frmw_objects(
+     i_owner            => 'ALERT',
+     i_obj_name         => 'DS_CMPT_INST_REL',
+     i_obj_type         => 'TABLE',
+     i_flg_category     => 'PRM',
+     i_delete_script    => '',
+     i_responsible_team => 'CDOC',
+     i_flg_nzd          => 'N');
+END;
+/  
+
+
+---
+CREATE TABLE DS_CMPT_INST_REL
+(
+  id_ds_cmpt_inst_rel   NUMBER(24) not null,
+  id_ds_cmpt_mkt_rel      NUMBER(24) not null,
+  id_ds_component_parent  NUMBER(24) ,
+  id_ds_component_child   NUMBER(24) not null,
+  id_institution          NUMBER(24) not null,
+  id_software             NUMBER(24) default 0 not null,
+  id_profile_template     NUMBER(24) default 0 not null,
+  id_category             NUMBER(24) default 0 not null,
+  rank                    NUMBER(24) not null,
+  gender                  VARCHAR2(1 CHAR),
+  age_min_value           NUMBER(5,2),
+  age_min_unit_measure    NUMBER(24),
+  age_max_value           NUMBER(5,2),
+  age_max_unit_measure    NUMBER(24),
+  id_unit_measure         NUMBER(24),
+  id_unit_measure_subtype NUMBER(24),
+  max_len                 NUMBER(24),
+  min_len                 NUMBER(24),
+  min_value               NUMBER(24),
+  max_value               NUMBER(24),
+  position                NUMBER(24) default 0,
+  comp_size       NUMBER(2) ,
+  comp_offset     NUMBER(2) ,
+  create_user             VARCHAR2(30 CHAR),
+  create_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution      NUMBER(24),
+  update_user             VARCHAR2(30 CHAR),
+  update_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution      NUMBER(24)
+)
+;
+
+-- Add comments to the columns 
+--comment on column DS_CMPT_INST_REL.flg_default_value  is 'Use Default Value? (Y/N)';
+comment on column DS_CMPT_INST_REL.min_len        is 'minimum length of field';
+comment on column DS_CMPT_INST_REL.id_profile_template  is 'Profile that has access to the field';
+comment on column DS_CMPT_INST_REL.position             is 'child component position in  line (RANK) - multiple fields by line';  
+COMMENT ON COLUMN DS_CMPT_INST_REL.ID_CATEGORY        IS 'ENABLED CATEGORY CONFIGURATION';
+comment on column DS_CMPT_INST_REL.MIN_LEN          is 'minimum number of characters for valid input';
+comment on column DS_CMPT_INST_REL.comp_size        is 'Size of component:1 - 12';
+comment on column DS_CMPT_INST_REL.comp_offset        is 'Component Offset of previous component';
+comment on column DS_CMPT_INST_REL.CREATE_USER          is 'User that created the record';
+comment on column DS_CMPT_INST_REL.CREATE_TIME          is 'Time when the record was created';
+comment on column DS_CMPT_INST_REL.CREATE_INSTITUTION   is 'Institution where record was created';
+comment on column DS_CMPT_INST_REL.UPDATE_USER          is 'Last user that changed the record';
+comment on column DS_CMPT_INST_REL.UPDATE_INSTITUTION   is 'Last Institution where user made the change';
+comment on column DS_CMPT_INST_REL.UPDATE_TIME          is 'Time of Last change';
+-- CHANGE END: Elisabete Bugalho
+
+--
+declare
+       l_sql varchar2(4000);
+begin
+       l_sql := q'[alter table ds_cmpt_mkt_rel add FLG_LABEL_VISIBLE VARCHAR2(1 char) default 'Y' not null]';
+       pk_versioning.run( l_sql);
+end;
+/
+comment on column DS_CMPT_INST_REL.FLG_LABEL_VISIBLE          is 'Set if label is visible (Y/N)';
+
+declare
+       l_sql varchar2(4000);
+begin
+       l_sql := q'[alter table ds_cmpt_inst_rel add FLG_LABEL_VISIBLE VARCHAR2(1 char) default 'Y' not null]';
+       pk_versioning.run( l_sql);
+end;
+/
+comment on column DS_CMPT_INST_REL.FLG_LABEL_VISIBLE          is 'Set if label is visible (Y/N)';

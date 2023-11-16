@@ -1,0 +1,25 @@
+
+
+  ALTER TABLE VITAL_SIGN_DESC ADD CONSTRAINT VSD_SVS_FK FOREIGN KEY (ID_VITAL_SIGN)
+	  REFERENCES VITAL_SIGN (ID_VITAL_SIGN) ENABLE;
+
+
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 26/08/2011 10:57
+-- CHANGE REASON: [ALERT-192605] Issue Replication: Manchester triage protocol - Improvements - ECG vital sign update
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE VITAL_SIGN_DESC ADD CONSTRAINT VSD_MRK_FK FOREIGN KEY (ID_MARKET) REFERENCES MARKET (ID_MARKET)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

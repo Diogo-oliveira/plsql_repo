@@ -1,0 +1,40 @@
+-- Create table
+create table UPD_ME_MED_ATC_INTERACTION
+(
+  EMB_ID          VARCHAR2(255) not null,
+  ATCD            VARCHAR2(255),
+  ATCDESCD        VARCHAR2(255),
+  DDI             VARCHAR2(255) not null,
+  INTERDDI        VARCHAR2(255) not null,
+  DDI_DESD        VARCHAR2(255) not null,
+  DDI_SLD         VARCHAR2(255) not null,
+  VERS            VARCHAR2(255) not null,
+  EMB_ID_INTERACT VARCHAR2(255),
+  ID_PROCESS      NUMBER(24),
+  FLG_STATUS      VARCHAR2(1),
+  ERR_DESCRIPTION VARCHAR2(255)
+);
+
+-- CHANGED BY: Sérgio Lopes
+-- CHANGED DATE: 2008-SET-24
+-- CHANGING REASON: Novas colunas mensagem interacção
+
+alter table UPD_ME_MED_ATC_INTERACTION add (
+  ID_INTERACT_MESSAGE        NUMBER(24),
+  ID_INTERACT_MESSAGE_FORMAT NUMBER(24)
+);
+
+-- Add comments to the columns 
+comment on column UPD_ME_MED_ATC_INTERACTION.ID_INTERACT_MESSAGE
+  is 'Interaction message ID';
+comment on column UPD_ME_MED_ATC_INTERACTION.ID_INTERACT_MESSAGE_FORMAT
+  is 'Interaction message format';
+  
+-- CHANGE END Sérgio Lopes	
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:27
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE UPD_ME_MED_ATC_INTERACTION IS ' [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

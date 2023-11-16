@@ -1,0 +1,28 @@
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/09/2018 11:05
+-- CHANGE REASON: [EMR-6418] 
+alter table BLOOD_PRODUCT_REQ
+  add constraint BPR_EPIS_DEST_FK foreign key (ID_EPISODE_DESTINATION)
+  references EPISODE (ID_EPISODE);
+alter table BLOOD_PRODUCT_REQ
+  add constraint BPR_EPIS_FK foreign key (ID_EPISODE)
+  references EPISODE (ID_EPISODE);
+alter table BLOOD_PRODUCT_REQ
+  add constraint BPR_EPIS_FK2 foreign key (ID_PREV_EPISODE)
+  references EPISODE (ID_EPISODE);
+alter table BLOOD_PRODUCT_REQ
+  add constraint BPR_EPIS_ORIGIN_FK foreign key (ID_EPISODE_ORIGIN)
+  references EPISODE (ID_EPISODE);
+alter table BLOOD_PRODUCT_REQ
+  add constraint BPR_INST_FK foreign key (ID_INSTITUTION)
+  references ALERT_CORE_DATA.AB_INSTITUTION (ID_AB_INSTITUTION);
+alter table BLOOD_PRODUCT_REQ
+  add constraint BPR_PAT_FK foreign key (ID_PATIENT)
+  references ALERT_ADTCOD.PATIENT (ID_PATIENT);
+alter table BLOOD_PRODUCT_REQ
+  add constraint BPR_PROF_CANCEL_FK foreign key (ID_PROF_CANCEL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table BLOOD_PRODUCT_REQ
+  add constraint BPR_PROF_FK foreign key (ID_PROFESSIONAL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+-- CHANGE END: Pedro Henriques

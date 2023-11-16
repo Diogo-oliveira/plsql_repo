@@ -1,0 +1,164 @@
+-- pending_issue_message
+
+CREATE TABLE pending_issue_message
+(
+    id_pending_issue_message    NUMBER(24,0) NOT NULL,
+		id_pending_issue_msg_parent NUMBER(24,0),
+    id_pending_issue            NUMBER(24) NOT NULL,
+		title                       VARCHAR2(4000),
+		text                        VARCHAR2(4000),
+		id_professional             NUMBER(24,0),
+		id_prof_cancel              NUMBER(24,0),
+		thread_level                NUMBER,
+    dt_creation                 TIMESTAMP WITH TIME ZONE,
+    dt_cancel                   TIMESTAMP WITH TIME ZONE,
+    dt_update                   TIMESTAMP WITH TIME ZONE,
+    flg_status                  VARCHAR2(1) NOT NULL
+);
+
+-- COMMENTS
+COMMENT ON COLUMN pending_issue_message.id_pending_issue_message IS 'Primary key';
+
+COMMENT ON COLUMN pending_issue_message.id_pending_issue_msg_parent IS 'Used by replied messages';
+
+COMMENT ON COLUMN pending_issue_message.id_pending_issue IS 'Issue ID';
+
+COMMENT ON COLUMN pending_issue_message.title IS 'Message''s subject';
+
+COMMENT ON COLUMN pending_issue_message.text IS 'Message''s body';
+
+COMMENT ON COLUMN pending_issue_message.id_professional IS 'Professional who creates the issue';
+
+COMMENT ON COLUMN pending_issue_message.id_prof_cancel IS 'Professional who cancels the issue';
+
+COMMENT ON COLUMN pending_issue_message.thread_level IS 'Level of the message. Used by replied messages';
+
+COMMENT ON COLUMN pending_issue_message.dt_creation IS 'Creation date';
+
+COMMENT ON COLUMN pending_issue_message.dt_cancel IS 'Cancel date';
+
+COMMENT ON COLUMN pending_issue_message.dt_update IS 'Last update date';
+
+COMMENT ON COLUMN pending_issue_message.flg_status IS 'Message status: A - Active, C - Canceled';
+
+COMMENT ON TABLE pending_issue_message IS 'Tabela responsável pelo armazenamento das mensagens associadas a um determinado ISSUE.';
+
+
+
+-- CONSTRAINTS
+ALTER TABLE PENDING_ISSUE_MESSAGE ADD CONSTRAINT PIM_ID_PIM_PK PRIMARY KEY (id_pending_issue_message);
+
+ALTER TABLE PENDING_ISSUE_MESSAGE ADD CONSTRAINT PIM_ID_PI_FK FOREIGN KEY (id_pending_issue) REFERENCES PENDING_ISSUE (id_pending_issue);
+
+ALTER TABLE PENDING_ISSUE_MESSAGE ADD CONSTRAINT PIM_FLG_STATUS_FK CHECK (flg_status IN ('A', 'C'));
+
+ALTER TABLE PENDING_ISSUE_MESSAGE ADD CONSTRAINT PIM_ID_PROFESSIONAL_FK FOREIGN KEY (id_professional) REFERENCES PROFESSIONAL (ID_PROFESSIONAL);
+
+ALTER TABLE PENDING_ISSUE_MESSAGE ADD CONSTRAINT PIM_ID_PROF_CANCEL_FK FOREIGN KEY (id_prof_cancel) REFERENCES PROFESSIONAL (ID_PROFESSIONAL);
+
+
+
+
+
+drop table pending_issue_message cascade constraint; 
+
+
+
+
+-- pending_issue_message
+
+CREATE TABLE pending_issue_message
+(
+    id_pending_issue            NUMBER(24,0) NOT NULL,
+		id_pending_issue_message    NUMBER(24,0) NOT NULL,
+		id_pending_issue_msg_parent NUMBER(24,0),
+    title                       VARCHAR2(4000),
+		text                        VARCHAR2(4000),
+		id_professional             NUMBER(24,0),
+		id_prof_cancel              NUMBER(24,0),
+		thread_level                NUMBER,
+    dt_creation                 TIMESTAMP WITH TIME ZONE,
+    dt_cancel                   TIMESTAMP WITH TIME ZONE,
+    dt_update                   TIMESTAMP WITH TIME ZONE,
+    flg_status                  VARCHAR2(1) NOT NULL
+);
+
+-- COMMENTS
+COMMENT ON COLUMN pending_issue_message.id_pending_issue_message IS 'Part of the composite primary key - Message number';
+
+COMMENT ON COLUMN pending_issue_message.id_pending_issue_msg_parent IS 'Used by replied messages';
+
+COMMENT ON COLUMN pending_issue_message.id_pending_issue IS 'Part of the composite primary key - Issue ID';
+
+COMMENT ON COLUMN pending_issue_message.title IS 'Message''s subject';
+
+COMMENT ON COLUMN pending_issue_message.text IS 'Message''s body';
+
+COMMENT ON COLUMN pending_issue_message.id_professional IS 'Professional who creates the issue';
+
+COMMENT ON COLUMN pending_issue_message.id_prof_cancel IS 'Professional who cancels the issue';
+
+COMMENT ON COLUMN pending_issue_message.thread_level IS 'Level of the message. Used by replied messages';
+
+COMMENT ON COLUMN pending_issue_message.dt_creation IS 'Creation date';
+
+COMMENT ON COLUMN pending_issue_message.dt_cancel IS 'Cancel date';
+
+COMMENT ON COLUMN pending_issue_message.dt_update IS 'Last update date';
+
+COMMENT ON COLUMN pending_issue_message.flg_status IS 'Message status: A - Active, C - Canceled';
+
+COMMENT ON TABLE pending_issue_message IS 'Tabela responsável pelo armazenamento das mensagens associadas a um determinado ISSUE.';
+
+
+-- CONSTRAINTS
+ALTER TABLE PENDING_ISSUE_MESSAGE ADD CONSTRAINT PIM_ID_PIM_PK PRIMARY KEY (id_pending_issue_message, id_pending_issue);
+
+ALTER TABLE PENDING_ISSUE_MESSAGE ADD CONSTRAINT PIM_ID_PI_FK FOREIGN KEY (id_pending_issue) REFERENCES PENDING_ISSUE (id_pending_issue);
+
+ALTER TABLE PENDING_ISSUE_MESSAGE ADD CONSTRAINT PIM_FLG_STATUS_FK CHECK (flg_status IN ('A', 'C'));
+
+ALTER TABLE PENDING_ISSUE_MESSAGE ADD CONSTRAINT PIM_ID_PROFESSIONAL_FK FOREIGN KEY (id_professional) REFERENCES PROFESSIONAL (ID_PROFESSIONAL);
+
+ALTER TABLE PENDING_ISSUE_MESSAGE ADD CONSTRAINT PIM_ID_PROF_CANCEL_CHK FOREIGN KEY (id_prof_cancel) REFERENCES PROFESSIONAL (ID_PROFESSIONAL);
+
+ALTER TABLE PENDING_ISSUE_MESSAGE MODIFY TITLE VARCHAR2(200);
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 29/10/2014 14:56
+-- CHANGE REASON: [ALERT-299659] new text field and state control
+DECLARE
+    i_sql VARCHAR2(1000 CHAR);
+BEGIN
+    i_sql := 'alter table pending_issue_message add msg_body clob';
+    pk_versioning.run(i_sql => i_sql);
+    
+    i_sql := 'COMMENT ON column pending_issue_message.msg_body IS ''Messages body.''';
+    pk_versioning.run(i_sql => i_sql);
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+comment on table PENDING_ISSUE_MESSAGE
+  is 'Table responsible for the storage of messages associated with a particular Issue.';  
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.pending_issue_message move lob(msg_body) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

@@ -1,0 +1,108 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/08/2011 09:00
+-- CHANGE REASON: [ALERT-190334] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects('ALERT', 'links', 'TABLE', 'PRM', 'N', '', 'N');
+
+    BEGIN
+        EXECUTE IMMEDIATE 'create table links (
+  id_links                   number(24,0)                      not null,
+  code_links                 varchar2(200 char)                not null,
+desc_links                 varchar2(4000 char)               not null, 
+id_parent                  number(24,0)                      null,  
+flg_available              varchar2(1 char)                  not null,
+flg_type                   varchar2(1 char)                  not null,    
+id_institution             number(24,0)                      not null,
+  id_software                number(24,0)                      not null,
+  id_profile_template        number(24,0)                      not null,  
+context_link               varchar2(4000 char)               null,
+normal_link                varchar2(4000 char)               null,
+flg_required_fields        varchar2(1 char)                  null,    
+flg_iav3                   varchar2(1 char)                  null,
+rank                       number(6,0)                       null,
+  create_user                varchar2(24 char)                 null,
+  create_time                timestamp(6) with local time zone null,
+  create_institution         number(24,0)                      null,
+  update_user                varchar2(24 char)                 null,
+  update_time                timestamp(6) with local time zone null,
+  update_institution         number(24,0)                      null
+)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+
+COMMENT ON TABLE links IS 'normalize links';
+COMMENT ON COLUMN links.id_links            IS 'link unique identifier';
+COMMENT ON COLUMN links.code_links          IS 'code link';
+COMMENT ON COLUMN links.desc_links          IS 'desc link';
+COMMENT ON COLUMN links.id_parent           IS 'link parent identifier';
+COMMENT ON COLUMN links.flg_available       IS 'record available Y/N';
+COMMENT ON COLUMN links.flg_type            IS 'flag type: L=link; F=folder';
+COMMENT ON COLUMN links.id_institution      IS 'institution identifier not equal to zero';
+COMMENT ON COLUMN links.id_software         IS 'software identifier zero means all';
+COMMENT ON COLUMN links.id_profile_template IS 'profilde template identifier zero means all';
+COMMENT ON COLUMN links.context_link        IS 'context link';
+COMMENT ON COLUMN links.normal_link         IS 'normal link';
+COMMENT ON COLUMN links.flg_required_fields iS 'required fields flag P=patient; E=episode; B=both';
+COMMENT ON COLUMN links.flg_iav3            iS 'Y/N is an IAV3 context link (Fertis, CITs e DBCs)';
+COMMENT ON COLUMN links.rank                IS 'rank number';    
+COMMENT ON COLUMN links.create_user         IS 'Creation User';
+COMMENT ON COLUMN links.create_time         IS 'Creation Time';
+COMMENT ON COLUMN links.create_institution  IS 'Creation Institution';
+COMMENT ON COLUMN links.update_user         IS 'Update User';
+COMMENT ON COLUMN links.update_time         IS 'Update Time';
+COMMENT ON COLUMN links.update_institution  IS 'Update Institution';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 18/11/2014 15:23
+-- CHANGE REASON: [ALERT-302131] 
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table links add FLG_LINK_VISIBLE VARCHAR2(1 CHAR) default ''Y'' not null';
+  EXECUTE IMMEDIATE 'comment on column links.FLG_LINK_VISIBLE  is ''Links has visible in the viewer''';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+ 
+END;
+/
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 18/11/2014 15:23
+-- CHANGE REASON: [ALERT-302131] 
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table links add LINKS_SUBTITLE VARCHAR2(4000 CHAR)';
+  EXECUTE IMMEDIATE 'comment on column links.LINKS_SUBTITLE  is ''Name of Subtitle description in the viewer (links or other)''';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+ 
+END;
+/
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 12/12/2014 09:10
+-- CHANGE REASON: [ALERT-304332] sys_configs, tables
+comment on column LINKS.flg_type  is 'flag type: L=link; F=folder; I=Infobutton (dont appear on viewer)';
+-- CHANGE END: mario.mineiro

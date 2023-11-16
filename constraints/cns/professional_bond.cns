@@ -1,0 +1,30 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 28/11/2013 10:40
+-- CHANGE REASON: [ALERT-268987] new fields and content tbls
+DECLARE
+    e_pk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+    e_unique_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE professional_bond add CONSTRAINT pbond_pk primary key(id_bond)
+        USING INDEX tablespace alert_idx';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE professional_bond add CONSTRAINT pbond_uk UNIQUE(id_bond, id_bond_parent, flg_available)
+        USING INDEX tablespace alert_idx';
+    EXCEPTION
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('UK already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

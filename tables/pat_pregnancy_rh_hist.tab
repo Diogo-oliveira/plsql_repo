@@ -1,0 +1,26 @@
+create table pat_pregnancy_rh_hist
+(
+  id_pat_pregnancy_rh_hist NUMBER(24) NOT NULL,
+  id_pat_pregnancy NUMBER(24) NOT NULL,
+  id_prof_rh  NUMBER(24) NOT NULL,
+	dt_reg_rh  timestamp with local time zone NOT NULL,
+	blood_group_father VARCHAR2(2),
+	blood_rhesus_father VARCHAR2(2),
+	blood_group_mother VARCHAR2(2),
+	blood_rhesus_mother VARCHAR2(1),	
+	flg_antigl_aft_chb VARCHAR2(2),
+	flg_antigl_aft_abb VARCHAR2(2),
+	flg_antigl_need VARCHAR2(2),
+	flg_titration VARCHAR2(1),
+	flg_antibody VARCHAR2(1)
+);
+
+COMMENT ON TABLE pat_pregnancy_rh_hist IS 'Table containing all changes made to table pat_pregnancy (RH)';
+
+-- JSILVA 31-07-2008
+alter table pat_pregnancy_rh_hist drop column flg_titration;
+alter table pat_pregnancy_rh_hist add titration_value VARCHAR2(10);
+-- END
+
+ALTER TABLE pat_pregnancy_rh_hist ADD id_episode_rh NUMBER(24);
+

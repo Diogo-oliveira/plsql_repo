@@ -1,0 +1,57 @@
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/07/2009 09:13
+-- CHANGE REASON: [ALERT-38601] Added database model related with new table BMNG_ALLOCATION_BED
+CREATE TABLE "ALERT"."BMNG_ALLOCATION_BED"(  
+    "ID_BMNG_ALLOCATION_BED" NUMBER(24,0) NOT NULL,
+    "ID_EPISODE" NUMBER(24,0) NOT NULL,
+"ID_PATIENT" NUMBER(24,0) NOT NULL,
+"ID_BED" NUMBER(24,0) NOT NULL,
+"ALLOCATION_NOTES" VARCHAR2(4000),
+"ID_ROOM" NUMBER(24,0) NOT NULL,
+"ID_PROF_CREATION" NUMBER(24,0) NOT NULL,
+"DT_CREATION"  TIMESTAMP(6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+"ID_PROF_RELEASE" NUMBER(24,0),
+"DT_RELEASE"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"FLG_OUTDATED" VARCHAR2(1) DEFAULT 'N' NOT NULL,
+"NCH_HOURS" NUMBER(24,0),
+"FLG_ALLOCATION_NCH" VARCHAR2(1),
+"DT_BEGIN_NCH"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+"DT_END_NCH"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    --
+    "CREATE_USER"  VARCHAR2(24),
+    "CREATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    "CREATE_INSTITUTION"  NUMBER(24),
+    "UPDATE_USER"  VARCHAR2(24),
+    "UPDATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    "UPDATE_INSTITUTION"  NUMBER(24)
+);
+
+-- Table Comment
+COMMENT ON TABLE BMNG_ALLOCATION_BED IS 'This table has information about all bed allocations made in ALERT application.';
+
+-- Collumns Comments
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."ID_BMNG_ALLOCATION_BED" IS 'Bed management allocation identifier (Primary Key)';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."ID_EPISODE" IS 'Episode identifier';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."ID_PATIENT" IS 'Patient identifier';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."ID_BED" IS 'Bed identifier';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."ALLOCATION_NOTES" IS 'Allocation notes inserted by professional when creating an allocation';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."ID_ROOM" IS 'Room identifier';
+
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."ID_PROF_CREATION" IS 'Professional identifier of professional that creates current registry';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."DT_CREATION" IS 'Date in which current registry was created (DEFAULT: CURRENT_TIMESTAMP)';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."ID_PROF_RELEASE" IS 'Professional identifier of professional that outdates current registry';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."DT_RELEASE" IS 'Date in which current registry was outdated';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."FLG_OUTDATED" IS 'It is current registry outdated (''Y''- Yes; ''N''- No) (DEFAULT: ''N'')';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."NCH_HOURS" IS 'Number of NCH associated with current allocation';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."FLG_ALLOCATION_NCH" IS 'Is this NCH information definitive or automatically updated with NCH_LEVEL information (''D''- Definitive; ''U''- Updatable)';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."DT_BEGIN_NCH" IS 'Date in which current NCH information starts taking efect';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."DT_END_NCH" IS 'Date in which current NCH information ends it''s validation';
+--
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."CREATE_USER" IS 'Professional ID that creates the registry';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."CREATE_TIME" IS 'Date of registry creation';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."CREATE_INSTITUTION" IS 'Institution ID where registry was created';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."UPDATE_USER" IS 'Professional ID that last updates the registry';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."UPDATE_TIME" IS 'Date of registry last update';
+COMMENT ON COLUMN "ALERT"."BMNG_ALLOCATION_BED"."UPDATE_INSTITUTION" IS 'Institution ID where registry was last updated';
+--
+-- CHANGE END: Luís Maia

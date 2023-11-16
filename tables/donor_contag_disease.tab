@@ -1,0 +1,39 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:19
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+CREATE TABLE donor_contag_disease (
+       id_donor_contag_disease  NUMBER(24) NOT NULL,
+       id_organ_donor           NUMBER(24) NOT NULL,
+       id_pat_history_diagnosis NUMBER(24) NOT NULL,
+       --
+       create_user              VARCHAR2(24 CHAR),
+       create_time              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution       NUMBER(24),
+       update_user              VARCHAR2(24 CHAR),
+       update_time              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution       NUMBER(24)
+);
+
+--
+
+COMMENT ON TABLE donor_contag_disease IS 'Table for the donors contagious diseases';
+--
+COMMENT ON COLUMN donor_contag_disease.id_donor_contag_disease  IS 'Donor contagious disease Id';
+COMMENT ON COLUMN donor_contag_disease.id_organ_donor           IS 'Organ donor Id';
+COMMENT ON COLUMN donor_contag_disease.id_pat_history_diagnosis IS 'Id of the contagious disease diagnosis registry';
+--
+COMMENT ON COLUMN donor_contag_disease.create_user              IS 'Professional that created the registry';
+COMMENT ON COLUMN donor_contag_disease.create_time              IS 'Date of the registry creation';
+COMMENT ON COLUMN donor_contag_disease.create_institution       IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN donor_contag_disease.update_user              IS 'Last professional that updated the registry';
+COMMENT ON COLUMN donor_contag_disease.update_time              IS 'Date of the last update to the registry';
+COMMENT ON COLUMN donor_contag_disease.update_institution       IS 'Id of the last institution where the registry was updated';
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:19
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE donor_contag_disease MOVE TABLESPACE table_m;
+--
+-- CHANGE END: Filipe Machado

@@ -1,0 +1,52 @@
+
+  CREATE TABLE PAT_MEDICATION_HIST_LIST_IT
+   (	ID_PAT_MEDICATION_HIST_LIST NUMBER(24,0) NOT NULL ENABLE,
+	ID_PAT_MEDICATION_LIST NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_MEDICATION_LIST DATE NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	EMB_ID NUMBER(10,0),
+	MED_ID NUMBER(10,0),
+	ID_DRUG NUMBER(12,0),
+	YEAR_BEGIN NUMBER(4,0),
+	MONTH_BEGIN NUMBER(2,0),
+	DAY_BEGIN NUMBER(2,0),
+	QTY NUMBER(5,3),
+	FREQUENCY VARCHAR2(30),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	FLG_PRESC VARCHAR2(1) NOT NULL ENABLE,
+	ID_PRESCRIPTION_PHARM NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE pat_medication_hist_list_it IS 'Relatos de medicação.' ;
+
+COMMENT ON COLUMN pat_medication_hist_list_it.id_pat_medication_hist_list IS 'Chave primária' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.id_pat_medication_list IS 'Chave primária' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.dt_pat_medication_list IS 'Data de registo' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.id_episode IS 'ID do episódio em que foi feito o registo.' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.id_patient IS 'ID do paciente.' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.id_institution IS 'ID da instituição onde foi feito o registo.' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.id_software IS 'ID do software onde foi feito o registo.' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.emb_id IS 'Id da embalagem.' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.med_id IS 'ID do medicamento. Só é preenchido, se não for relatado através do histórico.' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.id_drug IS 'ID do medicamento. Só está preechido, se for um medicamento da Farmácia do Hospital.' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.year_begin IS 'Ano (aproximado) de inicio da medicação' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.month_begin IS 'Mês (aproximado) de inicio da medicação' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.day_begin IS 'Dia (aproximado) de inicio da medicação' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.qty IS 'Quantidade.' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.frequency IS 'Frequência' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.flg_status IS 'A - activo, P - passivo, C - cancelado' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.id_professional IS 'ID do profissional que registou.' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.notes IS 'Notas.' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.flg_presc IS 'Flag que indica se é um relato de um medicamento prescrito (Y) ou não (N).' ;
+COMMENT ON COLUMN pat_medication_hist_list_it.id_prescription_pharm IS 'Se for relato de uma prescrição, preenche esta coluna com o ID_PRESCRIPTION_PHARM correspondente a essa prescrição. Caso contrário, é NULL' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_MEDICATION_HIST_LIST_IT ADD DT_PAT_MEDICATION_LIST_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_MEDICATION_HIST_LIST_IT.DT_PAT_MEDICATION_LIST_TSTZ IS 'Data de registo'; 

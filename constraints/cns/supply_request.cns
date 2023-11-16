@@ -1,0 +1,64 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 11:00
+-- CHANGE REASON: [ALERT-12334] 
+alter table SUPPLY_REQUEST
+  add constraint SRQ_PK primary key (ID_SUPPLY_REQUEST)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 02/12/2010 16:48
+-- CHANGE REASON: [ALERT-146441] Associate a surgical procedure to supplies
+ALTER TABLE 
+SUPPLY_REQUEST DROP CONSTRAINT SRQ_FLG_CONTEXT_CHK;
+
+ALTER TABLE SUPPLY_REQUEST ADD CONSTRAINT SRQ_FLG_CONTEXT_CHK CHECK (FLG_CONTEXT IN('M','P','F','I','A','E','O','S'));
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 10/02/2022 10:18
+-- CHANGE REASON: [EMR-51653]
+begin
+pk_versioning.run('ALTER TABLE
+SUPPLY_REQUEST DROP CONSTRAINT SRQ_FLG_CONTEXT_CHK');
+
+pk_versioning.run('ALTER TABLE SUPPLY_REQUEST ADD CONSTRAINT SRQ_FLG_CONTEXT_CHK CHECK (FLG_CONTEXT IN(''M'',''P'',''F'',''I'',''A'',''E'',''O'',''S'',''D''))');
+
+end;
+/
+
+begin
+pk_versioning.run('ALTER TABLE
+supply_request DROP CONSTRAINT SRQH_FLG_CONTEXT_CHK');
+end;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/02/2022 11:51
+-- CHANGE REASON: [EMR-51653]
+begin
+pk_versioning.run('ALTER TABLE
+SUPPLY_REQUEST DROP CONSTRAINT SRQ_FLG_CONTEXT_CHK');
+
+pk_versioning.run('ALTER TABLE SUPPLY_REQUEST ADD CONSTRAINT SRQ_FLG_CONTEXT_CHK CHECK (FLG_CONTEXT IN(''M'',''P'',''F'',''I'',''A'',''E'',''O'',''S'',''D''))');
+
+end;
+/
+
+begin
+pk_versioning.run('ALTER TABLE
+supply_request DROP CONSTRAINT SRQH_FLG_CONTEXT_CHK');
+end;
+/
+-- CHANGE END: Sofia Mendes

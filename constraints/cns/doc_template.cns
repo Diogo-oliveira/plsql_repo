@@ -1,0 +1,54 @@
+
+
+  ALTER TABLE DOC_TEMPLATE ADD CONSTRAINT DOCTEMP_PK PRIMARY KEY (ID_DOC_TEMPLATE) ENABLE;
+
+  ALTER TABLE DOC_TEMPLATE MODIFY (ID_DOC_TEMPLATE NOT NULL ENABLE);
+
+  ALTER TABLE DOC_TEMPLATE MODIFY (ID_DOCUMENTATION_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE DOC_TEMPLATE MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE DOC_TEMPLATE MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+ALTER TABLE DOC_TEMPLATE ADD CONSTRAINT doctemp_stage_chk CHECK(flg_template_stage IN ('D', 'V', 'T', 'C'));
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 15/02/2011 15:43
+-- CHANGE REASON: [ALERT-162460] Insert constraints in FLG_STATUS columns
+DECLARE
+    constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(constraint_already_exists, -02264);
+    l_constraint_name VARCHAR2(30) := 'DOCTEMP_FLG_AVAILABLE_CHK';
+    l_ddl             VARCHAR(32767) := 'ALTER TABLE DOC_TEMPLATE ADD CONSTRAINT DOCTEMP_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N''))';
+BEGIN
+    EXECUTE IMMEDIATE l_ddl;
+EXCEPTION
+    WHEN constraint_already_exists THEN
+        NULL;
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error creating constraint ' || l_constraint_name || ': ' || SQLERRM);
+END;
+/
+
+DECLARE
+    constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(constraint_already_exists, -02264);
+    l_constraint_name VARCHAR2(30) := 'DOCTEMP_FLG_GENDER_CHK';
+    l_ddl             VARCHAR(32767) := 'ALTER TABLE DOC_TEMPLATE ADD CONSTRAINT DOCTEMP_FLG_GENDER_CHK CHECK (FLG_GENDER IN (''F'', ''M'') OR FLG_GENDER IS NULL)';
+BEGIN
+    EXECUTE IMMEDIATE l_ddl;
+EXCEPTION
+    WHEN constraint_already_exists THEN
+        NULL;
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error creating constraint ' || l_constraint_name || ': ' || SQLERRM);
+END;
+/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 18/07/2018 17:29
+-- CHANGE REASON: [EMR-5029] [DB] New column "flg_process" in table doc_Template
+ALTER TABLE doc_template add CONSTRAINT doc_template_flg_process_chk CHECK(flg_process IN ('C', 'B'));
+-- CHANGE END: Nuno Coelho

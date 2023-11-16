@@ -1,0 +1,26 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 30/10/2015 09:58
+-- CHANGE REASON: [ALERT-316231] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX seimf_seih_IDX
+  ON sr_epis_interv_mod_fact (id_sr_epis_interv_hist)
+  TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+       BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX seimf_ct_io_IDX
+  ON sr_epis_interv_mod_fact (id_concept_term, id_inst_owner)
+  TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

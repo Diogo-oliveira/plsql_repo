@@ -1,0 +1,117 @@
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 19/01/2018 17:30
+-- CHANGE REASON: [CALERT-1468] 
+ CREATE TABLE MTOS_PARAM_VALUE_TASK
+   (  ID_MTOS_PARAM_VALUE   NUMBER(24) NOT NULL,
+      FLG_PARAM_TASK_TYPE   VARCHAR2(2) not null,
+      ID_PARAM_TASK         NUMBER(24),
+      ID_CONTENT_PARAM_TASK VARCHAR2(200),
+      MIN_VAL               NUMBER(8,2),
+      MAX_VAL               NUMBER(8,2),
+      FLG_AVAILABLE         VARCHAR2(1),
+      ID_INSTITUTION        NUMBER(24) NOT NULL,      
+      ID_SOFTWARE           NUMBER(24) NOT NULL,
+      CREATE_USER           VARCHAR2(24),
+      CREATE_TIME           TIMESTAMP(6),
+      CREATE_INSTITUTION    NUMBER(24),
+      UPDATE_USER           VARCHAR2(24),
+      UPDATE_TIME           TIMESTAMP(6),
+      UPDATE_INSTITUTION    NUMBER(24),
+      CONSTRAINT MPV_MPE_FK FOREIGN KEY (ID_MTOS_PARAM_VALUE)
+      REFERENCES mtos_param_value(id_mtos_param_value)
+   );
+
+ALTER TABLE MTOS_PARAM_VALUE_TASK
+ADD CONSTRAINT MPVT_FLG_AVAILABLE CHECK (FLG_AVAILABLE IN ('Y','N'));
+   
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.ID_MTOS_PARAM_VALUE
+        IS 'MTOS parameter value task identifier.';
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.FLG_PARAM_TASK_TYPE
+        IS 'MTOS parameter value task type (VS - Vital Sign, AP - Analysis parameter, D - Diagnosis';
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.ID_PARAM_TASK
+        IS 'Parameter value task identifier.';				
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.ID_CONTENT_PARAM_TASK
+        IS 'Parameter value task id_content. (Only to be used when it is not possible to set a record with id_param_task)';
+		
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.FLG_AVAILABLE
+        IS 'Flag that indicates if the record is available or not (Y/N)';
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.ID_INSTITUTION
+        IS 'Institution ID';		
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.ID_SOFTWARE
+        IS 'Software ID';	
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.CREATE_USER
+        IS 'Creation User';
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.CREATE_TIME
+        IS 'Creation Time';
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.CREATE_INSTITUTION
+        IS 'Creation Institution';
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.UPDATE_USER
+        IS 'Update User';
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.UPDATE_TIME
+        IS 'Update Time';
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.UPDATE_INSTITUTION
+        IS 'Update Institution';	
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.MIN_VAL
+        IS 'Task range minimum value';
+
+COMMENT ON COLUMN MTOS_PARAM_VALUE_TASK.MAX_VAL
+        IS 'Task range maximum value';			
+
+comment on table MTOS_PARAM_VALUE_TASK
+  is 'Configuration of tasks (VS, AP, D, etc.) for the MTOS values parameters';		
+  -- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+  alter table ALERT.MTOS_PARAM_VALUE_TASK modify flg_param_task_type null;
+ -- CHANGE END: Diogo Oliveira
+ 
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 09/04/2019 11:44
+-- CHANGE REASON: [EMR-14788] - Severity scores
+COMMENT on column mtos_param_value_task.flg_param_task_type is 'MTOS parameter value task type (VS - Vital Sign, AP - Analysis parameter, D - Diagnosis, A - Age';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 09/04/2019 11:47
+-- CHANGE REASON: [EMR-14788] - Severity scores
+ALTER TABLE mtos_param_value_task
+DROP COLUMN ID_CONTENT_PARAM_TASK;
+
+ALTER TABLE mtos_param_value_task
+DROP COLUMN Id_Software;
+
+ALTER TABLE mtos_param_value_task
+DROP COLUMN ID_INSTITUTION;
+  
+ALTER TABLE mtos_param_value_task
+add id_mtos_param_value_task number(24);
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 09/04/2019 11:48
+-- CHANGE REASON: [EMR-14788] - Severity scores
+ALTER TABLE mtos_param_value_task
+ADD CONSTRAINT MPVT_PK PRIMARY KEY (id_mtos_param_value_task);
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 09/04/2019 11:49
+-- CHANGE REASON: [EMR-14788] - Severity scores
+ALTER TABLE mtos_param_value_task
+ADD CONSTRAINT MPVT_UK UNIQUE (ID_MTOS_PARAM_VALUE,FLG_PARAM_TASK_TYPE,ID_PARAM_TASK,MIN_VAL, MAX_VAL );
+
+COMMENT ON COLUMN  mtos_param_value_task.Id_Mtos_Param_Value_Task IS 'Parameter value task identifier (Primary key) - Value automatically generated using insertion function pk_sev_scores_core.ins_mtos_param_value_task';
+-- CHANGE END: Diogo Oliveira

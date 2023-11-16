@@ -1,0 +1,53 @@
+
+
+  CREATE TABLE DOC_TYPE
+   (	ID_DOC_TYPE NUMBER(12,0) NOT NULL ENABLE,
+	CODE_DOC_TYPE VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_DOC_ORI_TYPE NUMBER(6,0)
+   );
+
+
+COMMENT ON TABLE doc_type IS 'Especificação do tipo de documento' ;
+
+COMMENT ON COLUMN doc_type.code_doc_type IS 'Código para tradução do tipo de documento' ;
+COMMENT ON COLUMN doc_type.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+
+
+ALTER TABLE doc_type add FLG_DUPLICATE varchar2(1) DEFAULT 'Y' NOT NULL;
+comment on column doc_type.flg_duplicate is 'Y se o documento pode existir em duplicado, N caso contrário';
+
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:18
+-- CHANGE REASON: [ALERT-126939] 
+alter table doc_type add id_content VARCHAR2(30 CHAR);
+comment on column doc_type.id_content
+  is 'Content identifier';
+  
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:19
+-- CHANGE REASON: [ALERT-126939] 
+--alter table doc_type 
+-- modify (id_xds_document_format number(24));
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:23
+-- CHANGE REASON: [ALERT-126939] 
+--ALTER TABLE doc_type drop column id_doc_ori_type;
+-- CHANGE END:  carlos.guilherme
+
+-- cmf 14-01-2016
+COMMENT ON TABLE  ALERT.DOC_TYPE				IS 'Specification of type of document.' ;
+COMMENT ON COLUMN ALERT.DOC_TYPE.CODE_DOC_TYPE	IS 'Code for translation of type of document.' ;
+COMMENT ON COLUMN ALERT.DOC_TYPE.FLG_AVAILABLE	IS 'Availability of record' ;
+COMMENT ON COLUMN ALERT.DOC_TYPE.RANK       	IS 'value for sorting purposes' ;
+COMMENT ON COLUMN ALERT.DOC_TYPE.ADW_LAST_UPDATE IS 'DEPRECATED.' ;
+COMMENT ON COLUMN ALERT.DOC_TYPE.ID_DOC_ORI_TYPE IS 'Doc_ori_type id' ;
+COMMENT ON COLUMN ALERT.DOC_TYPE.FLG_DUPLICATE	IS 'Sets if documento can be duplicated or not.';
+COMMENT ON COLUMN ALERT.DOC_TYPE.ID_CONTENT		IS 'Content identifier';

@@ -1,0 +1,163 @@
+
+
+  CREATE TABLE TRIAGE_DISCRIMINATOR
+   (	ID_TRIAGE_DISCRIMINATOR NUMBER(12,0) NOT NULL ENABLE,
+	CODE_TRIAGE_DISCRIMINATOR VARCHAR2(200) NOT NULL ENABLE,
+	FLG_DISC_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	MIN_PAIN NUMBER(3,0),
+	MAX_PAIN NUMBER(3,0),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	AGE_MIN NUMBER(3,0),
+	AGE_MAX NUMBER(3,0),
+	GENDER VARCHAR2(2)
+   );
+
+
+
+COMMENT ON COLUMN triage_discriminator.gender IS 'Sexo' ;
+
+comment on table TRIAGE_DISCRIMINATOR
+  is 'Discriminadores';
+
+comment on column TRIAGE_DISCRIMINATOR.ID_TRIAGE_DISCRIMINATOR
+  is 'Chave primária';
+comment on column TRIAGE_DISCRIMINATOR.CODE_TRIAGE_DISCRIMINATOR
+  is 'Código para tradução do discriminador';
+comment on column TRIAGE_DISCRIMINATOR.FLG_DISC_TYPE
+  is 'D - decisão, P - dor, E - final, N - normal';
+comment on column TRIAGE_DISCRIMINATOR.MIN_PAIN
+  is 'Valor mínimo da régua da dor para os discriminadores de dor';
+comment on column TRIAGE_DISCRIMINATOR.MAX_PAIN
+  is 'Valor máximo da régua da dor para os discriminadores de dor';
+comment on column TRIAGE_DISCRIMINATOR.FLG_AVAILABLE
+  is 'Disponibilidade do registo na instituição onde está instalada a BD';
+comment on column TRIAGE_DISCRIMINATOR.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+comment on column TRIAGE_DISCRIMINATOR.AGE_MIN
+  is 'Idade mínima';
+comment on column TRIAGE_DISCRIMINATOR.AGE_MAX
+  is 'Idade máxima';
+
+
+alter table TRIAGE_DISCRIMINATOR add ID_CONDITION_GROUP NUMBER(24,0);
+
+comment on column TRIAGE_DISCRIMINATOR.ID_CONDITION_GROUP
+  is 'Grupo que agrupa um conjunto de condições (id_condition_group_and)';
+
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 24/01/2010 19:50
+-- CHANGE REASON: [ALERT-70160] Triage refactoring
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DISCRIMINATOR ADD ID_PARENT NUMBER(24)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DISCRIMINATOR ADD FLG_ASSESSMENT_TYPE VARCHAR2(2)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DISCRIMINATOR ADD ID_TRIAGE_DECISION_POINT NUMBER(24)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DISCRIMINATOR ADD CODE_DISC_ANSWER VARCHAR2(200)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+
+COMMENT ON COLUMN TRIAGE_DISCRIMINATOR.ID_PARENT IS 'ID of the parent discriminator';
+COMMENT ON COLUMN TRIAGE_DISCRIMINATOR.CODE_DISC_ANSWER IS 'Translation code for the discriminator answer';
+COMMENT ON COLUMN TRIAGE_DISCRIMINATOR.FLG_ASSESSMENT_TYPE IS 'Type of assessment required in the discriminator: (VS) Vital sign evalution (Q) Set of child questions/discriminators';
+COMMENT ON COLUMN TRIAGE_DISCRIMINATOR.ID_TRIAGE_DECISION_POINT IS 'Corresponding decision point, if discriminator belongs to ESI triage protocol.';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 02/03/2010 10:50
+-- CHANGE REASON: [ALERT-77123] ESI Triage
+ALTER TABLE TRIAGE_DISCRIMINATOR MODIFY FLG_ASSESSMENT_TYPE VARCHAR2(2 CHAR);
+ALTER TABLE TRIAGE_DISCRIMINATOR MODIFY CODE_DISC_ANSWER VARCHAR2(200 CHAR);
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 03/05/2012 18:42
+-- CHANGE REASON: [ALERT-229201] EST simplified triage
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DISCRIMINATOR ADD FLG_VS_RECOMMENDED VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL';
+EXCEPTION
+    WHEN OTHERS THEN
+      dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DISCRIMINATOR ADD FLG_INITIAL_SCREEN_DISC VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL';
+EXCEPTION
+    WHEN OTHERS THEN
+      dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+COMMENT ON COLUMN TRIAGE_DISCRIMINATOR.FLG_VS_RECOMMENDED IS 'Indicates a discriminator as a group of recommended vital signs. Used in EST triage protocol. (Y) Yes, recommended vital signs (N) No, normal discriminator';
+COMMENT ON COLUMN TRIAGE_DISCRIMINATOR.FLG_INITIAL_SCREEN_DISC IS 'Indicates a discriminator as the group of vital signs displayed in the triage initial screen. Used in EST triage protocol. (Y) Yes, recommended vital signs (N) No, normal discriminator';
+-- CHANGE END: José Silva
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 14/11/2012 00:21
+-- CHANGE REASON: [ALERT-244705] 
+alter table triage_discriminator
+modify (
+            age_min number(5,2),
+            age_max number(5,2));
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 28/06/2013 17:46
+-- CHANGE REASON: [ALERT-260856] 
+ALTER TABLE triage_discriminator add code_discrim_question VARCHAR2(200);
+
+COMMENT ON column triage_discriminator.code_discrim_question IS 'Translation code for the discriminator question. This translation will be used when the application requires the discriminator to be shown in form of a question.';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:34
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table TRIAGE_DISCRIMINATOR
+  is 'Triage discriminators';
+-- Add comments to the columns 
+comment on column TRIAGE_DISCRIMINATOR.id_triage_discriminator
+  is 'Primary Key';
+comment on column TRIAGE_DISCRIMINATOR.code_triage_discriminator
+  is 'Discriminator translation code';
+comment on column TRIAGE_DISCRIMINATOR.flg_disc_type
+  is 'Discriminator type. D - Decision, P -Pain, E - Final, N - Normal';
+comment on column TRIAGE_DISCRIMINATOR.min_pain
+  is 'Minimum value for pain scale on pain discriminators';
+comment on column TRIAGE_DISCRIMINATOR.max_pain
+  is 'Max value for pain scale on pain discriminators';
+comment on column TRIAGE_DISCRIMINATOR.flg_available
+  is 'Availability: (Y) Yes (N) No';
+comment on column TRIAGE_DISCRIMINATOR.adw_last_update
+  is 'Date of last change';
+comment on column TRIAGE_DISCRIMINATOR.age_min
+  is 'Patient min age';
+comment on column TRIAGE_DISCRIMINATOR.age_max
+  is 'Patient max age';
+comment on column TRIAGE_DISCRIMINATOR.gender
+  is 'Patient gender';
+comment on column TRIAGE_DISCRIMINATOR.id_condition_group
+  is 'Id condition group  (id_condition_group_and)'; 
+  
+-- CHANGE END: Elisabete Bugalho

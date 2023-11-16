@@ -1,0 +1,111 @@
+-- Create table
+create table INTERV_EVALUATION
+(
+  ID_INTERV_EVALUATION NUMBER(24) not null,
+  DT_INTERV_EVALUATION TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  ID_PROFESSIONAL      NUMBER(24) not null,
+  NOTES                VARCHAR2(4000),
+  FLG_STATUS           VARCHAR2(1) not null,
+  DT_CANCEL            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROF_CANCEL       NUMBER(24),
+  ID_EPISODE           NUMBER(24),
+  FLG_TEMP             VARCHAR2(1)
+);
+-- Add comments to the table 
+comment on table INTERV_EVALUATION
+  is 'Avaliacoes de MFR';
+-- Add comments to the columns 
+comment on column INTERV_EVALUATION.ID_INTERV_EVALUATION
+  is 'Primary key';
+comment on column INTERV_EVALUATION.DT_INTERV_EVALUATION
+  is 'Data do registo';
+comment on column INTERV_EVALUATION.ID_PROFESSIONAL
+  is 'Profissional que fez o registo';
+comment on column INTERV_EVALUATION.NOTES
+  is 'Avaliacao';
+comment on column INTERV_EVALUATION.FLG_STATUS
+  is 'A - Activo, C - Cancelado';
+comment on column INTERV_EVALUATION.DT_CANCEL
+  is 'Data de cancelamento';
+comment on column INTERV_EVALUATION.ID_PROF_CANCEL
+  is 'Profissional que cancelou';
+comment on column INTERV_EVALUATION.ID_EPISODE
+  is 'Episodio em que foi feita a avaliacao';
+comment on column INTERV_EVALUATION.FLG_TEMP
+  is 'Indica se o registo é: H - histórico, T - temporário (temporariamente gravado(Auto Save)); D - definitivo';
+
+  -- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 20-01-2009
+-- CHANGE REASON: ALERT-684 Avaliações MFR
+	
+ALTER TABLE INTERV_EVALUATION RENAME COLUMN DT_INTERV_EVALUATION TO DT_INTERV_EVALUATION_TSTZ;
+ALTER TABLE INTERV_EVALUATION RENAME COLUMN DT_CANCEL TO DT_CANCEL_TSTZ;
+
+-- Altering Table 'INTERV_EVALUATION' 
+ALTER TABLE INTERV_EVALUATION ADD ID_PATIENT NUMBER(24);
+ALTER TABLE INTERV_EVALUATION ADD FLG_TYPE VARCHAR2(1);
+ALTER TABLE INTERV_EVALUATION ADD NOTES_CANCEL VARCHAR2(4000);
+
+COMMENT ON COLUMN INTERV_EVALUATION.ID_INTERV_EVALUATION IS 'ID of MFR evaluation';
+COMMENT ON COLUMN INTERV_EVALUATION.DT_EVALUATION_TSTZ IS 'Evaluation date in timestamp';
+COMMENT ON COLUMN INTERV_EVALUATION.ID_PROFESSIONAL IS 'Professional ID that made the evaluation';
+COMMENT ON COLUMN INTERV_EVALUATION.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN INTERV_EVALUATION.ID_PATIENT IS 'Patient ID';
+COMMENT ON COLUMN INTERV_EVALUATION.FLG_TYPE IS 'Type of evaluation (I- ICF, N- Notes, O - Other evaluation; )';
+COMMENT ON COLUMN INTERV_EVALUATION.NOTES IS 'notes associated with the evaluation';
+COMMENT ON COLUMN INTERV_EVALUATION.FLG_STATUS IS 'Status of evaluation (A - active, C- Canceled, R - Replaced)';
+COMMENT ON COLUMN INTERV_EVALUATION.DT_CANCEL_TSTZ IS 'Canceled date with timestamp';
+COMMENT ON COLUMN INTERV_EVALUATION.ID_PROF_CANCEL IS 'Professional Id that canceled the evaluation';
+COMMENT ON COLUMN INTERV_EVALUATION.NOTES_CANCEL IS 'Cancelation notes';
+COMMENT ON COLUMN INTERV_EVALUATION.FLG_TEMP IS 'Type of record: H - History, T - Temporary (temporary saved(autoSave)); D- Final';
+COMMENT ON COLUMN INTERV_EVALUATION.ID_PATIENT is 'Patient ID';
+COMMENT ON COLUMN INTERV_EVALUATION.FLG_TYPE is 'Type of evaluation (I – ICF, N – Notes; )';
+-- CHANGE END
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/01/2016 17:42
+-- CHANGE REASON: [ALERT-317912] 
+comment on table INTERV_EVALUATION
+  is 'Rehabilitation evaluation';
+-- Add comments to the columns 
+comment on column INTERV_EVALUATION.id_interv_evaluation
+  is 'Rehabilitation evaluation ID';
+comment on column INTERV_EVALUATION.dt_interv_evaluation_tstz
+  is 'Date that indicates when the record was registered';
+comment on column INTERV_EVALUATION.id_professional
+  is 'Professional ID';
+comment on column INTERV_EVALUATION.notes
+  is 'Notes';
+comment on column INTERV_EVALUATION.flg_status
+  is 'Flag that indicates the status: A - Active, C - Canceled, R - Replaced';
+comment on column INTERV_EVALUATION.dt_cancel_tstz
+  is 'Date that indicates when the record was cancelled';
+comment on column INTERV_EVALUATION.id_prof_cancel
+  is 'Professional that cancels the record';
+comment on column INTERV_EVALUATION.id_episode
+  is 'Episode ID';
+comment on column INTERV_EVALUATION.flg_temp
+  is 'Flag that indicates the type of record: H - History, T - Temporary ((autoSave), D- Final';
+comment on column INTERV_EVALUATION.id_patient
+  is 'Patient ID';
+comment on column INTERV_EVALUATION.flg_type
+  is 'Flag that indicates the type of evaluation: I ? ICF, N ? Notes';
+comment on column INTERV_EVALUATION.notes_cancel
+  is 'Cancelation notes';
+comment on column INTERV_EVALUATION.create_user
+  is 'Creation User';
+comment on column INTERV_EVALUATION.create_time
+  is 'Creation Time';
+comment on column INTERV_EVALUATION.create_institution
+  is 'Creation Institution';
+comment on column INTERV_EVALUATION.update_user
+  is 'Update User';
+comment on column INTERV_EVALUATION.update_time
+  is 'Update Time';
+comment on column INTERV_EVALUATION.update_institution
+  is 'Update Institution';
+  
+  
+  
+-- CHANGE END: Ana Matos

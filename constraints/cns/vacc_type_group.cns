@@ -1,0 +1,17 @@
+--PK vacc_type_group.cns
+alter table VACC_TYPE_GROUP add constraint VACC_TYPE_GROUP_PK primary key (ID_VACC_TYPE_GROUP) ENABLE;
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2009-05-04
+-- CHANGE REASON: ALERT-26735 - Implementação da Validação da Arquitectura Técnica DB
+alter table vacc_type_group
+  add constraint VTG_FLG_TYPE_CK
+  check (FLG_TYPE IN ('Y', 'N'));
+alter table vacc_type_group
+  add constraint VTG_FLG_PNV_CK
+  check (FLG_PNV IN ('Y', 'N'));
+alter table vacc_type_group
+  add constraint VTG_FLG_PRESC_TYPE_CK
+  check (FLG_PRESC_TYPE IN ('P', 'T', 'O'));
+-- CHANGE END

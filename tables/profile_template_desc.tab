@@ -1,0 +1,62 @@
+create table profile_template_desc
+(
+       id_profile_template_desc number(12) not null,
+       id_profile_template number(12) not null,
+       code_profile_template_desc varchar2(200) not null,
+       rank number(12),
+       id_country    number(12),
+       flg_available varchar2(1) not null,
+       adw_last_update date not null
+);
+
+comment on column profile_template_desc.id_profile_template_desc is
+'ID da tabela';
+
+comment on column profile_template_desc.id_profile_template is
+'ID do profile template a que se associa esta descrição';
+
+comment on column profile_template_desc.code_profile_template_desc is
+'Código para tradução na tabela transçation';
+
+comment on column profile_template_desc.rank is
+'Ordem em que deve aparecer o descritivo';
+
+comment on column profile_template_desc.flg_available is
+'Disponibilidade do registo';
+
+comment on column profile_template_desc.adw_last_update is
+'Data do último updat efectuado sobre o registo';
+
+comment on column profile_template_desc.id_country is
+'ID do país';
+
+
+alter table profile_template_desc add
+(
+      flg_type varchar2(1)
+);
+
+comment on column profile_template_desc.flg_type is
+'Tipo do descritivo: P - Physician; N - NonPhysician; B - NonBilling';
+
+
+alter table profile_template_desc add
+(
+      id_software number(24)
+);
+
+comment on column profile_template_desc.id_software is
+'Indica em que software a vender este descritivo de perfil deve aparecer';
+
+-- CHANGE 20071003
+-- JVB
+
+alter table profile_template_desc add
+(
+      flg_free varchar2(1)
+);
+
+comment on column profile_template_desc.flg_free is
+'Indica se um perfil é grátis: Y - Grátis; N - Não Grátis';
+
+-- CHANGE END

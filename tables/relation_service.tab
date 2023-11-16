@@ -1,0 +1,71 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 15/06/2010 12:09
+-- CHANGE REASON: [ALERT-94601] relation_service
+create table relation_service
+(
+  id_relation_service   number(24) not null,
+  code_relation_service varchar2(200 char) not null,
+  service_name          varchar2(200 char) not null,
+  id_relation_type      number(24) not null,
+  id_sys_list           number(24) not null,
+  rank                  number(24) not null,
+  flg_entity_required   varchar2(1 char) not null,
+  flg_range_required    varchar2(1 char) not null,
+  id_modal_window_type  number(24) not null,
+  code_warning          varchar2(200 char),
+  create_user           varchar2(24 char),
+  create_time           timestamp with local time zone,
+  create_institution    number(24),
+  update_user           varchar2(24 char),
+  update_time           timestamp with local time zone,
+  update_institution    number(24)
+)
+tablespace table_s;
+
+comment on table relation_service
+  is 'Relation services.';
+
+comment on column relation_service.id_relation_service
+  is 'Primary key.';
+comment on column relation_service.code_relation_service
+  is 'Code for translation.';
+comment on column relation_service.service_name
+  is 'Service name.';
+comment on column relation_service.id_relation_type
+  is 'Relation type identifier.';
+comment on column relation_service.id_sys_list
+  is 'Interacted entity type (SYS_LIST identifier).';
+comment on column relation_service.rank
+  is 'Entity relation type validation service.';
+comment on column relation_service.rank
+  is 'Relation service rank.';
+comment on column relation_service.flg_entity_required
+  is 'Must this service relations specify an entity? (Y/N)';
+comment on column relation_service.flg_range_required
+  is 'Do this service relations require range? (Y/N)';
+comment on column relation_service.id_modal_window_type
+  is 'Modal window type (SYS_LIST identifier).';
+comment on column relation_service.code_warning
+  is 'Code for warning message (overrides RELATION_TYPE.CODE_WARNING).';
+comment on column relation_service.create_user
+  is 'Creation User';
+comment on column relation_service.create_time
+  is 'Creation Time';
+comment on column relation_service.create_institution
+  is 'Creation Institution';
+comment on column relation_service.update_user
+  is 'Update User';
+comment on column relation_service.update_time
+  is 'Update Time';
+comment on column relation_service.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 12/03/2012 15:29
+-- CHANGE REASON: [ALERT-215533] drop unused objects
+begin
+  pk_frmw_objects.set_category_dpc(i_owner => 'ALERT', i_obj_name => 'RELATION_SERVICE');
+end;
+/
+-- CHANGE END: Pedro Carneiro

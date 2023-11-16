@@ -1,0 +1,50 @@
+
+
+  CREATE TABLE "ALERT"."TL_TIMELINE"
+   (	"ID_TL_TIMELINE" NUMBER(24,0),
+	"CODE_TL_TIMELINE" VARCHAR2(200),
+	"TABLE_NAME" VARCHAR2(30),
+	"ADW_LAST_UPDATE" DATE,
+	 CONSTRAINT "TLE_PK" PRIMARY KEY ("ID_TL_TIMELINE") ENABLE
+   ) ORGANIZATION INDEX NOCOMPRESS ;
+
+
+-- Para adicionar colunas pode ser usado código comentado
+-- De momento só são suportados os tipos de dados mais comuns.
+-- ALTER TABLE TL_TIMELINE ADD ID_TL_TIMELINE NUMBER(24,0) NOT NULL;
+-- ALTER TABLE TL_TIMELINE ADD CODE_TL_TIMELINE VARCHAR2(200) ;
+-- ALTER TABLE TL_TIMELINE ADD TABLE_NAME VARCHAR2(30) ;
+-- ALTER TABLE TL_TIMELINE ADD ADW_LAST_UPDATE DATE ;
+
+   COMMENT ON COLUMN "ALERT"."TL_TIMELINE"."ID_TL_TIMELINE" IS 'ID da tabela';
+
+
+
+   COMMENT ON COLUMN "ALERT"."TL_TIMELINE"."CODE_TL_TIMELINE" IS 'Descrição da time line';
+
+
+
+   COMMENT ON COLUMN "ALERT"."TL_TIMELINE"."TABLE_NAME" IS 'Nome da tabela onde estão os dados transaccionais da time line';
+
+
+
+
+-- Add comments to the table 
+comment on table TL_TIMELINE
+  is 'Timeline table parametrization';
+-- Add comments to the columns 
+comment on column TL_TIMELINE.ADW_LAST_UPDATE
+  is 'Last update date';
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:44
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column TL_TIMELINE.id_tl_timeline
+  is 'Primary Key';
+comment on column TL_TIMELINE.code_tl_timeline
+  is 'Translation code for timeline description';
+comment on column TL_TIMELINE.table_name
+  is 'Table name where the transactional data is';  
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,36 @@
+CREATE TABLE sch_event_type (
+       ID_SCH_EVENT_TYPE NUMBER(24),
+			 ID_SCH_EVENT          NUMBER(24),
+			 FLG_DEP_TYPE      VARCHAR2(1),
+			 DT_SCH_EVENT_TYPE DATE DEFAULT SYSDATE
+);
+
+COMMENT ON TABLE sch_event_type IS 'Defines the relation between events and the type of schedule to be used for a department';
+COMMENT ON COLUMN sch_event_type.id_sch_event IS 'Event identifier';
+COMMENT ON COLUMN sch_event_type.flg_dep_Type IS 'Type of schedule to be used for a department. Possible values: ''E'' exam, ''C'' consult.';
+COMMENT ON COLUMN sch_event_type.dt_sch_event_type IS 'Date of creation/modification';
+
+COMMENT ON COLUMN sch_event_type.flg_dep_type IS 'Type of schedule to be used by a department: exam (E), analysis (A), outpatient (C), surgery room (S)';
+
+COMMENT ON COLUMN SCH_EVENT_TYPE.DT_SCH_EVENT_TYPE IS 'Record creation date';
+COMMENT ON COLUMN SCH_EVENT_TYPE.ID_SCH_EVENT_TYPE IS 'Event type identifier';
+
+ALTER TABLE SCH_EVENT_TYPE ADD DT_SCH_EVENT_TYPE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+COMMENT ON COLUMN SCH_EVENT_TYPE.DT_SCH_EVENT_TYPE_TSTZ IS 'Record creation date';
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 21-04-2008
+-- CHANGE REASON: increase flg_dep_type length to accomodate new values; same values added to check constraint
+
+alter table SCH_EVENT_TYPE modify FLG_DEP_TYPE VARCHAR2(2);
+
+comment on column SCH_EVENT_TYPE.FLG_DEP_TYPE
+  is 'Type of schedule to be used by a department: exam (E), analysis (A), outpatient (C), surgery room (S), vacation (V), proc MFR (PM)';
+
+--END
+
+
+-- José Brito 22/09/2008 Eliminar colunas DATE
+alter table sch_event_type drop column dt_sch_event_type;
+
+

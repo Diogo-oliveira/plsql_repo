@@ -1,0 +1,10 @@
+DECLARE
+    l_ddl_tbl table_varchar := table_varchar('create index EIO_DTLASTINTER_IDSOFT_I on EPIS_INFO (DT_LAST_INTERACTION_TSTZ, ID_SOFTWARE) tablespace INDEX_L');
+
+BEGIN
+    FOR i IN l_ddl_tbl.first .. l_ddl_tbl.last
+    LOOP
+        pk_versioning.run(i_sql => l_ddl_tbl(i));
+    END LOOP;
+END;
+/

@@ -1,0 +1,145 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 21/07/2014 08:41
+-- CHANGE REASON: [ALERT-290969] Nursing Care Plan: NANDA, NIC, NOC - Data Model for History tracking
+
+BEGIN
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'NNN_EPIS_INDICATOR_H', i_obj_type => 'TABLE', i_flg_category => 'HST', i_flg_alert_default => 'N', i_delete_script => '', i_flg_default_child => 'N', i_flg_nzd => 'Y', i_responsible_team => 'NURSING');
+END;
+/
+CREATE TABLE NNN_EPIS_INDICATOR_H
+  (
+    ID_NNN_EPIS_INDICATOR_H NUMBER (24) NOT NULL ,
+    ID_NNN_EPIS_INDICATOR   NUMBER (24) NOT NULL ,
+    ID_NOC_INDICATOR        NUMBER (24) ,
+    ID_NOC_OTHR_IND_VRSN    NUMBER (24) ,
+    ID_PATIENT              NUMBER (24) NOT NULL ,
+    ID_EPISODE              NUMBER (24) ,
+    ID_VISIT                NUMBER (24) ,
+    ID_PROFESSIONAL         NUMBER (24) NOT NULL ,
+    ID_CANCEL_REASON        NUMBER (24) ,
+    CANCEL_NOTES            VARCHAR2 (1000 CHAR) ,
+    ID_EPISODE_ORIGIN       NUMBER (24) ,
+    ID_EPISODE_DESTINATION  NUMBER (24) ,
+    FLG_PRN                 VARCHAR2 (1 CHAR) NOT NULL ,
+    NOTES_PRN CLOB ,
+    FLG_TIME             VARCHAR2 (1 CHAR) NOT NULL ,
+    FLG_PRIORITY         VARCHAR2 (1 CHAR) NOT NULL ,
+    ID_ORDER_RECURR_PLAN NUMBER (24) ,
+    FLG_REQ_STATUS       VARCHAR2 (1 CHAR) NOT NULL ,
+    DT_VAL_TIME_START    TIMESTAMP WITH LOCAL TIME ZONE NOT NULL ,
+    DT_VAL_TIME_END      TIMESTAMP WITH LOCAL TIME ZONE ,
+    DT_TRS_TIME_START    TIMESTAMP WITH LOCAL TIME ZONE NOT NULL ,
+    DT_TRS_TIME_END      TIMESTAMP WITH LOCAL TIME ZONE NOT NULL ,
+    CREATE_USER          VARCHAR2 (30 CHAR) ,
+    CREATE_TIME          TIMESTAMP WITH LOCAL TIME ZONE ,
+    CREATE_INSTITUTION   NUMBER (24) ,
+    UPDATE_USER          VARCHAR2 (30 CHAR) ,
+    UPDATE_TIME          TIMESTAMP WITH LOCAL TIME ZONE ,
+    UPDATE_INSTITUTION   NUMBER (24)
+  )
+  TABLESPACE ALERT_DATA LOB
+  (
+    NOTES_PRN
+  )
+  STORE AS
+  (
+    TABLESPACE ALERT_LOB PCTVERSION 10 ENABLE STORAGE IN ROW NOCACHE
+  ) ;
+COMMENT ON TABLE NNN_EPIS_INDICATOR_H
+IS
+  'History tracking for NOC Indicators related to a NOC Outcome defined for a NANDA Diagnosis within a patient''s nursing care plan' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.ID_NNN_EPIS_INDICATOR_H
+IS
+  'Surrogate key' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.ID_NNN_EPIS_INDICATOR
+IS
+  'Episode''s NOC Indicator ID (surrogate key)' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.ID_NOC_INDICATOR
+IS
+  'NOC Indicator ID' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.ID_NOC_OTHR_IND_VRSN
+IS
+  '"Version" of the Other Indicator Settings ID associated to this nursing care plan. Used to retrieve the original description.' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.ID_PATIENT
+IS
+  'Patient ID' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.ID_EPISODE
+IS
+  'Episode ID' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.ID_VISIT
+IS
+  'Visit ID' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.ID_PROFESSIONAL
+IS
+  'Profissional ID who did the creation/edition of this entry' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.ID_CANCEL_REASON
+IS
+  'Cancel reason ID' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.CANCEL_NOTES
+IS
+  'Cancelation notes' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.ID_EPISODE_ORIGIN
+IS
+  'Episode ID where the activity was registered' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.ID_EPISODE_DESTINATION
+IS
+  'Episode ID where the activity is going to be performed' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.FLG_PRN
+IS
+  'Flag that indicates wether the Indicator is PRN or not' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.NOTES_PRN
+IS
+  'Notes to indicate when a PRN order should be activated' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.FLG_TIME
+IS
+  'Execution time to evaluate the indicator: In current (E)pisode, (B)etween episodes, (N)ext episode.' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.FLG_PRIORITY
+IS
+  'Flag that indicates the priority of an Indicator: (N)ormal, (U)rgent, (E)mergent' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.ID_ORDER_RECURR_PLAN
+IS
+  'Order recurrence plan ID for defined frequency in the instructions' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.FLG_REQ_STATUS
+IS
+  'Request status:
+C Cancelled
+D Draft
+E Expired
+F Finished
+I Ignored
+O Ongoing
+P Suspended
+R Requested
+S Suggested
+T Discontinued' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.DT_VAL_TIME_START
+IS
+  'Valid time start' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.DT_VAL_TIME_END
+IS
+  'Valid time end' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.DT_TRS_TIME_START
+IS
+  'Transaction time start' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.DT_TRS_TIME_END
+IS
+  'Transaction time end' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.CREATE_USER
+IS
+  'Creation User' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.CREATE_TIME
+IS
+  'Creation Time' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.CREATE_INSTITUTION
+IS
+  'Creation Institution' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.UPDATE_USER
+IS
+  'Update User' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.UPDATE_TIME
+IS
+  'Update Time' ;
+  COMMENT ON COLUMN NNN_EPIS_INDICATOR_H.UPDATE_INSTITUTION
+IS
+  'Update Institution' ;
+-- CHANGE END: Ariel Machado

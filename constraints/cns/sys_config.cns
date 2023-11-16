@@ -1,0 +1,59 @@
+
+
+  ALTER TABLE SYS_CONFIG ADD CONSTRAINT PK_SYS_CONFIG PRIMARY KEY (ID_PK) ENABLE;
+
+  ALTER TABLE SYS_CONFIG MODIFY (ID_SYS_CONFIG NOT NULL ENABLE);
+
+  ALTER TABLE SYS_CONFIG MODIFY (VALUE NOT NULL ENABLE);
+
+  ALTER TABLE SYS_CONFIG MODIFY (DESC_SYS_CONFIG NOT NULL ENABLE);
+
+  ALTER TABLE SYS_CONFIG MODIFY (ID_PK NOT NULL ENABLE);
+
+
+-- CHANGED BY: Susana Seixas
+-- CHANGE DATE: 2008-JUL-23
+-- CHANGE REASON: fix da 2.4.2 pedido pelos interfaces: unique constraint 
+alter table SYS_CONFIG add constraint SCG_UK unique (ID_SYS_CONFIG, ID_INSTITUTION, ID_SOFTWARE);
+-- CHANGE END
+
+
+
+-- CHANGED BY: Susana Silva
+-- CHANGED DATE: 2009-03-06
+-- CHANGED REASON: ALERT-18824
+alter table SYS_CONFIG
+  add constraint SCG_GLOBAL_CONFIGURATION_CHK
+  check (global_configuration IN ('Y','N'));
+-- CHANGE END: Susana Silva	
+
+-- cmf 20-10-2009
+alter table sys_config add constraint SYS_CFG_MRKT_FK foreign key ( id_market ) references market(id_market) enable;
+
+ALTER TABLE SYS_CONFIG drop CONSTRAINT PK_SYS_CONFIG;
+ALTER TABLE SYS_CONFIG ADD CONSTRAINT PK_SYS_CONFIG PRIMARY KEY (ID_SYS_CONFIG, ID_INSTITUTION, ID_SOFTWARE, ID_MARKET) ENABLE;
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/05/2014 10:36
+-- CHANGE REASON: [ALERT-281776] source multichoices
+DECLARE
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+BEGIN
+
+        BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE sys_config add CONSTRAINT scfg_mval_chk CHECK((fill_type IN (''M'', ''F'') AND mvalue IS NOT NULL) OR
+                                                          (fill_type NOT IN (''M'', ''F'') AND mvalue IS NULL)) novalidate';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('CK already exists');
+    END;     
+        BEGIN
+        EXECUTE IMMEDIATE 'alter table sys_config add constraint scfg_fill_chk check (fill_type in(''K'', ''F'', ''M'', ''T'')) novalidate';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('CK already exists');
+    END;          
+END;
+/
+-- CHANGE END:  Rui Gomes

@@ -1,0 +1,88 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 21/05/2013 16:58
+-- CHANGE REASON: [ALERT-248672] New frmw objs
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                                 i_obj_name          => 'COMPLAINT_REL',
+                                                 i_obj_type          => 'TABLE',
+                                                 i_flg_category      => 'DSV',
+                                                 i_flg_alert_default => 'N',
+                                                 i_delete_script     => NULL,
+                                                 i_flg_default_child => 'N');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE TABLE ALERT.COMPLAINT_REL 
+   (  ID_COMPLAINT NUMBER(24,0) NOT NULL , 
+  ID_COMP_PARENT NUMBER(24,0), 
+  FLG_AVAILABLE VARCHAR2(1 CHAR) NOT NULL , 
+  DT_CONTENT TIMESTAMP (6) WITH LOCAL TIME ZONE
+)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Table already exists');
+    END;
+end;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'COMMENT ON table COMPLAINT_REL IS ''Table used to register the dependencies between complaints''';
+    EXECUTE IMMEDIATE 'COMMENT ON column COMPLAINT_REL.ID_COMPLAINT IS ''ID of an complaint (Child or master)''';
+    EXECUTE IMMEDIATE 'COMMENT ON column COMPLAINT_REL.ID_COMP_PARENT IS ''ID a complaint (parent)''';
+    EXECUTE IMMEDIATE 'COMMENT ON column COMPLAINT_REL.FLG_AVAILABLE IS ''Status of an dependency -> Possible values Y-Available, N - Unavailable''';
+    EXECUTE IMMEDIATE 'COMMENT ON column COMPLAINT_REL.DT_CONTENT IS ''Version time''';
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table COMPLAINT_REL add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column complaint_rel.create_user IS 'Creation User';
+COMMENT ON column complaint_rel.create_time IS 'Creation Time';
+COMMENT ON column complaint_rel.create_institution IS 'Creation Institution';
+COMMENT ON column complaint_rel.update_user IS 'Update User';
+COMMENT ON column complaint_rel.update_time IS 'Update Time';
+COMMENT ON column complaint_rel.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table complaint_rel add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column complaint_rel.create_user IS 'Creation User';
+COMMENT ON column complaint_rel.create_time IS 'Creation Time';
+COMMENT ON column complaint_rel.create_institution IS 'Creation Institution';
+COMMENT ON column complaint_rel.update_user IS 'Update User';
+COMMENT ON column complaint_rel.update_time IS 'Update Time';
+COMMENT ON column complaint_rel.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

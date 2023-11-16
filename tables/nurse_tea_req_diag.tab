@@ -1,0 +1,47 @@
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 05/05/2011 11:40
+-- CHANGE REASON: [ALERT-176423] Patient education: tables and keys
+CREATE TABLE nurse_tea_req_diag(id_nurse_tea_req_diag NUMBER(24) NOT NULL, id_nurse_tea_req NUMBER(24) NOT NULL, id_diagnosis NUMBER(12), id_composition NUMBER(24), create_user VARCHAR2(24 CHAR), create_time TIMESTAMP(6)
+    WITH LOCAL TIME ZONE,
+    create_institution NUMBER(24),
+    update_user VARCHAR2(24 CHAR),
+    update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    update_institution NUMBER(24));
+
+COMMENT ON TABLE nurse_tea_req_diag IS 'Association of diagnoses to patient education requests';
+
+COMMENT ON column nurse_tea_req_diag.id_nurse_tea_req_diag IS 'Primary key';
+
+COMMENT ON column nurse_tea_req_diag.id_nurse_tea_req IS 'Patient education request ID';
+
+COMMENT ON column nurse_tea_req_diag.id_diagnosis IS 'Diagnosis ID';
+
+COMMENT ON column nurse_tea_req_diag.id_composition IS 'ICNP diagnosis ID';
+
+COMMENT ON column nurse_tea_req_diag.create_user IS 'Creation user';
+
+COMMENT ON column nurse_tea_req_diag.create_time IS 'Creation time';
+
+COMMENT ON column nurse_tea_req_diag.create_institution IS 'Creation institution';
+
+COMMENT ON column nurse_tea_req_diag.update_user IS 'Update user';
+
+COMMENT ON column nurse_tea_req_diag.update_time IS 'Update time';
+
+COMMENT ON column nurse_tea_req_diag.update_institution IS 'Update institution';
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 05/12/2014 10:42
+-- CHANGE REASON: [ALERT-303860] Allow NANDA diagnoses being associated with patient education
+DECLARE
+    l_sql pk_types.t_huge_byte;
+BEGIN
+    l_sql := 'ALTER TABLE NURSE_TEA_REQ_DIAG ADD ( ID_NAN_DIAGNOSIS NUMBER(24) )';
+    pk_versioning.run(i_sql => l_sql);
+
+    l_sql := q'[COMMENT ON COLUMN NURSE_TEA_REQ_DIAG.ID_NAN_DIAGNOSIS IS 'NANDA Diagnosis ID']';
+    pk_versioning.run(i_sql => l_sql);
+END;
+/
+-- CHANGE END: Ariel Machado

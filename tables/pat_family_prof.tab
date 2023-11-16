@@ -1,0 +1,84 @@
+
+
+  CREATE TABLE PAT_FAMILY_PROF
+   (	ID_PAT_FAMILY_PROF NUMBER(24,0) NOT NULL ENABLE,
+	ID_PAT_FAMILY NUMBER(24,0),
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_BEGIN DATE NOT NULL ENABLE,
+	DT_END DATE,
+	REASON_TYPE VARCHAR2(1),
+	REASON VARCHAR2(4000),
+	ID_PATIENT NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE pat_family_prof IS 'Histórico de médicos de família' ;
+
+COMMENT ON COLUMN pat_family_prof.id_pat_family IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_family_prof.dt_begin IS 'Data em que o médico passou a ser médico de família (da família associada)' ;
+COMMENT ON COLUMN pat_family_prof.dt_end IS 'Data em que o médico deixou de ser médico de família (da família associada)' ;
+COMMENT ON COLUMN pat_family_prof.reason_type IS 'Tipo de razão: M - mudança de residência do utente, P - preferência do utente, M - médico deixa de exercer na instit., R - reforma do médico' ;
+COMMENT ON COLUMN pat_family_prof.reason IS 'Justificação apontada pelo utente' ;
+
+alter table pat_family_prof 
+add (dt_begin_tstz timestamp with local time zone,
+dt_end_tstz timestamp with local time zone); 
+
+-- Add/modify columns 
+alter table PAT_FAMILY_PROF add FLG_STATUS varchar2(1) default 'A';
+-- Add comments to the columns 
+comment on column PAT_FAMILY_PROF.FLG_STATUS
+  is 'A - Active ; I - Inactive';
+
+
+
+--DROP DATE TYPE
+alter table PAT_FAMILY_PROF drop column  DT_BEGIN;
+alter table PAT_FAMILY_PROF drop column  DT_END;
+
+
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE PAT_FAMILY_PROF ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN PAT_FAMILY_PROF.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY_PROF modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY_PROF modify REASON_TYPE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY_PROF modify REASON varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY_PROF modify FLG_STATUS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY_PROF modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro

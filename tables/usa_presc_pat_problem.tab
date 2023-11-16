@@ -1,0 +1,43 @@
+
+  CREATE TABLE USA_PRESC_PAT_PROBLEM
+   (	ID_PRESC_PAT_PROBLEM NUMBER(24,0) NOT NULL ENABLE,
+	ID_PAT_PROBLEM NUMBER(24,0),
+	ID_PAT_ALLERGY NUMBER(24,0),
+	ID_PRESCRIPTION_PHARM NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_PRESC_PAT_PROBLEM DATE NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1),
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE,
+	ID_DRUG_PRESC_DET NUMBER(24,0),
+	ID_DRUG_REQ_DET NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE usa_presc_pat_problem IS 'Associação de prescrição de farmacos a problemas.' ;
+
+COMMENT ON COLUMN usa_presc_pat_problem.id_presc_pat_problem IS 'Chave primária.' ;
+COMMENT ON COLUMN usa_presc_pat_problem.id_pat_problem IS 'Problema a que está a associada a prescrição do fármaco.' ;
+COMMENT ON COLUMN usa_presc_pat_problem.id_prescription_pharm IS 'Prescrição associada ao problema.' ;
+COMMENT ON COLUMN usa_presc_pat_problem.id_professional IS 'Profissional que regista a associação.' ;
+COMMENT ON COLUMN usa_presc_pat_problem.dt_presc_pat_problem IS 'Data de registo da associação da prescrição ao problema.' ;
+COMMENT ON COLUMN usa_presc_pat_problem.flg_type IS 'Flag que indica se é uma contra-indicação (C), uma interacção com alergias (I) ou uma associação de fármacos a problemas (A).' ;
+COMMENT ON COLUMN usa_presc_pat_problem.flg_status IS 'Estado da associação: A - activo, C - cancelado.' ;
+COMMENT ON COLUMN usa_presc_pat_problem.id_prof_cancel IS 'Profissional que cancela.' ;
+COMMENT ON COLUMN usa_presc_pat_problem.dt_cancel IS 'Data de cancelamento.' ;
+COMMENT ON COLUMN usa_presc_pat_problem.id_drug_presc_det IS 'Prescrição interna (para administração no episódio) associada ao problema.' ;
+COMMENT ON COLUMN usa_presc_pat_problem.id_drug_req_det IS 'Requisição à farmácia hospitalar associada ao problema.' ;
+
+
+
+
+
+ALTER TABLE USA_PRESC_PAT_PROBLEM ADD DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN USA_PRESC_PAT_PROBLEM.DT_CANCEL_TSTZ IS 'Data de cancelamento.'; 
+
+
+
+
+ALTER TABLE USA_PRESC_PAT_PROBLEM ADD DT_PRESC_PAT_PROBLEM_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN USA_PRESC_PAT_PROBLEM.DT_PRESC_PAT_PROBLEM_TSTZ IS 'Data de registo da associa‡Æo da prescri‡Æo ao problema.'; 

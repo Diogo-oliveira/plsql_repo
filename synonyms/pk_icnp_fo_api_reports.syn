@@ -1,0 +1,21 @@
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 29/07/2011 18:01
+-- CHANGE REASON: [ALERT-182932] Implementation of the recurrence mechanism in ICNP functionality
+create or replace synonym alert_reports.pk_icnp_fo_api_reports for alert.pk_icnp_fo_api_reports;
+-- CHANGE END: Luis Oliveira
+
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 19/08/2011 17:56
+-- CHANGE REASON: [ALERT-191798] Implementation of the recurrence mechanism in ICNP functionality
+DECLARE
+  e_synonym_not_exists EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_synonym_not_exists, -01434); -- synonym to be dropped doesnt exist
+BEGIN
+  EXECUTE IMMEDIATE 'drop synonym alert_reports.pk_icnp_fo_api_reports';
+EXCEPTION
+  WHEN e_synonym_not_exists THEN
+    dbms_output.put_line('The synonym alert_reports.pk_icnp_fo_api_reports doesnt exist');   
+END;
+/
+create or replace synonym alert_viewer.pk_icnp_fo_api_reports for alert.pk_icnp_fo_api_reports;
+-- CHANGE END: Luis Oliveira

@@ -1,0 +1,156 @@
+  CREATE TABLE ADM_REQ_DIAGNOSIS
+   (	ID_ADM_REQ_DIAGNOSIS NUMBER(24),
+	ID_ADM_REQUEST NUMBER(24),
+	ID_DIAGNOSIS NUMBER(24),
+	ID_PROFESSIONAL_DIAG NUMBER(24),
+	FLG_STATUS VARCHAR2(1),
+	FLG_DIAG_STATUS VARCHAR2(1),
+	DT_EPIS_DIAGNOSIS TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	NOTES VARCHAR2(4000),
+	ID_PROFESSIONAL_UPDATE NUMBER(24),
+	DT_UPDATE TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	CREATE_USER VARCHAR2(24),
+	CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	CREATE_INSTITUTION NUMBER(24),
+	UPDATE_USER VARCHAR2(24),
+	UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	UPDATE_INSTITUTION NUMBER(24)
+   ) ;
+
+
+
+   COMMENT ON COLUMN ADM_REQ_DIAGNOSIS.ID_ADM_REQ_DIAGNOSIS IS 'ADM_REQ_DIAGNOSIS primary key';
+
+
+
+   COMMENT ON COLUMN ADM_REQ_DIAGNOSIS.ID_ADM_REQUEST IS 'Foreign key to ADM_REQUEST';
+
+
+
+   COMMENT ON COLUMN ADM_REQ_DIAGNOSIS.ID_DIAGNOSIS IS 'Foreign key to DIAGNOSIS';
+
+
+
+   COMMENT ON COLUMN ADM_REQ_DIAGNOSIS.ID_PROFESSIONAL_DIAG IS 'Professional that set this diagnose';
+
+
+
+   COMMENT ON COLUMN ADM_REQ_DIAGNOSIS.FLG_STATUS IS 'Active ''A'' / Outdated ''O''';
+
+
+
+   COMMENT ON COLUMN ADM_REQ_DIAGNOSIS.FLG_DIAG_STATUS IS 'Under investigation ''D'' / Confirmed ''F''';
+
+
+
+   COMMENT ON COLUMN ADM_REQ_DIAGNOSIS.DT_EPIS_DIAGNOSIS IS 'Date on which the diagnose was set';
+
+
+
+   COMMENT ON COLUMN ADM_REQ_DIAGNOSIS.NOTES IS 'Notes for this diagnose';
+
+
+
+   COMMENT ON COLUMN ADM_REQ_DIAGNOSIS.ID_PROFESSIONAL_UPDATE IS 'Professional that updated this diagnose';
+
+
+
+   COMMENT ON COLUMN ADM_REQ_DIAGNOSIS.DT_UPDATE IS 'Date on which the diagnose was updated';
+
+
+
+   COMMENT ON TABLE ADM_REQ_DIAGNOSIS  IS 'This table contains the list of diagnosis created for an admission request';
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/12/2011 16:34
+-- CHANGE REASON: [ALERT-210978 ] DEMOS MX - OUT - Admission request- se preenche as áreas de Dx e lateralidade no pedido do procedimento cirúrgico dá erro.
+DECLARE
+    e_column_already_there EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table adm_req_diagnosis add id_epis_diagnosis number(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/12/2011 16:49
+-- CHANGE REASON: [ALERT-210984 ] DEMOS MX - OUT - Admission request- se preenche as áreas de Dx e lateralidade no pedido do procedimento cirúrgico dá erro.
+DECLARE
+     e_already_not_null EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01442); -- alter table modify
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table adm_req_diagnosis modify id_epis_diagnosis number(24) not null novalidate';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904); -- drop column/comment on column
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE adm_req_diagnosis drop column id_diagnosis';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table ADM_REQ_DIAGNOSIS
+  is 'This table contains the list of diagnosis created for an admission request';
+-- Add comments to the columns 
+comment on column ADM_REQ_DIAGNOSIS.id_adm_req_diagnosis
+  is 'ADM_REQ_DIAGNOSIS primary key';
+comment on column ADM_REQ_DIAGNOSIS.id_adm_request
+  is 'Foreign key to ADM_REQUEST';
+comment on column ADM_REQ_DIAGNOSIS.id_professional_diag
+  is 'Professional that set this diagnose';
+comment on column ADM_REQ_DIAGNOSIS.flg_status
+  is 'Active ''A'' / Outdated ''O''';
+comment on column ADM_REQ_DIAGNOSIS.flg_diag_status
+  is 'Under investigation ''D'' / Confirmed ''F''';
+comment on column ADM_REQ_DIAGNOSIS.dt_epis_diagnosis
+  is 'Date on which the diagnose was set';
+comment on column ADM_REQ_DIAGNOSIS.notes
+  is 'Notes for this diagnose';
+comment on column ADM_REQ_DIAGNOSIS.id_professional_update
+  is 'Professional that updated this diagnose';
+comment on column ADM_REQ_DIAGNOSIS.dt_update
+  is 'Date on which the diagnose was updated';
+comment on column ADM_REQ_DIAGNOSIS.create_user
+  is 'Create User';
+comment on column ADM_REQ_DIAGNOSIS.create_time
+  is 'Create Time';
+comment on column ADM_REQ_DIAGNOSIS.create_institution
+  is 'Create Institution';
+comment on column ADM_REQ_DIAGNOSIS.update_user
+  is 'Update User';
+comment on column ADM_REQ_DIAGNOSIS.update_time
+  is 'Update Time';
+comment on column ADM_REQ_DIAGNOSIS.update_institution
+  is 'Update Institution';
+comment on column ADM_REQ_DIAGNOSIS.id_epis_diagnosis
+  is 'Episode diagnosis identifier';
+  
+  
+-- CHANGE END: Pedro Fernandes

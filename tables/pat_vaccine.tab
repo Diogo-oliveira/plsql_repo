@@ -1,0 +1,95 @@
+
+
+  CREATE TABLE PAT_VACCINE
+   (	ID_PAT_VACCINE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_VACCINE NUMBER(12,0) NOT NULL ENABLE,
+	DT_PAT_VACCINE DATE NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_TAKE DATE NOT NULL ENABLE,
+	FLG_TAKE_TYPE VARCHAR2(1),
+	LAB VARCHAR2(200),
+	LOTE VARCHAR2(200),
+	NOTES VARCHAR2(4000),
+
+	TUBERCULIN_TYPE VARCHAR2(30)
+   );
+
+
+COMMENT ON COLUMN pat_vaccine.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_vaccine.dt_pat_vaccine IS 'Data do registo' ;
+COMMENT ON COLUMN pat_vaccine.dt_take IS 'Data de administração da vacina' ;
+COMMENT ON COLUMN pat_vaccine.flg_take_type IS 'P - primovacinação, R - reforço' ;
+COMMENT ON COLUMN pat_vaccine.lab IS 'Laboratório de proveniência' ;
+COMMENT ON COLUMN pat_vaccine.lote IS 'Lote' ;
+COMMENT ON COLUMN pat_vaccine.tuberculin_type IS 'Tipo de tuberculina administrada nas provas tuberculínicas' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_VACCINE ADD DT_PAT_VACCINE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_VACCINE.DT_PAT_VACCINE_TSTZ IS 'Data do registo'; 
+ALTER TABLE PAT_VACCINE ADD DT_TAKE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_VACCINE.DT_TAKE_TSTZ IS 'Data de administra‡Æo da vacina'; 
+
+
+
+ALTER TABLE PAT_VACCINE DROP COLUMN DT_PAT_VACCINE;
+ALTER TABLE PAT_VACCINE DROP COLUMN DT_TAKE;
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE PAT_VACCINE ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN PAT_VACCINE.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACCINE modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACCINE modify TUBERCULIN_TYPE varchar2(30 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACCINE modify NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACCINE modify LOTE varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACCINE modify LAB varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACCINE modify FLG_TAKE_TYPE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACCINE modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro

@@ -1,0 +1,34 @@
+CREATE TABLE schedule_analysis
+(
+  id_schedule_analysis  NUMBER(24),
+	id_schedule       NUMBER(24),
+	id_analysis       NUMBER(24),
+	flg_preparation   VARCHAR2(1)
+);
+
+COMMENT ON TABLE schedule_analysis IS 'Contains specific information for analysis schedules';
+COMMENT ON COLUMN schedule_analysis.id_schedule_analysis IS 'Primary key';
+COMMENT ON COLUMN schedule_analysis.id_schedule IS 'Schedule identifier';
+COMMENT ON COLUMN schedule_analysis.id_analysis IS 'Analysis identifier';
+COMMENT ON COLUMN schedule_analysis.flg_preparation IS 'Indicates if the analysis has preparation instructions';
+
+COMMENT ON COLUMN SCHEDULE_ANALYSIS.ID_SCHEDULE_ANALYSIS IS 'Analysis schedule identifier';
+
+ALTER TABLE SCHEDULE_ANALYSIS MODIFY ID_ANALYSIS NUMBER(12);
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 26-07-2011
+-- CHANGE REASON: alert-188535
+alter table SCHEDULE_ANALYSIS drop column id_schedule_analysis;
+alter table SCHEDULE_ANALYSIS drop column id_analysis;
+alter table SCHEDULE_ANALYSIS drop column flg_preparation;
+alter table SCHEDULE_ANALYSIS add id_harvest number(24) not null;
+comment on column SCHEDULE_ANALYSIS.id_harvest is 'harvest id. A Lab appointment can have 0 (no requisition) or 1 or more harvests (with requisition). ';
+-- CHANGE END: Telmo
+
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 13-08-2013
+-- CHANGE REASON: sch-8193
+alter table SCHEDULE_ANALYSIS rename column id_harvest to id_analysis_req;
+-- CHANGE END: Telmo

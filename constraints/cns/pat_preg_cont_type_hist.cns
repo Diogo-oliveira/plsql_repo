@@ -1,0 +1,70 @@
+-- CHANGED BY:  Gisela Couto
+-- CHANGE DATE: 31/07/2014 11:08
+-- CHANGE REASON: [ALERT-292103] Dev DB - Multichoice domain tables implementation - Drop flg_contrac_type pk constraint - schema alert
+DECLARE
+
+PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || REPLACE(srcstr => SQLERRM, oldsub => 'ORA-', newsub => '') || '; ' ||
+                                 i_sql || ';');
+    END run_ddl;
+
+BEGIN
+ 
+     run_ddl(i_sql=> 'ALTER TABLE pat_preg_cont_type_hist drop CONSTRAINT pat_preg_cont_type_hist_pk');
+
+END;
+/
+-- CHANGE END:  Gisela Couto
+
+-- CHANGED BY:  Gisela Couto
+-- CHANGE DATE: 31/07/2014 17:03
+-- CHANGE REASON: [ALERT-291996] Dev DB - Multichoice domain tables implementation - pat_preg_cont_type/pat_preg_cont_type_hist new columns - schema alert
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || REPLACE(srcstr => SQLERRM, oldsub => 'ORA-', newsub => '') || '; ' ||
+                                 i_sql || ';');
+    END run_ddl;
+
+BEGIN
+
+    run_ddl(i_sql => 'ALTER TABLE pat_preg_cont_type_hist add CONSTRAINT m_opt_id_contrac_type_hist_fk foreign key(id_contrac_type) references multichoice_option(id_multichoice_option)');
+
+    run_ddl(i_sql => 'ALTER TABLE pat_preg_cont_type_hist add CONSTRAINT pat_preg_cont_type_hist_pk primary key(id_pat_pregnancy_hist,
+                                                                                          id_contrac_type)
+    USING INDEX tablespace table_s pctfree 10 initrans 2 maxtrans 255 storage(initial 128k NEXT 128k minextents 1
+                                                                              maxextents unlimited pctincrease 0)');
+
+END;
+/
+-- CHANGE END:  Gisela Couto
+
+-- CHANGED BY:  Gisela Couto
+-- CHANGE DATE: 10/09/2014 15:13
+-- CHANGE REASON: [ALERT-294272] Pregnancy button - Create a current pregnancy record - Document information and save - An error occurs
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || REPLACE(srcstr => SQLERRM, oldsub => 'ORA-', newsub => '') || '; ' ||
+                                 i_sql || ';');
+    END run_ddl;
+
+BEGIN
+ 
+    run_ddl(i_sql=> 'ALTER TABLE pat_preg_cont_type_hist drop CONSTRAINT M_OPT_ID_CONTRAC_TYPE_HIST_FK');
+ 
+    run_ddl(i_sql=> 'ALTER TABLE pat_preg_cont_type_hist drop CONSTRAINT PAT_PREG_CONT_TYPE_HIST_PK');
+    
+END;
+/
+-- CHANGE END:  Gisela Couto

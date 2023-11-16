@@ -1,0 +1,23 @@
+
+
+  ALTER TABLE SCH_EVENT_DCS ADD CONSTRAINT SEC_PK PRIMARY KEY (ID_SCH_EVENT_DCS) ENABLE;
+
+  ALTER TABLE SCH_EVENT_DCS MODIFY (ID_SCH_EVENT_DCS NOT NULL ENABLE);
+
+  ALTER TABLE SCH_EVENT_DCS MODIFY (ID_SCH_EVENT NOT NULL ENABLE);
+
+  ALTER TABLE SCH_EVENT_DCS MODIFY (ID_DEP_CLIN_SERV NOT NULL ENABLE);
+
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 13-10-2010
+-- CHANGE REASON: ALERT-148846
+begin
+  execute immediate 'alter table alert.sch_event_dcs add constraint SEC_FLG_AVAIL_CHK check (flg_available IN (''Y'', ''N''))';
+exception
+when others then null;
+end;
+/
+-- CHANGE END: Telmo
+
+

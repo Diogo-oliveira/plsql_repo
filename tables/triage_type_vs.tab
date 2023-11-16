@@ -1,0 +1,77 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/06/2013 17:02
+-- CHANGE REASON: [ALERT-260856] Ability to perform triage based on EST (Échelle Suisse de Tri) (ALERT_188926) - VERSIONING DB DDL
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    --i_flg_category
+    --DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'TRIAGE_TYPE_VS',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'CNT',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+
+    run_ddl(i_sql => '
+CREATE TABLE TRIAGE_TYPE_VS
+(
+  ID_TRIAGE_TYPE_VS          NUMBER(24) NOT NULL,
+  ID_TRIAGE_TYPE             NUMBER(24) NOT NULL,
+  ID_VITAL_SIGN              NUMBER(24) NOT NULL,
+  VAL_MIN                    NUMBER(10,3),
+  VAL_MAX                    NUMBER(10,3),
+  AGE_MIN                    NUMBER(5,2),
+  AGE_MAX                    NUMBER(5,2),
+  ID_UNIT_MEASURE            NUMBER(24),
+  ID_PARENT                  NUMBER(24),
+  ID_VITAL_SIGN_RELATED      NUMBER(24),
+  ID_VS_DESC_RELATED         NUMBER(24),
+  ID_TRIAGE_COLOR            NUMBER(24),
+  FLG_PREGNANT               VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL,
+  MIN_PREG_WEEKS             NUMBER(24),
+  MAX_PREG_WEEKS             NUMBER(24),
+  FLG_POSTPARTUM             VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL,
+  FLG_AVAILABLE              VARCHAR2(1 CHAR) DEFAULT ''Y'' NOT NULL,
+  CREATE_USER                VARCHAR2(24 CHAR),
+  CREATE_TIME                TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION         NUMBER(24),
+  UPDATE_USER                VARCHAR2(24 CHAR),
+  UPDATE_TIME                TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION         NUMBER(24)  
+) TABLESPACE ALERT_DATA');
+
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE TRIAGE_TYPE_VS IS ''Has all the vital signs by triage type vital sign with the corresponding validation values''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.ID_TRIAGE_TYPE_VS IS ''Primary key''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.ID_TRIAGE_TYPE IS ''Triage type id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.ID_VITAL_SIGN IS ''Vital sign ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.VAL_MIN IS ''Minimum acceptable value''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.VAL_MAX IS ''Maximum acceptable value''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.AGE_MIN IS ''Minimum patient age''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.AGE_MAX IS ''Maximum patient age''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.ID_UNIT_MEASURE IS ''Vital sign unit measure''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.ID_PARENT IS ''Parent id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.ID_VITAL_SIGN_RELATED IS ''Related vital sign id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.ID_VS_DESC_RELATED IS ''Related vital sign desc id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.ID_TRIAGE_COLOR IS ''Triage color corresponds to the triage degree level''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.FLG_PREGNANT IS ''Is a VS that only applies to pregnant women? Y -yes; N - Otherwise''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.MIN_PREG_WEEKS IS ''Minimum pregnancy weeks for the current degree''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.MAX_PREG_WEEKS IS ''Maximum pregnancy weeks for the current degree''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.FLG_POSTPARTUM IS ''Is a VS that only applies to women with < 1 month postpartum? Y -yes; N - Otherwise''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.FLG_AVAILABLE IS ''Is available? Y - yes; N - Otherwise''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.CREATE_USER is ''Professional ID which created the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.CREATE_TIME is ''Date of record creation''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.CREATE_INSTITUTION is ''Institution ID where record was created''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.UPDATE_USER is ''Professional ID who last updated the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.UPDATE_TIME is ''Date when record was last updated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_TYPE_VS.UPDATE_INSTITUTION is ''Institution ID where record was last updated''';
+END;
+/
+-- CHANGE END: Alexandre Santos

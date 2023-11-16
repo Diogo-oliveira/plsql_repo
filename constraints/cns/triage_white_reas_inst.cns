@@ -1,0 +1,18 @@
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 24/01/2010 19:50
+-- CHANGE REASON: [ALERT-70160] Triage refactoring
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_WHITE_REAS_INST ADD CONSTRAINT TWT_PK PRIMARY KEY (id_triage_white_reason, id_institution) ENABLE';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_WHITE_REAS_INST ADD CONSTRAINT TWT_FLGAVAILABLE_CHK CHECK(FLG_AVAILABLE IN (''Y'', ''N''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: José Brito

@@ -1,0 +1,14 @@
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 17/10/2012 18:21
+-- CHANGE REASON: [ALERT-242442] 
+DECLARE
+    e_idx_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_idx_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'create index STY_ID_CODE_STY_avail_IDX on SUPPLY_TYPE (id_supply_type,code_supply_type,FLG_AVAILABLE)';
+EXCEPTION
+    WHEN e_idx_already_exists THEN
+        dbms_output.put_line('index STY_ID_CODE_STY_avail_IDX already exists');   
+END;
+/
+-- CHANGE END:  Nuno Neves

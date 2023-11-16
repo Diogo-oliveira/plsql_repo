@@ -1,0 +1,66 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:25
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'CDR_CALL',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'TRS',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => '',
+                                             i_flg_default_child => 'N');
+END;
+/
+
+create table CDR_CALL
+(
+  id_cdr_call        NUMBER(24) not null,
+  id_prof_call       NUMBER(24) not null,
+  dt_call            TIMESTAMP WITH LOCAL TIME ZONE not null,
+  id_episode         NUMBER(24),
+  id_patient         NUMBER(24),
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+);
+
+comment on table CDR_CALL
+  is 'Clinical decision calls. All engine calls get registered here.';
+
+comment on column CDR_CALL.id_cdr_call
+  is 'Primary key.';
+comment on column CDR_CALL.id_prof_call
+  is 'Engine call made by (professional identifier).';
+comment on column CDR_CALL.dt_call
+  is 'Rule engine call date.';
+comment on column CDR_CALL.id_episode
+  is 'Episode identifier. Used for ADW indicators only.';
+comment on column CDR_CALL.id_patient
+  is 'Patient identifier. Used for ADW indicators only.';
+comment on column CDR_CALL.create_user
+  is 'Creation User';
+comment on column CDR_CALL.create_time
+  is 'Creation Time';
+comment on column CDR_CALL.create_institution
+  is 'Creation Institution';
+comment on column CDR_CALL.update_user
+  is 'Update User';
+comment on column CDR_CALL.update_time
+  is 'Update Time';
+comment on column CDR_CALL.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 22/11/2011 17:33
+-- CHANGE REASON: [ALERT-199760] changes_ddl
+alter table cdr_call add (
+id_cdr_call_parent number(24)
+);
+
+comment on column cdr_call.id_cdr_call_parent
+is 'Rule engine parent call identifier.';
+-- CHANGE END: Pedro Carneiro

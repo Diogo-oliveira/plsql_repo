@@ -1,0 +1,70 @@
+
+
+  CREATE TABLE WOUND_EVAL_CHARAC
+   (	ID_WOUND_EVAL_CHARAC NUMBER(24,0) NOT NULL ENABLE,
+	ID_WOUND_CHARAC NUMBER(24,0) NOT NULL ENABLE,
+	ID_WOUND_EVALUATION NUMBER(24,0) NOT NULL ENABLE,
+	VALUE NUMBER(27,3)
+   );
+
+
+COMMENT ON TABLE wound_eval_charac IS 'Caracterização da ferida' ;
+
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 29/04/2010 17:28
+-- CHANGE REASON: [ALERT-94082] Pain scales
+declare
+  column_exists exception;
+  pragma exception_init(column_exists, -1430);
+begin
+  execute immediate 'alter table wound_eval_charac add id_unit_measure number(24)';
+exception
+  when column_exists then
+    null;
+end;
+/
+declare
+  constraint_exists exception;
+  pragma exception_init(constraint_exists, -2275);
+begin
+  execute immediate 'alter table wound_eval_charac add constraint WEC_UM_FK foreign key (id_unit_measure) references unit_measure (id_unit_measure)';
+exception
+  when constraint_exists then
+    null;
+end;
+/
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 16:50
+-- CHANGE REASON: [ALERT-317702] 
+comment on table WOUND_EVAL_CHARAC
+  is 'Dressing: wound evaluation characteristics';
+-- Add comments to the columns 
+comment on column WOUND_EVAL_CHARAC.id_wound_eval_charac
+  is 'Primary key';
+comment on column WOUND_EVAL_CHARAC.id_wound_charac
+  is 'Wound characterisc ID';
+comment on column WOUND_EVAL_CHARAC.id_wound_evaluation
+  is 'Wound evaluation ID';
+comment on column WOUND_EVAL_CHARAC.value
+  is 'Value';
+comment on column WOUND_EVAL_CHARAC.create_user
+  is 'Creation User';
+comment on column WOUND_EVAL_CHARAC.create_time
+  is 'Creation Time';
+comment on column WOUND_EVAL_CHARAC.create_institution
+  is 'Creation Institution';
+comment on column WOUND_EVAL_CHARAC.update_user
+  is 'Update User';
+comment on column WOUND_EVAL_CHARAC.update_time
+  is 'Update Time';
+comment on column WOUND_EVAL_CHARAC.update_institution
+  is 'Update Institution';
+comment on column WOUND_EVAL_CHARAC.id_unit_measure
+  is 'Unit measure ID';
+  
+  
+  
+-- CHANGE END: Ana Matos

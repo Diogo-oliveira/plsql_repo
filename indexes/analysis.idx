@@ -1,0 +1,49 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/10/2011 09:16
+-- CHANGE REASON: [ALERT-196841] translation methods content indexation
+DECLARE e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'create index IDX_ANALYSIS_CNT on alert_Default.analysis (ID_CONTENT, CODE_ANALYSIS, FLG_AVAILABLE) tablespace ALERT_DEFAULT_IDX';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Index IDX_ANALYSIS_CNT already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 17/05/2012 16:19
+-- CHANGE REASON: [ALERT-230564] def search on id_analysis
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX analysis_cnt_idx ON alert.analysis(id_content, flg_available) tablespace index_s';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 05/07/2012 10:33
+-- CHANGE REASON: [ALERT-230995] support indexes
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX analysis_cnt_available_idx ON analysis(flg_available, id_content) tablespace index_s';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('index already inserted');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

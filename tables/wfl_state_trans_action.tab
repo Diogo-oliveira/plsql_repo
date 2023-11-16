@@ -1,0 +1,21 @@
+create table wfl_state_trans_action
+(
+	state_relation	number(5) not null,
+	action			number(4) not null
+) tablespace TABLE_S;
+
+--comments
+comment on table wfl_state_trans_action
+	is 'Table that relates state transition with the associated action';
+	
+comment on column wfl_state_trans_action.state_relation
+	is 'id of relation between states';
+comment on column wfl_state_trans_action.action
+	is 'id of action - action to perform in order to change state A (origin) to state B (destiny)';
+
+alter table wfl_state_trans_action
+drop constraint wfl_sta_sa_fk;
+
+alter table wfl_state_trans_action
+add constraint wfl_sta_a_fk foreign key (action)
+references wfl_action (id_action);

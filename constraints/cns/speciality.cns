@@ -1,0 +1,74 @@
+
+
+  ALTER TABLE SPECIALITY ADD CONSTRAINT SPC_PK PRIMARY KEY (ID_SPECIALITY) ENABLE;
+
+  ALTER TABLE SPECIALITY MODIFY (ID_SPECIALITY NOT NULL ENABLE);
+
+  ALTER TABLE SPECIALITY MODIFY (CODE_SPECIALITY NOT NULL ENABLE);
+
+  ALTER TABLE SPECIALITY MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE SPECIALITY MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:46
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table SPECIALITY add constraint SPEC_FLG_AVAILABLE_CHK check ( FLG_AVAILABLE in (''N'',''Y''))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 11/07/2011 17:50
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table SPECIALITY add constraint SPEC_FLG_AVAILABLE_CHK check ( FLG_AVAILABLE in (''N'',''Y'')) novalidate';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/07/2011 12:02
+-- CHANGE REASON: [ALERT-187577] grouping changes with novalidate
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table SPECIALITY add constraint SPEC_FLG_AVAILABLE_CHK check ( FLG_AVAILABLE in (''N'',''Y'')) novalidate';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

@@ -1,0 +1,104 @@
+  CREATE TABLE ROOM_TYPE
+   (	ID_ROOM_TYPE NUMBER(24),
+	CODE_ROOM_TYPE VARCHAR2(400),
+	FLG_AVAILABLE VARCHAR2(1),
+	ID_CONTENT VARCHAR2(200),
+	CREATE_USER VARCHAR2(24),
+	CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	CREATE_INSTITUTION NUMBER(24),
+	UPDATE_USER VARCHAR2(24),
+	UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	UPDATE_INSTITUTION NUMBER(24)
+   ) ;
+
+
+
+   COMMENT ON COLUMN ROOM_TYPE.ID_ROOM_TYPE IS 'Primary key';
+
+
+
+   COMMENT ON COLUMN ROOM_TYPE.CODE_ROOM_TYPE IS 'Code for translation';
+
+
+
+   COMMENT ON COLUMN ROOM_TYPE.FLG_AVAILABLE IS 'Flag indicating availability';
+
+
+
+   COMMENT ON COLUMN ROOM_TYPE.ID_CONTENT IS 'Content id';
+
+
+
+   COMMENT ON TABLE ROOM_TYPE  IS 'Type of bed content table';
+	 
+   ALTER TABLE room_type add(id_institution NUMBER(24));
+	 COMMENT ON column room_type.id_institution IS 'Content id';
+
+   ALTER TABLE room_type drop column id_content;
+
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/06/2010 14:32
+-- CHANGE REASON: [ALERT-105487] 
+ALTER TABLE ROOM_TYPE ADD 
+(
+flg_status VARCHAR2(1 CHAR),
+flg_parameterization_type VARCHAR2(1 CHAR) default 'C',
+id_professional NUMBER(24),
+dt_creation TIMESTAMP WITH LOCAL TIME ZONE,
+dt_last_update TIMESTAMP WITH LOCAL TIME ZONE,
+desc_room_type VARCHAR2(1000 CHAR)
+);
+
+COMMENT ON COLUMN ROOM_TYPE.flg_status IS 'Status of this data: A - active, E - edited, C - canceled.';
+COMMENT ON COLUMN ROOM_TYPE.flg_parameterization_type IS 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+COMMENT ON COLUMN ROOM_TYPE.id_professional IS 'Id professional that creates the data, when using backoffice.';
+COMMENT ON COLUMN ROOM_TYPE.dt_creation IS 'Creation date.';
+COMMENT ON COLUMN ROOM_TYPE.dt_last_update IS 'Last date when this data was updated.';
+COMMENT ON COLUMN ROOM_TYPE.desc_room_type IS 'Room type description.';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 19/07/2010 14:29
+-- CHANGE REASON: [ALERT-112871] 
+alter table room_type modify code_room_type null;
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Joao Sa
+-- CHANGE DATE: 11/01/2016
+-- ISSUE: Refactor: Table comments
+comment on table ROOM_TYPE
+  is 'Type of room';
+-- Add comments to the columns 
+comment on column ROOM_TYPE.id_room_type
+  is 'Room type id';
+comment on column ROOM_TYPE.code_room_type
+  is 'Code to translate the room type description';
+comment on column ROOM_TYPE.flg_available
+  is 'Available in this implementation? Y/N';
+comment on column ROOM_TYPE.create_user
+  is 'Creation User';
+comment on column ROOM_TYPE.create_time
+  is 'Creation Time';
+comment on column ROOM_TYPE.create_institution
+  is 'Creation Institution';
+comment on column ROOM_TYPE.update_user
+  is 'Update User';
+comment on column ROOM_TYPE.update_time
+  is 'Update Time';
+comment on column ROOM_TYPE.update_institution
+  is 'Update Institution';
+comment on column ROOM_TYPE.id_institution
+  is 'Institution this configuration is available to';
+comment on column ROOM_TYPE.flg_status
+  is 'Backoffice edition status of this record: (A)ctive; (E)dited; (C)anceled';
+comment on column ROOM_TYPE.flg_parameterization_type
+  is 'Record creation process: (C)onfigurations team, directly in the database; (B)ackoffice';
+comment on column ROOM_TYPE.id_professional
+  is 'Professional responsible for record creation';
+comment on column ROOM_TYPE.dt_creation
+  is 'Creation date';
+comment on column ROOM_TYPE.dt_last_update
+  is 'Last date update time';
+comment on column ROOM_TYPE.desc_room_type
+  is 'Room type description';

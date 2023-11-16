@@ -1,0 +1,95 @@
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 03/12/2010 10:10
+-- CHANGE REASON: [ALERT-146512] 
+ALTER TABLE PN_SOAP_BLOCK ADD CONSTRAINT PNSB_PK PRIMARY KEY (ID_PN_SOAP_BLOCK) ENABLE;
+-- CHANGE END: Pedro Teixeira
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 11:49
+-- CHANGE REASON: [ALERT-164552] soap blocks existing model changes
+declare
+  constraint_exists exception;
+  pragma exception_init(constraint_exists, -02264);
+begin
+  execute immediate '
+alter table pn_soap_block
+  add constraint pnsb_flg_type_chk
+  check (flg_type in (''C'', ''S'', ''B'', ''A'', ''L'', ''U''))
+';
+exception
+  when constraint_exists then dbms_output.put_line('constraint PNSB_FLG_TYPE_CHK already exists');
+end;
+/
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:29
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table pn_soap_block
+  add constraint pnsb_flg_wf_viewer_chk
+  check (flg_type IN ('ALL', 'ANL', 'EXM', 'MDC', 'INT', null));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 09:59
+-- CHANGE REASON: H&P phase2
+alter table pn_soap_block
+  add constraint pnsb_flg_wf_viewer_chk
+  check (flg_type IN ('ALL', 'ANL', 'EXM', 'MDC', 'INT', null));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:10
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table pn_soap_block
+  add constraint pnsb_flg_wf_viewer_chk
+  check (flg_type IN ('ALL', 'ANL', 'EXM', 'MDC', 'INT', null));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:15
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_SOAP_BLOCK DROP CONSTRAINT PNSB_FLG_WF_VIEWER_CHK ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:15
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_SOAP_BLOCK ADD CONSTRAINT PNSB_FLG_WF_VIEWER_CHK CHECK ( FLG_WF_VIEWER IN flg_type IN (''ALL'', ''ANL'', ''EXM'', ''MDC'', ''INT'') OR FLG_WF_VIEWER IS NULL) ENABLE');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:10
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_SOAP_BLOCK drop CONSTRAINT PNSB_FLAG_WF_VIEWER_CHK');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:10
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_SOAP_BLOCK add CONSTRAINT PNSB_FLG_WF_VIEWER_CHK CHECK (FLG_WF_VIEWER IN (''ALL'', ''ANL'', ''EXM'', ''MDC'', ''INT'') OR FLG_WF_VIEWER IS NULL) ENABLE');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto

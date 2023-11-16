@@ -1,0 +1,280 @@
+
+--tabela para parametrização da documentation
+CREATE TABLE doc_area_inst_soft(
+	id_doc_area_inst_soft NUMBER NOT NULL,
+	id_doc_area NUMBER NOT NULL, --uni
+	id_institution NUMBER DEFAULT 0 NOT NULL, --uni
+	id_software NUMBER NOT NULL, --uni
+	flg_mode VARCHAR2(1) NOT NULL,
+	adw_last_update DATE NOT NULL
+);
+
+--comments
+COMMENT ON TABLE doc_area_inst_soft
+	IS 'Parametrização de uma doc_area por softwsare e instituição';
+COMMENT ON COLUMN doc_area_inst_soft.id_doc_area_inst_soft
+	IS 'chave primária';
+COMMENT ON COLUMN doc_area_inst_soft.id_doc_area
+	IS 'id da doc_area associada';
+COMMENT ON COLUMN doc_area_inst_soft.id_institution
+	IS 'Parametrização por instituição. 0 significa todas';
+COMMENT ON COLUMN doc_area_inst_soft.id_software
+	IS 'Parametrização por software';
+COMMENT ON COLUMN doc_area_inst_soft.flg_mode
+	IS 'D - documentation, N - normal/text livre';
+
+-- RdSN 2007/08/12
+-- Field created
+alter table doc_area_inst_soft add FLG_TYPE VARCHAR2(2);
+comment on column doc_area_inst_soft.FLG_TYPE
+  is 'To select the context for this doc area, software and institution. Same domain as DOC_TEMPLATE_CONTEXT.FLG_TYPE.';
+
+
+--Emilia Taborda 2007/08/20
+alter table doc_area_inst_soft add flg_switch_mode varchar2(1);
+
+COMMENT ON COLUMN doc_area_inst_soft.flg_switch_mode IS 'Alternância entre touch option e free text.Valores possiveis:Y- Pode alternar;N -Não pode alternar';
+
+COMMENT ON COLUMN doc_area_inst_soft.flg_type IS
+'Tipo de configuração da determinação de doc_template em doc_template_context (DTC)
+A - Pesquisa por clinical_service. DTC.id_software not null. DTC.id_profile_template = not null. DTC.id_dep_clin_serv = null. DTC.id_context=id_clinical_service.
+C - Pesquisa por complaint. DTC.id_software not null. DTC.id_profile_template = not null. DTC.id_dep_clin_serv = null. DTC.id_context=id_complaint.
+CD - Pesquisa por complaint e dep_clin_serv. DTC.id_software not null. DTC.id_profile_template = not null. DTC.id_dep_clin_serv not null. DTC.id_context=id_complaint.
+D - Pesquisa por Doc_area. DTC.id_software not null. DTC.id_profile_template = null.DTC. id_dep_clin_serv = null. DTC.id_context=id_doc_area.
+ET - Pesquisa multi-template acedendo à tabela epis_doc_template';
+
+COMMENT ON COLUMN doc_area_inst_soft.flg_type IS
+'Tipo de configuração da determinação de doc_template em doc_template_context (DTC)
+A - Pesquisa por clinical_service. DTC.id_software not null. DTC.id_profile_template = not null. DTC.id_dep_clin_serv = null. DTC.id_context=id_clinical_service.
+C - Pesquisa por complaint. DTC.id_software not null. DTC.id_profile_template = not null. DTC.id_dep_clin_serv = null. DTC.id_context=id_complaint.
+CD - Pesquisa por complaint e dep_clin_serv. DTC.id_software not null. DTC.id_profile_template = not null. DTC.id_dep_clin_serv not null. DTC.id_context=id_complaint.
+D - Pesquisa por Doc_area. DTC.id_software not null. DTC.id_profile_template = null.DTC. id_dep_clin_serv = null. DTC.id_context=id_doc_area.';
+
+ALTER TABLE DOC_AREA_INST_SOFT ADD flg_multiple VARCHAR2(1);
+COMMENT ON COLUMN DOC_AREA_INST_SOFT.flg_multiple IS 'Suporte para multiplos templates: Y - sim; N - não';
+
+ALTER TABLE DOC_AREA_INST_SOFT ADD ID_SYS_SHORTCUT_ERROR NUMBER(24);
+COMMENT ON COLUMN DOC_AREA_INST_SOFT.ID_SYS_SHORTCUT_ERROR IS 'Shortcut a ser chamado em caso de erro ao carregar a documentation';
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-APR-21
+-- CHANGED REASON: ALERT-24615 Template by Area + Appointment
+COMMENT ON COLUMN doc_area_inst_soft.flg_type IS
+'Configuration type used by the area to search applicable templates in doc_template_context (DTC)
+C - Template by Complaint. Depends of COMPLAINT_FILTER sys_config: PROFILE_TEMPLATE: (DTC.id_context=id_complaint) ; DEP_CLIN_SERV: (DTC.id_context=id_complaint and DTC.id_dep_clin_ser = epis_info.id_dcs_requested)
+D - Template by DocArea. (DTC.id_context=id_doc_area)
+A - Template by Appointment. (DTC.id_context=episode.id_clinical_service)
+S - Template by Clinical service. (DTC.id_context = dep_clin_serv.id_clinical_service using join with epis_info.dep_clin_serv)
+SD - Template by Scheduled Department-clinical service. (DTC.id_context is NULL AND DTC.id_dep_clin_serv=epis_info.id_dcs_requested)
+DS - Template by DocArea + Clinical service. (DTC.id_context=id_doc_area AND DTC.id_context_2=dep_clin_serv.id_clinical_service using join with epis_info.dep_clin_serv)
+DA - Template by DocArea + Appointment. (DTC.id_context=id_doc_area AND DTC.id_context_2=episode.id_clinical_service)';
+--CHANGE END Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 04/09/2009 17:49
+-- CHANGE REASON: [ALERT-41146] ORIS: Be able to parameterize the use of templates by Area + Surgical Procedure
+COMMENT ON COLUMN doc_area_inst_soft.flg_type IS
+'Configuration type used by the area to search applicable templates in doc_template_context (DTC)
+C - Template by Complaint. Depends of COMPLAINT_FILTER sys_config: PROFILE_TEMPLATE: (DTC.id_context=id_complaint) ; DEP_CLIN_SERV: (DTC.id_context=id_complaint and DTC.id_dep_clin_ser = epis_info.id_dcs_requested)
+D - Template by DocArea. (DTC.id_context=id_doc_area)
+A - Template by Appointment. (DTC.id_context=episode.id_clinical_service)
+S - Template by Clinical service. (DTC.id_context = dep_clin_serv.id_clinical_service using join with epis_info.dep_clin_serv)
+SD - Template by Scheduled Department-clinical service. (DTC.id_context is NULL AND DTC.id_dep_clin_serv=epis_info.id_dcs_requested)
+DS - Template by DocArea + Clinical service. (DTC.id_context=id_doc_area AND DTC.id_context_2=dep_clin_serv.id_clinical_service using join with epis_info.dep_clin_serv)
+DA - Template by DocArea + Appointment. (DTC.id_context=id_doc_area AND DTC.id_context_2=episode.id_clinical_service)
+SP - Template by DocArea + Surgical procedure. (DTC.id_context=id_doc_area AND DTC.id_context_2=sr_epis_interv.id_sr_intervention)';
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 29/11/2010 15:48
+-- CHANGE REASON: [ALERT-140014] Data paging solution in summary pages
+DECLARE
+    l_exists PLS_INTEGER;
+    l_table  VARCHAR2(30) := 'DOC_AREA_INST_SOFT';
+l_col  VARCHAR2(30) := 'FLG_DATA_PAGING_ENABLED';
+
+    l_ddl_lst table_varchar2 := table_varchar2(
+'ALTER TABLE DOC_AREA_INST_SOFT ADD (
+           FLG_SCOPE_TYPE VARCHAR2(1 CHAR) DEFAULT ''E'' NOT NULL,
+           FLG_DATA_PAGING_ENABLED VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL,
+           PAGE_SIZE NUMBER(6),
+           ID_MARKET NUMBER(24))',
+'COMMENT ON COLUMN doc_area_inst_soft.flg_scope_type is ''Type of scope used by area to retrieve information: (E)pisode; (V)isit; (P)atient''',
+'COMMENT ON COLUMN doc_area_inst_soft.flg_data_paging_enabled is ''Data paging support is enabled in the area: (Y)es; (N)o''',
+'COMMENT ON COLUMN doc_area_inst_soft.page_size is ''Specifies how many items the area displays per page when data paging support is enabled''',
+'COMMENT ON COLUMN doc_area_inst_soft.id_market is ''Market identifier. Required for default configurations and it should be NULL for custom configurations''');
+BEGIN
+    SELECT count(1)
+      INTO l_exists
+      FROM user_tab_cols utc
+     WHERE utc.table_name = l_table
+ and utc.column_name = l_col;
+
+    IF l_exists = 0
+    THEN
+        FOR i IN l_ddl_lst.FIRST .. l_ddl_lst.LAST
+        LOOP
+            EXECUTE IMMEDIATE l_ddl_lst(i);
+        END LOOP;
+    ELSE
+        dbms_output.put_line('Info: Table DOC_AREA_INST_SOFT already updated for data paging support');
+    END IF;
+END;
+/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 31/03/2011 12:42
+-- CHANGE REASON: [ALERT-170455 ] Evaluates if DOC_AREA_INST_SOFT.ID_MARKET that was included in v2.5.1.2HF10, v2.5.1.3 and v2.6.0.5 is using a default value to prevent errors in DML scripts for 2.6.x versions
+DECLARE
+    l_data_default  LONG;
+    FUNCTION long2str(v LONG) RETURN VARCHAR2 IS
+        str VARCHAR2(4000);
+    BEGIN
+        str := substr(v, 1, 4000);
+        RETURN str;
+    END;
+BEGIN
+    SELECT ut.data_default
+      INTO l_data_default
+      FROM user_tab_cols ut
+     WHERE ut.table_name = 'DOC_AREA_INST_SOFT'
+       AND ut.column_name = 'ID_MARKET';
+
+    dbms_output.put_line('Default value for DOC_AREA_INST_SOFT.ID_MARKET: ' ||
+                         nvl(long2str(l_data_default), '<no default value>'));
+    IF long2str(l_data_default) IS NULL
+    THEN
+        -- No default value was found for ID_MARKET. We set 0 as default value (all markets)
+        EXECUTE IMMEDIATE 'ALTER TABLE DOC_AREA_INST_SOFT MODIFY ID_MARKET NUMBER(24) DEFAULT 0';
+        dbms_output.put_line('Default value for DOC_AREA_INST_SOFT.ID_MARKET was updated to 0');
+    ELSE
+        dbms_output.put_line('Default value for DOC_AREA_INST_SOFT.ID_MARKET already updated');
+    END IF;
+EXCEPTION
+    WHEN no_data_found THEN
+        dbms_output.put_line('The column DOC_AREA_INST_SOFT.ID_MARKET was not created yet in this database.
+        Ignoring the update of default value');
+        NULL;
+END;
+/
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 04/04/2011 10:50
+-- CHANGE REASON: [ALERT-170813] 
+begin
+COMMENT ON COLUMN doc_area_inst_soft.flg_type IS
+'Configuration type used by the area to search applicable templates in doc_template_context (DTC)
+C - Template by Complaint. Depends of COMPLAINT_FILTER sys_config: PROFILE_TEMPLATE: (DTC.id_context=id_complaint) ; DEP_CLIN_SERV: (DTC.id_context=id_complaint and DTC.id_dep_clin_ser = epis_info.id_dcs_requested)
+D - Template by DocArea. (DTC.id_context=id_doc_area)
+A - Template by Appointment. (DTC.id_context=episode.id_clinical_service)
+S - Template by Clinical service. (DTC.id_context = dep_clin_serv.id_clinical_service using join with epis_info.dep_clin_serv)
+SD - Template by Scheduled Department-clinical service. (DTC.id_context is NULL AND DTC.id_dep_clin_serv=epis_info.id_dcs_requested)
+DS - Template by DocArea + Clinical service. (DTC.id_context=id_doc_area AND DTC.id_context_2=dep_clin_serv.id_clinical_service using join with epis_info.dep_clin_serv)
+DA - Template by DocArea + Appointment. (DTC.id_context=id_doc_area AND DTC.id_context_2=episode.id_clinical_service)
+SP - Template by DocArea + Surgical procedure. (DTC.id_context=id_doc_area AND DTC.id_context_2=sr_epis_interv.id_sr_intervention)
+P  - Template by CIPE)';
+end;
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 04/04/2011 10:50
+-- CHANGE REASON: [ALERT-170813] 
+begin
+COMMENT ON COLUMN doc_area_inst_soft.flg_type IS
+'Configuration type used by the area to search applicable templates in doc_template_context (DTC)
+C - Template by Complaint. Depends of COMPLAINT_FILTER sys_config: PROFILE_TEMPLATE: (DTC.id_context=id_complaint) ; DEP_CLIN_SERV: (DTC.id_context=id_complaint and DTC.id_dep_clin_ser = epis_info.id_dcs_requested)
+D - Template by DocArea. (DTC.id_context=id_doc_area)
+A - Template by Appointment. (DTC.id_context=episode.id_clinical_service)
+S - Template by Clinical service. (DTC.id_context = dep_clin_serv.id_clinical_service using join with epis_info.dep_clin_serv)
+SD - Template by Scheduled Department-clinical service. (DTC.id_context is NULL AND DTC.id_dep_clin_serv=epis_info.id_dcs_requested)
+DS - Template by DocArea + Clinical service. (DTC.id_context=id_doc_area AND DTC.id_context_2=dep_clin_serv.id_clinical_service using join with epis_info.dep_clin_serv)
+DA - Template by DocArea + Appointment. (DTC.id_context=id_doc_area AND DTC.id_context_2=episode.id_clinical_service)
+SP - Template by DocArea + Surgical procedure. (DTC.id_context=id_doc_area AND DTC.id_context_2=sr_epis_interv.id_sr_intervention)
+P  - Template by CIPE)';
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 25/11/2013 10:22
+-- CHANGE REASON: [ALERT-268453 ] 
+-- Add comments to the columns 
+comment on column DOC_AREA_INST_SOFT.flg_type
+  is 'Configuration type used by the area to search applicable templates in doc_template_context (DTC)
+C - Template by Complaint. Depends of COMPLAINT_FILTER sys_config: PROFILE_TEMPLATE: (DTC.id_context=id_complaint) ; DEP_CLIN_SERV: (DTC.id_context=id_complaint and DTC.id_dep_clin_ser = epis_info.id_dcs_requested)
+D - Template by DocArea. (DTC.id_context=id_doc_area)
+A - Template by Appointment. (DTC.id_context=episode.id_clinical_service)
+S - Template by Clinical service. (DTC.id_context = dep_clin_serv.id_clinical_service using join with epis_info.dep_clin_serv)
+SD - Template by Scheduled Department-clinical service. (DTC.id_context is NULL AND DTC.id_dep_clin_serv=epis_info.id_dcs_requested)
+DS - Template by DocArea + Clinical service. (DTC.id_context=id_doc_area AND DTC.id_context_2=dep_clin_serv.id_clinical_service using join with epis_info.dep_clin_serv)
+DA - Template by DocArea + Appointment. (DTC.id_context=id_doc_area AND DTC.id_context_2=episode.id_clinical_service)
+SP - Template by DocArea + Surgical procedure. (DTC.id_context=id_doc_area AND DTC.id_context_2=sr_epis_interv.id_sr_intervention)
+P  - Template by CIPE
+E - Template by others Exams.(DTC.id_context=exam.id_exam)
+I - Template by Intervention. (DTC.id_context=intervention.id_intervention)
+ER - Template by Exams and Others Exams at Results Interpretation Area.(DTC.id_context=exam.id_exam)';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/01/2016 14:58
+-- CHANGE REASON: [ALERT-317702] 
+comment on table DOC_AREA_INST_SOFT
+  is 'Documentation area configuration';
+-- Add comments to the columns 
+comment on column DOC_AREA_INST_SOFT.id_doc_area_inst_soft
+  is 'Primary key';
+comment on column DOC_AREA_INST_SOFT.id_doc_area
+  is 'Documentation area ID';
+comment on column DOC_AREA_INST_SOFT.id_institution
+  is 'Institution ID';
+comment on column DOC_AREA_INST_SOFT.id_software
+  is 'Software ID';
+comment on column DOC_AREA_INST_SOFT.flg_mode
+  is 'D - documentation, N - normal/text livre';
+comment on column DOC_AREA_INST_SOFT.adw_last_update
+  is 'Update date';
+comment on column DOC_AREA_INST_SOFT.flg_switch_mode
+  is 'Flag that indicates if it is possible to change between touch option and free text';
+comment on column DOC_AREA_INST_SOFT.flg_type
+  is 'Configuration type used by the area to search applicable templates in doc_template_context (DTC)
+C - Template by Complaint. Depends of COMPLAINT_FILTER sys_config: PROFILE_TEMPLATE: (DTC.id_context=id_complaint) ; DEP_CLIN_SERV: (DTC.id_context=id_complaint and DTC.id_dep_clin_ser = epis_info.id_dcs_requested)
+D - Template by DocArea. (DTC.id_context=id_doc_area)
+A - Template by Appointment. (DTC.id_context=episode.id_clinical_service)
+S - Template by Clinical service. (DTC.id_context = dep_clin_serv.id_clinical_service using join with epis_info.dep_clin_serv)
+SD - Template by Scheduled Department-clinical service. (DTC.id_context is NULL AND DTC.id_dep_clin_serv=epis_info.id_dcs_requested)
+DS - Template by DocArea + Clinical service. (DTC.id_context=id_doc_area AND DTC.id_context_2=dep_clin_serv.id_clinical_service using join with epis_info.dep_clin_serv)
+DA - Template by DocArea + Appointment. (DTC.id_context=id_doc_area AND DTC.id_context_2=episode.id_clinical_service)
+SP - Template by DocArea + Surgical procedure. (DTC.id_context=id_doc_area AND DTC.id_context_2=sr_epis_interv.id_sr_intervention)
+P  - Template by CIPE
+E - Template by others Exams.(DTC.id_context=exam.id_exam)
+I - Template by Intervention. (DTC.id_context=intervention.id_intervention)
+ER - Template by Exams and Others Exams at Results Interpretation Area.(DTC.id_context=exam.id_exam)';
+comment on column DOC_AREA_INST_SOFT.flg_multiple
+  is 'Flag that indicates if multiple template is allowed';
+comment on column DOC_AREA_INST_SOFT.id_sys_shortcut_error
+  is 'Shortcut ID when loading documentation with error';
+comment on column DOC_AREA_INST_SOFT.create_user
+  is 'Creation User';
+comment on column DOC_AREA_INST_SOFT.create_time
+  is 'Creation Time';
+comment on column DOC_AREA_INST_SOFT.create_institution
+  is 'Creation Institution';
+comment on column DOC_AREA_INST_SOFT.update_user
+  is 'Update User';
+comment on column DOC_AREA_INST_SOFT.update_time
+  is 'Update Time';
+comment on column DOC_AREA_INST_SOFT.update_institution
+  is 'Update Institution';
+comment on column DOC_AREA_INST_SOFT.flg_scope_type
+  is 'Type of scope used by area to retrieve information: (E)pisode; (V)isit; (P)atient';
+comment on column DOC_AREA_INST_SOFT.flg_data_paging_enabled
+  is 'Data paging support is enabled in the area: (Y)es; (N)o';
+comment on column DOC_AREA_INST_SOFT.page_size
+  is 'Specifies how many items the area displays per page when data paging support is enabled';
+comment on column DOC_AREA_INST_SOFT.id_market
+  is 'Market identifier. Required for default configurations and it should be NULL for custom configurations';
+  
+  
+-- CHANGE END: Ana Matos

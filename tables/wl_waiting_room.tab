@@ -1,0 +1,55 @@
+
+
+  CREATE TABLE WL_WAITING_ROOM
+   (	ID_WL_WAITING_ROOM NUMBER(24,0) NOT NULL ENABLE,
+	ID_ROOM_CONSULT NUMBER(24,0) NOT NULL ENABLE,
+	ID_ROOM_WAIT NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE wl_waiting_room IS 'Associação de gabinetes de consulta com as respectivas salas de espera, para que a aplicação saiba em que sala o utente deve aguardar a chamada, mediante a sala onde vai ter consulta,' ;
+
+
+-- CHANGED BY: RicardoNunoAlmeida
+-- CHANGE DATE: 23/04/2010 17:53
+-- CHANGE REASON: [ALERT-91338] 
+ALTER TABLE wl_waiting_room drop column id_wl_waiting_room;
+-- CHANGE END: RicardoNunoAlmeida
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table WL_WAITING_ROOM
+  is 'Table that contains the association between the consultation room an their waiting room.
+The purpose is for the  application knows in which room the patient should wait until we will called
+';
+-- Add comments to the columns 
+comment on column WL_WAITING_ROOM.id_room_consult
+  is 'Consult room identifier,(where consultation take place)';
+comment on column WL_WAITING_ROOM.id_room_wait
+  is 'Waiting room identifier (where patient will wait)';
+comment on column WL_WAITING_ROOM.create_user
+  is 'Creation User';
+comment on column WL_WAITING_ROOM.create_time
+  is 'Creation Time';
+comment on column WL_WAITING_ROOM.create_institution
+  is 'Creation Institution';
+comment on column WL_WAITING_ROOM.update_user
+  is 'Update User';
+comment on column WL_WAITING_ROOM.update_time
+  is 'Update Time';
+comment on column WL_WAITING_ROOM.update_institution
+  is 'Update Institution';  
+-- CHANGE END: Pedro Fernandes
+
+-- cmf
+declare
+       l_Sql varchar2(4000);
+begin
+       l_Sql := q'[alter table wl_waiting_room add order_rank number(6) default 0]';
+       pk_versioning.run(l_sql);
+end;
+/
+
+comment on column WL_WAITING_ROOM.order_rank is 'value for sorting purpose';  

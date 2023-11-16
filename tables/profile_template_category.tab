@@ -1,0 +1,20 @@
+create table PROFILE_TEMPLATE_CATEGORY
+(
+  ID_PROFILE_TEMPLATE NUMBER(24) not null,
+  ID_CATEGORY         NUMBER(24) not null
+);
+
+comment on table PROFILE_TEMPLATE_CATEGORY is 'Relação entre perfis e categorias';
+
+comment on column PROFILE_TEMPLATE_CATEGORY.ID_PROFILE_TEMPLATE is 'Identificação do perfil';
+comment on column PROFILE_TEMPLATE_CATEGORY.ID_CATEGORY is 'Identificação da categoria';
+
+declare
+l_sql    varchar2(1000 char);
+begin
+l_sql := q'[ALTER TABLE PROFILE_TEMPLATE_CATEGORY ADD FLG_CAT_PROF VARCHAR2(1 CHAR) DEFAULT 'Y' NOT NULL]';
+pk_versioning.run( l_sql );
+end;
+/
+
+COMMENT ON COLUMN PROFILE_TEMPLATE_CATEGORY.FLG_CAT_PROF IS 'From CATEGORY.FLG_PROF: Cannot be equal to "N"' ;

@@ -1,0 +1,14 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 30/04/2011 18:11
+-- CHANGE REASON: [ALERT-173229] Order recurrence core development
+DECLARE
+    e_idx_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_idx_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'create index ORCPLT_ORCPL_IDX on ORDER_RECURR_PLAN_TIME (ID_ORDER_RECURR_PLAN)';
+EXCEPTION
+    WHEN e_idx_already_exists THEN
+        dbms_output.put_line('index already exists');   
+END;
+/
+-- CHANGE END: Carlos Loureiro

@@ -1,0 +1,61 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 01/06/2009 15:31
+-- CHANGE REASON: [ALERT-889 ] Modelo de dados do nutricionista
+-- Creating Check Constraint on 'DIET_PROF_INSTIT'
+ALTER TABLE DIET_PROF_INSTIT
+ ADD (CONSTRAINT DPI_FLG_SHARE_CHK CHECK (FLG_SHARE IN ('Y','N')));
+ 
+alter table DIET_PROF_INSTIT
+  add constraint DPI_FLG_STATUS_CHK
+  check (FLG_STATUS IN ('A','C')); 
+-- CHANGE END: Elisabete Bugalho
+
+-- Rita Lopes
+alter table DIET_PROF_INSTIT
+  add constraint DPI_PK primary key (ID_DIET_PROF_INSTIT);
+ 
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19-06-2009
+-- CHANGE REASON: ALERT-32977 
+
+  alter table DIET_PROF_INSTIT
+  drop constraint DPI_FLG_STATUS_CHK;
+alter table DIET_PROF_INSTIT
+  add constraint DPI_FLG_STATUS_CHK
+  check (FLG_STATUS IN ('A','C','E'));
+  
+--CHANGE END
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 10/11/2011 09:15
+-- CHANGE REASON: [ALERT-202720] 
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02443);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table DIET_PROF_INSTIT drop constraint DPI_FLG_STATUS_CHK';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02264);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table DIET_PROF_INSTIT add constraint DPI_FLG_STATUS_CHK check (FLG_STATUS IN (''A'',''C'',''E'',''O'')) ';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Rita Lopes

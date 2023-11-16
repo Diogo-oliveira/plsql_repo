@@ -1,0 +1,52 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 11/02/2013 17:35
+-- CHANGE REASON: [ALERT-250607] Method to migrate prefilled templates created by professionals when a template is updated
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'DOC_TEMPLATE_UPDATE_QUALIF',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'CNT',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => '',
+                                             i_flg_default_child => 'N',
+                                             i_flg_nzd           => 'N',
+                                             i_responsible_team  => 'DOC');
+END;
+/
+
+CREATE TABLE DOC_TEMPLATE_UPDATE_QUALIF(
+ id_doc_area NUMBER (24) NOT NULL,
+ id_doc_template_source NUMBER (24) NOT NULL,
+ id_doc_template_target NUMBER (24) NOT NULL,
+ id_doc_element_crit_src NUMBER (24) NOT NULL,
+ id_doc_element_crit_tgt NUMBER (24) NOT NULL,
+ id_doc_element_qualif_src NUMBER (24) NOT NULL,
+ id_doc_element_qualif_tgt NUMBER (24) NOT NULL,
+ hash_value VARCHAR2(4000),
+ create_user        VARCHAR2(24),
+ create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+ create_institution NUMBER(24),
+ update_user        VARCHAR2(24),
+ update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+ update_institution NUMBER(24)
+);
+
+
+comment on table doc_template_update_qualif 
+  is 'Mapping between qualifiers/quantifiers of templates that have been updated. This information is used to aid in the migration of prefilled templates (DOC_MACRO_VERSION_QLF) that were created using a template which has been replaced by another'; 
+
+comment on column doc_template_update_qualif.id_doc_area is 'Area ID'; 
+comment on column doc_template_update_qualif.id_doc_template_source is 'ID of DOC_TEMPLATE that is substituted'; 
+comment on column doc_template_update_qualif.id_doc_template_target is 'ID of DOC_TEMPLATE that replaces the previous one'; 
+comment on column doc_template_update_qualif.id_doc_element_crit_src is 'ID of DOC_ELEMENT_CRIT that is substituted'; 
+comment on column doc_template_update_qualif.id_doc_element_crit_tgt is 'ID of DOC_ELEMENT_CRIT that replaces the previous one'; 
+comment on column doc_template_update_qualif.id_doc_element_qualif_src is 'ID of DOC_ELEMENT_QUALIF that is substituted'; 
+comment on column doc_template_update_qualif.id_doc_element_qualif_tgt is 'ID of DOC_ELEMENT_QUALIF that replaces the previous one'; 
+comment on column doc_template_update_qualif.hash_value is 'SHA-1 created as result of comparison properties of qualifiers/quantifiers and that was used to establish a match between them';
+comment on column doc_template_update_qualif.create_user is 'Creation User';
+comment on column doc_template_update_qualif.create_time is 'Creation Time';
+comment on column doc_template_update_qualif.create_institution is 'Creation Institution';
+comment on column doc_template_update_qualif.update_user is 'Update User';
+comment on column doc_template_update_qualif.update_time is 'Update Time';
+comment on column doc_template_update_qualif.update_institution is 'Update Institution';
+-- CHANGE END: Ariel Machado

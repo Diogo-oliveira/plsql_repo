@@ -1,0 +1,49 @@
+
+
+  CREATE TABLE PAT_HISTORY_HIST
+   (	ID_PAT_HISTORY_HIST NUMBER(24,0),
+	ID_PAT_HISTORY NUMBER(24,0),
+	ID_PROFESSIONAL NUMBER(24,0),
+	DT_CREATION DATE,
+	FLG_STATUS VARCHAR2(1),
+	FLG_TYPE_DIAG VARCHAR2(240),
+	FLG_TYPE_HIST VARCHAR2(1),
+	NOTES VARCHAR2(240),
+	ADW_LAST_UPDATE DATE
+   );
+
+alter table PAT_HISTORY_HIST modify ID_PAT_HISTORY_HIST not null;
+alter table PAT_HISTORY_HIST modify ID_PAT_HISTORY not null;
+alter table PAT_HISTORY_HIST modify ID_PROFESSIONAL not null;
+alter table PAT_HISTORY_HIST modify DT_CREATION not null;
+alter table PAT_HISTORY_HIST modify FLG_STATUS not null;
+alter table PAT_HISTORY_HIST modify FLG_TYPE_DIAG not null;
+alter table PAT_HISTORY_HIST modify ADW_LAST_UPDATE not null;
+
+comment on column PAT_HISTORY_HIST.ID_PAT_HISTORY_HIST
+  is 'Chave primária';
+comment on column PAT_HISTORY_HIST.ID_PAT_HISTORY
+  is 'Chave primária';
+comment on column PAT_HISTORY_HIST.ID_PROFESSIONAL
+  is 'Profissional';
+comment on column PAT_HISTORY_HIST.DT_CREATION
+  is 'Data de registo';
+comment on column PAT_HISTORY_HIST.FLG_STATUS
+  is 'Estado da história do paciente:A -Activo; C - Cancelar; D - Despiste; F - Confirmado; R - Declinar; B - Base';
+comment on column PAT_HISTORY_HIST.FLG_TYPE_DIAG
+  is 'Tipo de diagnóstico. P - Provisório;Novo tipo de diagnóstico: B - Diagnóstico base, existe apenas para o ORIS.';
+comment on column PAT_HISTORY_HIST.FLG_TYPE_HIST
+  is 'Tipo de história. C - Cirurgica;M - Médica; F- Familiar;S - Social';
+comment on column PAT_HISTORY_HIST.NOTES
+  is 'Notas';
+comment on column PAT_HISTORY_HIST.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_HISTORY_HIST ADD DT_CREATION_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_HISTORY_HIST.DT_CREATION_TSTZ IS 'Data de registo'; 
+
+
+-- DROP DATE TYPE
+ALTER table PAT_HISTORY_HIST DROP COLUMN DT_CREATION;

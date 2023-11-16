@@ -1,0 +1,33 @@
+-- Create table
+create table CRISIS_CRON
+(
+  ID_CRISIS_CRON NUMBER(24) not null,
+  CRON_LINE_TEXT VARCHAR2(2000) not null
+);
+
+-- Add comments to the table 
+comment on table CRISIS_CRON
+  is 'Linhas do crontab que não são da crisis machine';
+-- Add comments to the columns 
+comment on column CRISIS_CRON.ID_CRISIS_CRON
+  is 'Chave primária';
+comment on column CRISIS_CRON.CRON_LINE_TEXT
+  is 'Linha de texto';
+
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 08/10/2013 12:30
+-- CHANGE REASON: [ALERT-266177] Crisis Machine cleanup
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner        => 'ALERT',
+                                             i_obj_name     => 'CRISIS_CRON',
+                                             i_obj_type     => 'TABLE',
+                                             i_flg_category => 'DPC');
+																						 
+		EXECUTE IMMEDIATE 'drop table crisis_cron';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('drop table crisis_cron - Error (' || SQLCODE || '), resuming execution...');
+END;
+/
+-- CHANGE END: Gustavo Serrano

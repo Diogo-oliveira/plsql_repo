@@ -1,0 +1,37 @@
+CREATE TABLE todo_task (
+       flg_task            VARCHAR2(2) NOT NULL,   
+       id_profile_template NUMBER(24,0) NOT NULL,   
+       flg_type            VARCHAR2(1) NOT NULL,   
+       id_sys_shortcut     NUMBER(24,0),           
+       icon                VARCHAR2(30) NOT NULL,  
+       flg_icon_type       VARCHAR2(1) NOT NULL    
+);
+
+COMMENT ON TABLE todo_task IS 'Stores the relation between professional profiles and pending or depending tasks to show on ''To-Do List''';
+
+COMMENT ON COLUMN todo_task.flg_task IS 'Types of tasks available: check ''TODO_TASK.FLG_TASK'' on SYS_DOMAIN for details.';
+COMMENT ON COLUMN todo_task.id_profile_template IS 'Professional profile template';
+COMMENT ON COLUMN todo_task.flg_type IS '(P) Pending or (D) depending task';
+COMMENT ON COLUMN todo_task.id_sys_shortcut IS 'Shortcut used on ''To-Do List''';
+COMMENT ON COLUMN todo_task.icon IS 'Task icon';
+COMMENT ON COLUMN todo_task.flg_icon_type IS 'Type of icon: (I) icon or (T) text';
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/02/2013 15:28
+-- CHANGE REASON: [ ALERT-252087] Make configurable the tasks that are displayed in the work list
+--                
+-- Add/modify columns 
+alter table TODO_TASK add id_institution number(24) default 0;
+-- Add comments to the columns 
+comment on column TODO_TASK.id_institution
+  is 'Institution identifier.';
+
+
+ALTER TABLE TODO_TASK modify FLG_TASK VARCHAR2(2 CHAR);
+ALTER TABLE TODO_TASK modify CREATE_USER VARCHAR2(30 CHAR);
+ALTER TABLE TODO_TASK modify FLG_ICON_TYPE VARCHAR2(1 CHAR);
+ALTER TABLE TODO_TASK modify FLG_TYPE VARCHAR2(1 CHAR);
+ALTER TABLE TODO_TASK modify ICON VARCHAR2(30 CHAR);
+ALTER TABLE TODO_TASK modify UPDATE_USER VARCHAR2(30 CHAR);
+-- CHANGE END: Elisabete Bugalho

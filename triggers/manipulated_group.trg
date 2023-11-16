@@ -1,0 +1,1 @@
+drop trigger MANIPULATED_GROUP;

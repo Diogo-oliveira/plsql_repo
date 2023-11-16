@@ -1,0 +1,177 @@
+-- ******************** Table structure
+CREATE TABLE MONITORIZATIONS_EA (
+	ID_MONITORIZATION NUMBER(24,0) NOT NULL,
+	ID_MONITORIZATION_VS number(24,0) not null,
+	ID_MONITORIZATION_VS_PLAN number(24,0) not null,
+	ID_VITAL_SIGN number(24,0) not null,
+	FLG_STATUS varchar2(1) not null,
+	FLG_STATUS_DET varchar2(1) not null,
+	FLG_STATUS_PLAN varchar2(1) not null,
+	FLG_TIME varchar2(1) not null,
+	DT_MONITORIZATION TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+	DT_PLAN TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+	INTERVAL NUMBER(12,4),
+	ID_EPISODE_ORIGIN NUMBER(24),
+	DT_BEGIN TIMESTAMP(6) WITH LOCAL TIME ZONE,
+	DT_END TIMESTAMP(6) WITH LOCAL TIME ZONE,
+	NUM_MONIT number(24,0) not null,
+	ID_VISIT number(24,0) not null,
+	STATUS_STR VARCHAR2(50),
+	STATUS_MSG VARCHAR2(50),
+	STATUS_ICON VARCHAR2(50),
+	STATUS_FLG VARCHAR2(50),
+	FLG_NOTES varchar2(1) not null,
+	ID_EPISODE number(24,0) not null,
+	ID_PREV_EPISODE number(24,0),
+	ID_PATIENT number(24,0) not null,
+	ID_PROFESSIONAL number(24,0) not null,
+        DT_DG_LAST_UPDATE TIMESTAMP(6) WITH LOCAL TIME ZONE default current_timestamp,
+);	
+
+
+
+-- ******************** Comments
+
+-- Table comment
+comment on table MONITORIZATIONS_EA is 'Monitorizations - Easy Access';
+
+-- Table columns comments
+comment on column MONITORIZATIONS_EA.ID_MONITORIZATION is 'Monitorization request''s ID';
+comment on column MONITORIZATIONS_EA.ID_MONITORIZATION_VS is 'Monitorization request detail''s ID';
+comment on column MONITORIZATIONS_EA.ID_MONITORIZATION_VS_PLAN is 'Next reading ID';
+comment on column MONITORIZATIONS_EA.ID_VITAL_SIGN is 'Requested vital sign ID';
+comment on column MONITORIZATIONS_EA.FLG_STATUS is 'Request''s status: A - In progress; C - Cancelled; D - Pending; F - Complete; I - Interrupted';
+comment on column MONITORIZATIONS_EA.FLG_STATUS_DET is 'Request''s detail''s status: A - In progress; C - Cancelled; D - Pending; F - Complete; I - Interrupted';
+comment on column MONITORIZATIONS_EA.FLG_STATUS_PLAN is 'Reading status: A - In progress; C - Cancelled; D - Pending; F - Complete';
+comment on column MONITORIZATIONS_EA.FLG_TIME is 'Execution type: in this (E)pisode, (B)etween episodes, (N)ext episode.';
+comment on column MONITORIZATIONS_EA.DT_MONITORIZATION is 'Monitorization date';
+comment on column MONITORIZATIONS_EA.DT_PLAN is 'Next reading date';
+comment on column MONITORIZATIONS_EA.INTERVAL is 'Interval between readings';
+comment on column MONITORIZATIONS_EA.ID_EPISODE_ORIGIN is 'When the patient has an episode with an intervention request with FLG_TIME = ''N'', then the patient comes to another appointment and that request is duplicated to this new episode. In this new request, this column is filled with the episode ID of the first request.';
+comment on column MONITORIZATIONS_EA.DT_BEGIN is 'Request''s begin date';
+comment on column MONITORIZATIONS_EA.DT_END is 'Request''s end date';
+comment on column MONITORIZATIONS_EA.NUM_MONIT is 'Monitorization number (in the visit)';
+comment on column MONITORIZATIONS_EA.ID_VISIT is 'Visit ID';
+comment on column MONITORIZATIONS_EA.STATUS_STR is 'Request''s status (in a specific format)';
+comment on column MONITORIZATIONS_EA.STATUS_MSG is 'Request''s status message code';
+comment on column MONITORIZATIONS_EA.STATUS_ICON is 'Request''s status icon';
+comment on column MONITORIZATIONS_EA.STATUS_FLG is 'Request''s status flag (used to return the icon)';
+comment on column MONITORIZATIONS_EA.FLG_NOTES is 'Indication of whether there''re notes (Y) or not (N). Notes: registry notes or cancellation notes.';
+comment on column MONITORIZATIONS_EA.ID_EPISODE is 'Episode ID';
+comment on column MONITORIZATIONS_EA.ID_PREV_EPISODE is 'Previous episode ID';
+comment on column MONITORIZATIONS_EA.ID_PATIENT is 'Patient ID';
+comment on column MONITORIZATIONS_EA.ID_PROFESSIONAL is 'Professional ID';
+
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-OCT-10
+-- CHANGE REASON: ADDITIONAL COLUMN ON EASY ACCESS TABLE
+
+alter table MONITORIZATION_EA_SAMPLE
+add DT_DG_LAST_UPDATE TIMESTAMP(6) WITH LOCAL TIME ZONE default current_timestamp;
+
+
+comment on column MONITORIZATIONS_EA.DT_DG_LAST_UPDATE is 'Last update date';
+
+-- CHANGE END
+
+--cmf 23-09-2009
+comment on column MONITORIZATIONS_EA.ID_PROFESSIONAL is 'Professional ID';
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:34
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table MONITORIZATIONS_EA
+add DT_ORDER TIMESTAMP(6) WITH LOCAL TIME ZONE;
+
+
+comment on column MONITORIZATIONS_EA.DT_ORDER is 'Moment when the ordering professional ask the registering professional to request';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table MONITORIZATIONS_EA
+add DT_ORDER TIMESTAMP(6) WITH LOCAL TIME ZONE;
+
+
+comment on column MONITORIZATIONS_EA.DT_ORDER is 'Moment when the ordering professional ask the registering professional to request';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model -cdoc - monitorizations, bedmanagement, hidrics
+-- Add comments to the table 
+comment on table MONITORIZATIONS_EA
+  is 'Monitorizations - Easy Access';
+-- Add comments to the columns 
+comment on column MONITORIZATIONS_EA.id_monitorization
+  is 'Monitorization request''s ID';
+comment on column MONITORIZATIONS_EA.id_monitorization_vs
+  is 'Monitorization request detail''s ID';
+comment on column MONITORIZATIONS_EA.id_monitorization_vs_plan
+  is 'Next reading ID';
+comment on column MONITORIZATIONS_EA.id_vital_sign
+  is 'Requested vital sign ID';
+comment on column MONITORIZATIONS_EA.flg_status
+  is 'Request''s status: A - In progress; C - Cancelled; D - Pending; F - Complete; I - Interrupted; R- Draft; E - Expired;';
+comment on column MONITORIZATIONS_EA.flg_status_det
+  is 'Request''s detail''s status: A - In progress; C - Cancelled; D - Pending; F - Complete; I - Interrupted';
+comment on column MONITORIZATIONS_EA.flg_status_plan
+  is 'Reading status: A - In progress; C - Cancelled; D - Pending; F - Complete';
+comment on column MONITORIZATIONS_EA.flg_time
+  is 'Execution type: in this (E)pisode, (B)etween episodes, (N)ext episode.';
+comment on column MONITORIZATIONS_EA.dt_monitorization
+  is 'Monitorization date';
+comment on column MONITORIZATIONS_EA.dt_plan
+  is 'Next reading date';
+comment on column MONITORIZATIONS_EA.interval
+  is 'Interval between readings';
+comment on column MONITORIZATIONS_EA.id_episode_origin
+  is 'When the patient has an episode with an intervention request with FLG_TIME = ''N'', then the patient comes to another appointment and that request is duplicated to this new episode. In this new request, this column is filled with the episode ID of the first request.';
+comment on column MONITORIZATIONS_EA.dt_begin
+  is 'Request''s begin date';
+comment on column MONITORIZATIONS_EA.dt_end
+  is 'Request''s end date';
+comment on column MONITORIZATIONS_EA.num_monit
+  is 'Monitorization number (in the visit)';
+comment on column MONITORIZATIONS_EA.id_visit
+  is 'Visit ID';
+comment on column MONITORIZATIONS_EA.status_str
+  is 'Request''s status (in a specific format)';
+comment on column MONITORIZATIONS_EA.status_msg
+  is 'Request''s status message code';
+comment on column MONITORIZATIONS_EA.status_icon
+  is 'Request''s status icon';
+comment on column MONITORIZATIONS_EA.status_flg
+  is 'Request''s status flag (used to return the icon)';
+comment on column MONITORIZATIONS_EA.flg_notes
+  is 'Indication of whether there''re notes (Y) or not (N). Notes: registry notes or cancellation notes.';
+comment on column MONITORIZATIONS_EA.id_episode
+  is 'Episode ID';
+comment on column MONITORIZATIONS_EA.id_prev_episode
+  is 'Previous episode ID';
+comment on column MONITORIZATIONS_EA.id_patient
+  is 'Patient ID';
+comment on column MONITORIZATIONS_EA.id_professional
+  is 'Professional ID';
+comment on column MONITORIZATIONS_EA.dt_dg_last_update
+  is 'Last update date';
+comment on column MONITORIZATIONS_EA.create_user
+  is 'Creation User';
+comment on column MONITORIZATIONS_EA.create_time
+  is 'Creation Time';
+comment on column MONITORIZATIONS_EA.create_institution
+  is 'Creation Institution';
+comment on column MONITORIZATIONS_EA.update_user
+  is 'Update User';
+comment on column MONITORIZATIONS_EA.update_time
+  is 'Update Time';
+comment on column MONITORIZATIONS_EA.update_institution
+  is 'Update Institution';
+comment on column MONITORIZATIONS_EA.dt_order
+  is 'Moment when the ordering professional ask the registering professional to request';
+  
+-- CHANGE END: Pedro Fernandes

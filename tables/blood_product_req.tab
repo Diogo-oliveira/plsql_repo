@@ -1,0 +1,104 @@
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/09/2018 11:05
+-- CHANGE REASON: [EMR-6418] 
+create table BLOOD_PRODUCT_REQ
+(
+  id_blood_product_req      NUMBER(24) not null,
+  id_episode                  NUMBER(24),
+  id_professional             NUMBER(24) not null,
+  id_institution              NUMBER(12),
+  flg_time                    VARCHAR2(1 CHAR) not null,
+  flg_status                  VARCHAR2(2 CHAR) not null,
+  id_prof_cancel              NUMBER(24),
+  ID_CANCEL_REASON NUMBER(24),
+  notes_cancel                VARCHAR2(1000 CHAR),
+  notes                       VARCHAR2(1000 CHAR),
+  id_episode_origin           NUMBER(24),
+  id_episode_destination      NUMBER(24),
+  id_prev_episode             NUMBER(24),
+  dt_req_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_begin_tstz               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_cancel_tstz              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  id_patient                  NUMBER(24),
+  id_prof_last_update         NUMBER(24),
+  dt_last_update_tstz         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_user                 VARCHAR2(50 CHAR),
+  create_time                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution          NUMBER(50 CHAR),
+  update_user                 VARCHAR2(50 CHAR),
+  update_time                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution          NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 8M
+    next 2M
+    minextents 1
+    maxextents unlimited
+    pctincrease 0
+  );
+comment on table BLOOD_PRODUCT_REQ
+  is 'Blood Product orders table';
+comment on column BLOOD_PRODUCT_REQ.id_blood_product_req
+  is 'Order''s ID';
+comment on column BLOOD_PRODUCT_REQ.id_episode
+  is 'Episode ID';
+comment on column BLOOD_PRODUCT_REQ.id_professional
+  is 'Professional ID';
+comment on column BLOOD_PRODUCT_REQ.id_institution
+  is 'Institution ID';
+comment on column BLOOD_PRODUCT_REQ.flg_time
+  is 'To be performed: E - this episode; B - between episodes; N - next episode';
+comment on column BLOOD_PRODUCT_REQ.flg_status
+  is 'Flag that indicates the order''s status';
+comment on column BLOOD_PRODUCT_REQ.id_prof_cancel
+  is 'Professional that cancels the order';
+comment on column BLOOD_PRODUCT_REQ.notes_cancel
+  is 'Cancelation notes';
+comment on column BLOOD_PRODUCT_REQ.notes
+  is 'Notes';
+comment on column BLOOD_PRODUCT_REQ.id_episode_origin
+  is 'Episode ID where the order was registered';
+comment on column BLOOD_PRODUCT_REQ.id_episode_destination
+  is 'Episode ID where the order is going to be performed';
+comment on column BLOOD_PRODUCT_REQ.id_prev_episode
+  is 'Episode ID where the order was registered (when the visit has more than one episode)';
+comment on column BLOOD_PRODUCT_REQ.dt_req_tstz
+  is 'Date that indicates when the order was registered';
+comment on column BLOOD_PRODUCT_REQ.dt_begin_tstz
+  is 'Date for which the order is to be performed';
+comment on column BLOOD_PRODUCT_REQ.dt_cancel_tstz
+  is 'Date that indicates when the order was cancelled';
+comment on column BLOOD_PRODUCT_REQ.id_patient
+  is 'Patient ID';
+comment on column BLOOD_PRODUCT_REQ.create_user
+  is 'Creation User';
+comment on column BLOOD_PRODUCT_REQ.create_time
+  is 'Creation Time';
+comment on column BLOOD_PRODUCT_REQ.create_institution
+  is 'Creation Institution';
+comment on column BLOOD_PRODUCT_REQ.update_user
+  is 'Update User';
+comment on column BLOOD_PRODUCT_REQ.update_time
+  is 'Update Time';
+comment on column BLOOD_PRODUCT_REQ.update_institution
+  is 'Update Institution';
+comment on column BLOOD_PRODUCT_REQ.id_prof_last_update
+  is 'Last update professional ID';
+comment on column BLOOD_PRODUCT_REQ.dt_last_update_tstz
+  is 'Last update date';
+  
+  
+  
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/10/2018 14:35
+-- CHANGE REASON: [EMR-7652] 
+COMMENT ON COLUMN BLOOD_PRODUCT_REQ.FLG_STATUS IS 'Flag that indicates the order''s status (SYS_DOMAIN)';
+COMMENT ON COLUMN BLOOD_PRODUCT_REQ.ID_CANCEL_REASON IS 'Cancel Reason ID';
+-- CHANGE END: Pedro Henriques

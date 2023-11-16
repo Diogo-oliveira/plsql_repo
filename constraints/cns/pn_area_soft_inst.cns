@@ -1,0 +1,97 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:28
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+ALTER TABLE pn_area_soft_inst ADD CONSTRAINT PNASI_FLGAVAILABLE_CHK CHECK(flg_available IN ('Y', 'N'));
+
+ALTER TABLE pn_area_soft_inst ADD CONSTRAINT PNASI_DATA_SORT_SUMMARY_CHK CHECK(DATA_SORT_SUMMARY IN ('ASC', 'DESC'));
+ALTER TABLE pn_area_soft_inst ADD CONSTRAINT PNASI_FLG_REPORT_TITLE_CHK CHECK(FLG_REPORT_TITLE_TYPE IN ('B', 'T'));
+
+
+alter table pn_area_soft_inst
+  add constraint pasi_pk primary key (id_software, id_institution, id_pn_area);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 09:58
+-- CHANGE REASON: H&P phase2
+ALTER TABLE pn_area_soft_inst ADD CONSTRAINT PNASI_FLGAVAILABLE_CHK CHECK(flg_available IN ('Y', 'N'));
+
+ALTER TABLE pn_area_soft_inst ADD CONSTRAINT PNASI_DATA_SORT_SUMMARY_CHK CHECK(DATA_SORT_SUMMARY IN ('ASC', 'DESC'));
+ALTER TABLE pn_area_soft_inst ADD CONSTRAINT PNASI_FLG_REPORT_TITLE_CHK CHECK(FLG_REPORT_TITLE_TYPE IN ('B', 'T'));
+
+
+alter table pn_area_soft_inst
+  add constraint pasi_pk primary key (id_software, id_institution, id_pn_area);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:10
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+ALTER TABLE pn_area_soft_inst ADD CONSTRAINT PNASI_FLGAVAILABLE_CHK CHECK(flg_available IN ('Y', 'N'));
+
+ALTER TABLE pn_area_soft_inst ADD CONSTRAINT PNASI_DATA_SORT_SUMMARY_CHK CHECK(DATA_SORT_SUMMARY IN ('ASC', 'DESC'));
+ALTER TABLE pn_area_soft_inst ADD CONSTRAINT PNASI_FLG_REPORT_TITLE_CHK CHECK(FLG_REPORT_TITLE_TYPE IN ('B', 'T'));
+
+
+alter table pn_area_soft_inst
+  add constraint pasi_pk primary key (id_software, id_institution, id_pn_area);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:11
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_AREA_SOFT_INST DROP CONSTRAINT PNASI_FLGAVAILABLE_CHK ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 06/01/2012 16:11
+-- CHANGE REASON: [ALERT-212777] Fix findings based on the Arch script H&P v.2 - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE PN_AREA_SOFT_INST add CONSTRAINT PNASI_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N'')) ENABLE');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/07/2012 14:13
+-- CHANGE REASON: [ALERT-236679 ] Progress notes - filter by Last X notes
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_area_soft_inst
+  add constraint PASI_SUM_DEFAULT_FILTER_CHK
+  check (summary_default_filter IN (''N'', ''D''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 11/02/2013 08:09
+-- CHANGE REASON: [ALERT-250486 ] A physician suggested to add the option "Anamnesi Fisiologica" (or in (truncated)
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_area_soft_inst drop constraint PNASI_DATA_SORT_SUMMARY_CHK';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    
+END;
+/
+ 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_area_soft_inst ADD CONSTRAINT PNASI_DATA_SORT_SUMMARY_CHK CHECK(DATA_SORT_SUMMARY IN (''ASC'', ''DESC'', null))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

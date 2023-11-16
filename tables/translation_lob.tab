@@ -1,0 +1,83 @@
+-- CHANGED BY:  Álvaro Vasconcelos
+-- CHANGE DATE: 23/02/2011 08:26
+-- CHANGE REASON: [ALERT-158645] Release Notes DDL
+create table TRANSLATION_LOB
+(
+  id_translation   NUMBER(24),
+  code_translation VARCHAR2(200 CHAR) not null,
+  desc_lang_1      CLOB,
+  desc_lang_2      CLOB,
+  desc_lang_3      CLOB,
+  desc_lang_4      CLOB,
+  desc_lang_5      CLOB,
+  desc_lang_6      CLOB,
+  desc_lang_7      CLOB,
+  desc_lang_8      CLOB,
+  desc_lang_9      CLOB,
+  desc_lang_10     CLOB,
+  desc_lang_11     CLOB,
+  desc_lang_12     CLOB,
+  desc_lang_13     CLOB,
+  desc_lang_14     CLOB,
+  desc_lang_15     CLOB,
+  desc_lang_16     CLOB,
+  desc_lang_17     CLOB
+);
+
+COMMENT ON TABLE TRANSLATION_LOB IS 'Translation table for lobs';
+-- CHANGE END:  Álvaro Vasconcelos
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 13/12/2013 09:43
+-- CHANGE REASON: [ALERT-271800] 
+BEGIN
+    pk_versioning.run('alter table translation_lob add (DESC_LANG_18 varchar2(4000))');
+END;
+/
+  
+BEGIN
+    pk_versioning.run('comment on column translation_lob.DESC_LANG_18 is ''Description for Fench Switzerland''');
+END;
+/
+-- CHANGE END: Rui Spratley
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 13/01/2014 10:38
+-- CHANGE REASON: [ALERT-271800] 
+BEGIN
+    pk_versioning.run('alter table TRANSLATION_LOB drop column desc_lang_18');
+END;
+/
+
+BEGIN
+    pk_versioning.run('alter table translation_lob add (desc_lang_18 clob)');
+END;
+/
+-- CHANGE END: Rui Spratley
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 17/12/2014 09:37
+-- CHANGE REASON: [ALERT-299993] 
+BEGIN 
+    pk_versioning.run('alter table translation_lob add (DESC_LANG_19 clob)'); 
+END; 
+/ 
+   
+BEGIN 
+    pk_versioning.run('comment on column translation_lob.DESC_LANG_19 is ''Description for Português (Angola)'''); 
+END; 
+/ 
+-- CHANGE END: Rui Spratley
+
+-- CMF 06-01-2016
+comment on column ALERT.translation_lob.DESC_LANG_19 is ''; 
+
+-- cmf 10/05/2018
+alter table alert.TRANSLATION_LOB  add table_name GENERATED ALWAYS AS ( substr(code_translation, 1, instr( code_translation, '.',1)-1)  ) VIRTUAL; 
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 14/10/2020 16:00
+-- CHANGE REASON: [ARCH-8187]
+rename table translation_lob to translation_lob_bckx;
+-- CHANGE END: Ana Matos

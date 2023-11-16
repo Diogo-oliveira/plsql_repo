@@ -1,0 +1,21 @@
+--FKs periodic_observation_desc.fk
+alter table PERIODIC_OBSERVATION_DESC add constraint PER_OBS_DESC_PER_OBS_PARAM_FK foreign key (ID_PERIODIC_OBSERVATION_PARAM) references periodic_observation_param (ID_PERIODIC_OBSERVATION_PARAM) ENABLE;
+
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 17/02/2011 17:55
+-- CHANGE REASON: [ALERT-157960] added missing foreign keys
+alter table periodic_observation_desc
+  add constraint pod_pop_fk foreign key (id_periodic_observation_param)
+  references periodic_observation_param (id_periodic_observation_param);
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 24/02/2011 08:17
+-- CHANGE REASON: [ALERT-157960] added constraint
+alter table periodic_observation_desc
+  add constraint pod_pop_fk foreign key (id_periodic_observation_param)
+  references periodic_observation_param (id_periodic_observation_param)
+  novalidate;
+-- CHANGE END: Pedro Carneiro

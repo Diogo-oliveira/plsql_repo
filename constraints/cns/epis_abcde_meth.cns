@@ -1,0 +1,49 @@
+
+ALTER TABLE epis_abcde_meth ADD CONSTRAINT EAMH_PK PRIMARY KEY (id_epis_abcde_meth) ENABLE;
+ALTER TABLE epis_abcde_meth ADD CONSTRAINT EAMH_FLGSTATUS_CHK CHECK(flg_status IN ('A', 'O'));
+
+
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 16/03/2010 11:25
+-- CHANGE REASON: [ALERT-79224] Trauma: Cancellation of ABCDE assessments
+ALTER TABLE epis_abcde_meth DROP CONSTRAINT EAMH_FLGSTATUS_CHK;
+ALTER TABLE epis_abcde_meth ADD CONSTRAINT EAMH_FLGSTATUS_CHK CHECK(flg_status IN ('A', 'O', 'C'));
+ALTER TABLE epis_abcde_meth ADD CzONSTRAINT EAMH_PROF_CANCEL_FK FOREIGN KEY (id_prof_cancel)
+REFERENCES professional (id_professional) ENABLE;
+ALTER TABLE epis_abcde_meth ADD CONSTRAINT EAMH_CANCEL_REA_FK FOREIGN KEY (id_cancel_reason)
+REFERENCES cancel_reason (id_cancel_reason) ENABLE;
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 18/03/2010 09:25
+-- CHANGE REASON: [ALERT-79224] Trauma: Cancellation of ABCDE assessments
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_abcde_meth DROP CONSTRAINT EAMH_FLGSTATUS_CHK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+ALTER TABLE epis_abcde_meth ADD CONSTRAINT EAMH_FLGSTATUS_CHK CHECK(flg_status IN ('A', 'O', 'C'));
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_abcde_meth DROP CONSTRAINT EAMH_PROF_CANCEL_FK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+ALTER TABLE epis_abcde_meth ADD CONSTRAINT EAMH_PROF_CANCEL_FK FOREIGN KEY (id_prof_cancel)
+REFERENCES professional (id_professional) ENABLE;
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_abcde_meth DROP CONSTRAINT EAMH_CANCEL_REA_FK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+ALTER TABLE epis_abcde_meth ADD CONSTRAINT EAMH_CANCEL_REA_FK FOREIGN KEY (id_cancel_reason)
+REFERENCES cancel_reason (id_cancel_reason) ENABLE;
+-- CHANGE END: José Brito

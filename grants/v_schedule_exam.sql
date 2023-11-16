@@ -1,0 +1,5 @@
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 16-02-2011
+-- CHANGE REASON: alert-161552
+grant select on V_SCHEDULE_EXAM to INTF_ALERT;
+-- CHANGE END: Telmo

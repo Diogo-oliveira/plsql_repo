@@ -1,0 +1,23 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 17/05/2012 14:13
+-- CHANGE REASON: [ALERT-230496] 
+DECLARE
+    e_sequence_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_sequence_not_exists, -02289);
+    l_curval NUMBER(24) := NULL;
+BEGIN
+    SELECT nvl((SELECT MAX(rn.id_result_notes)
+                 FROM result_notes rn),
+               0)
+      INTO l_curval
+      FROM dual;
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE sequence seq_result_notes minvalue 0 maxvalue 999999999999 START
+            WITH ' || l_curval || ' increment BY 1 cache 500';
+    EXCEPTION
+        WHEN e_sequence_not_exists THEN
+            dbms_output.put_line('Sequence already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

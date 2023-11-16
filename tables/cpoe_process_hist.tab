@@ -1,0 +1,61 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 11/12/2009 00:39
+-- CHANGE REASON: [ALERT-61939] CPOE 2nd phase: versioning of CPOE feature for Diets and Hidrics
+CREATE TABLE CPOE_PROCESS_HIST
+(
+  ID_CPOE_PROCESS_HIST     NUMBER(24)        NOT NULL,
+ID_CPOE_PROCESS          NUMBER(24)        NOT NULL,
+ID_CPOE_PROCESS_PREV     NUMBER(24)        ,
+  FLG_STATUS               VARCHAR2(1 CHAR)  NOT NULL,
+  ID_EPISODE               NUMBER(24)        NOT NULL,
+  ID_PROFESSIONAL          NUMBER(24)        NOT NULL,
+  ID_INSTITUTION           NUMBER(24)        NOT NULL,
+ID_SOFTWARE              NUMBER(24)        NOT NULL,
+  DT_PROC_HISTORY          TIMESTAMP(6)      WITH LOCAL TIME ZONE,
+  CREATE_USER              VARCHAR2(24 CHAR) ,
+  CREATE_TIME              TIMESTAMP(6)      WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION       NUMBER(24)        ,
+  UPDATE_USER              VARCHAR2(24 CHAR) ,
+  UPDATE_TIME              TIMESTAMP(6)      WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION       NUMBER(24)
+);
+comment on table  CPOE_PROCESS_HIST  is                     'Computerized Physician Order Entry (CPOE) process history table';
+comment on column CPOE_PROCESS_HIST.ID_CPOE_PROCESS_HIST is 'CPOE process history ID';
+comment on column CPOE_PROCESS_HIST.ID_CPOE_PROCESS is      'CPOE process ID';
+comment on column CPOE_PROCESS_HIST.ID_CPOE_PROCESS_PREV is 'CPOE previous process ID';
+comment on column CPOE_PROCESS_HIST.FLG_STATUS is           'CPOE process status: (A)ctive (I)nactive (D)raft (E)xpired';
+comment on column CPOE_PROCESS_HIST.ID_EPISODE is           'Episode ID';
+comment on column CPOE_PROCESS_HIST.ID_PROFESSIONAL is      'Professional ID';
+comment on column CPOE_PROCESS_HIST.ID_INSTITUTION is       'Institution ID';
+comment on column CPOE_PROCESS_HIST.ID_SOFTWARE is          'Software ID';
+comment on column CPOE_PROCESS_HIST.DT_PROC_HISTORY is      'CPOE process last history update date';
+comment on column CPOE_PROCESS_HIST.CREATE_USER is          'Creation user';
+comment on column CPOE_PROCESS_HIST.CREATE_TIME is          'Creation time';
+comment on column CPOE_PROCESS_HIST.CREATE_INSTITUTION is   'Creation institution';
+comment on column CPOE_PROCESS_HIST.UPDATE_USER is          'Update user';
+comment on column CPOE_PROCESS_HIST.UPDATE_TIME is          'Update time';
+comment on column CPOE_PROCESS_HIST.UPDATE_INSTITUTION is   'Update institution';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 12/10/2010 10:06
+-- CHANGE REASON: [ALERT-128784] 
+comment on table CPOE_PROCESS_HIST is 'Computerized Prescription Order Entry (CPOE) process history table [CPOEPH]';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 27/09/2011 12:10
+-- CHANGE REASON: [ALERT-185453] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_PROCESS_HIST add ID_DEP_CLIN_SERV number(24)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+
+comment on column CPOE_PROCESS_HIST.ID_DEP_CLIN_SERV is 'Department clinical service';
+-- CHANGE END: Tiago Silva

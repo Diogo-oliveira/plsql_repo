@@ -1,0 +1,119 @@
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 29/07/2010 15:11
+-- CHANGE REASON: [ALERT-116048] 
+create table REHAB_SCH_NEED_HIST
+(
+  ID_REHAB_SCH_NEED_HIST NUMBER(24) not null,
+  DT_REHAB_SCH_NEED_HIST TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROFESSIONAL_HIST   NUMBER(24),
+  ID_REHAB_SCH_NEED      NUMBER(24) not null,
+  ID_REHAB_SESSION_TYPE  VARCHAR2(24 CHAR),
+  DT_REHAB_SCH_NEED      TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_EPISODE_ORIGIN      NUMBER(24),
+  ID_PROFESSIONAL        NUMBER(24),
+  SESSIONS               NUMBER(6),
+  FREQUENCY              NUMBER(6),
+  FLG_FREQUENCY          VARCHAR2(1 CHAR),
+  FLG_PRIORITY           VARCHAR2(1 CHAR),
+  DT_BEGIN               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  FLG_STATUS             VARCHAR2(1 CHAR),
+  ID_RESP_PROFESSIONAL   NUMBER(24),
+  ID_RESP_REHAB_GROUP    NUMBER(24),
+  NOTES                  VARCHAR2(1000 CHAR),
+  ID_CANCEL_REASON       NUMBER(24),
+  DT_CANCEL              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_CANCEL_PROFESSIONAL NUMBER(24),
+  NOTES_CANCEL           VARCHAR2(1000 CHAR),
+  CREATE_USER            VARCHAR2(24 CHAR),
+  CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION     NUMBER(24),
+  UPDATE_USER            VARCHAR2(24 CHAR),
+  UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION     NUMBER(24)
+);
+comment on table REHAB_SCH_NEED_HIST
+  is 'Rehab schedule need';
+comment on column REHAB_SCH_NEED_HIST.DT_REHAB_SCH_NEED_HIST
+  is 'Date of the change';
+comment on column REHAB_SCH_NEED_HIST.ID_PROFESSIONAL_HIST
+  is 'Professional ID that made the change';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 02/12/2011 15:16
+-- CHANGE REASON: [ALERT-208144] 
+alter table REHAB_SCH_NEED_HIST
+  add constraint RSNH_FLG_FREQUENCY_CHK
+  check (FLG_FREQUENCY IN ('H', 'D', 'W','M'));
+alter table REHAB_SCH_NEED_HIST
+  add constraint RSNH_FLG_PRIORITY_CHK
+  check (FLG_PRIORITY IN ('M', 'U', 'N'));
+alter table REHAB_SCH_NEED_HIST
+  add constraint RSNH_FLG_STATUS_CHK
+  check (FLG_STATUS IN ('D', 'S', 'W','C','N'));
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/01/2016 16:47
+-- CHANGE REASON: [ALERT-317912] 
+comment on table REHAB_SCH_NEED_HIST
+  is 'Rehabilitation schedule need history';
+-- Add comments to the columns 
+comment on column REHAB_SCH_NEED_HIST.id_rehab_sch_need_hist
+  is 'Primary key';
+comment on column REHAB_SCH_NEED_HIST.dt_rehab_sch_need_hist
+  is 'Date of the change';
+comment on column REHAB_SCH_NEED_HIST.id_professional_hist
+  is 'Professional ID that made the change';
+comment on column REHAB_SCH_NEED_HIST.id_rehab_sch_need
+  is 'Rehabilitation schedule need ID';
+comment on column REHAB_SCH_NEED_HIST.id_rehab_session_type
+  is 'Rehabilitation session type ID';
+comment on column REHAB_SCH_NEED_HIST.dt_rehab_sch_need
+  is 'Date that indicates when the record was registered';
+comment on column REHAB_SCH_NEED_HIST.id_episode_origin
+  is 'Episode origin ID';
+comment on column REHAB_SCH_NEED_HIST.id_professional
+  is 'Professional ID';
+comment on column REHAB_SCH_NEED_HIST.sessions
+  is 'Number of sessions';
+comment on column REHAB_SCH_NEED_HIST.frequency
+  is 'Frequency';
+comment on column REHAB_SCH_NEED_HIST.flg_frequency
+  is 'Flag that indicates the frequency';
+comment on column REHAB_SCH_NEED_HIST.flg_priority
+  is 'Priority';
+comment on column REHAB_SCH_NEED_HIST.dt_begin
+  is 'Begin date';
+comment on column REHAB_SCH_NEED_HIST.flg_status
+  is 'Flag that indicates the status';
+comment on column REHAB_SCH_NEED_HIST.id_resp_professional
+  is 'Responsible professional ID';
+comment on column REHAB_SCH_NEED_HIST.id_resp_rehab_group
+  is 'Responsible group ID';
+comment on column REHAB_SCH_NEED_HIST.notes
+  is 'Notes';
+comment on column REHAB_SCH_NEED_HIST.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column REHAB_SCH_NEED_HIST.dt_cancel
+  is 'Date that indicates when the record was cancelled';
+comment on column REHAB_SCH_NEED_HIST.id_cancel_professional
+  is 'Professional that cancels the record';
+comment on column REHAB_SCH_NEED_HIST.notes_cancel
+  is 'Cancelation notes';
+comment on column REHAB_SCH_NEED_HIST.create_user
+  is 'Creation User';
+comment on column REHAB_SCH_NEED_HIST.create_time
+  is 'Creation Time';
+comment on column REHAB_SCH_NEED_HIST.create_institution
+  is 'Creation Institution';
+comment on column REHAB_SCH_NEED_HIST.update_user
+  is 'Update User';
+comment on column REHAB_SCH_NEED_HIST.update_time
+  is 'Update Time';
+comment on column REHAB_SCH_NEED_HIST.update_institution
+  is 'Update Institution';
+  
+  
+  
+-- CHANGE END: Ana Matos

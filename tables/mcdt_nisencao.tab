@@ -1,0 +1,97 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 12/09/2011 17:13
+-- CHANGE REASON: [ALERT-194915 ] 
+CREATE TABLE mcdt_nisencao(id_mcdt NUMBER(24) NOT NULL,
+                           flg_mcdt VARCHAR2(1) NOT NULL,
+                           flg_available VARCHAR2(1) NOT NULL);
+
+ALTER TABLE mcdt_nisencao add(create_user VARCHAR2(24), create_time TIMESTAMP(6)
+    WITH LOCAL TIME ZONE,
+    create_institution NUMBER(24,
+    0),
+    update_user VARCHAR2(24),
+    update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    update_institution NUMBER(24,
+    0));
+
+COMMENT ON column mcdt_nisencao.create_user IS 'Creation User';
+COMMENT ON column mcdt_nisencao.create_time IS 'Creation Time';
+COMMENT ON column mcdt_nisencao.create_institution IS 'Creation Institution';
+COMMENT ON column mcdt_nisencao.update_user IS 'Update User';
+COMMENT ON column mcdt_nisencao.update_time IS 'Update Time';
+COMMENT ON column mcdt_nisencao.update_institution IS 'Update Institution';
+COMMENT ON TABLE mcdt_nisencao IS 'MCDT''s sem isenção';
+COMMENT ON column mcdt_nisencao.flg_mcdt IS '''A''-analysis, ''I''- Image, ''E''- other exams, ''P'' Interventions, ''F'' MFR';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 12/09/2011 17:51
+-- CHANGE REASON: [ALERT-194915 ] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM User_Tables
+     WHERE table_name = 'MCDT_NISENCAO';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'CREATE TABLE mcdt_nisencao(id_mcdt NUMBER(24) NOT NULL,
+                           flg_mcdt VARCHAR2(1) NOT NULL,
+                           flg_available VARCHAR2(1) NOT NULL)';
+    
+        EXECUTE IMMEDIATE 'ALTER TABLE mcdt_nisencao add(create_user VARCHAR2(24), create_time TIMESTAMP(6)
+    WITH LOCAL TIME ZONE,
+    create_institution NUMBER(24,0),
+    update_user VARCHAR2(24),
+    update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    update_institution NUMBER(24,0))';
+    END IF;
+END;
+/
+    
+COMMENT ON column mcdt_nisencao.create_user IS 'Creation User';
+COMMENT ON column mcdt_nisencao.create_time IS 'Creation Time';
+COMMENT ON column mcdt_nisencao.create_institution IS 'Creation Institution';
+COMMENT ON column mcdt_nisencao.update_user IS 'Update User';
+COMMENT ON column mcdt_nisencao.update_time IS 'Update Time';
+COMMENT ON column mcdt_nisencao.update_institution IS 'Update Institution';
+COMMENT ON TABLE mcdt_nisencao IS 'MCDT''s sem isenção';
+COMMENT ON column mcdt_nisencao.flg_mcdt IS '''A''-analysis, ''I''- Image, ''E''- other exams, ''P'' Interventions, ''F'' MFR';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tables
+     WHERE table_name = 'MCDT_NISENCAO';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'CREATE TABLE mcdt_nisencao(id_mcdt NUMBER(24) NOT NULL,
+                           flg_mcdt VARCHAR2(1) NOT NULL,
+                           flg_available VARCHAR2(1) NOT NULL)';
+    
+        EXECUTE IMMEDIATE 'ALTER TABLE mcdt_nisencao add(create_user VARCHAR2(24), create_time TIMESTAMP(6)
+    WITH LOCAL TIME ZONE,
+    create_institution NUMBER(24,0),
+    update_user VARCHAR2(24),
+    update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    update_institution NUMBER(24,0))';
+    END IF;
+END;
+/
+
+COMMENT ON column mcdt_nisencao.create_user IS 'Creation User';
+COMMENT ON column mcdt_nisencao.create_time IS 'Creation Time';
+COMMENT ON column mcdt_nisencao.create_institution IS 'Creation Institution';
+COMMENT ON column mcdt_nisencao.update_user IS 'Update User';
+COMMENT ON column mcdt_nisencao.update_time IS 'Update Time';
+COMMENT ON column mcdt_nisencao.update_institution IS 'Update Institution';
+COMMENT ON TABLE mcdt_nisencao IS 'MCDT''s sem isenção';
+COMMENT ON column mcdt_nisencao.flg_mcdt IS '''A''-analysis, ''I''- Image, ''E''- other exams, ''P'' Interventions, ''F'' MFR';
+-- CHANGE END: Joana Barroso

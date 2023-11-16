@@ -1,0 +1,36 @@
+
+
+  CREATE TABLE UNIT_MEASURE
+   (	ID_UNIT_MEASURE NUMBER(24,0) NOT NULL ENABLE,
+	CODE_UNIT_MEASURE VARCHAR2(200) NOT NULL ENABLE,
+	ID_UNIT_MEASURE_TYPE NUMBER(24,0) NOT NULL ENABLE,
+	INTERNAL_NAME VARCHAR2(200) NOT NULL ENABLE,
+	ENUMERATED VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN unit_measure.id_unit_measure IS 'Chave primária' ;
+COMMENT ON COLUMN unit_measure.code_unit_measure IS 'Código para obter as unidades do sinal vital por língua' ;
+COMMENT ON COLUMN unit_measure.id_unit_measure_type IS 'Tipo de unidade medida' ;
+COMMENT ON COLUMN unit_measure.internal_name IS 'Nome interno' ;
+COMMENT ON COLUMN unit_measure.enumerated IS 'Indica se os valores da unidade são expressos como uma enumeração. S - Sim; N- Não' ;
+COMMENT ON COLUMN unit_measure.flg_available IS 'Disponibilidade do registo' ;
+COMMENT ON COLUMN unit_measure.adw_last_update IS 'Data da última alteração' ;
+
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-FEB-13
+-- CHANGING REASON:  abreviaturas dos descritivos
+-- Add/modify columns 
+alter table UNIT_MEASURE add CODE_UNIT_MEASURE_ABRV VARCHAR2(200);
+-- Add comments to the columns 
+comment on column UNIT_MEASURE.CODE_UNIT_MEASURE_ABRV
+  is 'abreviatura das unidades de medida';
+-- CHANGE END Patrícia Neto	
+
+
+
+ALTER TABLE UNIT_MEASURE  ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN UNIT_MEASURE.ID_CONTENT  IS 'Identificador único de conteúdo';

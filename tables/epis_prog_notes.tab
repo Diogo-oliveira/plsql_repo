@@ -1,0 +1,64 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 02/12/2010 16:15
+-- CHANGE REASON: [ALERT-146429] ddl.sql
+create table epis_prog_notes
+(
+  id_epis_prog_notes      number(24) not null,
+  id_episode              number(24) not null,
+  id_pn_soap_block        number(24) not null,
+  flg_status              varchar2(1 char) not null,
+  text                    clob not null,
+  id_prof_created         number(24) not null,
+  dt_created              timestamp with local time zone not null,
+  id_prof_last_update     number(24) not null,
+  dt_last_update          timestamp with local time zone not null,
+  id_cancel_info_det      number(24),
+  id_epn_parent           number(24),
+  create_user             varchar2(24 char),
+  create_time             timestamp with local time zone,
+  create_institution      number(24),
+  update_user             varchar2(24 char),
+  update_time             timestamp with local time zone,
+  update_institution      number(24)
+)
+lob (text) store as (enable storage in row tablespace alert_lob)
+;
+
+comment on table epis_prog_notes
+  is 'Stores free text records, made in client specific data blocks, in the Progress notes screen.';
+
+comment on column epis_prog_notes.id_epis_prog_notes
+  is 'Primary key.';
+comment on column epis_prog_notes.id_episode
+  is 'Episode identifier.';
+comment on column epis_prog_notes.id_pn_soap_block
+  is 'SOAP block identifier.';
+comment on column epis_prog_notes.flg_status
+  is 'Record status: (A)ctive, (O)utdated, (C)ancelled.';
+comment on column epis_prog_notes.text
+  is 'Record text.';
+comment on column epis_prog_notes.id_prof_created
+  is 'Record created by (professional identifier).';
+comment on column epis_prog_notes.dt_created
+  is 'Record creation date.';
+comment on column epis_prog_notes.id_prof_last_update
+  is 'Record last updated by (professional identifier).';
+comment on column epis_prog_notes.dt_last_update
+  is 'Record last update date.';
+comment on column epis_prog_notes.id_cancel_info_det
+  is 'Cancel information detail identifier.';
+comment on column epis_prog_notes.id_epn_parent
+  is 'Original record identifier.';
+comment on column epis_prog_notes.create_user
+  is 'Creation User';
+comment on column epis_prog_notes.create_time
+  is 'Creation Time';
+comment on column epis_prog_notes.create_institution
+  is 'Creation Institution';
+comment on column epis_prog_notes.update_user
+  is 'Update User';
+comment on column epis_prog_notes.update_time
+  is 'Update Time';
+comment on column epis_prog_notes.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro

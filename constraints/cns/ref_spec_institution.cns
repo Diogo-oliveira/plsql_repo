@@ -1,0 +1,31 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 25/01/2011 16:51
+-- CHANGE REASON: [ALERT-157333] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints
+     WHERE table_name = 'REF_SPEC_INSTITUTION'
+       AND constraint_name = 'RSIN_FLG_AVAILABLE_CHK';
+
+    IF l_count <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE "REF_SPEC_INSTITUTION" ADD CONSTRAINT "RSIN_FLG_AVAILABLE_CHK" CHECK (FLG_AVAILABLE in (''Y'',''N'')) ENABLE';
+    END IF;
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints
+     WHERE table_name = 'REF_SPEC_INSTITUTION'
+       AND constraint_name = 'RSIN_PK';
+
+    IF l_count <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE "REF_SPEC_INSTITUTION" ADD CONSTRAINT "RSIN_PK" PRIMARY KEY ("ID_SPECIALITY", "ID_INSTITUTION") ENABLE';
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso

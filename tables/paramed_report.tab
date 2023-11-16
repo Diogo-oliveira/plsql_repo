@@ -1,0 +1,81 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 22/03/2010 16:56
+-- CHANGE REASON: [ALERT-69945] social harmless ddl - paramed_report
+create table paramed_report
+(
+  id_paramed_report    number(24) not null,
+  flg_status           varchar2(1 char) not null,
+  text                 clob,
+  id_episode           number(24) not null,
+  dt_creation          timestamp with local time zone not null,
+  dt_last_update       timestamp with local time zone,
+  id_professional      number(24) not null,
+  id_cancel_info_det   number(24),
+  create_user          varchar2(24),
+  create_time          timestamp with local time zone,
+  create_institution   number(24),
+  update_user          varchar2(24),
+  update_time          timestamp with local time zone,
+  update_institution   number(24)
+);
+
+comment on table paramed_report
+  is 'Paramedical professionals service reports.';
+
+comment on column paramed_report.id_paramed_report
+  is 'Unique identifier.';
+comment on column paramed_report.flg_status
+  is 'Report status: (A)ctive, (E)edited, (C)ancelled.';
+comment on column paramed_report.text
+  is 'Report content.';
+comment on column paramed_report.id_episode
+  is 'Episode identifier.';
+comment on column paramed_report.dt_creation
+  is 'Record creation date.';
+comment on column paramed_report.dt_last_update
+  is 'Last change date.';
+comment on column paramed_report.id_professional
+  is 'Registered by (professional identifier).';
+comment on column paramed_report.id_cancel_info_det
+  is 'Cancel information detail identifier.';
+comment on column paramed_report.create_user
+  is 'Creation User';
+comment on column paramed_report.create_time
+  is 'Creation Time';
+comment on column paramed_report.create_institution
+  is 'Creation Institution';
+comment on column paramed_report.update_user
+  is 'Update User';
+comment on column paramed_report.update_time
+  is 'Update Time';
+comment on column paramed_report.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PARAMED_REPORT modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:29
+-- CHANGE REASON: [ALERT-154361] 
+alter table PARAMED_REPORT modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:32
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.paramed_report move lob(text) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

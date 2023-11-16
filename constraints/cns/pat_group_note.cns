@@ -1,0 +1,12 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 05/09/2012 14:28
+-- CHANGE REASON: [ALERT-239422] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);    
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE pat_group_note  ADD CONSTRAINT pat_group_note_pk PRIMARY KEY (id_group_note,id_patient,id_episode)  USING INDEX TABLESPACE index_m';
+  EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.'); 
+END;
+/
+-- CHANGE END: Paulo Teixeira

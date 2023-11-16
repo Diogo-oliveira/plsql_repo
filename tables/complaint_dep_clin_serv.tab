@@ -1,0 +1,66 @@
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 16/10/2020 16:28
+-- CHANGE REASON: [EMR-34344] - Change complaints database model
+BEGIN
+pk_frmw_objects.insert_into_frmw_objects(
+i_owner            => 'ALERT',
+i_obj_name         => 'COMPLAINT_DEP_CLIN_SERV',
+i_obj_type         => 'TABLE',
+i_flg_category     => 'PRM',
+i_delete_script    => '',
+i_responsible_team => 'CDOC',
+i_flg_nzd          => 'Y',
+i_flg_alert_default => 'N');
+END;
+/
+create table COMPLAINT_DEP_CLIN_SERV
+(
+id_complaint              NUMBER(24),
+id_dep_clin_serv          NUMBER(24),
+rank                      NUMBER(6) DEFAULT 0 NOT NULL,
+id_software               NUMBER(24) NOT NULL,
+flg_available             VARCHAR2(1) DEFAULT 'Y' NOT NULL,
+create_user               VARCHAR2(24),
+create_time               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+create_institution        NUMBER(24),
+update_user               VARCHAR2(24),
+update_time               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+update_institution        NUMBER(24)
+)
+tablespace alert_data;
+-- Add comments to the table
+comment on table COMPLAINT_DEP_CLIN_SERV
+is 'Complaint configuration';
+-- Add comments to the columns
+comment on column COMPLAINT_DEP_CLIN_SERV.id_complaint
+is 'Complaint ID';
+comment on column COMPLAINT_DEP_CLIN_SERV.id_dep_clin_serv
+is 'Clinical service ID';
+comment on column COMPLAINT_DEP_CLIN_SERV.rank
+is 'Rank';
+comment on column COMPLAINT_DEP_CLIN_SERV.id_software
+is 'Software ID';
+comment on column COMPLAINT_DEP_CLIN_SERV.flg_available
+is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column COMPLAINT_DEP_CLIN_SERV.create_user
+is 'Creation User';
+comment on column COMPLAINT_DEP_CLIN_SERV.create_time
+is 'Creation Time';
+comment on column COMPLAINT_DEP_CLIN_SERV.create_institution
+is 'Creation Institution';
+comment on column COMPLAINT_DEP_CLIN_SERV.update_user
+is 'Update User';
+comment on column COMPLAINT_DEP_CLIN_SERV.update_time
+is 'Update Time';
+comment on column COMPLAINT_DEP_CLIN_SERV.update_institution
+is 'Update Institution';
+-- Add/modify columns
+alter table COMPLAINT_DEP_CLIN_SERV modify id_complaint not null;
+alter table COMPLAINT_DEP_CLIN_SERV modify id_dep_clin_serv not null;
+alter table COMPLAINT_DEP_CLIN_SERV add id_complaint_alias number(24);
+-- Add comments to the columns
+comment on column COMPLAINT_DEP_CLIN_SERV.id_complaint_alias
+is 'synonym for the complaint';
+-- CHANGE END: Elisabete Bugalho

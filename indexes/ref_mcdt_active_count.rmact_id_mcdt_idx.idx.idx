@@ -1,0 +1,40 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 13/09/2011 09:54
+-- CHANGE REASON: [ALERT-195015 ] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(*)
+      INTO l_var
+      FROM user_indexes ui
+     WHERE ui.index_name = 'RMACT_ID_MCDT_IDX'
+       AND ui.table_name = 'REF_MCDT_ACTIVE_COUNT';
+
+    IF l_var = 0
+    THEN   
+        EXECUTE IMMEDIATE 'CREATE INDEX rmact_id_mcdt_idx ON ref_mcdt_active_count(id_mcdt)';    
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_ind_columns
+     WHERE table_name = 'REF_MCDT_ACTIVE_COUNT'
+       AND index_name = 'RMACT_ID_MCDT_IDX'
+       AND column_name = 'ID_MCDT';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'CREATE INDEX rmact_id_mcdt_idx ON ref_mcdt_active_count(id_mcdt)';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso

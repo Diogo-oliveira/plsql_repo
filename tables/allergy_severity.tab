@@ -1,0 +1,26 @@
+CREATE TABLE allergy_severity 
+(
+    id_allergy_severity   NUMBER(24) NOT NULL,
+    code_allergy_severity VARCHAR2(200) NOT NULL,
+    flg_status            VARCHAR2(1)
+);
+
+-- COMMENTS
+COMMENT ON TABLE allergy_severity IS 'This table holds the severity of a determined allergy';
+COMMENT ON COLUMN allergy_severity.id_allergy_severity IS 'Primary key';
+COMMENT ON COLUMN allergy_severity.code_allergy_severity IS 'Code for translation';
+COMMENT ON COLUMN allergy_severity.flg_status IS 'A: Active - I: Inactive';
+
+-- CONSTRAINTS
+ALTER TABLE allergy_severity ADD CONSTRAINT id_allergy_severity PRIMARY KEY (id_allergy_severity);
+ALTER TABLE allergy_severity ADD CONSTRAINT AGY_SEVERITY_FLG_STATUS_CHK CHECK (flg_status IN ('A', 'I'));
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 04/05/2011 14:35
+-- CHANGE REASON: [ALERT-172290 ] Alergy list
+alter table allergy_severity add id_content VARCHAR2(24 CHAR);
+
+COMMENT ON COLUMN allergy_severity.id_content IS 'Id Content'.
+/
+-- CHANGE END: Sofia Mendes

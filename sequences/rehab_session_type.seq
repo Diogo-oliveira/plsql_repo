@@ -1,0 +1,23 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 21/05/2013 16:59
+-- CHANGE REASON: [ALERT-248672] New frmw objs
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+
+l_max_seq NUMBER(24);
+BEGIN
+SELECT MAX(ltrim(a.id_rehab_session_type, 'REHAB'))
+      INTO l_max_seq
+      FROM alert.rehab_session_type a;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE sequence seq_rehab_session_type minvalue 0 maxvalue 999999999999 START
+    WITH ' || l_max_seq || ' increment BY 1 cache 500';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Sequence already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

@@ -1,0 +1,5 @@
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 17-03-2010
+-- CHANGE REASON: SCH-386
+grant execute on PK_SCHEDULE_API_UI to ALERT_VIEWER;
+-- CHANGE END: Telmo Castro

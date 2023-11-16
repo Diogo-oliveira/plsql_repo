@@ -1,0 +1,29 @@
+--Rui Batista 2008/03/19
+--Alertas v3.0
+create sequence seq_sys_alert_config
+minvalue 1
+maxvalue 999999999999999999999999
+start with 1
+increment by 1
+CACHE 500
+NOORDER  
+NOCYCLE;
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 13/06/2013 12:15
+-- CHANGE REASON: [ALERT-259950 ] 
+DECLARE
+    l_var sys_alert_config.id_sys_alert_config%TYPE;
+BEGIN
+
+    SELECT MAX(id_sys_alert_config)
+      INTO l_var
+      FROM sys_alert_config;
+
+    EXECUTE IMMEDIATE 'drop sequence seq_sys_alert_config';
+    EXECUTE IMMEDIATE 'CREATE sequence seq_sys_alert_config minvalue 1 maxvalue 999999999999999999999999 START
+        WITH ' || l_var || 'increment BY 1 cache 500';
+
+END;
+/
+-- CHANGE END: Joana Barroso

@@ -1,0 +1,106 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 09:01
+-- CHANGE REASON: [ALERT-12334] 
+create table SUPPLY
+(
+  ID_SUPPLY          NUMBER(24) not null,
+  CODE_SUPPLY        VARCHAR2(200 CHAR) not null,
+  ID_SUPPLY_TYPE     NUMBER(24),
+  FLG_TYPE           VARCHAR2(1 CHAR) not null,
+  ID_CONTENT         VARCHAR2(200 CHAR),
+  CREATE_USER        VARCHAR2(24 CHAR),
+  CREATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER        VARCHAR2(24 CHAR),
+  UPDATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+
+-- Add comments to the table 
+comment on table SUPPLY
+  is 'Materials used in medical / nursing acts.';
+-- Add comments to the columns 
+comment on column SUPPLY.ID_SUPPLY
+  is 'Primary Key';
+comment on column SUPPLY.CODE_SUPPLY
+  is 'Code for supply name';
+comment on column SUPPLY.ID_SUPPLY_TYPE
+  is 'ID for supply type';
+comment on column SUPPLY.FLG_TYPE
+  is 'Flag Type: I-Supplies, K-Kits, S-Sets';
+comment on column SUPPLY.ID_CONTENT
+  is 'Context identification';
+comment on column SUPPLY.CREATE_USER
+  is 'Creation user';
+comment on column SUPPLY.CREATE_TIME
+  is 'Creation time';
+comment on column SUPPLY.CREATE_INSTITUTION
+  is 'Creation institution';
+comment on column SUPPLY.UPDATE_USER
+  is 'Update user';
+comment on column SUPPLY.UPDATE_TIME
+  is 'Update time';
+comment on column SUPPLY.UPDATE_INSTITUTION
+  is 'Update institution';
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 01/07/2010 15:07
+-- CHANGE REASON: [ALERT-108775]  Activity therapist
+comment on column SUPPLY.FLG_TYPE
+  is 'Flag Type: I-Supplies, K-Kits, S-Sets, M-Activity Therapist Supplies';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 02/12/2010 16:35
+-- CHANGE REASON: [ALERT-146433] Add FLG_AVAILABLE to SUPPLY, SUPPLY_TYPE
+alter table supply add flg_available varchar2(1 char) default 'Y' not null;
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 02/12/2010 16:48
+-- CHANGE REASON: [ALERT-146441] Associate a surgical procedure to supplies
+comment on column SUPPLY.FLG_TYPE
+is 'Flag Type: I-Supplies, K-Kits, S-Sets, M-Activity Therapist Supplies, E - Surgical Equipments, P - Implants'
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 07/12/2010 14:21
+-- CHANGE REASON: [ALERT-146441] Associate a surgical procedure to supplies
+comment on column SUPPLY.FLG_TYPE
+is 'Flag Type: I-Supplies, K-Kits, S-Sets, M-Activity Therapist Supplies, E - Surgical Equipments, P - Implants';
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 16/11/2016 15:13
+-- CHANGE REASON: [ALERT-326438] 
+begin
+pk_versioning.run('ALTER TABLE SUPPLY ADD (STANDARD_CODE VARCHAR2(200 CHAR))');
+end;
+/
+
+
+COMMENT ON COLUMN SUPPLY.ID_SUPPLY IS 'Supply ID';
+COMMENT ON COLUMN SUPPLY.CODE_SUPPLY IS 'Translation code';
+COMMENT ON COLUMN SUPPLY.ID_SUPPLY_TYPE IS 'Supply type ID';
+COMMENT ON COLUMN SUPPLY.FLG_TYPE IS 'Supply type: I - Supplies, K - Kits, S - Sets, M - Activity Therapist Supplies, E - Surgical Equipments, P - Implants';
+COMMENT ON COLUMN SUPPLY.ID_CONTENT IS 'Content unique ID';
+COMMENT ON COLUMN SUPPLY.FLG_AVAILABLE IS 'Flag that indicates if the record is available or not (Y/N)';
+COMMENT ON COLUMN SUPPLY.STANDARD_CODE IS 'Standard code';
+COMMENT ON COLUMN SUPPLY.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN SUPPLY.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN SUPPLY.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN SUPPLY.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN SUPPLY.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN SUPPLY.UPDATE_INSTITUTION IS 'Update Institution';
+-- CHANGE END: Ana Matos

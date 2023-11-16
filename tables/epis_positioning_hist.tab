@@ -1,0 +1,232 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 11/12/2009 17:02
+-- CHANGE REASON: [ALERT-61892] CPOE 2nd phase
+CREATE TABLE EPIS_POSITIONING_HIST
+(
+  ID_EPIS_POSITIONING_HIST  NUMBER(24) NOT NULL,
+  ID_EPIS_POSITIONING       NUMBER(24) NOT NULL,
+  ID_EPISODE                NUMBER(24) NOT NULL,
+  ID_PROFESSIONAL           NUMBER(24),
+  FLG_STATUS                VARCHAR2(1) NOT NULL,
+  FLG_MASSAGE               VARCHAR2(1),
+  NOTES                     VARCHAR2(4000),
+  ID_PROF_CANCEL            NUMBER(24),
+  NOTES_CANCEL              VARCHAR2(4000),
+  ROT_INTERVAL              VARCHAR2(24),
+  ID_PROF_INTER             NUMBER(24),
+  NOTES_INTER               VARCHAR2(4000),
+  DT_CREATION_TSTZ          TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+  DT_CANCEL_TSTZ            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DT_INTER_TSTZ             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_USER               VARCHAR2(24),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24),
+  ID_ROTATION_INTERVAL      NUMBER(24)
+);
+
+
+comment on column EPIS_POSITIONING_HIST.ID_EPIS_POSITIONING_HIST
+  is 'Epis positioning unique identifier';
+comment on column EPIS_POSITIONING_HIST.ID_EPIS_POSITIONING
+  is 'Epis positioning identifier';
+comment on column EPIS_POSITIONING_HIST.ID_EPISODE
+  is 'Episode identifier';
+comment on column EPIS_POSITIONING_HIST.ID_PROFESSIONAL
+  is 'Professional identifier';
+comment on column EPIS_POSITIONING_HIST.FLG_STATUS
+  is 'Positioning request status. R-requested; E-In exectution; I-Interrupted; C-Cancelled; D-Draft; L-Draft cancelled';
+comment on column EPIS_POSITIONING_HIST.FLG_MASSAGE
+  is 'Massage requested flag';
+comment on column EPIS_POSITIONING_HIST.NOTES
+  is 'Notes';
+comment on column EPIS_POSITIONING_HIST.ID_PROF_CANCEL
+  is 'Professional responsible for cancel';
+comment on column EPIS_POSITIONING_HIST.NOTES_CANCEL
+  is 'Cancel notes';
+comment on column EPIS_POSITIONING_HIST.ROT_INTERVAL
+  is 'Rotation interval description';
+comment on column EPIS_POSITIONING_HIST.ID_PROF_INTER
+  is 'Professional responsible for intervention';
+comment on column EPIS_POSITIONING_HIST.NOTES_INTER
+  is 'Intervention notes';
+comment on column EPIS_POSITIONING_HIST.DT_CREATION_TSTZ
+  is 'Creation date';
+comment on column EPIS_POSITIONING_HIST.DT_CANCEL_TSTZ
+  is 'Cancel date';
+comment on column EPIS_POSITIONING_HIST.DT_INTER_TSTZ
+  is 'Intervention date';
+comment on column EPIS_POSITIONING_HIST.CREATE_USER
+  is 'Creation User';
+comment on column EPIS_POSITIONING_HIST.CREATE_TIME
+  is 'Creation Time';
+comment on column EPIS_POSITIONING_HIST.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column EPIS_POSITIONING_HIST.UPDATE_USER
+  is 'Update User';
+comment on column EPIS_POSITIONING_HIST.UPDATE_TIME
+  is 'Update Time';
+comment on column EPIS_POSITIONING_HIST.UPDATE_INSTITUTION
+  is 'Update Institution';
+comment on column EPIS_POSITIONING_HIST.ID_ROTATION_INTERVAL
+  is 'Positioning rotation interval identifier';
+  
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 11/04/2011 11:24
+-- CHANGE REASON: [ALERT-171600] 
+alter table epis_positioning_hist add (id_cancel_reason number(24));
+
+COMMENT ON COLUMN epis_positioning_hist.id_cancel_reason IS 'Cancel reason identification' ;
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:17
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+begin
+EXECUTE IMMEDIATE 'alter table epis_positioning_hist add (dt_epis_positioning TIMESTAMP WITH LOCAL TIME ZONE)' ;
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_positioning_hist.dt_epis_positioning IS ''Last update epis_positioning table''' ;
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:41
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+BEGIN
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_positioning_hist.flg_massage  is     ''Massage requested flag (Y/N)''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:42
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+BEGIN
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_positioning_hist.FLG_STATUS  is     ''Positioning request status. R-requested; E-In exectution; I-Interrupted; C-Cancelled; D-Draft; L-Draft cancelled''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:44
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+BEGIN
+
+EXECUTE IMMEDIATE 'ALTER TABLE epis_positioning_hist modify (FLG_STATUS varchar2(1 char) default ''R'')';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:44
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+BEGIN
+
+EXECUTE IMMEDIATE 'ALTER TABLE epis_positioning_hist modify (flg_massage varchar2(1 char) default ''N'')';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 26/10/2011 11:54
+-- CHANGE REASON: [ALERT-201548] Positioning - INP: UX Intake and Output
+begin
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_positioning_hist.flg_status IS ''Positioning request status. R-requested; E-In exectution; I-Interrupted; C-Cancelled; D-Draft; L-Draft cancelled; O-Expired''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:42
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table EPIS_POSITIONING_HIST
+  is 'Historical table of epis_positioning, keep history of epis_positioning records';
+-- Add comments to the columns 
+comment on column EPIS_POSITIONING_HIST.id_epis_positioning_hist
+  is 'Epis positioning unique identifier';
+comment on column EPIS_POSITIONING_HIST.id_epis_positioning
+  is 'Epis positioning identifier';
+comment on column EPIS_POSITIONING_HIST.id_episode
+  is 'Episode identifier';
+comment on column EPIS_POSITIONING_HIST.id_professional
+  is 'Professional identifier';
+comment on column EPIS_POSITIONING_HIST.flg_status
+  is 'Positioning request status. R-requested; E-In exectution; I-Interrupted; C-Cancelled; D-Draft; L-Draft cancelled; O-Expired';
+comment on column EPIS_POSITIONING_HIST.flg_massage
+  is 'Massage requested flag (Y/N)';
+comment on column EPIS_POSITIONING_HIST.notes
+  is 'Notes';
+comment on column EPIS_POSITIONING_HIST.id_prof_cancel
+  is 'Professional responsible for cancel';
+comment on column EPIS_POSITIONING_HIST.notes_cancel
+  is 'Cancel notes';
+comment on column EPIS_POSITIONING_HIST.rot_interval
+  is 'Rotation interval description';
+comment on column EPIS_POSITIONING_HIST.id_prof_inter
+  is 'Professional responsible for intervention';
+comment on column EPIS_POSITIONING_HIST.notes_inter
+  is 'Intervention notes';
+comment on column EPIS_POSITIONING_HIST.dt_creation_tstz
+  is 'Creation date';
+comment on column EPIS_POSITIONING_HIST.dt_cancel_tstz
+  is 'Cancel date';
+comment on column EPIS_POSITIONING_HIST.dt_inter_tstz
+  is 'Intervention date';
+comment on column EPIS_POSITIONING_HIST.create_user
+  is 'Creation User';
+comment on column EPIS_POSITIONING_HIST.create_time
+  is 'Creation Time';
+comment on column EPIS_POSITIONING_HIST.create_institution
+  is 'Creation Institution';
+comment on column EPIS_POSITIONING_HIST.update_user
+  is 'Update User';
+comment on column EPIS_POSITIONING_HIST.update_time
+  is 'Update Time';
+comment on column EPIS_POSITIONING_HIST.update_institution
+  is 'Update Institution';
+comment on column EPIS_POSITIONING_HIST.id_rotation_interval
+  is 'Positioning rotation interval identifier';
+comment on column EPIS_POSITIONING_HIST.id_cancel_reason
+  is 'Cancel reason identification';
+comment on column EPIS_POSITIONING_HIST.dt_epis_positioning
+  is 'Last update epis_positioning table';
+  
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 17/03/2020 11:15
+-- CHANGE REASON: [EMR-27841] - New development for Positioning menu	
+ALTER TABLE epis_positioning_hist
+ADD flg_origin varchar2(2);
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 27/03/2020 12:07
+-- CHANGE REASON: [EMR-28818] - Positioning >> Migrate transactional records from sr_positioning to positioning data model. Delete deprecated functions.
+ALTER TABLE EPIS_POSITIONING_HIST add id_episode_context NUMBER(24);
+-- CHANGE END: Diogo Oliveira

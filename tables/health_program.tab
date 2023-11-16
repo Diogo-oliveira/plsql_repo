@@ -1,0 +1,95 @@
+-- Create table
+create table HEALTH_PROGRAM
+(
+  ID_HEALTH_PROGRAM      NUMBER(24) not null,
+  CODE_HEALTH_PROGRAM    VARCHAR2(200) not null,
+  DT_HEALTH_PROGRAM_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  ID_CONTENT             VARCHAR2(200),
+  CREATE_USER            VARCHAR2(24),
+  CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION     NUMBER(24),
+  UPDATE_USER            VARCHAR2(24),
+  UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION     NUMBER(24)
+)
+;
+-- Add comments to the table 
+comment on table HEALTH_PROGRAM
+  is 'Health programs.';
+-- Add comments to the columns 
+comment on column HEALTH_PROGRAM.ID_HEALTH_PROGRAM
+  is 'Unique identifier.';
+comment on column HEALTH_PROGRAM.CODE_HEALTH_PROGRAM
+  is 'Code for translation.';
+comment on column HEALTH_PROGRAM.DT_HEALTH_PROGRAM_TSTZ
+  is 'Registry date.';
+comment on column HEALTH_PROGRAM.CREATE_USER
+  is 'Creation User';
+comment on column HEALTH_PROGRAM.CREATE_TIME
+  is 'Creation Time';
+comment on column HEALTH_PROGRAM.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column HEALTH_PROGRAM.UPDATE_USER
+  is 'Update User';
+comment on column HEALTH_PROGRAM.UPDATE_TIME
+  is 'Update Time';
+comment on column HEALTH_PROGRAM.UPDATE_INSTITUTION
+  is 'Update Institution';
+
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 26/08/2013 14:51
+-- CHANGE REASON: [ALERT-263008] 
+declare
+  e_col_exists exception;
+  pragma exception_init(e_col_exists, -01430);
+begin
+  execute immediate 'alter table health_program add (rank number(24) default 0 not null)
+';
+exception when e_col_exists then
+  dbms_output.put_line('column HEALTH_PROGRAM.RANK already exists');
+end;
+/
+
+alter table health_program modify (rank default null);
+
+comment on column HEALTH_PROGRAM.rank
+  is 'Health program rank.';
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 14:42
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table HEALTH_PROGRAM
+  is 'Health programs.';
+-- Add comments to the columns 
+comment on column HEALTH_PROGRAM.id_health_program
+  is 'Unique identifier.';
+comment on column HEALTH_PROGRAM.code_health_program
+  is 'Code for translation.';
+comment on column HEALTH_PROGRAM.dt_health_program_tstz
+  is 'Registry date.';
+comment on column HEALTH_PROGRAM.id_content
+  is 'Content identifier.';
+comment on column HEALTH_PROGRAM.create_user
+  is 'Creation User';
+comment on column HEALTH_PROGRAM.create_time
+  is 'Creation Time';
+comment on column HEALTH_PROGRAM.create_institution
+  is 'Creation Institution';
+comment on column HEALTH_PROGRAM.update_user
+  is 'Update User';
+comment on column HEALTH_PROGRAM.update_time
+  is 'Update Time';
+comment on column HEALTH_PROGRAM.update_institution
+  is 'Update Institution';
+comment on column HEALTH_PROGRAM.rank
+  is 'Health program rank.';
+-- CHANGE END: Renato Nunes
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 12/10/2020 16:58
+-- CHANGE REASON: [EMR-36750] - Table Health_program add default value
+alter table HEALTH_PROGRAM modify rank default 0;
+-- CHANGE END: Elisabete Bugalho

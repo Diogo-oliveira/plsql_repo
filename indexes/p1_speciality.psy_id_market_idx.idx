@@ -1,0 +1,22 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/07/2010 16:50
+-- CHANGE REASON: [ALERT-109230] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_ind_columns ui
+     WHERE ui.index_name = 'PSY_ID_MARKET_IDX'
+       AND ui.table_name = 'P1_SPECIALITY'
+       AND ui.column_name = 'ID_MARKET';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'CREATE INDEX PSY_ID_MARKET_IDX ON P1_SPECIALITY (ID_MARKET)';
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso

@@ -1,0 +1,19 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 11:32
+-- CHANGE REASON: [ALERT-38908] Versionamento.
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table PRESC_FREQ_DET
+  add constraint PRFD_PK primary key (ID_PRESC_FREQ_DET)
+  using index 
+  tablespace INDEX_M;
+-- Create/Recreate check constraints 
+alter table PRESC_FREQ_DET
+  add constraint PRFD_FLG_MEAL_CHK
+  check (FLG_MEAL in ('Y','N'));
+alter table PRESC_FREQ_DET
+  add constraint PRFD_OTHER_FREQ_TYPE_CHK
+  check (OTHER_FREQ_TYPE in ('ED','DL'));
+alter table PRESC_FREQ_DET
+  add constraint PRFD_PARITY_CHK
+  check (PARITY in ('E','O'));
+-- CHANGE END: Pedro Albuquerque

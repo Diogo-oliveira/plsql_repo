@@ -1,0 +1,118 @@
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 2009/07/03 14:49
+-- CHANGE REASON: ALERT-32705 [CLONE -Relatório de nota de alta médica, para todas as aplicações]
+--                ALERT-34577 [[CLONE] Setting up "predefined text area" and "cancel reason area" [2.5]]
+-- Create table
+create table PHY_DISCHARGE_NOTES
+(
+  ID_PHY_DISCHARGE_NOTES NUMBER(24) not null,
+  ID_PATIENT             NUMBER(24) not null,
+  ID_PROFESSIONAL        NUMBER(24) not null,
+  ID_EPISODE             NUMBER(24) not null,
+  FLG_STATUS             VARCHAR2(1) not null,
+  DT_CREATION            TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  NOTES                  VARCHAR2(4000),
+  ID_CANCEL_REASON       NUMBER(24),
+  CANCEL_NOTES           VARCHAR2(4000),
+  DT_CANCEL              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROFESSIONAL_CANCEL NUMBER(24),
+  UPDATE_INSTITUTION     NUMBER(24),
+  CREATE_USER            VARCHAR2(24),
+  CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION     NUMBER(24),
+  UPDATE_USER            VARCHAR2(24),
+  UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table PHY_DISCHARGE_NOTES
+  is 'Table used to store Physician Discharge Notes';
+-- Add comments to the columns 
+comment on column PHY_DISCHARGE_NOTES.ID_PHY_DISCHARGE_NOTES
+  is 'ID Physician Discharge Notes (PK)';
+comment on column PHY_DISCHARGE_NOTES.ID_PATIENT
+  is 'ID Patient (FK)';
+comment on column PHY_DISCHARGE_NOTES.ID_PROFESSIONAL
+  is 'ID Professional (FK)';
+comment on column PHY_DISCHARGE_NOTES.ID_EPISODE
+  is 'ID_EPISODE (FK)';
+comment on column PHY_DISCHARGE_NOTES.FLG_STATUS
+  is 'Flag Status [(A)ctivated, (C)ancelled] ';
+comment on column PHY_DISCHARGE_NOTES.DT_CREATION
+  is 'Date of Creation';
+comment on column PHY_DISCHARGE_NOTES.NOTES
+  is 'Notes saved by professional';
+comment on column PHY_DISCHARGE_NOTES.ID_CANCEL_REASON
+  is 'ID Cancel Reason (FK)';
+comment on column PHY_DISCHARGE_NOTES.CANCEL_NOTES
+  is 'Cancel Notes saved by professional';
+comment on column PHY_DISCHARGE_NOTES.DT_CANCEL
+  is 'Date of Cancellation';
+comment on column PHY_DISCHARGE_NOTES.ID_PROFESSIONAL_CANCEL
+  is 'ID Professional that have cancelled the register';
+comment on column PHY_DISCHARGE_NOTES.UPDATE_INSTITUTION
+  is 'ID Institution where has been applied the last change';
+comment on column PHY_DISCHARGE_NOTES.CREATE_USER
+  is 'ID Professional that have created the register';
+comment on column PHY_DISCHARGE_NOTES.CREATE_TIME
+  is 'Date of register creation';
+comment on column PHY_DISCHARGE_NOTES.CREATE_INSTITUTION
+  is 'ID Institution where the register has been created';
+comment on column PHY_DISCHARGE_NOTES.UPDATE_USER
+  is 'ID Professional that have applied the last change';
+comment on column PHY_DISCHARGE_NOTES.UPDATE_TIME
+  is 'Date of the last change';
+
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PHY_DISCHARGE_NOTES modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PHY_DISCHARGE_NOTES modify FLG_STATUS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PHY_DISCHARGE_NOTES modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PHY_DISCHARGE_NOTES modify CANCEL_NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.phy_discharge_notes move lob(notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

@@ -1,0 +1,44 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGED DATE: 2009-JUL-27
+-- CHANGING REASON: posologias irregulares
+alter table PRESC_FIELD_DET_PROP
+  add constraint PFDP_PK primary key (ID_PRESCRIPTION_FIELD_REL, FLG_TAKE_TYPE)
+  using index 
+  tablespace INDEX_S
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+
+alter table PRESC_FIELD_DET_PROP
+  add constraint PFDP_FIELD_TYPE_CHK
+  check (field_type IN ('L', 'N', 'F', 'D', 'T', 'DT', 'OP', 'FT', 'LM'));
+alter table PRESC_FIELD_DET_PROP
+  add constraint PFDP_FLG_AVAILABLE_CHK
+  check (flg_available IN ('Y', 'N'));
+alter table PRESC_FIELD_DET_PROP
+  add constraint PFDP_FLG_TAKE_TYPE_CHK
+  check (flg_take_type IN ('N', 'S', 'C', 'P', 'U', 'A', '-'));
+
+-- CHANGE END Pedro Albuquerque
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 21/08/2009 15:17
+-- CHANGE REASON: [ALERT-37067] 
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table PRESC_FIELD_DET_PROP
+  add constraint PFDP_PK primary key (ID_PRESCRIPTION_FIELD_REL);
+-- Create/Recreate check constraints 
+alter table PRESC_FIELD_DET_PROP
+  add constraint PFDP_FIELD_TYPE_CHK
+  check (field_type IN ('L', 'N', 'F', 'D', 'T', 'DT', 'OP', 'FT', 'LM'));
+alter table PRESC_FIELD_DET_PROP
+  add constraint PFDP_FLG_AVAILABLE_CHK
+  check (flg_available IN ('Y', 'N'));
+-- CHANGE END: Pedro Albuquerque

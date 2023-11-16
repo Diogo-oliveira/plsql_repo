@@ -1,0 +1,16 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 13/03/2015 16:05
+-- CHANGE REASON: [ALERT-308685] HAS - LAP Certification | The system must provide the ability to define and display a specific description for the CDR notification severity
+--                
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table CDR_TYPE_SEVERITY_DESC
+  add constraint CDRTS_PK primary key (id_CDR_TYPE_SEV_DESC);
+ 
+alter table CDR_TYPE_SEVERITY_DESC
+  add constraint CDRTS_FLG_AVAILABLE_CHK
+  check (FLG_AVAILABLE IN ('Y','N')); 
+ 
+alter table CDR_TYPE_SEVERITY_DESC
+  add constraint CDRTS_CTS_UK unique (ID_CDR_TYPE, ID_CDR_SEVERITY);
+   
+-- CHANGE END: Elisabete Bugalho

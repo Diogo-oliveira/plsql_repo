@@ -1,0 +1,85 @@
+
+create table ADVANCE_DIRECTIVE
+(
+  ID_ADVANCE_DIRECTIVE   NUMBER(24) NOT NULL,
+	CODE_ADVANCE_DIRECTIVE VARCHAR2(200) NOT NULL,
+	FLG_AVAILABLE          VARCHAR2(1) NOT NULL,
+	ID_DOC_ELEMENT_YES     NUMBER(24) NOT NULL,
+  ID_DOC_ELEMENT_NO      NUMBER(24) NOT NULL,
+	FLG_TYPE               VARCHAR2(1) NOT NULL,
+	ID_DOC_AREA            NUMBER(24) NOT NULL,
+	ID_DOC_TYPE            NUMBER(24)
+);
+
+COMMENT ON TABLE ADVANCE_DIRECTIVE IS 'Configuration table of all available advance directives.';
+
+COMMENT ON COLUMN ADVANCE_DIRECTIVE.ID_ADVANCE_DIRECTIVE IS 'Advance directive ID.';
+COMMENT ON COLUMN ADVANCE_DIRECTIVE.CODE_ADVANCE_DIRECTIVE IS 'Translation code.';
+COMMENT ON COLUMN ADVANCE_DIRECTIVE.FLG_AVAILABLE IS 'Translation code.';
+COMMENT ON COLUMN ADVANCE_DIRECTIVE.ID_DOC_ELEMENT_YES IS 'Template element ID used to confirm the advance directive.';
+COMMENT ON COLUMN ADVANCE_DIRECTIVE.ID_DOC_ELEMENT_NO IS 'Template element ID used to negate the advance directive.';
+COMMENT ON COLUMN ADVANCE_DIRECTIVE.FLG_TYPE IS 'Advance directive type: H - healthcare proxy, L - legal proxy, W - living will';
+COMMENT ON COLUMN ADVANCE_DIRECTIVE.ID_DOC_AREA IS 'Touch option area ID where the advance directive is documented.';
+COMMENT ON COLUMN ADVANCE_DIRECTIVE.ID_DOC_TYPE IS 'Document type ID associated with the advance directive';
+
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 08/04/2011 20:03
+-- CHANGE REASON: [ALERT-172088] Ability to record if a patient has a terminal illness and ability to record life expectancy (ALERT_122481)
+--                
+DECLARE
+    e_already_made_change EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_already_made_change, -1451);
+BEGIN
+    BEGIN
+    EXECUTE IMMEDIATE 'alter table ADVANCE_DIRECTIVE modify id_doc_element_yes null';
+EXCEPTION WHEN e_already_made_change THEN
+dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ADVANCE_DIRECTIVE modify id_doc_element_no null';
+EXCEPTION WHEN e_already_made_change THEN
+dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+
+EXECUTE IMMEDIATE 'comment on column ADVANCE_DIRECTIVE.flg_type is ''Advance directive type: H - healthcare proxy, L - legal proxy, W - living will, D - DNAR decision, E - End of life care, C - Cardiac resuscitation''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table ADVANCE_DIRECTIVE modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table ADVANCE_DIRECTIVE modify FLG_TYPE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table ADVANCE_DIRECTIVE modify FLG_AVAILABLE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table ADVANCE_DIRECTIVE modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table ADVANCE_DIRECTIVE modify CODE_ADVANCE_DIRECTIVE varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro

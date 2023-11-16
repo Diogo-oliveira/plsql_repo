@@ -1,0 +1,61 @@
+
+
+  ALTER TABLE EPIS_POSITIONING ADD CONSTRAINT EPG_PK PRIMARY KEY (ID_EPIS_POSITIONING) ENABLE;
+
+  ALTER TABLE EPIS_POSITIONING MODIFY (ID_EPIS_POSITIONING NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_POSITIONING MODIFY (ID_EPISODE NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_POSITIONING MODIFY (DT_CREATION NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_POSITIONING MODIFY (FLG_STATUS NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:41
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+BEGIN
+
+EXECUTE IMMEDIATE 'ALTER TABLE epis_positioning ADD CONSTRAINT EP_FLG_MASSAGE_CHK CHECK (flg_massage IN (''Y'',''N''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:42
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+BEGIN
+
+EXECUTE IMMEDIATE 'ALTER TABLE epis_positioning ADD CONSTRAINT EP_FLG_STATUS_CHK CHECK (FLG_STATUS IN (''R'',''E'',''F'',''C'',''I'',''D'',''L''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 26/10/2011 11:54
+-- CHANGE REASON: [ALERT-201548] Positioning - INP: UX Intake and Output
+begin
+EXECUTE IMMEDIATE 'ALTER TABLE epis_positioning drop CONSTRAINT EP_FLG_STATUS_CHK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+
+
+begin
+EXECUTE IMMEDIATE 'alter table epis_positioning  add constraint EP_FLG_STATUS_CHK  check (flg_status IN (''R'',''E'',''F'',''C'',''I'',''D'',''L'',''O''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+-- CHANGE END: António Neto

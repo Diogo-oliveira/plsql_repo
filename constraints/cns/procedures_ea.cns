@@ -1,0 +1,206 @@
+-- CHANGE BY: Rita Lopes
+-- CHANGE REASON: Acrescentar a criacao da coluna
+-- CHANGE DATE: 06-11-2008
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table PROCEDURES_EA
+  add constraint PROCEDURES_EA_PK primary key (ID_INTERV_PRESC_DET)
+  using index 
+  tablespace TABLE_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+
+
+-- Create/Recreate check constraints 
+alter table PROCEDURES_EA
+  add constraint PEA_FLG_INTERV_TYPE_CK
+  check (flg_interv_type IN ('A', 'N', 'S', 'U', 'C'));
+alter table PROCEDURES_EA
+  add constraint PEA_FLG_MFR_CK
+  check (flg_mfr IN ('N', 'Y'));
+alter table PROCEDURES_EA
+  add constraint PEA_FLG_NOTES_CK
+  check (flg_notes IN ('Y','N'));
+alter table PROCEDURES_EA
+  add constraint PEA_FLG_PRTY_CK
+  check (flg_prty IN ('M', 'N', 'U'));
+alter table PROCEDURES_EA
+  add constraint PEA_FLG_STATUS_CHANGE
+  check (flg_status_change IN ('B', 'C', 'H', 'M', 'Q', 'T', 'U'));
+alter table PROCEDURES_EA
+  add constraint PEA_FLG_STATUS_DET_CK
+  check (flg_status_det IN ('A', 'C', 'D', 'E', 'F', 'G', 'I', 'P', 'R', 'S', 'V'));
+alter table PROCEDURES_EA
+  add constraint PEA_FLG_STATUS_INTERVENTION_CK
+  check (flg_status_intervention IN ('A', 'I'));
+alter table PROCEDURES_EA
+  add constraint PEA_FLG_STATUS_PLAN_CK
+  check (flg_status_plan IN ('A', 'C', 'D', 'E', 'F', 'M', 'N', 'P', 'R'));
+alter table PROCEDURES_EA
+  add constraint PEA_FLG_STATUS_REQ_CK
+  check (flg_status_req IN ('D', 'C', 'E', 'P', 'F', 'R', 'S', 'I'));
+alter table PROCEDURES_EA
+  add constraint PEA_FLG_TIME
+  check (flg_time IN ('B', 'E', 'N'));
+
+
+-- CHANGE END:
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/09/2009 17:45
+-- CHANGE REASON: [ALERT-42947] New feature ALERT 910 MCDT INTERNAL EXTERNAL
+alter table procedures_ea drop constraint pea_flg_status_det_ck;
+alter table PROCEDURES_EA add constraint PEA_FLG_STATUS_DET_CK check (flg_status_det IN ('A', 'C', 'D', 'E', 'F', 'G', 'I', 'P', 'R', 'S', 'V', 'X'));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/12/2009 21:07
+-- CHANGE REASON: [ALERT-62132] CPOE Procedures/Dressings/Patient education
+ALTER TABLE procedures_ea drop CONSTRAINT pea_flg_status_det_ck;
+ALTER TABLE procedures_ea add CONSTRAINT pea_flg_status_det_ck CHECK (flg_status_det IN ('A', 'C', 'D', 'E', 'F', 'G', 'I', 'P', 'R', 'S', 'V', 'X', 'T', 'Z'));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 02/11/2011 11:11
+-- CHANGE REASON: [ALERT-201543] Task Expire support for CPOE - Procedures
+alter table PROCEDURES_EA 
+   drop constraint PEA_FLG_STATUS_DET_CK;
+ 
+alter table PROCEDURES_EA
+  add constraint PEA_FLG_STATUS_DET_CK
+  check (flg_status_det IN ('A', 'C', 'D', 'E', 'F', 'G', 'I', 'P', 'R', 'S', 'V', 'X', 'T', 'Z', 'O'));
+
+alter table PROCEDURES_EA
+   drop constraint PEA_FLG_STATUS_PLAN_CK;
+
+alter table PROCEDURES_EA  
+  add constraint PEA_FLG_STATUS_PLAN_CK
+  check (flg_status_plan IN ('A', 'C', 'D', 'E', 'F', 'M', 'N', 'P', 'R', 'O'));
+
+alter table PROCEDURES_EA
+  drop constraint PEA_FLG_STATUS_REQ_CK;
+
+alter table PROCEDURES_EA
+  add constraint PEA_FLG_STATUS_REQ_CK
+  check (flg_status_req IN ('D', 'C', 'E', 'P', 'F', 'R', 'S', 'I', 'O'));
+-- CHANGE END: Ariel Machado
+
+-- CHANGE DATE: 14/11/2011 09:20
+-- CHANGE REASON: [ALERT-201543] Task Expire support for CPOE - Procedures
+DECLARE
+    e_nonexistent_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_nonexistent_constraint, -02443);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE procedures_ea DROP CONSTRAINT pea_flg_status_det_ck';
+EXCEPTION
+    WHEN e_nonexistent_constraint THEN
+        NULL;    
+END;
+/ 
+
+ALTER TABLE procedures_ea
+  ADD CONSTRAINT pea_flg_status_det_ck
+  CHECK (flg_status_det IN ('A', 'C', 'D', 'E', 'F', 'G', 'I', 'P', 'R', 'S', 'V', 'X', 'T', 'Z', 'O'));
+
+DECLARE
+    e_nonexistent_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_nonexistent_constraint, -02443);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE procedures_ea DROP CONSTRAINT pea_flg_status_plan_ck';
+EXCEPTION
+    WHEN e_nonexistent_constraint THEN
+        NULL;
+    
+END;
+/ 
+
+ALTER TABLE procedures_ea  
+  ADD CONSTRAINT pea_flg_status_plan_ck
+  CHECK (flg_status_plan IN ('A', 'C', 'D', 'E', 'F', 'M', 'N', 'P', 'R', 'O'));
+
+DECLARE
+    e_nonexistent_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_nonexistent_constraint, -02443);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE procedures_ea DROP CONSTRAINT pea_flg_status_req_ck';
+EXCEPTION
+    WHEN e_nonexistent_constraint THEN
+        NULL;
+    
+END;
+/
+
+ALTER TABLE procedures_ea
+  ADD CONSTRAINT pea_flg_status_req_ck
+  CHECK (flg_status_req IN ('D', 'C', 'E', 'P', 'F', 'R', 'S', 'I', 'O'));
+-- CHANGE END: Ariel Machado
+
+
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 16/04/2013 15:52
+-- CHANGE REASON: [ALERT-255084] 
+DECLARE
+    e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE procedures_ea add CONSTRAINT PEA_FLG_CLINICAL_PURPOSE_CHK CHECK(FLG_CLINICAL_PURPOSE IN (''N'', ''T'', ''S'', ''P'',''R'', ''O''))';
+
+EXCEPTION
+    WHEN e_constraint_already_there THEN
+        NULL;
+    
+END;
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 28/05/2014 09:42
+-- CHANGE REASON: [ALERT-283445 ] 
+DECLARE
+  e_nonexistent_constraint EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_nonexistent_constraint, -02443); 
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE procedures_ea DROP CONSTRAINT pea_flg_status_det_ck';
+  EXCEPTION
+    WHEN e_nonexistent_constraint THEN
+      dbms_output.put_line('Constraint procedures_ea.pea_flg_status_det_ck doesnt exist');
+  END;
+
+  EXECUTE IMMEDIATE 'ALTER TABLE procedures_ea ADD CONSTRAINT pea_flg_status_det_ck check (flg_status_det IN (''A'', ''C'', ''D'', ''E'', ''F'', ''G'', ''I'', ''P'', ''R'', ''S'', ''V'', ''X'', ''T'', ''Z'', ''O'',''N''))';
+END;
+/
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 28/05/2014 09:44
+-- CHANGE REASON: [ALERT-283445 ] 
+DECLARE
+  e_nonexistent_constraint EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_nonexistent_constraint, -02443); -- nonexistent constraint
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE procedures_ea DROP CONSTRAINT pea_flg_status_req_ck';
+  EXCEPTION
+    WHEN e_nonexistent_constraint THEN
+      dbms_output.put_line('Constraint procedures_ea.pea_flg_status_req_ck doesnt exist');
+  END;
+
+  EXECUTE IMMEDIATE 'ALTER TABLE procedures_ea ADD CONSTRAINT pea_flg_status_req_ck check (flg_status_req IN (''D'', ''C'', ''E'', ''P'', ''F'', ''R'', ''S'', ''I'', ''O'',''N''))';
+END;
+/
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/03/2017 11:16
+-- CHANGE REASON: [ALERT-328947] 
+ALTER TABLE PROCEDURES_EA DROP CONSTRAINT PEA_FLG_STATUS_REQ_CHK;
+
+ALTER TABLE PROCEDURES_EA ADD CONSTRAINT PEA_FLG_STATUS_REQ_CHK CHECK (flg_status_req IN ('PD', 'S', 'X', 'R', 'D', 'W', 'A', 'E', 'P', 'F', 'I', 'O', 'N', 'C', 'Z'));
+-- CHANGE END: Ana Matos

@@ -1,0 +1,10 @@
+DECLARE
+    e_not_exist EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_not_exist, -04043);
+BEGIN
+    EXECUTE IMMEDIATE 'DROP view ME_MANIP_GROUP_PT';
+EXCEPTION
+    WHEN e_not_exist THEN
+        NULL;
+END;
+/

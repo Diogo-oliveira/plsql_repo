@@ -1,0 +1,18 @@
+-- CHANGED BY: Nuno Alves
+-- CHANGE DATE: 09/06/2015 09:16
+-- CHANGE REASON: [ALERT-312396] ALERT-312396 Issue Replication: [BSUH] Outpatient Appointment report and Outpatient GP Letter generation and sending 2 reports in discharge
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || REPLACE(srcstr => SQLERRM, oldsub => 'ORA-', newsub => '') || '; ' ||
+                                 i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl('ALTER TABLE discharge_report add CONSTRAINT discharge_report_pk primary key(id_discharge_report)');
+    run_ddl('ALTER TABLE discharge_report add CONSTRAINT dr_flg_status_chk CHECK(flg_status IN (''R'', ''S''))');
+END;
+/
+-- CHANGE END: Nuno Alves

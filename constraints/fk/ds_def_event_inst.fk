@@ -1,0 +1,21 @@
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 16:06
+-- CHANGE REASON: [ARCH-7603] - Changes on DB Model
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_DEF_EVENT_INST add constraint DSDE_I_DS_CMPT_I_FK foreign key ( ID_DS_CMPT_INST_REL ) references DS_CMPT_INST_REL (ID_DS_CMPT_INST_REL)';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_DEF_EVENT_INST add constraint DSDE_I_DS_EVT_ACT_FK foreign key ( ID_DS_CMPT_MKT_REL, id_action ) references DS_DEF_EVENT (ID_DS_CMPT_MKT_REL, id_action)';
+pk_versioning.run( l_sql );
+end;
+/
+-- CHANGE END: Elisabete Bugalho

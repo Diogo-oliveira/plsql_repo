@@ -1,0 +1,23 @@
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 25/02/2011 17:32
+-- CHANGE REASON: [ALERT-164703] DDL Reports - H & P reformulation in INPATIENT
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TIMEFRAME_GROUP
+ ADD (CONSTRAINT TGP_PK PRIMARY KEY 
+  (ID_TIMEFRAME_GROUP))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+--
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TIMEFRAME_GROUP
+ ADD (CONSTRAINT TGP_TYPE_CHK CHECK (FLG_TYPE IN (''R'', ''C'', ''T'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: António Neto

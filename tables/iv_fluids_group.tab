@@ -1,0 +1,61 @@
+-- Create table
+create table IV_FLUIDS_GROUP
+(
+  ID_IV_FLUIDS_GROUP         NUMBER(12) not null,
+  CODE_IV_FLUIDS_GROUP       VARCHAR2(200)      ,
+  FLG_AVAILABLE              VARCHAR2(1) not null,
+  ADW_LAST_UPDATE            DATE
+)
+tablespace TABLE_S
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table IV_FLUIDS_GROUP
+  is 'Contem os grupos de soros.';
+-- Add comments to the columns 
+comment on column IV_FLUIDS_GROUP.ID_IV_FLUIDS_GROUP
+  is 'Chave primaria';
+comment on column IV_FLUIDS_GROUP.CODE_IV_FLUIDS_GROUP
+  is 'Nome do grupo';
+comment on column IV_FLUIDS_GROUP.FLG_AVAILABLE
+  is 'Disponibilidade do registo na instituição onde está instalada a BD';
+comment on column IV_FLUIDS_GROUP.ADW_LAST_UPDATE
+  is 'Data da ultima alteracão';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table IV_FLUIDS_GROUP
+  add constraint IV_FLUIDS_GROUP_PK primary key (ID_IV_FLUIDS_GROUP)
+  using index 
+  tablespace INDEX_S
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate indexes 
+create index IV_FLUIDS_GROUP_I on IV_FLUIDS_GROUP (ID_IV_FLUIDS_GROUP)
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on IV_FLUIDS_GROUP to ALERT_DEMO;
+grant select on IV_FLUIDS_GROUP to ALERT_VIEWER;
+grant select on IV_FLUIDS_GROUP to INFARMED;
+grant select on IV_FLUIDS_GROUP to INTER_ALERT_V2;

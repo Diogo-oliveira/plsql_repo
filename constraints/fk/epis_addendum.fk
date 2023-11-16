@@ -1,0 +1,59 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 21/12/2010 12:25
+-- CHANGE REASON: [ALERT-139534] 
+declare
+  e_protection_1 EXCEPTION;
+  e_protection_2 EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_protection_1, -02275);
+  PRAGMA EXCEPTION_INIT(e_protection_2, -02264);
+begin
+BEGIN
+        EXECUTE IMMEDIATE 'alter table EPIS_ADDENDUM
+  add constraint EA_CR_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON)';
+    EXCEPTION
+        WHEN e_protection_1 THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table EPIS_ADDENDUM
+  add constraint EA_ESO_FK foreign key (ID_EPIS_SIGN_OFF)
+  references EPIS_SIGN_OFF (ID_EPIS_SIGN_OFF)';
+    EXCEPTION
+        WHEN e_protection_1 THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table EPIS_ADDENDUM
+  add constraint EA_PC_FK foreign key (ID_PROF_CANCEL)
+  references PROFESSIONAL (ID_PROFESSIONAL)';
+    EXCEPTION
+        WHEN e_protection_1 THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table EPIS_ADDENDUM
+  add constraint EA_P_FK foreign key (ID_PROFESSIONAL)
+  references PROFESSIONAL (ID_PROFESSIONAL)';
+    EXCEPTION
+        WHEN e_protection_1 THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table EPIS_ADDENDUM
+  add constraint EA_PSO_FK foreign key (ID_PROFESSIONAL_SIGN_OFF)
+  references PROFESSIONAL (ID_PROFESSIONAL)';
+    EXCEPTION
+        WHEN e_protection_1 THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table EPIS_ADDENDUM
+  add constraint EA_FLG_STATUS_CHK check (FLG_STATUS IN (''A'', ''C'', ''S''))';
+    EXCEPTION
+        WHEN e_protection_2 THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

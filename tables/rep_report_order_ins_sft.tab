@@ -1,0 +1,88 @@
+-- CHANGED BY:Ricardo Pires
+-- CHANGE DATE: 26-Jun-2014 12:00
+-- CHANGE REASON: ALERT-287183
+create table REP_REPORT_ORDER_INS_SFT
+(
+  id_rep_rpt_order_ins_sft                   NUMBER(24) not null,
+  id_reports                                 NUMBER(24) not null,
+  id_market                                  NUMBER(24) not null,  
+  id_institution                             NUMBER(24) not null,
+  id_software                                NUMBER(24) not null,
+  id_context                                 NUMBER(24) not null,  
+  create_user                                VARCHAR2(24 CHAR),
+  create_time                                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution                         NUMBER(24),
+  update_user                                VARCHAR2(24 CHAR),
+  update_time                                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution                         NUMBER(24)
+)
+tablespace ALERT_DATA;
+
+ALTER TABLE REP_REPORT_ORDER_INS_SFT ADD CONSTRAINT RROIS_PK PRIMARY KEY (id_rep_rpt_order_ins_sft) ENABLE;   
+
+create unique index RROIS_REP_MRK_INS_SFT_UIDX on REP_REPORT_ORDER_INS_SFT (ID_REPORTS, ID_MARKET, ID_INSTITUTION, ID_SOFTWARE, ID_CONTEXT)
+  tablespace ALERT_IDX;  
+  
+ALTER TABLE ALERT.REP_REPORT_ORDER_INS_SFT 
+    ADD CONSTRAINT REP_REPORT_ORDER_INS_SFT_UN UNIQUE ( ID_REPORTS , ID_MARKET , ID_INSTITUTION , ID_SOFTWARE , ID_CONTEXT ) ;
+  
+comment on table REP_REPORT_ORDER_INS_SFT
+  is 'Table to configure the orders that should be printed on a specific reports.';
+comment on column REP_REPORT_ORDER_INS_SFT.id_rep_rpt_order_ins_sft
+  is 'Primary Key';
+comment on column REP_REPORT_ORDER_INS_SFT.id_reports
+  is 'Identifier of the report';
+comment on column REP_REPORT_ORDER_INS_SFT.id_market
+  is 'Identifier of the market';  
+comment on column REP_REPORT_ORDER_INS_SFT.id_institution
+  is 'Identifier of the institution';  
+comment on column REP_REPORT_ORDER_INS_SFT.id_software
+  is 'Identifier of the software';
+comment on column REP_REPORT_ORDER_INS_SFT.id_context
+  is 'Identifies the id of the context regarding the task_type associated with the report(id_analysis, id_exam, id_intervention,...)'; 
+comment on column REP_REPORT_ORDER_INS_SFT.create_user
+  is 'Creation User';
+comment on column REP_REPORT_ORDER_INS_SFT.create_time
+  is 'Creation Time';
+comment on column REP_REPORT_ORDER_INS_SFT.create_institution
+  is 'Creation Institution';
+comment on column REP_REPORT_ORDER_INS_SFT.update_user
+  is 'Update User';
+comment on column REP_REPORT_ORDER_INS_SFT.update_time
+  is 'Update Time';
+comment on column REP_REPORT_ORDER_INS_SFT.update_institution
+  is 'Update Institution';       
+
+alter table REP_REPORT_ORDER_INS_SFT
+  add constraint RROIS_REP_MKT_FK foreign key (ID_REPORTS, ID_MARKET)
+  references REP_REPORT_MKT (ID_REPORTS, ID_MARKET);       
+  
+alter table REP_REPORT_ORDER_INS_SFT
+  add constraint RROIS_INST_FK foreign key (ID_INSTITUTION)
+  references ALERT_CORE_DATA.AB_INSTITUTION (ID_AB_INSTITUTION);    
+  
+alter table REP_REPORT_ORDER_INS_SFT
+  add constraint RROIS_SFT_FK foreign key (ID_SOFTWARE)
+  references ALERT_CORE_DATA.AB_SOFTWARE (ID_AB_SOFTWARE);   
+-- CHANGE END   
+
+-- CHANGED BY:Ricardo Pires
+-- CHANGE DATE: 27-Ago-2014 18:00
+-- CHANGE REASON: ALERT-293378
+ALTER TABLE REP_REPORT_ORDER_INS_SFT  ADD (ID_TASK_TYPE_CONTEXT NUMBER(24));
+COMMENT ON COLUMN REP_REPORT_ORDER_INS_SFT.ID_TASK_TYPE_CONTEXT IS 'Association of the id_context to a task_type. Identifies the type of information inserted on id_context.';
+-- CHANGE END  
+
+-- CHANGED BY:Ricardo Pires
+-- CHANGE DATE: 27-Ago-2014 18:00
+-- CHANGE REASON: ALERT-293378
+ALTER TABLE REP_REPORT_ORDER_INS_SFT DROP CONSTRAINT REP_REPORT_ORDER_INS_SFT_UN;
+
+DROP INDEX RROIS_REP_MRK_INS_SFT_UIDX;
+
+create unique index RROIS_REP_MRK_INS_SFT_UIDX on REP_REPORT_ORDER_INS_SFT (ID_REPORTS, ID_MARKET, ID_INSTITUTION, ID_SOFTWARE, ID_CONTEXT, ID_TASK_TYPE_CONTEXT)
+  tablespace ALERT_IDX;  
+
+ALTER TABLE ALERT.REP_REPORT_ORDER_INS_SFT 
+    ADD CONSTRAINT REP_REPORT_ORDER_INS_SFT_UN UNIQUE ( ID_REPORTS , ID_MARKET , ID_INSTITUTION , ID_SOFTWARE , ID_CONTEXT, ID_TASK_TYPE_CONTEXT ) ;
+-- CHANGE END 

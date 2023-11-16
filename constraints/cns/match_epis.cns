@@ -1,0 +1,27 @@
+
+
+  ALTER TABLE MATCH_EPIS ADD CONSTRAINT MTCH_PK PRIMARY KEY (ID_MATCH_EPIS) ENABLE;
+
+  ALTER TABLE MATCH_EPIS MODIFY (ID_MATCH_EPIS NOT NULL ENABLE);
+
+  ALTER TABLE MATCH_EPIS MODIFY (ID_EPISODE NOT NULL ENABLE);
+
+  ALTER TABLE MATCH_EPIS MODIFY (ID_EPISODE_TEMP NOT NULL ENABLE);
+
+  ALTER TABLE MATCH_EPIS MODIFY (ID_PATIENT NOT NULL ENABLE);
+
+  ALTER TABLE MATCH_EPIS MODIFY (ID_PATIENT_TEMP NOT NULL ENABLE);
+
+
+  ALTER TABLE MATCH_EPIS MODIFY (ID_PROFESSIONAL NOT NULL ENABLE);
+
+  ALTER TABLE MATCH_EPIS MODIFY (DT_MATCH NOT NULL ENABLE);
+
+--João Eiras, 2008-01-18, Alterações para suportar o match apenas de episódios
+alter table match_epis modify(id_episode null);
+alter table match_epis modify(id_episode_temp null);
+alter table match_epis modify(id_professional null);
+ALTER TABLE match_epis ADD CONSTRAINT mtep_ep_prof_chk
+CHECK((id_episode IS NULL AND id_episode_temp IS NULL) OR
+      (id_episode IS NOT NULL AND id_episode_temp IS NOT NULL AND id_professional IS NOT NULL));
+

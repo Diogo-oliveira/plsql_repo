@@ -1,0 +1,20 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 19/04/2010 15:28
+-- CHANGE REASON: [ALERT-90193] 
+DECLARE
+    l_count NUMBER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM all_constraints u
+     WHERE upper(u.constraint_name) LIKE upper('WWMT_PK')
+       AND upper(u.owner) = upper('ALERT')
+       AND upper(u.table_name) = upper('WF_WORKFLOW_MARKET');
+
+    IF l_count <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE WF_WORKFLOW_MARKET ADD CONSTRAINT WWMT_PK PRIMARY KEY (ID_MARKET, ID_WORKFLOW) ENABLE';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso

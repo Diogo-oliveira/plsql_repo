@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_tbl_iv_fluid_presc_values as TABLE OF t_rec_iv_fluid_presc_values;

@@ -1,0 +1,17 @@
+-- CHANGED BY: Nuno Alves
+-- CHANGE DATE: 28/08/2015 09:05
+-- CHANGE REASON: [ALERT-313880] ALERT-313880 CL RED UC Discharge: Application doesn´t answer
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || REPLACE(srcstr => SQLERRM, oldsub => 'ORA-', newsub => '') || '; ' ||
+                                 i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl('CREATE INDEX ALERT.DNT_EPI_RPT_FK_IDX ON ALERT.DISCHARGE_NOTES (ID_EPIS_REPORT) tablespace ALERT_IDX');
+END;
+/
+-- CHANGE END: Nuno Alves

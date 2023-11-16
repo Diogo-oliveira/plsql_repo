@@ -1,0 +1,17 @@
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table REP_MFR_NOTIFICATION
+  add constraint RMN_PK primary key (ID_REP_MFR_NOTIFICATION)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+
+alter table rep_mfr_notification drop constraint RMN_PK;
+alter table rep_mfr_notification add constraint RMN_PK primary key (id_rep_mfr_notification, id_interv_presc_det);

@@ -1,0 +1,138 @@
+
+  ALTER TABLE P1_DEST_INSTITUTION MODIFY (ID_DEST_INSTITUTION NOT NULL ENABLE);
+
+  ALTER TABLE P1_DEST_INSTITUTION MODIFY (ID_INST_ORIG NOT NULL ENABLE);
+
+  ALTER TABLE P1_DEST_INSTITUTION MODIFY (ID_INST_DEST NOT NULL ENABLE);
+
+  ALTER TABLE "ALERT"."P1_DEST_INSTITUTION" ADD CONSTRAINT "PDN_UK" UNIQUE ("ID_INST_ORIG", "ID_INST_DEST", "FLG_TYPE") ENABLE;                                                                                                                                                                             
+                                                                                                                                                                                                                                                                                                            
+  ALTER TABLE "ALERT"."P1_DEST_INSTITUTION" ADD CONSTRAINT "PDN_PK" PRIMARY KEY ("ID_DEST_INSTITUTION") ENABLE;                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                              
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGED DATE: 2009-JAN-09
+-- CHANGED REASON: ALERT-827
+
+ALTER TABLE P1_DEST_INSTITUTION
+ ADD (CONSTRAINT PDN_FLG_TYPE_CHK CHECK (FLG_TYPE in ('C','A','I','E','P','F')));
+
+ALTER TABLE P1_DEST_INSTITUTION
+ ADD (CONSTRAINT PDN_FLG_INSIDE_REF_AREA_CHK CHECK (FLG_INSIDE_REF_AREA in ('Y','N')));
+
+-- CHANGE END;
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 09/12/2010 16:51
+-- CHANGE REASON: [ALERT-144578] 
+alter table P1_DEST_INSTITUTION add constraint PDN_FLG_DEFAULT_CHK check (FLG_DEFAULT in ('Y','N'));
+alter table P1_DEST_INSTITUTION add constraint PDN_FLG_TYPE_INS_CHK check (FLG_TYPE_INS in ('SNS','CONV'));
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 17/02/2011 16:27
+-- CHANGE REASON: [ALERT-161828 ] 
+alter table P1_DEST_INSTITUTION
+drop constraint PDN_FLG_TYPE_INS_CHK;
+alter table P1_DEST_INSTITUTION
+  add constraint PDN_FLG_TYPE_INS_CHK
+  check (FLG_TYPE_INS in ('SNS','CONV', 'SSMN'));
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/09/2011 09:46
+-- CHANGE REASON: [ALERT-194409] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'PDN_UK'
+       AND u.table_name = 'P1_DEST_INSTITUTION';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_dest_institution add CONSTRAINT PDN_UK UNIQUE(ID_INST_ORIG, ID_INST_DEST, FLG_TYPE) enable';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 11/02/2014 09:05
+-- CHANGE REASON: [ALERT-276023] 
+BEGIN
+    pk_versioning.run(i_sql => q'[alter table P1_DEST_INSTITUTION drop constraint PDN_FLG_REF_LINE_CHK]');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/01/2015 14:37
+-- CHANGE REASON: [ALERT-280039] 
+BEGIN
+pk_versioning.run(i_sql => q'[alter table P1_DEST_INSTITUTION add constraint PDN_FLG_NET_TYPE_CHK check (FLG_NET_TYPE in ('A','P'))]');
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01442);
+BEGIN
+    EXECUTE IMMEDIATE q'[alter table P1_DEST_INSTITUTION modify flg_default not null]';
+EXCEPTION
+    WHEN e_exception THEN
+        dbms_output.put_line('Coluna ja está not null');
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01442);
+BEGIN
+    EXECUTE IMMEDIATE q'[alter table P1_DEST_INSTITUTION modify flg_type not null]';
+EXCEPTION
+    WHEN e_exception THEN
+        dbms_output.put_line('Coluna ja está not null');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/01/2015 15:15
+-- CHANGE REASON: [ALERT-280039] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01442);
+BEGIN
+    EXECUTE IMMEDIATE q'[alter table P1_DEST_INSTITUTION modify flg_net_type not null]';
+EXCEPTION
+    WHEN e_exception THEN
+        dbms_output.put_line('Coluna ja está not null');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/01/2015 15:15
+-- CHANGE REASON: [ALERT-280039] 
+alter table P1_DEST_INSTITUTION drop constraint PDN_UK;
+
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_indexes i
+     WHERE i.INDEX_NAME = 'PDN_UK';
+
+    IF l_count > 0
+    THEN
+        EXECUTE IMMEDIATE 'drop index PDN_UK';
+    END IF;
+END;
+/
+
+alter table P1_DEST_INSTITUTION add constraint PDN_UK unique (ID_INST_ORIG, ID_INST_DEST, FLG_TYPE, FLG_NET_TYPE) ENABLE;
+-- CHANGE END: Ana Monteiro

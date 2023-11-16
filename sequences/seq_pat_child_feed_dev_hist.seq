@@ -1,0 +1,21 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/07/2011 15:01
+-- CHANGE REASON: [ALERT-188174] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+
+    EXECUTE IMMEDIATE 'create sequence seq_pat_child_feed_dev_hist
+minvalue 1
+maxvalue 999999999999999999999999
+start with 1
+increment by 1
+cache 500';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

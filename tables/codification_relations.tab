@@ -1,0 +1,43 @@
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 09/12/2013 14:07
+-- CHANGE REASON: [ALERT-271432] 
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner            => 'ALERT',
+                                             i_obj_name         => 'CODIFICATION_RELATIONS',
+                                             i_obj_type         => 'TABLE',
+                                             i_flg_category     => 'CNT',
+                                             i_flg_nzd          => 'N',
+                                             i_responsible_team => 'CODING');
+    dbms_output.put_line(SQLERRM);
+END;
+/
+
+create table codification_relations (
+  id_codif_relations                NUMBER(24) default 0 not null,
+  id_codification                   number(24) not null,
+  id_map_set                        number(24) not null,
+  id_terminology_version            number(24) not null,
+  dt_start                          timestamp with local time zone default current_timestamp not null,
+  dt_end                            timestamp with local time zone,
+  create_user                       varchar2(30 char),
+  create_time                       timestamp with local time zone,
+  create_institution                number(24),
+  update_user                       varchar2(30 char),
+  update_time                       timestamp with local time zone,
+  update_institution                number(24));
+  
+comment on table codification_relations  is 'Table that relates id_codification, id_map_set and id_terminology_version';
+
+comment on column codification_relations.id_codif_relations  is 'Sequencial identifier for the table';
+comment on column codification_relations.id_codification  is 'Codification identifier';
+comment on column codification_relations.id_map_set  is 'Map Set identifier';
+comment on column codification_relations.id_terminology_version  is 'Terminology version identifier';
+comment on column codification_relations.dt_start  is 'Start date of relation';
+comment on column codification_relations.dt_end  is 'End date of relation';
+comment on column codification_relations.create_user  is 'Creation User';
+comment on column codification_relations.create_time  is 'Creation Time';
+comment on column codification_relations.create_institution  is 'Creation Institution';
+comment on column codification_relations.update_user  is 'Update User';
+comment on column codification_relations.update_time  is 'Update Time';
+comment on column codification_relations.update_institution  is 'Update Institution';
+-- CHANGE END: Rui Spratley

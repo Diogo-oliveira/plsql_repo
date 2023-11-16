@@ -1,0 +1,38 @@
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 09-01-2009
+-- CHANGE REASON: agenda MFR
+
+create global temporary table SCH_TMPTAB_VACS_MFR
+(
+  id_sch_consult_vacancy number(24) not null,
+  num_schedules_temp     number(24) default 0 not null,
+  num_schedules_perm     number(24) default 0 not null,
+  num_slots_temp         number(24) default 0 not null,
+  num_slots_perm         number(24) default 0 not null,
+  dt_begin_trunc         timestamp with local time zone null,
+  NUM_SCHEDULES_TEMP_OLAP number(24) default 0 not null
+)
+on commit preserve rows;
+
+comment on table SCH_TMPTAB_VACS_MFR is 'get the result of function pk_schedule_mfr.get_vacancies. This columns were choose to avoid further processing in get_availability';
+comment on column SCH_TMPTAB_VACS_MFR.id_sch_consult_vacancy  is 'primary key';
+comment on column SCH_TMPTAB_VACS_MFR.num_schedules_temp  is 'number of temporary schedules inside this vacancy';
+comment on column SCH_TMPTAB_VACS_MFR.num_schedules_perm  is 'number of permanent schedules inside this vacancy';
+comment on column SCH_TMPTAB_VACS_MFR.num_slots_temp  is 'number of temporary slots inside this vacancy';
+comment on column SCH_TMPTAB_VACS_MFR.num_slots_perm  is 'number of permanent schedules inside this vacancy';
+comment on column SCH_TMPTAB_VACS_MFR.dt_begin_trunc  is 'date portion of sch_consult_vacancy.dt_begin_tstz';
+comment on column SCH_TMPTAB_VACS_MFR.NUM_SCHEDULES_TEMP_OLAP is 'number of temporary schedules inside this vacancy which overlap with other schedules';
+
+--END
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-01-2013
+-- CHANGE REASON: ALERT-246442
+begin
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', 
+                                           i_obj_name => 'SCH_TMPTAB_VACS_MFR', 
+                                           i_obj_type => 'TABLE', 
+                                           i_flg_category => 'DSV');
+end;
+/
+--CHANGE END: Telmo

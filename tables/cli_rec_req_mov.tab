@@ -1,0 +1,48 @@
+
+
+  CREATE TABLE CLI_REC_REQ_MOV
+   (	ID_CLI_REC_REQ_MOV NUMBER(24,0) NOT NULL ENABLE,
+	ID_CLI_REC_REQ_DET NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	DT_GET_FILE DATE NOT NULL ENABLE,
+	ID_PROF_GET_FILE NUMBER(24,0) NOT NULL ENABLE,
+	DT_REQ_TRANSP DATE,
+	ID_PROF_REQ_TRANSP NUMBER(24,0),
+	DT_BEGIN_MOV DATE,
+	ID_PROF_BEGIN_MOV NUMBER(24,0),
+	DT_END_MOV DATE,
+
+	ID_PROF_END_MOV NUMBER(24,0),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000)
+   );
+
+
+COMMENT ON TABLE cli_rec_req_mov IS 'Fornecimento e transporte dos p. clínicos requisitados.' ;
+
+COMMENT ON COLUMN cli_rec_req_mov.flg_status IS 'E - em processamento, O - pronto p/ transp., T - em transporte, F - concluído, C - cancelado' ;
+COMMENT ON COLUMN cli_rec_req_mov.dt_get_file IS 'Data / hora de início de processamento no AC' ;
+COMMENT ON COLUMN cli_rec_req_mov.dt_req_transp IS 'Data / hora de req. do transporte do arquivo para o destino' ;
+COMMENT ON COLUMN cli_rec_req_mov.dt_begin_mov IS 'Data / hora de início do transporte' ;
+COMMENT ON COLUMN cli_rec_req_mov.dt_end_mov IS 'Data / hora de fim do transporte' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE CLI_REC_REQ_MOV ADD DT_BEGIN_MOV_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN CLI_REC_REQ_MOV.DT_BEGIN_MOV_TSTZ IS 'Data / hora de in¡cio do transporte'; 
+ALTER TABLE CLI_REC_REQ_MOV ADD DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+ALTER TABLE CLI_REC_REQ_MOV ADD DT_END_MOV_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN CLI_REC_REQ_MOV.DT_END_MOV_TSTZ IS 'Data / hora de fim do transporte'; 
+ALTER TABLE CLI_REC_REQ_MOV ADD DT_GET_FILE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN CLI_REC_REQ_MOV.DT_GET_FILE_TSTZ IS 'Data / hora de in¡cio de processamento no AC'; 
+ALTER TABLE CLI_REC_REQ_MOV ADD DT_REQ_TRANSP_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN CLI_REC_REQ_MOV.DT_REQ_TRANSP_TSTZ IS 'Data / hora de req. do transporte do arquivo para o destino'; 
+
+
+alter table CLI_REC_REQ_MOV drop column DT_GET_FILE;
+alter table CLI_REC_REQ_MOV drop column DT_REQ_TRANSP;
+alter table CLI_REC_REQ_MOV drop column DT_BEGIN_MOV;
+alter table CLI_REC_REQ_MOV drop column DT_END_MOV;
+alter table CLI_REC_REQ_MOV drop column DT_CANCEL;

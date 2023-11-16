@@ -1,0 +1,83 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 21/09/2012 11:21
+-- CHANGE REASON: [ALERT-239461] Allergies: rank in the "search by allergen" results within medication
+DECLARE
+    e_pk EXCEPTION;
+    e_uk1 EXCEPTION;
+    e_name_already_dropped1 EXCEPTION;
+    e_name_already_dropped2 EXCEPTION;
+    e_name_already_dropped3 EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_dropped1, -2443);
+    PRAGMA EXCEPTION_INIT(e_name_already_dropped2, -2429);
+    PRAGMA EXCEPTION_INIT(e_name_already_dropped3, -1418);
+    PRAGMA EXCEPTION_INIT(e_pk, -2260);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ALLERGY_INST_SOFT_MARKET DROP CONSTRAINT AISM_ID_AISM_UK CASCADE';
+    EXCEPTION
+        WHEN e_name_already_dropped1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX AISM_ID_AISM_PK1';
+    EXCEPTION
+        WHEN e_name_already_dropped2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_name_already_dropped3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ALLERGY_INST_SOFT_MARKET ADD CONSTRAINT AISM_ID_AISM_PK PRIMARY KEY (ID_ALLERGY, ID_INSTITUTION, ID_SOFTWARE, ID_MARKET)';
+    EXCEPTION
+        WHEN e_pk THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 21/09/2012 13:49
+-- CHANGE REASON: [ALERT-239461] Allergies: rank in the "search by allergen" results within medication
+DECLARE
+    e_pk EXCEPTION;
+    e_uk1 EXCEPTION;
+    e_name_already_dropped1 EXCEPTION;
+    e_name_already_dropped2 EXCEPTION;
+    e_name_already_dropped3 EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_dropped1, -2443);
+    PRAGMA EXCEPTION_INIT(e_name_already_dropped2, -2429);
+    PRAGMA EXCEPTION_INIT(e_name_already_dropped3, -1418);
+    PRAGMA EXCEPTION_INIT(e_pk, -2260);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ALLERGY_INST_SOFT_MARKET DROP CONSTRAINT AISM_ID_AISM_UK CASCADE';
+    EXCEPTION
+        WHEN e_name_already_dropped1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX AISM_ID_AISM_PK';
+    EXCEPTION
+        WHEN e_name_already_dropped2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_name_already_dropped3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ALLERGY_INST_SOFT_MARKET ADD CONSTRAINT AISM_ID_AISM_PK PRIMARY KEY (ID_ALLERGY, ID_INSTITUTION, ID_SOFTWARE, ID_MARKET)';
+    EXCEPTION
+        WHEN e_pk THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

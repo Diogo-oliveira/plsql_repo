@@ -1,0 +1,44 @@
+
+
+  CREATE TABLE SCALES_DOC_VALUE
+   (	ID_SCALES_DOC_VALUE NUMBER(24,0) NOT NULL ENABLE,
+	ID_SCALES NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOC_ELEMENT NUMBER(24,0) NOT NULL ENABLE,
+	VALUE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-MAR-23
+-- CHANGED REASON: ALERT-11985 - Changes on Touch-Option database model to include id content
+ALTER TABLE SCALES_DOC_VALUE ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN SCALES_DOC_VALUE.ID_CONTENT  IS 'Content identifier';
+--CHANGE END Ariel Machado
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 02/06/2011 16:49
+-- CHANGE REASON: [ALERT-183259 ] [Assessment tools]: Decimal values in scales needs to be supported
+alter table scales_doc_value modify (value number(26,2));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 dataModel - assessment scales
+
+COMMENT ON TABLE scales_doc_value IS 'table with  scales documentation points';
+-- Add comments to the columns 
+COMMENT ON column scales_doc_value.id_scales_doc_value IS 'Scales documentation value identifier';
+COMMENT ON column scales_doc_value.id_scales IS 'Scales identifier';
+COMMENT ON column scales_doc_value.id_doc_element IS 'Documentation element identifier';
+COMMENT ON column scales_doc_value.value IS 'Value (scales points)';
+COMMENT ON column scales_doc_value.flg_available IS 'Available. Values Y- Yes; N- No';
+COMMENT ON column scales_doc_value.adw_last_update IS 'Date of last update, used by adw';
+COMMENT ON column scales_doc_value.id_content IS 'Content identifier';
+COMMENT ON column scales_doc_value.create_user IS 'Creation User';
+COMMENT ON column scales_doc_value.create_time IS 'Creation Time';
+COMMENT ON column scales_doc_value.create_institution IS 'Creation Institution';
+COMMENT ON column scales_doc_value.update_user IS 'Update User';
+COMMENT ON column scales_doc_value.update_time IS 'Update Time';
+COMMENT ON column scales_doc_value.update_institution IS 'Update Institution';
+-- CHANGE END: Pedro Fernandes

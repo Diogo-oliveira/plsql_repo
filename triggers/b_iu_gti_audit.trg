@@ -1,0 +1,1 @@
+alter trigger b_iu_gti_audit disable;

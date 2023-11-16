@@ -1,0 +1,151 @@
+
+
+  ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_DIAG_FK FOREIGN KEY (ID_DIAGNOSIS)
+	  REFERENCES DIAGNOSIS (ID_DIAGNOSIS) ENABLE;
+
+  ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_EPIS_FK FOREIGN KEY (ID_EPISODE)
+	  REFERENCES EPISODE (ID_EPISODE) ENABLE;
+
+  ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_PROF_FK FOREIGN KEY (ID_PROFESSIONAL_DIAG)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_PROF_FK2 FOREIGN KEY (ID_PROFESSIONAL_CANCEL)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+
+  ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_PROF_FK3 FOREIGN KEY (ID_PROF_CONFIRMED)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_PROF_FK4 FOREIGN KEY (ID_PROF_RULLED_OUT)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_PROF_FK5 FOREIGN KEY (ID_PROF_BASE)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+
+alter table EPIS_DIAGNOSIS
+  add constraint EDS_EDN_FK foreign key (ID_EPIS_DIAGNOSIS_NOTES)
+  references EPIS_DIAGNOSIS_NOTES (ID_EPIS_DIAGNOSIS_NOTES);
+
+  
+--CHANGED BY: Ariel Geraldo Machado
+--CHANGE DATE: 2008-SEP-16
+--CHANGE REASON: Database denormalization
+ALTER TABLE epis_diagnosis add CONSTRAINT eds_pat_fk foreign key(id_patient) references patient(id_patient) enable;
+--CHANGE END
+
+--CHANGED BY: Carlos Silva
+--CHANGE DATE: 2009-MAR-27
+--CHANGE REASON: ALERT-12181
+ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_CRE_FK FOREIGN KEY (id_cancel_reason)
+	  REFERENCES cancel_reason (id_cancel_reason) ENABLE;
+--CHANGE END: Carlos Silva
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 25/02/2010 11:21
+-- CHANGE REASON: [ALERT-70086] Transfer of information: The information recorded as final diagnosi (truncated) 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); --fk
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_EPIS_ORI_FK FOREIGN KEY (ID_EPISODE_ORIGIN) REFERENCES EPISODE (ID_EPISODE) ENABLE';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 11/05/2011 08:04
+-- CHANGE REASON: [ALERT-175003] [EDIS DB] Add id_cdr_call to Pregnancy and Diagnosis areas
+DECLARE
+    e_fk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_exists, -02275);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_diagnosis ADD CONSTRAINT ED_ICC_FK FOREIGN KEY (ID_CDR_CALL) REFERENCES CDR_CALL (ID_CDR_CALL)';
+EXCEPTION
+    WHEN e_fk_already_exists THEN
+        dbms_output.put_line('FK already exists.');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 16:16
+-- CHANGE REASON: [ALERT-229222] VERSIONING TRANSACTIONAL MODEL - SCHEMA ALERT - DDL
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_CNCPTTR_FK FOREIGN KEY(ID_DIAG_BASIS, ID_DBASIS_INST_OWNER) REFERENCES CONCEPT_TERM(ID_CONCEPT_TERM, ID_INST_OWNER)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 30/08/2013 18:27
+-- CHANGE REASON: [ALERT-264219] DB Versioning - SCHEMA ALERT TABLE CHANGES (ALERT_251640)
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_SUB_ANALY_FK FOREIGN KEY(ID_SUB_ANALYSIS, ID_SUBANALY_INST_OWNER) REFERENCES CONCEPT_TERM(ID_CONCEPT_TERM, ID_INST_OWNER)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_ANAT_AREA_FK FOREIGN KEY(ID_ANATOMICAL_AREA, ID_ANATAREA_INST_OWNER) REFERENCES CONCEPT_TERM(ID_CONCEPT_TERM, ID_INST_OWNER)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_ANAT_SIDE_FK FOREIGN KEY(ID_ANATOMICAL_SIDE, ID_ANATSIDE_INST_OWNER) REFERENCES CONCEPT_TERM(ID_CONCEPT_TERM, ID_INST_OWNER)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 18/11/2013 14:06
+-- CHANGE REASON: [ALERT-269873] A&E diagnoses_Some diagnosis are not giving the option to document "anatomical side". (ALERT_268880)
+--                BSUH - Diagnosis/Problems/Past history - possibility to define the classification to be used in each functional area (ALERT_265471)
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_DIAG_COND_FK FOREIGN KEY(ID_DIAGNOSIS_CONDITION, ID_DIAGCOND_INST_OWNER) REFERENCES CONCEPT_TERM(ID_CONCEPT_TERM, ID_INST_OWNER)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 06/12/2016 10:10
+-- CHANGE REASON: [ALERT-326911] Ability to document the type of lesion and place where the lesion occurred, associated to a diagnoses from the Chapter XIX - "Injury, poisoning and certain other consequences of external causes (S00-T98)" --- CIE-10 catalogue diagnosis.
+--                
+alter table EPIS_DIAGNOSIS
+  add constraint EDS_LES_LOC_FK foreign key (ID_LESION_LOCATION, ID_LESION_LOCAT_INST_OWNER)
+  references ALERT_CORE_DATA.CONCEPT_TERM (ID_CONCEPT_TERM, ID_INST_OWNER);
+alter table EPIS_DIAGNOSIS
+  add constraint EDS_LES_TYP_FK foreign key (ID_LESION_TYPE, ID_LESION_TYPE_INST_OWNER)
+  references ALERT_CORE_DATA.CONCEPT_TERM (ID_CONCEPT_TERM, ID_INST_OWNER);
+-- CHANGE END: Elisabete Bugalho

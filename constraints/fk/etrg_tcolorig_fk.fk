@@ -1,0 +1,15 @@
+
+-- José Brito 14/05/2009 ALERT-20512 Triage T5 improvements
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_triage drop CONSTRAINT etrg_tcolorig_fk';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+ALTER TABLE epis_triage ADD CONSTRAINT etrg_tcolorig_fk FOREIGN KEY (id_triage_color_orig)
+REFERENCES triage_color (id_triage_color) ENABLE;
+-- END
+
+

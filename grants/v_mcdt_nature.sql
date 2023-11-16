@@ -1,0 +1,5 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 23/07/2012 16:16
+-- CHANGE REASON: [ALERT-236064] 
+grant select on V_MCDT_NATURE to ALERT_INTER;
+-- CHANGE END: Joana Barroso

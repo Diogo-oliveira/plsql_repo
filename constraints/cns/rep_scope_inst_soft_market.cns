@@ -1,0 +1,56 @@
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 22/11/2010 15:26
+-- CHANGE REASON: [ALERT-143418] PK_REPORTS issue replication
+DECLARE
+    e_primary_key EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_primary_key, -02260);
+    l_table_name VARCHAR2(30) := 'rep_scope_inst_soft_market';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT rep_scope_ism_pk PRIMARY KEY (id_rep_scope_ism)';
+EXCEPTION
+    WHEN e_primary_key THEN
+        dbms_output.put_line('WARNING - Primary key in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+
+DECLARE
+    e_name_already_used_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_name_already_used_constraint, -02264);
+    l_table_name VARCHAR2(30) := 'rep_scope_inst_soft_market';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name ||
+                      ' ADD CONSTRAINT rep_s_ism_rep_type_chk CHECK (flg_report_type IN (''C'',''S'',''D'',''R'',''E'',''CE'',''CO'',''DE''))';
+EXCEPTION
+    WHEN e_name_already_used_constraint THEN
+        dbms_output.put_line('WARNING - Check constraint in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+
+DECLARE
+    e_name_already_used_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_name_already_used_constraint, -02264);
+    l_table_name VARCHAR2(30) := 'rep_scope_inst_soft_market';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name ||
+                      ' ADD CONSTRAINT rep_s_ism_scope_type_chk CHECK (flg_scope in (''E'',''P'',''V''))';
+EXCEPTION
+    WHEN e_name_already_used_constraint THEN
+        dbms_output.put_line('WARNING - Check constraint in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END: Rui Duarte
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 27/Jan/2011 09:07
+-- CHANGE REASON: ALERT-158045
+ALTER TABLE rep_scope_inst_soft_market DROP CONSTRAINT REP_S_ISM_REP_TYPE_CHK;
+ALTER TABLE rep_scope_inst_soft_market ADD CONSTRAINT REP_S_ISM_REP_TYPE_CHK CHECK (flg_report_type IN ('C','D','S','REQUISITION','E','CONSENT','P','CM', 'CERTIFICATE'));
+-- CHANGE END
+
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 04/May/2011 09:07
+-- CHANGE REASON: ALERT-176216
+ALTER TABLE rep_scope_inst_soft_market DROP CONSTRAINT REP_S_ISM_REP_TYPE_CHK;
+ALTER TABLE rep_scope_inst_soft_market ADD CONSTRAINT REP_S_ISM_REP_TYPE_CHK CHECK (FLG_REPORT_TYPE IN ('C','D','S','REQUISITION','E','CONSENT','P','CM', 'CERTIFICATE','U'));
+-- CHANGE END

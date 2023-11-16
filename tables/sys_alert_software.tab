@@ -1,0 +1,29 @@
+
+
+  CREATE TABLE SYS_ALERT_SOFTWARE
+   (	ID_SYS_ALERT_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	ID_SYS_ALERT NUMBER(24,0),
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	SCREEN_NAME VARCHAR2(200),
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_SYS_SHORTCUT NUMBER(24,0),
+	ID_SHORTCUT_PK NUMBER(24,0)
+   );
+
+
+COMMENT ON COLUMN sys_alert_software.id_sys_alert_software IS 'ID único' ;
+COMMENT ON COLUMN sys_alert_software.id_sys_shortcut IS 'ID do atalho' ;
+
+--Rui Batista 2007/07/10
+--Reestrutração dos Alertas
+
+--Adiciona coluna do template de forma a permitir indicar shortcuts diferentes conforme o perfil do profissional que acede ao alerta
+alter table sys_alert_software
+add (id_profile_template number(12));
+
+COMMENT ON column sys_alert_software.id_profile_template IS 'ID do template de acessos a que se aplica';
+COMMENT ON column sys_alert_software.id_sys_alert IS 'ID do tipo de alerta';
+COMMENT ON column sys_alert_software.id_software IS 'ID do software';
+COMMENT ON column sys_alert_software.screen_name IS 'Nome do ecrã (não utilizado actualmente)';
+COMMENT ON column sys_alert_software.id_institution IS 'ID da instituição';
+COMMENT ON column sys_alert_software.id_shortcut_pk IS 'ID único do atalho';

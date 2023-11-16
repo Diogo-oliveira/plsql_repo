@@ -1,0 +1,44 @@
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 23/03/2010 09:26
+-- CHANGE REASON: [ALERT-69945] 
+-- Create table
+create table INTERV_PLAN_TYPE
+(
+  ID_INTERV_PLAN_TYPE NUMBER(24) not null,
+  FLG_TYPE  VARCHAR2(1 CHAR) not null,
+INTERNAL_NAME VARCHAR2(1000 CHAR),
+FLG_AVAILABLE       VARCHAR2(1 CHAR) default 'Y' not null,
+  --AUDIT
+  CREATE_USER         VARCHAR2(24 CHAR),
+  CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24 CHAR),
+  UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24)
+);
+-- Add comments to the table 
+comment on table INTERV_PLAN_TYPE
+  is 'Type of intervention plans available.';
+-- Add comments to the columns 
+comment on column INTERV_PLAN_TYPE.ID_INTERV_PLAN_TYPE
+  is 'Intervention plan ID.';
+comment on column INTERV_PLAN_TYPE.FLG_TYPE
+  is 'Flag with type of intervention: S - social worker, P - psychology, D - dietitian.';
+comment on column INTERV_PLAN_TYPE.INTERNAL_NAME
+  is 'Internal description of the type of intervention plan.';
+comment on column INTERV_PLAN_TYPE.FLG_AVAILABLE
+  is 'Flg that indicates if the type of intervention is available or not: Y - yes, N - no.';
+--AUDIT
+comment on column INTERV_PLAN_TYPE.CREATE_USER 
+  is 'Creation User';
+comment on column INTERV_PLAN_TYPE.CREATE_TIME 
+  is 'Creation Time';
+comment on column  INTERV_PLAN_TYPE.CREATE_INSTITUTION 
+  is 'Creation Institution';
+comment on column  INTERV_PLAN_TYPE.UPDATE_USER 
+  is 'Update User';
+comment on column  INTERV_PLAN_TYPE.UPDATE_TIME 
+  is 'Update Time';
+comment on column INTERV_PLAN_TYPE.UPDATE_INSTITUTION 
+  is 'Update Institution';
+-- CHANGE END: orlando.antunes

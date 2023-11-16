@@ -1,0 +1,39 @@
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 14/11/2018 15:29
+-- CHANGE REASON: [EMR-8895] 
+begin
+pk_versioning.run('CREATE UNIQUE INDEX AIR_UK 
+    ON analysis_instit_recipient (
+    CASE 
+      WHEN FLG_DEFAULT = ''Y'' 
+        THEN ID_ANALYSIS_INSTIT_SOFT
+          ELSE NULL END,
+    CASE 
+      WHEN FLG_DEFAULT = ''Y'' 
+        THEN FLG_DEFAULT 
+          ELSE NULL END)');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 15/11/2018 15:24
+-- CHANGE REASON: [EMR-8895] 
+begin
+pk_versioning.run('DROP INDEX AIR_UK');
+end;
+/
+begin
+pk_versioning.run('CREATE UNIQUE INDEX AIR_UK 
+    ON analysis_instit_recipient (
+    CASE 
+      WHEN FLG_DEFAULT = ''Y'' 
+        THEN ID_ANALYSIS_INSTIT_SOFT
+          ELSE NULL END,
+    CASE 
+      WHEN FLG_DEFAULT = ''Y'' 
+        THEN FLG_DEFAULT 
+          ELSE NULL END)');
+end;
+/
+-- CHANGE END: Ana Matos

@@ -1,0 +1,215 @@
+create table PRE_HOSP_ACCIDENT
+(
+  ID_PRE_HOSP_ACCIDENT    NUMBER(24) not null,
+	ID_INSTITUTION          NUMBER(24) not null,
+	ID_SOFTWARE             NUMBER(24) not null,
+	DT_ACCIDENT             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  NAME                    VARCHAR2(200) not null,
+  GENDER                  VARCHAR2(1),
+	DT_BIRTH                DATE,
+	AGE                     NUMBER(6),
+	ADDRESS                 VARCHAR2(4000),
+	CITY                    VARCHAR2(200),
+	PAT_ZIP_CODE            VARCHAR2(30),
+	DT_REPORT_MKA           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+	CPA_CODE                VARCHAR2(30),
+	TRANSPORT_NUMBER        VARCHAR2(30),
+	ACC_ZIP_CODE            VARCHAR2(30),
+	LATITUDE                NUMBER(9,6),
+	LONGITUDE               NUMBER(9,6),
+	DT_RIDE_OUT             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+	DT_ARRIVAL              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+	FLG_MECH_INJ            VARCHAR2(1),
+	MECH_INJURY             VARCHAR2(200),
+	DT_DRV_AWAY             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  FLG_STATUS              VARCHAR2(1) NOT NULL,
+  ID_PROF_CREATE          NUMBER(24),
+  DT_PRE_HOSP_ACCIDENT    TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+  ID_EPISODE              NUMBER(24),
+  CREATE_USER             VARCHAR2(24),
+  CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION      NUMBER(24),
+  UPDATE_USER             VARCHAR2(24),
+  UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION      NUMBER(24)
+)tablespace TABLE_M
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+
+-- Add comment to the table
+comment on table PRE_HOSP_ACCIDENT is 'Pre hospital accident information';
+-- Add comments to the columns 
+comment on column PRE_HOSP_ACCIDENT.ID_PRE_HOSP_ACCIDENT is 'Primary key';
+comment on column PRE_HOSP_ACCIDENT.ID_INSTITUTION is 'Institution id';
+comment on column PRE_HOSP_ACCIDENT.ID_SOFTWARE is 'Software id';
+comment on column PRE_HOSP_ACCIDENT.DT_ACCIDENT is 'Time of accident';
+comment on column PRE_HOSP_ACCIDENT.NAME is 'Patient name';
+comment on column PRE_HOSP_ACCIDENT.GENDER is 'Patient gender : F - female, M - male, I - Unknown, N - Not specified';
+comment on column PRE_HOSP_ACCIDENT.DT_BIRTH is 'Patient birth date';
+comment on column PRE_HOSP_ACCIDENT.AGE is 'Patient Age';
+comment on column PRE_HOSP_ACCIDENT.ADDRESS is 'Patient address';
+comment on column PRE_HOSP_ACCIDENT.CITY is 'Patient city';
+comment on column PRE_HOSP_ACCIDENT.PAT_ZIP_CODE is 'Patient zip code';
+comment on column PRE_HOSP_ACCIDENT.DT_REPORT_MKA is 'Moment of report to MKA';
+comment on column PRE_HOSP_ACCIDENT.CPA_CODE is 'CPA code';
+comment on column PRE_HOSP_ACCIDENT.TRANSPORT_NUMBER is 'Transport ride number';
+comment on column PRE_HOSP_ACCIDENT.ACC_ZIP_CODE is 'Zip code where the accident took place';
+comment on column PRE_HOSP_ACCIDENT.LATITUDE is 'Latitude';
+comment on column PRE_HOSP_ACCIDENT.LONGITUDE is 'Longitude';
+comment on column PRE_HOSP_ACCIDENT.DT_RIDE_OUT is 'Moment of ride out to the patient/incident';
+comment on column PRE_HOSP_ACCIDENT.DT_ARRIVAL is 'Moment of arrival at the patient/incident';
+comment on column PRE_HOSP_ACCIDENT.FLG_MECH_INJ is 'Flag mechanism of injury B – Blunt; P – Penetrating';
+comment on column PRE_HOSP_ACCIDENT.MECH_INJURY is 'Information about mechanism of injury';
+comment on column PRE_HOSP_ACCIDENT.DT_DRV_AWAY is 'Moment of driving away with the patient';
+comment on column PRE_HOSP_ACCIDENT.FLG_STATUS is 'Indicates record state: A Active; I Inactive';
+comment on column PRE_HOSP_ACCIDENT.ID_PROF_CREATE is 'Professional ID which created the record';
+comment on column PRE_HOSP_ACCIDENT.DT_PRE_HOSP_ACCIDENT is 'Insertion or last updated time';
+comment on column PRE_HOSP_ACCIDENT.ID_EPISODE is 'episode ID';
+comment on column PRE_HOSP_ACCIDENT.CREATE_USER is 'Professional ID which created the record';
+comment on column PRE_HOSP_ACCIDENT.CREATE_TIME is 'Date of record creation';
+comment on column PRE_HOSP_ACCIDENT.CREATE_INSTITUTION is 'Institution ID where record was created';
+comment on column PRE_HOSP_ACCIDENT.UPDATE_USER is 'Professional ID who last updated the record';
+comment on column PRE_HOSP_ACCIDENT.UPDATE_TIME is 'Date when record was last updated';
+comment on column PRE_HOSP_ACCIDENT.UPDATE_INSTITUTION is 'Institution ID where record was last updated';
+
+comment on column PRE_HOSP_ACCIDENT.FLG_STATUS is 'Indicates record state: A Active; I Inactive; C Cancelled';
+
+alter table PRE_HOSP_ACCIDENT modify FLG_MECH_INJ VARCHAR2(2);
+comment on column PRE_HOSP_ACCIDENT.FLG_MECH_INJ
+  is 'Flag mechanism of injury B – Blunt; P – Penetrating; FT - Free Text';
+  
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 30/09/2011 14:39
+-- CHANGE REASON: [ALERT-197754] Pre-hospital data - Road Traffic Accident (RTA)
+--                DB Versioning - New tables
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_ACCIDENT ADD FLG_PROT_DEVICE VARCHAR2(2 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_ACCIDENT ADD FLG_RTA_PAT_TYP VARCHAR2(2 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_ACCIDENT ADD RTA_PAT_TYP_FT VARCHAR2(1000 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_ACCIDENT ADD FLG_IS_DRIV_OWN VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_ACCIDENT ADD FLG_POLICE_INVOLVED VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_ACCIDENT ADD POLICE_NUM VARCHAR2(200 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_ACCIDENT ADD POLICE_STATION VARCHAR2(200 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE PRE_HOSP_ACCIDENT ADD POLICE_ACCIDENT_NUM VARCHAR2(200 CHAR)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_ACCIDENT.FLG_PROT_DEVICE IS ''Protection device in situ: BS - Baby seat; CR - Child restraint; H - Helmet; SB - Seat belt; N - None; U - Unknown''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_ACCIDENT.FLG_RTA_PAT_TYP IS ''RTA patient type: D - Driver; P - Passenger; C - Cyclist; PD - Pedestrian; O - Other''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_ACCIDENT.RTA_PAT_TYP_FT IS ''Free text of FLG_RTA_PAT_TYP = O''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_ACCIDENT.FLG_IS_DRIV_OWN IS ''Is the driver the owner? Y - Yes; N - No''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_ACCIDENT.FLG_POLICE_INVOLVED IS ''Police involved? Y - Yes; N - No''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_ACCIDENT.POLICE_NUM IS ''Police ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_ACCIDENT.POLICE_STATION IS ''Police station''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN PRE_HOSP_ACCIDENT.POLICE_ACCIDENT_NUM IS ''Police accident number''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 24/07/2013 10:49
+-- CHANGE REASON: [ALERT-262378] Anounced arrival improvements (UK market)
+--                
+alter table PRE_HOSP_ACCIDENT modify name null;			
+	
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 26/11/2013 17:48
+-- CHANGE REASON: [ALERT-270633]     ALERT-265767 [UK-Brigthon] - Organisation Code for Ambulance trust
+--                
+DECLARE
+    l_sql VARCHAR2(4000);
+BEGIN
+
+    l_sql := 'alter table PRE_HOSP_ACCIDENT add ID_AMB_TRUST_CODE NUMBER(24)';
+    pk_versioning.run(l_sql);
+
+    l_sql := 'alter table PRE_HOSP_ACCIDENT add code_ambulance_trust VARCHAR2(200 CHAR)GENERATED ALWAYS AS (''ALERT.PRE_HOSP_ACCIDENT.CODE_AMBULANCE_TRUST.''|| TO_CHAR(ID_PRE_HOSP_ACCIDENT)) VIRTUAL';
+    pk_versioning.run(l_sql);
+END;
+/
+
+alter table PRE_HOSP_ACCIDENT modify name VARCHAR2(200 CHAR);
+alter table PRE_HOSP_ACCIDENT modify gender VARCHAR2(1 CHAR);
+alter table PRE_HOSP_ACCIDENT modify city VARCHAR2(200 CHAR);
+alter table PRE_HOSP_ACCIDENT modify pat_zip_code VARCHAR2(30 CHAR);
+alter table PRE_HOSP_ACCIDENT modify cpa_code VARCHAR2(30 CHAR);
+alter table PRE_HOSP_ACCIDENT modify transport_number VARCHAR2(30 CHAR);
+alter table PRE_HOSP_ACCIDENT modify acc_zip_code VARCHAR2(30 CHAR);
+alter table PRE_HOSP_ACCIDENT modify flg_mech_inj VARCHAR2(2 CHAR);
+alter table PRE_HOSP_ACCIDENT modify mech_injury VARCHAR2(200 CHAR);
+alter table PRE_HOSP_ACCIDENT modify flg_status VARCHAR2(1 CHAR);
+alter table PRE_HOSP_ACCIDENT modify create_user VARCHAR2(24 CHAR);
+alter table PRE_HOSP_ACCIDENT modify update_user VARCHAR2(24 CHAR);
+
+-- Add comments to the columns 
+comment on column PRE_HOSP_ACCIDENT.code_ambulance_trust
+  is 'Ambulance trust free text';
+
+-- Add comments to the columns 
+comment on column PRE_HOSP_ACCIDENT.ID_AMB_TRUST_CODE
+  is 'Ambulance trust code';
+
+
+comment on column PRE_HOSP_ACCIDENT.cpa_code
+  is 'CPA code (ECC code)';
+comment on column PRE_HOSP_ACCIDENT.latitude
+  is 'Latitude (incident data)';
+comment on column PRE_HOSP_ACCIDENT.longitude
+  is 'Longitude (incident data)';
+comment on column PRE_HOSP_ACCIDENT.police_station
+  is 'Police station description';
+comment on column PRE_HOSP_ACCIDENT.transport_number
+  is 'Transport (ambulance) ride number ';
+
+comment on column PRE_HOSP_ACCIDENT.police_accident_num
+  is 'Police accident number (id number)';
+-- CHANGE END: Elisabete Bugalho

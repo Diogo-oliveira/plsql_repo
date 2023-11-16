@@ -1,0 +1,66 @@
+create table pat_pregn_fetus_hist
+(
+  id_pat_pregnancy_hist NUMBER(24) NOT NULL,
+  id_pat_pregn_fetus NUMBER(24) NOT NULL,
+	flg_gender VARCHAR2(1),
+	fetus_number NUMBER(2),
+	flg_childbirth_type VARCHAR2(2),
+	flg_status VARCHAR2(1),
+	weight NUMBER(10));
+
+COMMENT ON TABLE pat_pregn_fetus_hist IS 'Table containing all changes made to table pat_pregn_fetus';
+
+
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 19/02/2010 11:04
+-- CHANGE REASON: [ALERT-75562] Developments on Partogram templates
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE pat_pregn_fetus_hist ADD id_unit_measure NUMBER(24)';
+EXCEPTION
+WHEN OTHERS THEN
+  NULL;
+END;
+/
+
+ALTER TABLE pat_pregn_fetus_hist MODIFY weight NUMBER(13, 3);
+-- CHANGE END: José Silva
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 06/06/2011 11:17
+-- CHANGE REASON: [ALERT-183624] Pregnancy developments
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregn_fetus_hist ADD PRESENT_HEALTH VARCHAR2(1000 CHAR)';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+
+ALTER TABLE pat_pregn_fetus_hist MODIFY flg_status VARCHAR2(2 CHAR);
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:49
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column PAT_PREGN_FETUS_HIST.id_pat_pregnancy_hist
+  is 'Primary key';
+comment on column PAT_PREGN_FETUS_HIST.id_pat_pregn_fetus
+  is 'Patinet pregancy fetus ID';
+comment on column PAT_PREGN_FETUS_HIST.flg_gender
+  is 'Gender: M-  Male; F -Female; I - Undetermined , N- Not specified; U - Not known';
+comment on column PAT_PREGN_FETUS_HIST.fetus_number
+  is 'Fetus number';
+comment on column PAT_PREGN_FETUS_HIST.flg_childbirth_type
+  is 'Child birth type';
+comment on column PAT_PREGN_FETUS_HIST.flg_status
+  is 'Fetus status: U - unknown, A - alive, D - dead, C - cancelled';
+comment on column PAT_PREGN_FETUS_HIST.weight
+  is 'Fetus weight';
+comment on column PAT_PREGN_FETUS_HIST.id_unit_measure
+  is 'Unit measure that was used to register the fetus weight.';
+comment on column PAT_PREGN_FETUS_HIST.present_health
+  is 'Fetus present health';  
+-- CHANGE END: Elisabete Bugalho

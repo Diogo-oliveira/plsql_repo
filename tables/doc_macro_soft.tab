@@ -1,0 +1,45 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 30/03/2012 17:39
+-- CHANGE REASON: [ALERT-188349] 
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'DOC_MACRO_SOFT',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'TRS',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+END;
+/
+
+
+create table doc_macro_soft
+(
+  id_doc_macro_soft    NUMBER(24) not null,
+id_doc_macro         NUMBER(24) not null,
+id_software          NUMBER(24) not null,
+  flg_status           VARCHAR2(1 CHAR) not null, 
+dt_creation          TIMESTAMP(6) WITH LOCAL TIME ZONE not null, 
+--
+  create_user          VARCHAR2(24 CHAR),
+  create_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution   NUMBER(24),
+  update_user          VARCHAR2(24 CHAR),
+  update_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution   NUMBER(24)
+);
+
+comment on table doc_macro_soft is 'Table to store the association between a macro record and a software identifier';
+comment on column doc_macro_soft.id_doc_macro_soft is 'Unique key';
+comment on column doc_macro_soft.id_doc_macro is 'Doc Macro identifier';
+comment on column doc_macro_soft.id_software is 'Software identifier';
+comment on column doc_macro_soft.flg_status is 'Record status: A - Active; I - Inactive;C - Canceled;O - Outdated;D - Automatically disabled';
+comment on column doc_macro_soft.dt_creation      is 'Create time';
+--
+comment on column doc_macro_soft.create_user is 'Creation User';
+comment on column doc_macro_soft.create_time is 'Creation Time';
+comment on column doc_macro_soft.create_institution is 'Creation Institution';
+comment on column doc_macro_soft.update_user is 'Update User';
+comment on column doc_macro_soft.update_time is 'Update Time';
+comment on column doc_macro_soft.update_institution is 'Update Institution';
+-- CHANGE END: Gustavo Serrano

@@ -1,0 +1,18 @@
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table DBM_ROUTE
+  add constraint DBMR_PK primary key (ID_DBM_ROUTE)
+  using index 
+  tablespace TABLE_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate check constraints 
+alter table DBM_ROUTE
+  add constraint DBMR_FLG_AVAILABLE_CHK
+  check (FLG_AVAILABLE in ('Y','N'));

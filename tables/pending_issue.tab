@@ -1,0 +1,89 @@
+-- pending_issue
+
+CREATE TABLE pending_issue
+(
+		id_pending_issue NUMBER(24,0) NOT NULL,
+		id_patient       NUMBER(24) NOT NULL,
+		id_episode       NUMBER(24),
+		id_professional  NUMBER(24,0),
+		id_prof_cancel   NUMBER(24,0),
+		id_prof_update   NUMBER(24,0),
+		title            VARCHAR2(4000),
+		dt_creation      TIMESTAMP WITH TIME ZONE,
+		dt_cancel        TIMESTAMP WITH TIME ZONE,
+		dt_update        TIMESTAMP WITH TIME ZONE,
+		flg_status       VARCHAR2(1) NOT NULL
+);
+
+-- COMMENTS
+COMMENT ON COLUMN pending_issue.id_pending_issue IS 'Primary key';
+
+COMMENT ON COLUMN pending_issue.id_patient IS 'Patient ID';
+
+COMMENT ON COLUMN pending_issue.id_episode IS 'Episode ID';
+
+COMMENT ON COLUMN pending_issue.id_professional IS 'Professional who creates the issue';
+
+COMMENT ON COLUMN pending_issue.id_prof_cancel IS 'Professional who cancels the issue';
+
+COMMENT ON COLUMN pending_issue.id_prof_update IS 'Professional who updates the issue';
+
+COMMENT ON COLUMN pending_issue.title IS 'Issue''s subject';
+
+COMMENT ON COLUMN pending_issue.dt_creation IS 'Creation date';
+
+COMMENT ON COLUMN pending_issue.dt_cancel IS 'Cancel date';
+
+COMMENT ON COLUMN pending_issue.dt_update IS 'Last update date';
+
+COMMENT ON COLUMN pending_issue.flg_status IS 'Issue status: O - Open, G - Ongoing, C - Closed, X - Cancelled';
+
+COMMENT ON TABLE pending_issue IS 'Tabela responsável pelo armazenamento dos dados relativos aos ISSUES criados.';
+
+
+-- CONSTRAINTS
+ALTER TABLE pending_issue ADD CONSTRAINT PI_ID_PI_PK PRIMARY KEY (id_pending_issue);
+
+ALTER TABLE pending_issue ADD CONSTRAINT PI_ID_PATIENT_FK FOREIGN KEY (id_patient) REFERENCES PATIENT (ID_PATIENT);
+
+ALTER TABLE pending_issue ADD CONSTRAINT PI_ID_EPISODE_FK FOREIGN KEY (id_episode) REFERENCES EPISODE (ID_EPISODE);
+
+ALTER TABLE pending_issue ADD CONSTRAINT PI_ID_PROFESSIONAL_FK FOREIGN KEY (id_professional) REFERENCES PROFESSIONAL (ID_PROFESSIONAL);
+
+ALTER TABLE pending_issue ADD CONSTRAINT PI_ID_PROF_CANCEL_FK FOREIGN KEY (id_prof_cancel) REFERENCES PROFESSIONAL (ID_PROFESSIONAL);
+
+ALTER TABLE pending_issue ADD CONSTRAINT PI_ID_PROF_UPDATE_FK FOREIGN KEY (id_prof_update) REFERENCES PROFESSIONAL (ID_PROFESSIONAL);
+
+ALTER TABLE pending_issue ADD CONSTRAINT PI_FLG_STATUS_CHK CHECK (flg_status IN ('O', 'G', 'C', 'X'));
+
+ALTER TABLE PENDING_ISSUE MODIFY TITLE VARCHAR2(200);
+
+
+-- Add/modify columns 
+alter table PENDING_ISSUE add FLG_DISCHARGE VARCHAR2(1);
+-- Add comments to the columns 
+comment on column PENDING_ISSUE.FLG_DISCHARGE
+  is 'Flag discharge';
+  
+
+-- CHANGED BY: THIAGO BRITO
+-- CHANGE DATE: 2009-MAY-11
+-- CHANGE REASON: ALERT-27388
+
+ALTER TABLE pending_issue ADD flg_status_hist VARCHAR2(1);
+COMMENT ON COLUMN pending_issue.flg_status_hist IS 'Previous status';
+
+-- CHANGE END
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table PENDING_ISSUE
+  is 'Pending issues';
+-- Add comments to the columns 
+comment on column PENDING_ISSUE.id_group
+  is 'DEPRECATED';
+  
+-- CHANGE END: Elisabete Bugalho

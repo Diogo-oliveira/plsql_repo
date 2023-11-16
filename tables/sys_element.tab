@@ -1,0 +1,44 @@
+
+
+  CREATE TABLE SYS_ELEMENT
+   (	ID_SYS_ELEMENT NUMBER NOT NULL ENABLE,
+	ID_SYS_DOCUMENTATION NUMBER NOT NULL ENABLE,
+	ID_ELEMENT NUMBER,
+	RANK NUMBER NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ID_DIMENSION NUMBER NOT NULL ENABLE,
+	POSITION VARCHAR2(1),
+	INTERNAL_NAME VARCHAR2(200),
+	FLG_TYPE VARCHAR2(3),
+	AGE_MAX NUMBER,
+
+	AGE_MIN NUMBER,
+	MAX_VALUE NUMBER,
+	MIN_VALUE NUMBER,
+	FLG_GENDER VARCHAR2(1)
+   );
+
+
+COMMENT ON COLUMN sys_element.rank IS 'Ordenação' ;
+COMMENT ON COLUMN sys_element.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN sys_element.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN sys_element.position IS 'Posição' ;
+COMMENT ON COLUMN sys_element.flg_type IS 'Indicador do tipo de auxiliar de preenchimento a mostrar: D - Keypad para datas; H - Keypad para horas; M - Multi choice; O - texto OTHER (abre ecrã inferior) ; S- Touch;  N-Keypad para numeros; T -  texto livre (no próprio elemento)' ;
+COMMENT ON COLUMN sys_element.id_sys_element IS 'Chave primária' ;
+COMMENT ON COLUMN sys_element.id_sys_documentation IS 'Chave primária' ;
+COMMENT ON COLUMN sys_element.id_element IS 'Chave primária' ;
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 13/12/2012 10:38
+-- CHANGE REASON: [ALERT-246445] FRMW_OBJECTS :: wrong classification
+BEGIN                                         
+    pk_frmw_objects.insert_into_frmw_objects(i_owner        => 'ALERT',
+                                             i_obj_name     => 'SYS_ELEMENT',
+                                             i_obj_type     => 'TABLE',
+                                             i_flg_category => 'DPC',
+                                             i_flg_nzd      => 'N');
+END;
+/
+-- CHANGE END: Ariel Machado

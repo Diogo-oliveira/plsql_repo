@@ -1,0 +1,40 @@
+CREATE OR REPLACE VIEW v_episode_impressions AS
+SELECT id_epis_diagnosis_notes,
+       dt_epis_diagnosis_notes,
+       id_prof_create,
+       flg_status,
+       notes,
+       id_prof_cancel,
+       dt_cancel,
+       id_episode,
+       id_cancel_reason,
+       notes_cancel,
+       dt_create,
+			 flg_history
+  FROM (SELECT en.id_epis_diagnosis_notes,
+               en.dt_epis_diagnosis_notes,
+               en.id_episode,
+               en.notes,
+               en.id_prof_create,
+               en.dt_create,
+               nvl2(id_cancel_reason, 'C', 'A') flg_status,
+               en.id_cancel_reason,
+               en.notes_cancel,
+               en.id_prof_cancel,
+               en.dt_cancel,
+               'C' flg_history -- Current record
+          FROM epis_diagnosis_notes en
+        UNION ALL
+        SELECT enh.id_epis_diagnosis_notes,
+               enh.dt_epis_diagnosis_notes,
+               enh.id_episode,
+               enh.notes,
+               enh.id_prof_create,
+               enh.dt_create,
+               'O' flg_status,
+               NULL id_cancel_reason,
+               NULL notes_cancel,
+               NULL id_prof_cancel,
+               NULL dt_cancel,
+               'H' flg_history -- history record
+          FROM epis_diag_notes_hist enh) t;

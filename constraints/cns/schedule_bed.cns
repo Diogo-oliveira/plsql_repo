@@ -1,0 +1,35 @@
+-- CHANGED BY: Telmo
+-- CHANGED DATE: 01-06-2009
+-- CHANGE REASON: ALERT-694 BED SCHEDULING
+
+ALTER TABLE SCHEDULE_BED ADD (CONSTRAINT SBD_PK PRIMARY KEY (ID_SCHEDULE));
+
+alter table SCHEDULE_BED add constraint SBD_FTMP_CHK  check (flg_temporary IN ('Y','N'));
+  
+alter table SCHEDULE_BED add constraint SBD_FCON_CHK  check (flg_conflict IN ('Y','N'));
+
+--END
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SCHEDULE_BED ADD CONSTRAINT SBD_FLG_CONFLICT_CHK CHECK (FLG_CONFLICT IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SBD_FLG_CONFLICT_CHK table SCHEDULE_BED column FLG_CONFLICT: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SCHEDULE_BED ADD CONSTRAINT SBD_FLG_TEMPORARY_CHK CHECK (FLG_TEMPORARY IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SBD_FLG_TEMPORARY_CHK table SCHEDULE_BED column FLG_TEMPORARY: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto

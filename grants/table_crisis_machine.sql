@@ -1,0 +1,5 @@
+
+
+  GRANT SELECT ON ALERT.crisis_machine TO ALERT_VIEWER;
+
+

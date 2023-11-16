@@ -1,0 +1,48 @@
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 16/10/2020 16:28
+-- CHANGE REASON: [EMR-34344] - Change complaints database model
+BEGIN
+pk_frmw_objects.insert_into_frmw_objects(
+i_owner            => 'ALERT',
+i_obj_name         => 'COMPLAINT_ALIAS',
+i_obj_type         => 'TABLE',
+i_flg_category     => 'CNT',
+i_delete_script    => '',
+i_responsible_team => 'CDOC',-- ARCH
+i_flg_nzd          => 'N',
+i_flg_alert_default => 'N');
+END;
+/
+create table COMPLAINT_ALIAS
+(
+id_complaint            NUMBER(24),
+id_complaint_alias      NUMBER(24),
+code_complaint_alias    VARCHAR2(200 CHAR),
+id_content              VARCHAR2(200 CHAR),
+flg_available           VARCHAR2(1 CHAR),
+create_user             VARCHAR2(24 CHAR),
+create_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+create_institution      NUMBER(24),
+update_user             VARCHAR2(24 CHAR),
+update_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+update_institution      NUMBER(24)
+)
+tablespace ALERT_DATA;
+-- Add comments to the table
+comment on table COMPLAINT_ALIAS
+is 'Available complaints on institution';
+
+comment on column COMPLAINT_ALIAS.id_complaint is 'Complaint ID';
+comment on column COMPLAINT_ALIAS.id_complaint_alias is 'Complaint Alias ID';
+comment on column COMPLAINT_ALIAS.code_complaint_alias is 'Translation code for compalint alias description';
+comment on column COMPLAINT_ALIAS.id_content is 'Content unique ID';
+comment on column COMPLAINT_ALIAS.flg_available is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column COMPLAINT_ALIAS.create_user  is 'Creation User';
+comment on column COMPLAINT_ALIAS.create_time is 'Creation Time';
+comment on column COMPLAINT_ALIAS.create_institution  is 'Creation Institution';
+comment on column COMPLAINT_ALIAS.update_user is 'Update User';
+comment on column COMPLAINT_ALIAS.update_time is 'Update Time';
+comment on column COMPLAINT_ALIAS.update_institution is 'Update Institution';
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,22 @@
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/10/2018 14:35
+-- CHANGE REASON: [EMR-7652] 
+ALTER TABLE HEMO_TYPE_ANALYSIS 
+ADD CONSTRAINT HTA_PK PRIMARY KEY (ID_HEMO_TYPE_ANALYSIS);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 17/02/2020 12:23
+-- CHANGE REASON: [EMR-26921] - Ability to automatically request a lab sample collection for the mother of a newborn (until 7 days old) needing a transfusion
+DECLARE
+l_sql VARCHAR2(4000);
+BEGIN
+
+l_sql := q'[alter table hemo_type_analysis add constraint HTA_FN_CHK check (FLG_NEWBORN IN ('Y','N'))
+novalidate]';
+
+pk_versioning.run(l_sql);
+
+END;
+/
+-- CHANGE END: Diogo Oliveira

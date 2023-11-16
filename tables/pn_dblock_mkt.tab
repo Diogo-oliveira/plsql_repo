@@ -1,0 +1,807 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 10:10
+-- CHANGE REASON: [ALERT-164483] soap note blocks configuration data model
+create table PN_DBLOCK_MKT
+(
+  ID_SOFTWARE        NUMBER(24) not null,
+  ID_MARKET          NUMBER(24) not null,
+  FLG_TYPE           VARCHAR2(2 char) not null,
+  ID_PN_SOAP_BLOCK   NUMBER(24) not null,
+  ID_PN_DATA_BLOCK   NUMBER(24) not null,
+  FLG_IMPORT         VARCHAR2(1 char) not null,
+  FLG_SELECT         VARCHAR2(1 char) not null,
+  FLG_SCOPE          VARCHAR2(1 char),
+  RANK               NUMBER(6) not null,
+  CREATE_USER        VARCHAR2(24 char),
+  CREATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER        VARCHAR2(24 char),
+  UPDATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+)
+;
+
+comment on table PN_DBLOCK_MKT
+  is 'SOAP and data blocks factory configurations by software and market.';
+
+comment on column PN_DBLOCK_MKT.ID_SOFTWARE
+  is 'Software identifier.';
+comment on column PN_DBLOCK_MKT.ID_MARKET
+  is 'Market identifier.';
+comment on column PN_DBLOCK_MKT.FLG_TYPE
+  is 'Note type flag: A - ambulatory progress note, H - history and physical, P - progress note, L - prolonged service note, CC - critical care note, CR - consult note.';
+comment on column PN_DBLOCK_MKT.ID_PN_SOAP_BLOCK
+  is 'SOAP block identifier.';
+comment on column PN_DBLOCK_MKT.ID_PN_DATA_BLOCK
+  is 'Data block identifier.';
+comment on column PN_DBLOCK_MKT.FLG_IMPORT
+  is 'Data block importability: (N)ot importable, (T)ext importable, (B)lock importable.';
+comment on column PN_DBLOCK_MKT.FLG_SELECT
+  is 'Is the data block selectable? Y/N';
+comment on column PN_DBLOCK_MKT.FLG_SCOPE
+  is 'Scope of the query: V-visit, E-Episode, P-patient';
+comment on column PN_DBLOCK_MKT.RANK
+  is 'Data block rank.';
+comment on column PN_DBLOCK_MKT.CREATE_USER
+  is 'Creation User';
+comment on column PN_DBLOCK_MKT.CREATE_TIME
+  is 'Creation Time';
+comment on column PN_DBLOCK_MKT.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column PN_DBLOCK_MKT.UPDATE_USER
+  is 'Update User';
+comment on column PN_DBLOCK_MKT.UPDATE_TIME
+  is 'Update Time';
+comment on column PN_DBLOCK_MKT.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/10/2011 10:26
+-- CHANGE REASON: [ALERT-199727] H&P phase 2
+alter table pn_dblock_mkt drop column flg_type;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:30
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table PN_DBLOCK_MKT add (FLG_SELECTED varchar2(1 char) default 'Y');
+alter table PN_DBLOCK_MKT add (FLG_ACTIONS_AVAILABLE varchar2(1 char) default 'N');
+alter table PN_DBLOCK_MKT add (FLG_LINE_ON_BOXES varchar2(1 char) default 'Y');
+alter table PN_DBLOCK_MKT add (gender                      VARCHAR2(2 char));
+alter table PN_DBLOCK_MKT add (age_min                     NUMBER(3));
+alter table PN_DBLOCK_MKT add (age_max                     NUMBER(3));
+alter table PN_DBLOCK_MKT add (FLG_PREGNANT                varchar2(1 char) default 'N');
+alter table pn_dblock_mkt add (ID_PN_NOTE_TYPE number(24));
+alter table PN_DBLOCK_MKT add (FLG_AUTO_POPULATED          varchar2(1 char) default 'N');
+alter table PN_DBLOCK_MKT add (FLG_OUTSIDE_PERIOD          varchar2(1 char) default 'N');
+alter table PN_DBLOCK_MKT add (DAYS_AVAILABLE_PERIOD          NUMBER(6));
+alter table PN_DBLOCK_MKT add (FLG_MANDATORY          varchar2(1 char) default 'N');
+alter table pn_dblock_mkt add flg_cp_no_changes_import varchar2(1 char) default 'N';
+alter table pn_dblock_mkt add flg_import_date varchar2(1 char) default 'N';
+alter table pn_dblock_mkt add flg_import_reference varchar2(1 char) default 'N';
+alter table pn_dblock_mkt add flg_group_on_import varchar2(1 char) default 'N';
+
+COMMENT ON column PN_DBLOCK_MKT.FLG_SELECTED IS 'Indicate if the item is selected by default in the import screen.';
+COMMENT ON column PN_DBLOCK_MKT.FLG_ACTIONS_AVAILABLE IS 'Indicate if the actions button should be available in the edition screen';
+COMMENT ON column PN_DBLOCK_MKT.FLG_LINE_ON_BOXES IS 'Indicates if the data block box has a visible line.';
+comment on column PN_DBLOCK_MKT.gender
+  is 'Gender in which the note type should be shown (M/F)';
+comment on column PN_DBLOCK_MKT.age_min
+  is 'Minimal age in which the note type should be shown';
+comment on column PN_DBLOCK_MKT.age_max
+  is 'Maximum age in which the note type should be shown';
+COMMENT ON column PN_DBLOCK_MKT.FLG_PREGNANT IS 'Indicates if the area should be available in pregnant patients';
+COMMENT ON column PN_DBLOCK_MKT.FLG_AUTO_POPULATED IS 'Y-This area should be auto-populated. N-otherwise.';
+COMMENT ON column pn_dblock_mkt.id_pn_note_type IS 'Note type id.';
+COMMENT ON column pn_dblock_mkt.FLG_OUTSIDE_PERIOD IS 'At least the nearest entry interval, defined in Data Block if he does not have values';
+COMMENT ON column pn_dblock_mkt.DAYS_AVAILABLE_PERIOD IS 'Period of time in days during which a record is available on the Data Block import screen.';
+COMMENT ON column pn_dblock_mkt.FLG_MANDATORY IS 'It''s mandatory to fill the Data Block Or not';
+COMMENT ON column pn_dblock_mkt.flg_cp_no_changes_import IS 'Y-When importing shoud be performed a copy of the last record. N-otherwise. Only available for template areas';
+COMMENT ON column pn_dblock_mkt.flg_import_date IS 'Y-When importing a record shoud be imported the date in which the record was performed. N-otherwise.';
+COMMENT ON column pn_dblock_mkt.flg_import_reference IS 'Y-When importing a record shoud be manteined reference with original area. The different record are shown separately in the edition screen. N-otherwise. All the records of the area are show in the same box in the edition screen.';
+COMMENT ON column pn_dblock_mkt.flg_group_on_import IS 'Y- records should be grouped by Date and category. N-No group';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/10/2011 09:42
+-- CHANGE REASON: [ALERT-199724 ] H&P phase 2
+alter table pn_dblock_mkt add (FLG_IMPORT_MANDATORY varchar2(1 char) default 'N');
+      
+COMMENT ON column pn_dblock_mkt.FLG_IMPORT_MANDATORY IS 'Indicate if the item only can be inserted by import.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 09:59
+-- CHANGE REASON: H&P phase2
+alter table PN_DBLOCK_MKT add (FLG_SELECTED varchar2(1 char) default 'Y');
+alter table PN_DBLOCK_MKT add (FLG_ACTIONS_AVAILABLE varchar2(1 char) default 'N');
+alter table PN_DBLOCK_MKT add (FLG_LINE_ON_BOXES varchar2(1 char) default 'Y');
+alter table PN_DBLOCK_MKT add (gender                      VARCHAR2(2 char));
+alter table PN_DBLOCK_MKT add (age_min                     NUMBER(3));
+alter table PN_DBLOCK_MKT add (age_max                     NUMBER(3));
+alter table PN_DBLOCK_MKT add (FLG_PREGNANT                varchar2(1 char) default 'N');
+alter table pn_dblock_mkt add (ID_PN_NOTE_TYPE number(24));
+alter table PN_DBLOCK_MKT add (FLG_AUTO_POPULATED          varchar2(1 char) default 'N');
+alter table PN_DBLOCK_MKT add (FLG_OUTSIDE_PERIOD          varchar2(1 char) default 'N');
+alter table PN_DBLOCK_MKT add (DAYS_AVAILABLE_PERIOD          NUMBER(6));
+alter table PN_DBLOCK_MKT add (FLG_MANDATORY          varchar2(1 char) default 'N');
+alter table pn_dblock_mkt add flg_cp_no_changes_import varchar2(1 char) default 'N';
+alter table pn_dblock_mkt add flg_import_date varchar2(1 char) default 'N';
+alter table pn_dblock_mkt add flg_import_reference varchar2(1 char) default 'N';
+alter table pn_dblock_mkt add flg_group_on_import varchar2(1 char) default 'N';
+
+COMMENT ON column PN_DBLOCK_MKT.FLG_SELECTED IS 'Indicate if the item is selected by default in the import screen.';
+COMMENT ON column PN_DBLOCK_MKT.FLG_ACTIONS_AVAILABLE IS 'Indicate if the actions button should be available in the edition screen';
+COMMENT ON column PN_DBLOCK_MKT.FLG_LINE_ON_BOXES IS 'Indicates if the data block box has a visible line.';
+comment on column PN_DBLOCK_MKT.gender
+  is 'Gender in which the note type should be shown (M/F)';
+comment on column PN_DBLOCK_MKT.age_min
+  is 'Minimal age in which the note type should be shown';
+comment on column PN_DBLOCK_MKT.age_max
+  is 'Maximum age in which the note type should be shown';
+COMMENT ON column PN_DBLOCK_MKT.FLG_PREGNANT IS 'Indicates if the area should be available in pregnant patients';
+COMMENT ON column PN_DBLOCK_MKT.FLG_AUTO_POPULATED IS 'Y-This area should be auto-populated. N-otherwise.';
+COMMENT ON column pn_dblock_mkt.id_pn_note_type IS 'Note type id.';
+COMMENT ON column pn_dblock_mkt.FLG_OUTSIDE_PERIOD IS 'At least the nearest entry interval, defined in Data Block if he does not have values';
+COMMENT ON column pn_dblock_mkt.DAYS_AVAILABLE_PERIOD IS 'Period of time in days during which a record is available on the Data Block import screen.';
+COMMENT ON column pn_dblock_mkt.FLG_MANDATORY IS 'It''s mandatory to fill the Data Block Or not';
+COMMENT ON column pn_dblock_mkt.flg_cp_no_changes_import IS 'Y-When importing shoud be performed a copy of the last record. N-otherwise. Only available for template areas';
+COMMENT ON column pn_dblock_mkt.flg_import_date IS 'Y-When importing a record shoud be imported the date in which the record was performed. N-otherwise.';
+COMMENT ON column pn_dblock_mkt.flg_import_reference IS 'Y-When importing a record shoud be manteined reference with original area. The different record are shown separately in the edition screen. N-otherwise. All the records of the area are show in the same box in the edition screen.';
+COMMENT ON column pn_dblock_mkt.flg_group_on_import IS 'Y- records should be grouped by Date and category. N-No group';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:10
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table PN_DBLOCK_MKT add (FLG_SELECTED varchar2(1 char) default 'Y');
+alter table PN_DBLOCK_MKT add (FLG_ACTIONS_AVAILABLE varchar2(1 char) default 'N');
+alter table PN_DBLOCK_MKT add (FLG_LINE_ON_BOXES varchar2(1 char) default 'Y');
+alter table PN_DBLOCK_MKT add (gender                      VARCHAR2(2 char));
+alter table PN_DBLOCK_MKT add (age_min                     NUMBER(3));
+alter table PN_DBLOCK_MKT add (age_max                     NUMBER(3));
+alter table PN_DBLOCK_MKT add (FLG_PREGNANT                varchar2(1 char) default 'N');
+alter table pn_dblock_mkt add (ID_PN_NOTE_TYPE number(24));
+alter table PN_DBLOCK_MKT add (FLG_AUTO_POPULATED          varchar2(1 char) default 'N');
+alter table PN_DBLOCK_MKT add (FLG_OUTSIDE_PERIOD          varchar2(1 char) default 'N');
+alter table PN_DBLOCK_MKT add (DAYS_AVAILABLE_PERIOD          NUMBER(6));
+alter table PN_DBLOCK_MKT add (FLG_MANDATORY          varchar2(1 char) default 'N');
+alter table pn_dblock_mkt add flg_cp_no_changes_import varchar2(1 char) default 'N';
+alter table pn_dblock_mkt add flg_import_date varchar2(1 char) default 'N';
+alter table pn_dblock_mkt add flg_import_reference varchar2(1 char) default 'N';
+alter table pn_dblock_mkt add flg_group_on_import varchar2(1 char) default 'N';
+
+COMMENT ON column PN_DBLOCK_MKT.FLG_SELECTED IS 'Indicate if the item is selected by default in the import screen.';
+COMMENT ON column PN_DBLOCK_MKT.FLG_ACTIONS_AVAILABLE IS 'Indicate if the actions button should be available in the edition screen';
+COMMENT ON column PN_DBLOCK_MKT.FLG_LINE_ON_BOXES IS 'Indicates if the data block box has a visible line.';
+comment on column PN_DBLOCK_MKT.gender
+  is 'Gender in which the note type should be shown (M/F)';
+comment on column PN_DBLOCK_MKT.age_min
+  is 'Minimal age in which the note type should be shown';
+comment on column PN_DBLOCK_MKT.age_max
+  is 'Maximum age in which the note type should be shown';
+COMMENT ON column PN_DBLOCK_MKT.FLG_PREGNANT IS 'Indicates if the area should be available in pregnant patients';
+COMMENT ON column PN_DBLOCK_MKT.FLG_AUTO_POPULATED IS 'Y-This area should be auto-populated. N-otherwise.';
+COMMENT ON column pn_dblock_mkt.id_pn_note_type IS 'Note type id.';
+COMMENT ON column pn_dblock_mkt.FLG_OUTSIDE_PERIOD IS 'At least the nearest entry interval, defined in Data Block if he does not have values';
+COMMENT ON column pn_dblock_mkt.DAYS_AVAILABLE_PERIOD IS 'Period of time in days during which a record is available on the Data Block import screen.';
+COMMENT ON column pn_dblock_mkt.FLG_MANDATORY IS 'It''s mandatory to fill the Data Block Or not';
+COMMENT ON column pn_dblock_mkt.flg_cp_no_changes_import IS 'Y-When importing shoud be performed a copy of the last record. N-otherwise. Only available for template areas';
+COMMENT ON column pn_dblock_mkt.flg_import_date IS 'Y-When importing a record shoud be imported the date in which the record was performed. N-otherwise.';
+COMMENT ON column pn_dblock_mkt.flg_import_reference IS 'Y-When importing a record shoud be manteined reference with original area. The different record are shown separately in the edition screen. N-otherwise. All the records of the area are show in the same box in the edition screen.';
+COMMENT ON column pn_dblock_mkt.flg_group_on_import IS 'Y- records should be grouped by Date and category. N-No group';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:59
+-- CHANGE REASON: [ALERT-206287 ] H&P phase 2
+alter table pn_dblock_mkt add (FLG_IMPORT_MANDATORY varchar2(1 char) default 'N');
+      
+COMMENT ON column pn_dblock_mkt.FLG_IMPORT_MANDATORY IS 'Indicate if the item only can be inserted by import.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 12:59
+-- CHANGE REASON: [ALERT-206417] H&P phase 2
+alter table pn_dblock_mkt drop column flg_type;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 13:12
+-- CHANGE REASON: [ALERT-206287 ] H&P phase 2
+alter table PN_DBLOCK_MKT modify (FLG_PREGNANT                varchar2(1 char) default 'Y');
+alter table PN_DBLOCK_MKT modify (FLG_SELECTED varchar2(1 char) not null);
+alter table PN_DBLOCK_MKT modify (FLG_ACTIONS_AVAILABLE varchar2(1 char) not null);
+alter table PN_DBLOCK_MKT modify (FLG_LINE_ON_BOXES varchar2(1 char) not null);
+alter table PN_DBLOCK_MKT modify (FLG_AUTO_POPULATED          varchar2(1 char) not null);
+alter table PN_DBLOCK_MKT modify (FLG_OUTSIDE_PERIOD          varchar2(1 char) not null);
+alter table PN_DBLOCK_MKT modify (FLG_MANDATORY          varchar2(1 char) not null);
+alter table pn_dblock_mkt modify (flg_cp_no_changes_import varchar2(1 char) not null);
+alter table pn_dblock_mkt modify (flg_import_date varchar2(1 char) not null);
+alter table pn_dblock_mkt modify (flg_import_reference varchar2(1 char) not null);
+alter table pn_dblock_mkt modify (flg_group_on_import varchar2(1 char) not null);
+
+COMMENT ON column pn_dblock_mkt.flg_group_on_import IS 'Y- records should be grouped by Date and category (Only available for: Vital Signs, Labs and Image). N-No group';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 13:12
+-- CHANGE REASON: [ALERT-206287 ] H&P phase 2
+alter table pn_dblock_mkt add (FLG_IMPORT_MANDATORY varchar2(1 char) default 'N');
+      
+COMMENT ON column pn_dblock_mkt.FLG_IMPORT_MANDATORY IS 'Indicate if the item only can be inserted by import.';
+
+alter table pn_dblock_mkt add id_pndb_parent number(24);
+
+comment on column pn_dblock_mkt.id_pndb_parent
+  is 'Parent data block identifier. If no id_pndb_parent is defined is used the id_pndb_parent of the pn_data_block table (if defined)';
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 24/11/2011 18:04
+-- CHANGE REASON: [ALERT-206356 ] H&P
+alter table pn_sblock_soft_inst add (id_pn_note_type number(24) not null);
+
+COMMENT ON column pn_sblock_soft_inst.id_pn_note_type IS 'Note type id.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 24/11/2011 18:28
+-- CHANGE REASON: [ALERT-206356 ] H&P
+alter table pn_sblock_soft_inst add (id_pn_note_type number(24));
+
+COMMENT ON column pn_sblock_soft_inst.id_pn_note_type IS 'Note type id.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:15
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table PN_DBLOCK_MKT modify AGE_MIN number(06)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:15
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table PN_DBLOCK_MKT modify AGE_MAX number(06)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:15
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table PN_DBLOCK_MKT modify GENDER varchar2(0001 char)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/01/2012 16:29
+-- CHANGE REASON: [ALERT-216664] 
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt modify(FLG_IMPORT VARCHAR2(24 CHAR))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt add(flg_struct_type VARCHAR2(1 CHAR) default ''B'')';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt modify(flg_struct_type VARCHAR2(1 CHAR) not null)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+
+COMMENT ON column pn_dblock_mkt.flg_struct_type IS 'Indicates the type of structure that representes.(N)ote, (I)import, (B)oth';
+
+
+DECLARE
+    e_invalid_identifier EXCEPTION;
+ 
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904); -- drop column/comment on column    
+BEGIN
+
+        EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt drop column flg_import_reference';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+   
+END;
+/
+
+DECLARE
+    e_invalid_identifier EXCEPTION;
+ 
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904); -- drop column/comment on column    
+BEGIN
+
+        EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt drop column flg_import_mandatory';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:44
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    execute immediate 'alter table pn_dblock_mkt add (flg_show_title VARCHAR2(1 char) default ''Y'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_dblock_mkt.flg_show_title IS ''Indicate if the data block title should appear in the application''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table pn_dblock_mkt add (flg_show_sub_title VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_dblock_mkt.flg_show_sub_title IS ''Y - Indicates the data block subtitle should appear in the application (example for assessment tools the subitile is the doc_area). N - Otherwise.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table pn_dblock_mkt add (FLG_SYNCHRONIZED VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_dblock_mkt.FLG_SYNCHRONIZED IS ''Y - If Data Blocks info is to be synchronized with the directed areas, other than templates. N- otherwise''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_mkt add flg_data_removable varchar2(3 char) default ''IP'' not null';
+EXCEPTION
+    WHEN e_column_already_there THEN
+      dbms_output.put_line('AVISO: Operação já executada anteriormente.');   
+END;
+/
+
+COMMENT ON COLUMN pn_dblock_mkt.flg_data_removable IS 'It is possible to remove the: I-Imported data; P-auto-populated records that does not need review (black ones); N-not applicable. Include all the letters in the flag that aggregate the set of elements that must have the option ''Remove''. This config does not appy to the suggested records (red ones), that can always be removed';
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/04/2012 11:51
+-- CHANGE REASON: [ALERT-226245] BD - Versioning DDL (Migrations) after migrate - EDIS restructuring - Present Illness / Current visit
+BEGIN
+    execute immediate 'alter table pn_dblock_mkt modify flg_scope VARCHAR2(1 CHAR) default ''E'' not NULL';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:51
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+BEGIN
+    execute immediate 'COMMENT ON column PN_DBLOCK_MKT.FLG_AUTO_POPULATED IS ''Y-This area should be auto-populated. O-Auto-populated with ongoing records; F-Auto-populated with finalized records; A-Auto-populated with anormal results; M-Auto-populated with normal results; R-The first record is autopopulated. L-The last record is auto-populated. P -Auto-populate records created since last recheck. W-auto-populate records with notes/comments (can only be used if ''T'' is not used in one config); T-auto-populate records without notes/comments (can only be used if ''W'' is not used in one config); C-Ongoing records with at least one completed execution since last note; B-All records since last note + all records without notes/commentsN-It is not auto-populated.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table PN_DBLOCK_MKT add (AUTO_POP_EXEC_PROF_CAT VARCHAR2(200 CHAR))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN PN_DBLOCK_MKT.AUTO_POP_EXEC_PROF_CAT IS ''Professional categories types that executed the task to consider when auto-populating records (join in this column all the needed categories). Null-consider all the professional categories.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'alter table PN_DBLOCK_MKT modify (FLG_AUTO_POPULATED          varchar2(24 char))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_mkt modify flg_data_removable varchar2(24 char)';
+EXCEPTION
+    WHEN others THEN
+      dbms_output.put_line('AVISO: Operação já executada anteriormente.');   
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_mkt modify days_available_period number(24)';
+EXCEPTION
+    WHEN others THEN
+      dbms_output.put_line('AVISO: Operação já executada anteriormente.');   
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_mkt modify age_min number(24)';
+EXCEPTION
+    WHEN others THEN
+      dbms_output.put_line('AVISO: Operação já executada anteriormente.');   
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_mkt modify age_max number(24)';
+EXCEPTION
+    WHEN others THEN
+      dbms_output.put_line('AVISO: Operação já executada anteriormente.');   
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 10/05/2012 08:52
+-- CHANGE REASON: [ALERT-229650 ] Recheck
+COMMENT ON column PN_DBLOCK_MKT.FLG_AUTO_POPULATED IS 'Y-This area should be auto-populated. O-Auto-populated with ongoing records; F-Auto-populated with finalized records; A-Auto-populated with anormal results; M-Auto-populated with normal results; R-The first record is autopopulated. L-The last record is auto-populated. P -Auto-populate records created since last recheck. W-auto-populate records with notes/comments (can only be used if ''T'' is not used in one config); T-auto-populate records without notes/comments (can only be used if ''W'' is not used in one config); C-Ongoing records with at least one completed execution since last note; B-All records since last note + all records without notes/comments; N-It is not auto-populated.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/05/2012 10:56
+-- CHANGE REASON: [ALERT-231085 ] Improvements to Single page funcionality including(H&P, CV, PPH)
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_mkt drop column flg_auto_populated';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/06/2012 09:48
+-- CHANGE REASON: [ALERT-232123] Create flag for focus - Current visit - PPN - PPN edition screen - When entering a note, the focus should be on the Overall evaluation text field
+BEGIN
+    execute immediate 'alter table PN_DBLOCK_MKT add (FLG_FOCUS VARCHAR2(1 CHAR) default ''N'' NOT NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN PN_DBLOCK_MKT.FLG_FOCUS IS ''Y - Indicates this data block has focus in the note when creating a new one. N - Otherwise''';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 13/06/2012 15:19
+-- CHANGE REASON: [ALERT-233082] Add flag editable for data blocks - Improvements to Single page functionality including(H&P, CV, PPH), Phase V
+BEGIN
+execute immediate 'alter table pn_dblock_mkt add (flg_editable VARCHAR2(1 char) default ''Y'' not null)';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+BEGIN
+execute immediate 'comment on column pn_dblock_mkt.flg_editable is ''Y - Allows the edition of a data block. N - otherwise is disable''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 22/08/2012 17:02
+-- CHANGE REASON: [ALERT-238310] Import mechanism for Inactive problems
+BEGIN
+    execute immediate 'alter table pn_dblock_mkt drop column flg_selected';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/10/2012 16:25
+-- CHANGE REASON: [ALERT-242379 ] Single page note for Discharge Summary
+BEGIN
+    execute immediate 'alter table pn_dblock_mkt add (FLG_GROUP_SELECT_FILTER VARCHAR2(1 CHAR) default ''N'' not null)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_dblock_mkt.FLG_GROUP_SELECT_FILTER IS ''Indicate if some filter should be applied when selecting all the group of tasks in the import screen. N - No filter to apply. O-The ongoing records are selected. F - The finalized records are selected. I - The inactive records are selected. D - Pending records are selected''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 30/11/2012 08:55
+-- CHANGE REASON: [ALERT-246012 ] Alteração do mecanismo de sincronização na single page
+BEGIN
+    execute immediate 'alter table pn_dblock_mkt drop constraint PN_DBLOCK_MKT_IMP_CHK';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'alter table pn_dblock_mkt drop column FLG_SYNCHRONIZED';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 29/01/2013 15:15
+-- CHANGE REASON: [ALERT-250486 ] A physician suggested to add the option "Anamnesi Fisiologica" (or in (truncated)
+BEGIN
+    execute immediate 'alter table pn_dblock_mkt add (id_task_type NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    execute immediate 'COMMENT ON COLUMN pn_dblock_mkt.id_task_type IS ''Task type to use in the in place insertions.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/05/2013 16:25
+-- CHANGE REASON: [ALERT-259145] Triage single page
+COMMENT ON COLUMN pn_dblock_mkt.flg_data_removable IS 'It is possible to remove the: I-Records imported through the import screen; P-Auto-populated records that does not need review (black ones); S-Records created through shortcut; N-not applicable. Remove not available. Include all the letters in the flag that aggregate the set of elements that must have the option ''Remove''. This config does not appy to the suggested records (red ones), that can always be removed';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 22/01/2015 15:37
+-- CHANGE REASON: [ALERT-306656] 
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_mkt add (FLG_ORDER_TYPE VARCHAR2(1 CHAR) default ''D'' not null)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON COLUMN PN_DBLOCK_MKT.FLG_ORDER_TYPE IS 'Default D - Indicates the order type in the data blocks D - DESC; A - ASC';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 07/07/2017 14:53
+-- CHANGE REASON: [ALERT-330567] Discharge summary for FR market.
+ALTER TABLE pn_dblock_mkt add (flg_signature VARCHAR2(1 char) DEFAULT 'Y');
+COMMENT ON COLUMN tmp_pn_configs.flg_signature is 'Show professional signature? Y/N';
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 10/07/2017 08:20
+-- CHANGE REASON: [ALERT-330567] Discharge summary for FR market.
+ALTER TABLE pn_dblock_mkt add (flg_signature VARCHAR2(1 char) DEFAULT 'Y');
+COMMENT ON COLUMN pn_dblock_mkt .flg_signature is 'Show professional signature? Y/N';
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 10/11/2017 10:14
+-- CHANGE REASON: [CALERT-581] CCH Changes in the Date& Time minimum, maximum and default values acceptable in keypads.
+--                
+-- Add/modify columns 
+alter table PN_DBLOCK_MKT add flg_min_value VARCHAR2(24 CHAR);
+alter table PN_DBLOCK_MKT add flg_default_value VARCHAR2(24 CHAR);
+alter table PN_DBLOCK_MKT add flg_max_value VARCHAR2(24 CHAR);
+alter table PN_DBLOCK_MKT add flg_format VARCHAR2(24 CHAR);
+alter table PN_DBLOCK_MKT add flg_validation VARCHAR2(24 CHAR);
+-- Add comments to the columns 
+comment on column PN_DBLOCK_MKT.flg_min_value
+  is 'Indicates the min date value A - Admission date, C - Current date; P - Proposed date, P-X - Proposed -x days, P+X - Proposed + x days';
+comment on column PN_DBLOCK_MKT.flg_default_value
+  is 'Indicates the default date  value A - Admission date, C - Current date; P - Proposed date, P-X - Proposed -x days, P+X - Proposed + x days';
+comment on column PN_DBLOCK_MKT.flg_max_value
+  is 'Indicates the max date  value A - Admission date, C - Current date; P - Proposed date, P-X - Proposed -x days, P+X - Proposed + x days';
+comment on column PN_DBLOCK_MKT.flg_format
+  is 'Indicates Date format DH Date and Hour, D - Date';
+comment on column PN_DBLOCK_MKT.flg_validation
+  is 'Indicates Date validation DT - Date and Time, DTP - Partial Date and time, ';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 07/12/2017 10:57
+-- CHANGE REASON: [    CALERT-904] Important progress note - Import to two different blocks at once
+--                 
+-- Add/modify columns 
+alter table PN_DBLOCK_MKT add id_pndb_related NUMBER(24);
+-- Add comments to the columns 
+comment on column PN_DBLOCK_MKT.id_pndb_related
+  is 'Data block identifier to be autopopulated with the informatition related ';
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Vitor Sa
+-- CHANGE DATE: 14/12/2017 11:28
+-- CHANGE REASON: [CALERT-1240] CALERT-1240 DB Development
+ALTER TABLE pn_dblock_mkt ADD ID_SWF_FILE_VIEWER NUMBER(24);
+COMMENT ON COLUMN pn_dblock_mkt.ID_SWF_FILE_VIEWER IS 'Viewer screen that is loaded when the area is selected';
+ALTER TABLE pn_dblock_mkt ADD VALUE_VIEWER VARCHAR2(100 CHAR);
+COMMENT ON COLUMN pn_dblock_mkt.VALUE_VIEWER IS 'Default values for viewer';
+-- CHANGE END: Vitor Sa
+
+-- CHANGED BY: Kelsey Lai
+-- CHANGE DATE: 18/1/2018
+-- CHANGE REASON: [CALERT-213] CCH Progress note - ICU Assessment Note
+comment on column pn_dblock_mkt.flg_min_value is 'Indicates the min date value A - Admission date, C - Current date, P - Proposed date, P-X - Proposed -x days, P+X - Proposed + x days, ICU_A - ICU admission date, ICU_D - ICU discharge date';
+
+comment on column pn_dblock_mkt.flg_max_value is 'Indicates the max date  value A - Admission date, C - Current date, P - Proposed date, P-X - Proposed -x days, P+X - Proposed + x days, ICU_A - ICU admission date, ICU_D - ICU discharge date';
+
+comment on column pn_dblock_mkt.flg_default_value is 'Indicates the default date  value A - Admission date, C - Current date, P - Proposed date, P-X - Proposed -x days, P+X - Proposed + x days, ICU_A - ICU admission date, ICU_D - ICU discharge date';
+-- CHANGE END: Kelsey Lai
+
+-- CHANGED BY: Lillian Lu
+-- CHANGE DATE: 2018-03-05
+-- CHANGE REASON: [CEMR-531] Holiday signature note > Date/ Time block > it is possible to edit Date
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_mkt add (MIN_DAYS_PERIOD NUMBER(12,6))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_mkt add (MAX_DAYS_PERIOD NUMBER(12,6))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_mkt add (DEFAULT_DAYS_PERIOD NUMBER(12,6))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+COMMENT ON COLUMN PN_DBLOCK_MKT.MIN_DAYS_PERIOD IS 'Minimum period in days corresponding to flg_min_value';
+COMMENT ON COLUMN PN_DBLOCK_MKT.MAX_DAYS_PERIOD IS 'Maximum period in days corresponding to flg_max_value';
+COMMENT ON COLUMN PN_DBLOCK_MKT.DEFAULT_DAYS_PERIOD IS 'Default period in days corresponding to flg_default_value';
+COMMENT ON COLUMN PN_DBLOCK_MKT.FLG_MIN_VALUE IS 'Indicates the min date value A - Admission date, C - Current date, P - Proposed date, ICU_A - ICU admission date, ICU_D - ICU discharge date';
+COMMENT ON COLUMN PN_DBLOCK_MKT.FLG_MAX_VALUE IS 'Indicates the max date  value A - Admission date, C - Current date, P - Proposed date,ICU_A - ICU admission date, ICU_D - ICU discharge date';
+COMMENT ON COLUMN PN_DBLOCK_MKT.FLG_DEFAULT_VALUE IS 'Indicates the default date  value A - Admission date, C - Current date, P - Proposed date, ICU_A - ICU admission date, ICU_D - ICU discharge date';
+-- CHANGE END: Lillian Lu
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 11/04/2019 14:40
+-- CHANGE REASON: [EMR-14889] SP Mechanism to not include some doc_areas already present in other blocks
+-- Add/modify columns 
+alter table PN_DBLOCK_MKT add flg_exc_sum_page_da varchar2(1 CHAR);
+-- Add comments to the columns 
+comment on column PN_DBLOCK_MKT.flg_exc_sum_page_da
+  is 'From this Data Block exclude the other summary page doc_areas existing on the note (only for data blockS configured by SUMMARY PAGE) ';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 14/05/2021 15:48
+-- CHANGE REASON: [EMR-44820] - Initial assessment: "Nota de evaluacion inicial de enfermaria" single page review
+-- Add comments to the columns
+comment on column PN_DBLOCK_MKT.age_min
+is 'Minimal age in which the note type should be shown IN MONTHS';
+comment on column PN_DBLOCK_MKT.age_max
+is 'Maximum age in which the note type should be shown IN MONTHS';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/11/2021 16:11
+-- CHANGE REASON: [EMR-48698] - Single page: improvements on lab tests results presentation
+declare
+l_sql varchar2(4000);
+begin
+l_sql := q'[alter table PN_DBLOCK_MKT add flg_group_type VARCHAR2(1 CHAR)]';
+pk_versioning.run(l_sql);
+end;
+/
+
+-- Add comments to the columns
+comment on column PN_DBLOCK_MKT.flg_group_type
+is 'When grouping the task it will be by (D) Date - Default ; I(Instructions) Date and instructions (only when FLG_GROUP_ON_IMPORT is Y )';
+-- CHANGE END: Elisabete Bugalho

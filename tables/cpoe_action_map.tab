@@ -1,0 +1,32 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 29/10/2009 04:37
+-- CHANGE REASON: [ALERT-51207] 
+create table CPOE_ACTION_MAP
+(
+  ID_SOURCE_ACTION   NUMBER(24) not null,
+  ID_TARGET_ACTION   NUMBER(24) not null,
+ID_TASK_TYPE       NUMBER(24) not null,
+  CREATE_USER        VARCHAR2(24 CHAR),
+  CREATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER        VARCHAR2(24 CHAR),
+  UPDATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+);
+comment on table CPOE_ACTION_MAP is                     'Computerized Physician Order Entry (CPOE) relates actions with original target actions for each type of task';
+comment on column CPOE_ACTION_MAP.ID_SOURCE_ACTION is   'Source action ID (CPOE action)';
+comment on column CPOE_ACTION_MAP.ID_TARGET_ACTION is   'Target action ID (Original task action)';
+comment on column CPOE_ACTION_MAP.ID_TASK_TYPE is       'Task type to which this action mapping is related to';
+comment on column CPOE_ACTION_MAP.CREATE_USER is        'Creation User';
+comment on column CPOE_ACTION_MAP.CREATE_TIME is        'Creation Time';
+comment on column CPOE_ACTION_MAP.CREATE_INSTITUTION is 'Creation Institution';
+comment on column CPOE_ACTION_MAP.UPDATE_USER is        'Update User';
+comment on column CPOE_ACTION_MAP.UPDATE_TIME is        'Update Time';
+comment on column CPOE_ACTION_MAP.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 11/12/2009 00:23
+-- CHANGE REASON: [ALERT-61939] CPOE 2nd phase: versioning of CPOE feature for Diets and Hidrics
+drop table CPOE_ACTION_MAP;
+-- CHANGE END: Carlos Loureiro

@@ -1,0 +1,75 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/10/2011 16:15
+-- CHANGE REASON: [ALERT-200929 ] Intake and Output: hidrics_location: Should be allowed to have several lines with the same body_part and body_side and flg_available = 'N', because of the default process
+DECLARE    
+    e_object_exists EXCEPTION;  
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955); -- indexes/sequences/tables   
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+BEGIN  
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table hidrics_location drop constraint HL_BDP_BDS_UK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX HID_LOC_BDP_BDS_IDX ON HIDRICS_LOCATION ((CASE WHEN flg_available = ''Y'' THEN ID_BODY_PART END), (CASE WHEN flg_available = ''Y'' THEN ID_BODY_SIDE END))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 24/10/2011 11:21
+-- CHANGE REASON: [ALERT-201389 ] hidrics_location: Should be allowed to have several lines with the same body_part and body_side and flg_available = 'N', because of the default process
+BEGIN
+   
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX HID_LOC_BDP_BDS_IDX ON HIDRICS_LOCATION ((CASE WHEN flg_available = ''Y'' THEN ID_BODY_PART END), (CASE WHEN flg_available = ''Y'' THEN ID_BODY_SIDE END))';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 26/10/2011 17:05
+-- CHANGE REASON: [ALERT-201812 ] Default process - SET_DEF_HIDRICS_LOCATION
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 24/10/2011 11:21
+-- CHANGE REASON: [ALERT-201812] hidrics_location: Should be allowed to have several lines with the same body_part and body_side and flg_available = 'N', because of the default process
+BEGIN
+   
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX HID_LOC_BDP_BDS_IDX';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 24/10/2011 11:21
+-- CHANGE REASON: [ALERT-201389 ] hidrics_location: Should be allowed to have several lines with the same body_part and body_side and flg_available = 'N', because of the default process
+BEGIN
+   
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX HID_LOC_BDP_BDS_IDX ON HIDRICS_LOCATION ((CASE WHEN flg_available = ''Y'' THEN ID_BODY_PART END), (CASE WHEN flg_available = ''Y'' THEN ID_BODY_SIDE END), (CASE FLG_AVAILABLE WHEN ''Y'' THEN FLG_AVAILABLE END))';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes
+-- CHANGE END: Sofia Mendes

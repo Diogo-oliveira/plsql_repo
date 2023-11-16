@@ -1,0 +1,52 @@
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 29/07/2010 15:05
+-- CHANGE REASON: [ALERT-116048] 
+alter table REHAB_PRESC_HIST
+  add constraint RPT_PK primary key (ID_REHAB_PRESC_HIST);
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 01/10/2012 16:52
+-- CHANGE REASON: [ALERT-241270] 
+DECLARE
+    e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE rehab_presc_hist add CONSTRAINT RPT_FLG_LATERALITY_CHK CHECK(flg_laterality IN (''N'', ''B'', ''L'', ''R''))';
+
+EXCEPTION
+    WHEN e_constraint_already_there THEN
+        NULL;
+    
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/03/2013 16:28
+-- CHANGE REASON: [ALERT-253717 ] 
+alter table REHAB_PRESC_HIST drop constraint RPT_FLG_LATERALITY_CHK;
+alter table REHAB_PRESC_HIST
+  add constraint RPT_FLG_LATERALITY_CHK
+  check (flg_laterality IN ('N', 'B', 'L', 'R', 'Z'));
+  
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 28/05/2014 11:11
+-- CHANGE REASON: [ALERT-283905 ] 
+DECLARE
+    e_nonexistent_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_nonexistent_constraint, -02443); -- nonexistent constraint
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE rehab_presc_hist DROP CONSTRAINT rpt_flg_status_chk';
+    EXCEPTION
+        WHEN e_nonexistent_constraint THEN
+            dbms_output.put_line('Constraint rehab_presc_hist.rpt_flg_status_chk doesnt exist');
+    END;
+
+    EXECUTE IMMEDIATE 'ALTER TABLE rehab_presc_hist ADD CONSTRAINT rpt_flg_status_chk check (flg_status IN (''B'', ''C'', ''P'', ''Q'', ''E'', ''D'', ''S'', ''F'', ''O'', ''X'', ''L'', ''R'', ''N''))';
+END;
+/
+-- CHANGE END: cristina.oliveira

@@ -1,0 +1,14 @@
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 17/10/2012 18:20
+-- CHANGE REASON: [ALERT-242442] 
+DECLARE
+    e_idx_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_idx_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'create index SLD_SL_SSI_IDX on supply_loc_default (id_supply_location,id_supply_soft_inst,flg_default)';
+EXCEPTION
+    WHEN e_idx_already_exists THEN
+        dbms_output.put_line('index SLD_SL_SSI_IDX already exists');   
+END;
+/
+-- CHANGE END:  Nuno Neves

@@ -1,0 +1,27 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 2009/07/03 14:49
+-- CHANGE REASON: ALERT-32705 [CLONE -Relatório de nota de alta médica, para todas as aplicações]
+--                ALERT-34577 [[CLONE] Setting up "predefined text area" and "cancel reason area" [2.5]]
+
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table PHY_DISCHARGE_NOTES
+  add constraint PHDN_PK primary key (ID_PHY_DISCHARGE_NOTES)
+  using index 
+  tablespace TABLE_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+  
+  
+-- Create/Recreate check constraints 
+alter table PHY_DISCHARGE_NOTES
+  add constraint PHDN_FLG_STATUS_CHK
+  check (flg_status IN ('A', 'C'));
+  
+-- CHANGE END: Filipe Machado

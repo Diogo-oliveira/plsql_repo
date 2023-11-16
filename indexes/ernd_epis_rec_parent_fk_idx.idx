@@ -1,0 +1,15 @@
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 26/06/2014 16:59
+-- CHANGE REASON: [ALERT-288248] 
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE INDEX ernd_epis_rec_parent_fk_idx ON EPIS_RECOMEND (ID_EPIS_RECOMEND_PARENT)';
+EXCEPTION
+    WHEN e_name_already_exists THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Jorge Silva

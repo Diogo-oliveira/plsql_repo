@@ -1,0 +1,46 @@
+DECLARE
+L_DEL_SCRIPT VARCHAR2(1000 CHAR) ;
+BEGIN
+
+L_DEL_SCRIPT:= 'DELETE FROM ALERT.PROF_ALL_PROFILES WHERE (:PRM = 1 AND ID_INSTITUTION != 0)';
+PK_FRMW_OBJECTS.INSERT_INTO_FRMW_OBJECTS(I_OWNER              => 'ALERT',
+                                         I_OBJ_NAME           => 'PROF_ALL_PROFILES',
+                                         I_OBJ_TYPE           => 'TABLE',
+                                         I_FLG_CATEGORY       => 'PRM',
+                                         I_FLG_ALERT_DEFAULT  => 'N',
+                                         I_DELETE_SCRIPT      => L_DEL_SCRIPT,
+                                         I_FLG_DEFAULT_CHILD  => 'N',
+                                         I_FLG_NZD            => 'Y',
+                                         I_FLG_SENSITIVE_DATA => 'N');
+END;
+/
+
+CREATE TABLE ALERT.PROF_ALL_PROFILES
+(
+ID_PROFESSIONAL             NUMBER(24) NOT NULL,
+ID_PROFILE_TEMPLATE         NUMBER(24) NOT NULL,
+ID_INSTITUTION              NUMBER(24) NOT NULL,
+ID_SOFTWARE                 NUMBER(24) NOT NULL,
+FLG_SHOW_VIEWER             VARCHAR2(0001 CHAR) DEFAULT 'Y' NOT NULL,
+CREATE_USER                 VARCHAR2(24),
+CREATE_TIME                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION          NUMBER(24),
+UPDATE_USER                 VARCHAR2(24),
+UPDATE_TIME                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION          NUMBER(24),
+ID_SK                       NUMBER(24) NOT NULL
+)
+;
+
+COMMENT ON TABLE  ALERT.PROF_ALL_PROFILES                      IS 'Table where all profiles for a professional are configured';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES.ID_PROFESSIONAL      IS 'Professional identifier';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES.ID_PROFILE_TEMPLATE  IS 'Profile to be available for use';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES.ID_INSTITUTION       IS 'Institution where configuration is to be located';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES.ID_SOFTWARE          IS 'Software of profile';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES.FLG_SHOW_VIEWER      IS 'Flag that hides/show viewer';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES.CREATE_USER          IS 'User that created the record';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES.CREATE_TIME          IS 'Time when the record was created';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES.CREATE_INSTITUTION   IS 'Institution where record was created';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES.UPDATE_USER          IS 'Last user that changed the record';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES.UPDATE_INSTITUTION   IS 'Last Institution where user made the change';
+COMMENT ON COLUMN ALERT.PROF_ALL_PROFILES.UPDATE_TIME          IS 'Time of Last change';

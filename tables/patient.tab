@@ -1,0 +1,65 @@
+
+
+  CREATE TABLE PATIENT
+   (	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	NAME VARCHAR2(200) NOT NULL ENABLE,
+	GENDER VARCHAR2(1),
+	DT_BIRTH DATE,
+	NICK_NAME VARCHAR2(200),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_DECEASED DATE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_PAT_FAMILY NUMBER(24,0),
+	LAST_NAME VARCHAR2(100),
+	MIDDLE_NAME VARCHAR2(100),
+
+	AGE NUMBER(3,0)
+   );
+
+
+COMMENT ON TABLE patient IS 'Esta tabela contem os dados dos pacientes' ;
+
+COMMENT ON COLUMN patient.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN patient.name IS 'Nome do paciente' ;
+COMMENT ON COLUMN patient.gender IS 'Sexo. F - feminino, M - masculino, NULL - deconhecido, I - indeterminado' ;
+COMMENT ON COLUMN patient.dt_birth IS 'Data de nascimento' ;
+COMMENT ON COLUMN patient.nick_name IS 'Nome por que gosta de ser tratado' ;
+COMMENT ON COLUMN patient.flg_status IS 'Estado: activo / inactivo' ;
+COMMENT ON COLUMN patient.dt_deceased IS 'Data de óbito' ;
+COMMENT ON COLUMN patient.adw_last_update IS 'Ultima alteração' ;
+COMMENT ON COLUMN patient.last_name IS 'Patient last name. The last name of the patient may also be kept together with other patient name at the ''NAME'' field.' ;
+COMMENT ON COLUMN patient.middle_name IS 'Patient middle name or initials. The middle name of the patient may also be kept together with other patient name at the ''NAME'' field.' ;
+COMMENT ON COLUMN patient.age IS 'Patient age. Useful to set a "guessed" patient age when the date of birth is unknown.' ;
+
+ALTER TABLE PATIENT ADD (FLG_MIGRATION VARCHAR2(1) DEFAULT 'A' NOT NULL);
+
+COMMENT ON COLUMN PATIENT.FLG_MIGRATION IS 'This column will have default ''A'' value for ALERT, migrated records will have ''M'' value, and test records will have ''T'' value';
+
+
+
+COMMENT ON COLUMN  PATIENT.ID_PAT_FAMILY IS 'Patient family ID';
+COMMENT ON COLUMN  PATIENT.GENDER IS 'Gender: F - Female; M - Male; I - Undetermined';
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-JUL-31
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15266
+
+COMMENT ON COLUMN  PATIENT.ID_PAT_FAMILY IS 'Patient family ID';
+COMMENT ON COLUMN  PATIENT.GENDER IS 'Gender: F - Female; M - Male; I - Undetermined';
+
+-- CHANGED END: Nuno Ferreira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2020 18:02
+-- CHANGE REASON: [EMR-40083]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00942);
+BEGIN
+EXECUTE IMMEDIATE 'DROP TABLE patient_old';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos

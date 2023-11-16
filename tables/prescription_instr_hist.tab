@@ -1,0 +1,220 @@
+create table PRESCRIPTION_INSTR_HIST
+(
+  ID_PRESCRIPTION_INSTR_HIST NUMBER(24) not null,
+  ID_PRESC                   NUMBER(24) not null,
+  FLG_TYPE_PRESC             VARCHAR2(1) not null,
+  FLG_SUBTYPE_PRESC          VARCHAR2(2),
+  QTY                        NUMBER(24,4),
+  ID_UNIT_MEASURE_QTY        NUMBER(24),
+  FREQUENCY                  NUMBER(24),
+  ID_UNIT_MEASURE_FREQ       NUMBER(24),
+  DURATION                   NUMBER(24),
+  ID_UNIT_MEASURE_DUR        NUMBER(24),
+  DATE_START                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DATE_END                   TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROFESSIONAL            NUMBER(24),
+  ID_INSTITUTION             NUMBER(12),
+  ID_SOFTWARE                NUMBER(24),
+  LAST_UPDATE_TSTZ           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  PRESCRIPTION_TABLE         VARCHAR2(100),
+  FLG_STATUS_OLD             VARCHAR2(1),
+  FLG_STATUS_NEW             VARCHAR2(1),
+  FLG_CHANGE                 VARCHAR2(1)
+);
+
+comment on table PRESCRIPTION_INSTR_HIST is 'Histórico das alterações da posologia de medicação';
+
+comment on column PRESCRIPTION_INSTR_HIST.ID_PRESC is 'Identificação de medicamento/manipulado/dietético (ID_PRESCRIPTION_PHARM/ID_DRUG_REQ_DET/ID_DRUG_PRESC_DET)';
+comment on column PRESCRIPTION_INSTR_HIST.FLG_TYPE_PRESC is 'Identificação do tipo de prescrição: E - Exterior, I - Farmácia hospitalar, A - Neste local';
+comment on column PRESCRIPTION_INSTR_HIST.FLG_SUBTYPE_PRESC is 'Identificação de subtipo de prescrição: ME - manipulado p/ exterior, DE - dietético p/ exterior, MI - manipulado p/ farmácia hospitalar , DI - dietético p/ farmácia hospitalar';
+comment on column PRESCRIPTION_INSTR_HIST.QTY is 'Quantidade';
+comment on column PRESCRIPTION_INSTR_HIST.ID_UNIT_MEASURE_QTY is 'Unidade de medida da quantidade';
+comment on column PRESCRIPTION_INSTR_HIST.FREQUENCY is 'Frequência';
+comment on column PRESCRIPTION_INSTR_HIST.ID_UNIT_MEASURE_FREQ is 'Unidade de medida da frequência';
+comment on column PRESCRIPTION_INSTR_HIST.DURATION is 'Duração';
+comment on column PRESCRIPTION_INSTR_HIST.ID_UNIT_MEASURE_DUR is 'Unidade de medida da duração';
+comment on column PRESCRIPTION_INSTR_HIST.DATE_START is 'Data de início';
+comment on column PRESCRIPTION_INSTR_HIST.DATE_END is 'Data de fim';
+comment on column PRESCRIPTION_INSTR_HIST.ID_PROFESSIONAL is 'ID do profissional';
+comment on column PRESCRIPTION_INSTR_HIST.ID_INSTITUTION is 'ID da instituição';
+comment on column PRESCRIPTION_INSTR_HIST.ID_SOFTWARE is 'ID do software';
+comment on column PRESCRIPTION_INSTR_HIST.LAST_UPDATE_TSTZ is 'Data de última alteração da posologia';
+comment on column PRESCRIPTION_INSTR_HIST.PRESCRIPTION_TABLE is 'tabela da prescrição reativa ao id_presc';
+comment on column PRESCRIPTION_INSTR_HIST.FLG_STATUS_OLD is 'estado inicial';
+comment on column PRESCRIPTION_INSTR_HIST.FLG_STATUS_NEW is 'estado final';
+comment on column PRESCRIPTION_INSTR_HIST.FLG_CHANGE is 'Flag tipo de alteração P- Posologia S- Status ';
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-NOV-30
+-- CHANGED REASON: Modify Orders/Refills
+-- Add/modify columns 
+alter table PRESCRIPTION_INSTR_HIST add i_med VARCHAR2(11);
+alter table PRESCRIPTION_INSTR_HIST add ID_EPISODE NUMBER(24);
+alter table PRESCRIPTION_INSTR_HIST add ID_PATIENT NUMBER(24);
+alter table PRESCRIPTION_INSTR_HIST add PROF_NOTES varchar2(173);
+alter table PRESCRIPTION_INSTR_HIST add REFILL NUMBER(24,4);
+alter table prescription_instr_hist add ORDER_MODIFIED_ID_ISSUE NUMBER(24);
+alter table prescription_instr_hist add ORDER_MODIFIED_MESSAGE VARCHAR2(4000);
+alter table prescription_instr_hist add PATIENT_NOTIFIED VARCHAR2(1);
+alter table PRESCRIPTION_INSTR_HIST add DOSAGE VARCHAR2(4000);
+
+-- Add comments to the columns 
+comment on column PRESCRIPTION_INSTR_HIST.FLG_CHANGE
+  is 'Flag tipo de alteração P- Posologia S- Status M - Modify Orders ';
+comment on column PRESCRIPTION_INSTR_HIST.i_med
+  is 'id do medicamento';
+  comment on column PRESCRIPTION_INSTR_HIST.PROF_NOTES
+  is 'Usadas para registar as notas inseridas pelo profissional na prescription_pharm';
+  comment on column PRESCRIPTION_INSTR_HIST.REFILL
+  is 'refill';
+comment on column prescription_instr_hist.ORDER_MODIFIED_ID_ISSUE
+  is 'id_issue.parâmetro associado ao ORDER_MODIFIED.  Quando é criado um pending issue.';
+comment on column prescription_instr_hist.ORDER_MODIFIED_MESSAGE
+  is 'mensagem do pending issue, gerada quando é criado um id_issue.'; 
+comment on column PRESCRIPTION_PHARM.PATIENT_NOTIFIED
+  is 'parâmetro associado ao ORDER_MODIFIED. ''R'', se o paciente já foi notificado da modificação, ''U'', se o paciente ainda não foi notificado da modificação.';  
+comment on column PRESCRIPTION_INSTR_HIST.DOSAGE
+  is 'dosagem - string'; 
+ --CHANGES END  
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-JUN-20
+-- CHANGE REASON: Notas no histórico
+ALTER TABLE prescription_instr_hist
+ADD notes VARCHAR(4000);
+
+COMMENT ON COLUMN prescription_instr_hist.notes
+  is 'Notes.';
+--CHANGE END
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 2009-JAN-06
+-- CHANGE REASON: ALERT-4259
+
+alter table PRESCRIPTION_INSTR_HIST add (
+    QTY_MANIP NUMBER(24,4),
+    UNIT_MANIP VARCHAR2(50)
+    );
+    
+COMMENT ON COLUMN PRESCRIPTION_INSTR_HIST.qty_manip IS 'Quantidade a preparar (só existe nos manipulados).' ;
+COMMENT ON COLUMN PRESCRIPTION_INSTR_HIST.unit_manip IS 'Unidade da quantidade a preparar, QTY_MANIP (só existe para manipulados)' ;
+
+-- CHANGED END
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 2009-JAN-15
+-- CHANGE REASON: ALERT-13657
+
+alter table PRESCRIPTION_INSTR_HIST add (
+    ROUTE_ID VARCHAR2(11)
+    );
+    
+COMMENT ON COLUMN PRESCRIPTION_INSTR_HIST.route_id IS 'Via de administração.';
+
+-- CHANGED END
+
+
+
+--CHANGED BY: Pedro Albuquerque
+--CHANGE DATE: 2009-MAR-27 
+--CHANGE REASON: cancel reasons
+
+alter table prescription_instr_hist
+add ID_CANCEL_REASON NUMBER(24);
+comment on column prescription_instr_hist.ID_CANCEL_REASON is 'id cancel reason';
+
+alter table prescription_instr_hist
+add cancel_reason VARCHAR2(4000);
+comment on column prescription_instr_hist.cancel_reason is 'Cancel / Discontinue / Suspend text reason';
+
+--CHANGE END
+
+-- CHANGED REASON: New fields for Dispense
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 19/03/2009
+ALTER TABLE ALERT.PRESCRIPTION_INSTR_HIST ADD DISPENSE NUMBER(24,4);
+/
+ALTER TABLE ALERT.PRESCRIPTION_INSTR_HIST ADD UNIT_MEASURE_DISPENSE NUMBER(24);
+/
+COMMENT ON COLUMN PRESCRIPTION_INSTR_HIST.DISPENSE IS 'Dispensed quantity';
+/
+COMMENT ON COLUMN PRESCRIPTION_INSTR_HIST.UNIT_MEASURE_DISPENSE IS 'Unit measure for dispense quantity';
+/
+-- CHANGE END
+
+alter table prescription_instr_hist
+modify refill varchar2(100);
+
+
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 2009-JUL-10
+-- CHANGE REASON: ALERT-35531
+
+alter table PRESCRIPTION_INSTR_HIST modify I_MED VARCHAR2(255);
+
+-- CHANGED END
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 25/09/2009 17:37
+-- CHANGE REASON: [ALERT-46314] 
+alter table prescription_instr_hist
+add id_presc_instr_det number(24) default null;
+
+comment on column prescription_instr_hist.id_presc_instr_det is 'id das instruções do popup das instruções';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Patricia Neto
+-- CHANGE DATE: 28/09/2009 15:33
+-- CHANGE REASON: [ALERT-46539] Nova coluna de histórico
+alter table PRESCRIPTION_INSTR_HIST add ID_PRESC_INSTR_DET NUMBER(24);
+-- Add comments to the columns 
+comment on column PRESCRIPTION_INSTR_HIST.ID_PRESC_INSTR_DET
+  is 'id das instruções do popup das instruções';
+-- CHANGE END: Patricia Neto
+
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195] 
+declare
+ l_count pls_integer;
+begin
+
+  select count(1)
+  into l_count
+  from all_tab_columns 
+  where owner = 'ALERT' and table_name = 'PRESCRIPTION_INSTR_HIST' and column_name = 'ID_PRESC_DIRECTIONS';
+
+  if l_count = 0 then
+    execute immediate ( 'ALTER TABLE PRESCRIPTION_INSTR_HIST ADD ID_PRESC_DIRECTIONS NUMBER(24)' );
+  end if;
+
+end;
+/
+-- CHANGE END: Nuno Ferreira
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195] 
+COMMENT ON COLUMN PRESCRIPTION_INSTR_HIST.ID_PRESC_DIRECTIONS IS 'Prescription Directions ID';
+-- CHANGE END: Nuno Ferreira
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 04/11/2013
+-- CHANGE REASON: ALERT-268016
+ALTER TABLE PRESCRIPTION_INSTR_HIST DROP CONSTRAINT PIH_EPIS_FK;
+-- CHANGE END
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:57
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESCRIPTION_INSTR_HIST IS 'Histórico das alterações da posologia de medicação [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

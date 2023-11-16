@@ -1,0 +1,116 @@
+
+
+  ALTER TABLE HIDRICS_RELATION MODIFY (ID_HIDRICS_RELATION NOT NULL ENABLE);
+
+  ALTER TABLE HIDRICS_RELATION MODIFY (ID_HIDRICS_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE HIDRICS_RELATION MODIFY (ID_HIDRICS NOT NULL ENABLE);
+
+  ALTER TABLE HIDRICS_RELATION MODIFY (FLG_STATE NOT NULL ENABLE);
+
+  ALTER TABLE HIDRICS_RELATION MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE HIDRICS_RELATION MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+
+  ALTER TABLE HIDRICS_RELATION MODIFY (ID_SOFTWARE NOT NULL ENABLE);
+
+  ALTER TABLE HIDRICS_RELATION MODIFY (ID_INSTITUTION NOT NULL ENABLE);
+
+
+alter table HIDRICS_RELATION
+  add constraint HRN_PK primary key (ID_HIDRICS_RELATION);
+
+alter table HIDRICS_RELATION
+  add constraint HRN_UK unique (ID_HIDRICS_TYPE, ID_HIDRICS, ID_SOFTWARE, ID_INSTITUTION);
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 05/07/2010 11:55
+-- CHANGE REASON: [ALERT-109290] Add check constraints to HIDRICS_RELATION
+alter table HIDRICS_RELATION
+  add constraint HIDR_FLG_ST_CHK
+  check (FLG_STATE IN ('A', 'I'));
+alter table HIDRICS_RELATION
+  add constraint HIDR_FLG_AV_CHK
+  check (FLG_AVAILABLE IN ('Y', 'N'));
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 05/07/2010 16:17
+-- CHANGE REASON: [ALERT-109290] DB Versioning - TABLES
+DECLARE
+    e_index EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_index, -01418); -- index
+BEGIN
+    execute immediate 'ALTER TABLE hidrics_relation drop CONSTRAINT hrn_uk cascade';
+
+    BEGIN
+        execute immediate 'drop INDEX hrn_uk';
+    EXCEPTION
+        WHEN e_index THEN
+            NULL;
+    END;
+
+    execute immediate 'ALTER TABLE hidrics_relation add CONSTRAINT hrn_uk UNIQUE(id_hidrics_type,
+ id_hidrics,
+ id_software,
+ id_institution,
+ id_department,
+ id_dept)';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 09:45
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+DECLARE
+    e_index EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_index, -01418); -- index
+BEGIN
+    execute immediate 'ALTER TABLE hidrics_relation drop CONSTRAINT hrn_uk cascade';
+
+    BEGIN
+        execute immediate 'drop INDEX hrn_uk';
+    EXCEPTION
+        WHEN e_index THEN
+            NULL;
+    END;
+
+    execute immediate 'ALTER TABLE hidrics_relation add CONSTRAINT hrn_uk UNIQUE(id_hidrics_type,
+ id_hidrics,
+ id_software,
+ id_institution,
+ id_department,
+ id_dept,
+ id_market)';
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 27/10/2011 09:10
+-- CHANGE REASON: [ALERT-201999 ] Hidrics location - PK_BACKOFFICE_DEFAULT -> SET_INST_HIDRICS
+BEGIN
+   
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table hidrics_relation drop constraint HRN_UK';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+
+BEGIN
+   
+    BEGIN
+        EXECUTE IMMEDIATE 'drop index HRN_UK';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes

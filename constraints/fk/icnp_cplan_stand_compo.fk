@@ -1,0 +1,78 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+-- Create/Recreate primary, unique and foreign key constraints 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); -- fk
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO
+  add constraint ICSC_ICN_FK foreign key (ID_COMPOSITION)
+  references ICNP_COMPOSITION (ID_COMPOSITION)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO
+  add constraint ICSC_ICN_PARENT_FK foreign key (ID_COMPOSITION_PARENT)
+  references ICNP_COMPOSITION (ID_COMPOSITION)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO
+  add constraint ICSC_ICS_FK foreign key (ID_CPLAN_STAND)
+  references ICNP_CPLAN_STAND (ID_CPLAN_STAND)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 29/10/2010 11:25
+-- CHANGE REASON: [ALERT-117147] 
+-- Create/Recreate primary, unique and foreign key constraints 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); -- fk
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO
+  add constraint ICSC_ICN_FK foreign key (ID_COMPOSITION)
+  references ICNP_COMPOSITION (ID_COMPOSITION)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO
+  add constraint ICSC_ICN_PARENT_FK foreign key (ID_COMPOSITION_PARENT)
+  references ICNP_COMPOSITION (ID_COMPOSITION)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 29/07/2011 18:01
+-- CHANGE REASON: [ALERT-182932] Implementation of the recurrence mechanism in ICNP functionality
+DECLARE
+    e_fk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_exists, -02275); -- such a referential constraint already exists in the table
+BEGIN
+  EXECUTE IMMEDIATE 'alter table icnp_cplan_stand_compo add constraint icsc_orp_fk foreign key (id_order_recurr_plan) references order_recurr_plan (id_order_recurr_plan)';
+EXCEPTION
+  WHEN e_fk_already_exists THEN
+    dbms_output.put_line('Foreign key icnp_cplan_stand_compo.icsc_orp_fk already exists');   
+END;
+/
+-- CHANGE END: Luis Oliveira

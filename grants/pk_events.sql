@@ -1,0 +1,17 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 03/07/2010 20:32
+-- CHANGE REASON: [ALERT-109286] 
+grant execute on PK_events to ALERT_VIEWER;
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 29/06/2012 10:40
+-- CHANGE REASON: [ALERT-201292] 
+GRANT EXECUTE ON pk_events TO alert_inter;
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 20/10/2014 11:57
+-- CHANGE REASON: [ALERT-298727] 
+GRANT EXECUTE ON ALERT.PK_EVENTS TO ALERT_INTER;
+-- CHANGE END: mario.mineiro

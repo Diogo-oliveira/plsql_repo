@@ -1,0 +1,406 @@
+  CREATE TABLE ANALYSIS_RESULT_PAR
+   (	ID_ANALYSIS_RESULT_PAR NUMBER(24,0) NOT NULL ENABLE,
+	ID_ANALYSIS_RESULT NUMBER(24,0) NOT NULL ENABLE,
+	ID_PARAMETER_ANALYSIS NUMBER(24,0) NOT NULL ENABLE,
+	ID_ANALYSIS_REQ_PAR NUMBER(24,0),
+	ID_PROFESSIONAL NUMBER(24,0),
+	DT_ANALYSIS_RESULT_PAR DATE NOT NULL ENABLE,
+	DESC_ANALYSIS_RESULT VARCHAR2(4000),
+	DT_DOCTOR_REGISTRY DATE,
+	NOTES_DOCTOR_REGISTRY VARCHAR2(4000),
+	ID_EPISODE NUMBER(24,0),
+	ID_ANALYSIS_PARAMETER NUMBER(24,0),
+
+	ID_RESULT_STATUS NUMBER(24,0),
+	REF_VAL VARCHAR2(200),
+	VALUE VARCHAR2(4000),
+	ID_UNIT_MEASURE NUMBER(24,0),
+	CODING_SYSTEM VARCHAR2(200),
+	ID_ABNORMALITY NUMBER(24,0),
+	ID_ABNORMALITY_NATURE NUMBER(24,0),
+	METHOD VARCHAR2(200),
+	EQUIPMENT VARCHAR2(200),
+	DT_VALIDATION DATE,
+	ID_PROF_VALIDATION NUMBER(24,0),
+	FLG_VALIDATION_TYPE VARCHAR2(6),
+	ID_INSTIT_ORIGIN NUMBER(12,0),
+
+	DESC_UNIT_MEASURE VARCHAR2(200)
+   );
+
+
+COMMENT ON TABLE analysis_result_par IS 'Resultados dos parâmetros correspondentes às análises requisitadas' ;
+
+COMMENT ON COLUMN analysis_result_par.dt_analysis_result_par IS 'Data / hora de obtenção dos resultados' ;
+COMMENT ON COLUMN analysis_result_par.desc_analysis_result IS 'Descritivo do resultado (valor)' ;
+COMMENT ON COLUMN analysis_result_par.dt_doctor_registry IS 'Data de registo dos comentários do médico' ;
+COMMENT ON COLUMN analysis_result_par.notes_doctor_registry IS 'Comentários do médico' ;
+COMMENT ON COLUMN analysis_result_par.id_episode IS 'ID do episódio em que foram lidos os resultados, pelo requisitante' ;
+COMMENT ON COLUMN analysis_result_par.id_analysis_parameter IS 'Parâmetro requisitado' ;
+COMMENT ON COLUMN analysis_result_par.ref_val IS 'Valores de referência' ;
+COMMENT ON COLUMN analysis_result_par.value IS 'Valor do resultado, quando por interface' ;
+COMMENT ON COLUMN analysis_result_par.id_unit_measure IS 'Unidade de medida' ;
+COMMENT ON COLUMN analysis_result_par.coding_system IS 'Sistema' ;
+COMMENT ON COLUMN analysis_result_par.method IS 'Método utilizado na obtenção do resultado' ;
+COMMENT ON COLUMN analysis_result_par.equipment IS 'Equipamento utilizado na obtenção do resultado' ;
+COMMENT ON COLUMN analysis_result_par.dt_validation IS 'Data de validação' ;
+
+COMMENT ON COLUMN analysis_result_par.id_prof_validation IS 'Profissional que valida' ;
+COMMENT ON COLUMN analysis_result_par.flg_validation_type IS 'Validado por médico (D), ou técnico (T)' ;
+COMMENT ON COLUMN analysis_result_par.id_instit_origin IS 'Instituição de onde provém o resultado' ;
+COMMENT ON COLUMN analysis_result_par.desc_unit_measure IS 'Descritivo da unidade de medida, para o interface' ;
+
+
+
+ALTER TABLE ANALYSIS_RESULT_PAR 
+ ADD (REF_VAL_MIN  NUMBER(24)
+ ,REF_VAL_MAX  NUMBER(24));
+
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.REF_VAL IS 'Valores de referência (por interface)';
+
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.REF_VAL_MIN IS 'Valor de referência mínimo';
+
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.REF_VAL_MAX IS 'Valor de referência máximo';
+
+
+alter table analysis_result_par add (dt_analysis_result_par_tstz timestamp with local time zone);
+alter table analysis_result_par add (dt_doctor_registry_tstz timestamp with local time zone);
+alter table analysis_result_par add (dt_validation_tstz timestamp with local time zone);
+
+COMMENT ON COLUMN analysis_result_par.dt_analysis_result_par_tstz IS 'Data / hora de obtenção dos resultados' ;
+COMMENT ON COLUMN analysis_result_par.dt_doctor_registry_tstz IS 'Data de registo dos comentários do médico' ;
+COMMENT ON COLUMN analysis_result_par.dt_validation_tstz IS 'Data de validação' ;
+
+
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY  
+ (REF_VAL_MIN  NUMBER(24,3)
+ ,REF_VAL_MAX  NUMBER(24,3));
+
+
+
+ALTER TABLE ANALYSIS_RESULT_PAR 
+ ADD (ANALYSIS_RESULT_VALUE  NUMBER(24,3));
+
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ANALYSIS_RESULT_VALUE IS 'Resultado do parâmetro (valor numérico)';
+
+
+-- Add/modify columns 
+alter table ANALYSIS_RESULT_PAR add VALUE VARCHAR2(4000);
+-- Add comments to the columns 
+comment on column ANALYSIS_RESULT_PAR.VALUE
+  is 'Valor do resultado, quando por interface';
+  
+ALTER TABLE ANALYSIS_RESULT_PAR 
+ ADD (LABORATORY_DESC VARCHAR2(200)
+     ,LABORATORY_SHORT_DESC VARCHAR2(30)
+ )
+
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.LABORATORY_DESC IS 'Laboratory description';  
+
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.LABORATORY_SHORT_DESC IS 'Laboratory short description';  
+
+ALTER TABLE ANALYSIS_RESULT_PAR 
+ ADD (FLG_INTF_ORIG VARCHAR2(1));
+
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.FLG_INTF_ORIG IS 'Flag that indicates if the results where insert by interfaces';
+
+ALTER TABLE ANALYSIS_RESULT_PAR 
+ ADD (DT_EXT_REGISTRY TIMESTAMP WITH LOCAL TIME ZONE
+ )
+/
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.DT_EXT_REGISTRY IS 'External System record date (Interfaces)'
+/
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Desnormalização - Remover campos DATE para uso de TIMESTAMPS.
+ALTER TABLE ANALYSIS_RESULT_PAR DROP COLUMN DT_ANALYSIS_RESULT_PAR;
+ALTER TABLE ANALYSIS_RESULT_PAR DROP COLUMN DT_DOCTOR_REGISTRY;
+ALTER TABLE ANALYSIS_RESULT_PAR DROP COLUMN DT_VALIDATION;
+-- CHANGE END
+
+-- CHANGED BY: Jose Castro
+-- CHANGE DATE: 2009-03-18
+-- CHANGE REASON: ALERT-1495: Cancelamento de análises seriadas
+ALTER TABLE ANALYSIS_RESULT_PAR ADD ID_PROFESSIONAL_CANCEL NUMBER(24);
+ALTER TABLE ANALYSIS_RESULT_PAR ADD ID_CANCEL_REASON NUMBER(24);
+ALTER TABLE ANALYSIS_RESULT_PAR ADD DT_CANCEL TIMESTAMP WITH LOCAL TIME ZONE;
+ALTER TABLE ANALYSIS_RESULT_PAR ADD NOTES_CANCEL VARCHAR2(4000);
+ALTER TABLE ANALYSIS_RESULT_PAR ADD (DT_ANALYSIS_RESULT_PAR_UPD TIMESTAMP WITH LOCAL TIME ZONE);
+ALTER TABLE ANALYSIS_RESULT_PAR ADD (ID_PROFESSIONAL_UPD NUMBER(24));
+
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_PROFESSIONAL_CANCEL IS 'Professional Cancel ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_CANCEL_REASON IS 'Cancel Reason ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.DT_CANCEL IS 'Cancel Date';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.NOTES_CANCEL IS 'Cancel Notes';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.DT_ANALYSIS_RESULT_PAR_UPD IS 'Date of the update';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_PROFESSIONAL_UPD IS 'Professional ID that performed the update';
+-- CHANGE END
+
+
+-- CHANGED BY: Jose Castro
+-- CHANGE DATE: 2009-10-06
+-- CHANGE REASON: ALERT-47865
+alter table ANALYSIS_RESULT_PAR rename column NOTES_DOCTOR_REGISTRY to INTERFACE_NOTES;
+comment on column ANALYSIS_RESULT_PAR.INTERFACE_NOTES is 'Interfaces notes';
+
+alter table ANALYSIS_RESULT_PAR add PARAMETER_NOTES;
+comment on column ANALYSIS_RESULT_PAR.PARAMETER_NOTES is 'Parameter notes';
+-- CHANGE END
+
+-- CHANGED BY: Jose Castro
+-- CHANGE DATE: 2009-10-06
+-- CHANGE REASON: ALERT-47865
+alter table ANALYSIS_RESULT_PAR add PARAMETER_NOTES VARCHAR2(4000);
+comment on column ANALYSIS_RESULT_PAR.PARAMETER_NOTES is 'Parameter notes';
+-- CHANGE END
+
+-- CHANGED BY: Jose Castro
+-- CHANGE DATE: 2009-10-15
+-- CHANGE REASON: ALERT-49104
+alter table ANALYSIS_RESULT_PAR add DT_INS_RESULT_TSTZ TIMESTAMP WITH LOCAL TIME ZONE;
+comment on column ANALYSIS_RESULT_PAR.DT_INS_RESULT_TSTZ is 'Result insertion date';
+-- CHANGE END
+
+-- CHANGED BY: Carlos Nogueira
+-- CHANGE DATE: 05-04-2010
+-- CHANGE REASON: ALERT-85540
+-- Add/modify columns 
+alter table ANALYSIS_RESULT_PAR add REF_VAL_MIN_STR VARCHAR2(30);
+alter table ANALYSIS_RESULT_PAR add REF_VAL_MAX_STR VARCHAR2(30);
+
+-- Add comments to the columns 
+comment on column ANALYSIS_RESULT_PAR.REF_VAL_MIN_STR
+  is 'Valor de referência mínimo (string)';
+comment on column ANALYSIS_RESULT_PAR.REF_VAL_MAX_STR
+  is 'Valor de referência máximo (string)';
+-- CHANGE END: José Castro
+
+
+
+-- CHANGED BY: Carlos Nogueira
+-- CHANGE DATE: 03/01/2011 17:03
+-- CHANGE REASON: [ALERT-151987] 
+
+alter table analysis_result_par 
+add id_prof_read number(24);
+
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_PROF_READ IS 'Professional that read the result';   
+-- CHANGE END: Carlos Nogueira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 16/02/2011 12:15
+-- CHANGE REASON: [ALERT-41171] 
+alter table analysis_result_par rename column desc_analysis_result to desc_analysis_result_old;
+alter table analysis_result_par rename column interface_notes to interface_notes_old;
+alter table analysis_result_par rename column value to value_old;
+alter table analysis_result_par rename column parameter_notes to parameter_notes_old;
+
+alter table analysis_result_par add (desc_analysis_result clob);
+alter table analysis_result_par add (interface_notes clob);
+alter table analysis_result_par add (value clob);
+alter table analysis_result_par add (parameter_notes clob);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 17/05/2011 11:21
+-- CHANGE REASON: [ALERT-179666] 
+ALTER TABLE ANALYSIS_RESULT_PAR ADD (ID_ANALYSIS_DESC NUMBER(12));
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_ANALYSIS_DESC IS 'Id analysis desc';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/05/2011 11:37
+-- CHANGE REASON: [ALERT-179430] 
+ALTER TABLE ANALYSIS_RESULT_PAR ADD (ID_CDR NUMBER(24));
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_CDR IS 'Clinical decision rule id';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/11/2011 10:57
+-- CHANGE REASON: [ALERT-205008] 
+ALTER TABLE ANALYSIS_RESULT_PAR ADD (NOTES_DOCTOR_REGISTRY CLOB);
+
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.NOTES_DOCTOR_REGISTRY IS 'Review notes';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/12/2011 08:55
+-- CHANGE REASON: [ALERT-209155] 
+ALTER TABLE analysis_result_par DROP COLUMN DESC_ANALYSIS_RESULT_OLD;
+ALTER TABLE analysis_result_par DROP COLUMN INTERFACE_NOTES_OLD;
+ALTER TABLE analysis_result_par DROP COLUMN PARAMETER_NOTES_OLD;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/12/2011 09:20
+-- CHANGE REASON: [ALERT-209155] 
+ALTER TABLE analysis_result_par DROP COLUMN DESC_ANALYSIS_RESULT_OLD;
+ALTER TABLE analysis_result_par DROP COLUMN INTERFACE_NOTES_OLD;
+ALTER TABLE analysis_result_par DROP COLUMN PARAMETER_NOTES_OLD;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 06/12/2012 17:35
+-- CHANGE REASON: [ALERT-244776] 
+declare
+  e_col_exists exception;
+  pragma exception_init(e_col_exists, -00904);
+begin
+  execute immediate 'ALTER TABLE ANALYSIS_RESULT_PAR DROP COLUMN FLG_RESULT_ORIGIN';
+exception when e_col_exists then
+  dbms_output.put_line('Column ANALYSIS_RESULT_PAR.FLG_RESULT_ORIGIN no longer exists');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/09/2013 09:09
+-- CHANGE REASON: [ALERT-264901] 
+ALTER TABLE ANALYSIS_RESULT_PAR DROP COLUMN VALUE_OLD;
+ALTER TABLE ANALYSIS_RESULT_PAR DROP COLUMN UNIT_MEASURE;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/09/2013 09:09
+-- CHANGE REASON: [ALERT-264901] 
+COMMENT ON TABLE ANALYSIS_RESULT_PAR IS 'Lab tests'' parameter result history table';
+
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_ANALYSIS_RESULT_PAR IS 'Lab test''s parameter result ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_ANALYSIS_RESULT IS 'Lab test''s result ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_ANALYSIS_REQ_PAR IS 'Lab test''s order parameter ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_ANALYSIS_PARAMETER IS 'Lab test''s parameter ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_INSTIT_ORIGIN IS 'Institution ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_PROFESSIONAL IS 'Professional that registers the result';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.DT_ANALYSIS_RESULT_PAR_TSTZ IS 'Date that indicates when the parameter result was registered';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.DT_INS_RESULT_TSTZ IS 'Date that indicates when the result was registered';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ANALYSIS_RESULT_VALUE IS 'Lab test''s parameter result (number)';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.DESC_ANALYSIS_RESULT IS 'Lab test''s parameter result (text)';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.VALUE IS 'Lab test''s parameter result (value)';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_ANALYSIS_DESC IS 'Result (icon)';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_RESULT_STATUS IS 'Result status ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_UNIT_MEASURE IS 'Unit measure ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.DESC_UNIT_MEASURE IS 'Unit measure description';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.REF_VAL_MIN IS 'Minimum reference value';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.REF_VAL_MAX IS 'Maximum reference value';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.REF_VAL IS 'Reference range';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.REF_VAL_MIN_STR IS 'Minimum reference value (text)';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.REF_VAL_MAX_STR IS 'Maximum reference value (text)';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_ABNORMALITY IS 'Abnormality level ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_ABNORMALITY_NATURE IS 'Abnormality level nature ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_CDR IS 'Clinical decision rule ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.PARAMETER_NOTES IS 'Parameter result notes';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.INTERFACE_NOTES IS 'Parameter result notes (interface)';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.CODING_SYSTEM IS 'Coding system';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.METHOD IS 'Method';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.EQUIPMENT IS 'Equipment';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_PROF_VALIDATION IS 'Professional that validates the result';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.DT_VALIDATION_TSTZ IS 'Date that indicates when the result was validated';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.FLG_VALIDATION_TYPE IS 'Flag that indicates the professional''s category that validated the result';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.DT_EXT_REGISTRY IS 'Date that indicates the registry in the external system';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.FLG_INTF_ORIG IS 'Flag that indicates if the result came from an external system';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_PROF_READ IS 'Professional who marked the lab test as read';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.DT_DOCTOR_REGISTRY_TSTZ IS 'Date when the professional marked the lab test as read';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_PROFESSIONAL_CANCEL IS 'Professional that cancels the lab test parameter result';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.DT_CANCEL IS 'Date that indicates when the lab tests parameter result was cancelled';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_CANCEL_REASON IS 'Cancel reason ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.NOTES_CANCEL IS 'Cancelation notes';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_PROFESSIONAL_UPD IS 'Last update professional ID';
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.DT_ANALYSIS_RESULT_PAR_UPD IS 'Last update date';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 11/04/2014 16:46
+-- CHANGE REASON: [ALERT-280752] 
+-- Add/modify columns 
+alter table ANALYSIS_RESULT_PAR add flg_mult_result VARCHAR2(1) default 'N';
+-- Add comments to the columns 
+comment on column ANALYSIS_RESULT_PAR.flg_mult_result
+  is 'Flag that indicates if exists multiple results for the same ID_RESULT and ID_ANALYSIS_PARAMETER (for different unit measures)';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/05/2014 15:11
+-- CHANGE REASON: [ ALERT-285475] 
+ALTER TABLE ANALYSIS_RESULT_PAR ADD (ID_LABORATORY NUMBER(24));
+
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_LABORATORY IS 'Laboratory ID';
+
+
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY CODING_SYSTEM VARCHAR2(200 CHAR);
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY CREATE_USER VARCHAR2(20 CHAR);
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY DESC_UNIT_MEASURE VARCHAR2(200 CHAR);
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY EQUIPMENT VARCHAR2(200 CHAR);
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY FLG_INTF_ORIG VARCHAR2(1 CHAR);
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY FLG_VALIDATION_TYPE VARCHAR2(6 CHAR);
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY LABORATORY_DESC VARCHAR2(200 CHAR);
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY LABORATORY_SHORT_DESC VARCHAR2(30 CHAR);
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY METHOD VARCHAR2(1000 CHAR);
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY NOTES_CANCEL VARCHAR2(1000 CHAR);
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY REF_VAL VARCHAR2(200 CHAR);
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY REF_VAL_MAX_STR VARCHAR2(30 CHAR);
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY REF_VAL_MIN_STR VARCHAR2(30 CHAR);
+ALTER TABLE ANALYSIS_RESULT_PAR MODIFY UPDATE_USER VARCHAR2(24 CHAR);
+
+
+ALTER TABLE ANALYSIS_RESULT_PAR ADD CONSTRAINT ARLP_PROF_CANCEL_FK FOREIGN KEY (ID_PROFESSIONAL_CANCEL) REFERENCES PROFESSIONAL(ID_PROFESSIONAL);
+ALTER TABLE ANALYSIS_RESULT_PAR ADD CONSTRAINT ARLP_PROF_UPD_FK FOREIGN KEY (ID_PROFESSIONAL_UPD) REFERENCES PROFESSIONAL(ID_PROFESSIONAL);
+ALTER TABLE ANALYSIS_RESULT_PAR ADD CONSTRAINT ARLP_PROF_READ_FK FOREIGN KEY (ID_PROF_READ) REFERENCES PROFESSIONAL(ID_PROFESSIONAL);
+ALTER TABLE ANALYSIS_RESULT_PAR ADD CONSTRAINT ARLP_LAB_FK FOREIGN KEY (ID_LABORATORY) REFERENCES AB_INSTITUTION (ID_AB_INSTITUTION);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 07/07/2014 10:50
+-- CHANGE REASON: [ALERT-289537 ] 
+DECLARE e_column_already_there EXCEPTION;
+e_invalid_identifier EXCEPTION;
+e_already_not_null EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+PRAGMA EXCEPTION_INIT(e_already_not_null, -01442);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_RESULT_PAR 
+ ADD (ID_ARP_PARENT NUMBER(24)
+ ,ANALYSIS_RESULT_VALUE_1 NUMBER(24,3)
+ ,ANALYSIS_RESULT_VALUE_2 NUMBER(24,3)
+ ,COMPARATOR VARCHAR2(2 CHAR)
+ ,SEPARATOR VARCHAR2(1 CHAR)
+ ,STANDARD_CODE VARCHAR2(200 CHAR))
+ MODIFY (METHOD VARCHAR2(200 CHAR))';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ID_ARP_PARENT IS ''Lab test''''s parameter result parent ID''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ANALYSIS_RESULT_VALUE_1 IS ''Lab test''''s parameter result (value)''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_RESULT_PAR.ANALYSIS_RESULT_VALUE_2 IS ''Lab test''''s parameter result (value)''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_RESULT_PAR.COMPARATOR IS ''Comparator for numerical results''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_RESULT_PAR.SEPARATOR IS ''Separator for numerical results''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_RESULT_PAR.STANDARD_CODE IS ''Standard code''';
+    
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:01
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS_RESULT_PAR IS 'Lab tests'' parameter results table';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/04/2017 11:33
+-- CHANGE REASON: [ALERT-329997] 
+ALTER TABLE ANALYSIS_RESULT_PAR ADD (FLG_RELEVANT VARCHAR (1 CHAR));
+COMMENT ON COLUMN ANALYSIS_RESULT_PAR.FLG_RELEVANT IS 'Indication of the result''s relevance';
+-- CHANGE END: Ana Matos

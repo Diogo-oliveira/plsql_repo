@@ -1,0 +1,47 @@
+
+BEGIN
+PK_FRMW_OBJECTS.insert_into_frmw_objects('ALERT','UPD_MED_LOG','TABLE','DSV','N',NULL,'N');
+END;
+/
+
+create table UPD_MED_LOG
+(
+  ID_UPD_MED_LOG       NUMBER(24) not null,
+  VERS                 VARCHAR2(50) not null,
+  SUPPLIER_VERSION     VARCHAR2(100) not null,
+  UPDATE_READY_DATE    DATE,
+  UPDATE_EXECUTED_DATE DATE,
+  ID_PROCESS           NUMBER(24) not null,
+  TABLE_NAME           VARCHAR2(255) not null,
+  ERROR_NUMBER         NUMBER(10),
+  UPDATE_END_DATE      DATE
+);
+-- Add comments to the table 
+comment on table UPD_MED_LOG
+  is 'LOGS ALL IMPORTANT INFORMATION FOR EACH MEDICATION UPDATE';
+-- Add comments to the columns 
+comment on column UPD_MED_LOG.ID_UPD_MED_LOG
+  is 'Table ID';
+comment on column UPD_MED_LOG.VERS
+  is 'medication database VERS: GB, USA, PT...';
+comment on column UPD_MED_LOG.SUPPLIER_VERSION
+  is 'supplier verison of the data: G-Standaard_Oct_2010, FDBUK_Nov_2010';
+comment on column UPD_MED_LOG.UPDATE_READY_DATE
+  is 'date of the execution of the start_balance() process';
+comment on column UPD_MED_LOG.UPDATE_EXECUTED_DATE
+  is 'date of the execution of the run_job_balance() process ';
+comment on column UPD_MED_LOG.ID_PROCESS
+  is 'Process number';
+comment on column UPD_MED_LOG.TABLE_NAME
+  is 'updated table';
+comment on column UPD_MED_LOG.ERROR_NUMBER
+  is 'Number of records that returned an error during the update process';
+comment on column UPD_MED_LOG.UPDATE_END_DATE
+  is 'date of the end of the update on the table';
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:27
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE UPD_MED_LOG IS 'LOGS ALL IMPORTANT INFORMATION FOR EACH MEDICATION UPDATE [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,36 @@
+CREATE TABLE NOTES_PROFILE_INST
+(
+ID_NOTES_PROFILE_INST	NUMBER(24)      NOT NULL,
+ID_PROFILE_TEMPLATE     NUMBER(24)      NOT NULL,
+ID_INSTITUTION		NUMBER(24)      NOT NULL,
+ID_NOTES_CONFIG		NUMBER(24)      NOT NULL,
+FLG_WRITE		VARCHAR2(1)     NOT NULL,
+FLG_READ		VARCHAR2(1)     NOT NULL,
+FLG_AVAILABLE		VARCHAR2(1)	NOT NULL
+);
+
+COMMENT ON TABLE ALERT.NOTES_PROFILE_INST                IS 'Notes origin configuration';
+COMMENT ON COLUMN NOTES_PROFILE_INST.ID_NOTES_PROFILE_INST  IS 'Chave primária' ;
+COMMENT ON COLUMN NOTES_PROFILE_INST.ID_PROFILE_TEMPLATE IS 'Perfil para que está configurado' ;
+COMMENT ON COLUMN NOTES_PROFILE_INST.ID_INSTITUTION      IS 'Institution para que está configurado' ;
+COMMENT ON COLUMN NOTES_PROFILE_INST.ID_NOTES_CONFIG     IS 'Item configurado em NOTES_CONFIG' ;
+COMMENT ON COLUMN NOTES_PROFILE_INST.FLG_AVAILABLE       IS 'Disponivel ou nao: Y/N' ;
+
+
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 29/01/2010 17:24
+-- CHANGE REASON: [ALERT-71963] 
+DECLARE
+    e_column_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE notes_profile_inst ADD (FLG_PRINT VARCHAR2(1 CHAR) DEFAULT ''Y'')';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+--
+COMMENT ON COLUMN notes_profile_inst.FLG_PRINT IS 'Flag that indicates if current type of registries should be visible (Y) or invisible (N) in section notes of reports.';
+-- CHANGE END: Luís Maia

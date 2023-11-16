@@ -1,0 +1,19 @@
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 22/11/2010 15:26
+-- CHANGE REASON: [ALERT-143418] PK_REPORTS issue replication
+DECLARE
+    e_constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_exists, -02275);
+    l_table_name VARCHAR2(30) := 'rep_scope_inst_soft_market';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT rep_s_ism_tlt_fk FOREIGN KEY (id_reports) REFERENCES reports (id_reports)';
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT rep_s_ism_sfw_fk FOREIGN KEY (id_rep_section) REFERENCES rep_section (id_rep_section)';
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT rep_s_ism_inst_fk FOREIGN KEY (id_institution) REFERENCES institution (id_institution)';
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT rep_s_ism_soft_fk FOREIGN KEY (id_software) REFERENCES software (id_software)';
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT rep_s_ism_mark_fk FOREIGN KEY (id_market) REFERENCES market (id_market)';
+EXCEPTION
+    WHEN e_constraint_already_exists THEN
+        dbms_output.put_line('WARNING - Foreign keys in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END: Rui Duarte

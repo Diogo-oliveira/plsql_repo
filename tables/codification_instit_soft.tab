@@ -1,0 +1,77 @@
+-- ADDED BY: Jose Castro
+-- ADDED DATE: 07/07/2009
+-- ADDED REASON: ALERT-910
+-- Create table
+create table CODIFICATION_INSTIT_SOFT
+(
+  ID_CODIF_INSTIT_SOFT        NUMBER(24) NOT NULL,
+  ID_CODIFICATION             NUMBER(24) NOT NULL,
+  ID_INSTITUTION              NUMBER(24) NOT NULL,
+  ID_SOFTWARE                 NUMBER(24) NOT NULL,
+  FLG_DEFAULT                 VARCHAR2(1) NOT NULL,
+  FLG_AVAILABLE               VARCHAR2(1) NOT NULL,
+  CREATE_USER                 VARCHAR2(24),
+  CREATE_TIME                 TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION          NUMBER(24),
+  UPDATE_USER                 VARCHAR2(24),
+  UPDATE_TIME                 TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION          NUMBER(24)
+);
+ 
+-- Add comments to the table 
+comment on table CODIFICATION_INSTIT_SOFT
+  is 'Codifications to be matched with MCDTs';
+
+-- Add comments to the columns 
+comment on column CODIFICATION_INSTIT_SOFT.ID_CODIF_INSTIT_SOFT
+  is 'Codification Institution Software ID';
+comment on column CODIFICATION_INSTIT_SOFT.ID_CODIFICATION
+  is 'Codification ID';
+comment on column CODIFICATION_INSTIT_SOFT.ID_INSTITUTION
+  is 'Institution ID';
+comment on column CODIFICATION_INSTIT_SOFT.ID_SOFTWARE
+  is 'Software ID';
+comment on column CODIFICATION_INSTIT_SOFT.FLG_DEFAULT
+  is 'Default codification for this institution and software';
+comment on column CODIFICATION_INSTIT_SOFT.FLG_AVAILABLE
+  is 'This codification is available or not';
+comment on column CODIFICATION_INSTIT_SOFT.CREATE_USER
+  is 'Creation User';
+comment on column CODIFICATION_INSTIT_SOFT.CREATE_TIME
+  is 'Creation Time';
+comment on column CODIFICATION_INSTIT_SOFT.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column CODIFICATION_INSTIT_SOFT.UPDATE_USER
+  is 'Update User';
+comment on column CODIFICATION_INSTIT_SOFT.UPDATE_TIME
+  is 'Update Time';
+comment on column CODIFICATION_INSTIT_SOFT.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- ADDED END
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:01
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE CODIFICATION_INSTIT_SOFT IS 'Codification configuration';
+
+COMMENT ON COLUMN CODIFICATION_INSTIT_SOFT.ID_CODIF_INSTIT_SOFT IS 'Primary key';
+COMMENT ON COLUMN CODIFICATION_INSTIT_SOFT.ID_CODIFICATION IS 'Codification ID';
+COMMENT ON COLUMN CODIFICATION_INSTIT_SOFT.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN CODIFICATION_INSTIT_SOFT.ID_SOFTWARE IS 'Software ID';
+COMMENT ON COLUMN CODIFICATION_INSTIT_SOFT.FLG_DEFAULT IS 'Flag that indicates if the record is default or not (Y/N)';
+COMMENT ON COLUMN CODIFICATION_INSTIT_SOFT.FLG_AVAILABLE IS 'Flag that indicates if the record is available or not (Y/N)';
+COMMENT ON COLUMN CODIFICATION_INSTIT_SOFT.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN CODIFICATION_INSTIT_SOFT.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN CODIFICATION_INSTIT_SOFT.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN CODIFICATION_INSTIT_SOFT.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN CODIFICATION_INSTIT_SOFT.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN CODIFICATION_INSTIT_SOFT.UPDATE_INSTITUTION IS 'Update Institution';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 05/05/2021 16:02
+-- CHANGE REASON: [EMR-44727]
+ALTER TABLE codification_instit_soft ADD FLG_USE_ON_REFERRAL VARCHAR2(1 CHAR) DEFAULT 'N';
+comment on column codification_instit_soft.FLG_USE_ON_REFERRAL IS 'Use this codification on external referral? (Y/N)';
+-- CHANGE END: Pedro Henriques

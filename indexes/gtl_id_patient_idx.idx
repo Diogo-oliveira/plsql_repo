@@ -1,0 +1,12 @@
+
+
+DECLARE
+    already_indexed EXCEPTION;
+    PRAGMA EXCEPTION_INIT(already_indexed, -01408);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE INDEX gtl_id_patient_idx ON grid_task_lab (id_patient) TABLESPACE index_s';
+EXCEPTION
+    WHEN already_indexed THEN
+        NULL;
+END;
+/

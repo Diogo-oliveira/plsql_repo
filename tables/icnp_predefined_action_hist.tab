@@ -1,0 +1,137 @@
+
+CREATE TABLE ICNP_PREDEFINED_ACTION_HIST
+ (ID_PREDEFINED_ACTION_HIST NUMBER(24) NOT NULL
+ ,ID_PREDEFINED_ACTION NUMBER(24) NOT NULL
+ ,DT_PREDEFINED_ACTION_HIST TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ ,ID_PROFESSIONAL NUMBER(24)
+ ,FLG_MOST_RECENT VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ ,ID_CANCEL_REASON NUMBER(24)
+ ,DT_CANCEL TIMESTAMP WITH LOCAL TIME ZONE
+ ,REASON_NOTES VARCHAR2(2000)
+ ,ID_PROF_CANCEL NUMBER(24) 
+ ,HIST_NOTES VARCHAR2(50)
+ ,FLG_CANCEL VARCHAR2(1) NOT NULL
+ ,CREATE_USER VARCHAR2(24) 
+ ,CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE 
+ ,CREATE_INSTITUTION NUMBER(24) 
+ ,UPDATE_USER VARCHAR2(24) 
+ ,UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE 
+ ,UPDATE_INSTITUTION NUMBER(24)
+ )
+/
+
+COMMENT ON TABLE ICNP_PREDEFINED_ACTION_HIST IS 'Automatic Action. Primarily allows composition actions to be associated with composition diagnosis. However, it also allows all type of relation between compositions.'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.ID_PREDEFINED_ACTION_HIST IS 'Predefined action history ID.'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.ID_PREDEFINED_ACTION IS 'Predefined action ID from ICNP_PREDEFINED_ACTION table.'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.DT_PREDEFINED_ACTION_HIST IS 'Date when predefined action is changed.'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.ID_PROFESSIONAL IS 'Professional ID that has created the relation history'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.FLG_MOST_RECENT IS 'Most recent composition flag (Y/N)'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.ID_CANCEL_REASON IS 'Cancel reason ID'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.DT_CANCEL IS 'Date when relation ID is cancelled'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.ID_PROF_CANCEL IS 'ID of professional that cancelled the composition relations.'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.FLG_CANCEL IS 'Y-Relation is cancelled, N-relation is active'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.HIST_NOTES IS 'History notes (internal comments)'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.CREATE_USER IS 'Creation User'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.CREATE_TIME IS 'Creation Time'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.CREATE_INSTITUTION IS 'Creation Institution'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.UPDATE_USER IS 'Update User'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.UPDATE_TIME IS 'Update Time'
+/
+
+COMMENT ON COLUMN ICNP_PREDEFINED_ACTION_HIST.UPDATE_INSTITUTION IS 'Update Institution'
+
+/
+
+-- CHANGED BY: Pedro Lopes
+-- CHANGE DATE: 2009-JUL-10
+-- CHANGE REASON: ALERT-913
+
+ALTER TABLE icnp_predefined_action_hist MODIFY flg_cancel DEFAULT 'N';
+
+--CHANGE END;
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 07/06/2013 15:16
+-- CHANGE REASON: [ALERT-257983] 
+alter table ICNP_PREDEFINED_ACTION_HIST add flg_most_freq VARCHAR2(1);
+-- Add comments to the columns 
+comment on column ICNP_PREDEFINED_ACTION_HIST.flg_most_freq
+  is '(Y/N) Most frequent nursing interventions';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 10:40
+-- CHANGE REASON: [ALERT-317702] 
+comment on table ICNP_PREDEFINED_ACTION_HIST
+  is 'Automatic action history table';
+-- Add comments to the columns 
+comment on column ICNP_PREDEFINED_ACTION_HIST.id_predefined_action_hist
+  is 'Primary key';
+comment on column ICNP_PREDEFINED_ACTION_HIST.id_predefined_action
+  is 'Predefined action ID';
+comment on column ICNP_PREDEFINED_ACTION_HIST.dt_predefined_action_hist
+  is 'Date when the register was made';
+comment on column ICNP_PREDEFINED_ACTION_HIST.id_professional
+  is 'Professional ID that has created the relation history';
+comment on column ICNP_PREDEFINED_ACTION_HIST.flg_most_recent
+  is 'Flag that indicates if this is the most recent composition (Y/N)';
+comment on column ICNP_PREDEFINED_ACTION_HIST.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column ICNP_PREDEFINED_ACTION_HIST.dt_cancel
+  is 'Date that indicates when the action was cancelled';
+comment on column ICNP_PREDEFINED_ACTION_HIST.reason_notes
+  is 'Cancelation notes';
+comment on column ICNP_PREDEFINED_ACTION_HIST.id_prof_cancel
+  is 'Professional that cancels the action';
+comment on column ICNP_PREDEFINED_ACTION_HIST.hist_notes
+  is 'History notes (internal comments)';
+comment on column ICNP_PREDEFINED_ACTION_HIST.flg_cancel
+  is 'Flag that indicates the type of cancelation: Y - relation is cancelled, N - relation is active';
+comment on column ICNP_PREDEFINED_ACTION_HIST.create_user
+  is 'Creation User';
+comment on column ICNP_PREDEFINED_ACTION_HIST.create_time
+  is 'Creation Time';
+comment on column ICNP_PREDEFINED_ACTION_HIST.create_institution
+  is 'Creation Institution';
+comment on column ICNP_PREDEFINED_ACTION_HIST.update_user
+  is 'Update User';
+comment on column ICNP_PREDEFINED_ACTION_HIST.update_time
+  is 'Update Time';
+comment on column ICNP_PREDEFINED_ACTION_HIST.update_institution
+  is 'Update Institution';
+comment on column ICNP_PREDEFINED_ACTION_HIST.flg_most_freq
+  is 'Most frequent nursing intervention (Y/N)';
+  
+  
+  
+-- CHANGE END: Ana Matos

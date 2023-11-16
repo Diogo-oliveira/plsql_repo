@@ -1,0 +1,279 @@
+-- Create table
+create table PROCEDURES_EA
+(
+  ID_INTERV_PRESCRIPTION   NUMBER(24),
+  ID_INTERV_PRESC_DET      NUMBER(24) not null,
+  ID_INTERV_PRESC_PLAN     NUMBER(24),
+  ID_INTERVENTION          NUMBER(24),
+  FLG_STATUS_INTERVENTION  VARCHAR2(1),
+  ID_SPECIALITY            NUMBER(24),
+  ID_SYSTEM_APPARATI       NUMBER(24),
+  ID_INTERV_PHYSIATRY_AREA NUMBER(24),
+  FLG_STATUS_REQ           VARCHAR2(1),
+  FLG_STATUS_DET           VARCHAR2(1),
+  FLG_STATUS_PLAN          VARCHAR2(1),
+  FLG_TIME                 VARCHAR2(1),
+  FLG_INTERV_TYPE          VARCHAR2(1),
+  DT_BEGIN_REQ             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DT_BEGIN_DET             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  INTERVAL                 NUMBER(12,4),
+  DT_INTERV_PRESCRIPTION   TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  FLG_MFR                  VARCHAR2(1),
+  DT_PLAN                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROFESSIONAL          NUMBER(24),
+  FLG_NOTES                VARCHAR2(1),
+  STATUS_STR               VARCHAR2(200),
+  STATUS_MSG               VARCHAR2(200),
+  STATUS_ICON              VARCHAR2(200),
+  STATUS_FLG               VARCHAR2(1),
+  ID_PROF_ORDER            NUMBER(24),
+  CODE_INTERVENTION_ALIAS  VARCHAR2(200),
+  FLG_PRTY                 VARCHAR2(1),
+  NUM_FREQ                 NUMBER(3),
+  NUM_TAKE                 NUMBER(3),
+  NUM_SESS                 NUMBER(3),
+  FLG_STATUS_CHANGE        VARCHAR2(1),
+  ID_EPISODE_ORIGIN        NUMBER(24),
+  ID_VISIT                 NUMBER(24),
+  ID_EPISODE               NUMBER(24),
+  ID_PATIENT               NUMBER(24),
+  FLG_REFERRAL             VARCHAR2(1),
+  FLG_FREQ                 VARCHAR2(1),
+  DT_INTERV_PRESC_DET      TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DT_DG_LAST_UPDATE        TIMESTAMP(6) WITH LOCAL TIME ZONE default CURRENT_TIMESTAMP
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table PROCEDURES_EA
+  is 'Easy Access table for Procedures';
+-- Add comments to the columns 
+comment on column PROCEDURES_EA.ID_INTERV_PRESCRIPTION
+  is 'Request ID';
+comment on column PROCEDURES_EA.ID_INTERV_PRESC_DET
+  is 'Request''s detail ID';
+comment on column PROCEDURES_EA.ID_INTERV_PRESC_PLAN
+  is 'Next execution''s ID';
+comment on column PROCEDURES_EA.ID_INTERVENTION
+  is 'Intervention''s ID';
+comment on column PROCEDURES_EA.FLG_STATUS_INTERVENTION
+  is 'Intervention''s status';
+comment on column PROCEDURES_EA.ID_SPECIALITY
+  is 'Intervention''s specialty ID';
+comment on column PROCEDURES_EA.ID_SYSTEM_APPARATI
+  is 'Intervention''s system apparati ID';
+comment on column PROCEDURES_EA.ID_INTERV_PHYSIATRY_AREA
+  is 'Physical therapy area ID';
+comment on column PROCEDURES_EA.FLG_STATUS_REQ
+  is 'Request''s status ';
+comment on column PROCEDURES_EA.FLG_STATUS_DET
+  is 'Request''s detail status ';
+comment on column PROCEDURES_EA.FLG_STATUS_PLAN
+  is 'Execution''s status ';
+comment on column PROCEDURES_EA.FLG_TIME
+  is 'Execution type: in this (E)pisode, (B)etween episodes, (N)ext episode.';
+comment on column PROCEDURES_EA.FLG_INTERV_TYPE
+  is 'Type of execution: N - dose and interval, U - Single dose, S - PRN, A - Scheduled dose, C - Continuous';
+comment on column PROCEDURES_EA.DT_BEGIN_REQ
+  is 'Request''s begin date';
+comment on column PROCEDURES_EA.DT_BEGIN_DET
+  is 'Intervention''s begin date';
+comment on column PROCEDURES_EA.INTERVAL
+  is 'Interval between executions';
+comment on column PROCEDURES_EA.DT_INTERV_PRESCRIPTION
+  is 'Request''s registry date';
+comment on column PROCEDURES_EA.FLG_MFR
+  is 'Indication of whether it''s a request of a physical therapy intervention (Y) or not (N).';
+comment on column PROCEDURES_EA.DT_PLAN
+  is 'Next execution''s date';
+comment on column PROCEDURES_EA.ID_PROFESSIONAL
+  is 'Request''s registry professional ID';
+comment on column PROCEDURES_EA.FLG_NOTES
+  is 'Indication of whether there are notes (Y) or not (N). Notes: registry notes, cancellation notes or notes for the technician.';
+comment on column PROCEDURES_EA.STATUS_STR
+  is 'Request''s status (in a specific format)';
+comment on column PROCEDURES_EA.STATUS_MSG
+  is 'Code of the message to be displayed';
+comment on column PROCEDURES_EA.STATUS_ICON
+  is 'Code of the icon to be displayed according to status';
+comment on column PROCEDURES_EA.STATUS_FLG
+  is 'Value used to obtain status icon';
+comment on column PROCEDURES_EA.ID_PROF_ORDER
+  is 'Request''s professional ID';
+comment on column PROCEDURES_EA.CODE_INTERVENTION_ALIAS
+  is 'Intervention code for description. Only for physical therapy requests.';
+comment on column PROCEDURES_EA.FLG_PRTY
+  is 'Indication of whether it''s a prioritary request (Y) or not (N). Only for physical therapy requests.';
+comment on column PROCEDURES_EA.NUM_FREQ
+  is 'Frequency of the treatment. Only for physical therapy requests.';
+comment on column PROCEDURES_EA.NUM_TAKE
+  is 'Number of executions. Only for physical therapy requests.';
+comment on column PROCEDURES_EA.NUM_SESS
+  is 'Number of sessions. Only for physical therapy requests.';
+comment on column PROCEDURES_EA.FLG_STATUS_CHANGE
+  is 'Status of the proposed change. Only for physical therapy requests.';
+comment on column PROCEDURES_EA.ID_EPISODE_ORIGIN
+  is 'When the patient has an episode with an intervention request with FLG_TIME = ''N'', then the patient comes to another appointment and that request is duplicated to this new episode. In this new request, this column is filled with the episode ID of the first request.';
+comment on column PROCEDURES_EA.ID_VISIT
+  is 'Visit ID';
+comment on column PROCEDURES_EA.ID_EPISODE
+  is 'Episode ID';
+comment on column PROCEDURES_EA.ID_PATIENT
+  is 'Patient ID';
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 2008/10/21
+-- CHANGE REASON: Added missing column DT_ORDER
+alter table procedures_ea add dt_order timestamp(6) with local time zone;
+comment on column procedures_ea.dt_order is 'Moment when the ordering professional ask the registering professional to request';
+-- CHANGE END
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008/11/05
+-- CHANGE REASON: Added missing column ID_CHANGE
+alter table procedures_ea add id_change number(24) ;
+comment on column procedures_ea.id_change is 'Alteration number';
+-- CHANGE END
+
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2009-JAN-07
+-- CHANGE REASON: Alteração de tipos de dados
+
+
+ALTER TABLE PROCEDURES_EA MODIFY NUM_FREQ NUMBER(24);
+ALTER TABLE PROCEDURES_EA MODIFY NUM_SESS NUMBER(24);
+
+-- CHANGE END
+
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/09/2009 17:45
+-- CHANGE REASON: [ALERT-42947] New feature ALERT 910 MCDT INTERNAL EXTERNAL
+comment on column procedures_ea.flg_referral is 'Flag that shows if requisiton was added to referral. Options are (A)vailable,  (R)eserved, electronically sent (I) or printed (S).';
+-- CHANGE END: João Martins
+
+-- cmf 23-09-2009
+COMMENT ON COLUMN PROCEDURES_EA.DT_DG_LAST_UPDATE   IS ' Data governance last update date';
+COMMENT ON COLUMN PROCEDURES_EA.DT_INTERV_PRESC_DET IS ' Date of row insertion';
+COMMENT ON COLUMN PROCEDURES_EA.FLG_FREQ            IS ' Frequency of treatments: n times per (D) day, (S) week or (M) month';
+COMMENT ON COLUMN PROCEDURES_EA.FLG_REFERRAL        IS ' Flag that shows if requisiton was added to referral. Options are (A)vailable,  (R)eserved, electronically sent (I) or printed (S).';
+
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 01/10/2012 16:25
+-- CHANGE REASON: [ALERT-241269 ] 
+
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+
+    EXECUTE IMMEDIATE 'alter table procedures_ea add( flg_laterality VARCHAR2(1 CHAR))';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    
+END;
+/
+
+comment on column PROCEDURES_EA.flg_laterality
+  is 'Laterality of intervention: N- (N)ot Applicable, B- (B)ilateral, L- (L)eft, R- (R)ight';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 16/04/2013 15:38
+-- CHANGE REASON: [ALERT-255084] 
+ALTER TABLE PROCEDURES_EA 
+ ADD (FLG_CLINICAL_PURPOSE VARCHAR2(1 CHAR),
+      OTHER_CLIN_PURP VARCHAR2(1000 CHAR));
+
+COMMENT ON COLUMN PROCEDURES_EA.FLG_CLINICAL_PURPOSE IS 'Flag that indicates the Clinical purpose';
+COMMENT ON COLUMN PROCEDURES_EA.OTHER_CLIN_PURP IS 'Clinical purpose others (when flg_clinical_purpose = ''O'')';
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 15/06/2016 11:20
+-- CHANGE REASON: [ALERT-322211] 
+ALTER TABLE PROCEDURES_EA MODIFY (FLG_STATUS_REQ VARCHAR2(2 CHAR), FLG_STATUS_DET VARCHAR2(2 CHAR), STATUS_FLG VARCHAR2(2 CHAR));
+
+ALTER TABLE PROCEDURES_EA DROP CONSTRAINT PEA_FLG_STATUS_REQ_CK;
+ALTER TABLE PROCEDURES_EA DROP CONSTRAINT PEA_FLG_STATUS_DET_CK;
+
+ALTER TABLE PROCEDURES_EA ADD CONSTRAINT PEA_FLG_STATUS_REQ_CHK CHECK (flg_status_req IN ('PD', 'R', 'D', 'W', 'A', 'S', 'E', 'P', 'F', 'C', 'I', 'O', 'N', 'Z'));
+ALTER TABLE PROCEDURES_EA ADD CONSTRAINT PEA_FLG_STATUS_DET_CHK CHECK (flg_status_det IN ('PD', 'S', 'X', 'E', 'R', 'D', 'W', 'A', 'F', 'I', 'O', 'N', 'C', 'V', 'T', 'G', 'P', 'Z'));
+ 
+
+ 
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/07/2016 09:39
+-- CHANGE REASON: [ALERT-323391] 
+ALTER TABLE PROCEDURES_EA DROP COLUMN id_speciality;
+ALTER TABLE PROCEDURES_EA DROP COLUMN id_system_apparati;
+ALTER TABLE PROCEDURES_EA DROP COLUMN id_interv_physiatry_area;
+ALTER TABLE PROCEDURES_EA DROP COLUMN flg_mfr;
+ALTER TABLE PROCEDURES_EA DROP COLUMN num_freq; 
+ALTER TABLE PROCEDURES_EA DROP COLUMN num_sess;
+ALTER TABLE PROCEDURES_EA DROP COLUMN flg_status_change;
+ALTER TABLE PROCEDURES_EA DROP COLUMN flg_freq; 
+ALTER TABLE PROCEDURES_EA DROP COLUMN id_change;
+
+
+ALTER TABLE PROCEDURES_EA ADD (
+    flg_prn VARCHAR2(1 CHAR),
+    flg_doc VARCHAR2(1 CHAR),
+    id_interv_codification NUMBER(24),
+    id_order_recurrence NUMBER(24),
+    id_task_dependency NUMBER(24),
+    flg_req_origin_module VARCHAR2(1 CHAR),
+    notes VARCHAR2(1000 CHAR),
+    notes_cancel VARCHAR2(1000 CHAR));
+    
+    
+COMMENT ON COLUMN PROCEDURES_EA.FLG_PRN IS 'Flag that indicates whether the procedure is PRN or not';
+COMMENT ON COLUMN PROCEDURES_EA.FLG_DOC IS 'Indication of wether there are documents (Y) or not (N)';
+COMMENT ON COLUMN PROCEDURES_EA.ID_INTERV_CODIFICATION IS 'Codification procedure ID';
+COMMENT ON COLUMN PROCEDURES_EA.ID_ORDER_RECURRENCE IS 'Order recurrence ID';
+COMMENT ON COLUMN PROCEDURES_EA.ID_TASK_DEPENDENCY IS 'Task dependency identifier';
+COMMENT ON COLUMN PROCEDURES_EA.FLG_REQ_ORIGIN_MODULE IS 'Request created by: D - Default, O - Order Sets, I - Interfaces; S - Scheduler;  R - Referral';
+COMMENT ON COLUMN PROCEDURES_EA.NOTES IS 'General notes';
+COMMENT ON COLUMN PROCEDURES_EA.NOTES_CANCEL IS 'Procedures'' cancel notes';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 04/05/2017 10:17
+-- CHANGE REASON: [ALERT-330278] 
+ALTER TABLE PROCEDURES_EA ADD (ID_CLINICAL_PURPOSE NUMBER(24), CLINICAL_PURPOSE_NOTES VARCHAR(1000 CHAR));
+
+COMMENT ON COLUMN PROCEDURES_EA.ID_CLINICAL_PURPOSE IS 'Clinical purpose ID';
+COMMENT ON COLUMN PROCEDURES_EA.CLINICAL_PURPOSE_NOTES IS 'Clinical purpose free text field (when id_clinical_purpose = 0)';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 27/05/2020 17:24
+-- CHANGE REASON: [EMR-32397]
+ALTER TABLE procedures_ea ADD FLG_LOCATION VARCHAR2(5 CHAR);
+COMMENT ON COLUMN procedures_ea.flg_location IS 'Flag Location (In this facility, Care of Point, Others..)';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/03/2021 15:25
+-- CHANGE REASON: [EMR-42955]
+ALTER TABLE PROCEDURES_EA MODIFY NOTES VARCHAR2(4000);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 09/11/2021 08:43
+-- CHANGE REASON: [EMR-49451]
+ALTER TABLE procedures_ea DROP COLUMN other_clin_purp;
+-- CHANGE END: Ana Matos

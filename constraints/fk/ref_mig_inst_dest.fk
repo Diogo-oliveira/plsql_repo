@@ -1,0 +1,31 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 25/06/2012 17:09
+-- CHANGE REASON: [ALERT-233961] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints c
+     WHERE c.constraint_name = 'RMT_INN_NEW_FK'
+       AND c.table_name = 'REF_MIG_INST_DEST';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE REF_MIG_INST_DEST ADD (CONSTRAINT RMT_INN_NEW_FK FOREIGN KEY (ID_INST_DEST_NEW) REFERENCES INSTITUTION(ID_INSTITUTION))';
+    END IF;
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints c
+     WHERE c.constraint_name = 'RMT_PERT_FK'
+       AND c.table_name = 'REF_MIG_INST_DEST';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE REF_MIG_INST_DEST ADD (CONSTRAINT RMT_PERT_FK FOREIGN KEY (ID_EXTERNAL_REQUEST) REFERENCES P1_EXTERNAL_REQUEST(ID_EXTERNAL_REQUEST))';
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro

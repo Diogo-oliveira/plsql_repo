@@ -1,0 +1,75 @@
+-- CHANGED BY: Patricia Neto
+-- CHANGE DATE: 28/10/2009 18:21
+-- CHANGE REASON: [ ALERT-20754  ] medication_uk - witness controlled drugs
+create table PROF_DRUG_WITNESS_INST_DCS
+(
+  ID_PROF_WITNESS            NUMBER(24) not null,
+  ID_INSTITUTION              NUMBER(24) not null,
+  ID_SOFTWARE                NUMBER(24) not null,
+  ID_DEP_CLIN_SERV           NUMBER(24),
+  ID_PROF_WITNESSED          NUMBER(24),
+  ID_PROF_TEMPLATE_WITNESSED NUMBER(24)
+);
+comment on table PROF_DRUG_WITNESS_INST_DCS
+  is 'LIST OF AUTHORIZED PROFESSIONALS TO WITNESS DRUG ADMINISTRATION OF OTHER PROFESSIONALS';
+comment on column PROF_DRUG_WITNESS_INST_DCS.ID_PROF_WITNESS
+  is 'WITNESS PROFESSIONAL CODE ';
+comment on column PROF_DRUG_WITNESS_INST_DCS.ID_INSTITUtION
+  is 'ID_PROF_WITNESS WITNESSES ACTION IN THIS INSTITUTION';
+comment on column PROF_DRUG_WITNESS_INST_DCS.ID_SOFTWARE
+  is 'ID_PROF_WITNESS WITNESSES ACTION IN THIS SOFTWARE';
+comment on column PROF_DRUG_WITNESS_INST_DCS.ID_DEP_CLIN_SERV
+  is 'ID_PROF_WITNESS WITNESSES ACTION IN THIS CLINICAL SERVICE';
+comment on column PROF_DRUG_WITNESS_INST_DCS.ID_PROF_WITNESSED
+  is 'SPECIFY ANY PROFESSIONAL TO BE WITNESSED';
+comment on column PROF_DRUG_WITNESS_INST_DCS.ID_PROF_TEMPLATE_WITNESSED
+  is 'SPECIFY ANY PROFILE TEMPLATE TO BE WITNESSED';
+-- CHANGE END: Patricia Neto
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PROF_DRUG_WITNESS_INST_DCS add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column prof_drug_witness_inst_dcs.create_user IS 'Creation User';
+COMMENT ON column prof_drug_witness_inst_dcs.create_time IS 'Creation Time';
+COMMENT ON column prof_drug_witness_inst_dcs.create_institution IS 'Creation Institution';
+COMMENT ON column prof_drug_witness_inst_dcs.update_user IS 'Update User';
+COMMENT ON column prof_drug_witness_inst_dcs.update_time IS 'Update Time';
+COMMENT ON column prof_drug_witness_inst_dcs.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table prof_drug_witness_inst_dcs add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column prof_drug_witness_inst_dcs.create_user IS 'Creation User';
+COMMENT ON column prof_drug_witness_inst_dcs.create_time IS 'Creation Time';
+COMMENT ON column prof_drug_witness_inst_dcs.create_institution IS 'Creation Institution';
+COMMENT ON column prof_drug_witness_inst_dcs.update_user IS 'Update User';
+COMMENT ON column prof_drug_witness_inst_dcs.update_time IS 'Update Time';
+COMMENT ON column prof_drug_witness_inst_dcs.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

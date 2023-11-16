@@ -1,0 +1,65 @@
+
+
+  ALTER TABLE BED ADD CONSTRAINT BED_ROOM_FK FOREIGN KEY (ID_ROOM)
+	  REFERENCES ROOM (ID_ROOM) ENABLE;
+
+
+  ALTER TABLE BED ADD CONSTRAINT BED_BTY_FK FOREIGN KEY (ID_BED_TYPE)
+	  REFERENCES BED_TYPE (ID_BED_TYPE) ENABLE;
+
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 15:45
+-- CHANGE REASON: [ALERT-160874] [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE BED ADD CONSTRAINT BED_PROF_AN0973_FK 
+FOREIGN KEY (ID_PROFESSIONAL) REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'BED_PROF_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:02
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE BED ADD CONSTRAINT BED_PROF_FK 
+FOREIGN KEY (ID_PROFESSIONAL) REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'BED_PROF_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 15/07/2011 15:10
+-- CHANGE REASON: [ALERT-188516] missing FK on BO tables
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table BED
+  add constraint BED_PROF_FK foreign key (ID_PROFESSIONAL)
+  references ALERT.PROFESSIONAL(ID_PROFESSIONAL) novalidate';
+    
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

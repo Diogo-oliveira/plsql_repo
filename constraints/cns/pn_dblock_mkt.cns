@@ -1,0 +1,382 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 10:10
+-- CHANGE REASON: [ALERT-164483] soap note blocks configuration data model
+alter table pn_dblock_mkt
+  add constraint pdm_pk primary key (id_software, id_market, flg_type, id_pn_soap_block, id_pn_data_block);
+alter table pn_dblock_mkt
+  add constraint pdm_flg_import_chk
+  check (flg_import in ('N', 'T', 'B'));
+alter table pn_dblock_mkt
+  add constraint pdm_flg_select_chk
+  check (flg_select in ('Y', 'N'));
+alter table pn_dblock_mkt
+  add constraint pdm_flg_scope_chk
+  check (flg_scope in ('P', 'E', 'V'));  
+alter table pn_dblock_mkt
+  add constraint pdm_flg_type_chk
+  check (flg_type in ('A', 'H', 'P', 'L', 'CC', 'CR'));
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 26/05/2011 10:10
+-- CHANGE REASON: [ALERT-181620 ] Add one new option to Progress Notes functionality to insert information in free text
+alter table pn_dblock_mkt drop constraint PDM_FLG_TYPE_CHK;
+
+alter table pn_dblock_mkt add constraint PDM_FLG_TYPE_CHK CHECK
+(flg_type in ('A', 'H', 'P', 'L', 'CC', 'CR','FT')) ENABLE;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/10/2011 10:26
+-- CHANGE REASON: [ALERT-199727] H&P phase 2
+alter table pn_dblock_mkt drop primary key drop index;
+
+alter table pn_dblock_mkt
+  add constraint pdm_pk primary key (id_software, id_market, id_pn_note_type, id_pn_soap_block, id_pn_data_block);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:30
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_SELECTED_CHK CHECK(FLG_SELECTED IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_ACTIONS_AVAIL_CHK CHECK(FLG_ACTIONS_AVAILABLE IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_LINE_ON_BOXES_CHK CHECK(FLG_LINE_ON_BOXES IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_PREGNANT_CHK CHECK(FLG_PREGNANT IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_AUTO_POPULATED_CHK CHECK(FLG_AUTO_POPULATED IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_OUTSIDE_PERIOD_CHK CHECK(FLG_OUTSIDE_PERIOD IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_MANDATORY_CHK CHECK(FLG_MANDATORY IN ('Y', 'N'));
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PDBM_FLG_COPY_CH_CHK CHECK(flg_cp_no_changes_import IN ('Y', 'N'));
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PDBM_FLG_IMPORT_DATE_CHK CHECK(flg_import_date IN ('Y', 'N'));
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PDBM_FLG_IMPORT_REFERENCE_CHK CHECK(flg_import_reference IN ('Y', 'N'));
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PDBM_FLG_GROUP_IMP_CHK CHECK(flg_group_on_import IN ('Y', 'N'));
+
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/10/2011 09:42
+-- CHANGE REASON: [ALERT-199724 ] H&P phase 2
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PNDBM_FLG_IMPORT_MDT_CHK CHECK(FLG_IMPORT_MANDATORY IN ('Y', 'N'));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 09:59
+-- CHANGE REASON: H&P phase2
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_SELECTED_CHK CHECK(FLG_SELECTED IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_ACTIONS_AVAIL_CHK CHECK(FLG_ACTIONS_AVAILABLE IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_LINE_ON_BOXES_CHK CHECK(FLG_LINE_ON_BOXES IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_PREGNANT_CHK CHECK(FLG_PREGNANT IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_AUTO_POPULATED_CHK CHECK(FLG_AUTO_POPULATED IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_OUTSIDE_PERIOD_CHK CHECK(FLG_OUTSIDE_PERIOD IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_MANDATORY_CHK CHECK(FLG_MANDATORY IN ('Y', 'N'));
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PDBM_FLG_COPY_CH_CHK CHECK(flg_cp_no_changes_import IN ('Y', 'N'));
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PDBM_FLG_IMPORT_DATE_CHK CHECK(flg_import_date IN ('Y', 'N'));
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PDBM_FLG_IMPORT_REFERENCE_CHK CHECK(flg_import_reference IN ('Y', 'N'));
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PDBM_FLG_GROUP_IMP_CHK CHECK(flg_group_on_import IN ('Y', 'N'));
+
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:11
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_SELECTED_CHK CHECK(FLG_SELECTED IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_ACTIONS_AVAIL_CHK CHECK(FLG_ACTIONS_AVAILABLE IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_LINE_ON_BOXES_CHK CHECK(FLG_LINE_ON_BOXES IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_PREGNANT_CHK CHECK(FLG_PREGNANT IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_AUTO_POPULATED_CHK CHECK(FLG_AUTO_POPULATED IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_OUTSIDE_PERIOD_CHK CHECK(FLG_OUTSIDE_PERIOD IN ('Y', 'N'));
+ALTER TABLE PN_DBLOCK_MKT ADD CONSTRAINT PNDBM_FLG_MANDATORY_CHK CHECK(FLG_MANDATORY IN ('Y', 'N'));
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PDBM_FLG_COPY_CH_CHK CHECK(flg_cp_no_changes_import IN ('Y', 'N'));
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PDBM_FLG_IMPORT_DATE_CHK CHECK(flg_import_date IN ('Y', 'N'));
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PDBM_FLG_IMPORT_REFERENCE_CHK CHECK(flg_import_reference IN ('Y', 'N'));
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PDBM_FLG_GROUP_IMP_CHK CHECK(flg_group_on_import IN ('Y', 'N'));
+
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:59
+-- CHANGE REASON: [ALERT-206287 ] H&P phase 2
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PNDBM_FLG_IMPORT_MDT_CHK CHECK(FLG_IMPORT_MANDATORY IN ('Y', 'N'));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 12:59
+-- CHANGE REASON: [ALERT-206417] H&P phase 2
+alter table pn_dblock_mkt drop primary key drop index;
+
+alter table pn_dblock_mkt
+  add constraint pdm_pk primary key (id_software, id_market, id_pn_note_type, id_pn_soap_block, id_pn_data_block);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 13:12
+-- CHANGE REASON: [ALERT-206287 ] H&P phase 2
+ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PNDBM_FLG_IMPORT_MDT_CHK CHECK(FLG_IMPORT_MANDATORY IN ('Y', 'N'));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 24/11/2011 18:04
+-- CHANGE REASON: [ALERT-206356 ] H&P
+alter table pn_sblock_soft_inst drop primary key drop index;
+
+alter table PN_SBLOCK_SOFT_INST
+  add constraint PSST_PK primary key (ID_INSTITUTION, ID_SOFTWARE, ID_DEPARTMENT, ID_DEP_CLIN_SERV, ID_PN_SOAP_BLOCK, ID_PN_NOTE_TYPE);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 24/11/2011 18:28
+-- CHANGE REASON: [ALERT-206356 ] H&P
+alter table pn_sblock_soft_inst drop primary key drop index;
+
+alter table PN_SBLOCK_SOFT_INST
+  add constraint PSST_PK primary key (ID_INSTITUTION, ID_SOFTWARE, ID_DEPARTMENT, ID_DEP_CLIN_SERV, ID_PN_SOAP_BLOCK, ID_PN_NOTE_TYPE) novalidate;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/01/2012 16:29
+-- CHANGE REASON: [ALERT-216664] 
+DECLARE
+    e_non_existant EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+BEGIN
+  BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_dblock_mkt
+  drop constraint PDM_FLG_IMPORT_CHK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+  
+END;
+/
+
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_dblock_mkt
+  add constraint PDM_FLG_IMPORT_CHK
+    check (flg_import in (''N'', ''T'', ''B'',''BI'',''NI'',''BB'',''NB''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_unique_already_there EXCEPTION;    
+
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261); -- unique constraint    
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_dblock_mkt
+  add constraint pndbm_flg_struct_type_chk
+  check (flg_struct_type IN (''N'', ''I'', ''B''))';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:49
+-- CHANGE REASON: [ALERT-226174] 
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt ADD (CONSTRAINT PNDBM_FLG_SHOW_TITLE_CHK CHECK (flg_show_title IN (''Y'', ''N'')))';
+EXCEPTION
+    WHEN others THEN
+        null;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt ADD (CONSTRAINT PNDBM_SHOW_SUB_TITLE_CHK CHECK (flg_show_sub_title IN (''Y'', ''N'')))';
+EXCEPTION
+    WHEN others THEN
+        null;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt ADD (CONSTRAINT PNDBM_SYNCHRONIZED_CHK CHECK (FLG_SYNCHRONIZED IN (''Y'', ''N'')))';
+EXCEPTION
+    WHEN others THEN
+        null;
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt ADD (CONSTRAINT PNDBM_FLG_DATA_REM_CHK CHECK (REGEXP_LIKE(flg_data_removable, ''^([IPN])'')))';
+EXCEPTION
+    WHEN others THEN
+        null;
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/04/2012 09:57
+-- CHANGE REASON: [ALERT-226914] Add constraints - Version constraints PN_DBLOCK_SINST_IMP_CHK and PN_DBLOCK_MKT_IMP_CHK
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PN_DBLOCK_MKT_IMP_CHK 
+      CHECK(
+                      case 
+                          when flg_struct_type = ''N'' AND flg_synchronized = ''Y'' AND flg_data_removable <> ''N'' then null 
+                          else 1 
+                      end 
+                      is not null) ENABLE NOVALIDATE';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:51
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+DECLARE
+    e_non_existant EXCEPTION;    
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint    
+BEGIN
+  ----------------------------------    
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_dblock_mkt drop constraint PNDBM_FLG_AUTO_POPULATED_CHK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+ 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt ADD (CONSTRAINT PNDBM_FLG_AUTO_POPULATED_CHK CHECK (REGEXP_LIKE(FLG_AUTO_POPULATED, ''^([YOFAMRLWTPBCN])'')))';
+EXCEPTION
+    WHEN others THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/06/2012 09:48
+-- CHANGE REASON: [ALERT-232123] Create flag for focus - Current visit - PPN - PPN edition screen - When entering a note, the focus should be on the Overall evaluation text field
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt ADD (CONSTRAINT PNDBM_FLG_FOCUS_CHK CHECK (FLG_FOCUS IN (''Y'', ''N'')))';
+EXCEPTION
+    WHEN others THEN
+        null;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 08/06/2012 16:52
+-- CHANGE REASON: [ALERT-232682] Allow to filter buttons to be filtered by gender and age - Improvements to Single page functionality including(H&P, CV, PPH), Phase IV
+begin
+execute immediate 'alter table pn_dblock_mkt add constraint pndbm_gender_chk CHECK(gender IN (''N'',''M'', ''F'', ''I'', ''U'', ''H'') OR gender IS NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 13/06/2012 15:19
+-- CHANGE REASON: [ALERT-233082] Add flag editable for data blocks - Improvements to Single page functionality including(H&P, CV, PPH), Phase V
+begin
+execute immediate 'alter table pn_dblock_mkt add constraint pndbm_flg_editable_chk CHECK(flg_editable IN (''Y'',''N''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/10/2012 16:26
+-- CHANGE REASON: [ALERT-242379 ] Single page note for Discharge Summary
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt ADD (CONSTRAINT PNDBM_FLG_GROUP_SELECT_CHK CHECK (REGEXP_LIKE(FLG_GROUP_SELECT_FILTER, ''^([NOFID])'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 29/01/2013 15:15
+-- CHANGE REASON: [ALERT-250486 ] A physician suggested to add the option "Anamnesi Fisiologica" (or in (truncated)
+begin
+execute immediate ('ALTER TABLE pn_dblock_mkt ADD CONSTRAINT PNDBM_TT_FK FOREIGN KEY (id_task_type) REFERENCES tl_task(id_tl_task)');
+exception
+when others then
+null;
+end;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_ttp_mkt drop constraint PNDBTTM_FLG_SHTC_FILTER_CHK';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_ttp_mkt ADD (CONSTRAINT PNDBTTM_FLG_SHTC_FILTER_CHK CHECK (REGEXP_LIKE(FLG_SHORTCUT_FILTER, ''^([YOFAMRLWTPBCNSVZDIEGKHJ])'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/05/2013 16:25
+-- CHANGE REASON: [ALERT-259145] Triage single page
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt drop CONSTRAINT PNDBM_FLG_DATA_REM_CHK';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operacao ja executada anteriormente');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_mkt ADD (CONSTRAINT PNDBM_FLG_DATA_REM_CHK CHECK (REGEXP_LIKE(flg_data_removable, ''^([IPNS])'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operacao ja executada anteriormente');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 04/12/2013 15:44
+-- CHANGE REASON: [ALERT-270948 ] review mechanism in the nursing initial assessment
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE pn_dblock_mkt DROP CONSTRAINT PNDBM_FLG_EDITABLE_CHK ');
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('operacao ja executada anteriormente');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE pn_dblock_mkt add CONSTRAINT PNDBM_FLG_EDITABLE_CHK CHECK (FLG_EDITABLE IN (''Y'', ''N'', ''X'', ''K'')) ENABLE');
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('operacao ja executada anteriormente');
+END;
+/
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,11 @@
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 21/03/2009 16:34
+-- CHANGE REASON: [ALERT-19860] Interface views
+grant select on V_PAT_ALLERGY to alert_adtcod, intf_alert;
+-- CHANGE END
+
+-- CHANGED BY:  Joel Lopes
+-- CHANGE DATE: 06/03/2014 09:45
+-- CHANGE REASON: [ALERT-278171] 
+GRANT SELECT ON V_PAT_ALLERGY TO ALERT_INTER;
+-- CHANGE END:  Joel Lopes

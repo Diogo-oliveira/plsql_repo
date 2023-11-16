@@ -1,0 +1,254 @@
+create table DOC_TEMPLATE_CONTEXT
+(
+  ID_DOC_TEMPLATE_CONTEXT NUMBER not null,
+  ID_COMPLAINT              NUMBER not null,
+  ID_DOC_TEMPLATE           NUMBER not null,
+  ID_INSTITUTION            NUMBER not null,
+  ID_SOFTWARE               NUMBER not null,
+  ID_PROFILE_TEMPLATE       NUMBER,
+  ID_DEP_CLIN_SERV          NUMBER,
+  ADW_LAST_UPDATE           DATE not null
+);
+-- Add comments to the table 
+comment on table DOC_TEMPLATE_CONTEXT
+  is 'Associação entre um template e vários contextos';
+-- Add comments to the columns 
+comment on column DOC_TEMPLATE_CONTEXT.ID_DOC_TEMPLATE_CONTEXT
+  is 'chave primária';
+comment on column DOC_TEMPLATE_CONTEXT.ID_COMPLAINT
+  is 'id do template associado a esta queixa';
+comment on column DOC_TEMPLATE_CONTEXT.ID_INSTITUTION
+  is 'id da instituição para qual é feita esta parametrização (0 para todas)';
+comment on column DOC_TEMPLATE_CONTEXT.ID_SOFTWARE
+  is 'id do software para qual é feita esta parametrização';
+comment on column DOC_TEMPLATE_CONTEXT.ID_PROFILE_TEMPLATE
+  is 'id pela qual se associa um determinado template a uma queixa - mutuamente esclusivo com id_dep_clin_serv';
+comment on column DOC_TEMPLATE_CONTEXT.ID_DEP_CLIN_SERV
+  is 'id pela qual se associa um determinado template a uma queixa - mutuamente esclusivo com id_profile_template';
+
+alter table doc_template_context modify id_complaint number null;
+
+
+--Emilia Taborda 2007/07/31
+--Novas colunas
+alter table DOC_TEMPLATE_CONTEXT add (id_context number(24),
+flg_type varchar2(2)); 
+
+comment on column DOC_TEMPLATE_CONTEXT.ID_CONTEXT
+  is 'Identificador ao qual é associado o template baseado na flag type';
+
+comment on column DOC_TEMPLATE_CONTEXT.FLG_TYPE
+  is 'Tipo de identificador: C-Complaint; I-Intervention; A-Appointment type; D-Doc area, S-Specialty';
+
+-- INPATIENT 17-10-2007
+ALTER TABLE DOC_TEMPLATE_CONTEXT ADD id_sch_event NUMBER(24);
+COMMENT ON COLUMN DOC_TEMPLATE_CONTEXT.id_sch_event IS 'Tipo de consulta agendada. Se for 0 então este registo é valido para todos os tipos de agendamento';
+
+COMMENT ON COLUMN DOC_TEMPLATE_CONTEXT.FLG_TYPE IS 'Tipo de identificador: C-Complaint; I-Intervention; A-Appointment type; D-Doc area, S-Specialty, E-Exam, T-Schedule event';
+-- END
+
+
+-- Sílvia Freitas 19-10-2007 
+COMMENT ON COLUMN DOC_TEMPLATE_CONTEXT.FLG_TYPE IS 'Tipo de identificador: C-Complaint; I-Intervention; A-Appointment type; D-Doc area, S-Specialty, E-Exam, T-Schedule event, M- Medicação';
+
+-- PLLopes 25-03-2009
+ALTER TABLE doc_template_context ADD ID_CONTEXT_2 NUMBER(24);
+
+COMMENT ON COLUMN doc_template_context.id_context_2 IS 'Service ID used by templates of DS type.';
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-APR-21
+-- CHANGED REASON: ALERT-24615 Template by Area + Appointment
+-- Because this column was added initially in v2.5 before be released, but after that was in a released fix for v2.4.3 then
+-- we need to check if already exists on table. This code replaces the previous from PPLopes on 25-03-2009
+DECLARE
+    l_found NUMBER;
+    l_user  VARCHAR2(200);
+BEGIN
+    SELECT COUNT(*)
+      INTO l_found
+      FROM all_tab_columns a
+     WHERE a.owner = 'ALERT'
+       AND a.table_name = 'DOC_TEMPLATE_CONTEXT'
+       AND a.column_name = 'ID_CONTEXT_2';
+
+    IF l_found = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE doc_template_context ADD ID_CONTEXT_2 NUMBER(24)';
+    END IF;
+END;
+/
+COMMENT ON COLUMN doc_template_context.id_context_2 IS 'Aditional context value used by some context criteria. Some criteria that make uses this field are DS/DA template types.';
+--CHANGE END Ariel Machado
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-APR-23
+-- CHANGED REASON: ALERT-24615 Template by Area + Appointment
+COMMENT ON COLUMN doc_template_context.flg_type IS 
+'Applicable criteria for use of this template:
+ A - Template by Appointment
+ C - Template by Complaint
+ D - Template by Doc_area
+ E - Template by others Exams
+ I - Template by Intervention
+ S - Template by clinical Service
+CT - Template by Complaint (used internally by Private Practice)
+DA - Template by Doc_area + Appointment 
+DS - Template by Doc_area + clinical Service
+SD - Template by Scheduled Department-clinical service';
+-- CHANGE END Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 04/09/2009 17:49
+-- CHANGE REASON: [ALERT-41146] ORIS: Be able to parameterize the use of templates by Area + Surgical Procedure
+COMMENT ON COLUMN doc_template_context.flg_type IS 
+'Applicable criteria for use of this template:
+ A - Template by Appointment
+ C - Template by Complaint
+ D - Template by Doc_area
+ E - Template by others Exams
+ I - Template by Intervention
+ S - Template by clinical Service
+CT - Template by Complaint (used internally by Private Practice)
+DA - Template by Doc_area + Appointment 
+DS - Template by Doc_area + clinical Service
+SD - Template by Scheduled Department-clinical service
+SP - Template by Doc_area + Surgical procedure';
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 04/04/2011 11:07
+-- CHANGE REASON: [ALERT-170813] 
+begin
+alter table DOC_TEMPLATE_CONTEXT
+  drop constraint DOC_TEMPL_CONT_FLG_TY_CHK
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 04/04/2011 11:08
+-- CHANGE REASON: [ALERT-170813] 
+begin
+alter table DOC_TEMPLATE_CONTEXT
+  drop constraint DOC_TEMPL_CONT_FLG_TY_CHK
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 04/04/2011 11:08
+-- CHANGE REASON: [ALERT-170813] 
+begin
+alter table DOC_TEMPLATE_CONTEXT
+  add constraint DOC_TEMPL_CONT_FLG_TY_CHK
+  check (flg_type IN('C', 'I', 'D', 'A', 'S', 'E', 'M', 'CT', 'SD', 'DS', 'DA', 'SP', 'R','DC','P'));
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+
+-- CHANGED BY:  Teresa Coutinho
+-- CHANGE DATE: 12/10/2011 16:23
+-- CHANGE REASON: [ALERT-198529] 
+-- Add comments to the columns 
+comment on column DOC_TEMPLATE_CONTEXT.flg_type
+  is 'Applicable criteria for use of this template:
+ A - Template by Appointment
+ C - Template by Complaint
+ D - Template by Doc_area
+ E - Template by others Exams
+ I - Template by Intervention
+ S - Template by clinical Service
+CT - Template by Complaint (used internally by Private Practice)
+DA - Template by Doc_area + Appointment
+DS - Template by Doc_area + clinical Service
+SD - Template by Scheduled Department-clinical service
+SP - Template by Doc_area + Surgical procedure
+R  - Template by Rehabilitation';
+-- CHANGE END: Teresa Coutinho
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 25/11/2013 10:22
+-- CHANGE REASON: [ALERT-268453 ] 
+-- Add comments to the columns 
+comment on column DOC_TEMPLATE_CONTEXT.flg_type
+  is 'Applicable criteria for use of this template:
+ A - Template by Appointment
+ C - Template by Complaint
+ D - Template by Doc_area
+ E - Template by others Exams
+ I - Template by Intervention
+ S - Template by clinical Service
+CT - Template by Complaint (used internally by Private Practice)
+DA - Template by Doc_area + Appointment
+DS - Template by Doc_area + clinical Service
+SD - Template by Scheduled Department-clinical service
+SP - Template by Doc_area + Surgical procedure
+R  - Template by Rehabilitation
+ER - Template by Exams and Others Exams at Results Interpretation Area';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/01/2016 14:58
+-- CHANGE REASON: [ALERT-317702] 
+comment on table DOC_TEMPLATE_CONTEXT
+  is 'Documentation template association to a context';
+-- Add comments to the columns 
+comment on column DOC_TEMPLATE_CONTEXT.id_doc_template_context
+  is 'Primary key';
+comment on column DOC_TEMPLATE_CONTEXT.id_doc_template
+  is 'Documentation template ID';
+comment on column DOC_TEMPLATE_CONTEXT.id_institution
+  is 'Institution ID';
+comment on column DOC_TEMPLATE_CONTEXT.id_software
+  is 'Software ID';
+comment on column DOC_TEMPLATE_CONTEXT.id_profile_template
+  is 'Profile template ID (when used, ID_DEP_CLIN_SERV is not used)';
+comment on column DOC_TEMPLATE_CONTEXT.id_dep_clin_serv
+  is 'Clinical service ID (when used, ID_PROFILE_TEMPLATE is not used)';
+comment on column DOC_TEMPLATE_CONTEXT.adw_last_update
+  is 'Update date';
+comment on column DOC_TEMPLATE_CONTEXT.id_context
+  is 'Context ID';
+comment on column DOC_TEMPLATE_CONTEXT.flg_type
+  is 'Applicable criteria for use of this template:
+ A - Template by Appointment
+ C - Template by Complaint
+ D - Template by Doc_area
+ E - Template by others Exams
+ I - Template by Intervention
+ S - Template by clinical Service
+CT - Template by Complaint (used internally by Private Practice)
+DA - Template by Doc_area + Appointment
+DS - Template by Doc_area + clinical Service
+SD - Template by Scheduled Department-clinical service
+SP - Template by Doc_area + Surgical procedure
+R  - Template by Rehabilitation
+ER - Template by Exams and Others Exams at Results Interpretation Area';
+comment on column DOC_TEMPLATE_CONTEXT.id_sch_event
+  is 'Type of appointment (0 is used for any type)';
+comment on column DOC_TEMPLATE_CONTEXT.id_context_2
+  is 'Aditional context value used by some context criteria. Some criteria that make uses this field are DS/DA template types.';
+comment on column DOC_TEMPLATE_CONTEXT.create_user
+  is 'Creation User';
+comment on column DOC_TEMPLATE_CONTEXT.create_time
+  is 'Creation Time';
+comment on column DOC_TEMPLATE_CONTEXT.create_institution
+  is 'Creation Institution';
+comment on column DOC_TEMPLATE_CONTEXT.update_user
+  is 'Update User';
+comment on column DOC_TEMPLATE_CONTEXT.update_time
+  is 'Update Time';
+comment on column DOC_TEMPLATE_CONTEXT.update_institution
+  is 'Update Institution';
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/10/2018 10:04
+-- CHANGE REASON: [EMR-7619] 
+ALTER TABLE doc_template_context ADD FLG_SHOW_PREVIOUS_VALUES VARCHAR2(1 CHAR);
+COMMENT ON COLUMN  DOC_TEMPLATE_CONTEXT.FLG_SHOW_PREVIOUS_VALUES IS 'Show previous values on Flash? (Y/N)';
+-- CHANGE END: Pedro Henriques

@@ -1,0 +1,89 @@
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 25/02/2011 17:31
+-- CHANGE REASON: [ALERT-164703] DDL Reports - H & P reformulation in INPATIENT
+DECLARE e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE TIMEFR_REP_GRP_SOFT_INST
+ (ID_TIMEFRAME_REP NUMBER(24) NOT NULL
+ ,ID_TIMEFRAME_GROUP NUMBER(24) NOT NULL
+ ,ID_INSTITUTION NUMBER(24) DEFAULT 0 NOT NULL
+ ,ID_SOFTWARE NUMBER(24) DEFAULT 0 NOT NULL
+ ,FLG_AVAILABLE VARCHAR2(1 CHAR) DEFAULT ''Y'' NOT NULL
+ ,RANK_GROUP NUMBER(24)
+ )';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON TABLE timefr_rep_grp_soft_inst IS 'Table that allows operations to change configuration by institution, software and clinical service';
+/
+
+COMMENT ON column timefr_rep_grp_soft_inst.id_timeframe_rep IS 'Id of the timeframe report';
+/
+
+COMMENT ON column timefr_rep_grp_soft_inst.id_timeframe_group IS 'Id of the timeframe group';
+/
+
+COMMENT ON column timefr_rep_grp_soft_inst.id_institution IS 'Id institution';
+/
+
+COMMENT ON column timefr_rep_grp_soft_inst.id_software IS 'Id software';
+/
+
+COMMENT ON column timefr_rep_grp_soft_inst.flg_available IS 'Flag that indicates if this association is valid (''Y'' - yes; ''N'' - no)';
+/
+
+COMMENT ON column timefr_rep_grp_soft_inst.rank_group IS 'Rank that changes the order of presentation of groups inside screen';
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table TIMEFR_REP_GRP_SOFT_INST add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column timefr_rep_grp_soft_inst.create_user IS 'Creation User';
+COMMENT ON column timefr_rep_grp_soft_inst.create_time IS 'Creation Time';
+COMMENT ON column timefr_rep_grp_soft_inst.create_institution IS 'Creation Institution';
+COMMENT ON column timefr_rep_grp_soft_inst.update_user IS 'Update User';
+COMMENT ON column timefr_rep_grp_soft_inst.update_time IS 'Update Time';
+COMMENT ON column timefr_rep_grp_soft_inst.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table timefr_rep_grp_soft_inst add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column timefr_rep_grp_soft_inst.create_user IS 'Creation User';
+COMMENT ON column timefr_rep_grp_soft_inst.create_time IS 'Creation Time';
+COMMENT ON column timefr_rep_grp_soft_inst.create_institution IS 'Creation Institution';
+COMMENT ON column timefr_rep_grp_soft_inst.update_user IS 'Update User';
+COMMENT ON column timefr_rep_grp_soft_inst.update_time IS 'Update Time';
+COMMENT ON column timefr_rep_grp_soft_inst.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

@@ -1,0 +1,77 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 18/07/2014 16:39
+-- CHANGE REASON: [ALERT-290969] Nursing Care Plan: NANDA, NIC, NOC - Data Model
+
+BEGIN
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'NNN_EPIS_LNK_INT_ACTV', i_obj_type => 'TABLE', i_flg_category => 'TRS', i_flg_alert_default => 'N', i_delete_script => '', i_flg_default_child => 'N', i_flg_nzd => 'Y', i_responsible_team => 'NURSING');
+END;
+/
+CREATE TABLE NNN_EPIS_LNK_INT_ACTV
+  (
+    ID_NNN_EPIS_LNK_INT_ACTV NUMBER (24) NOT NULL ,
+    ID_NNN_EPIS_INTERVENTION NUMBER (24) NOT NULL ,
+    ID_NNN_EPIS_ACTIVITY     NUMBER (24) NOT NULL ,
+    INTERV_ACTIVITY_CODE     VARCHAR2 (200 CHAR) NOT NULL ,
+    ID_EPISODE               NUMBER (24) NOT NULL ,
+    ID_PROFESSIONAL          NUMBER (24) NOT NULL ,
+    FLG_LNK_STATUS           VARCHAR2 (1 CHAR) NOT NULL ,
+    DT_TRS_TIME_START        TIMESTAMP WITH LOCAL TIME ZONE NOT NULL ,
+    DT_TRS_TIME_END          TIMESTAMP WITH LOCAL TIME ZONE ,
+    CREATE_USER              VARCHAR2 (30 CHAR) ,
+    CREATE_TIME              TIMESTAMP WITH LOCAL TIME ZONE ,
+    CREATE_INSTITUTION       NUMBER (24) ,
+    UPDATE_USER              VARCHAR2 (30 CHAR) ,
+    UPDATE_TIME              TIMESTAMP WITH LOCAL TIME ZONE ,
+    UPDATE_INSTITUTION       NUMBER (24)
+  )
+  TABLESPACE ALERT_DATA ;
+
+COMMENT ON TABLE NNN_EPIS_LNK_INT_ACTV
+IS
+  'Links between Interventions and Activities within a patient''s nursing care plan' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.ID_NNN_EPIS_LNK_INT_ACTV
+IS
+  'Link ID (Surrogate key)' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.ID_NNN_EPIS_INTERVENTION
+IS
+  'Episode''s NIC Intervention ID' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.ID_NNN_EPIS_ACTIVITY
+IS
+  'Episode''s NIC Activity ID' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.INTERV_ACTIVITY_CODE
+IS
+  'NIC Activity code within an Intervention' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.ID_EPISODE
+IS
+  'Episode ID in which this link was created/edited' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.ID_PROFESSIONAL
+IS
+  'Profissional ID who did the creation/edition of this entry' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.FLG_LNK_STATUS
+IS
+  'Link status: (A)ctive, (C)ancelled' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.DT_TRS_TIME_START
+IS
+  'Transaction time start' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.DT_TRS_TIME_END
+IS
+  'Transaction time end' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.CREATE_USER
+IS
+  'Creation User' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.CREATE_TIME
+IS
+  'Creation Time' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.CREATE_INSTITUTION
+IS
+  'Creation Institution' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.UPDATE_USER
+IS
+  'Update User' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.UPDATE_TIME
+IS
+  'Update Time' ;
+  COMMENT ON COLUMN NNN_EPIS_LNK_INT_ACTV.UPDATE_INSTITUTION
+IS
+  'Update Institution' ;
+-- CHANGE END: Ariel Machado

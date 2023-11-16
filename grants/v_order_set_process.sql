@@ -1,0 +1,5 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 05/03/2012
+-- CHANGE REASON: [ALERT-221667]
+GRANT SELECT ON v_order_set_process TO ALERT_INTER;
+-- CHANGE END: Tiago Silva

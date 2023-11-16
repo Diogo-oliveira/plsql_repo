@@ -1,0 +1,42 @@
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 17/09/2010 22:12
+-- CHANGE REASON: [ALERT-125735] 
+PROMPT Creating Primary Key on 'REF_TRANS_RESPONSIBILITY'
+ALTER TABLE REF_TRANS_RESPONSIBILITY
+ ADD (CONSTRAINT RTR_PK PRIMARY KEY 
+  (ID_TRANS_RESP));
+
+PROMPT Altering Primary Key Index 'RTR_PK'
+ALTER INDEX RTR_PK
+ REBUILD NOREVERSE
+ TABLESPACE INDEX_L;
+
+PROMPT Creating Check Constraint on 'REF_TRANS_RESPONSIBILITY'
+ALTER TABLE REF_TRANS_RESPONSIBILITY
+ ADD (CONSTRAINT RTR_FLG_ACTIVE_CHK CHECK (FLG_ACTIVE in ('Y','N')));
+/
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 16/12/2013 16:54
+-- CHANGE REASON: [ALERT-270853] 
+DECLARE
+    e_exp EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exp, -01442);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table REF_TRANS_RESPONSIBILITY modify flg_active not null';
+EXCEPTION
+    WHEN e_exp THEN
+        dbms_output.put_line('Ja alterado para not null');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 16/12/2013 16:58
+-- CHANGE REASON: [ALERT-270853] 
+BEGIN
+    pk_versioning.run(i_sql => 'alter table REF_TRANS_RESPONSIBILITY add constraint RTR_PROF_DEST_ORIG_INST_CHK check ((ID_WORKFLOW=10 and id_prof_dest is not null) or (ID_WORKFLOW=11 and id_inst_dest_tr is not null))');
+END;
+/
+-- CHANGE END: Ana Monteiro

@@ -1,0 +1,21 @@
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 07/07/2014 10:51
+-- CHANGE REASON: [ALERT-289537 ] 
+DECLARE e_object_exists EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'create sequence SEQ_ANALYSIS_RESULT_SEND
+             minvalue 1
+             maxvalue 999999999999
+             start with 1
+             increment by 1
+             cache 500
+             noorder
+             nocycle';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: teresa.coutinho

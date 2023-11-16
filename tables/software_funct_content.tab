@@ -1,0 +1,166 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 03/04/2012 15:45
+-- CHANGE REASON: [ALERT-223723] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                                 i_obj_name          => 'SOFTWARE_FUNCT_CONTENT',
+                                                 i_obj_type          => 'TABLE',
+                                                 i_flg_category      => 'DSV',
+                                                 i_flg_alert_default => 'N',
+                                                 i_delete_script     => NULL,
+                                                 i_flg_default_child => 'N',
+                                                 i_flg_nzd           => 'N');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE TABLE SOFTWARE_FUNCT_CONTENT(id_sfc number(24) not null,
+                            id_software NUMBER(24) NOT NULL,
+id_institution number(24) not null,
+                                    flg_labtest VARCHAR2(1 char) not null,
+                                    flg_imaging VARCHAR2(1 char) NOT NULL,
+                                    flg_exam VARCHAR2(1 char) NOT NULL,
+                                    flg_interv VARCHAR2(1 char) NOT NULL,
+                                    flg_mfr VARCHAR2(1 char) NOT NULL,
+                                    flg_diagnosis VARCHAR2(1 char) NOT NULL,
+                                    flg_medication VARCHAR2(1 char) NOT NULL,
+                                    flg_imunization VARCHAR2(1 char) NOT NULL,
+                                    flg_hidrics VARCHAR2(1 char) NOT NULL,
+create_user              VARCHAR2(24 char),
+                                    create_time              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                                    create_institution       NUMBER(24),
+                                    update_user              VARCHAR2(24 char),
+                                    update_time              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                                    update_institution       NUMBER(24)) tablespace alert_data';
+    
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Table already exists');
+    END;
+END;
+/
+
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON TABLE SOFTWARE_FUNCT_CONTENT IS ''Classification of Functionalities Present in each Sofware Module.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.id_sfc IS ''Primary Key Sequence ID.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.id_software IS ''Software Module Id.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.id_institution IS ''Institution Id for bypass generic configurations.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.flg_labtest IS ''LabTests area avilable in Software module? (Y/N).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.flg_imaging IS ''Imaging Exams area avilable in Software module? (Y/N).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.flg_exam IS ''Other exams area avilable in Software module? (Y/N).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.flg_interv IS ''Procedures area avilable in Software module? (Y/N).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.flg_mfr IS ''MFR Procedures area avilable in Software module? (Y/N).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.flg_diagnosis IS ''Diagnosis area avilable in Software module? (Y/N).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.flg_medication IS ''Medication area avilable in Software module? (Y/N).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.flg_imunization IS ''Immunization area avilable in Software module? (Y/N).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.flg_hidrics IS ''Intake/Output area avilable in Software module? (Y/N)''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.CREATE_USER IS ''Creation User''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.create_time IS ''Creation Time''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.CREATE_institution IS ''Creation Institution''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.update_user IS ''Update User''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.update_time IS ''Update Time''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column SOFTWARE_FUNCT_CONTENT.update_institution IS ''Update Institution''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

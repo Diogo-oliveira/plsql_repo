@@ -1,0 +1,84 @@
+CREATE TABLE REP_TEMPLATE_CFG
+(  
+  ID_REP_TEMPLATE               NUMBER(24) not null,  
+  ID_DOC_AREA                   NUMBER(24) not null,
+  ID_REPORTS                    NUMBER(24) not null,
+  ID_CONCEPT                    NUMBER(24) not null,
+  ID_MARKET                     NUMBER(24) not null,
+  ID_SOFTWARE                   NUMBER(24) not null,
+  ID_INSTITUTION                NUMBER(24) not null,
+  ADW_LAST_UPDATE               DATE default sysdate,
+  CREATE_USER                   VARCHAR2(24),
+  CREATE_TIME                   TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION            NUMBER(24),
+  UPDATE_USER                   VARCHAR2(24),
+  UPDATE_TIME                   TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION            NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table REP_TEMPLATE_CFG
+  is 'On this table it is configured the template that is used by a specific report.';
+-- Add comments to the columns 
+comment on column REP_TEMPLATE_CFG.ID_REP_TEMPLATE
+  is 'Primary Key';
+comment on column REP_TEMPLATE_CFG.ID_DOC_AREA
+  is 'Identifier of the template';
+comment on column REP_TEMPLATE_CFG.ID_REPORTS
+  is 'Identifier of the report';
+comment on column REP_TEMPLATE_CFG.ID_CONCEPT
+  is 'Identifier of the diagnosis, if not applicable - 0';
+comment on column REP_TEMPLATE_CFG.ID_MARKET
+  is 'Market where this relationship applies';
+comment on column REP_TEMPLATE_CFG.ID_SOFTWARE
+  is 'Identifier of the software';
+comment on column REP_TEMPLATE_CFG.ID_INSTITUTION
+  is 'Identifier of the institution';
+comment on column REP_TEMPLATE_CFG.ADW_LAST_UPDATE
+  is 'Date of the last change on the row';
+comment on column REP_TEMPLATE_CFG.CREATE_USER
+  is 'Creation User';
+comment on column REP_TEMPLATE_CFG.CREATE_TIME
+  is 'Creation Time';
+comment on column REP_TEMPLATE_CFG.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column REP_TEMPLATE_CFG.UPDATE_USER
+  is 'Update User';
+comment on column REP_TEMPLATE_CFG.UPDATE_TIME
+  is 'Update Time';
+comment on column REP_TEMPLATE_CFG.UPDATE_INSTITUTION
+  is 'Update Institution';
+  
+  -- CHANGED BY: ricardo.pires
+-- CHANGE DATE: 2014-07-04
+-- CHANGE REASON: ALERT-289431
+ALTER TABLE 
+   rep_template_cfg 
+ADD 
+   (
+      id_doc_template          number(24) default(0) not null
+   );
+   
+COMMENT ON COLUMN rep_template_cfg.id_doc_template 
+     IS 'Identifier of the template to use';     
+-- CHANGE END: ricardo.pires
+
+-- CHANGED BY: ricardo.pires
+-- CHANGE DATE: 2014-07-04
+-- CHANGE REASON: ALERT-289431
+DROP INDEX RTC_D_REP_CCP_MRK_SFT_INS_UIDX;
+
+CREATE UNIQUE INDEX RTC_D_RP_CP_MK_SF_IN_TP_UIDX 
+	ON rep_template_cfg (id_doc_area, id_reports, id_concept, id_market, id_software, id_institution, id_doc_template)
+	tablespace ALERT_IDX;
+-- CHANGE END: ricardo.pires	

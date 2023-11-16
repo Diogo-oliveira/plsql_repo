@@ -1,0 +1,85 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 18/10/2017 08:55
+-- CHANGE REASON: [ALERT-333318] NOM024 - New needs related to guide "SINAC" and SAEH
+--                
+-- Create table
+
+create table PREGNANCY_FETUS_LIMITS
+(
+  gest_weeks    number(24),
+  gender        varchar2(1),
+  min_weight    number(6),
+  max_weight    number(6),
+  min_height    number(6),
+  max_height    number(6),
+  flg_available varchar2(1)
+)
+tablespace ALERT_DATA;
+-- Add comments to the table 
+comment on table PREGNANCY_FETUS_LIMITS
+  is 'Pregnancy fetus heigth and weigth limits by gestation weeks - MX - NOM024';
+-- Add comments to the columns 
+comment on column PREGNANCY_FETUS_LIMITS.gest_weeks
+  is 'Number of gestation weeks';
+comment on column PREGNANCY_FETUS_LIMITS.gender
+  is 'Gender: M-  Male; F -Female; ';
+comment on column PREGNANCY_FETUS_LIMITS.min_weight
+  is 'Fetus min weight';
+comment on column PREGNANCY_FETUS_LIMITS.max_weight
+  is 'Fetus max weight';
+comment on column PREGNANCY_FETUS_LIMITS.min_height
+  is 'Fetus min height';
+comment on column PREGNANCY_FETUS_LIMITS.max_height
+  is 'Fetus max height';
+comment on column PREGNANCY_FETUS_LIMITS.flg_available
+  is 'Record availability';
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PREGNANCY_FETUS_LIMITS add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column pregnancy_fetus_limits.create_user IS 'Creation User';
+COMMENT ON column pregnancy_fetus_limits.create_time IS 'Creation Time';
+COMMENT ON column pregnancy_fetus_limits.create_institution IS 'Creation Institution';
+COMMENT ON column pregnancy_fetus_limits.update_user IS 'Update User';
+COMMENT ON column pregnancy_fetus_limits.update_time IS 'Update Time';
+COMMENT ON column pregnancy_fetus_limits.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pregnancy_fetus_limits add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column pregnancy_fetus_limits.create_user IS 'Creation User';
+COMMENT ON column pregnancy_fetus_limits.create_time IS 'Creation Time';
+COMMENT ON column pregnancy_fetus_limits.create_institution IS 'Creation Institution';
+COMMENT ON column pregnancy_fetus_limits.update_user IS 'Update User';
+COMMENT ON column pregnancy_fetus_limits.update_time IS 'Update Time';
+COMMENT ON column pregnancy_fetus_limits.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

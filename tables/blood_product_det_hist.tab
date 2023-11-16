@@ -1,0 +1,264 @@
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/09/2018 11:06
+-- CHANGE REASON: [EMR-6418] 
+create table BLOOD_PRODUCT_DET_HIST
+(
+  ID_BLOOD_PRODUCT_DET_HIST NUMBER(24) not null,
+	DT_BLOOD_PRODUCT_DET_HIST TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  id_BLOOD_PRODUCT_DET     NUMBER(24) not null,
+  id_blood_product_req  NUMBER(24) not null,
+  id_intervention         NUMBER(24) not null,
+  id_movement             NUMBER(24),
+  flg_status              VARCHAR2(2 CHAR) not null,
+  notes                   VARCHAR2(1000 CHAR),
+  notes_tech              VARCHAR2(1000 CHAR),
+  id_prof_cancel          NUMBER(24),
+  notes_cancel            VARCHAR2(1000 CHAR),
+  flg_priority                VARCHAR2(1 CHAR),
+  dt_end_tstz             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_begin_tstz           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_cancel_tstz          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_BLOOD_PRODUCT_DET     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_pend_req_tstz        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   id_interv_codification  NUMBER(24),
+  id_exec_institution     NUMBER(24),
+  id_cancel_reason        NUMBER(24),
+  id_not_order_reason     NUMBER(24),
+  id_co_sign_order        NUMBER(24),
+  id_co_sign_cancel       NUMBER(24),
+  id_prof_last_update     NUMBER(24),
+  dt_last_update_tstz     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  id_order_recurrence     NUMBER(24),
+  flg_fasting             VARCHAR2(1 CHAR),
+  id_pat_health_plan      NUMBER(24),
+  id_pat_exemption        NUMBER(24),
+  flg_req_origin_module   VARCHAR2(1 CHAR),
+  id_clinical_purpose     NUMBER(24),
+  clinical_purpose_notes  VARCHAR2(1000 CHAR),
+  TRANSFUSION_TYPE VARCHAR2(10 CHAR),
+  qty_exec NUMBER(24),
+  ID_unit_mea_qty_exec NUMBER(24),
+  special_instr NUMBER(24),
+  BARCODE_LAB VARCHAR2(50 CHAR),
+  qty_received NUMBER(24),
+ID_unit_mea_qty_received NUMBER(24),
+EXPIRATION_DATE TIMESTAMP(6) WITH LOCAL TIME ZONE,
+BLOOD_GROUP VARCHAR2(10 CHAR),
+ID_BPD_ORIGIN NUMBER(24),
+ADVERSE_REACTION VARCHAR(1 CHAR),
+ create_user             VARCHAR2(24 CHAR),
+  create_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution      NUMBER(24),
+  update_user             VARCHAR2(24 CHAR),
+  update_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution      NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 8M
+    next 2M
+    minextents 1
+    maxextents unlimited
+    pctincrease 0
+  );
+-- Add comments to the table 
+comment on table BLOOD_PRODUCT_DET_HIST
+  is 'Blood Product orders detail table';
+-- Add comments to the columns 
+comment on column BLOOD_PRODUCT_DET_HIST.ID_BLOOD_PRODUCT_DET_HIST
+  is 'Blood Product Hist order detail ID';
+comment on column BLOOD_PRODUCT_DET_HIST.DT_BLOOD_PRODUCT_DET_HIST
+  is 'Blood Product order detail Date';
+comment on column BLOOD_PRODUCT_DET_HIST.id_BLOOD_PRODUCT_DET
+  is 'Blood Product order detail ID';
+comment on column BLOOD_PRODUCT_DET_HIST.id_blood_product_req
+  is 'Order''s ID';
+comment on column BLOOD_PRODUCT_DET_HIST.id_intervention
+  is 'Blood Product ID';
+comment on column BLOOD_PRODUCT_DET_HIST.id_movement
+  is 'Movement ID';
+comment on column BLOOD_PRODUCT_DET_HIST.flg_status
+  is 'Flag that indicates the blood product status';
+comment on column BLOOD_PRODUCT_DET_HIST.notes
+  is 'Notes';
+comment on column BLOOD_PRODUCT_DET_HIST.notes_tech
+  is 'Notes tech';
+comment on column BLOOD_PRODUCT_DET_HIST.id_prof_cancel
+  is 'Professional that cancels the blood product';
+comment on column BLOOD_PRODUCT_DET_HIST.notes_cancel
+  is 'Cancelation notes';
+comment on column BLOOD_PRODUCT_DET_HIST.flg_priority
+  is 'Flag that indicates the urgency of a blood product';
+comment on column BLOOD_PRODUCT_DET_HIST.dt_end_tstz
+  is 'End date of the blood prod execution';
+comment on column BLOOD_PRODUCT_DET_HIST.dt_begin_tstz
+  is 'Start date of the blood prod execution';
+comment on column BLOOD_PRODUCT_DET_HIST.dt_cancel_tstz
+  is 'Date that indicates when the blood prod was cancelled';
+comment on column BLOOD_PRODUCT_DET_HIST.dt_BLOOD_PRODUCT_DET
+  is 'Deprecated';
+comment on column BLOOD_PRODUCT_DET_HIST.dt_pend_req_tstz
+  is 'Date that indicates when the order has been updated from pending to ordered';
+comment on column BLOOD_PRODUCT_DET_HIST.create_user
+  is 'Creation User';
+comment on column BLOOD_PRODUCT_DET_HIST.create_time
+  is 'Creation Time';
+comment on column BLOOD_PRODUCT_DET_HIST.create_institution
+  is 'Creation Institution';
+comment on column BLOOD_PRODUCT_DET_HIST.update_user
+  is 'Update User';
+comment on column BLOOD_PRODUCT_DET_HIST.update_time
+  is 'Update Time';
+comment on column BLOOD_PRODUCT_DET_HIST.update_institution
+  is 'Update Institution';
+comment on column BLOOD_PRODUCT_DET_HIST.id_interv_codification
+  is 'Procedure''s codification ID';
+comment on column BLOOD_PRODUCT_DET_HIST.id_exec_institution
+  is 'Institution ID where the order is performed';
+comment on column BLOOD_PRODUCT_DET_HIST.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column BLOOD_PRODUCT_DET_HIST.id_not_order_reason
+  is 'Not order reason ID';
+comment on column BLOOD_PRODUCT_DET_HIST.id_co_sign_order
+  is 'Co-sign order ID';
+comment on column BLOOD_PRODUCT_DET_HIST.id_co_sign_cancel
+  is 'Co-sign cancel ID';
+comment on column BLOOD_PRODUCT_DET_HIST.id_prof_last_update
+  is 'Last update professional ID';
+comment on column BLOOD_PRODUCT_DET_HIST.dt_last_update_tstz
+  is 'Last update date';
+comment on column BLOOD_PRODUCT_DET_HIST.id_order_recurrence
+  is 'Order recurrence ID';
+comment on column BLOOD_PRODUCT_DET_HIST.flg_fasting
+  is 'Flag that indicates whether the patient must be fasting for the procedure';
+comment on column BLOOD_PRODUCT_DET_HIST.id_pat_health_plan
+  is 'Healthcare insurance plan ID used';
+comment on column BLOOD_PRODUCT_DET_HIST.id_pat_exemption
+  is 'Exemption ID used';
+comment on column BLOOD_PRODUCT_DET_HIST.flg_req_origin_module
+  is 'Request created by: D - Default, C - Care Plans, O - Order Sets, P - CPOE, I - Interfaces; S - Scheduler;  R - Referral; M - Medication';
+comment on column BLOOD_PRODUCT_DET_HIST.id_clinical_purpose
+  is 'Clinical purpose ID';
+comment on column BLOOD_PRODUCT_DET_HIST.clinical_purpose_notes
+  is 'Clinical purpose free text field (when id_clinical_purpose = 0)';
+comment on column BLOOD_PRODUCT_DET_HIST.TRANSFUSION_TYPE
+  is 'Transfusion type';
+comment on column BLOOD_PRODUCT_DET_HIST.BARCODE_LAB
+	is 'Barcode Receiver from Lab';
+  
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 19/09/2018 16:00
+-- CHANGE REASON: [EMR-6676] 
+ALTER TAbLE BLOOD_PRODUCT_DET_HIST ADD BLOOD_GROUP_RH VARCHAR2(10 CHAR);
+ALTER TABLE BLOOD_PRODUCT_DET_HIST ADD MATCH VARCHAR2(1 CHAR);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 25/09/2018 14:00
+-- CHANGE REASON: [EMR-6915] 
+ ALTER TABLE blood_product_det_hist
+ add id_prof_match number(24);
+ALTER TABLE blood_product_det_hist
+ add  dt_match_tstz timestamp(6);
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 12/10/2018 17:17
+-- CHANGE REASON: [EMR-7604] 
+ALTER TABLE blood_product_det_hist RENAME COLUMN ID_INTERVENTION TO ID_HEMO_TYPE;
+ALTER TABLE blood_product_det_hist DROP COLUMN ID_INTERV_CODIFICATION;
+ALTER TABLE blood_product_det_hist ADD ID_DIAGNOSIS_LIST VARCHAR2(1000 CHAR);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 12/10/2018 17:30
+-- CHANGE REASON: [EMR-7594] 
+alter table blood_product_det_hist
+drop column id_prof_match;
+
+alter table blood_product_det_hist
+drop column dt_match_tstz;
+
+alter table blood_product_det_hist
+drop column match;    
+
+ALTER TABLE blood_product_det_hist 
+  add desc_hemo_type_lab varchar2(4000);   
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/10/2018 14:35
+-- CHANGE REASON: [EMR-7652] 
+COMMENT ON COLUMN BLOOD_PRODUCT_DET_HIST.QTY_EXEC IS 'Blood Produt quantity requested';
+COMMENT ON COLUMN BLOOD_PRODUCT_DET_HIST.ID_UNIT_MEA_QTY_EXEC IS 'Unit measure (QTY_EXEC)';
+COMMENT ON COLUMN BLOOD_PRODUCT_DET_HIST.SPECIAL_INSTR IS 'Special Instructions';
+COMMENT ON COLUMN BLOOD_PRODUCT_DET_HIST.BARCODE_LAB IS 'Interface -> Barcode';
+COMMENT ON COLUMN BLOOD_PRODUCT_DET_HIST.QTY_RECEIVED IS 'Interface -> Quantity received by Interface';
+COMMENT ON COLUMN BLOOD_PRODUCT_DET_HIST.ID_UNIT_MEA_QTY_RECEIVED IS 'Interface -> Unit measure (QTY_RECEIVED)';
+COMMENT ON COLUMN BLOOD_PRODUCT_DET_HIST.EXPIRATION_DATE IS 'Interface -> Expiration Date';
+COMMENT ON COLUMN BLOOD_PRODUCT_DET_HIST.BLOOD_GROUP IS 'Interface -> Blood Group (A, B, O, AB)';
+COMMENT ON COLUMN BLOOD_PRODUCT_DET_HIST.ID_BPD_ORIGIN IS 'Blood Product Det Id Origin';
+COMMENT ON COLUMN BLOOD_PRODUCT_DET_HIST.ADVERSE_REACTION IS 'Have Adverse Reaction (Y/N)';
+COMMENT ON COLUMN BLOOD_PRODUCT_DET_HIST.BLOOD_GROUP_RH IS 'Interface -> Blood Group RH (Rh+, Rh-)';
+COMMENT ON COLUMN BLOOD_PRODUCT_DET_HIST.TRANSFUSION_TYPE IS 'Transfusion type';
+COMMENT ON COLUMN BLOOD_PRODUCT_DET_HIST.FLG_STATUS IS 'Flag that indicates the blood product status (SYS_DOMAIN)';
+ALTER TABLE blood_product_det_hist RENAME COLUMN ID_INTERVENTION TO ID_HEMO_TYPE;
+ALTER TABLE blood_product_det_hist DROP COLUMN ID_INTERV_CODIFICATION;
+ALTER TABLE blood_product_det_hist ADD ID_DIAGNOSIS_LIST VARCHAR2(1000 CHAR);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 30/10/2018 16:30
+-- CHANGE REASON: [EMR-8415] 
+ALTER TABLE blood_product_det_hist
+ add id_professional number(24);
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/01/2019 12:35
+-- CHANGE REASON: [EMR-10725]
+ALTER TABLE blood_product_det_hist add id_special_type NUMBER(24);
+COMMENT ON COLUMN blood_product_det_hist.id_special_type IS 'Special type of transfusion';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 19/02/2020 09:26
+-- CHANGE REASON: [EMR-27011] - In ALERT the provided units should be shown with the unit donation code, associated to the component type
+ALTER TABLE blood_product_det_hist
+ADD  donation_code varchar2(200);
+
+comment on column blood_product_det_hist.donation_code is 'Donation code of the blood unit';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 05/03/2021 16:24
+-- CHANGE REASON: [EMR-42682] - BBank: Order details missed when more than one bag required
+ALTER TABLE BLOOD_PRODUCT_DET_HIST
+ADD (flg_req_without_crossmatch VARCHAR2(1) DEFAULT 'N');
+
+ALTER TABLE BLOOD_PRODUCT_DET_HIST
+ADD (ID_PROF_CROSSMATCH NUMBER(24));
+
+comment on column BLOOD_PRODUCT_DET_HIST.flg_req_without_crossmatch is
+'Flag that indicates if the blood product has been requested without ordering a crossmatch test (Y - Yes / N - No)';
+
+comment on column BLOOD_PRODUCT_DET_HIST.ID_PROF_CROSSMATCH is
+'Id of the professional that has requested the blood product without ordering a crossmatch test';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 04/08/2022 10:23
+-- CHANGE REASON: [EMR-54405]
+ALTER TABLE BLOOD_PRODUCT_DET_HIST ADD FLG_WITH_SCREENING VARCHAR2(1 CHAR) DEFAULT 'Y';
+comment on column BLOOD_PRODUCT_DET_HIST.FLG_WITH_SCREENING IS 'With screening? (Y/N)';
+ALTER TABLE BLOOD_PRODUCT_DET_HIST ADD FLG_WITHOUT_NAT_TEST VARCHAR2(1 CHAR) DEFAULT 'N';
+comment on column BLOOD_PRODUCT_DET_HIST.FLG_WITH_SCREENING IS 'Consent without NAT testing? (Y/N)';
+ALTER TABLE BLOOD_PRODUCT_DET_HIST ADD FLG_PREPARE_NOT_SEND VARCHAR2(1 CHAR) DEFAULT 'N';
+comment on column BLOOD_PRODUCT_DET_HIST.FLG_WITH_SCREENING IS 'Prepare the blood but not send to the unit';
+-- CHANGE END: Pedro Henriques

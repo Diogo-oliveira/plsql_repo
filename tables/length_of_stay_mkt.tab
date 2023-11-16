@@ -1,0 +1,22 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 18/03/2015 11:42
+-- CHANGE REASON: [ALERT-309049] [STABLE] EDIS patient grids changes
+--                
+BEGIN
+
+pk_versioning.run(i_sql => q'[create table LENGTH_OF_STAY_MKT
+(
+id_length_of_stay      number(24) not null,
+id_market number(24) not null,
+flg_available VARCHAR2(1 CHAR) default 'Y' not null,
+  create_user          VARCHAR2(24 CHAR),
+  create_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution   NUMBER(24),
+  update_user          VARCHAR2(24 CHAR),
+  update_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution   NUMBER(24)
+)]');
+END;
+/
+COMMENT ON TABLE LENGTH_OF_STAY_MKT IS 'length of stay for configuration purposes';
+-- CHANGE END: Elisabete Bugalho

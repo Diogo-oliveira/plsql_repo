@@ -1,0 +1,55 @@
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 16/08/2010 11:42
+-- CHANGE REASON: [ALERT-117299] 
+create table ME_REIMBURSEMENT_LEVELS
+(
+  ID_REIMBURSEMENT_LEVEL NUMBER(4) not null,
+  REIMBURSEMENT_LEVEL VARCHAR2(1 CHAR) not null,
+  PERCENTAGE_RG          VARCHAR2(3 CHAR) not null,
+  PERCENTAGE_ADDITION_RE NUMBER(4) not null,
+  CONSTRAINT REIMBURSEMENT_LEVEL_UNIQUE UNIQUE (ID_REIMBURSEMENT_LEVEL)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+  
+-- Add comments to the table 
+comment on table ME_REIMBURSEMENT_LEVELS
+  is 'Tabela com a correspondencia entre a percentagem de comparticipação e o escalão dos medicamentos';
+-- Add comments to the columns 
+comment on column ME_REIMBURSEMENT_LEVELS.ID_REIMBURSEMENT_LEVEL
+  is 'ID do escalão do medicamento';
+comment on column ME_REIMBURSEMENT_LEVELS.REIMBURSEMENT_LEVEL
+  is 'Escalão do medicamento';
+comment on column ME_REIMBURSEMENT_LEVELS.PERCENTAGE_RG
+  is 'Percentagem de comparticipação do medicamento.';
+comment on column ME_REIMBURSEMENT_LEVELS.PERCENTAGE_ADDITION_RE
+  is 'Acréscimo de percentagem de comparticipação para o regime especial.';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table ME_REIMBURSEMENT_LEVELS
+  add constraint ME_REIMBURSEMENT_LEVELS_PK primary key (REIMBURSEMENT_LEVEL)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- CHANGE END:  NUNO ANTUNES
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:49
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE ME_REIMBURSEMENT_LEVELS IS 'Tabela com a correspondencia entre a percentagem de comparticipação e o escalão dos medicamentos [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,150 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 11:07
+-- CHANGE REASON: [ALERT-12334] 
+create table SUPPLY_REQUEST_HIST
+(
+  ID_SUPPLY_REQUEST_HIST NUMBER(24) not null,
+  ID_SUPPLY_REQUEST      NUMBER(24) not null,
+  ID_PROFESSIONAL        NUMBER(24) not null,
+  ID_EPISODE             NUMBER(24) not null,
+  ID_ROOM_REQ            NUMBER(24),
+  ID_CONTEXT             NUMBER(24),
+  FLG_CONTEXT            VARCHAR2(1 CHAR),
+  DT_REQUEST             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  FLG_STATUS             VARCHAR2(1 CHAR) not null,
+  FLG_REASON             VARCHAR2(1 CHAR) not null,
+  FLG_PROF_PREP          VARCHAR2(1 CHAR),
+  ID_PROF_CANCEL         NUMBER(24),
+  DT_CANCEL              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  NOTES_CANCEL           CLOB,
+  ID_CANCEL_REASON       NUMBER(24),
+  NOTES                  CLOB,
+  CREATE_USER            VARCHAR2(24 CHAR),
+  CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION     NUMBER(24),
+  UPDATE_USER            VARCHAR2(24 CHAR),
+  UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION     NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table SUPPLY_REQUEST_HIST
+  is 'Supplies requests history.';
+-- Add comments to the columns 
+comment on column SUPPLY_REQUEST_HIST.ID_SUPPLY_REQUEST_HIST
+  is 'Primary Key';
+comment on column SUPPLY_REQUEST_HIST.ID_SUPPLY_REQUEST
+  is 'Supplies requests id';
+comment on column SUPPLY_REQUEST_HIST.ID_PROFESSIONAL
+  is 'Professional?s ID';
+comment on column SUPPLY_REQUEST_HIST.ID_EPISODE
+  is 'Episode?s ID';
+comment on column SUPPLY_REQUEST_HIST.ID_ROOM_REQ
+  is 'ID for the request origin?s room';
+comment on column SUPPLY_REQUEST_HIST.ID_CONTEXT
+  is 'Generic field for context ID';
+comment on column SUPPLY_REQUEST_HIST.FLG_CONTEXT
+  is 'Flag for context: M-Medication, P- Interventions, F- MFR, I-  Nursing interventions, A- Lab testd, E- Image exams, O- Others exams';
+comment on column SUPPLY_REQUEST_HIST.DT_REQUEST
+  is 'Date for request';
+comment on column SUPPLY_REQUEST_HIST.FLG_STATUS
+  is 'Flag for request status';
+comment on column SUPPLY_REQUEST_HIST.FLG_REASON
+  is 'Flag for request reason: C-Contaminated material, D-Damaged material, B-Bed confinement, F-Difficulty in canulation, H-Patient?s hygienic care, S-Dressing,P-Patient?s admission,
+T-To be loaned, O-Other';
+comment on column SUPPLY_REQUEST_HIST.FLG_PROF_PREP
+  is 'Flag for preparing professional: P-Pharmacist, T-Technician';
+comment on column SUPPLY_REQUEST_HIST.ID_PROF_CANCEL
+  is 'ID for cancelling professional';
+comment on column SUPPLY_REQUEST_HIST.DT_CANCEL
+  is 'Date for cancellation';
+comment on column SUPPLY_REQUEST_HIST.NOTES_CANCEL
+  is 'Cancelling notes ';
+comment on column SUPPLY_REQUEST_HIST.ID_CANCEL_REASON
+  is 'Cancel reason identification';
+comment on column SUPPLY_REQUEST_HIST.NOTES
+  is 'Notes';
+comment on column SUPPLY_REQUEST_HIST.CREATE_USER
+  is 'Creation user';
+comment on column SUPPLY_REQUEST_HIST.CREATE_TIME
+  is 'Creation time';
+comment on column SUPPLY_REQUEST_HIST.CREATE_INSTITUTION
+  is 'Creation institution';
+comment on column SUPPLY_REQUEST_HIST.UPDATE_USER
+  is 'Update user';
+comment on column SUPPLY_REQUEST_HIST.UPDATE_TIME
+  is 'Update time';
+comment on column SUPPLY_REQUEST_HIST.UPDATE_INSTITUTION
+  is 'Update institution';
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 11:52
+-- CHANGE REASON: [ALERT-12334] 
+ALTER TABLE SUPPLY_REQUEST_HIST MOVE LOB(NOTES_CANCEL) STORE AS (TABLESPACE ALERT_LOB);
+ALTER TABLE SUPPLY_REQUEST_HIST  MOVE LOB(NOTES) STORE AS (TABLESPACE ALERT_LOB);
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/01/2016 11:21
+-- CHANGE REASON: [ALERT-317912] 
+comment on table SUPPLY_REQUEST_HIST
+  is 'Supplies'' orders history table';
+-- Add comments to the columns 
+comment on column SUPPLY_REQUEST_HIST.id_supply_request_hist
+  is 'Primary key';
+comment on column SUPPLY_REQUEST_HIST.id_supply_request
+  is 'Order''s ID';
+comment on column SUPPLY_REQUEST_HIST.id_professional
+  is 'Professional that registers the order';
+comment on column SUPPLY_REQUEST_HIST.id_episode
+  is 'Episode ID';
+comment on column SUPPLY_REQUEST_HIST.id_room_req
+  is 'Room ID';
+comment on column SUPPLY_REQUEST_HIST.id_context
+  is 'Context ID';
+comment on column SUPPLY_REQUEST_HIST.flg_context
+  is 'Flag that indicates the context association: M - Medication, P - Interventions, F - Rehabilitation, I -  Nursing interventions, A - Lab tests, E - Image exams, O - Others exams, S - Surgical procedure';
+comment on column SUPPLY_REQUEST_HIST.dt_request
+  is 'Date that indicates when the record was registered';
+comment on column SUPPLY_REQUEST_HIST.flg_status
+  is 'Flag that indicates the status';
+comment on column SUPPLY_REQUEST_HIST.flg_reason
+  is 'Flag that indicates the ordering reason';
+comment on column SUPPLY_REQUEST_HIST.flg_prof_prep
+  is 'Flag that indicates the preparing professional: P - Pharmacist, T - Technician';
+comment on column SUPPLY_REQUEST_HIST.id_prof_cancel
+  is 'Professional that cancels the order';
+comment on column SUPPLY_REQUEST_HIST.dt_cancel
+  is 'Date that indicates when the order was cancelled';
+comment on column SUPPLY_REQUEST_HIST.notes_cancel
+  is 'Cancelation notes';
+comment on column SUPPLY_REQUEST_HIST.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column SUPPLY_REQUEST_HIST.notes
+  is 'Notes';
+comment on column SUPPLY_REQUEST_HIST.create_user
+  is 'Creation User';
+comment on column SUPPLY_REQUEST_HIST.create_time
+  is 'Creation Time';
+comment on column SUPPLY_REQUEST_HIST.create_institution
+  is 'Creation Institution';
+comment on column SUPPLY_REQUEST_HIST.update_user
+  is 'Update User';
+comment on column SUPPLY_REQUEST_HIST.update_time
+  is 'Update Time';
+comment on column SUPPLY_REQUEST_HIST.update_institution
+  is 'Update Institution';
+  
+  
+  
+-- CHANGE END: Ana Matos

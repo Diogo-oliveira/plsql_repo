@@ -1,0 +1,2 @@
+
+GRANT SELECT ON ALERT.prof_team_room TO ALERT_VIEWER;

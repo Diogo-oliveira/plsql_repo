@@ -1,0 +1,45 @@
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 2013-07-23
+-- CHANGE REASON: ADT-7626
+
+create table CRITERIA_MARKET
+(
+  id_criteria         NUMBER not null,
+  id_market           NUMBER not null,
+  create_user         VARCHAR2(24),
+  create_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution  NUMBER(24),
+  update_user         VARCHAR2(24),
+  update_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution  NUMBER(24)
+)
+tablespace TABLE_S;
+ 
+comment on table CRITERIA_MARKET
+  is 'Enable us to configure a criteria within a market';
+ 
+comment on column CRITERIA_MARKET.id_criteria
+  is 'Criteria ID';
+comment on column CRITERIA_MARKET.id_market
+  is 'Market ID';
+comment on column CRITERIA_MARKET.create_user
+  is 'Creation User';
+comment on column CRITERIA_MARKET.create_time
+  is 'Creation Time';
+comment on column CRITERIA_MARKET.create_institution
+  is 'Creation Institution';
+comment on column CRITERIA_MARKET.update_user
+  is 'Update User';
+comment on column CRITERIA_MARKET.update_time
+  is 'Update Time';
+comment on column CRITERIA_MARKET.update_institution
+  is 'Update Institution';
+
+-- CHANGED END: Bruno Martins
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 08/02/2018 12:32
+-- CHANGE REASON: [EMR-1012] 
+ALTER TABLE criteria_market ADD FLG_ADD_REMOVE VARCHAR2(1);
+COMMENT ON COLUMN criteria_market.FLG_ADD_REMOVE IS 'Criteria type: A - add criteria, R - remove criteria';
+-- CHANGE END: Pedro Henriques

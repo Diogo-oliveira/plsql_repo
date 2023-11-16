@@ -1,0 +1,40 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 29/06/2012 17:38
+-- CHANGE REASON: [ALERT-234793] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints c
+     WHERE c.constraint_name = 'RMA_PK'
+       AND c.table_name = 'REF_MIG_INST_DEST_DATA';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE REF_MIG_INST_DEST_DATA ADD (CONSTRAINT RMA_PK PRIMARY KEY (ID_EXTERNAL_REQUEST,ID_INST_DEST))';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 10/09/2012 09:52
+-- CHANGE REASON: [ALERT-239611] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints t
+     WHERE t.table_name = 'REF_MIG_INST_DEST_DATA'
+       AND t.constraint_name = 'RMA_FLG_PROCESSED_CHK';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_MIG_INST_DEST_DATA add constraint RMA_FLG_PROCESSED_CHK check (FLG_PROCESSED in (''S'',''U'',''N''))';
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro

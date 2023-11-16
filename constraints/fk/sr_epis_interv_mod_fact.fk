@@ -1,0 +1,35 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 30/10/2015 09:58
+-- CHANGE REASON: [ALERT-316231] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+    e_object_exists1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists1, -02260);
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -06512);
+    e_object_exists3 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists3, -02264);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE sr_epis_interv_mod_fact
+  ADD CONSTRAINT seimf_seih_fk FOREIGN KEY (id_sr_epis_interv_hist) 
+  REFERENCES sr_epis_interv_hist (id_sr_epis_interv_hist)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE sr_epis_interv_mod_fact
+  ADD CONSTRAINT seimf_ct_fk FOREIGN KEY (ID_CONCEPT_TERM, ID_INST_OWNER) 
+  REFERENCES concept_term (ID_CONCEPT_TERM, ID_INST_OWNER)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

@@ -1,0 +1,30 @@
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 02/03/2010 10:50
+-- CHANGE REASON: [ALERT-77123] ESI Triage
+ALTER TABLE EPIS_TRIAGE_OPTION ADD CONSTRAINT ETO_PK PRIMARY KEY (ID_EPIS_TRIAGE, ID_TRIAGE) ENABLE;
+ALTER TABLE EPIS_TRIAGE_OPTION ADD CONSTRAINT ETO_FLGSELECTEDOPTION_CHK CHECK(FLG_SELECTED_OPTION IN ('Y', 'N'));
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/06/2013 15:50
+-- CHANGE REASON: [ALERT-260856] Ability to perform triage based on EST (Échelle Suisse de Tri) (ALERT_188926) - VERSIONING DB DDL
+DECLARE
+    e_pk EXCEPTION;
+    e_uk1 EXCEPTION;
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);
+    PRAGMA EXCEPTION_INIT(e_pk, -2260);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE EPIS_TRIAGE_OPTION ADD CONSTRAINT ETO_FLGSO_FLGDC_NNULL_CHK CHECK(FLG_SELECTED_OPTION IS NOT NULL OR ID_TRIAGE_CONS_VALUE IS NOT NULL)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

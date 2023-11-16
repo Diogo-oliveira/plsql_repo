@@ -1,0 +1,104 @@
+
+
+  CREATE TABLE ANALYSIS_ROOM
+   (	ID_ANALYSIS_ROOM NUMBER(24,0) NOT NULL ENABLE,
+	ID_ANALYSIS NUMBER(12,0) NOT NULL ENABLE,
+	ID_ROOM NUMBER(24,0) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE analysis_room IS 'Sala(s) onde se realiza(m) as análises' ;
+
+COMMENT ON COLUMN analysis_room.flg_type IS 'M - Sala onde se realiza a análise; T - sala para onde é levado o tubo de análise' ;
+
+ALTER TABLE ANALYSIS_ROOM 
+ ADD (FLG_AVAILABLE  VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ );
+
+COMMENT ON COLUMN ANALYSIS_ROOM.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD';
+
+ALTER TABLE ANALYSIS_ROOM MODIFY FLG_AVAILABLE default null;
+
+-- Add/modify columns 
+alter table ANALYSIS_ROOM add DESC_EXEC_DESTINATION VARCHAR2(200);
+-- Add comments to the columns 
+comment on column ANALYSIS_ROOM.DESC_EXEC_DESTINATION
+  is 'Descritivo do destino da execução da análise (casos em que a colheita é enviada para uma instituição externa)';
+
+-- Add/modify columns 
+alter table ANALYSIS_ROOM add FLG_DEFAULT VARCHAR2(1) default 'Y' not null;
+-- Add comments to the columns 
+comment on column ANALYSIS_ROOM.FLG_DEFAULT
+  is 'Flag que indica o default room para uma análise';
+
+-- Add/modify columns 
+alter table ANALYSIS_ROOM add ID_INSTITUTION NUMBER(24);
+-- Add comments to the columns 
+comment on column ANALYSIS_ROOM.ID_INSTITUTION
+  is 'Instituição a que pertence';
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 14:57
+-- CHANGE REASON: [ALERT-246252] 
+ALTER TABLE analysis_room MODIFY (ID_SAMPLE_TYPE NUMBER(12) NOT NULL);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:11
+-- CHANGE REASON: [ALERT-246248] 
+ALTER TABLE ANALYSIS_ROOM ADD (ID_SAMPLE_TYPE NUMBER(12));
+
+COMMENT ON COLUMN ANALYSIS_ROOM.ID_SAMPLE_TYPE IS 'Sample type id';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/11/2014 12:32
+-- CHANGE REASON: [ALERT-301498] 
+begin
+pk_versioning.run('ALTER TABLE ANALYSIS_ROOM ADD (ID_ANALYSIS_INSTIT_SOFT NUMBER(24))');
+end;
+/
+
+
+COMMENT ON COLUMN ANALYSIS_ROOM.ID_ANALYSIS_ROOM IS 'Primary key';
+COMMENT ON COLUMN ANALYSIS_ROOM.ID_ANALYSIS IS 'Lab test ID';
+COMMENT ON COLUMN ANALYSIS_ROOM.ID_SAMPLE_TYPE IS 'Sample type ID';
+COMMENT ON COLUMN ANALYSIS_ROOM.ID_ROOM IS 'Room ID';
+COMMENT ON COLUMN ANALYSIS_ROOM.FLG_TYPE IS 'Collection room (M) or laboratory (T)';
+COMMENT ON COLUMN ANALYSIS_ROOM.FLG_DEFAULT IS 'Flag that indicates if the record is default or not (Y/N)';
+COMMENT ON COLUMN ANALYSIS_ROOM.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN ANALYSIS_ROOM.DESC_EXEC_DESTINATION IS 'Room description (when the lab test is sent to an external facility)';
+COMMENT ON COLUMN ANALYSIS_ROOM.ID_ANALYSIS_INSTIT_SOFT IS 'Institution / software configuration ID';
+COMMENT ON COLUMN ANALYSIS_ROOM.RANK IS 'Rank';
+COMMENT ON COLUMN ANALYSIS_ROOM.FLG_AVAILABLE IS 'Flag that indicates if the record is available or not (Y/N)';
+COMMENT ON COLUMN ANALYSIS_ROOM.ADW_LAST_UPDATE IS 'ADW last update date';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:01
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS_ROOM IS 'Lab test''s association to a room';
+
+COMMENT ON COLUMN ANALYSIS_ROOM.ID_ANALYSIS_ROOM IS 'Primary key';
+COMMENT ON COLUMN ANALYSIS_ROOM.ID_ANALYSIS IS 'Lab test ID';
+COMMENT ON COLUMN ANALYSIS_ROOM.ID_ROOM IS 'Room ID';
+COMMENT ON COLUMN ANALYSIS_ROOM.RANK IS 'Rank';
+COMMENT ON COLUMN ANALYSIS_ROOM.ADW_LAST_UPDATE IS 'Update date';
+COMMENT ON COLUMN ANALYSIS_ROOM.FLG_TYPE IS 'Flag that indicates the type of room: M - Collection room, T - laboratory';
+COMMENT ON COLUMN ANALYSIS_ROOM.FLG_AVAILABLE IS 'Flag that indicates if the record is available or not (Y/N)';
+COMMENT ON COLUMN ANALYSIS_ROOM.DESC_EXEC_DESTINATION IS 'Description';
+COMMENT ON COLUMN ANALYSIS_ROOM.FLG_DEFAULT IS 'Flag that indicates if the record is default or not (Y/N)';
+COMMENT ON COLUMN ANALYSIS_ROOM.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN ANALYSIS_ROOM.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ANALYSIS_ROOM.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ANALYSIS_ROOM.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ANALYSIS_ROOM.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ANALYSIS_ROOM.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ANALYSIS_ROOM.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN ANALYSIS_ROOM.ID_SAMPLE_TYPE IS 'Sample type ID';
+COMMENT ON COLUMN ANALYSIS_ROOM.ID_ANALYSIS_INSTIT_SOFT IS 'Institution / software configuration ID';
+-- CHANGE END: Ana Matos

@@ -1,0 +1,1 @@
+GRANT SELECT ON v_institution_accounts TO intf_alert;

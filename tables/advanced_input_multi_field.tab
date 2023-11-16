@@ -1,0 +1,36 @@
+-- CHANGE REASON: Criação da tabela para a configuração dos multichoices por advanced_input_field
+-- APPLICATION: CARE (3)
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 21/08/2007
+CREATE TABLE ALERT.ADVANCED_INPUT_MULTI_FIELD
+(
+	ID_ADVANCED_INPUT_MULTI_FIELD NUMBER(24) not null,
+    ID_ADVANCED_INPUT_FIELD NUMBER(24) not null,
+	CODE_SYS_DOMAIN VARCHAR2(200) not null,
+    MULTI_FIELD_VAL VARCHAR2(30) not null,
+    RANK NUMBER(6) not null,
+	ADW_LAST_UPDATE DATE not null
+);
+
+comment on table ALERT.ADVANCED_INPUT_MULTI_FIELD
+	is 'Advanced input multichoice fields configuration';
+comment on column ADVANCED_INPUT_MULTI_FIELD.ID_ADVANCED_INPUT_MULTI_FIELD
+	is 'Primary Key';
+comment on column ADVANCED_INPUT_MULTI_FIELD.ID_ADVANCED_INPUT_FIELD
+	is 'Foreign Key for the ADVANCED_INPUT_FIELD table';
+comment on column ADVANCED_INPUT_MULTI_FIELD.CODE_SYS_DOMAIN
+	is 'SYS_DOMAIN code';
+comment on column ADVANCED_INPUT_MULTI_FIELD.RANK
+	is 'Order definition';    
+comment on column ADVANCED_INPUT_MULTI_FIELD.ADW_LAST_UPDATE
+	is 'Last change date';
+comment on column ADVANCED_INPUT_MULTI_FIELD.multi_field_val 
+IS 'This column is mandatory and contains the same value as in the SYS_DOMAIN table. The reason is because SYS_DOMAIN table does not have an ID column defined, and we need this value to be able to uniquely identify each row.';
+
+-- CHANGE REASON: Alteração do tipo da coluna por causa da Time Zone
+-- APPLICATION:CARE
+-- CHANGED BY: Orlando Antunes 
+-- CHANGE DATE: 23/08/200
+alter table ALERT.ADVANCED_INPUT_MULTI_FIELD modify ADW_LAST_UPDATE TIMESTAMP(6) WITH LOCAL TIME ZONE;
+--END
+

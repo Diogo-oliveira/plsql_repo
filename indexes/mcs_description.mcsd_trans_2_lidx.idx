@@ -1,0 +1,37 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 08/02/2010 18:37
+-- CHANGE REASON: [ALERT-71995] Medical Classification System domain indexes creation
+create index MCSD_TRANS_2_LIDX ON MCS_DESCRIPTION(TRANSLATION_2) indextype is lucene.LuceneIndex
+parameters ('Stemmer:English;LobStorageParameters:TABLESPACE LUCENE_IDX PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS NOLOGGING;LogLevel:INFO;MergeFactor:2;AutoTuneMemory:true;MaxBufferedDocs:100;FormatCols:id_mcs_source(NOT_ANALYZED);ExtraCols:to_char(id_mcs_source) "id_mcs_source";');
+-- CHANGE END: Carlos Loureiro
+
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 23/02/2010
+-- CHANGE REASON: [ALERT-71995] Medical Classification System domain indexes creation
+
+-- please execute these commands with SYS database user
+ALTER TRIGGER SYS.CDC_ALTER_CTABLE_BEFORE DISABLE;
+ALTER TRIGGER SYS.CDC_CREATE_CTABLE_AFTER DISABLE;
+ALTER TRIGGER SYS.CDC_CREATE_CTABLE_BEFORE DISABLE;
+ALTER TRIGGER SYS.CDC_DROP_CTABLE_BEFORE DISABLE;
+
+DECLARE
+    e_index_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_index_not_exists, -01418);
+BEGIN
+    EXECUTE IMMEDIATE 'drop index ALERT.MCSD_TRANS_2_LIDX';
+EXCEPTION
+    WHEN e_index_not_exists THEN
+        dbms_output.put_line('Warning: ALERT.MCSD_TRANS_2_LIDX not found');
+END;
+/
+
+create index ALERT.MCSD_TRANS_2_LIDX ON ALERT.MCS_DESCRIPTION(TRANSLATION_2) indextype is lucene.LuceneIndex
+parameters ('Stemmer:English;LobStorageParameters:TABLESPACE LUCENE_IDX PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS NOLOGGING;LogLevel:INFO;MergeFactor:2;AutoTuneMemory:true;MaxBufferedDocs:100;FormatCols:id_mcs_source(NOT_ANALYZED);ExtraCols:to_char(id_mcs_source) "id_mcs_source";');
+
+ALTER TRIGGER SYS.CDC_ALTER_CTABLE_BEFORE ENABLE;
+ALTER TRIGGER SYS.CDC_CREATE_CTABLE_AFTER ENABLE;
+ALTER TRIGGER SYS.CDC_CREATE_CTABLE_BEFORE ENABLE;
+ALTER TRIGGER SYS.CDC_DROP_CTABLE_BEFORE ENABLE;
+-- CHANGE END: Carlos Loureiro

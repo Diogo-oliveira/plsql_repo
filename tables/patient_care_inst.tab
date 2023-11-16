@@ -1,0 +1,63 @@
+
+
+  CREATE TABLE "ALERT"."PATIENT_CARE_INST"
+   (	"ID_PATIENT" NUMBER(24,0),
+	"ID_INSTITUTION" NUMBER(12,0),
+	"REASON_TYPE" VARCHAR2(1),
+	"REASON" VARCHAR2(4000),
+	"DT_BEGIN_TSTZ" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"ID_INSTITUTION_ENROLED" NUMBER(24,0)
+   ) ;
+
+
+-- Para adicionar colunas pode ser usado código comentado
+-- De momento só são suportados os tipos de dados mais comuns.
+-- ALTER TABLE PATIENT_CARE_INST ADD ID_PATIENT NUMBER(24,0) NOT NULL;
+-- ALTER TABLE PATIENT_CARE_INST ADD ID_INSTITUTION NUMBER(12,0) ;
+-- ALTER TABLE PATIENT_CARE_INST ADD REASON_TYPE VARCHAR2(1) ;
+-- ALTER TABLE PATIENT_CARE_INST ADD REASON VARCHAR2(4000) ;
+-- ALTER TABLE PATIENT_CARE_INST ADD DT_BEGIN_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL;
+-- ALTER TABLE PATIENT_CARE_INST ADD ID_INSTITUTION_ENROLED NUMBER(24,0) ;
+
+   COMMENT ON COLUMN "ALERT"."PATIENT_CARE_INST"."ID_PATIENT" IS 'ID do paciente Chave primaria';
+
+
+
+   COMMENT ON COLUMN "ALERT"."PATIENT_CARE_INST"."ID_INSTITUTION" IS 'ID da instituição';
+
+
+
+   COMMENT ON COLUMN "ALERT"."PATIENT_CARE_INST"."REASON_TYPE" IS 'Tipo de razão: M - mudança de residência do utente, P - preferência do utente, M - médico deixa de exercer na instit., R - reforma do médico';
+
+
+
+   COMMENT ON COLUMN "ALERT"."PATIENT_CARE_INST"."REASON" IS 'Justificação apontada pelo utente';
+
+
+
+   COMMENT ON COLUMN "ALERT"."PATIENT_CARE_INST"."DT_BEGIN_TSTZ" IS 'Data inicio';
+
+
+
+   COMMENT ON COLUMN "ALERT"."PATIENT_CARE_INST"."ID_INSTITUTION_ENROLED" IS 'Instituição (centro saúde / extensão) em que está inscrito';
+
+
+
+   COMMENT ON TABLE "ALERT"."PATIENT_CARE_INST"  IS 'Centro de saúde do paciente';
+
+
+comment on column PATIENT_CARE_INST.REASON_TYPE
+is 'Tipo de razão: 1 - Primeira Inscrição Nos Cuidados Primários 2 - Transferido de uma Inscrição Primária 3 - Inscrição Esporádica 4 - Transferido PARA 5 - Desistência 6 - Óbito 7 - Anulação por DADOS FALSOS 8 - Anulação por ERRO na Atribuição de Número Operacional';
+
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 20/01/2016 16:05
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON TABLE PATIENT_CARE_INST IS 'Primary Care Institution';
+COMMENT ON COLUMN  PATIENT_CARE_INST.ID_PATIENT IS 'Patient Identifier';
+COMMENT ON COLUMN  PATIENT_CARE_INST.ID_INSTITUTION IS 'Institution Identifier';
+COMMENT ON COLUMN  PATIENT_CARE_INST.REASON_TYPE IS 'Type of reason: 1- First register at primary care 2- Transfer from an primary care register 3- Temporary register 4- Transfered to 5- Quit 6- Decease 7- Canceled due to false data 8-Cancellation duo to the Operational Error Number Assignment';
+COMMENT ON COLUMN  PATIENT_CARE_INST.REASON IS 'Reason';
+COMMENT ON COLUMN  PATIENT_CARE_INST.DT_BEGIN_TSTZ IS 'Begin Date';
+COMMENT ON COLUMN  PATIENT_CARE_INST.ID_INSTITUTION_ENROLED IS 'Institution where the pacient is enroled';
+-- CHANGE END:  ruben.araujo

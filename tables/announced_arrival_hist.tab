@@ -1,0 +1,110 @@
+create table ANNOUNCED_ARRIVAL_HIST
+(
+  ID_ANNOUNCED_ARRIVAL_HIST NUMBER(24) not null,
+  ID_ANNOUNCED_ARRIVAL      NUMBER(24) not null,
+  ID_PRE_HOSP_ACCIDENT      NUMBER(24) not null,
+  ID_EPISODE                NUMBER(24),
+  FLG_EPI_TYPE              VARCHAR2(1),
+  TYPE_INJURY               VARCHAR2(200),
+  CONDITION                 VARCHAR2(200),
+  REFERRED_BY               VARCHAR2(200),
+  ID_SPECIALITY             NUMBER(12),
+	ID_CLINICAL_SERVICE       NUMBER(12),
+  ID_ED_PHYSICIAN           NUMBER(24),
+  DT_EXPECTED_ARRIVAL       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  FLG_STATUS                VARCHAR2(1) not null,
+  DT_ANNOUNCED_ARRIVAL      TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  CREATE_USER               VARCHAR2(24),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24)
+)tablespace TABLE_M
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+
+-- Add comment to the table
+comment on table ANNOUNCED_ARRIVAL_HIST is 'History table of patient with announced arrival';
+-- Add comments to the columns 
+comment on column ANNOUNCED_ARRIVAL_HIST.ID_ANNOUNCED_ARRIVAL_HIST is 'Primary key';
+comment on column ANNOUNCED_ARRIVAL_HIST.ID_ANNOUNCED_ARRIVAL is 'Announced arrival ID';
+comment on column ANNOUNCED_ARRIVAL_HIST.ID_PRE_HOSP_ACCIDENT is 'Pre-Hospital accident ID';
+comment on column ANNOUNCED_ARRIVAL_HIST.ID_EPISODE is 'Associated arrival episode ID';
+comment on column ANNOUNCED_ARRIVAL_HIST.FLG_EPI_TYPE is 'Indicates if the associated episode was merged or created: M Merged; C Created';
+comment on column ANNOUNCED_ARRIVAL_HIST.TYPE_INJURY is 'Type of injury or problem';
+comment on column ANNOUNCED_ARRIVAL_HIST.CONDITION is 'Patient condition';
+comment on column ANNOUNCED_ARRIVAL_HIST.REFERRED_BY is 'Who reported the accident';
+comment on column ANNOUNCED_ARRIVAL_HIST.ID_SPECIALITY is 'Speciality of the emergency department physician';
+comment on column ANNOUNCED_ARRIVAL_HIST.ID_CLINICAL_SERVICE is 'Clinical service of the emergency department physician';
+comment on column ANNOUNCED_ARRIVAL_HIST.ID_ED_PHYSICIAN is 'Emergency department physician';
+comment on column ANNOUNCED_ARRIVAL_HIST.DT_EXPECTED_ARRIVAL is 'Expected time of patient arrival';
+comment on column ANNOUNCED_ARRIVAL_HIST.FLG_STATUS is 'Indicates announced arrival state: E Expected; A Arrived; C Cancelled';
+comment on column ANNOUNCED_ARRIVAL_HIST.DT_ANNOUNCED_ARRIVAL is 'Insertion or last updated time';
+comment on column ANNOUNCED_ARRIVAL_HIST.CREATE_USER is 'Professional ID which created the record';
+comment on column ANNOUNCED_ARRIVAL_HIST.CREATE_TIME is 'Date of record creation';
+comment on column ANNOUNCED_ARRIVAL_HIST.CREATE_INSTITUTION is 'Institution ID where record was created';
+comment on column ANNOUNCED_ARRIVAL_HIST.UPDATE_USER is 'Professional ID who last updated the record';
+comment on column ANNOUNCED_ARRIVAL_HIST.UPDATE_TIME is 'Date when record was last updated';
+comment on column ANNOUNCED_ARRIVAL_HIST.UPDATE_INSTITUTION is 'Institution ID where record was last updated';
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 23/10/2009 08:26
+-- CHANGE REASON: [ALERT-51265] Add optins 'A' and 'P' to FLG_EPI_TYPE of ANNOUNCED_ARRIVAL table
+comment on column ANNOUNCED_ARRIVAL_HIST.FLG_EPI_TYPE
+  is 'Indicates if the associated episode was merged or created: M Merged; C Created (Applies only to V1). Indicates that the episode was created in conjunction with the announced patient or was created before: A ? in conjunction with the ann pat; B ? before the ann pat';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 05/05/2010 15:58
+-- CHANGE REASON: [ALERT-95507] Issue Replication: Information is missing on detail screen
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); -- alter table modify
+BEGIN
+BEGIN
+execute immediate 'alter table ANNOUNCED_ARRIVAL_HIST add ID_CANCEL_REASON NUMBER(24)';
+EXCEPTION
+WHEN e_already_exists THEN
+dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+
+BEGIN
+execute immediate 'alter table ANNOUNCED_ARRIVAL_HIST add CANCEL_NOTES VARCHAR2(4000)';
+EXCEPTION
+WHEN e_already_exists THEN
+dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 24/07/2013 10:48
+-- CHANGE REASON: [ALERT-262378] Anounced arrival improvements (UK market)
+--                
+-- Add/modify columns 
+alter table ANNOUNCED_ARRIVAL_HIST add id_patient number(24);
+-- Add comments to the columns 
+comment on column ANNOUNCED_ARRIVAL_HIST.id_patient
+  is 'Patient identifier ';
+	
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:17
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column ANNOUNCED_ARRIVAL_HIST.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column ANNOUNCED_ARRIVAL_HIST.cancel_notes
+  is 'Cancellation notes';
+comment on column ANNOUNCED_ARRIVAL_hist.flg_epi_type
+  is 'Indicates if the associated episode was merged or created: M Merged; C Created (Applies only to V1). Indicates that the episode was created in conjunction with the announced patient or was created before: A - Episode created on announced patient arrival, P - Episode created before announced patient arrival, M - Merged, C - Created';
+  
+-- CHANGE END: Elisabete Bugalho

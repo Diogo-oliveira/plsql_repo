@@ -1,0 +1,40 @@
+
+
+  CREATE TABLE PAT_FAM_SOC_HIST
+   (	ID_PAT_FAM_SOC_HIST NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_FAM_SOC_HIST DATE NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_PAT_FAMILY NUMBER(24,0),
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000) NOT NULL ENABLE,
+	ID_PROF_WRITE NUMBER(24,0) NOT NULL ENABLE,
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE pat_fam_soc_hist IS 'História familiar e social' ;
+
+COMMENT ON COLUMN pat_fam_soc_hist.notes_cancel IS 'Notas de cancelamento' ;
+COMMENT ON COLUMN pat_fam_soc_hist.id_pat_fam_soc_hist IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_fam_soc_hist.dt_pat_fam_soc_hist IS 'Data de registo' ;
+COMMENT ON COLUMN pat_fam_soc_hist.id_pat_family IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_fam_soc_hist.flg_type IS 'Tipo: F - história familiar; S - hist. social' ;
+COMMENT ON COLUMN pat_fam_soc_hist.flg_status IS 'Estado: A - activo, C - cancelado' ;
+COMMENT ON COLUMN pat_fam_soc_hist.dt_cancel IS 'Data de cancelamento' ;
+
+comment on column PAT_FAM_SOC_HIST.ID_EPISODE
+  is 'ID do episódio em que foi feito o registo.';
+alter table pat_fam_soc_hist 
+add (dt_pat_fam_soc_hist_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+
+-- DROP DATE TYPE
+ALTER table PAT_FAM_SOC_HIST DROP column DT_PAT_FAM_SOC_HIST; 
+ALTER table PAT_FAM_SOC_HIST DROP column DT_CANCEL;

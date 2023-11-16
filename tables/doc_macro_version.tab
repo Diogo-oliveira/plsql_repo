@@ -1,0 +1,74 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 30/03/2012 17:37
+-- CHANGE REASON: [ALERT-188349] 
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'DOC_MACRO_VERSION',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'TRS',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+END;
+/
+
+create table doc_macro_version
+(
+  id_doc_macro_version         NUMBER(24) not null,
+--  id_epis_complaint            NUMBER(24), --NOT NECESSARY 
+--  id_episode                   NUMBER(24) not null, --NOT NECESSARY 
+  id_professional              NUMBER(24) not null, --REDUNDANT
+  dt_creation                  TIMESTAMP(6) WITH LOCAL TIME ZONE not null,--NECESSARY ?
+  id_prof_last_update          NUMBER(24) not null, --NECESSARY ?
+  dt_last_update               TIMESTAMP(6) WITH LOCAL TIME ZONE,--NECESSARY ?
+  id_prof_cancel               NUMBER(24), --REDUNDANT
+  id_cancel_reason             NUMBER(24),
+  notes_cancel                 VARCHAR2(1000 CHAR),
+  dt_cancel                    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  flg_status                   VARCHAR2(1 CHAR) not null,
+  flg_edition_type             VARCHAR2(1 CHAR) not null,
+  id_doc_area                  NUMBER(24) not null,
+  id_doc_template              NUMBER(24) not null, 
+  id_parent                    NUMBER(24), --CHANGE FROM id_epis_documentation_parent 
+--  id_epis_context              NUMBER(24), --NOT NECESSARY
+--  id_episode_context           NUMBER(24), --NOT NECESSARY
+notes                        CLOB,
+--  id_scales_action             NUMBER(24), --NOT NECESSARY
+  create_user                  VARCHAR2(24 CHAR),
+  create_time                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution           NUMBER(24),
+  update_user                  VARCHAR2(24 CHAR),
+  update_time                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution           NUMBER(24)
+) LOB (notes) STORE AS
+      (TABLESPACE alert_lob);
+
+comment on table doc_macro_version is 'Table to store the information for a template macro record';
+
+comment on column doc_macro_version.id_doc_macro_version is 'Unique key';
+--comment on column doc_macro_version.id_epis_complaint is 'Episódio da queixa';
+--comment on column doc_macro_version.id_episode is 'Episódio';
+comment on column doc_macro_version.id_professional is 'Professional identifier who created record';
+comment on column doc_macro_version.dt_creation      is 'Create time';
+comment on column doc_macro_version.id_prof_last_update is 'Professional who performed last change to record';
+comment on column doc_macro_version.dt_last_update      is 'Last update';
+comment on column doc_macro_version.id_prof_cancel is 'Profissional who canceled';
+comment on column doc_macro_version.id_cancel_reason is 'Cancel reason ID';
+comment on column doc_macro_version.notes_cancel is 'Cancel notes';
+comment on column doc_macro_version.dt_cancel       is 'Cancel time';
+comment on column doc_macro_version.flg_status is 'Record status: A - Active; I - Inactive;C - Canceled;O - Outdated';
+comment on column doc_macro_version.flg_edition_type is 'Flag to indicate the type of edition that originate this record: ''N'' - New; ''E'' - Edit;';
+comment on column doc_macro_version.id_doc_area is 'Documentation area';
+comment on column doc_macro_version.id_doc_template is 'Doc template identifier';
+comment on column doc_macro_version.id_parent is 'Doc Macro base/original';
+--comment on column doc_macro_version.id_epis_context is 'ID de registo do contexto';
+--comment on column doc_macro_version.id_episode_context is 'ID do episódio de destino onde poderá ser consultada esta informação (TI)';
+comment on column doc_macro_version.notes is 'Additional notes / Free-text records';
+--comment on column doc_macro_version.id_scales_action is 'Indicate wich option was selected';
+comment on column doc_macro_version.create_user is 'Creation User';
+comment on column doc_macro_version.create_time is 'Creation Time';
+comment on column doc_macro_version.create_institution is 'Creation Institution';
+comment on column doc_macro_version.update_user is 'Update User';
+comment on column doc_macro_version.update_time is 'Update Time';
+comment on column doc_macro_version.update_institution is 'Update Institution';
+-- CHANGE END: Gustavo Serrano

@@ -1,0 +1,118 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 11/12/2009 17:02
+-- CHANGE REASON: [ALERT-61892] CPOE 2nd phase
+create table EPIS_POSITIONING_DET_HIST
+(
+  ID_EPIS_POSIT_DET_HIST  NUMBER(24) not null,
+  ID_EPIS_POSITIONING_DET NUMBER(24) not null,
+  ID_EPIS_POSITIONING     NUMBER(24) not null,
+  ID_POSITIONING          NUMBER(24) not null,
+  RANK                    NUMBER(24) not null,
+  CREATE_USER             VARCHAR2(24 CHAR),
+  CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION      NUMBER(24),
+  UPDATE_USER             VARCHAR2(24 CHAR),
+  UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION      NUMBER(24)
+);
+
+comment on column EPIS_POSITIONING_DET_HIST.ID_EPIS_POSIT_DET_HIST
+  is 'Unique identifier key';
+comment on column EPIS_POSITIONING_DET_HIST.ID_EPIS_POSITIONING_DET
+  is 'Epis_positioning_det identifier';
+comment on column EPIS_POSITIONING_DET_HIST.ID_EPIS_POSITIONING
+  is 'Epis positioning identifier';
+comment on column EPIS_POSITIONING_DET_HIST.ID_POSITIONING
+  is 'Positioning identifier';
+comment on column EPIS_POSITIONING_DET_HIST.RANK
+  is 'Positioning rank order';
+comment on column EPIS_POSITIONING_DET_HIST.CREATE_USER
+  is 'Creation User';
+comment on column EPIS_POSITIONING_DET_HIST.CREATE_TIME
+  is 'Creation Time';
+comment on column EPIS_POSITIONING_DET_HIST.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column EPIS_POSITIONING_DET_HIST.UPDATE_USER
+  is 'Update User';
+comment on column EPIS_POSITIONING_DET_HIST.UPDATE_TIME
+  is 'Update Time';
+comment on column EPIS_POSITIONING_DET_HIST.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:17
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+begin
+EXECUTE IMMEDIATE 'alter table epis_positioning_det_hist add (dt_epis_positioning_det timestamp with local time zone)';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_positioning_det_hist.dt_epis_positioning_det IS ''Last update epis_positioning_det table''' ;
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:32
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+begin
+EXECUTE IMMEDIATE 'alter table epis_positioning_det_hist add (id_prof_last_upd number(24))';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_positioning_det_hist.id_prof_last_upd IS ''Last update professional identifier''' ;
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 19/04/2011 16:32
+-- CHANGE REASON: [ALERT-174012] Creation of Columns and Types - Update functionality positionings to function with detail and history
+begin
+EXECUTE IMMEDIATE 'alter table epis_positioning_det_hist add (flg_outdated varchar2(1 char) default ''N'')';
+EXECUTE IMMEDIATE 'comment on column epis_positioning_det_hist.flg_outdated is ''It is current registry outdated (''''Y''''- Yes; ''''N''''- No) (DEFAULT: ''''N'''')''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:42
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table EPIS_POSITIONING_DET_HIST
+  is 'History table for positioning detail records';
+-- Add comments to the columns 
+comment on column EPIS_POSITIONING_DET_HIST.id_epis_posit_det_hist
+  is 'Unique identifier key';
+comment on column EPIS_POSITIONING_DET_HIST.id_epis_positioning_det
+  is 'Epis positioning det identifier';
+comment on column EPIS_POSITIONING_DET_HIST.id_epis_positioning
+  is 'Epis positioning identifier';
+comment on column EPIS_POSITIONING_DET_HIST.id_positioning
+  is 'Positioning identifier';
+comment on column EPIS_POSITIONING_DET_HIST.rank
+  is 'Positioning rank order';
+comment on column EPIS_POSITIONING_DET_HIST.create_user
+  is 'Creation User';
+comment on column EPIS_POSITIONING_DET_HIST.create_time
+  is 'Creation Time';
+comment on column EPIS_POSITIONING_DET_HIST.create_institution
+  is 'Creation Institution';
+comment on column EPIS_POSITIONING_DET_HIST.update_user
+  is 'Update User';
+comment on column EPIS_POSITIONING_DET_HIST.update_time
+  is 'Update Time';
+comment on column EPIS_POSITIONING_DET_HIST.update_institution
+  is 'Update Institution';
+comment on column EPIS_POSITIONING_DET_HIST.dt_epis_positioning_det
+  is 'Last update epis_positioning_det table';
+comment on column EPIS_POSITIONING_DET_HIST.id_prof_last_upd
+  is 'Last update professional identifier';
+comment on column EPIS_POSITIONING_DET_HIST.flg_outdated
+  is 'It is current registry outdated (''Y''- Yes; ''N''- No) (DEFAULT: ''N'')';
+  
+-- CHANGE END: Pedro Fernandes

@@ -1,0 +1,572 @@
+CREATE TABLE DISCHARGE_DETAIL_HIST
+(
+ID_DISCHARGE_DETAIL_HIST	NUMBER(24,0) NOT NULL ENABLE,	
+ID_DISCHARGE_HIST        	NUMBER(24,0) NOT NULL ENABLE,
+ID_DISCHARGE 			             NUMBER(24,0) NOT NULL ENABLE,
+ID_DISCHARGE_DETAIL 		       NUMBER(24,0) NOT NULL ENABLE,
+FLG_PAT_CONDITION 		         VARCHAR2(1),
+ID_TRANSPORT_TYPE 		         NUMBER(24,0),
+ID_DISCH_REA_TRANSP_ENT_INST 	 NUMBER(24,0),
+FLG_CARETAKER 			           VARCHAR2(1),
+CARETAKER_NOTES 		           VARCHAR2(4000),
+FLG_FOLLOW_UP_BY 		           VARCHAR2(1),
+FOLLOW_UP_NOTES 		           VARCHAR2(4000),
+FOLLOW_UP_DATE 			           DATE,
+FLG_WRITTEN_NOTES 		         VARCHAR2(1),
+FLG_VOLUNTARY 			           VARCHAR2(1),
+FLG_PAT_REPORT 			           VARCHAR2(1),
+FLG_TRANSFER_FORM 		         VARCHAR2(1),
+ID_PROF_ADMITTING 		         NUMBER(24,0),
+ID_DEP_CLIN_SERV_ADMITING 	   NUMBER(24,0),
+FLG_SUMMARY_REPORT 		         VARCHAR2(1),
+FLG_AUTOPSY_CONSENT 		       VARCHAR2(1),
+AUTOPSY_CONSENT_DESC 		       VARCHAR2(4000),
+FLG_ORGN_DNTN_INFO 		         VARCHAR2(1),
+ORGN_DNTN_INFO 			           VARCHAR2(4000),
+FLG_EXAMINER_NOTIFIED 		     VARCHAR2(1),
+EXAMINER_NOTIFIED_INFO 		    VARCHAR2(4000),
+FLG_ORGN_DNTN_FORM_COMPLETE 	VARCHAR2(1),
+FLG_AMA_FORM_COMPLETE 		    VARCHAR2(1),
+FLG_LWBS_FORM_COMPLETE 		    VARCHAR2(1),
+NOTES 				                VARCHAR2(4000),
+PROF_ADMITTING_DESC 		      VARCHAR2(200),
+DT_prof_admiting_tstz         TIMESTAMP WITH LOCAL TIME ZONE,
+DEP_CLIN_SERV_ADMITING_DESC 	VARCHAR2(200),
+MSE_TYPE 			                VARCHAR2(10),
+FLG_MED_RECONCILE             VARCHAR2(1),
+FLG_INSTRUCTIONS_DISCUSSED    VARCHAR2(1),
+INSTRUCTIONS_DISCUSSED_NOTES   VARCHAR2(4000),
+INSTRUCTIONS_UNDERSTOOD        VARCHAR2(1),
+PAT_INSTRUCTIONS_PROVIDED     VARCHAR(1), 
+flg_record_release            VARCHAR(1),
+desc_record_release           VARCHAR(4000),
+id_prof_assigned_to           number(24),
+VS_TAKEN                      VARCHAR2(1),
+INTAKE_OUTPUT_DONE            VARCHAR2(1),
+ADMIT_TO_ROOM                 varchar2(4000),
+flg_patient_consent           Varchar2(1), 
+acceptance_facility           varchar2(4000),
+admitting_room                varchar2(4000),
+room_assigned_by              varchar2(4000),
+FLG_ITEMS_SENT_WITH_PATIENT   varchar2(1),
+ITEMS_SENT_WITH_PATIENT       varchar2(4000),
+procedure_text                varchar2(4000),
+FLG_CHECK_VALUABLES           VARCHAR2(1),
+FLG_PATIENT_TRANSPORT         VARCHAR2(1),
+FLG_PAT_ESCORTED_BY           VARCHAR2(1),
+DESC_PAT_ESCORTED_BY          VARCHAR2(4000),
+ADMISSION_ORDERS              VARCHAR2(4000),
+reason_of_transfer            VARCHAR2(4000),
+FLG_TRANSFER_TRANSPORT        varchar2(1),
+desc_TRANSFER_TRANSPORT       VARCHAR2(4000),
+DT_TRANSFER_TRANSPORT_TSTZ    TIMESTAMP WITH LOCAL TIME ZONE,
+RISK_OF_TRANSFER              VARCHAR2(4000),
+BENEFITS_OF_TRANSFER          VARCHAR2(4000),
+EN_ROUTE_ORDERS               VARCHAR2(4000),
+DT_DEATH_TSTZ                 TIMESTAMP WITH LOCAL TIME ZONE,
+PRF_DECLARED_DEATH            VARCHAR2(200),
+AUTOPSY_CONSENT               VARCHAR2(4000),
+FLG_ORGN_DONATION_AGENCY      varchar2(1),
+FLG_REPORT_OF_DEATH           varchar2(1),
+FLG_CORONER_CONTACTED         varchar2(1),
+CORONER_NAME                  varchar2(0500),
+FLG_FUNERAL_HOME_CONTACTED    varchar2(1),
+dt_body_removed_TSTZ          TIMESTAMP WITH LOCAL TIME ZONE,
+FLG_SIGNED_AMA_FORM           varchar2(1),
+DESC_SIGNED_AMA_FORM          VARCHAR2(4000),
+FUNERAL_HOME_name             varchar2(0500),
+RISK_OF_LEAVING               VARCHAR2(4000),
+REASON_FOR_VISIT              VARCHAR2(4000),
+FLG_RISK_OF_LEAVING           VARCHAR2(1),
+DT_AMA_tstz                   TIMESTAMP WITH LOCAL TIME ZONE,
+FLG_SURGERY 			VARCHAR2(1),
+DATE_SURGERY 			DATE,
+FLG_PRESCRIPTION_GIVEN        VARCHAR2(1),
+FOLLOW_UP_DATE_TSTZ 		TIMESTAMP WITH LOCAL TIME ZONE,
+DATE_SURGERY_TSTZ 		TIMESTAMP WITH LOCAL TIME ZONE,
+ID_PROF_CREATED_HIST		NUMBER(24,0),
+DT_CREATED_HIST			TIMESTAMP WITH LOCAL TIME ZONE,
+);
+
+COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.ID_DISCHARGE_DETAIL_HIST IS 'Primary key of current table';
+COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.ID_DISCHARGE_DETAIL IS 'Primary key of table discharge_detail' ;
+COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.FLG_PAT_CONDITION   IS 'Patient Conditions: (I)mproved, (U)nchanged, (S)table, (W)orse, (O)ther' ;
+COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.ID_TRANSPORT_TYPE   IS 'Type of transportation assigned to patient ' ;
+COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.FLG_CARETAKER       IS 'Caretaker Flag: (C)aretaker, (F)amily, (P)atient, (N)one, (O)ther' ;
+COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.CARETAKER_NOTES     IS 'Notes for individual responsible for additional care and instructions' ;
+COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.FLG_FOLLOW_UP_BY    IS 'Type of Professional for performs the follow-up: (P)rimary care doctor, (N)one, (O)ther' ;
+COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.FOLLOW_UP_NOTES     IS 'Notes for follow-up' ;
+COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.FOLLOW_UP_DATE      IS 'Date/Time of Follow-up' ;
+COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.FLG_WRITTEN_NOTES   IS 'Flag indicates if there is additional WRITTEN instructions' ;
+COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.NOTES               IS 'Additional Notes' ;
+COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.MSE_TYPE            IS 'Tipo da avaliação médica. Pode assumir os seguintes valores:I - I have performed a medical screening evaluation;N - No mergency medical condition exists;F - Further evaluation needed to rule out an emc';
+
+alter table discharge_Detail_hist add reason_for_leaving varchar2(4000);
+
+-- inpatient 31-10-2007
+alter table discharge_detail_hist drop column autopsy_consent;
+-- end
+
+-- 13-11-2007 inpatient
+alter table discharge_detail_hist add FLG_PRESCRIPTION_GIVEN_TO    VARCHAR2(1);
+alter table discharge_detail_hist add desc_PRESCRIPTION_GIVEN_TO   VARCHAR2(500);
+alter table discharge_detail_hist add desc_PATIENT_TRANSPORT       VARCHAR2(500);
+alter table discharge_detail_hist add NEXT_VISIT_SCHEDULED         VARCHAR2(500);
+alter table discharge_detail_hist add flg_instructions_next_visit  VARCHAR2(1);
+alter table discharge_detail_hist add desc_instructions_next_visit VARCHAR2(4000);
+alter table discharge_detail_hist add id_dep_clin_serv_visit       number(24);
+alter table discharge_detail_hist add id_complaint                 number(24);
+-- end
+
+--16-11-2007 inpatient
+alter table discharge_detail_hist add id_consult_Req number(24);
+--
+
+ALTER TABLE DISCHARGE_DETAIL_HIST ADD ID_SCHEDULE NUMBER(24);
+COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.ID_SCHEDULE IS 'Corresponding schedule Id';
+
+
+-- José Brito 04/06/2008 Revisão dos conteúdos da alta (USA)
+ALTER TABLE discharge_detail_hist ADD report_given_to VARCHAR2(200);
+ALTER TABLE discharge_detail_hist ADD reason_of_transfer_desc VARCHAR2(4000);
+ALTER TABLE discharge_detail_hist MODIFY reason_of_transfer VARCHAR2(1);
+--
+
+
+-- INPATIENT LMAIA 22-09-2008
+-- DROP das colunas DT_... que não são Timezone (desnormalização)
+alter table discharge_detail_hist drop (FOLLOW_UP_DATE, DATE_SURGERY);
+-- END
+
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 15/01/2010 08:20
+-- CHANGE REASON: [ALERT-67475] [REPLICATION]: Suitable report for discharge prescription
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE DISCHARGE_DETAIL_HIST ADD FLG_PRINT_REPORT varchar2(1)';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.FLG_PRINT_REPORT IS ''Indica se o profissional decidiu ou não imprimir o relatório com o resumo do episódio no momento da alta.''';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 22/03/2010 17:11
+-- CHANGE REASON: [ALERT-69945] social harmless ddl - discharge_detail and discharge_detail_hist
+alter table discharge_detail_hist add (followup_count   number(24),
+                                       total_time_spent number(24,3),
+                                       id_unit_measure  number(24));
+
+comment on column discharge_detail_hist.followup_count
+  is 'Number of follow up encounters.';
+comment on column discharge_detail_hist.total_time_spent
+  is 'Total time spent on follow up encounters.';
+comment on column discharge_detail_hist.id_unit_measure
+  is 'Total time spent unit measure.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 10/10/2010 21:27
+-- CHANGE REASON: [ALERT-130722] Tracking view ward
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE discharge_detail_hist add id_room_admit NUMBER(24)';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+COMMENT ON column discharge_detail_hist.id_room_admit IS 'Room ID where the episode is going to be admitted.';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 28/01/2011 17:03
+-- CHANGE REASON: [ALERT-143303] New filed "Exit code" in discharge 
+ALTER TABLE discharge_detail_hist MODIFY flg_pat_condition VARCHAR2(3 CHAR);
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 18/03/2011 15:37
+-- CHANGE REASON: [ALERT-167553] ALERT_65836 - In the screen which appears when we choose discharge for death the (truncated)
+DECLARE
+    e_column_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_exists, -1430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE DISCHARGE_DETAIL_HIST ADD FLG_AUTOPSY VARCHAR2(1 CHAR)';
+EXCEPTION
+    WHEN e_column_already_exists THEN
+        dbms_output.put_line('EPIS_REPORT.FLG_AUTOPSY already exists.');
+END;
+/
+
+COMMENT ON column DISCHARGE_DETAIL_HIST.flg_autopsy IS 'Is to perform an autopsy? Y - Yes; N - Otherwise';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 03/04/2012 11:06
+-- CHANGE REASON: [ALERT-221292] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+
+    BEGIN EXECUTE IMMEDIATE 'alter table discharge_detail_hist add dt_fw_visit TIMESTAMP(6) WITH LOCAL TIME ZONE';EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.'); END;
+BEGIN EXECUTE IMMEDIATE 'alter table discharge_detail_hist add id_dep_clin_serv_fw number(24)'; EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.'); END;
+BEGIN EXECUTE IMMEDIATE 'alter table discharge_detail_hist add id_prof_fw number(24)'; EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.'); END;
+BEGIN EXECUTE IMMEDIATE 'alter table discharge_detail_hist add sched_notes clob'; EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.'); END;
+BEGIN EXECUTE IMMEDIATE 'alter table discharge_detail_hist add id_consult_req_fw number(24)'; EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.'); END;
+BEGIN EXECUTE IMMEDIATE 'alter table discharge_detail_hist add id_complaint_fw number(24)'; EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.'); END;
+BEGIN EXECUTE IMMEDIATE 'alter table discharge_detail_hist add reason_for_visit_fw clob'; EXCEPTION WHEN e_object_exists THEN dbms_output.put_line('AVISO: Operação já executada anteriormente.'); END;
+END;
+/
+COMMENT ON COLUMN discharge_detail_hist.dt_fw_visit is 'date NEXT VISIT ';
+COMMENT ON COLUMN discharge_detail_hist.id_dep_clin_serv_fw is 'id_dep_clin_serv NEXT VISIT ';
+COMMENT ON COLUMN discharge_detail_hist.id_prof_fw is 'id_prof NEXT VISIT';
+COMMENT ON COLUMN discharge_detail_hist.sched_notes is 'schedule notes NEXT VISIT';
+COMMENT ON COLUMN discharge_detail_hist.id_consult_req_fw is 'id_consult_req NEXT VISIT';
+COMMENT ON COLUMN discharge_detail_hist.id_complaint_fw is 'id_complaint NEXT VISIT';
+COMMENT ON COLUMN discharge_detail_hist.reason_for_visit_fw is 'reason_for_visit NEXT VISIT';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 08/05/2014 16:31
+-- CHANGE REASON: [ALERT-284038] 
+DECLARE
+    e_column_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_exists, -1430);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table DISCHARGE_DETAIL_HIST add ID_DEATH_CHARACTERIZATION NUMBER(24)';
+EXCEPTION
+    WHEN e_column_already_exists THEN
+        dbms_output.put_line('DISCHARGE_DETAIL_HIST.id_death_characterization already exists.');
+END;
+/
+
+DECLARE
+    l_sql VARCHAR2(4000);
+BEGIN
+  
+    l_sql := 'ALTER TABLE DISCHARGE_DETAIL_HIST ADD CODE_DEATH_EVENT VARCHAR2(200 CHAR) GENERATED ALWAYS AS (''ALERT.DISCHARGE_DETAIL_HIST.CODE_DEATH_EVENT.''|| TO_CHAR(ID_DISCHARGE_DETAIL_HIST)) VIRTUAL';
+    pk_versioning.run(l_sql);
+END;
+/
+
+comment on column DISCHARGE_DETAIL_HIST.id_death_characterization is 'Death Event Characterization (id_concept_term)';
+comment on column DISCHARGE_DETAIL_HIST.CODE_DEATH_EVENT is 'Death Event translation code';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table DISCHARGE_DETAIL_HIST
+  is 'Detail of discharge information history information ';
+-- Add comments to the columns 
+comment on column DISCHARGE_DETAIL_HIST.id_discharge_hist
+  is 'Primary of discharge_hist';
+comment on column DISCHARGE_DETAIL_HIST.id_discharge
+  is 'Primary key of discharge';
+comment on column DISCHARGE_DETAIL_HIST.id_disch_rea_transp_ent_inst
+  is 'Discharge transportation ID';
+comment on column DISCHARGE_DETAIL_HIST.flg_voluntary
+  is 'Voluntary or involuntary hospitalizationY -Voluntary admission; N -Involuntary admission';
+comment on column DISCHARGE_DETAIL_HIST.flg_pat_report
+  is 'Indicates if the report was delivered to the patient (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.flg_transfer_form
+  is 'Transfer Report delivered (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.id_prof_admitting
+  is 'Admitting physician';
+comment on column DISCHARGE_DETAIL_HIST.id_dep_clin_serv_admiting
+  is 'Admitting service';
+comment on column DISCHARGE_DETAIL_HIST.flg_summary_report
+  is 'ED summary report provided (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.flg_autopsy_consent
+  is 'Autopsy consent (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.autopsy_consent_desc
+  is 'Autopsy consent description';
+comment on column DISCHARGE_DETAIL_HIST.flg_orgn_dntn_info
+  is 'Organ donation information given to (sys_domain DISCHARGE_DETAIL.FLG_ORGN_DNTN_INFO)';
+comment on column DISCHARGE_DETAIL_HIST.orgn_dntn_info
+  is 'Organ donation information description';
+comment on column DISCHARGE_DETAIL_HIST.flg_examiner_notified
+  is 'Medical examiner notified (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.examiner_notified_info
+  is 'Medical examiner notified description';
+comment on column DISCHARGE_DETAIL_HIST.flg_orgn_dntn_form_complete
+  is 'Organ donation form complete (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.flg_ama_form_complete
+  is 'AMA form complete (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.flg_lwbs_form_complete
+  is 'LWBS form complete (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.prof_admitting_desc
+  is 'Admitting physician on external institution ';
+comment on column DISCHARGE_DETAIL_HIST.dt_prof_admiting_tstz
+  is 'Admitting date';
+comment on column DISCHARGE_DETAIL_HIST.dep_clin_serv_admiting_desc
+  is 'Admitting service on external institution';
+comment on column DISCHARGE_DETAIL_HIST.mse_type
+  is 'Medical evaluation Type.I - I have performed a medical screening evaluation;N - No mergency medical condition exists;F - Further evaluation needed to rule out an emc';
+comment on column DISCHARGE_DETAIL_HIST.flg_med_reconcile
+  is 'Medication reconciliation complete (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.flg_instructions_discussed
+  is 'Instructions discussed with. P - Patient, F - Family, C - Caretaker, O  - Other';
+comment on column DISCHARGE_DETAIL_HIST.instructions_discussed_notes
+  is 'Intructions notes';
+comment on column DISCHARGE_DETAIL_HIST.instructions_understood
+  is 'Instructions  understood (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.pat_instructions_provided
+  is 'Instructions provided to patient (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.flg_record_release
+  is 'DEPRECATED';
+comment on column DISCHARGE_DETAIL_HIST.desc_record_release
+  is 'DEPRECATED';
+comment on column DISCHARGE_DETAIL_HIST.id_prof_assigned_to
+  is 'Next visit with';
+comment on column DISCHARGE_DETAIL_HIST.vs_taken
+  is 'Vital signs(Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.intake_output_done
+  is 'Intake and output (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.admit_to_room
+  is 'Patient admitting to room';
+comment on column DISCHARGE_DETAIL_HIST.flg_patient_consent
+  is 'Patient''s consent to transfer';
+comment on column DISCHARGE_DETAIL_HIST.acceptance_facility
+  is 'Accept facility name';
+comment on column DISCHARGE_DETAIL_HIST.admitting_room
+  is 'Admitting room or unit';
+comment on column DISCHARGE_DETAIL_HIST.room_assigned_by
+  is 'Room or unit belongs to';
+comment on column DISCHARGE_DETAIL_HIST.flg_items_sent_with_patient
+  is 'Patient information';
+comment on column DISCHARGE_DETAIL_HIST.items_sent_with_patient
+  is 'Patient information';
+comment on column DISCHARGE_DETAIL_HIST.procedure_text
+  is 'DEPRECATED';
+comment on column DISCHARGE_DETAIL_HIST.flg_check_valuables
+  is 'Clothes / valuables checklist complete (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.flg_patient_transport
+  is 'Patient transport';
+comment on column DISCHARGE_DETAIL_HIST.flg_pat_escorted_by
+  is 'Patient escorted by';
+comment on column DISCHARGE_DETAIL_HIST.desc_pat_escorted_by
+  is 'Patient escorted by in free text';
+comment on column DISCHARGE_DETAIL_HIST.admission_orders
+  is 'Admission requests';
+comment on column DISCHARGE_DETAIL_HIST.reason_of_transfer
+  is 'Reason for transfer';
+comment on column DISCHARGE_DETAIL_HIST.flg_transfer_transport
+  is 'Mode of transport';
+comment on column DISCHARGE_DETAIL_HIST.desc_transfer_transport
+  is 'Mode of transport in free text';
+comment on column DISCHARGE_DETAIL_HIST.dt_transfer_transport_tstz
+  is 'Date os transport';
+comment on column DISCHARGE_DETAIL_HIST.risk_of_transfer
+  is 'Risks of patient transfer';
+comment on column DISCHARGE_DETAIL_HIST.benefits_of_transfer
+  is 'Benefits of patient transfer';
+comment on column DISCHARGE_DETAIL_HIST.en_route_orders
+  is 'Physician orders in progress';
+comment on column DISCHARGE_DETAIL_HIST.dt_death_tstz
+  is 'Date and time of death';
+comment on column DISCHARGE_DETAIL_HIST.prf_declared_death
+  is 'Physician stating time of death';
+comment on column DISCHARGE_DETAIL_HIST.flg_orgn_donation_agency
+  is 'Organ donation agency notified (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.flg_report_of_death
+  is 'Provisional report of death complete (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.flg_coroner_contacted
+  is 'Coroner contacted (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.coroner_name
+  is 'Coroner name';
+comment on column DISCHARGE_DETAIL_HIST.flg_funeral_home_contacted
+  is 'Funeral home contacted
+ (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.dt_body_removed_tstz
+  is 'Date/time body was removed';
+comment on column DISCHARGE_DETAIL_HIST.flg_signed_ama_form
+  is 'Signed AMA form Y -Y, N -No - why?';
+comment on column DISCHARGE_DETAIL_HIST.desc_signed_ama_form
+  is 'Signed AMA justify in free text';
+comment on column DISCHARGE_DETAIL_HIST.funeral_home_name
+  is 'Funeral home';
+comment on column DISCHARGE_DETAIL_HIST.risk_of_leaving
+  is 'Risk of leaving';
+comment on column DISCHARGE_DETAIL_HIST.reason_for_visit
+  is 'LWBS reason';
+comment on column DISCHARGE_DETAIL_HIST.flg_risk_of_leaving
+  is 'Patient advided about risks of leaving(Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.dt_ama_tstz
+  is 'Date and time os AMA ';
+-- Add comments to the columns 
+comment on column DISCHARGE_DETAIL_HIST.flg_surgery
+  is 'Surgery (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.flg_prescription_given
+  is 'Prescriptions in previous visits (Y/N)';
+comment on column DISCHARGE_DETAIL_HIST.follow_up_date_tstz
+  is 'Next follow-up visit date';
+comment on column DISCHARGE_DETAIL_HIST.date_surgery_tstz
+  is 'Surgery date';
+comment on column DISCHARGE_DETAIL_HIST.id_prof_created_hist
+  is 'Professional that created the record';
+comment on column DISCHARGE_DETAIL_HIST.dt_created_hist
+  is 'Date when the record was created';
+comment on column DISCHARGE_DETAIL_HIST.reason_for_leaving
+  is 'LWBS reason';
+comment on column DISCHARGE_DETAIL_HIST.flg_prescription_given_to
+  is 'Prescription given to; C-Caretaker;F-Family;P-Patient;N-Not provided;O-Other (specify )';
+comment on column DISCHARGE_DETAIL_HIST.desc_prescription_given_to
+  is 'Prescription given to description, only filled when the option Other is selected.';
+comment on column DISCHARGE_DETAIL_HIST.desc_patient_transport
+  is 'Transport used for patient transfer';
+comment on column DISCHARGE_DETAIL_HIST.next_visit_scheduled
+  is 'Next follow-up visit';
+comment on column DISCHARGE_DETAIL_HIST.flg_instructions_next_visit
+  is 'Instructions for the next visit; F-Fasting; N-No fasting (SYS_DOMAIN SCHEDULE.FLG_INSTRUCTIONS)';
+comment on column DISCHARGE_DETAIL_HIST.desc_instructions_next_visit
+  is 'Instructions for the next visit description';
+comment on column DISCHARGE_DETAIL_HIST.id_dep_clin_serv_visit
+  is 'Dep_clin_serv for nex visit';
+comment on column DISCHARGE_DETAIL_HIST.id_complaint
+  is 'Complaint ID';
+comment on column DISCHARGE_DETAIL_HIST.id_consult_req
+  is 'Next visit request';
+comment on column DISCHARGE_DETAIL_HIST.report_given_to
+  is 'Patient report given to';
+comment on column DISCHARGE_DETAIL_HIST.reason_of_transfer_desc
+  is 'Reason for transfer patient';
+comment on column DISCHARGE_DETAIL_HIST.flg_print_report
+  is 'Indicates is the report was printed on discharge.';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 01/09/2016 15:21
+-- CHANGE REASON: [ALERT-324343] Death process registration number in medical discharge area by death reason
+--                
+-- Add/modify columns 
+BEGIN
+  pk_versioning.run('alter table DISCHARGE_DETAIL_HIST add death_process_registration number(24)');
+EXCEPTION
+    WHEN OTHERS THEN 
+      NULL;
+END;
+/        
+-- Add comments to the columns 
+comment on column DISCHARGE_DETAIL_HIST.death_process_registration
+  is 'Death process registration number';  
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 02/01/2017 11:26
+-- CHANGE REASON: [ALERT-326427] [CDOC] - DB Implement Clues Popup on discharge
+ALTER TABLE discharge_detail_hist
+ADD id_inst_transfer NUMBER(24) NULL;
+COMMENT ON COLUMN discharge_detail_hist.id_inst_transfer IS 'Transfer ID institution';
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE 
+	l_sql VARCHAR2(1000 CHAR);
+	l_sql_1 VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.discharge_detail_hist move lob(sched_notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+	l_sql_1 := 'ALTER TABLE alert.discharge_detail_hist move lob(reason_for_visit_fw) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql_1);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 07/09/2018 15:53
+-- CHANGE REASON: [EMR-5115] New Button for admission order
+
+
+alter table DISCHARGE_DETAIL_HIST add id_admitting_doctor NUMBER(24);
+comment on column DISCHARGE_DETAIL_HIST.id_admitting_doctor
+  is 'Physician that is admitting the patient';
+  
+alter table DISCHARGE_DETAIL_HIST add id_co_sign NUMBER(24);
+comment on column DISCHARGE_DETAIL_HIST.id_co_sign
+  is 'Co-sign information';  
+  
+alter table DISCHARGE_DETAIL_HIST add id_written_by NUMBER(24);
+comment on column DISCHARGE_DETAIL_HIST.id_written_by
+  is 'Physician that is written the admission';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 04/12/2018 08:29
+-- CHANGE REASON: [EMR-8662] 
+ALTER TABLE discharge_detail_hist ADD FLG_COMPULSORY VARCHAR2(1 CHAR);
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Ana Moita
+-- CHANGED DATE: 2019-4-26
+-- CHANGED REASON: EMR-15178
+
+alter table DISCHARGE_DETAIL_HIST add id_compulsory_reason NUMBER(24);
+comment on column DISCHARGE_DETAIL_HIST.id_compulsory_reason
+  is 'Compulsory reason selected option ID'; 
+alter table DISCHARGE_DETAIL_HIST add compulsory_reason VARCHAR2(4000);
+comment on column DISCHARGE_DETAIL_HIST.compulsory_reason
+   is 'Compulsory reason notes'; 	
+comment on column DISCHARGE_DETAIL_HIST.flg_compulsory
+   is 'Compulsory admission? Y - yes; N - no'; 
+-- CHANGE END: Ana Moita
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 09/03/2020 15:38
+-- CHANGE REASON: [EMR-27538] - Discharge model changes
+ALTER TABLE DISCHARGE_DETAIL_HIST ADD (flg_type_closure VARCHAR2(1 CHAR));
+
+COMMENT ON COLUMN DISCHARGE_DETAIL_HIST.flg_type_closure IS 'Type of closure (sys_domain DISCHARGE_DETAIL.FLG_TYPE_CLOSURE)';
+-- CHANGE END: Elisabete Bugalho
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := q'[ALTER TABLE DISCHARGE_DETAIL_HIST ADD OPER_TREATMENT_DETAIL CLOB]';
+	pk_versioning.run(l_sql);
+end;
+/
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := q'[ALTER TABLE ALERT.DISCHARGE_DETAIL_HIST MOVE LOB(OPER_TREATMENT_DETAIL) STORE AS (TABLESPACE ALERT_LOB)]';
+	pk_versioning.run(l_sql);
+end;
+/
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := q'[ALTER TABLE DISCHARGE_DETAIL_HIST ADD STATUS_BEFORE_DEATH   CLOB ]';
+	pk_versioning.run(l_sql);
+end;
+/
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := q'[ALTER TABLE ALERT.DISCHARGE_DETAIL_HIST MOVE LOB(STATUS_BEFORE_DEATH) STORE AS (TABLESPACE ALERT_LOB)]';
+	pk_versioning.run(l_sql);
+end;
+/

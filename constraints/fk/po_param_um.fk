@@ -1,0 +1,51 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 26/08/2013 14:46
+-- CHANGE REASON: [ALERT-263008] 
+declare
+  e_fk_exists exception;
+  pragma exception_init(e_fk_exists, -02275);
+begin
+  begin
+    execute immediate 'alter table PO_PARAM_UM
+  add constraint POPUM_INST_FK foreign key (ID_INSTITUTION)
+  references ALERT_CORE_DATA.AB_INSTITUTION (ID_AB_INSTITUTION)
+
+';
+  exception when e_fk_exists then
+    dbms_output.put_line('foreign key POPUM_INST_FK exists!');
+  end;
+  begin
+    execute immediate 'alter table PO_PARAM_UM
+  add constraint POPUM_POP_FK foreign key (ID_PO_PARAM, ID_INST_OWNER)
+  references PO_PARAM (ID_PO_PARAM, ID_INST_OWNER)
+';
+  exception when e_fk_exists then
+    dbms_output.put_line('foreign key POPUM_POP_FK exists!');
+  end;
+  begin
+    execute immediate 'alter table PO_PARAM_UM
+  add constraint POPUM_SOFT_FK foreign key (ID_SOFTWARE)
+  references ALERT_CORE_DATA.AB_SOFTWARE (ID_AB_SOFTWARE)
+';
+  exception when e_fk_exists then
+    dbms_output.put_line('foreign key POPUM_SOFT_FK exists!');
+  end;
+  begin
+    execute immediate 'alter table PO_PARAM_UM
+  add constraint POPUM_UMS_FK foreign key (ID_UNIT_MEASURE_SUBTYPE)
+  references UNIT_MEASURE_SUBTYPE (ID_UNIT_MEASURE_SUBTYPE)
+';
+  exception when e_fk_exists then
+    dbms_output.put_line('foreign key POPUM_UMS_FK exists!');
+  end;
+  begin
+    execute immediate 'alter table PO_PARAM_UM
+  add constraint POPUM_UMTYPE_FK foreign key (ID_UNIT_MEASURE_TYPE)
+  references UNIT_MEASURE_TYPE (ID_UNIT_MEASURE_TYPE)
+';
+  exception when e_fk_exists then
+    dbms_output.put_line('foreign key POPUM_UMTYPE_FK exists!');
+  end;
+end;
+/
+-- CHANGE END: mario.mineiro

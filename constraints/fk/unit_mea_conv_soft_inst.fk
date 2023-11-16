@@ -1,0 +1,61 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 02/12/2013 09:33
+-- CHANGE REASON: [ALERT-270040] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE unit_mea_conv_soft_inst
+  ADD CONSTRAINT umcsi_cfd_fk FOREIGN KEY (
+    ID_UNIT_MEASURE_CONVERT
+  ) REFERENCES UNIT_MEASURE_CONVERT (ID_UNIT_MEASURE_CONVERT)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+   BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE unit_mea_conv_soft_inst
+  ADD CONSTRAINT umcsi_vs_fk FOREIGN KEY (
+    id_vital_sign
+  ) REFERENCES vital_sign (id_vital_sign)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE unit_mea_conv_soft_inst
+  ADD CONSTRAINT umcsi_inst_fk FOREIGN KEY (
+    id_institution
+  ) REFERENCES ab_institution (id_ab_institution)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE unit_mea_conv_soft_inst
+  ADD CONSTRAINT umcsi_soft_fk FOREIGN KEY (
+    id_software
+  ) REFERENCES ab_software (id_ab_software)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE unit_mea_conv_soft_inst
+  ADD CONSTRAINT umcsi_market_fk FOREIGN KEY (
+    id_market
+  ) REFERENCES ab_market (id_ab_market)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

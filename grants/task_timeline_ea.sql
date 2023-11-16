@@ -1,0 +1,5 @@
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 01/07/2009 12:30
+-- CHANGE REASON: [ALERT-31811] Added grants for table task_timeline_ea
+GRANT SELECT ON TASK_TIMELINE_EA TO ALERT_VIEWER;
+-- CHANGE END: Luís Maia

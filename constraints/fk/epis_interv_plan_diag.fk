@@ -1,0 +1,31 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 22/09/2011 09:39
+-- CHANGE REASON: [ALERT-194825] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_interv_plan_diag
+  ADD CONSTRAINT eipd_eip_fk FOREIGN KEY (
+    id_epis_interv_plan_hist
+  ) REFERENCES epis_interv_plan_hist (id_epis_interv_plan_hist)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE epis_interv_plan_diag
+  ADD CONSTRAINT eipd_ed_fk FOREIGN KEY (
+    id_epis_diagnosis
+  ) REFERENCES epis_diagnosis (id_epis_diagnosis)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

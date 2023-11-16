@@ -1,0 +1,31 @@
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 26/11/2013 15:36
+-- CHANGE REASON: [ALERT-270558] 
+CREATE TABLE PAT_PREG_CONT_TYPE
+(
+  ID_PAT_PREGNANCY    NUMBER(24) not null,
+  FLG_CONTRAC_TYPE    VARCHAR2(0030 CHAR),
+  OTHER_CONTRACEPTION_TYPE clob,
+  CREATE_USER varchar2(0030 char),
+  UPDATE_USER varchar2(0030 char),
+  CREATE_TIME timestamp with local time zone,
+  UPDATE_TIME timestamp with local time zone,
+  CREATE_INSTITUTION  number(24),
+  UPDATE_INSTITUTION  number(24) 
+);
+
+COMMENT ON TABLE PAT_PREG_CONT_TYPE IS 'Contraception type of pregnancy';
+COMMENT ON COLUMN PAT_PREG_CONT_TYPE.ID_PAT_PREGNANCY IS 'Pregnancy Patient identifier';
+COMMENT ON COLUMN PAT_PREG_CONT_TYPE.FLG_CONTRAC_TYPE IS 'Contraception type (value of sys_domain WOMAN_HEALTH.CONTRAC_METHOD)';
+COMMENT ON COLUMN PAT_PREG_CONT_TYPE.OTHER_CONTRACEPTION_TYPE IS 'Other contraception type in free text';
+COMMENT ON COLUMN PAT_PREG_CONT_TYPE.CREATE_USER IS 'User that created the record';
+COMMENT ON COLUMN PAT_PREG_CONT_TYPE.UPDATE_USER IS 'User that updated the record';
+COMMENT ON COLUMN PAT_PREG_CONT_TYPE.CREATE_TIME IS 'Time when the record was created';
+COMMENT ON COLUMN PAT_PREG_CONT_TYPE.UPDATE_TIME IS 'Time when the record was updated';
+COMMENT ON COLUMN PAT_PREG_CONT_TYPE.CREATE_INSTITUTION IS 'Institution where the record was created';
+COMMENT ON COLUMN PAT_PREG_CONT_TYPE.UPDATE_INSTITUTION IS 'Institution where the record was updated';
+
+ALTER TABLE PAT_PREG_CONT_TYPE add CONSTRAINT ppct_id_pat_prenancy_fk foreign key(id_pat_pregnancy) references pat_pregnancy(id_pat_pregnancy);
+ALTER TABLE PAT_PREG_CONT_TYPE move lob(OTHER_CONTRACEPTION_TYPE) store as ( tablespace ALERT_LOB);
+ALTER TABLE PAT_PREG_CONT_TYPE add CONSTRAINT PAT_PREG_CONT_TYPE_PK primary key(ID_PAT_PREGNANCY,FLG_CONTRAC_TYPE);
+-- CHANGE END: Jorge Silva

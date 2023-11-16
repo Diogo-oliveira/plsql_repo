@@ -1,0 +1,17 @@
+-- CHANGED BY: filipe.f.pereira
+-- CHANGE DATE: 18/07/2013
+-- CHANGE REASON: ALERT-217073
+
+DECLARE
+    e_primary_key EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_primary_key, -02260);
+    l_table_name VARCHAR2(30) := 'REP_EDITABLE_TEXT_MKT';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT RETM_PK PRIMARY KEY (ID_REP_EDITABLE_TEXT_MKT)';
+EXCEPTION
+    WHEN e_primary_key THEN
+        dbms_output.put_line('WARNING - Primary key in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+
+-- CHANGE END: filipe.f.pereira

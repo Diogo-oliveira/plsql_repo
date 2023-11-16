@@ -1,0 +1,13 @@
+alter table PROF_GROUP_PENDING_ISSUES
+  add constraint PGE_PK primary key (ID_GROUP, ID_PROFESSIONAL);
+
+alter table PROF_GROUP_PENDING_ISSUES
+  add constraint PGE_STATE_CHK
+  check (STATE in ('A','I'));
+
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 28/01/2011 16:52
+-- CHANGE REASON: [ALERT-158109] 
+ALTER TABLE prof_group_pending_issues add CONSTRAINT pge_grp_fk foreign key(id_group) references alert.group_pending_issues(id_group);
+-- CHANGE END:  sergio.dias

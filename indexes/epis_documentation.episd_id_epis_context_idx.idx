@@ -1,0 +1,25 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 24/04/2012 15:13
+-- CHANGE REASON: [ALERT-228609] Index on EPIS_DOCUMENTATION(ID_EPIS_CONTEXT)
+DECLARE
+    l_exists       NUMBER;
+    l_create_index BOOLEAN := FALSE;
+BEGIN
+    SELECT COUNT(*)
+      INTO l_exists
+      FROM user_ind_columns ui
+     WHERE ui.table_name = 'EPIS_DOCUMENTATION'
+       AND ui.column_name = 'ID_EPIS_CONTEXT';
+
+    IF l_exists = 0
+    THEN
+        l_create_index := TRUE;
+    END IF;
+
+    IF l_create_index
+    THEN
+        EXECUTE IMMEDIATE 'CREATE INDEX EPISD_ID_EPIS_CONTEXT_IDX ON EPIS_DOCUMENTATION(ID_EPIS_CONTEXT)';
+    END IF;
+END;
+/
+-- CHANGE END: Ariel Machado

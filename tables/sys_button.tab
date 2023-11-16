@@ -1,0 +1,55 @@
+
+
+  CREATE TABLE SYS_BUTTON
+   (	ID_SYS_BUTTON NUMBER(24,0) NOT NULL ENABLE,
+	INTERN_NAME_BUTTON VARCHAR2(200) NOT NULL ENABLE,
+	CODE_BUTTON VARCHAR2(200),
+	ICON VARCHAR2(50),
+	SKIN VARCHAR2(200) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1),
+	CODE_ICON VARCHAR2(200),
+	ADW_LAST_UPDATE DATE
+   );
+
+   alter table sys_button add CODE_INTERN_NAME VARCHAR2(200);
+
+   
+COMMENT ON TABLE sys_button IS 'No caso da roda, os registos desta tabela correspondem às pétalas, ou botões.No caso das opções de menu da aplicação, correspondem aos botões de acesso a forms, botões de acesso a ecrãs dentro dos forms e deep_navs.' ;
+
+COMMENT ON COLUMN sys_button.code_button IS 'Código para tradução do label do botão' ;
+COMMENT ON COLUMN sys_button.icon IS 'Nome do Icon' ;
+COMMENT ON COLUMN sys_button.skin IS 'Nome do Skin' ;
+COMMENT ON COLUMN sys_button.flg_type IS 'Tipo: C - criação, L - cancelamento, S - pesquisa, P - impressão, T - textos + freq., O - ok, D - detalhe, H - help, N - conteúdos, F - visão 1, V - visão 2, I - digitalização, M - não, G - gráfico, H - gráfico em barras horizontais, B - gráfico em barras verticais' ;
+COMMENT ON COLUMN sys_button.code_intern_name IS 'Código para tradução do nome do botão' ;
+
+-- RdSN 2008/01/10
+-- Tooltips
+
+alter table sys_button
+add code_tooltip_title varchar2(200);
+comment on column sys_button.code_tooltip_title is 'Code for the tooltip title translation';
+
+alter table sys_button
+add code_tooltip_desc varchar2(200);
+comment on column sys_button.code_tooltip_desc is 'Code for the tooltip title translation';
+
+
+-- 08-01-2016
+COMMENT ON TABLE  alert.sys_button IS 'Buttons, deepnavs should be store in this table' ;
+comment on column alert.sys_button.ID_SYS_BUTTON		is 'Primary Key';
+comment on column alert.sys_button.INTERN_NAME_BUTTON  is 'Internal name';
+comment on column alert.sys_button.CODE_BUTTON         is 'code for translation purpose. description of button';
+comment on column alert.sys_button.ICON                is 'Button icon';
+comment on column alert.sys_button.SKIN                is 'Deprecated. Do not use';
+comment on column alert.sys_button.FLG_TYPE            is 'Informative.  C - creation, L - cancelation, S - Search, P - Print, T - Most Freq. text, O - Ok, D - details, H - Help, N - Contents, F - View 1, V - View 2, I - Digitalization, M - No, G - Graph, H - Horizontal Graph, B - Vertical Graph' ;
+comment on column alert.sys_button.CODE_ICON           is 'To use when icon can change based on language';
+comment on column alert.sys_button.ADW_LAST_UPDATE     is 'Deprecated. Do not use.';
+comment on column alert.sys_button.CODE_INTERN_NAME    is 'Internal description, if needed.';
+comment on column alert.sys_button.CODE_TOOLTIP_TITLE  is 'Default tooltip title';
+comment on column alert.sys_button.CODE_TOOLTIP_DESC   is 'Default tooltip description';
+comment on column ALERT.sys_button.CREATE_USER        is 'User that created the record';
+comment on column ALERT.sys_button.CREATE_TIME        is 'Time when the record was created';
+comment on column ALERT.sys_button.CREATE_INSTITUTION is 'Institution where record was created';
+comment on column ALERT.sys_button.UPDATE_USER        is 'Last user that changed the record';
+comment on column ALERT.sys_button.UPDATE_INSTITUTION is 'Last Institution where user made the change';
+comment on column ALERT.sys_button.UPDATE_TIME        is 'Time of Last change';

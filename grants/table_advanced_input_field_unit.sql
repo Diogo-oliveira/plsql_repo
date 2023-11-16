@@ -1,0 +1,2 @@
+grant select on ADVANCED_INPUT_FIELD_UNIT to ALERT_VIEWER;
+ 

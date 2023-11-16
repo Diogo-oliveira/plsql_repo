@@ -1,0 +1,52 @@
+ALTER TABLE ORDER_SET_LINK ADD CONSTRAINT OSL_PK PRIMARY KEY 
+  (ID_ORDER_SET
+  ,ID_LINK
+  ,FLG_LINK_TYPE);
+    
+ALTER TABLE ORDER_SET_LINK ADD CONSTRAINT OSL_FLG_LINK_TYPE_CHK CHECK (FLG_LINK_TYPE in ('E', 'S'));
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 14/12/2010 15:45
+-- CHANGE REASON: [ALERT-149189] 
+alter table ORDER_SET_LINK drop constraint OSL_FLG_LINK_TYPE_CHK;
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -02264);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ORDER_SET_LINK add constraint OSL_FLG_LINK_TYPE_CHK check (FLG_LINK_TYPE in (''E'',''S'',''C''))';
+EXCEPTION
+    WHEN e_exception THEN NULL;
+END;
+/
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 07/11/2012 10:50
+-- CHANGE REASON: [ALERT-240453] new clinical indication and order set type fields on order sets
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -02443);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ORDER_SET_LINK drop constraint OSL_FLG_LINK_TYPE_CHK';
+EXCEPTION
+    WHEN e_exception THEN NULL;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -02264);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ORDER_SET_LINK add constraint OSL_FLG_LINK_TYPE_CHK check (FLG_LINK_TYPE in (''E'',''S'',''C'',''T''))';
+EXCEPTION
+    WHEN e_exception THEN NULL;
+END;
+/
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY:  Pedro Portas
+-- CHANGE DATE: 28/04/2014 15:53
+-- CHANGE REASON: [ALERT-282908] 
+alter table ORDER_SET_LINK drop constraint OSL_FLG_LINK_TYPE_CHK;
+alter table ORDER_SET_LINK add constraint OSL_FLG_LINK_TYPE_CHK check (FLG_LINK_TYPE in ('E','S','C','R','T'));
+-- CHANGE END:  Pedro Portas

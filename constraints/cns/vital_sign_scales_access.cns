@@ -1,0 +1,61 @@
+
+
+  ALTER TABLE "ALERT"."VITAL_SIGN_SCALES_ACCESS" MODIFY ("ID_VITAL_SIGN_SCALES_ACCESS" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."VITAL_SIGN_SCALES_ACCESS" MODIFY ("ID_VITAL_SIGN_SCALES" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."VITAL_SIGN_SCALES_ACCESS" MODIFY ("ID_INSTITUTION" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."VITAL_SIGN_SCALES_ACCESS" MODIFY ("ID_SOFTWARE" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."VITAL_SIGN_SCALES_ACCESS" MODIFY ("FLG_AVAILABLE" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."VITAL_SIGN_SCALES_ACCESS" ADD CONSTRAINT "VSSA_PK" PRIMARY KEY ("ID_VITAL_SIGN_SCALES_ACCESS") ENABLE;
+
+
+
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 28/01/2011 16:52
+-- CHANGE REASON: [ALERT-158109] 
+ALTER TABLE vital_sign_scales_access add CONSTRAINT vssa_sof_fk foreign key(id_software) references software(id_software);
+
+ALTER TABLE vital_sign_scales_access add CONSTRAINT vssa_ins_fk foreign key(id_institution) references institution(id_institution);
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 18/02/2014 11:51
+-- CHANGE REASON: [ALERT-275609] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -06512);
+    e_object_exists3 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists3, -02264);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter   TABLE VITAL_SIGN_SCALES_ACCESS ADD CONSTRAINT vssa_fa_chk CHECK ( FLG_AVAILABLE IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

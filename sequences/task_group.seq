@@ -1,0 +1,26 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 19/09/2013 10:25
+-- CHANGE REASON: [ALERT-258241] Task groups development
+DECLARE
+    e_seq_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_seq_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_TASK_GROUP MINVALUE 1 MAXVALUE 999999999999999999999999 START WITH 1 INCREMENT BY 1 CACHE 500';
+EXCEPTION
+    WHEN e_seq_already_exists THEN
+        dbms_output.put_line('sequence already exists');   
+END;
+/   
+
+ -->task_group_hist|sequence
+DECLARE
+    e_seq_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_seq_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_TASK_GROUP_HIST MINVALUE 1 MAXVALUE 999999999999999999999999 START WITH 1 INCREMENT BY 1 CACHE 500';
+EXCEPTION
+    WHEN e_seq_already_exists THEN
+        dbms_output.put_line('sequence already exists');   
+END;
+/ 
+-- CHANGE END: Tiago Silva

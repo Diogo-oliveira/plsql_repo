@@ -1,0 +1,77 @@
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 23/03/2010 09:27
+-- CHANGE REASON: [ALERT-69945] 
+create table INTERV_PLAN_DEP_CLIN_SERV
+(
+ID_INTERV_PLAN NUMBER(24) not null,
+ID_DEP_CLIN_SERV NUMBER(24),
+ID_PROFESSIONAL NUMBER(24),
+ID_SOFTWARE NUMBER(24) not null,
+ID_INSTITUTION NUMBER(24) not null,
+  FLG_AVAILABLE       VARCHAR2(1 CHAR) default 'Y' not null,
+FLG_TYPE            VARCHAR2(1 CHAR) default 'P' not null,
+--AUDIT
+  CREATE_USER         VARCHAR2(24 CHAR),
+  CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24 CHAR),
+  UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24)
+);
+-- Add comments to the table 
+comment on table INTERV_PLAN_DEP_CLIN_SERV
+  is 'Interventions plans parametrization table';
+-- Add comments to the columns
+comment on column INTERV_PLAN_DEP_CLIN_SERV.ID_INTERV_PLAN
+  is 'Intervention plan ID.';
+comment on column INTERV_PLAN_DEP_CLIN_SERV.ID_DEP_CLIN_SERV
+  is 'Clinical service/department for which the Intervention plan is parametrized as more frequent.';
+comment on column INTERV_PLAN_DEP_CLIN_SERV.ID_PROFESSIONAL
+  is 'ID professional.';
+comment on column INTERV_PLAN_DEP_CLIN_SERV.ID_SOFTWARE
+  is 'ID software.';
+comment on column INTERV_PLAN_DEP_CLIN_SERV.ID_INSTITUTION
+  is 'ID institution.';
+comment on column INTERV_PLAN_DEP_CLIN_SERV.FLG_AVAILABLE
+  is 'Flg that indicates if the intervention plan is available or not: Y - yes, N - no.';
+comment on column INTERV_PLAN_DEP_CLIN_SERV.FLG_TYPE
+  is 'Type of parametrization of intervention plan. M - more frequent, P - search.';
+--AUDIT
+comment on column INTERV_PLAN_DEP_CLIN_SERV.CREATE_USER 
+  is 'Creation User';
+comment on column INTERV_PLAN_DEP_CLIN_SERV.CREATE_TIME 
+  is 'Creation Time';
+comment on column  INTERV_PLAN_DEP_CLIN_SERV.CREATE_INSTITUTION 
+  is 'Creation Institution';
+comment on column  INTERV_PLAN_DEP_CLIN_SERV.UPDATE_USER 
+  is 'Update User';
+comment on column  INTERV_PLAN_DEP_CLIN_SERV.UPDATE_TIME 
+  is 'Update Time';
+comment on column INTERV_PLAN_DEP_CLIN_SERV.UPDATE_INSTITUTION 
+  is 'Update Institution';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 14/12/2012 11:55
+-- CHANGE REASON: [ALERT-247359] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table INTERV_PLAN_DEP_CLIN_SERV
+add id_INTERV_PLAN_DEP_CLIN_SERV NUMBER(24)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('id_INTERV_PLAN_DEP_CLIN_SERV: coluna a ser acrescentada já existe na tabela');
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:49
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column INTERV_PLAN_DEP_CLIN_SERV.id_interv_plan_dep_clin_serv
+  is 'Primary Key';  
+-- CHANGE END: Elisabete Bugalho

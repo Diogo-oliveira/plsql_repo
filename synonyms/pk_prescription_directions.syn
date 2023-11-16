@@ -1,0 +1,24 @@
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195]
+declare
+  l_count pls_integer;
+  l_sql_stat varchar2(4000):=' CREATE OR REPLACE SYNONYM ALERT_VIEWER.PK_PRESCRIPTION_DIRECTIONS FOR PK_PRESCRIPTION_DIRECTIONS';
+
+begin
+  select count(1)
+  into l_count
+  from all_synonyms
+  where owner = 'ALERT_VIEWER' and table_owner = 'ALERT' and synonym_name = 'PK_PRESCRIPTION_DIRECTIONS';
+
+  if l_count = 0 then
+    execute immediate (l_sql_stat);
+  end if;
+
+end;
+/
+-- CHANGE END: Nuno Ferreira
+
+
+
+

@@ -1,0 +1,25 @@
+create table THERAPEUTIC_PROTOCOLS
+(
+  ID_THERAPEUTIC_PROTOCOLS   NUMBER(24) not null,
+  CODE_THERAPEUTIC_PROTOCOLS VARCHAR2(255),
+  ADW_LAST_UPDATE            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  FLG_AVAILABLE              VARCHAR2(1)
+);
+
+comment on table THERAPEUTIC_PROTOCOLS is 'Protocolos Terapêuticos';
+
+comment on column THERAPEUTIC_PROTOCOLS.CODE_THERAPEUTIC_PROTOCOLS is 'Descritivo do Protocolo Terapêutico';
+comment on column THERAPEUTIC_PROTOCOLS.ADW_LAST_UPDATE is 'Data de última alteração';
+comment on column THERAPEUTIC_PROTOCOLS.FLG_AVAILABLE is 'Y - Sim, N - Não';
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-JUNE-23
+-- CHANGE REASON: Indica se o protocolo terapêutico é criado pelo cliente ou pela Alert
+ALTER TABLE therapeutic_protocols
+ADD flg_client VARCHAR2(1) DEFAULT 'N';
+
+-- Add comments to the columns 
+comment on column therapeutic_protocols.flg_client
+  is 'Indicates if the therapeutic protocol is created by the client.';
+--CHANGE END
+

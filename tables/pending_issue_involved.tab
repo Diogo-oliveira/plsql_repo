@@ -1,0 +1,71 @@
+-- pending_issue_involved
+
+CREATE TABLE pending_issue_involved
+(
+		id_pending_issue NUMBER(24,0) NOT NULL,
+		id_involved      NUMBER(24) NOT NULL,
+		flg_involved     VARCHAR2(1) NOT NULL
+);
+
+-- COMMENTS
+COMMENT ON COLUMN pending_issue_involved.id_pending_issue IS 'Pending Issue ID';
+
+COMMENT ON COLUMN pending_issue_involved.id_involved IS 'Professional ID or Group ID';
+
+COMMENT ON COLUMN pending_issue_involved.flg_involved IS 'Issue status: G - Group, P - Professional';
+
+COMMENT ON TABLE pending_issue_involved IS 'This table is used to manage the professionals or groups involved on an issue''s discussion.';
+
+-- CONSTRAINTS
+ALTER TABLE pending_issue_involved ADD CONSTRAINT PI_ID_PENDING_ISSUE_FK FOREIGN KEY (id_pending_issue) REFERENCES pending_issue (id_pending_issue);
+
+ALTER TABLE pending_issue_involved ADD CONSTRAINT PI_FLG_INVOLVED_CHK CHECK (flg_involved IN ('G', 'P'));
+
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PENDING_ISSUE_INVOLVED add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column pending_issue_involved.create_user IS 'Creation User';
+COMMENT ON column pending_issue_involved.create_time IS 'Creation Time';
+COMMENT ON column pending_issue_involved.create_institution IS 'Creation Institution';
+COMMENT ON column pending_issue_involved.update_user IS 'Update User';
+COMMENT ON column pending_issue_involved.update_time IS 'Update Time';
+COMMENT ON column pending_issue_involved.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pending_issue_involved add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column pending_issue_involved.create_user IS 'Creation User';
+COMMENT ON column pending_issue_involved.create_time IS 'Creation Time';
+COMMENT ON column pending_issue_involved.create_institution IS 'Creation Institution';
+COMMENT ON column pending_issue_involved.update_user IS 'Update User';
+COMMENT ON column pending_issue_involved.update_time IS 'Update Time';
+COMMENT ON column pending_issue_involved.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

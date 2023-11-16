@@ -1,0 +1,92 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 11:37
+-- CHANGE REASON: [ALERT-12334 ] 
+create table SUPPLIES_WF_STATUS
+(
+  FLG_STATUS         VARCHAR2(1) not null,
+  ID_STATUS          NUMBER(24) not null,
+  FLG_DISPLAY_TYPE   VARCHAR2(2) not null,
+  CREATE_USER        VARCHAR2(24),
+  CREATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER        VARCHAR2(24),
+  UPDATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24),
+  ID_CATEGORY        NUMBER(12)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table SUPPLIES_WF_STATUS
+  is 'Maps flg_status into id_status';
+-- Add comments to the columns 
+comment on column SUPPLIES_WF_STATUS.FLG_STATUS
+  is 'Supplies workflow status (varchar)';
+comment on column SUPPLIES_WF_STATUS.ID_STATUS
+  is 'Supplies workflow flg_status (number)';
+comment on column SUPPLIES_WF_STATUS.FLG_DISPLAY_TYPE
+  is 'Supplies workflow icon''s display type';
+comment on column SUPPLIES_WF_STATUS.CREATE_USER
+  is 'Creation User';
+comment on column SUPPLIES_WF_STATUS.CREATE_TIME
+  is 'Creation Time';
+comment on column SUPPLIES_WF_STATUS.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column SUPPLIES_WF_STATUS.UPDATE_USER
+  is 'Update User';
+comment on column SUPPLIES_WF_STATUS.UPDATE_TIME
+  is 'Update Time';
+comment on column SUPPLIES_WF_STATUS.UPDATE_INSTITUTION
+  is 'Update Institution';
+comment on column SUPPLIES_WF_STATUS.ID_CATEGORY
+  is 'Professional''s category';
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 12:07
+-- CHANGE REASON: [ALERT-317912] 
+comment on table SUPPLIES_WF_STATUS
+  is 'Supplies status mapping';
+-- Add comments to the columns 
+comment on column SUPPLIES_WF_STATUS.flg_status
+  is 'Flag that indicates the workflow''s status';
+comment on column SUPPLIES_WF_STATUS.id_status
+  is 'Workflow''s status ID';
+comment on column SUPPLIES_WF_STATUS.flg_display_type
+  is 'Workflow icon''s display type';
+comment on column SUPPLIES_WF_STATUS.create_user
+  is 'Creation User';
+comment on column SUPPLIES_WF_STATUS.create_time
+  is 'Creation Time';
+comment on column SUPPLIES_WF_STATUS.create_institution
+  is 'Creation Institution';
+comment on column SUPPLIES_WF_STATUS.update_user
+  is 'Update User';
+comment on column SUPPLIES_WF_STATUS.update_time
+  is 'Update Time';
+comment on column SUPPLIES_WF_STATUS.update_institution
+  is 'Update Institution';
+comment on column SUPPLIES_WF_STATUS.id_category
+  is 'Category ID';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 28/07/2022 11:41
+-- CHANGE REASON: [EMR-54351] - Supplies workflow revision for interfaces
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE supplies_wf_status
+MODIFY FLG_STATUS varchar2(2 CHAR)';
+EXCEPTION
+WHEN others THEN
+dbms_output.put_line('Error altering table supplies_wf_status');
+END;
+/
+-- CHANGE END: Diogo Oliveira

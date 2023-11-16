@@ -1,0 +1,7 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 25/03/2010 14:11
+-- CHANGE REASON: [ALERT-63591] Registration of complications through templates in use at JBZ (JBZ will provide the templates).
+GRANT SELECT ON ALERT.COMP_COLS_VISIBILITY TO ALERT_VIEWER;
+-- CHANGE END: Alexandre Santos
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON COMP_COLS_VISIBILITY to ALERT_APEX_TOOLS;

@@ -1,0 +1,59 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 04/12/2009 14:59
+-- CHANGE REASON: [ALERT-55090] 
+alter table SR_POSIT_INSTIT_SOFT
+  add constraint SPIS_ID_INST_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION);
+
+alter table SR_POSIT_INSTIT_SOFT
+  add constraint SPIS_ID_SOFT_FK foreign key (ID_SOFTWARE)
+  references SOFTWARE (ID_SOFTWARE);
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Jorge Canossa
+-- CHANGE DATE: 07/02/2011 17:38
+-- CHANGE REASON: [ALERT-160488] 
+alter table SR_POSIT_INSTIT_SOFT
+  add constraint SPIS_ID_SR_POSIT_FK foreign key (ID_SR_POSIT)
+  references ALERT.SR_POSIT(ID_SR_POSIT);
+
+alter table SR_POSIT_INSTIT_SOFT
+  add constraint SPIS_ID_SR_PARENT_FK foreign key (ID_SR_PARENT)
+  references ALERT.SR_POSIT(ID_SR_POSIT); 
+-- CHANGE END: Jorge Canossa
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 15:45
+-- CHANGE REASON: [ALERT-160874] [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_POSIT_INSTIT_SOFT ADD CONSTRAINT SPIS_SR_POS_AN0973_FK 
+FOREIGN KEY (ID_SR_POSIT) REFERENCES SR_POSIT (ID_SR_POSIT) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SPIS_SR_POS_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:02
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_POSIT_INSTIT_SOFT ADD CONSTRAINT SPIS_SR_POS_FK 
+FOREIGN KEY (ID_SR_POSIT) REFERENCES SR_POSIT (ID_SR_POSIT) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SPIS_SR_POS_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto

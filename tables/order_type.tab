@@ -1,0 +1,51 @@
+  CREATE TABLE ORDER_TYPE
+   (ID_ORDER_TYPE NUMBER(12,0) NOT NULL,
+	INTERNAL_NAME VARCHAR2(200) NOT NULL,
+	CODE_ORDER_TYPE VARCHAR2(200) NOT NULL,
+	ICON_NAME VARCHAR2(200),
+	RANK NUMBER(6) NOT NULL,
+	ADW_LAST_UPDATE DATE NOT NULL
+   );
+
+COMMENT ON TABLE ORDER_TYPE IS 'Order type represents how an order was requested. By phone, verbal, etc.' ;
+
+COMMENT ON COLUMN ORDER_TYPE.ID_ORDER_TYPE IS 'The primary key.' ;
+COMMENT ON COLUMN ORDER_TYPE.INTERNAL_NAME IS 'An internal name describing the order type.' ;
+COMMENT ON COLUMN ORDER_TYPE.CODE_ORDER_TYPE IS 'Order type token for translation.' ;
+COMMENT ON COLUMN ORDER_TYPE.ICON_NAME IS 'Order type icon representation.' ;
+COMMENT ON COLUMN ORDER_TYPE.RANK IS 'Ranking order.' ;
+COMMENT ON COLUMN ORDER_TYPE.ADW_LAST_UPDATE IS 'Last insert/update moment.' ;
+
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 25/07/2013 09:48
+-- CHANGE REASON: [ALERT-262388] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table order_type add flg_ordered_by varchar2(200 char)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table order_type add flg_default_ob varchar2(2 char)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+		BEGIN
+        EXECUTE IMMEDIATE 'alter table order_type add flg_co_sign_wf varchar2(2 char)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+COMMENT ON COLUMN order_type.flg_ordered_by  is 'ordered by list';
+COMMENT ON COLUMN order_type.flg_default_ob  is 'default ordered by option';
+COMMENT ON COLUMN order_type.flg_co_sign_wf  is 'generate co-sign workflow Y/N';
+-- CHANGE END: Paulo Teixeira

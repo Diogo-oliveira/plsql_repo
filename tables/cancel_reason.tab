@@ -1,0 +1,94 @@
+CREATE TABLE CANCEL_REASON
+ (ID_CANCEL_REASON NUMBER(24) NOT NULL
+ ,CODE_CANCEL_REASON VARCHAR2(200) NOT NULL
+ ,ID_CANCEL_REA_AREA NUMBER(24) NOT NULL
+ ,ID_CONTENT VARCHAR2(200)
+ )
+/
+COMMENT ON TABLE CANCEL_REASON IS 'Contains the different cancel reasons.'
+/
+COMMENT ON COLUMN CANCEL_REASON.ID_CANCEL_REASON IS 'Cancel reason primary key'
+/
+COMMENT ON COLUMN CANCEL_REASON.CODE_CANCEL_REASON IS 'Cancel reason code for translation'
+/
+COMMENT ON COLUMN CANCEL_REASON.ID_CANCEL_REA_AREA IS 'Cancel reason area for which this reason applies'
+/
+COMMENT ON COLUMN CANCEL_REASON.ID_CONTENT IS 'Content Id'
+/
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 15/11/2010 11:23
+-- CHANGE REASON: [ALERT-140829] 
+DECLARE
+    e_generic EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_generic, -01430); 
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table cancel_reason add  (
+  FLG_NOTES_MANDATORY     VARCHAR2(1) default ''N'')';
+    EXCEPTION
+        WHEN e_generic THEN
+            dbms_output.put_line('WARNING: Operation already performed.');
+    END;
+end;
+/
+comment on column cancel_reason.FLG_NOTES_MANDATORY
+  is 'Indicates if an option requires the completion of notes';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 16/04/2011 12:54
+-- CHANGE REASON: [ALERT-156637] 
+alter table CANCEL_REASON
+add   rank  NUMBER(6);
+
+alter table CANCEL_REASON
+add id_reason_type NUMBER(24);
+
+alter table CANCEL_REASON modify id_content VARCHAR2(200 CHAR);
+alter table CANCEL_REASON modify create_user VARCHAR2(24 CHAR);
+alter table CANCEL_REASON modify update_user VARCHAR2(24 CHAR);
+alter table CANCEL_REASON modify code_cancel_reason VARCHAR2(200 CHAR);
+
+comment on column CANCEL_REASON.id_reason_type
+  is 'Reason type ID';
+ 
+comment on column CANCEL_REASON.rank
+  is 'Cancel reason rank for ordering';
+  
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 16/04/2011 17:09
+-- CHANGE REASON: [ALERT-173628] 
+ALTER TABLE CANCEL_REASON
+MODIFY FLG_NOTES_MANDATORY VARCHAR2(1 CHAR)not null;
+
+ALTER TABLE CANCEL_REASON 
+DROP COLUMN ID_CANCEL_REA_AREA;
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 26/04/2011 16:37
+-- CHANGE REASON: [ALERT-173923] 
+alter table cancel_reason
+modify id_cancel_rea_area null;  
+-- CHANGE END:  sergio.dias
+
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 02/05/2011 17:09
+-- CHANGE REASON: [ALERT-173628] 
+ALTER TABLE CANCEL_REASON
+MODIFY FLG_NOTES_MANDATORY VARCHAR2(1 CHAR)not null;
+
+alter table cancel_reason
+modify id_cancel_rea_area null;  
+-- CHANGE END:  sergio.dias
+
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 28/06/2012 10:48
+-- CHANGE REASON: [ALERT-216464] 
+ALTER TABLE cancel_reason drop column id_cancel_rea_area;
+-- CHANGE END:  sergio.dias

@@ -1,0 +1,32 @@
+
+
+  CREATE TABLE WL_PROF_ROOM
+   (	ID_WL_PROF_ROOM NUMBER(24,0) NOT NULL ENABLE,
+	ID_ROOM NUMBER(24,0) NOT NULL ENABLE,
+	DT_LOGIN DATE NOT NULL ENABLE,
+	DT_NEXT_LOGIN DATE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE wl_prof_room IS 'Histórico de logins dos profissionais e salas onde o fizeram.De cada vez q um prof. faz login, cria-se um novo registo, preenchendo-se DT_LOGIN com SYSDATE. Se houver registo anterior de login, preenche-se nesse registo a DT_NEXT_LOGIN também com SYSDATE.' ;
+
+COMMENT ON COLUMN wl_prof_room.dt_login IS 'Data / hora de login' ;
+COMMENT ON COLUMN wl_prof_room.dt_next_login IS 'Data / hora de login subsequente' ;
+
+
+
+
+ALTER TABLE WL_PROF_ROOM ADD DT_LOGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN WL_PROF_ROOM.DT_LOGIN_TSTZ IS 'Data / hora de login'; 
+
+
+
+
+ALTER TABLE WL_PROF_ROOM ADD DT_NEXT_LOGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN WL_PROF_ROOM.DT_NEXT_LOGIN_TSTZ IS 'Data / hora de login subsequente'; 
+
+-- INPATIENT Ricardo Nuno Almeida 2008/09/22
+-- Drop às colunas DATE
+ALTER TABLE WL_PROF_ROOM DROP (DT_LOGIN, DT_NEXT_LOGIN);
+-- END

@@ -1,0 +1,1 @@
+GRANT EXECUTE ON alert.pk_filter_lov TO alert_core_Tech;

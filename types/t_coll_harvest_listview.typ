@@ -1,0 +1,1 @@
+DROP TYPE t_coll_harvest_listview

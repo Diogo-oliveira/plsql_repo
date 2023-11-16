@@ -1,0 +1,34 @@
+	
+-- Create table
+create table HCN_EVAL
+(
+	ID_HCN_EVAL NUMBER(24) not null,
+	ID_EPISODE NUMBER(24) not null,
+	ID_EPIS_DOCUMENTATION NUMBER(24),
+	DT_EVAL DATE not null,
+	FLG_STATUS VARCHAR2(1) not null,
+	DT_CANCEL DATE ,
+	ID_PROF_CANCEL NUMBER(24) ,
+	TOTAL_POINTS NUMBER(6,3) not null,
+	ID_DEPARTMENT NUMBER(24)
+);
+
+-- Add comments to the table
+comment on table HCN_EVAL	is 'Esta tabela contém a informação relativa às avaliações dos pacientes a enfermeiros, incluindo os pontos';
+
+-- Add comments to the columns
+comment on column HCN_EVAL.ID_HCN_EVAL	is 'Chave primária';
+comment on column HCN_EVAL.ID_EPISODE	is 'ID do episódio';
+comment on column HCN_EVAL.ID_EPIS_DOCUMENTATION	is 'ID da avaliação efectuada';
+comment on column HCN_EVAL.DT_EVAL	is 'Data da avaliação (só pode haver uma activa por dia para cada episódio)';
+comment on column HCN_EVAL.FLG_STATUS	is 'Estado da avaliação: A- Activo, C- Cancelado, I- Inactivo';
+comment on column HCN_EVAL.DT_CANCEL	is 'Data de cancelamento';
+comment on column HCN_EVAL.ID_PROF_CANCEL	is 'ID do profissional que cancelou';
+comment on column HCN_EVAL.TOTAL_POINTS	is 'Total de pontos';
+comment on column HCN_EVAL.ID_DEPARTMENT   is 'ID do serviço ao qual o paciente estava alocado no momento da avaliação';
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 11-11-2008
+-- CHANGE REASON: ALERT-9518
+ALTER TABLE "HCN_EVAL" DROP (DT_EVAL,DT_CANCEL);
+-- CHANGE END

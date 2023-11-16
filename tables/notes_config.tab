@@ -1,0 +1,37 @@
+CREATE TABLE NOTES_CONFIG
+(
+ID_NOTES_CONFIG NUMBER(24)      NOT NULL ,
+INTERN_NAME  VARCHAR2(0200)  NOT NULL ,
+NOTES_CODE   VARCHAR2(0010)  NOT NULL ,
+INTERN_DESC  VARCHAR2(2000),
+flg_import   VARCHAR2(1) NOT NULL,
+code_notes_config VARCHAR2(200) NOT NULL,
+adw_last_update DATE NOT NULL
+);
+
+COMMENT ON COLUMN NOTES_CONFIG.ID_NOTES_CONFIG   IS 'Chave primária' ;
+COMMENT ON COLUMN NOTES_CONFIG.INTERN_NAME       IS 'Nome interno' ;
+COMMENT ON COLUMN NOTES_CONFIG.NOTES_CODE        IS 'Código a usar para o diario: IMG-Imagem, VS-sinais vitais, TXT-texto livre, etc...' ;
+COMMENT ON COLUMN NOTES_CONFIG.INTERN_DESC       IS 'Descrição interna da configuração' ;
+COMMENT ON COLUMN NOTES_CONFIG.EXTERN_DESC       IS 'Descrição externa para o diario' ;
+COMMENT ON COLUMN notes_config.flg_import        IS 'Registos importados automaticamente: Y - Sim; N - Não';
+COMMENT ON COLUMN notes_config.code_notes_config IS 'Descritivo para visualização do registo';
+
+
+-- 30-06-2008
+alter table notes_config add id_doc_area number(24);
+COMMENT ON COLUMN notes_config.id_doc_area IS 'ID_DOC_AREA associado da funcionalidade a importar';
+
+-- 08-07-2008
+ALTER TABLE NOTES_CONFIG ADD RANK            NUMBER(6);
+ALTER TABLE NOTES_CONFIG ADD FLG_GROUP       VARCHAR2(1);
+ALTER TABLE NOTES_CONFIG ADD CODE_GROUP_DESC VARCHAR2(200);
+
+COMMENT ON COLUMN notes_config.rank              IS 'valor para ordenação da secção';
+COMMENT ON COLUMN notes_config.FLG_GROUP         IS 'valor Y/N para indicar se esta secção pode ter visão agrupada';
+COMMENT ON COLUMN notes_config.CODE_GROUP_DESC   IS 'Descrição que vai aparecer quando secção é agrupada';
+
+-- 09-07-2008
+ALTER TABLE NOTES_CONFIG ADD FLG_ID_ITEM     VARCHAR2(1);
+COMMENT ON COLUMN notes_config.FLG_ID_ITEM   IS 'Y/N: INDICA SE A LEITURA/ESCRITA É FEITA USANDO O CAMPO ID_ITEM';
+--

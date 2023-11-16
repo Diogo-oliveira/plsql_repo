@@ -1,0 +1,30 @@
+
+
+  CREATE TABLE ABNORMALITY_NATURE
+   (	ID_ABNORMALITY_NATURE NUMBER(24,0) NOT NULL ENABLE,
+	VALUE VARCHAR2(6) NOT NULL ENABLE,
+	DESC_ABNORMALITY_NATURE VARCHAR2(4000) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE abnormality_nature IS 'Tabela de parametrização de graus de anormalidade (registos da tabela "0080 - Nature of Abnormal testing" do HL7)' ;
+
+COMMENT ON COLUMN abnormality_nature.value IS 'Valor na tabela de HL7' ;
+COMMENT ON COLUMN abnormality_nature.desc_abnormality_nature IS 'Descrição na tabela de HL7' ;
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 15-01-2009
+-- CHANGE REASON: ALERT-9198
+ALTER TABLE ABNORMALITY_NATURE 
+ ADD (CODE_ABNORMALITY_NATURE VARCHAR2(200) NOT NULL,
+ );
+
+COMMENT ON COLUMN ABNORMALITY_NATURE.CODE_ABNORMALITY_NATURE IS 'Código da descrição na tabela de HL7';
+
+ALTER TABLE ABNORMALITY_NATURE DROP COLUMN DESC_ABNORMALITY_NATURE; 
+-- CHANGE END
+
+
+
+
+

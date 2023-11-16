@@ -1,0 +1,29 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 21/05/2013 16:58
+-- CHANGE REASON: [ALERT-248672] New frmw objs
+DECLARE
+    e_unique_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE COMPLAINT_REL 
+add CONSTRAINT CR_UK UNIQUE(ID_COMPLAINT, ID_COMP_PARENT, FLG_AVAILABLE)
+USING INDEX';
+    EXCEPTION
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('UK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE alert.COMPLAINT_REL
+  add(CONSTRAINT CR_FLG_AVAILABLE_CHK CHECK(FLG_AVAILABLE IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

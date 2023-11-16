@@ -1,0 +1,52 @@
+
+
+  CREATE TABLE CLI_REC_REQ
+   (	ID_CLI_REC_REQ NUMBER(24,0) NOT NULL ENABLE,
+	DT_CLI_REC_REQ DATE NOT NULL ENABLE,
+	ID_PROF_REQ NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	FLG_TIME VARCHAR2(1) NOT NULL ENABLE,
+	DT_BEGIN DATE,
+	ID_SCHEDULE NUMBER(24,0),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+
+	NOTES_CANCEL VARCHAR2(4000),
+	ID_ROOM NUMBER(24,0),
+	ID_EPISODE_ORIGIN NUMBER(24,0),
+	ID_EPISODE_DESTINATION NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE cli_rec_req IS 'Requisição do processo clínico em papel' ;
+
+COMMENT ON COLUMN cli_rec_req.dt_cli_rec_req IS 'Data / hora da requisição' ;
+COMMENT ON COLUMN cli_rec_req.flg_status IS 'D - pendente; R - requisitado; E - em execução; P - fornecimento parcial; F - terminado; C - cancelado' ;
+COMMENT ON COLUMN cli_rec_req.flg_time IS 'Realização: E - neste episódio; N - próximo episódio; B - entre episódios' ;
+COMMENT ON COLUMN cli_rec_req.dt_begin IS 'Data pretendida para início da execução do exame (ie, ñ imediata)' ;
+COMMENT ON COLUMN cli_rec_req.dt_cancel IS 'Data / hora de cancelamento' ;
+COMMENT ON COLUMN cli_rec_req.notes_cancel IS 'Notas de cancelamento' ;
+COMMENT ON COLUMN cli_rec_req.id_room IS 'Sala destino do transporte do p. clínico' ;
+COMMENT ON COLUMN cli_rec_req.id_episode_origin IS 'ID do episódio em que foi registada a req. inicialmente (se FLG_TIME = ''N'')' ;
+COMMENT ON COLUMN cli_rec_req.id_episode_destination IS 'ID do episódio em que foi registada a req. destino (se FLG_TIME = ''N'')' ;
+
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE CLI_REC_REQ ADD DT_BEGIN_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN CLI_REC_REQ.DT_BEGIN_TSTZ IS 'Data pretendida para in¡cio da execu‡Æo do exame (ie, ¤ imediata)'; 
+ALTER TABLE CLI_REC_REQ ADD DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN CLI_REC_REQ.DT_CANCEL_TSTZ IS 'Data / hora de cancelamento'; 
+ALTER TABLE CLI_REC_REQ ADD DT_CLI_REC_REQ_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN CLI_REC_REQ.DT_CLI_REC_REQ_TSTZ IS 'Data / hora da requisi‡Æo'; 
+
+
+
+--Carlos Vieira
+--Timezones changes
+alter table CLI_REC_REQ drop column DT_CLI_REC_REQ;
+alter table CLI_REC_REQ drop column DT_BEGIN;
+alter table CLI_REC_REQ drop column DT_CANCEL;
+--END 

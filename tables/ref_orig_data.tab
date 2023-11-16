@@ -1,0 +1,184 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 09/03/2010 09:28
+-- CHANGE REASON: [ALERT-79864] 
+DECLARE
+    l_sql   VARCHAR2(1000 CHAR);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM all_objects u
+     WHERE u.object_name = 'REF_ORIG_DATA'
+       AND object_type = 'TABLE';
+
+    IF l_count = 0
+    THEN
+    
+        l_sql := 'create table REF_ORIG_DATA
+(
+  ID_EXTERNAL_REQUEST NUMBER(24) not null,
+  ID_PROFESSIONAL     NUMBER(24),
+  NUM_ORDER           VARCHAR2(30),
+  PROF_NAME           VARCHAR2(200),
+  ID_INSTITUTION      NUMBER(24),
+  INSTITUTION_NAME    VARCHAR2(200),
+  CREATE_USER         VARCHAR2(24),
+  CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24),
+  UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24),
+  ID_PROF_CREATE      NUMBER(24) not null,
+  DT_CREATE           TIMESTAMP(6) WITH LOCAL TIME ZONE not null
+)';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on table REF_ORIG_DATA is 'Referral data  created by a hospital registar']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ORIG_DATA.ID_EXTERNAL_REQUEST is 'Pedido de refenciação']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ORIG_DATA.ID_PROFESSIONAL is 'Professional Id if is a alert professional']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ORIG_DATA.NUM_ORDER is 'Institution name when institution does not have alert registration']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ORIG_DATA.PROF_NAME is 'Professional name when professional does not have alert registration']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ORIG_DATA.ID_INSTITUTION is 'Institution Id when  is a alert institution']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ORIG_DATA.INSTITUTION_NAME is 'Institution name when institution does not have alert registration']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ORIG_DATA.CREATE_USER is 'Creation User']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ORIG_DATA.CREATE_TIME is 'Creation Time']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ORIG_DATA.CREATE_INSTITUTION is 'Creation Institution']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ORIG_DATA.UPDATE_USER is 'Update User']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ORIG_DATA.UPDATE_TIME is 'Update Time']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_ORIG_DATA.UPDATE_INSTITUTION is 'Update Institution']';
+        EXECUTE IMMEDIATE l_sql;
+    
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 31/03/2010 15:00
+-- CHANGE REASON: [ALERT-85573] 
+comment on column REF_ORIG_DATA.ID_PROF_CREATE
+  is 'Register who created referral request';
+
+comment on column REF_ORIG_DATA.DT_CREATE
+  is 'Date of request criation';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 01/04/2010
+-- CHANGE REASON: [ALERT-85573] 
+comment on column REF_ORIG_DATA.ID_PROF_CREATE
+  is 'Register who created referral request';
+
+comment on column REF_ORIG_DATA.DT_CREATE
+  is 'Date of request criation';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 27/11/2013 10:48
+-- CHANGE REASON: [ALERT-267879] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REF_ORIG_DATA'
+       AND c.column_name = 'ID_INSTITUTION';
+
+    IF l_count > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_ORIG_DATA drop column ID_INSTITUTION';
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REF_ORIG_DATA'
+       AND c.column_name = 'NUM_ORDER';
+
+    IF l_count > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_ORIG_DATA drop column NUM_ORDER';
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REF_ORIG_DATA'
+       AND c.column_name = 'PROF_NAME';
+
+    IF l_count > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_ORIG_DATA drop column PROF_NAME';
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REF_ORIG_DATA'
+       AND c.column_name = 'ID_PROF_CREATE';
+
+    IF l_count > 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_ORIG_DATA drop column ID_PROF_CREATE';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 27/11/2013 11:18
+-- CHANGE REASON: [ALERT-267879] 
+alter table REF_ORIG_DATA modify institution_name VARCHAR2(1000 CHAR);
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on table REF_ORIG_DATA
+  is 'Referral data created by a hospital registrar';
+-- Add comments to the columns 
+comment on column REF_ORIG_DATA.id_external_request
+  is 'Referral';
+comment on column REF_ORIG_DATA.id_professional
+  is 'Professional (if is a alert professional)';

@@ -1,0 +1,33 @@
+CREATE TABLE EHR_ACCESS_CATEGORY
+ (ID_CATEGORY NUMBER(12) NOT NULL
+ ,ID_INSTITUTION NUMBER(24) NOT NULL
+ ,FLG_HAS_EHR_ACCESS VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ );
+
+COMMENT ON TABLE EHR_ACCESS_CATEGORY IS 'EHR Access manager by professional category';
+
+COMMENT ON COLUMN EHR_ACCESS_CATEGORY.ID_CATEGORY IS 'Professional category ID';
+
+COMMENT ON COLUMN EHR_ACCESS_CATEGORY.ID_INSTITUTION IS 'Institution ID';
+
+COMMENT ON COLUMN EHR_ACCESS_CATEGORY.FLG_HAS_EHR_ACCESS IS 'Has EHR Access Manager (Y)es, (N)o';
+
+
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 24/03/2010 11:33
+-- CHANGE REASON: [ALERT-83122] 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); 
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ehr_access_category add (id_software number(24) default 0 not null )';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ehr_access_category.id_software IS ''Software ID''';
+end;
+/
+-- CHANGE END: Paulo Teixeira

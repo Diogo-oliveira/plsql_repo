@@ -1,0 +1,33 @@
+
+
+  CREATE TABLE PAT_GINEC
+   (	ID_PAT_GINEC NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	YEAR_BEGIN_MENSTRUATION NUMBER(4,0),
+	MONTH_BEGIN_MENSTRUATION NUMBER(2,0),
+	DAY_BEGIN_MENSTRUATION NUMBER(2,0),
+	INTERVAL_MENSTRUATION NUMBER(2,0),
+	DURATION_MENSTRUATION NUMBER(2,0),
+	DT_BEGIN_MENOPAUSE DATE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE pat_ginec IS 'História ginecológica' ;
+
+COMMENT ON COLUMN pat_ginec.year_begin_menstruation IS 'Ano de início do ciclo menstrual' ;
+COMMENT ON COLUMN pat_ginec.month_begin_menstruation IS 'Mês de início do ciclo menstrual' ;
+COMMENT ON COLUMN pat_ginec.day_begin_menstruation IS 'Dia de início do ciclo menstrual' ;
+COMMENT ON COLUMN pat_ginec.interval_menstruation IS 'Intervalo entre ciclos, em dias' ;
+COMMENT ON COLUMN pat_ginec.duration_menstruation IS 'Duração em dias do ciclo' ;
+COMMENT ON COLUMN pat_ginec.dt_begin_menopause IS 'Início da menopausa' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_GINEC ADD DT_BEGIN_MENOPAUSE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_GINEC.DT_BEGIN_MENOPAUSE_TSTZ IS 'In¡cio da menopausa'; 
+
+
+
+---- DROP DATE TYPE
+ALTER table PAT_GINEC DROP column DT_BEGIN_MENOPAUSE;

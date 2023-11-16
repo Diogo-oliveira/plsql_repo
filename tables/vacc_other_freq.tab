@@ -1,0 +1,36 @@
+-- Create table
+create table VACC_OTHER_FREQ
+(
+  ID_VACC         NUMBER(12) not null,
+  EMB_ID          VARCHAR2(255),
+  DCI_ID          VARCHAR2(255),
+  RANK            NUMBER(5),
+  ADW_LAST_UPDATE DATE not null
+);
+-- Add comments to the table 
+comment on table VACC_OTHER_FREQ
+  is 'Tabela com os medicamentos mais frequentes para as vacinas fora do PNV';
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 19/01/2011 12:39
+-- CHANGE REASON: [ALERT-156485] 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE alert.vacc_other_freq add CONSTRAINT vof_pk primary key(id_vacc, emb_id, dci_id) USING INDEX tablespace INDEX_M';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Teixeira
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 19/01/2011 14:43
+-- CHANGE REASON: [ALERT-156485] 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE alert.vacc_other_freq add CONSTRAINT vof_pk primary key(id_vacc, emb_id, dci_id, adw_last_update) USING INDEX tablespace INDEX_M';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Teixeira

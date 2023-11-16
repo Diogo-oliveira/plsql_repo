@@ -1,0 +1,17 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:51
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_area ADD (CONSTRAINT
+ PA_REP_FK FOREIGN KEY 
+  (ID_REPORT) REFERENCES REPORTS
+  (ID_REPORTS))';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

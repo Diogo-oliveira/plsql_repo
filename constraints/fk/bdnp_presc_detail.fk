@@ -1,0 +1,32 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE constraint_name = 'BPL_HPN_FK'
+       AND table_name = 'BDNP_PRESC_DETAIL';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE BDNP_PRESC_DETAIL  add constraint BPL_HPN_FK foreign key (ID_HEALTH_PLAN)  references alert_adtcod_cfg.HEALTH_PLAN (ID_HEALTH_PLAN)';
+    END IF;
+END;
+/
+
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE constraint_name = 'BPL_PAT_FK'
+       AND table_name = 'BDNP_PRESC_DETAIL';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE BDNP_PRESC_DETAIL add constraint BPL_PAT_FK foreign key (ID_PATIENT) references alert_adtcod.PATIENT (ID_PATIENT)';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso

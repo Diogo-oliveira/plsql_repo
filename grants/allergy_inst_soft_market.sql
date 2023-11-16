@@ -1,0 +1,20 @@
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2017-1-03
+-- CHANGED REASON: ALERT-327486
+grant SELECT on ALERT.ALLERGY_INST_SOFT_MARKET to ALERT_APEX_TOOLS;
+-- CHANGE END: Humberto Cardoso
+
+
+-- CHANGED BY: Adriana Salgueiro
+-- CHANGED DATE: 2021-4-20
+-- CHANGED REASON: EMR-44191
+
+grant select on ALERT.ALLERGY_INST_SOFT_MARKET to ALERT_DEFAULT;
+grant references on ALERT.ALLERGY_INST_SOFT_MARKET to ALERT_DEFAULT;
+-- CHANGE END: Adriana Salgueiro
+
+-- CHANGED BY: Pedro Pacheco
+-- CHANGED DATE: 2022-2-20
+-- CHANGED REASON: EMR-17325
+grant select, insert, update on ALERT.ALLERGY_INST_SOFT_MARKET to alert_core_cnt;
+-- CHANGE END: Pedro Pacheco

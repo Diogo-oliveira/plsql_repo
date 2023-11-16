@@ -1,0 +1,47 @@
+
+
+  CREATE TABLE HEALTH_PLAN
+   (	ID_HEALTH_PLAN NUMBER(12,0) NOT NULL ENABLE,
+	CODE_HEALTH_PLAN VARCHAR2(200) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_INSTIT_TYPE VARCHAR2(1) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE health_plan IS 'Serviços / subsistemas / seguros de saúde, etc' ;
+
+COMMENT ON COLUMN health_plan.flg_type IS 'Tipo: S - SNS; A - ADSE; M - SAMS; G - seguro vida' ;
+COMMENT ON COLUMN health_plan.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN health_plan.flg_instit_type IS 'Tipo de instituição: H - hospital, C - centro saúde' ;
+
+ALTER TABLE HEALTH_PLAN 
+ ADD (FLG_CLIENT VARCHAR2(1) DEFAULT 'N'
+ ,INSURANCE_CLASS VARCHAR2(2));
+
+COMMENT ON COLUMN HEALTH_PLAN.FLG_CLIENT IS 'Flag that indicates if record is inserted by Alert application';
+
+COMMENT ON COLUMN HEALTH_PLAN.INSURANCE_CLASS IS 'Insurance Classification - MD – Medicaid insurance, MC - Medicare insurance, HM - HMO Insurance, PI - Private Insurance';
+
+
+
+
+ALTER TABLE HEALTH_PLAN ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN HEALTH_PLAN.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2020 18:02
+-- CHANGE REASON: [EMR-40083]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00942);
+BEGIN
+EXECUTE IMMEDIATE 'DROP TABLE health_plan_old';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos

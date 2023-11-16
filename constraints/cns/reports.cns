@@ -1,0 +1,96 @@
+
+
+  ALTER TABLE REPORTS ADD CONSTRAINT REP_PK PRIMARY KEY (ID_REPORTS) ENABLE;
+
+  ALTER TABLE REPORTS MODIFY (ID_REPORTS NOT NULL ENABLE);
+
+  ALTER TABLE REPORTS MODIFY (CODE_REPORTS NOT NULL ENABLE);
+
+  ALTER TABLE REPORTS MODIFY (FLG_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE REPORTS MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+
+--João Eiras 03-10-2007
+--Novas colunas
+    ALTER TABLE reports add CONSTRAINT rep_ftmfrac_cns CHECK(flg_time_fraction IS NULL OR flg_time_fraction IN ('N', 'Y'));
+    ALTER TABLE reports add CONSTRAINT rep_ftmprfs_cns CHECK(flg_param_profs IS NULL OR flg_param_profs IN ('Y', 'N'));
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 02/12/2009 21:11
+-- CHANGE REASON: [PIX-341] HIE XDS Content Creator module in Alert
+ALTER TABLE reports 
+    ADD CONSTRAINT REP_FLG_XDS_PUBLISHABLE_CHK
+    CHECK(flg_xds_publishable IS NULL OR flg_xds_publishable IN ('Y', 'N'));
+-- CHANGE END: Ariel Machado
+
+-- cmf 12-07-2010
+ALTER TABLE REPORTS ADD CONSTRAINT RPT_SW_DLG_DFLT_CHK CHECK ( FLG_SHOW_DIALOG_DEFAULT IN ('Y','N') );
+ALTER TABLE REPORTS ADD CONSTRAINT RPT_ORNTTN_DFLT_CHK CHECK ( FLG_ORIENTATION_DEFAULT IN ('NP','NL', 'RP', 'RL') );
+ALTER TABLE REPORTS ADD CONSTRAINT RPT_SIZE_DFLT_CHK   CHECK ( FLG_SIZE_DEFAULT        IN ('ISO_A3', 'ISO_A4', 'ISO_A5', 'ISO_A6') );
+ALTER TABLE REPORTS ADD CONSTRAINT RPT_SDES_DFLT_CHK   CHECK ( FLG_SIDES_DEFAULT       IN ('D', 'O', 'T') );
+ALTER TABLE REPORTS ADD CONSTRAINT RPT_QLTY_DFLT_CHK   CHECK ( FLG_QUALITY_DEFAULT     IN ('N', 'H', 'D' ) );
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 14-Dec-2010
+-- CHANGE REASON: ALERT-ALERT-149266
+DECLARE
+    e_name_already_used_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_name_already_used_constraint, -02264);
+    l_table_name VARCHAR2(30) := 'REPORTS';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name ||
+                      ' ADD CONSTRAINT rep_flg_rep_type_chk CHECK (flg_report_type IN (''C'',''S'',''D'',''R'',''E'',''CE'',''CO'',''DE''))';
+EXCEPTION
+    WHEN e_name_already_used_constraint THEN
+        dbms_output.put_line('WARNING - Check constraint in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 27/Jan/2011 09:07
+-- CHANGE REASON: ALERT-158045
+ALTER TABLE reports DROP CONSTRAINT rep_flg_rep_type_chk;
+ALTER TABLE reports ADD CONSTRAINT rep_flg_rep_type_chk CHECK (flg_report_type IN ('C','D','S','REQUISITION','E','CONSENT','P','CM', 'CERTIFICATE'));
+-- CHANGE END
+
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 04/May/2011 09:07
+-- CHANGE REASON: ALERT-176216
+ALTER TABLE reports DROP CONSTRAINT REP_FLG_REP_TYPE_CHK;
+ALTER TABLE reports ADD CONSTRAINT REP_FLG_REP_TYPE_CHK CHECK (FLG_REPORT_TYPE IN ('C','D','S','REQUISITION','E','CONSENT','P','CM', 'CERTIFICATE','U'));
+-- CHANGE END
+
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 04/May/2011 09:07
+-- CHANGE REASON: ALERT-176216
+ALTER TABLE rep_scope_inst_soft_market DROP CONSTRAINT REP_S_ISM_REP_TYPE_CHK;
+ALTER TABLE rep_scope_inst_soft_market ADD CONSTRAINT REP_S_ISM_REP_TYPE_CHK CHECK (FLG_REPORT_TYPE IN ('C','D','S','REQUISITION','E','CONSENT','P','CM', 'CERTIFICATE','U'));
+-- CHANGE END
+
+-- CHANGED BY: goncalo.almeida
+-- CHANGE DATE: 04/May/2011 09:07
+-- CHANGE REASON: ALERT-176216
+ALTER TABLE reports DROP CONSTRAINT REP_FLG_REP_TYPE_CHK;
+ALTER TABLE reports ADD CONSTRAINT REP_FLG_REP_TYPE_CHK CHECK (FLG_REPORT_TYPE IN ('C','D','S','REQUISITION','E','CONSENT','P','CM', 'CERTIFICATE','U'));
+-- CHANGE END
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 19/05/2016 
+-- CHANGE REASON: [ALERT-321123] 
+ALTER TABLE REPORTS ADD CONSTRAINT FLG_DATE_FILTERS_CONTEXT_CHK CHECK(FLG_DATE_FILTERS_CONTEXT IN
+                                                                      ('N',
+                                                                       'ME',
+                                                                       'YE',
+                                                                       'MP',
+                                                                       'YP'));
+                                                                       
+ALTER TABLE REPORTS ADD CONSTRAINT FLG_DATE_FILTERS_CONTEXT_CNS CHECK(
+                                                                      (FLG_DATE_FILTERS = 'N' AND FLG_DATE_FILTERS_CONTEXT = 'N')
+                                                                       OR
+                                                                      (FLG_DATE_FILTERS = 'Y' AND FLG_DATE_FILTERS_CONTEXT IN ('N', 'ME', 'YE', 'MP', 'YP'))
+                                                                      );
+-- CHANGE END

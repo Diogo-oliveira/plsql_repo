@@ -1,0 +1,26 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 29/10/2009 04:37
+-- CHANGE REASON: [ALERT-51207] 
+alter table CPOE_TASK_SOFT_INST add constraint CPOETSI_CPOET_FK1 foreign key (ID_TASK_TYPE) references CPOE_TASK_TYPE (ID_TASK_TYPE); 
+alter table CPOE_TASK_SOFT_INST add constraint CPOETSI_CPOET_FK2 foreign key (ID_TASK_TYPE_PARENT) references  CPOE_TASK_TYPE (ID_TASK_TYPE); 
+alter table CPOE_TASK_SOFT_INST add constraint CPOETSI_CPOET_FK3 foreign key (ID_TASK_GROUP_PARENT) references CPOE_TASK_TYPE (ID_TASK_TYPE); 
+alter table CPOE_TASK_SOFT_INST add constraint CPOETSI_INST_FK foreign key (ID_INSTITUTION) references INSTITUTION (ID_INSTITUTION); 
+alter table CPOE_TASK_SOFT_INST add constraint CPOETSI_SOFT_FK foreign key (ID_SOFTWARE) references SOFTWARE (ID_SOFTWARE); 
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 11/12/2009 01:01
+-- CHANGE REASON: [ALERT-61939] CPOE 2nd phase: versioning of CPOE feature for Diets and Hidrics
+alter table CPOE_TASK_SOFT_INST drop constraint CPOETSI_CPOET_FK1;
+alter table CPOE_TASK_SOFT_INST drop constraint CPOETSI_CPOET_FK2;
+alter table CPOE_TASK_SOFT_INST drop constraint CPOETSI_CPOET_FK3;
+alter table CPOE_TASK_SOFT_INST
+  add constraint CPOETSI_CPOET_FK foreign key (ID_TASK_TYPE)
+  references CPOE_TASK_TYPE (ID_TASK_TYPE);
+alter table CPOE_TASK_SOFT_INST
+  add constraint CPOETSI_CPOET_PARENT_FK foreign key (ID_TASK_TYPE_PARENT)
+  references CPOE_TASK_TYPE (ID_TASK_TYPE);
+alter table CPOE_TASK_SOFT_INST
+  add constraint CPOETSI_CPOET_GRP_FK foreign key (ID_TASK_GROUP_PARENT)
+  references CPOE_TASK_TYPE (ID_TASK_TYPE);
+-- CHANGE END: Carlos Loureiro

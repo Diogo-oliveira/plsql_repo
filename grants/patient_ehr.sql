@@ -1,0 +1,1 @@
+grant select, insert, update, delete, references on ALERT_HIE.patient_ehr to ALERT_VIEWER;

@@ -1,0 +1,36 @@
+-- CHANGED BY: rui.baeta
+-- CHANGE DATE: 21/11/2009 20:23
+-- CHANGE REASON: [ALERT-55962] new table "epis_type_reports" for relationship between epis_type and reports
+create table epis_type_reports
+(
+    id_epis_type number(12,0) not null,
+    id_reports number(24,0) not null
+);
+comment on table epis_type_reports is 'Association between episode type and reports' ;
+comment on column epis_type_reports.id_epis_type is 'Episode type id' ;
+comment on column epis_type_reports.id_reports is 'Report id' ;
+-- CHANGE END: rui.baeta
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table epis_type_reports add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column epis_type_reports.create_user IS 'Creation User';
+COMMENT ON column epis_type_reports.create_time IS 'Creation Time';
+COMMENT ON column epis_type_reports.create_institution IS 'Creation Institution';
+COMMENT ON column epis_type_reports.update_user IS 'Update User';
+COMMENT ON column epis_type_reports.update_time IS 'Update Time';
+COMMENT ON column epis_type_reports.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

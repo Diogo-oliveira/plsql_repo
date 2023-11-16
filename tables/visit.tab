@@ -1,0 +1,86 @@
+
+
+  CREATE TABLE VISIT
+   (	ID_VISIT NUMBER(24,0) NOT NULL ENABLE,
+	DT_BEGIN DATE NOT NULL ENABLE,
+	DT_END DATE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_EXTERNAL_CAUSE NUMBER(24,0),
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_ORIGIN NUMBER(24,0),
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	BARCODE VARCHAR2(30)
+   );
+
+
+COMMENT ON TABLE visit IS 'Esta tabela contem as visitas dos pacientes a uma instituição de prestação de cuidados de saúde. Entende-se por visita o periodo compreendido entre a entrada e a saida do paciente da instituição.' ;
+
+COMMENT ON COLUMN visit.id_visit IS 'Chave primaria' ;
+COMMENT ON COLUMN visit.dt_begin IS 'Data de inicio' ;
+COMMENT ON COLUMN visit.dt_end IS 'Data de fim' ;
+COMMENT ON COLUMN visit.flg_status IS 'Estado da visita: activa / inactiva' ;
+COMMENT ON COLUMN visit.barcode IS 'Código de barras' ;
+
+alter table visit 
+add (dt_begin_tstz timestamp with local time zone,
+     dt_end_tstz timestamp with local time zone); 
+
+ALTER TABLE VISIT  ADD (FLG_MIGRATION VARCHAR2(1) DEFAULT 'A' NOT NULL);
+
+COMMENT ON COLUMN VISIT.FLG_MIGRATION IS 'This column will have default ''A'' value for ALERT, migrated records will have ''M'' value, and test records will have ''T'' value';
+
+
+
+---------------------------------------------------------------------------------------------
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-AGO-01
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15281
+
+COMMENT ON COLUMN  VISIT.DT_BEGIN_TSTZ IS 'Visit begin date'; 
+COMMENT ON COLUMN  VISIT.DT_END_TSTZ IS 'Visit end date'; 
+COMMENT ON COLUMN  VISIT.ID_EXTERNAL_CAUSE IS 'External cause ID'; 
+COMMENT ON COLUMN  VISIT.ID_PATIENT IS 'Patient ID'; 
+COMMENT ON COLUMN  VISIT.ID_ORIGIN IS 'Origin ID'; 
+COMMENT ON COLUMN  VISIT.ID_INSTITUTION IS 'Institution ID'; 
+COMMENT ON COLUMN  VISIT.FLG_STATUS IS 'Visit status: A - Active; I - Inactive; C - Canceled';
+
+-- CHANGED END: Nuno Ferreira
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-AGO-05
+-- CHANGE REASON: Acrescentar campo
+alter table episode add dt_creation timestamp with local time zone;
+alter table visit add dt_creation timestamp with local time zone;
+COMMENT ON COLUMN visit.dt_creation IS 'Visit creation date';
+-- CHANGE END
+
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2008-SET-22
+-- CHANGE REASON: Drop de colunas DATE com correspondentes DATE_TSTZ
+
+ALTER TABLE VISIT DROP COLUMN DT_BEGIN;
+ALTER TABLE VISIT DROP COLUMN DT_END;
+
+-- CHANGE END
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 20/01/2016 16:05
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON TABLE VISIT IS 'Pacient visitations to the institution';
+COMMENT ON COLUMN  VISIT.ID_VISIT IS 'Primary Key';      
+COMMENT ON COLUMN  VISIT.BARCODE IS 'Bar Code'; 
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 06/03/2018 09:27
+-- CHANGE REASON: 
+ALTER TABLE visit MODIFY FLG_STATUS VARCHAR2(2 CHAR);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/03/2018 10:44
+-- CHANGE REASON: [EMR-1983] 
+ALTER TABLE visit MODIFY FLG_STATUS VARCHAR2(2 CHAR);
+-- CHANGE END: Pedro Henriques

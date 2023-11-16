@@ -1,0 +1,28 @@
+-- ADDED BY: Jose Castro
+-- ADDED DATE: 25/05/2010
+-- ADDED REASON: ALERT-14487
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table BODY_STRUCTURE
+  add constraint BSE_PK primary key (ID_BODY_STRUCTURE);
+
+alter table BODY_STRUCTURE
+  add constraint BSE_UK unique (ID_MCS_CONCEPT);
+
+-- Create/Recreate check constraints 
+alter table BODY_STRUCTURE
+  add constraint BSE_FLG_AVAILABLE
+  check (FLG_AVAILABLE IN ('Y', 'N'));
+-- ADDED END
+
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE BODY_STRUCTURE ADD CONSTRAINT BSE_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint BSE_FLG_AVAILABLE_CHK table BODY_STRUCTURE column FLG_AVAILABLE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto

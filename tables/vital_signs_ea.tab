@@ -1,0 +1,186 @@
+CREATE TABLE vital_signs_ea
+(
+    id_vital_sign       NUMBER(12),
+		id_vital_sign_read  NUMBER(24) NOT NULL,
+		id_vital_sign_desc  NUMBER(12),
+		value               NUMBER(10,3),
+		id_unit_measure     NUMBER(24),
+		dt_vital_sign_read  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+		flg_pain            VARCHAR2(1),
+		id_prof_read        NUMBER(24),
+		id_prof_cancel      NUMBER(24),
+		notes_cancel        VARCHAR2(4000),
+		flg_state           VARCHAR2(1),
+		dt_cancel           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+		flg_available       VARCHAR2(1),
+		id_institution_read NUMBER(12),
+		flg_status_epis     VARCHAR2(1),
+		id_visit            NUMBER(24),
+		id_episode          NUMBER(24),
+		id_patient          NUMBER(24),
+		relation_domain     VARCHAR2(1),
+		id_epis_triage      NUMBER(24)
+);
+
+COMMENT ON COLUMN vital_signs_ea.id_vital_sign       IS 'Vital sign ID';
+/
+
+COMMENT ON COLUMN vital_signs_ea.id_vital_sign_read  IS 'Vital sign reading ID';
+/
+
+COMMENT ON COLUMN vital_signs_ea.id_vital_sign_desc  IS 'Value ID (When it`s a description)';
+/
+
+COMMENT ON COLUMN vital_signs_ea.value               IS 'Values (for numeric values)';
+/
+
+COMMENT ON COLUMN vital_signs_ea.id_unit_measure     IS 'Unit measure of the reading';
+/
+
+COMMENT ON COLUMN vital_signs_ea.dt_vital_sign_read  IS 'Reading date';
+/
+
+COMMENT ON COLUMN vital_signs_ea.flg_pain            IS 'Indication of whether it`s a reading for pain (Y) or not (N)';
+/
+
+COMMENT ON COLUMN vital_signs_ea.id_prof_read        IS 'Reading professional ID';
+/
+
+COMMENT ON COLUMN vital_signs_ea.id_prof_cancel      IS 'Cancellation professional ID';
+/
+
+COMMENT ON COLUMN vital_signs_ea.notes_cancel        IS 'Cancellation notes';
+/
+
+COMMENT ON COLUMN vital_signs_ea.flg_state           IS 'Reading status';
+/
+
+COMMENT ON COLUMN vital_signs_ea.dt_cancel           IS 'Cancellation date';
+/
+
+COMMENT ON COLUMN vital_signs_ea.flg_available       IS 'Indication of whether the vital sign is available (Y) or not (N)';
+/
+
+COMMENT ON COLUMN vital_signs_ea.id_institution_read IS 'Institution ID';
+/
+
+COMMENT ON COLUMN vital_signs_ea.flg_status_epis     IS 'Episode status';
+/
+
+COMMENT ON COLUMN vital_signs_ea.id_visit            IS 'Visit ID';
+/
+
+COMMENT ON COLUMN vital_signs_ea.id_episode          IS 'Episode ID';
+/
+
+COMMENT ON COLUMN vital_signs_ea.id_patient          IS 'Patient ID';
+/
+
+COMMENT ON COLUMN vital_signs_ea.relation_domain     IS 'Relation domain: M - manchester, C - concatenation (blood pressure), S - sum (Glasgow), D - Division, A - Alternate';
+/
+
+COMMENT ON COLUMN vital_signs_ea.id_epis_triage      IS 'Triage episode ID' ;
+/
+
+-- DT_DG_LAST_UPDATE 
+ALTER TABLE vital_signs_ea ADD dt_dg_last_update TIMESTAMP(6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+/
+
+COMMENT ON COLUMN vital_signs_ea.dt_dg_last_update IS 'This column is supposed to be used for information''s validation.';
+/
+
+COMMENT ON TABLE vital_signs_ea IS 'This is an Easy Access table created in order to optmize the access to vital signs'' registers';
+/
+
+
+
+
+
+-- CHANGED BY: THIAGO BRITO
+-- CHANGE DATE: 2009-Aug-17
+-- CHANGE REASON: ALERT-38425
+
+ALTER TABLE vital_signs_ea add id_vs_scales_element NUMBER(24);
+/
+
+COMMENT ON COLUMN vital_signs_ea.id_vs_scales_element IS 'Vital Sign Scale ID';
+/
+
+-- CHANGE END
+
+-- cmf 23-09-2009
+comment on table vital_signs_ea is 'This table contains all the necessary information for vital signs readings';
+
+
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 2009-09-28
+-- CHANGE REASON: ALERT-32815
+COMMENT ON COLUMN vital_signs_ea.id_vs_scales_element IS 'Vital Sign Scales Element ID';
+/
+-- CHANGE END
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table VITAL_SIGNS_EA
+  is 'This awereness table contains all the necessary information for vital signs readings';
+-- Add comments to the columns 
+comment on column VITAL_SIGNS_EA.id_vital_sign
+  is 'Vital sign ID';
+comment on column VITAL_SIGNS_EA.id_vital_sign_read
+  is 'Vital sign reading ID';
+comment on column VITAL_SIGNS_EA.id_vital_sign_desc
+  is 'Value ID (When it`s a description)';
+comment on column VITAL_SIGNS_EA.value
+  is 'Values (for numeric values)';
+comment on column VITAL_SIGNS_EA.id_unit_measure
+  is 'Unit measure of the reading';
+comment on column VITAL_SIGNS_EA.dt_vital_sign_read
+  is 'Reading date';
+comment on column VITAL_SIGNS_EA.flg_pain
+  is 'Indication of whether it`s a reading for pain (Y) or not (N)';
+comment on column VITAL_SIGNS_EA.id_prof_read
+  is 'Reading professional ID';
+comment on column VITAL_SIGNS_EA.id_prof_cancel
+  is 'Cancellation professional ID';
+comment on column VITAL_SIGNS_EA.notes_cancel
+  is 'Cancellation notes';
+comment on column VITAL_SIGNS_EA.flg_state
+  is 'Reading status. A  - Active; C - Cancelled';
+comment on column VITAL_SIGNS_EA.dt_cancel
+  is 'Cancellation date';
+comment on column VITAL_SIGNS_EA.flg_available
+  is 'Indication of whether the vital sign is available (Y) or not (N)';
+comment on column VITAL_SIGNS_EA.id_institution_read
+  is 'Institution ID';
+comment on column VITAL_SIGNS_EA.flg_status_epis
+  is 'Episode status: A - Active; I Inactive; C - Cancelled; P - Pendent; T - Temporary';
+comment on column VITAL_SIGNS_EA.id_visit
+  is 'Visit ID';
+comment on column VITAL_SIGNS_EA.id_episode
+  is 'Episode ID';
+comment on column VITAL_SIGNS_EA.id_patient
+  is 'Patient ID';
+comment on column VITAL_SIGNS_EA.relation_domain
+  is 'Relation domain: M - manchester, C - concatenation (blood pressure), S - sum (Glasgow), D - Division, A - Alternate';
+comment on column VITAL_SIGNS_EA.id_epis_triage
+  is 'Triage episode ID';
+comment on column VITAL_SIGNS_EA.dt_dg_last_update
+  is 'This column is supposed to be used for information''s validation.';
+comment on column VITAL_SIGNS_EA.create_user
+  is 'Creation User';
+comment on column VITAL_SIGNS_EA.create_time
+  is 'Creation Time';
+comment on column VITAL_SIGNS_EA.create_institution
+  is 'Creation Institution';
+comment on column VITAL_SIGNS_EA.update_user
+  is 'Update User';
+comment on column VITAL_SIGNS_EA.update_time
+  is 'Update Time';
+comment on column VITAL_SIGNS_EA.update_institution
+  is 'Update Institution';
+comment on column VITAL_SIGNS_EA.id_vs_scales_element
+  is 'Vital Sign Scales Element ID';
+  
+-- CHANGE END: Pedro Fernandes

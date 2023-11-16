@@ -1,0 +1,28 @@
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:11
+-- CHANGE REASON: [ALERT-246248] 
+CREATE TABLE ANALYSIS_GROUP_MIG_BCK AS
+SELECT s.name software_namel,
+       ag.id_content id_content_analysis_group,
+       (SELECT t.desc_lang_1 || ';' || t.desc_lang_2 || ';' || t.desc_lang_3 || ';' || t.desc_lang_4 || ';' ||
+               t.desc_lang_5 || ';' || t.desc_lang_6 || ';' || t.desc_lang_7 || ';' || t.desc_lang_11 || ';' ||
+               t.desc_lang_16 || ';' || t.desc_lang_17
+          FROM translation t
+         WHERE t.code_translation = ag.code_analysis_group) analysis_group,
+       a.id_content id_content_analysis,
+       (SELECT t.desc_lang_1 || ';' || t.desc_lang_2 || ';' || t.desc_lang_3 || ';' || t.desc_lang_4 || ';' ||
+               t.desc_lang_5 || ';' || t.desc_lang_6 || ';' || t.desc_lang_7 || ';' || t.desc_lang_11 || ';' ||
+               t.desc_lang_16 || ';' || t.desc_lang_17
+          FROM translation t
+         WHERE t.code_translation = a.code_analysis) analysis
+  FROM analysis_agp agp
+  JOIN analysis a
+    ON (a.id_analysis = agp.id_analysis)
+  JOIN analysis_group ag
+    ON (ag.id_analysis_group = agp.id_analysis_group)
+  JOIN analysis_instit_soft ais
+    ON (ag.id_analysis_group = ais.id_analysis_group)
+  JOIN alert.software s
+    ON (s.id_software = ais.id_software)
+ ORDER BY 1, 2, 3;
+-- CHANGE END: Ana Matos

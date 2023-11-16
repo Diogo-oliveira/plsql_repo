@@ -1,0 +1,115 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 01/10/2010 17:09
+-- CHANGE REASON: [ALERT-129275] 
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(1000 CHAR);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+FROM user_constraints
+ WHERE table_name = 'WF_ACTION'
+ AND constraint_name = 'WAN_PK';
+
+IF l_count = 0
+    THEN
+   l_sql := q'[ALTER TABLE WF_ACTION ADD (CONSTRAINT WAN_PK PRIMARY KEY (ID_ACTION  ,ID_WORKFLOW  ,ID_STATUS_BEGIN  ,ID_STATUS_END))]';
+       EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(1000 CHAR);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+FROM user_constraints
+ WHERE table_name = 'WF_ACTION'
+ AND constraint_name = 'WAN_ACN_FK';
+
+IF l_count = 0
+    THEN
+   l_sql := q'[ALTER TABLE WF_ACTION ADD (CONSTRAINT WAN_ACN_FK FOREIGN KEY (ID_ACTION) REFERENCES ACTION (ID_ACTION))]';
+       EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(1000 CHAR);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+FROM user_constraints
+ WHERE table_name = 'WF_ACTION'
+ AND constraint_name = 'WAN_WTS_FK';
+
+IF l_count = 0
+    THEN
+   l_sql := q'[ALTER TABLE WF_ACTION ADD (CONSTRAINT WAN_WTS_FK FOREIGN KEY (ID_WORKFLOW,ID_STATUS_BEGIN,ID_STATUS_END) REFERENCES WF_TRANSITION (ID_WORKFLOW ,ID_STATUS_BEGIN,ID_STATUS_END))]';
+       EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 06/10/2010 09:27
+-- CHANGE REASON: [ALERT-129275] 
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(1000 CHAR);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+FROM user_constraints
+ WHERE table_name = 'WF_ACTION'
+ AND constraint_name = 'WAN_PK';
+
+IF l_count = 0
+    THEN
+   l_sql := q'[ALTER TABLE WF_ACTION ADD (CONSTRAINT WAN_PK PRIMARY KEY (ID_ACTION  ,ID_WORKFLOW  ,ID_STATUS_BEGIN  ,ID_STATUS_END))]';
+       EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(1000 CHAR);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+FROM user_constraints
+ WHERE table_name = 'WF_ACTION'
+ AND constraint_name = 'WAN_ACN_FK';
+
+IF l_count = 0
+    THEN
+   l_sql := q'[ALTER TABLE WF_ACTION ADD (CONSTRAINT WAN_ACN_FK FOREIGN KEY (ID_ACTION) REFERENCES ACTION (ID_ACTION))]';
+       EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(1000 CHAR);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+FROM user_constraints
+ WHERE table_name = 'WF_ACTION'
+ AND constraint_name = 'WAN_WTS_FK';
+
+IF l_count = 0
+    THEN
+   l_sql := q'[ALTER TABLE WF_ACTION ADD (CONSTRAINT WAN_WTS_FK FOREIGN KEY (ID_WORKFLOW,ID_STATUS_BEGIN,ID_STATUS_END) REFERENCES WF_TRANSITION (ID_WORKFLOW ,ID_STATUS_BEGIN,ID_STATUS_END))]';
+       EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro

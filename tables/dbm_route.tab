@@ -1,0 +1,75 @@
+-- Create table
+create table DBM_ROUTE
+(
+  ID_DBM_ROUTE  NUMBER(24) not null,
+  ID_DBM        NUMBER(24),
+  ID_ROUTE      NUMBER(24),
+  FLG_AVAILABLE VARCHAR2(1)
+)
+tablespace TABLE_L
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns 
+comment on column DBM_ROUTE.ID_DBM_ROUTE
+  is 'Primary key';
+comment on column DBM_ROUTE.ID_DBM
+  is 'The barcode identification the route belongs to';
+comment on column DBM_ROUTE.ID_ROUTE
+  is 'The administration route for the barcode';
+comment on column DBM_ROUTE.FLG_AVAILABLE
+  is 'Identifies if the route is available: Y - Yes, N - No';
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table DBM_ROUTE add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column dbm_route.create_user IS 'Creation User';
+COMMENT ON column dbm_route.create_time IS 'Creation Time';
+COMMENT ON column dbm_route.create_institution IS 'Creation Institution';
+COMMENT ON column dbm_route.update_user IS 'Update User';
+COMMENT ON column dbm_route.update_time IS 'Update Time';
+COMMENT ON column dbm_route.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table dbm_route add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column dbm_route.create_user IS 'Creation User';
+COMMENT ON column dbm_route.create_time IS 'Creation Time';
+COMMENT ON column dbm_route.create_institution IS 'Creation Institution';
+COMMENT ON column dbm_route.update_user IS 'Update User';
+COMMENT ON column dbm_route.update_time IS 'Update Time';
+COMMENT ON column dbm_route.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

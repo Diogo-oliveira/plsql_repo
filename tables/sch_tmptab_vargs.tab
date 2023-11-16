@@ -1,0 +1,37 @@
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 21-08-2008
+-- CHANGE REASON: tabela temporaria para performance improvements
+declare dummy number(1);
+begin
+  select 1 into dummy 
+  from all_tables 
+  where owner = 'ALERT' and table_name = 'SCH_TMPTAB_VARGS';
+
+exception
+  when no_data_found then
+    execute immediate 'CREATE GLOBAL TEMPORARY TABLE SCH_TMPTAB_VARGS(argtype NUMBER(4), id VARCHAR2(200))';
+    execute immediate 'comment on table SCH_TMPTAB_VARGS is ''global temporary table used in pk_schedule_common.get_vacancies and get_schedules for varchar arguments''';
+    execute immediate 'comment on column SCH_TMPTAB_VARGS.ARGTYPE is ''tipo de argumento. para as pesquisas por type e status''';
+    execute immediate 'comment on column SCH_TMPTAB_VARGS.ID is ''valor a usar na pesquisa, para o contexto dado por argtype''';
+end;
+--END
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-01-2013
+-- CHANGE REASON: ALERT-246442
+begin
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', 
+                                           i_obj_name => 'SCH_TMPTAB_VARGS', 
+                                           i_obj_type => 'TABLE', 
+                                           i_flg_category => 'DSV');
+end;
+/
+--CHANGE END: Telmo
+
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 21/01/2016 10:29
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON COLUMN SCH_TMPTAB_VARGS.ARGTYPE is 'Type of argument. eg duration , room , etc .';
+COMMENT ON COLUMN SCH_TMPTAB_VARGS.ID is 'Value to use in the search for the context given by argtype';
+-- CHANGE END:  jose.m.silva

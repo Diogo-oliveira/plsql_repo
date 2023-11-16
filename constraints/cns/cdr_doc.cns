@@ -1,0 +1,66 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 28/05/2014 16:40
+-- CHANGE REASON: [ALERT-286304] 
+declare
+  others exception;
+  pragma exception_init(others, -02260);
+begin
+  execute immediate 'alter TABLE CDR_DOC ADD CONSTRAINT  CDR_DOC_PK primary key (ID_CDR_DOC)';
+exception when others then
+  dbms_output.put_line('unique key CDRDOC_ID_CDR_DOC exists!');
+end;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 28/05/2014 16:40
+-- CHANGE REASON: [ALERT-286304] 
+declare
+  others exception;
+  pragma exception_init(others, -02260);
+begin
+  execute immediate 'alter TABLE CDR_DOC ADD CONSTRAINT CDRDOC_ITEM_TYPE FOREIGN KEY (ID_CDR_DOC_ITEM_TYPE) REFERENCES CDR_DOC_ITEM_TYPE (ID_CDR_DOC_ITEM_TYPE)';
+exception when others then
+  dbms_output.put_line('unique key CDRDOC_ITEM_TYPE exists!');
+end;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 28/05/2014 16:40
+-- CHANGE REASON: [ALERT-286304] 
+declare
+  others exception;
+  pragma exception_init(others, -02260);
+begin
+  execute immediate 'alter TABLE CDR_DOC ADD CONSTRAINT CDRDOC_DOC_TYPE FOREIGN KEY (ID_CDR_DOC_TYPE) REFERENCES CDR_DOC_TYPE(ID_CDR_DOC_TYPE)';
+exception when others then
+  dbms_output.put_line('unique key CDRDOC_DOC_TYPE exists!');
+end;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 28/05/2014 16:40
+-- CHANGE REASON: [ALERT-286304] 
+begin
+  execute immediate 'alter TABLE CDR_DOC ADD CONSTRAINT CDRDOC_AVAILABLE_CHK CHECK ( FLG_AVAILABLE IN (''Y'',''N'')) ENABLE';
+exception when others then
+dbms_output.put_line('ALTER TABLE CDR_DOC ADD FLG_AVAILABLE ERROR!');   
+end;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 28/05/2014 16:40
+-- CHANGE REASON: [ALERT-286304] 
+declare
+  others exception;
+  pragma exception_init(others, -02260);
+begin
+  execute immediate 'alter TABLE CDR_DOC ADD CONSTRAINT CDRDOC_INSTANCE FOREIGN KEY (ID_CDR_DOC_INSTANCE) REFERENCES CDR_DOC_INSTANCE (ID_CDR_DOC_INSTANCE)';
+exception when others then
+  dbms_output.put_line('unique key CDRDOC_INSTANCE exists!');
+end;
+/
+-- CHANGE END: mario.mineiro

@@ -1,0 +1,28 @@
+
+
+  CREATE TABLE EXAM_DRUG
+   (	ID_EXAM_DRUG NUMBER(24,0) NOT NULL ENABLE,
+	ID_EXAM NUMBER(12,0) NOT NULL ENABLE,
+	ID_DRUG NUMBER(12,0) NOT NULL ENABLE,
+	RANK NUMBER(24,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE exam_drug IS 'Exames q precisam de medicamentos p/ serem executadas.Tb serve para verificar se um exame utiliza produtos que possam interagir com medicamentos que o utente anda a tomar (verificando as interacções medicamentosas entre os medicamentos associados aos exames e os medicamentos prescritos ao utente)' ;
+
+
+-- CHANGED BY:  NELSON CANASTRO
+-- CHANGE DATE: 01/09/2010 10:50
+-- CHANGE REASON: [ALERT-121259] Convert all ID_Drug columns to varchar2(255)
+    ALTER TABLE EXAM_DRUG add id_drug_new VARCHAR2(255);
+
+    UPDATE EXAM_DRUG
+       SET id_drug_new = to_char(id_drug);
+
+    ALTER TABLE EXAM_DRUG drop CONSTRAINT edg_drug_fk;
+    ALTER TABLE EXAM_DRUG drop column id_drug;
+    ALTER TABLE EXAM_DRUG rename column id_drug_new TO id_drug;
+    ALTER TABLE EXAM_DRUG modify id_drug VARCHAR2(255) NOT NULL;
+-- CHANGE END:  NELSON CANASTRO

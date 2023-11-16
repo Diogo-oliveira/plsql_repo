@@ -1,0 +1,40 @@
+
+
+BEGIN
+     EXECUTE IMMEDIATE 'ALTER TABLE epis_fast_track ADD CONSTRAINT EFT_PK PRIMARY KEY (ID_EPIS_TRIAGE) ENABLE';
+EXCEPTION
+  WHEN OTHERS THEN
+	 NULL;
+END;
+/
+
+BEGIN
+     EXECUTE IMMEDIATE 'alter table epis_fast_track add constraint EFT_FLG_ST_CHK check (FLG_STATUS IN (''A'',''D''))';
+EXCEPTION
+  WHEN OTHERS THEN
+	 NULL;
+END;
+/
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 26/06/2018 10:46
+-- CHANGE REASON: 
+--                [DB] Improvements on Fast-track functionality
+ALTER TABLE epis_fast_track DROP CONSTRAINT EFT_FLG_TYPE_CHK;
+ALTER TABLE epis_fast_track ADD CONSTRAINT EFT_FLG_TYPE_CHK CHECK (FLG_TYPE IN ('P', 'S', 'E')); 
+ALTER TABLE epis_fast_track DROP CONSTRAINT EFT_FLG_ST_CHK;
+ALTER TABLE epis_fast_track ADD CONSTRAINT EFT_FLG_ST_CHK CHECK (FLG_STATUS IN ('A', 'D', 'C')); 
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 26/06/2018 10:46
+-- CHANGE REASON: 
+--                [DB] Improvements on Fast-track functionality
+ALTER TABLE epis_fast_track_hist DROP CONSTRAINT EFTH_FLG_ST_CHK;
+ALTER TABLE epis_fast_track_hist DROP CONSTRAINT EFTH_FLG_TYPE_CHK;
+
+ALTER TABLE epis_fast_track_hist ADD CONSTRAINT EFTH_FLG_ST_CHK CHECK (FLG_STATUS IN ('A', 'D', 'C')); 
+ALTER TABLE epis_fast_track_hist ADD CONSTRAINT EFTH_FLG_TYPE_CHK CHECK (FLG_TYPE IN ('P', 'S', 'E')); 
+-- CHANGE END: Elisabete Bugalho

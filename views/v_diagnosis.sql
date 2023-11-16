@@ -1,0 +1,21 @@
+CREATE OR REPLACE VIEW v_diagnosis AS
+SELECT id_diagnosis,
+       id_diagnosis_parent,
+       code_diagnosis,
+       code_icd,
+       flg_select,
+       flg_job,
+       flg_available,
+       adw_last_update,
+       flg_type,
+       flg_other,
+       gender,
+       age_min,
+       age_max,
+       mdm_coding,
+       flg_family,
+       flg_pos_birth,
+       flg_subtype,
+       id_content,
+       id_codification
+  FROM diagnosis;

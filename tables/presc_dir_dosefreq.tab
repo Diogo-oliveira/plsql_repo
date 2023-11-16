@@ -1,0 +1,97 @@
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195] 
+declare
+l_count pls_integer;
+l_sql_stat varchar2(4000) := '  CREATE TABLE ALERT.PRESC_DIR_DOSEFREQ
+   (ID_PRESC_DIR_DOSEFREQ NUMBER(24,0) NOT NULL,
+    ID_PRESC_DIR_INTERVAL NUMBER(24,0) NOT NULL,
+    RANK NUMBER(6,0),
+    FLG_DOSE_TYPE VARCHAR2(1 CHAR) NOT NULL,
+    DOSE NUMBER(24,4),
+    ID_UNIT_DOSE NUMBER(24,0),
+    DOSE_RNG_MIN NUMBER(24,4),
+    ID_UNIT_RNG_MIN NUMBER(24,0),
+    DOSE_RNG_MAX NUMBER(24,4),
+    ID_UNIT_RNG_MAX NUMBER(24,0),
+    ID_SLIDING_SCALE NUMBER(24,0),
+    FLG_FREQ_TYPE VARCHAR2(2 CHAR),
+    ID_PRESC_DIR_FREQUENCY NUMBER(24,0),
+    ID_GROUP NUMBER(6,0),
+      EDF_RI_AMOUNT NUMBER(6,0),
+    EDF_RI_ID_UNIT NUMBER(24,0),
+    EDF_DAILY_TAKES NUMBER(6,0),
+    EDF_EXACT_HOUR INTERVAL DAY (3) TO SECOND (3),
+    DF_ID_PRESC_DIR_FREQUENCY NUMBER(24,0),
+    DF_RI_AMOUNT NUMBER(6,0),
+    DF_RI_ID_UNIT NUMBER(24,0),
+    DOSEFREQ_HOUR INTERVAL DAY (3) TO SECOND (3),
+    CREATE_USER VARCHAR2(24 CHAR),
+    CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+    CREATE_INSTITUTION NUMBER(24,0),
+    UPDATE_USER VARCHAR2(24 CHAR),
+    UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+    UPDATE_INSTITUTION NUMBER(24,0)
+  )';
+		
+begin
+
+select count(1) into l_count from all_tables where table_name = 'PRESC_DIR_DOSEFREQ' and owner = 'ALERT';
+
+if l_count = 0 then
+  execute immediate (l_sql_stat);
+
+end if;
+
+end;
+/
+-- CHANGE END: Nuno Ferreira
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195]
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.ID_PRESC_DIR_DOSEFREQ IS 'Prescription directions dose and frequency ID';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.ID_PRESC_DIR_INTERVAL IS 'Prescription directions interval ID';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.RANK IS 'Dose and Frequency rank';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.FLG_DOSE_TYPE IS 'Flag Dose Type: V-Value; R-Range values; S-Sliding Scale';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.DOSE IS 'Dose amount';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.ID_UNIT_DOSE IS 'Dose unit measure ID';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.DOSE_RNG_MIN IS 'Dose Interval - MIN amount';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.ID_UNIT_RNG_MIN IS 'Dose Interval - unit measure ID for MIN value';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.DOSE_RNG_MAX IS 'Dose Interval - MAX amount';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.ID_UNIT_RNG_MAX IS 'Dose Interval - unit measure ID for MIN value';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.ID_SLIDING_SCALE IS 'Sliding scale ID';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.FLG_FREQ_TYPE IS 'Frequency Type';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.ID_PRESC_DIR_FREQUENCY IS 'Most Frequent / Pre-Defined Hours - Prescription Directions Frequency ID';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.ID_GROUP IS 'Aggregation id. This is necessary to aggregate each pre-defined frequency which has more than one time associated. |||| Example: id_presc_dir_frequency = 2. In
+ this id_presc_dir_frequency, we have, for instance, 2 x day - 2h, 4h; It is necessary to insert a unique id_group value for this id_presc_dir_frequen
+cy in each id_presc_dir_freq_soft_inst for this frequency';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.EDF_RI_AMOUNT IS 'Each Day - Regular inteval amount';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.EDF_RI_ID_UNIT IS 'Each Day - Regular interval amount unit measure ID';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.EDF_DAILY_TAKES IS 'Each Day - Daily takes';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.EDF_EXACT_HOUR IS 'Each Day - Daily exact hour';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.DF_ID_PRESC_DIR_FREQUENCY IS 'Daily - Prescription Directions Frequency ID';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.DF_RI_AMOUNT IS 'Daily - Regular inteval amount';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.DF_RI_ID_UNIT IS 'Daily - Regular interval amount unit measure ID';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.DOSEFREQ_HOUR IS 'Most frequent hour for date computation';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.CREATE_USER IS 'Creation User';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.CREATE_TIME IS 'Creation Time';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.CREATE_INSTITUTION IS 'Creation Institution';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.UPDATE_USER IS 'Update User';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.UPDATE_TIME IS 'Update Time';
+   COMMENT ON COLUMN ALERT.PRESC_DIR_DOSEFREQ.UPDATE_INSTITUTION IS 'Update Institution';
+   COMMENT ON TABLE ALERT.PRESC_DIR_DOSEFREQ  IS 'Prescription directions doses and frequencies';
+-- CHANGE END: Nuno Ferreira
+
+-- CHANGED BY: Pedro Quinteiro
+-- CHANGE DATE: 18/01/2011 16:22
+-- CHANGE REASON: [ALERT-154894] 
+alter table presc_dir_dosefreq modify flg_dose_type null
+/
+-- CHANGE END: Pedro Quinteiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:06
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_DIR_DOSEFREQ IS 'Prescription directions doses and frequencies [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

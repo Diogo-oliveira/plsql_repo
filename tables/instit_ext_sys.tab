@@ -1,0 +1,26 @@
+
+
+  CREATE TABLE INSTIT_EXT_SYS
+   (	ID_INSTIT_EXT_SYS NUMBER(24,0) NOT NULL ENABLE,
+	ID_EXTERNAL_SYS NUMBER(12,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	VALUE VARCHAR2(30) NOT NULL ENABLE,
+	ID_DEP_CLIN_SERV NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE instit_ext_sys IS 'Correspondência dos identificadores únicos das instituições, no Alert e nos sistemas externos' ;
+
+COMMENT ON COLUMN instit_ext_sys.value IS 'Identificador único da instituição, no sistema externo indicado' ;
+COMMENT ON COLUMN instit_ext_sys.id_dep_clin_serv IS 'Departamento e serviço clínico (só é preenchida no caso dos códigos para as receitas)' ;
+
+ALTER TABLE INSTIT_EXT_SYS 
+ ADD (ID_EPIS_TYPE  NUMBER(12)
+ ,ID_CLINICAL_SERVICE  NUMBER(12)
+ );
+
+COMMENT ON COLUMN INSTIT_EXT_SYS.ID_EPIS_TYPE IS 'ID do tipo de episódio (só preenchido nos registos relativos a códigos das instituições nas receitas)';
+
+COMMENT ON COLUMN INSTIT_EXT_SYS.ID_CLINICAL_SERVICE IS 'ID do serviço clínico (só preenchido nos registos relativos a códigos das instituições nas receitas)';
+
+alter table instit_ext_sys drop column id_dep_clin_serv;

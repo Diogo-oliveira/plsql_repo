@@ -1,0 +1,42 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 11:33
+-- CHANGE REASON: [ALERT-12334 ] 
+alter table SUPPLY_REASON
+  add constraint SRN_PK primary key (ID_SUPPLY_REASON)
+  using index 
+  tablespace TABLE_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/10/2010 14:20
+-- CHANGE REASON: [ALERT-130879] ID_CONTENT
+alter table supply_reason add constraint srn_flg_available_chk check (flg_available in ('Y','N'));
+alter table supply_reason add constraint srn_flg_type_chk check (flg_type in ('R','D'));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 05/11/2010 12:03
+-- CHANGE REASON: [ALERT-127624] Missing cancel reasons
+alter table supply_reason drop constraint srn_flg_type_chk;
+alter table supply_reason add constraint srn_flg_type_chk check (flg_type in ('R','D','S'));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 02/12/2010 16:49
+-- CHANGE REASON: [ALERT-146441] Associate a surgical procedure to supplies
+alter table supply_reason drop constraint SRN_FLG_TYPE_CHK;
+
+ALTER TABLE supply_reason
+  ADD CONSTRAINT SRN_FLG_TYPE_CHK
+  CHECK (flg_type IN ('R','D','S','Q'));
+ 
+-- CHANGE END: Filipe Silva

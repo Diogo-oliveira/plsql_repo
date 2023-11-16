@@ -1,0 +1,142 @@
+
+
+  CREATE TABLE HIDRICS_TYPE
+   (	ID_HIDRICS_TYPE NUMBER(24,0) NOT NULL ENABLE,
+	CODE_HIDRICS_TYPE VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(24,0),
+	ADW_LAST_UPDATE DATE,
+	ACRONYM VARCHAR2(10) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE hidrics_type IS 'Tipos de Hidricos' ;
+
+COMMENT ON COLUMN hidrics_type.id_hidrics_type IS 'Chave primária' ;
+COMMENT ON COLUMN hidrics_type.code_hidrics_type IS 'Código para obter os tipos de hidricos por língua' ;
+COMMENT ON COLUMN hidrics_type.flg_available IS 'Disponibilidade do registo' ;
+COMMENT ON COLUMN hidrics_type.rank IS 'Ordenação' ;
+COMMENT ON COLUMN hidrics_type.adw_last_update IS 'Data da última alteração' ;
+
+
+
+ALTER TABLE Hidrics_Type ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN Hidrics_Type.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+
+-- INPATIENT LMAIA 07-02-2009
+ALTER TABLE hidrics_type ADD (FLG_TI_TYPE VARCHAR2(2));
+COMMENT ON COLUMN hidrics_type.FLG_TI_TYPE  IS 'This field should be the same as the one stored in table TI_LOG.';
+-- END
+
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:25
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.HIDRICS_TYPE MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/11/2009 13:08
+-- CHANGE REASON: [ALERT-56932] 
+alter table
+   hidrics_type
+drop column
+   ADW_LAST_UPDATE;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 19/11/2009 08:18
+-- CHANGE REASON: [ALERT-56932] 
+ALTER TABLE HIDRICS_TYPE MODIFY FLG_TI_TYPE NOT NULL;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 22:36
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+alter table HIDRICS_TYPE add ID_PARENT NUMBER(24);
+comment on column HIDRICS_TYPE.ID_PARENT is 'Parent hidric type';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:43
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+COMMENT ON TABLE hidrics_type IS 'Hidrics Type' ;
+
+COMMENT ON COLUMN hidrics_type.id_hidrics_type IS 'Primary Key ID' ;
+COMMENT ON COLUMN hidrics_type.code_hidrics_type IS 'Code to get the hidrics description by language.' ;
+COMMENT ON COLUMN hidrics_type.flg_available IS 'Registry availability: Y - Available; N - Not available.' ;
+COMMENT ON COLUMN hidrics_type.rank IS 'Rank to be used in sorting' ;
+COMMENT ON COLUMN hidrics_type.acronym IS 'Acronym' ;
+COMMENT ON COLUMN hidrics_type.id_content IS 'Content Unique ID.' ;
+
+
+alter table hidrics_type modify ( code_hidrics_type  varchar2(200 char));
+alter table hidrics_type modify ( flg_available  varchar2(1 char));
+alter table hidrics_type modify ( acronym  varchar2(10 char));
+alter table hidrics_type modify ( id_content  varchar2(200 char));
+alter table hidrics_type modify ( flg_ti_type  varchar2(2 char));
+alter table hidrics_type modify ( create_user  varchar2(24 char));
+alter table hidrics_type modify ( update_user  varchar2(24 char));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/02/2011 15:21
+-- CHANGE REASON: [ALERT-153427 ] Bowel movements
+COMMENT ON TABLE hidrics_type IS 'Hidrics Type' ;
+
+COMMENT ON COLUMN hidrics_type.id_hidrics_type IS 'Primary Key ID' ;
+COMMENT ON COLUMN hidrics_type.code_hidrics_type IS 'Code to get the hidrics description by language.' ;
+COMMENT ON COLUMN hidrics_type.flg_available IS 'Registry availability: Y - Available; N - Not available.' ;
+COMMENT ON COLUMN hidrics_type.rank IS 'Rank to be used in sorting' ;
+COMMENT ON COLUMN hidrics_type.acronym IS 'Acronym' ;
+COMMENT ON COLUMN hidrics_type.id_content IS 'Content Unique ID.' ;
+
+
+alter table hidrics_type modify ( code_hidrics_type  varchar2(200 char));
+drop index HIDRICS_TYPE_CNT_UK;
+
+alter table hidrics_type modify ( flg_available  varchar2(1 char));
+
+CREATE UNIQUE INDEX HIDRICS_TYPE_CNT_UK ON ALERT.HIDRICS_TYPE (CASE WHEN ID_CONTENT IS NOT NULL AND nvl(FLG_AVAILABLE, 'Y') <> 'N'
+ THEN ID_CONTENT END,
+CASE WHEN ID_CONTENT IS NOT NULL AND nvl(FLG_AVAILABLE, 'Y') <> 'N'
+ THEN FLG_AVAILABLE END);
+ 
+alter table hidrics_type modify ( acronym  varchar2(10 char));
+alter table hidrics_type modify ( id_content  varchar2(200 char));
+alter table hidrics_type modify ( flg_ti_type  varchar2(2 char));
+alter table hidrics_type modify ( create_user  varchar2(24 char));
+alter table hidrics_type modify ( update_user  varchar2(24 char));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/02/2011 16:02
+-- CHANGE REASON: [ALERT-153427 ] Bowel movements
+COMMENT ON TABLE hidrics_type IS 'Hidrics Type' ;
+
+COMMENT ON COLUMN hidrics_type.id_hidrics_type IS 'Primary Key ID' ;
+COMMENT ON COLUMN hidrics_type.code_hidrics_type IS 'Code to get the hidrics description by language.' ;
+COMMENT ON COLUMN hidrics_type.flg_available IS 'Registry availability: Y - Available; N - Not available.' ;
+COMMENT ON COLUMN hidrics_type.rank IS 'Rank to be used in sorting' ;
+COMMENT ON COLUMN hidrics_type.acronym IS 'Acronym' ;
+COMMENT ON COLUMN hidrics_type.id_content IS 'Content Unique ID.' ;
+
+
+alter table hidrics_type modify ( code_hidrics_type  varchar2(200 char));
+drop index HIDRICS_TYPE_CNT_UK;
+
+alter table hidrics_type modify ( flg_available  varchar2(1 char));
+alter table hidrics_type modify ( id_content  varchar2(200 char));
+
+CREATE UNIQUE INDEX HIDRICS_TYPE_CNT_UK ON ALERT.HIDRICS_TYPE (CASE WHEN ID_CONTENT IS NOT NULL AND nvl(FLG_AVAILABLE, 'Y') <> 'N'
+ THEN ID_CONTENT END,
+CASE WHEN ID_CONTENT IS NOT NULL AND nvl(FLG_AVAILABLE, 'Y') <> 'N'
+ THEN FLG_AVAILABLE END);
+ 
+alter table hidrics_type modify ( acronym  varchar2(10 char));
+alter table hidrics_type modify ( flg_ti_type  varchar2(2 char));
+alter table hidrics_type modify ( create_user  varchar2(24 char));
+alter table hidrics_type modify ( update_user  varchar2(24 char));
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,38 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 16/12/2014 18:20
+-- CHANGE REASON: [ALERT-304404] 
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner            => 'ALERT',
+                                             i_obj_name         => 'FUNC_HELP_ICON_GROUP',
+                                             i_obj_type         => 'TABLE',
+                                             i_flg_category     => 'DSV', --Avaliar o uso de PRM
+                                             i_responsible_team => 'TOOLS');
+
+    pk_versioning.run(i_sql => 'CREATE TABLE FUNC_HELP_ICON_GROUP (
+    ID_FUNC_HELP_ICON_GROUP   NUMBER(24) NOT NULL,
+    CODE_FH_ICON_GROUP        AS (''FUNC_HELP_ICON_GROUP.CODE_FH_ICON_GROUP.''||TO_CHAR(ID_FUNC_HELP_ICON_GROUP)),
+    INTERNAL_NAME             VARCHAR2(200 CHAR) NOT NULL,
+    FLG_AVAILABLE             VARCHAR2(1 CHAR) NOT NULL,
+    CREATE_USER               VARCHAR2(200 CHAR),
+    CREATE_TIME               TIMESTAMP WITH LOCAL TIME ZONE,
+    CREATE_INSTITUTION        NUMBER(24),
+    UPDATE_USER               VARCHAR2(200 CHAR),
+    UPDATE_TIME               TIMESTAMP WITH LOCAL TIME ZONE,
+    UPDATE_INSTITUTION        NUMBER(24))');
+    
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE FUNC_HELP_ICON_GROUP IS ''Functionality help icon group registration''';
+    
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_GROUP.ID_FUNC_HELP_ICON_GROUP   IS ''Icon group unique identifier''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_GROUP.CODE_FH_ICON_GROUP        IS ''Code Functionality Help used in translation''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_GROUP.INTERNAL_NAME             IS ''Icon group internal name''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_GROUP.FLG_AVAILABLE             IS ''Flag available (Y\N)''';
+    --
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_GROUP.create_user        IS ''Professional that created the registry''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_GROUP.create_time        IS ''Date of the registry creation''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_GROUP.create_institution IS ''Id of the institution where the registry was created''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_GROUP.update_user        IS ''Last professional that updated the registry''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_GROUP.update_time        IS ''Date of the last update to the registry''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN FUNC_HELP_ICON_GROUP.update_institution IS ''Id of the last institution where the registry was updated''';    
+END;
+/
+-- CHANGE END: Gustavo Serrano

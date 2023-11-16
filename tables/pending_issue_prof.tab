@@ -1,0 +1,91 @@
+-- pending_issue_prof
+
+CREATE TABLE pending_issue_prof
+(
+    id_pending_issue_prof       NUMBER(24,0) NOT NULL,
+		id_pending_issue_message    NUMBER(24,0) NOT NULL,
+		id_professional             NUMBER(24,0) NOT NULL,
+		flg_status                  VARCHAR2(1),
+    dt_read                     TIMESTAMP WITH TIME ZONE,
+		dt_cancel                   TIMESTAMP WITH TIME ZONE
+);
+
+-- COMMENTS
+COMMENT ON COLUMN pending_issue_prof.id_pending_issue_prof IS 'Primary key';
+
+COMMENT ON COLUMN pending_issue_prof.id_pending_issue_message IS 'Message ID';
+
+COMMENT ON COLUMN pending_issue_prof.id_professional IS 'Professional ID';
+
+COMMENT ON COLUMN pending_issue_prof.dt_read IS 'Message''s read date';
+
+COMMENT ON COLUMN pending_issue_prof.dt_cancel IS 'Message''s cancel date';
+
+COMMENT ON COLUMN pending_issue_prof.flg_status IS 'Message status: A - Active, C - Canceled';
+
+COMMENT ON TABLE pending_issue_prof IS 'Tabela responsável pela relação entre as mensagens e os profissionais responsáveis.';
+
+
+
+-- CONSTRAINTS
+ALTER TABLE pending_issue_prof ADD CONSTRAINT PIP_ID_PIP_PK PRIMARY KEY (id_pending_issue_prof);
+
+ALTER TABLE pending_issue_prof ADD CONSTRAINT PIP_ID_PIM_FK FOREIGN KEY (id_pending_issue_message) REFERENCES PENDING_ISSUE_MESSAGE (id_pending_issue_message);
+
+ALTER TABLE pending_issue_prof ADD CONSTRAINT PIP_ID_PROF_FK FOREIGN KEY (id_professional) REFERENCES PROFESSIONAL (ID_PROFESSIONAL);
+
+ALTER TABLE pending_issue_prof ADD CONSTRAINT PIP_FLG_STATUS_FK CHECK (flg_status IN ('A', 'C'));
+
+
+
+drop table pending_issue_prof cascade constraint;
+
+
+
+-- pending_issue_prof
+
+CREATE TABLE pending_issue_prof
+(
+		id_pending_issue            NUMBER(24,0) NOT NULL,
+		id_pending_issue_message    NUMBER(24,0) NOT NULL,
+		id_professional             NUMBER(24,0) NOT NULL,
+		flg_status                  VARCHAR2(1),
+    dt_read                     TIMESTAMP WITH TIME ZONE,
+		dt_cancel                   TIMESTAMP WITH TIME ZONE
+);
+
+-- COMMENTS
+COMMENT ON COLUMN pending_issue_prof.id_pending_issue IS 'Part of the composite primary key - ID Pending Issue';
+
+COMMENT ON COLUMN pending_issue_prof.id_pending_issue_message IS 'Part of the composite primary key - Message Number';
+
+COMMENT ON COLUMN pending_issue_prof.id_professional IS 'Part of the composite primary key - Professional ID';
+
+COMMENT ON COLUMN pending_issue_prof.dt_read IS 'Message''s read date';
+
+COMMENT ON COLUMN pending_issue_prof.dt_cancel IS 'Message''s cancel date';
+
+COMMENT ON COLUMN pending_issue_prof.flg_status IS 'Message status: A - Active, C - Canceled';
+
+COMMENT ON TABLE pending_issue_prof IS 'Tabela responsável pela relação entre as mensagens e os profissionais responsáveis.';
+
+
+
+-- CONSTRAINTS
+ALTER TABLE pending_issue_prof ADD CONSTRAINT PIP_ID_PIP_PK PRIMARY KEY (id_pending_issue, id_pending_issue_message, id_professional);
+
+ALTER TABLE pending_issue_prof ADD CONSTRAINT PIP_ID_PIM_FK FOREIGN KEY (id_pending_issue_message, id_pending_issue) REFERENCES PENDING_ISSUE_MESSAGE (id_pending_issue_message, id_pending_issue);
+
+ALTER TABLE pending_issue_prof ADD CONSTRAINT PIP_ID_PROF_FK FOREIGN KEY (id_professional) REFERENCES PROFESSIONAL (ID_PROFESSIONAL);
+
+ALTER TABLE pending_issue_prof ADD CONSTRAINT PIP_FLG_STATUS_CHK CHECK (flg_status IN ('A', 'C'));
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table PENDING_ISSUE_PROF
+  is 'Table responsible for the relationship between the messages and responsible professionals.';
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,17 @@
+
+declare
+l_sql       varchar2(4000);
+pl          constant varchar2(0010 char) := '''';
+begin
+l_sql := 'ALTER TABLE ALERT.PROF_ALL_PROFILES_H ADD CONSTRAINT PAP_FLG_ACTION_CHK CHECK ( FLG_ACTION IN('||pl||'G'||pl||','||pl||'R'||pl||', '||pl||'X'||pl||') ) ';
+pk_versioning.run(l_sql);
+end;
+/
+
+declare
+l_sql       varchar2(4000);
+begin
+l_sql := 'ALTER TABLE ALERT.PROF_ALL_PROFILES_H ADD CONSTRAINT PAP_H_PK PRIMARY KEY ( ID_PK ) ENABLE';
+pk_versioning.run(l_sql);
+end;
+/

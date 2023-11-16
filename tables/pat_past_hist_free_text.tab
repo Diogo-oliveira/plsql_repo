@@ -1,0 +1,72 @@
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 24/01/2011 14:50
+-- CHANGE REASON: [ALERT-157301] New developments in PastHistory, free text values added(DML STEP 1)(v.2.6.0.5)
+--                
+CREATE TABLE pat_past_hist_free_text (
+       id_pat_ph_ft                  NUMBER(24,0)                         NOT NULL,
+       text                          CLOB                                 NOT NULL,
+       id_patient                    NUMBER(24,0)                         NOT NULL,
+       id_episode                    NUMBER(24,0)                         NOT NULL,
+       id_visit                      NUMBER(24,0)                         NOT NULL,
+       id_professional               NUMBER(24,0)                         NOT NULL,
+       dt_register                   TIMESTAMP(6) WITH LOCAL TIME ZONE    NOT NULL,
+       flg_type                      VARCHAR2(2)                          NOT NULL,
+       flg_status                    VARCHAR2(2)                          NOT NULL,
+       id_prof_canceled              NUMBER(24,0),
+       dt_cancel                     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       id_cancel_reason              NUMBER(24,0),
+       cancel_notes                  VARCHAR2(4000),
+       create_user                   VARCHAR2(24),
+       create_time                   TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution            NUMBER(24),
+       update_user                   VARCHAR2(24),
+       update_time                   TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution            NUMBER(24)
+    );
+COMMENT ON TABLE pat_past_hist_free_text IS 'Past history free text values';
+COMMENT ON COLUMN pat_past_hist_free_text.id_pat_ph_ft IS 'Primary key for past history free text values';
+COMMENT ON COLUMN pat_past_hist_free_text.text IS 'Past history free text values';
+COMMENT ON COLUMN pat_past_hist_free_text.id_patient IS 'Past history free text patient with register';
+COMMENT ON COLUMN pat_past_hist_free_text.id_episode IS 'Past history free text episode with register';
+COMMENT ON COLUMN pat_past_hist_free_text.id_visit IS 'Past history free text visit with register';
+COMMENT ON COLUMN pat_past_hist_free_text.id_professional IS 'Past history free text user that registered';
+COMMENT ON COLUMN pat_past_hist_free_text.dt_register IS 'Past history free text date of the register';
+COMMENT ON COLUMN pat_past_hist_free_text.flg_type IS 'Type of past history: (M) Medical, (S) Surgical, (A) Congenital anomalies';
+COMMENT ON COLUMN pat_past_hist_free_text.flg_status IS 'Past history free text status of the register: A - active(first register) E - Edited(Edited value) C - Canceled';
+COMMENT ON COLUMN pat_past_hist_free_text.id_prof_canceled is 'User that canceled register';
+COMMENT ON COLUMN pat_past_hist_free_text.dt_cancel is 'Cancel date';
+COMMENT ON COLUMN pat_past_hist_free_text.id_cancel_reason is 'Cancel reason ID';
+COMMENT ON COLUMN pat_past_hist_free_text.cancel_notes is 'Cancel notes';
+COMMENT ON COLUMN pat_past_hist_free_text.create_user is 'Creation User';
+COMMENT ON COLUMN pat_past_hist_free_text.create_time is 'Creation Time';
+COMMENT ON COLUMN pat_past_hist_free_text.create_institution is 'Creation Institution';
+COMMENT ON COLUMN pat_past_hist_free_text.update_user is 'Update User';
+COMMENT ON COLUMN pat_past_hist_free_text.update_time is 'Update Time';
+COMMENT ON COLUMN pat_past_hist_free_text.update_institution is 'Update Institution';
+-- CHANGE END: Rui Duarte
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 17/08/2011 18:46
+-- CHANGE REASON: [ALERT-190780] 
+alter table PAT_PAST_HIST_FREE_TEXT
+add (
+    id_doc_area           NUMBER(24)
+    );
+
+comment on column PAT_PAST_HIST_FREE_TEXT.id_doc_area
+  is 'Doc Area where the text was created';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:32
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.pat_past_hist_free_text move lob(text) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

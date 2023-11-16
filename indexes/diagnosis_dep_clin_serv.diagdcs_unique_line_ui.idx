@@ -1,0 +1,20 @@
+create unique index diagdcs_unique_line_ui on diagnosis_dep_clin_serv(id_dep_clin_serv,id_diagnosis,flg_type,id_institution,id_professional,id_software); 
+
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 06/06/2011 12:29
+-- CHANGE REASON: [ALERT-183624] 
+BEGIN
+   EXECUTE IMMEDIATE 'DROP INDEX DIAGDCS_UNIQUE_LINE_UI';
+EXCEPTION WHEN OTHERS THEN
+  NULL;
+END;
+/
+
+BEGIN
+   EXECUTE IMMEDIATE 'create index diagdcs_unique_line_ui on diagnosis_dep_clin_serv(id_dep_clin_serv,id_diagnosis,id_alert_diagnosis,flg_type,id_institution,id_professional,id_software)';
+EXCEPTION WHEN OTHERS THEN
+  NULL;
+END;
+/
+-- CHANGE END: José Silva

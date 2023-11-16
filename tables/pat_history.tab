@@ -1,0 +1,118 @@
+
+
+  CREATE TABLE PAT_HISTORY
+   (	ID_PAT_HISTORY NUMBER(24,0),
+	ID_PATIENT NUMBER(24,0),
+	DT_PAT_HISTORY DATE,
+	ID_PROF_WRITES NUMBER(24,0),
+	ID_DIAGNOSIS NUMBER(12,0),
+	FLG_STATUS VARCHAR2(1),
+	FLG_TYPE VARCHAR2(1),
+	DESC_DIAGNOSIS VARCHAR2(200),
+	NOTES VARCHAR2(4000),
+	FLG_TYPE_HIST VARCHAR2(240),
+	DT_CANCEL DATE,
+
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTE_CANCEL VARCHAR2(240),
+	MONTH_BEGIN NUMBER(2,0),
+	YEAR_BEGIN NUMBER(4,0),
+	DAY_BEGIN NUMBER(2,0),
+	YEAR_END NUMBER(4,0),
+	MONTH_END NUMBER(2,0),
+	DAY_END NUMBER(2,0),
+	ID_PROF_CONFIRMED NUMBER(24,0),
+	DT_CONFIRMED DATE,
+	ID_PROF_RULLED_OUT NUMBER(24,0),
+	DT_RULLED_OUT DATE,
+	ID_PROF_BASE NUMBER(24,0),
+
+	DT_BASE DATE,
+	ADW_LAST_UPDATE DATE
+   );
+
+
+comment on table PAT_HISTORY
+  is 'Registo da história :Cirúrgica/ Médica/ Familiar/ Social de um paciente';
+
+comment on column PAT_HISTORY.ID_PAT_HISTORY
+  is 'Chave primária';
+comment on column PAT_HISTORY.ID_PATIENT
+  is 'Paciente';
+comment on column PAT_HISTORY.DT_PAT_HISTORY
+  is 'Data de criação';
+comment on column PAT_HISTORY.ID_PROF_WRITES
+  is 'Professional';
+comment on column PAT_HISTORY.ID_DIAGNOSIS
+  is 'Diagnóstico';
+comment on column PAT_HISTORY.FLG_STATUS
+  is 'Estado da hisória do paciente:A -Activo; C - Cancelar; D - Despiste; F - Confirmado; R - Declinar; B -Base';
+comment on column PAT_HISTORY.FLG_TYPE
+  is 'Tipo de diagnóstico.P - Provisório';
+comment on column PAT_HISTORY.DESC_DIAGNOSIS
+  is 'Descrição do diagnóstico';
+comment on column PAT_HISTORY.NOTES
+  is 'Notas familiares ou sociais';
+comment on column PAT_HISTORY.FLG_TYPE_HIST
+  is 'Tipo de história. C - Cirurgica;M - Médica; F- Familiar;S - Social';
+comment on column PAT_HISTORY.DT_CANCEL
+  is 'Data de cancelamento';
+comment on column PAT_HISTORY.ID_PROF_CANCEL
+  is 'Profissional que cancelou';
+comment on column PAT_HISTORY.NOTE_CANCEL
+  is 'Notas de cancelamento';
+comment on column PAT_HISTORY.MONTH_BEGIN
+  is 'Mês (aproximando) de início da história do paciente';
+comment on column PAT_HISTORY.YEAR_BEGIN
+  is 'Ano (aproximando) de início da história do paciente';
+comment on column PAT_HISTORY.DAY_BEGIN
+  is 'Dia (aproximando) de início da história do paciente';
+comment on column PAT_HISTORY.YEAR_END
+  is 'Ano (aproximando) de fim da história do paciente';
+comment on column PAT_HISTORY.MONTH_END
+  is 'Mês (aproximando) de fim da história do paciente';
+comment on column PAT_HISTORY.DAY_END
+  is 'Dia (aproximando) de fim da história do paciente';
+comment on column PAT_HISTORY.ID_PROF_CONFIRMED
+  is 'Profissional que confirmou';
+comment on column PAT_HISTORY.DT_CONFIRMED
+  is 'Data em que se confirmou um diagnóstico diferencial provisório';
+comment on column PAT_HISTORY.ID_PROF_RULLED_OUT
+  is 'Profissional que declinou';
+comment on column PAT_HISTORY.DT_RULLED_OUT
+  is 'Data em que se declinou um diagnóstico diferencial provisório';
+comment on column PAT_HISTORY.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_HISTORY ADD DT_BASE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+ALTER TABLE PAT_HISTORY ADD DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_HISTORY.DT_CANCEL_TSTZ IS 'Data de cancelamento'; 
+ALTER TABLE PAT_HISTORY ADD DT_CONFIRMED_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_HISTORY.DT_CONFIRMED_TSTZ IS 'Data em que se confirmou um diagn¢stico diferencial provis¢rio'; 
+ALTER TABLE PAT_HISTORY ADD DT_PAT_HISTORY_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_HISTORY.DT_PAT_HISTORY_TSTZ IS 'Data de cria‡Æo'; 
+ALTER TABLE PAT_HISTORY ADD DT_RULLED_OUT_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_HISTORY.DT_RULLED_OUT_TSTZ IS 'Data em que se declinou um diagn¢stico diferencial provis¢rio'; 
+
+
+
+
+
+---- DROP DATE TYPE
+ALTER table PAT_HISTORY  DROP column DT_PAT_HISTORY;
+ALTER table PAT_HISTORY  DROP column DT_CANCEL;
+ALTER table PAT_HISTORY  DROP column DT_CONFIRMED;
+ALTER table PAT_HISTORY  DROP column DT_RULLED_OUT;
+ALTER table PAT_HISTORY  DROP column DT_BASE;
+
+
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE PAT_HISTORY ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN PAT_HISTORY.ID_EPISODE IS 'Episode ID';
+-- CHANGE END

@@ -1,0 +1,5 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/11/2011 16:38
+-- CHANGE REASON: Medication alert_product_TR
+GRANT EXECUTE ON PK_API_MED_IN TO ALERT_PRODUCT_MT;
+-- CHANGE END: Elisabete Bugalho

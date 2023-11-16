@@ -1,0 +1,54 @@
+
+
+  CREATE TABLE INF_MED
+   (	MED_ID NUMBER(10,0) CONSTRAINT MED_NULL NOT NULL ENABLE,
+	NOME VARCHAR2(100) CONSTRAINT NOME_NULL NOT NULL ENABLE,
+	DOS_COMP VARCHAR2(1000),
+	GENERICO VARCHAR2(1) CONSTRAINT GENERICO_NULL NOT NULL ENABLE,
+	DATA_AIM DATE,
+	FORM_FARM_ID NUMBER(4,0) CONSTRAINT FORM_FARM_NULL NOT NULL ENABLE,
+	TITULAR_AIM_ID NUMBER(10,0) CONSTRAINT TITULAR_NULL NOT NULL ENABLE,
+	ESTADO_AIM_ID NUMBER(3,0) CONSTRAINT ESTADO_NULL NOT NULL ENABLE,
+	CLASS_DISP_ID NUMBER(3,0) CONSTRAINT CLASS_DISP_NULL NOT NULL ENABLE,
+	CLASS_ESTUP_ID NUMBER(3,0) CONSTRAINT CLASS_ESTUP_NULL NOT NULL ENABLE,
+	DCIPT_ID NUMBER(10,0) CONSTRAINT DCI_NULL NOT NULL ENABLE,
+
+	DATA_ESTADO DATE,
+	DATA_ALTER DATE,
+	DATA_ALT_ESTADO DATE,
+	TIPO_PROD_ID NUMBER(3,0) CONSTRAINT TIPO_PROD_NULL NOT NULL ENABLE,
+	QT_DOS_COMP NUMBER(15,5),
+	UNIT_DOS_COMP VARCHAR2(200),
+	SHORT_DOS_COMP VARCHAR2(100)
+   );
+
+
+COMMENT ON TABLE inf_med IS 'Medicamentos.' ;
+
+COMMENT ON COLUMN inf_med.med_id IS 'Código identificador do medicamento.' ;
+COMMENT ON COLUMN inf_med.nome IS 'Nome autorizado para o medicamento.' ;
+COMMENT ON COLUMN inf_med.dos_comp IS 'Quantidade em substâncias activas.' ;
+COMMENT ON COLUMN inf_med.generico IS 'Medicamento genérico de acordo com a legislação em vigor (S/N).' ;
+COMMENT ON COLUMN inf_med.data_aim IS 'Data da AIM do medicamento.' ;
+COMMENT ON COLUMN inf_med.form_farm_id IS 'Código identificador da forma farmacêutica do medicamento.' ;
+COMMENT ON COLUMN inf_med.titular_aim_id IS 'Código identificador do titular da AIM do medicamento.' ;
+COMMENT ON COLUMN inf_med.estado_aim_id IS 'Código identificador do estado da AIM do medicamento.' ;
+COMMENT ON COLUMN inf_med.class_disp_id IS 'Código identificador da classificação do medicamento quanto ao regime de dispensa ao público do medicamento.' ;
+COMMENT ON COLUMN inf_med.class_estup_id IS 'Código identificador da classificação do medicamento segundo a legislção para substâncias controladas.' ;
+COMMENT ON COLUMN inf_med.dcipt_id IS 'Código identificador da DCI das substâncias activas constituintes do medicamento.' ;
+COMMENT ON COLUMN inf_med.data_estado IS 'Data do último estado do medicamento. Actualizada sempre que há alteração do ESTADO_AIM_ID para um valor diferente de 1, i.e., quando o medicamento deixa de estar autorizado.' ;
+COMMENT ON COLUMN inf_med.data_alter IS 'Data da última alteração ao medicamento. Actualizada sempre que há alteração de qualquer um dos atributos da tabela.' ;
+
+COMMENT ON COLUMN inf_med.data_alt_estado IS 'Data da última alteração do estado do medicamento. Actualizada sempre que há alteração do ESTADO_AIM_ID.' ;
+COMMENT ON COLUMN inf_med.tipo_prod_id IS 'Código identificador do tipo de produto.' ;
+COMMENT ON COLUMN inf_med.qt_dos_comp IS 'Quantidade da dosagem.' ;
+COMMENT ON COLUMN inf_med.unit_dos_comp IS 'Unidade da dosagem' ;
+COMMENT ON COLUMN inf_med.short_dos_comp IS 'Dosagem abreviada: se DOS_COMP tem mais de 60 caracteres e existe ''+'' ou '';'', então = ''Associação''; se DOS_COMP tem mais de 60 caracteres mas não tem ''+'' nem '';'', então = NULL; se DOS_COMP não tem mais de 60 caracteres, então = DOS_COMP.' ;
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/01/2019 11:03
+-- CHANGE REASON: [EMR-10496] Remove unused code from some packages (old medication packages)
+COMMENT ON table INF_MED IS 'Medicamentos. [DEPRECATED]'
+/
+-- CHANGE END: Sofia Mendes

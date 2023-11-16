@@ -1,0 +1,74 @@
+-- Create table
+create table STD_PRESC_DIRECTIONS
+(
+  ID_PRESC_DIRECTIONS    NUMBER(24) not null,
+  FLG_TAKE_TYPE          VARCHAR2(1 CHAR),
+  ID_ROUTE               VARCHAR2(255 CHAR),
+  VERS                   VARCHAR2(255 CHAR),
+  NOTES                  VARCHAR2(4000 CHAR),
+  CREATE_USER            VARCHAR2(24 CHAR),
+  CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION     NUMBER(24),
+  UPDATE_USER            VARCHAR2(24 CHAR),
+  UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION     NUMBER(24),
+  FLG_EXECUTION          VARCHAR2(1) not null,
+  FLG_FREE_TEXT          VARCHAR2(1 CHAR),
+  DIRECTIONS_DESCRIPTION VARCHAR2(4000 CHAR)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table STD_PRESC_DIRECTIONS
+  is 'Prescription directions';
+-- Add comments to the columns 
+comment on column STD_PRESC_DIRECTIONS.ID_PRESC_DIRECTIONS
+  is 'Prescription directions ID';
+comment on column STD_PRESC_DIRECTIONS.FLG_TAKE_TYPE
+  is 'Take type flag: A, C, E, I, N, O, P, S, U';
+comment on column STD_PRESC_DIRECTIONS.ID_ROUTE
+  is 'Route ID';
+comment on column STD_PRESC_DIRECTIONS.VERS
+  is 'Route Market';
+comment on column STD_PRESC_DIRECTIONS.NOTES
+  is 'Directions notes';
+comment on column STD_PRESC_DIRECTIONS.CREATE_USER
+  is 'Creation User';
+comment on column STD_PRESC_DIRECTIONS.CREATE_TIME
+  is 'Creation Time';
+comment on column STD_PRESC_DIRECTIONS.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column STD_PRESC_DIRECTIONS.UPDATE_USER
+  is 'Update User';
+comment on column STD_PRESC_DIRECTIONS.UPDATE_TIME
+  is 'Update Time';
+comment on column STD_PRESC_DIRECTIONS.UPDATE_INSTITUTION
+  is 'Update Institution';
+comment on column STD_PRESC_DIRECTIONS.FLG_EXECUTION
+  is 'B-Before next episode; E-Current episode; N-Next episode';
+comment on column STD_PRESC_DIRECTIONS.FLG_FREE_TEXT
+  is 'Directions described using free text';
+comment on column STD_PRESC_DIRECTIONS.DIRECTIONS_DESCRIPTION
+  is 'Prescription directions description';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table STD_PRESC_DIRECTIONS
+  add constraint SPRESC_DIR_PK primary key (ID_PRESC_DIRECTIONS)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );

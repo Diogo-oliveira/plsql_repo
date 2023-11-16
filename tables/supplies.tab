@@ -1,0 +1,35 @@
+  create table supplies
+   ( id_supplies number(24,0) not null enable,
+     code_supplies varchar2(200) not null enable,
+   	 barcode varchar2(30),
+		 id_unit_measure number(24),
+     flg_available varchar2(1) not null enable,
+     adw_last_update date not null enable );
+
+
+COMMENT ON TABLE supplies IS 'Material associado à execução de MCDTs' ;
+COMMENT ON COLUMN supplies.id_supplies IS 'Chave primária' ;
+COMMENT ON COLUMN supplies.code_supplies IS 'Código de identificação para a descrição multi-língua' ;
+COMMENT ON COLUMN supplies.barcode IS 'Código de barras' ;
+COMMENT ON COLUMN supplies.id_unit_measure IS 'Unidade de medida' ;
+COMMENT ON COLUMN supplies.flg_available IS 'Registo disponível: Y - disponível, N - Não disponível.' ;
+COMMENT ON COLUMN supplies.adw_last_update IS 'Data da última alteração do registo' ;
+
+
+alter table supplies add rank number(20);
+
+COMMENT ON COLUMN supplies.rank IS 'Ordenação' ;
+
+ALTER TABLE supplies DROP COLUMN barcode;
+ALTER TABLE supplies DROP COLUMN id_unit_measure;
+ALTER TABLE supplies DROP COLUMN rank;
+
+
+ALTER TABLE SUPPLIES ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN SUPPLIES.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:25
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.SUPPLIES MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares

@@ -1,0 +1,64 @@
+CREATE TABLE mtos_multiplier (
+       id_mtos_multiplier NUMBER(24) NOT NULL,
+			 id_mtos_param NUMBER(24),
+			 flg_parameter VARCHAR2(2),
+			 id_vital_sign NUMBER(24),
+			 multiplier_value NUMBER(6,4) NOT NULL,
+			 flg_multiplier_type VARCHAR2(1) NOT NULL,
+			 flg_available VARCHAR2(1) NOT NULL,
+			 create_user VARCHAR2(24),
+			 create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 create_institution NUMBER(24),
+			 update_user VARCHAR2(24),
+			 update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 update_institution NUMBER(24)
+) TABLESPACE TABLE_S;
+
+COMMENT ON TABLE mtos_multiplier IS 'Coefficients used in the formulas of the MTOS dataset scores (RTS, TRISS)';
+COMMENT ON COLUMN mtos_multiplier.id_mtos_multiplier IS 'Multiplier identifier';
+COMMENT ON COLUMN mtos_multiplier.id_mtos_param IS 'Parameter identifier';
+COMMENT ON COLUMN mtos_multiplier.flg_parameter IS '(VS) Vital Sign (BZ) Value of B0 coefficient used in TRISS (AI) Coefficient values for the Age Index used in TRISS';
+COMMENT ON COLUMN mtos_multiplier.id_vital_sign IS 'Vital Sign ID - Used for Announced Arrival';
+COMMENT ON COLUMN mtos_multiplier.multiplier_value IS 'Multiplier (coefficient) value';
+COMMENT ON COLUMN mtos_multiplier.flg_multiplier_type IS 'Type of multiplier: (N) Normal multiplier (B) Multiplier for BLUNT mechanism of injury (P) Multiplier for PENETRATING mechanism of injury';
+COMMENT ON COLUMN mtos_multiplier.flg_available IS 'Availability: (Y) Yes (N) No';
+COMMENT ON COLUMN mtos_multiplier.create_user IS 'Creation user';
+COMMENT ON COLUMN mtos_multiplier.create_time IS 'Creation date / time';
+COMMENT ON COLUMN mtos_multiplier.create_institution IS 'Creation institution';
+COMMENT ON COLUMN mtos_multiplier.update_user IS 'Update user';
+COMMENT ON COLUMN mtos_multiplier.update_time IS 'Update date / time';
+COMMENT ON COLUMN mtos_multiplier.update_institution IS 'Update institution';
+
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 05/11/2010 14:55
+-- CHANGE REASON: [ALERT-138136] 
+alter table MTOS_MULTIPLIER modify multiplier_value NUMBER(7,4);
+
+-- Add comments to the columns 
+comment on column MTOS_MULTIPLIER.flg_parameter is '(VS) Vital Sign (BZ) Value of B0 coefficient used in TRISS (AI) Coefficient values for the Age Index used in TRISS (CZ) Value for C0 coefficient used in CRIB II (DZ) Value for D0 coefficient used in APACHE II';
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 08/01/2018 16:00
+-- CHANGE REASON: [CALERT-1672]
+ALTER TABLE mtos_multiplier
+ADD FLG_PARAM_TASK_TYPE VARCHAR2(2) DEFAULT NULL;
+
+UPDATE mtos_multiplier m
+   SET m.FLG_PARAM_TASK_TYPE = 'VS'
+ WHERE m.id_vital_sign IS NOT NULL;
+ 
+ALTER TABLE mtos_multiplier
+ADD ID_PARAM_TASK number(24) DEFAULT NULL;
+
+COMMENT ON COLUMN mtos_multiplier.Flg_Param_Task_Type
+        IS 'Flag than indicates the type of parameter: VS-"Vital Sign"';
+        
+COMMENT ON COLUMN mtos_multiplier.Id_Param_Task
+        IS 'Id task of the parameter (Id related to FLG_PARAM_TASK_TYPE)';
+
+COMMENT ON COLUMN mtos_multiplier.Id_Vital_Sign
+  is 'Vital sign identifier, if the parameter is a vital sign - DEPRECATED';
+-- CHANGE END: Diogo Oliveira

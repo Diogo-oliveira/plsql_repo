@@ -1,0 +1,1 @@
+create or replace type T_TLB_DRUG_UNIT_MEA_INT is table of T_REC_DRUG_UNIT_MEA_INT;

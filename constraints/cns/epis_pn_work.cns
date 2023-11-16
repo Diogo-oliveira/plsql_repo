@@ -1,0 +1,21 @@
+--26/01/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+ALTER TABLE EPIS_PN_WORK
+ ADD (CONSTRAINT EPNW_PK PRIMARY KEY 
+  (ID_EPIS_PN))
+/
+
+ALTER TABLE EPIS_PN_WORK
+ ADD (CONSTRAINT EPW_TYPE_CHK CHECK (FLG_TYPE IN ('P', 'L','CC','H')))
+/
+
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 26/05/2011 10:10
+-- CHANGE REASON: [ALERT-181620 ] Add one new option to Progress Notes functionality to insert information in free text
+alter table epis_pn_work drop constraint EPW_TYPE_CHK;
+
+alter table epis_pn_work add constraint EPW_TYPE_CHK CHECK
+(flg_type in ('P','L','CC','H', 'FT')) ENABLE;
+-- CHANGE END: Sofia Mendes

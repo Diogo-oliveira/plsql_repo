@@ -1,0 +1,17 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+-- Create/Recreate indexes 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955); -- indexes/sequences/tables
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'create index ICSC_ICS_FK_IDX on ICNP_CPLAN_STAND_COMPO (ID_CPLAN_STAND)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

@@ -1,0 +1,49 @@
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 22/11/2010 15:26
+-- CHANGE REASON: [ALERT-143418] PK_REPORTS issue replication
+DECLARE
+    e_name_already_used EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_name_already_used, -00955);
+    l_table_name VARCHAR2(30) := 'rep_scope_inst_soft_market';
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE ' || l_table_name || ' (' || 
+                      'id_rep_scope_ism             NUMBER(24,0) NOT NULL,'             ||
+                      'id_reports                   NUMBER(24,0) NOT NULL,'             ||
+                      'id_rep_section               NUMBER(24,0) NOT NULL,'             ||
+                      'flg_report_type              VARCHAR2(2)  NOT NULL,'             ||
+                      'flg_scope                    VARCHAR2(1)  NOT NULL,'             ||
+                      'id_institution               NUMBER(24,0) NOT NULL,'             ||
+                      'id_software                  NUMBER(24,0) NOT NULL,'             ||
+                      'id_market                    NUMBER(24,0) NOT NULL,'             || 
+                      'CREATE_USER                  VARCHAR2(24),'                      ||
+                      'CREATE_TIME                  TIMESTAMP(6) WITH LOCAL TIME ZONE,' ||
+                      'CREATE_INSTITUTION           NUMBER(24),'                        || 
+                      'UPDATE_USER                  VARCHAR2(24),'                      ||
+                      'UPDATE_TIME                  TIMESTAMP(6) WITH LOCAL TIME ZONE,' ||
+                      'UPDATE_INSTITUTION           NUMBER(24)'                         || 
+                      ')';
+
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE ' || l_table_name ||
+                      ' IS ''Configuration table for report orientation - configures visible reports to be oriented to visit/episode/patient''';
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_rep_scope_ism IS ''Table primary key ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_reports IS ''Report primary key ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_rep_section IS ''Report section primary key''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.flg_scope IS ''Orientation type''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.flg_report_type IS ''Report type''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_institution IS ''Configuration institution ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_software IS ''Configuration software ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_market IS ''Configuration market ID''';
+    
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.CREATE_USER is ''Creation User''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.CREATE_TIME is ''Creation Time''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.CREATE_INSTITUTION is ''Creation Institution''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.UPDATE_USER is ''Update User''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.UPDATE_TIME is ''Update Time''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.UPDATE_INSTITUTION is ''Update Institution''';
+EXCEPTION
+    WHEN e_name_already_used THEN
+        dbms_output.put_line('WARNING - Table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END: Rui Duarte

@@ -1,0 +1,48 @@
+-- CHANGED BY:  goncalo.almeida
+-- CHANGE DATE: 21/Apr/2011 16:27
+-- CHANGE REASON: ALERT-174475
+CREATE sequence seq_rep_screen minvalue 1 maxvalue 999999999999999999999999999 increment BY 1 START WITH 600 nocache noorder nocycle;
+-- CHANGE END:  goncalo.almeida
+
+
+-- CHANGED BY:  goncalo.almeida
+-- CHANGE DATE: 21/Apr/2011 16:27
+-- CHANGE REASON: ALERT-174475
+DECLARE 
+v_sql VARCHAR(4000);
+BEGIN
+SELECT 'CREATE sequence seq_rep_screen minvalue 1 maxvalue 999999999999999999999999999 increment BY 1 START WITH '|| to_char(MAX(id_rep_screen)+1) ||' nocache noorder nocycle'
+  INTO v_sql
+  FROM rep_screen;
+
+EXECUTE IMMEDIATE v_sql;
+EXCEPTION WHEN OTHERS THEN dbms_output.put_line();
+END;
+/
+-- CHANGE END:  goncalo.almeida
+
+-- CHANGED BY:  goncalo.almeida
+-- CHANGE DATE: 21/Apr/2011 16:27
+-- CHANGE REASON: ALERT-174475
+DECLARE 
+v_sql VARCHAR(4000);
+BEGIN
+SELECT 'CREATE sequence seq_rep_screen minvalue 1 maxvalue 999999999999999999999999999 increment BY 1 START WITH '|| to_char(MAX(id_rep_screen)+1) ||' nocache noorder nocycle'
+  INTO v_sql
+  FROM rep_screen;
+
+EXECUTE IMMEDIATE v_sql;
+EXCEPTION WHEN OTHERS THEN dbms_output.put_line('Operation already performed');
+END;
+/
+-- CHANGE END:  goncalo.almeida
+
+-- CHANGED BY:  ricardo.pires
+-- CHANGE DATE: 28/Ago/2014 09:30
+-- CHANGE REASON: ALERT-293711
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER SEQUENCE seq_rep_screen INCREMENT BY 100';
+   EXCEPTION WHEN OTHERS THEN dbms_output.put_line('Operation already performed');
+END;
+/
+-- CHANGE END:  ricardo.pires

@@ -1,0 +1,44 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 26/08/2013 14:45
+-- CHANGE REASON: [ALERT-263008] 
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create table PO_PARAM_REG_MC
+(
+  id_po_param_reg    NUMBER(24) not null,
+  id_po_param_mc     NUMBER(24) not null,
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+)
+';
+exception when e_obj_exists then
+  dbms_output.put_line('table PO_PARAM_REG_MC exists!');
+end;
+/
+
+comment on table PO_PARAM_REG_MC
+  is 'Periodic observation parameter value register multi-choice options.';
+
+comment on column PO_PARAM_REG_MC.id_po_param_reg
+  is 'Value register identifier.';
+comment on column PO_PARAM_REG_MC.id_po_param_mc
+  is 'Multi-choice option identifier.';
+comment on column PO_PARAM_REG_MC.create_user
+  is 'Creation User';
+comment on column PO_PARAM_REG_MC.create_time
+  is 'Creation Time';
+comment on column PO_PARAM_REG_MC.create_institution
+  is 'Creation Institution';
+comment on column PO_PARAM_REG_MC.update_user
+  is 'Update User';
+comment on column PO_PARAM_REG_MC.update_time
+  is 'Update Time';
+comment on column PO_PARAM_REG_MC.update_institution
+  is 'Update Institution';
+-- CHANGE END: mario.mineiro

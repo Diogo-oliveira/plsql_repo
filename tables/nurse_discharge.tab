@@ -1,0 +1,113 @@
+
+
+  CREATE TABLE NURSE_DISCHARGE
+   (	ID_NURSE_DISCHARGE NUMBER(24,0) NOT NULL ENABLE,
+	DT_NURSE_DISCHARGE DATE NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	FLG_TEMP VARCHAR2(1) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE nurse_discharge IS 'Altas de enfermagem.Ao contrário de DISCHARGE, esta tabela pode conter vários registos não cancelados para cada episódio, para os casos em q se associam vários tratamentos de enfermagem a um epis. anterior.' ;
+
+comment on column NURSE_DISCHARGE.FLG_TEMP
+  is 'Indica se o registo é: H - histórico, T - temporário (temporariamente gravado(Auto Save)); D - definitivo';
+alter table nurse_discharge 
+add (dt_nurse_discharge_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+
+-- CHANGED BY: Carlos Vieira
+-- CHANGE DATE: 2008-Set-22
+-- CHANGE REASON:date columns, timestamp 
+
+alter table NURSE_DISCHARGE drop column DT_CANCEL;
+alter table NURSE_DISCHARGE drop column DT_NURSE_DISCHARGE;
+
+--End change
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table NURSE_DISCHARGE
+  is 'Nurse discharge';
+-- Add comments to the columns 
+comment on column NURSE_DISCHARGE.id_nurse_discharge
+  is 'Primary key';
+comment on column NURSE_DISCHARGE.id_professional
+  is 'Professional ID';
+comment on column NURSE_DISCHARGE.id_episode
+  is 'Episode ID';
+comment on column NURSE_DISCHARGE.notes
+  is 'Notes';
+comment on column NURSE_DISCHARGE.id_prof_cancel
+  is 'Professional that cancelled the record';
+comment on column NURSE_DISCHARGE.notes_cancel
+  is 'Cancellation notes';
+comment on column NURSE_DISCHARGE.flg_temp
+  is 'Type of record H - History, T - Temporary; D - Definitive';
+comment on column NURSE_DISCHARGE.dt_nurse_discharge_tstz
+  is 'Record date';
+comment on column NURSE_DISCHARGE.dt_cancel_tstz
+  is 'Cancellation date';
+
+  -->grid_task|table
+-- Add comments to the table 
+comment on table GRID_TASK
+  is 'Grids easy access';
+comment on column GRID_TASK.id_episode
+  is 'Episode ID';
+comment on column GRID_TASK.analysis_d
+  is 'Information of priority task analysis (doctor).';
+comment on column GRID_TASK.analysis_n
+  is 'Information of priority task analysis  (nurse).';
+comment on column GRID_TASK.harvest
+  is 'Information of priority task harvest ';
+comment on column GRID_TASK.exam_d
+  is 'DEPRECATED Information of priority task exams  (doctor).';
+comment on column GRID_TASK.exam_n
+  is 'DEPRECATED Information of priority task exams (nurse).';
+comment on column GRID_TASK.drug_presc
+  is 'Information of priority task drug prescriptions';
+comment on column GRID_TASK.drug_req
+  is 'Information of priority task drug requests';
+comment on column GRID_TASK.drug_transp
+  is 'Information of priority task drug transportation';
+comment on column GRID_TASK.intervention
+  is 'Information of priority task procedures';
+comment on column GRID_TASK.monitorization
+  is 'Information of priority task monitorization';
+comment on column GRID_TASK.nurse_activity
+  is 'Information of priority task wounds ';
+comment on column GRID_TASK.teach_req
+  is 'Information of priority task  patient education';
+comment on column GRID_TASK.movement
+  is 'Information of priority task transports';
+comment on column GRID_TASK.clin_rec_req
+  is 'Information of priority task clinical record requisition';
+comment on column GRID_TASK.clin_rec_transp
+  is 'Information of priority task clinical record transportation ';
+comment on column GRID_TASK.vaccine
+  is 'Information of priority task vaccines';
+comment on column GRID_TASK.hemo_req
+  is 'Information of priority task blood products request';
+comment on column GRID_TASK.material_req
+  is 'Information of priority task material requisition';
+comment on column GRID_TASK.icnp_intervention
+  is 'Information of priority task icnp intervention ';
+comment on column GRID_TASK.prescription_n
+  is 'Information of priority task prescription (administer on this episode)';
+comment on column GRID_TASK.prescription_p
+  is 'Information of priority task prescription (IV solutions in this episode).';
+comment on column GRID_TASK.discharge_pend
+  is 'Information of priority task pending discharge';
+comment on column GRID_TASK.supplies
+  is 'Information of priority task supplies';
+-- CHANGE END: Elisabete Bugalho

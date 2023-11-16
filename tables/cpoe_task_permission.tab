@@ -1,0 +1,48 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 29/10/2009 04:37
+-- CHANGE REASON: [ALERT-51207] 
+CREATE TABLE CPOE_TASK_PERMISSION
+(
+  ID_TASK_TYPE          NUMBER(24)     NOT NULL,
+  ID_ACTION             NUMBER        NOT NULL,
+  ID_CATEGORY           NUMBER(12)    NOT NULL,
+  ID_PROFILE_TEMPLATE   NUMBER(12)    NOT NULL,
+  ID_INSTITUTION        NUMBER(24)    NOT NULL,
+  ID_SOFTWARE           NUMBER(24)    NOT NULL,
+  FLG_AVAILABLE         VARCHAR2(1 CHAR)   NOT NULL,
+  CREATE_USER           VARCHAR2(24 CHAR)  ,
+  CREATE_TIME           TIMESTAMP(6)  WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24)    ,
+  UPDATE_USER           VARCHAR2(24 CHAR)  ,
+  UPDATE_TIME           TIMESTAMP(6)  WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+);
+comment on table  CPOE_TASK_PERMISSION is                      'Computerized Physician Order Entry (CPOE) task permission table';
+comment on column CPOE_TASK_PERMISSION.ID_TASK_TYPE is         'CPOE task type ID';
+comment on column CPOE_TASK_PERMISSION.ID_ACTION  is           'Action ID, from action table';
+comment on column CPOE_TASK_PERMISSION.ID_CATEGORY is          'Professional''s category ID';
+comment on column CPOE_TASK_PERMISSION.ID_PROFILE_TEMPLATE is  'Profile template ID';
+comment on column CPOE_TASK_PERMISSION.ID_INSTITUTION is       'Institution ID, where record setup takes effect';
+comment on column CPOE_TASK_PERMISSION.ID_SOFTWARE is          'Software ID, where record setup takes effect';
+comment on column CPOE_TASK_PERMISSION.FLG_AVAILABLE is        'CPOE record setup availability: (Y)es (N)o';
+comment on column CPOE_TASK_PERMISSION.CREATE_USER is          'Creation user';
+comment on column CPOE_TASK_PERMISSION.CREATE_TIME is          'Creation time';
+comment on column CPOE_TASK_PERMISSION.CREATE_INSTITUTION is   'Creation institution';
+comment on column CPOE_TASK_PERMISSION.UPDATE_USER is          'Update user';
+comment on column CPOE_TASK_PERMISSION.UPDATE_TIME is          'Update time';
+comment on column CPOE_TASK_PERMISSION.UPDATE_INSTITUTION is   'Update institution';
+-- CHANGE END: Tiago Silva
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 19/12/2016 09:41
+-- CHANGE REASON: [ALERT-325129]
+INSERT INTO cpoe_task_permission (ID_TASK_TYPE,id_action, id_category, id_profile_template, id_institution, id_software, flg_available)
+SELECT 35 as id_task_type, id_action, id_category, id_profile_template, id_institution, id_software, flg_available FROM cpoe_task_permission where id_task_type in (31);
+INSERT INTO cpoe_task_permission (ID_TASK_TYPE,id_action, id_category, id_profile_template, id_institution, id_software, flg_available)
+SELECT 33 as id_task_type, id_action, id_category, id_profile_template, id_institution, id_software, flg_available FROM cpoe_task_permission where id_task_type in (44);
+INSERT INTO cpoe_task_permission (ID_TASK_TYPE,id_action, id_category, id_profile_template, id_institution, id_software, flg_available)
+SELECT 34 as id_task_type, id_action, id_category, id_profile_template, id_institution, id_software, flg_available FROM cpoe_task_permission where id_task_type in (44);
+INSERT INTO cpoe_task_permission (ID_TASK_TYPE,id_action, id_category, id_profile_template, id_institution, id_software, flg_available)
+SELECT 39 as id_task_type, id_action, id_category, id_profile_template, id_institution, id_software, flg_available FROM cpoe_task_permission where id_task_type in (4);
+-- CHANGE END: Pedro Henriques

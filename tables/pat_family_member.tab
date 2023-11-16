@@ -1,0 +1,106 @@
+
+
+  CREATE TABLE PAT_FAMILY_MEMBER
+   (	ID_PAT_FAMILY_MEMBER NUMBER(24,0) NOT NULL ENABLE,
+	ID_PAT_FAMILY NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_FAMILY_RELATIONSHIP NUMBER(24,0),
+	ID_PAT_RELATED NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE pat_family_member IS 'Membros da familia do paciente.O próprio paciente tem nesta tabela um registo, criado automaticamente para facilitar a associação de parentesco qd outros membros da família são "o paciente".' ;
+
+COMMENT ON COLUMN pat_family_member.id_pat_family_member IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_family_member.id_pat_family IS 'Chave primaria' ;
+
+comment on table PAT_FAMILY_MEMBER
+  is 'Membros da familia do paciente.Idealmente, o próprio paciente tem nesta tabela um registo, criado automaticamente para facilitar a associação de parentesco qd outros membros da família são "o paciente".';
+
+
+alter table pat_family_member 
+ add (id_prof_cancel number(24),
+      dt_cancel_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE);
+
+comment on column pat_family_member.id_prof_cancel is 'ID do profissional que cancela.';
+comment on column pat_family_member.dt_cancel_tstz is 'Data de cancelamento.';
+ 
+alter table pat_family_member 
+ add (flg_status varchar2(1));
+
+comment on column pat_family_member.flg_status is 'Estado: (A)ctivo ou (I)nactivo. Um registo fica inactivo quando é se cancela um membro da família.';
+
+
+alter table pat_family_member
+add (notes_cancel varchar2(4000));
+
+comment on column pat_family_member.notes_cancel is 'Notas de cancelamento';		
+
+
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE PAT_FAMILY_MEMBER ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN PAT_FAMILY_MEMBER.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY_MEMBER modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY_MEMBER modify NOTES_CANCEL varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY_MEMBER modify FLG_STATUS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY_MEMBER modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:50
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table PAT_FAMILY_MEMBER
+  is 'Patient family members';
+-- Add comments to the columns 
+comment on column PAT_FAMILY_MEMBER.id_pat_family_member
+  is 'Primary Key';
+comment on column PAT_FAMILY_MEMBER.id_pat_family
+  is 'Patient Family ID';
+comment on column PAT_FAMILY_MEMBER.id_institution
+  is 'Institution ID';
+comment on column PAT_FAMILY_MEMBER.id_patient
+  is 'Patient ID';
+comment on column PAT_FAMILY_MEMBER.id_family_relationship
+  is 'Next Kin ID';
+comment on column PAT_FAMILY_MEMBER.id_pat_related
+  is 'Patient ID on Alert';
+comment on column PAT_FAMILY_MEMBER.id_prof_cancel
+  is 'Professional that cancels the record';
+comment on column PAT_FAMILY_MEMBER.dt_cancel_tstz
+  is 'Cancellation date';
+comment on column PAT_FAMILY_MEMBER.flg_status
+  is 'Status: (A)ctive ou (I)nactive. A record is inactive when a family menber is cancelled';
+comment on column PAT_FAMILY_MEMBER.notes_cancel
+  is 'Cancelation notes';  
+-- CHANGE END: Elisabete Bugalho

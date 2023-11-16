@@ -1,0 +1,36 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/11/2013 16:44
+-- CHANGE REASON: [ALERT-270542] 
+DECLARE
+    e_name_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE REF_COMMENTS_READ ADD (CONSTRAINT
+ RCD_INN_FK FOREIGN KEY 
+  (ID_INSTITUTION) REFERENCES AB_INSTITUTION
+  (ID_AB_INSTITUTION))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            NULL;
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ref_comments_read add(CONSTRAINT rcd_pl_fk foreign key(id_professional) references
+                                      professional(id_professional))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            NULL;
+    END;
+    
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ref_comments_read add(CONSTRAINT rcd_rcs_fk foreign key(id_ref_comment) references
+                                      ref_comments(id_ref_comment))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            NULL;
+    END;
+END;
+/
+-- CHANGE END: Joana Barroso

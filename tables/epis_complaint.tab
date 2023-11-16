@@ -1,0 +1,134 @@
+
+
+  CREATE TABLE EPIS_COMPLAINT
+   (	ID_EPIS_COMPLAINT NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_COMPLAINT NUMBER NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	PATIENT_COMPLAINT VARCHAR2(240),
+	FLG_STATUS VARCHAR2(1)
+   );
+
+
+COMMENT ON COLUMN epis_complaint.id_epis_complaint IS 'Chave primária' ;
+COMMENT ON COLUMN epis_complaint.id_episode IS 'Episódio' ;
+COMMENT ON COLUMN epis_complaint.id_professional IS 'Profissional' ;
+COMMENT ON COLUMN epis_complaint.id_complaint IS 'Queixa' ;
+COMMENT ON COLUMN epis_complaint.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN epis_complaint.patient_complaint IS 'Paciente da queixa' ;
+COMMENT ON COLUMN epis_complaint.flg_status IS 'Estado da queixa: I - Inactive;A - Active' ;
+
+
+COMMENT ON COLUMN epis_complaint.flg_status IS 'Estado da queixa: I - Inactive;A - Active;O - Outdated' ;
+
+alter table epis_complaint add id_epis_complaint_parent number(24);
+
+COMMENT ON COLUMN epis_complaint.id_epis_complaint_parent IS 'Epis_Complaint base/original' ;
+
+COMMENT ON COLUMN epis_complaint.flg_status IS 'Estado da queixa:A - Active;O - Outdated' ;
+
+alter table epis_complaint 
+add (adw_last_update_tstz timestamp with local time zone);
+
+ALTER TABLE EPIS_COMPLAINT ADD flg_reported_by VARCHAR2(1);
+COMMENT ON COLUMN EPIS_COMPLAINT.flg_reported_by IS 'Complaint reported by: S - Spouse; P - Patient; F - Family; R - Registrar; O - Other';
+
+ALTER TABLE EPIS_COMPLAINT ADD id_epis_complaint_root NUMBER(24);
+COMMENT ON COLUMN EPIS_COMPLAINT.id_epis_complaint_root IS 'Registo raíz que agrega todas as queixas do episódio';
+
+ALTER TABLE EPIS_COMPLAINT ADD id_dep_clin_serv NUMBER(24);
+COMMENT ON COLUMN EPIS_COMPLAINT.id_dep_clin_serv IS 'dep_clin_serv associado à queixa seleccionada'; 
+
+--Ariel Machado 2008/05/08
+ALTER TABLE EPIS_COMPLAINT 
+ ADD (FLG_EDITION_TYPE VARCHAR2(1)
+ );
+
+COMMENT ON COLUMN EPIS_COMPLAINT.FLG_EDITION_TYPE IS 'Flag to indicate the type of edition that originate this record: ''N'' - New; ''E'' - Edit; ''A'' - Agree; ''U'' - Update; ''O'' - No changes; ''X'' - Exchange;';
+--Changed End
+
+ALTER TABLE EPIS_COMPLAINT DROP COLUMN ADW_LAST_UPDATE;
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 02/12/2010 16:15
+-- CHANGE REASON: [ALERT-146429] ddl.sql
+alter table epis_complaint add
+(
+  id_cancel_info_det number(24)
+)
+;
+
+comment on column epis_complaint.flg_status
+  is 'Record status: (A)ctive, (O)utdated, (C)ancelled.';
+comment on column epis_complaint.id_cancel_info_det
+  is 'Cancel information detail identifier.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 14/12/2010 10:17
+-- CHANGE REASON: [ALERT-148997] Issue Replication: Error when selecting alert button.
+ALTER TABLE EPIS_COMPLAINT MODIFY PATIENT_COMPLAINT VARCHAR2(4000);
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:17
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EPIS_COMPLAINT
+  is 'Episode complaint';
+-- Add comments to the columns 
+comment on column EPIS_COMPLAINT.id_epis_complaint
+  is 'Primary Key';
+comment on column EPIS_COMPLAINT.id_episode
+  is 'Episode ID';
+comment on column EPIS_COMPLAINT.id_professional
+  is 'Professional that registered the complaint';
+comment on column EPIS_COMPLAINT.id_complaint
+  is 'Complaint ID';
+comment on column EPIS_COMPLAINT.patient_complaint
+  is 'Chief complaint (patient complaint)';
+comment on column EPIS_COMPLAINT.adw_last_update_tstz
+  is 'Date os last change';
+comment on column EPIS_COMPLAINT.id_epis_complaint_root
+  is 'Parent record that aggregates all  episode complaints';
+comment on column EPIS_COMPLAINT.id_dep_clin_serv  
+  is 'DEP_CLIN_SERV associated to the complaint';
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 29/04/2019 09:54
+-- CHANGE REASON: [EMR-15222]  Chief Complaint in arabic
+-- Add/modify columns 
+alter table EPIS_COMPLAINT add patient_complaint_arabic VARCHAR2(4000);
+-- Add comments to the columns 
+comment on column EPIS_COMPLAINT.patient_complaint_arabic
+  is 'Chief complaint (patient complaint IN ARABIC)';
+  
+ 
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 16/10/2020 16:32
+-- CHANGE REASON: [EMR-34344] - Change complaints database model
+alter table EPIS_COMPLAINT add id_complaint_alias NUMBER(24);
+-- Add comments to the columns
+comment on column EPIS_COMPLAINT.id_complaint_alias
+is 'Complaint Alias ID';
+
+alter table EPIS_COMPLAINT
+add constraint ECOMP_CALIAS_FK foreign key (ID_COMPLAINT_ALIAS)
+references COMPLAINT_ALIAS (ID_COMPLAINT_ALIAS);
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 20/10/2020 11:16
+-- CHANGE REASON: [EMR-34344] - Change complaints database model
+alter table EPIS_COMPLAINT add id_complaint_alias NUMBER(24);
+-- Add comments to the columns
+comment on column EPIS_COMPLAINT.id_complaint_alias
+is 'Complaint Alias ID';
+-- CHANGE END: Elisabete Bugalho

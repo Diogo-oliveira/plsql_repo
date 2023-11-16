@@ -1,0 +1,183 @@
+
+
+  CREATE TABLE PAT_FAMILY
+   (	ID_PAT_FAMILY NUMBER(24,0) NOT NULL ENABLE,
+	NAME VARCHAR2(200) NOT NULL ENABLE,
+	ADDRESS VARCHAR2(200),
+	ZIP_CODE VARCHAR2(30),
+	LOCATION VARCHAR2(200),
+	DISTRICT VARCHAR2(200),
+	NUM_CONTACT VARCHAR2(30),
+	NOTES VARCHAR2(4000),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0),
+
+	ID_INSTIT_ENROLED NUMBER(24,0),
+	ID_SOCIAL_CLASS NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE pat_family IS 'Agregado familiar do paciente' ;
+
+COMMENT ON COLUMN pat_family.id_pat_family IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_family.name IS 'Apelido familiar escolhido' ;
+COMMENT ON COLUMN pat_family.notes IS 'Notas sobre a família ou o processo familiar' ;
+
+
+alter table pat_family
+add (social_class_notes varchar2(4000));
+
+comment on column pat_family.social_class_notes is 'Notas de classe social';
+
+
+alter table pat_family
+add (id_prof_social_class number(24),
+     dt_social_class_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE);
+		 
+comment on column pat_family.id_prof_social_class is 'Profissional que regista a classe social e notas da classe social';	
+comment on column pat_family.dt_social_class_tstz is 'Data de registo da classe social e notas da classe social';		
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 05/04/2011 18:33
+-- CHANGE REASON: [ALERT-170943] drop unused column (nzd restriction)
+alter table pat_family drop (id_patient);
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 16/03/2012 15:19
+-- CHANGE REASON: [ALERT-223673 ] 
+DECLARE
+    e_exc EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exc, -01430); -- unique constraint
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pat_family add num_family_record VARCHAR2(200)';
+    EXCEPTION
+        WHEN e_exc THEN
+            dbms_output.put_line('Column already created');
+    END;
+end;
+/
+COMMENT ON column pat_family.num_family_record IS 'Family record number';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY modify ZIP_CODE varchar2(30 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY modify SOCIAL_CLASS_NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY modify NUM_FAMILY_RECORD varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY modify NUM_CONTACT varchar2(30 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY modify NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY modify NAME varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY modify LOCATION varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY modify DISTRICT varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:30
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_FAMILY modify ADDRESS varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:49
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table PAT_FAMILY
+  is 'Patient''s household';
+-- Add comments to the columns 
+comment on column PAT_FAMILY.id_pat_family
+  is 'Primary Key';
+comment on column PAT_FAMILY.name
+  is 'Name';
+comment on column PAT_FAMILY.address
+  is 'Adress';
+comment on column PAT_FAMILY.zip_code
+  is 'Zip code';
+comment on column PAT_FAMILY.location
+  is 'Location ';
+comment on column PAT_FAMILY.district
+  is 'district';
+comment on column PAT_FAMILY.num_contact
+  is 'Contact number';
+comment on column PAT_FAMILY.notes
+  is 'Family notes';
+comment on column PAT_FAMILY.adw_last_update
+  is 'Date of last change';
+comment on column PAT_FAMILY.id_institution
+  is 'Intitution ID';
+comment on column PAT_FAMILY.id_instit_enroled
+  is 'institution enroled id';
+comment on column PAT_FAMILY.id_social_class
+  is 'Social class ID';
+comment on column PAT_FAMILY.social_class_notes
+  is 'Social class notes';
+comment on column PAT_FAMILY.id_prof_social_class
+  is 'Professional that registers the social class';
+comment on column PAT_FAMILY.dt_social_class_tstz
+  is 'Social class registered date';  
+  
+-- CHANGE END: Elisabete Bugalho

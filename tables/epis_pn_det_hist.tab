@@ -1,0 +1,89 @@
+--26/01/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+CREATE TABLE EPIS_PN_DET_HIST
+ (ID_EPIS_PN_DET NUMBER(24) NOT NULL
+ ,DT_EPIS_PN_DET_HIST TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ ,ID_EPIS_PN NUMBER(24) NOT NULL
+ ,ID_PROFESSIONAL NUMBER(24) NOT NULL
+ ,DT_PN TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ ,ID_PN_DATA_BLOCK NUMBER(24)
+ ,ID_PN_SOAP_BLOCK NUMBER(24)
+ ,FLG_STATUS VARCHAR2(1 CHAR) NOT NULL
+ ,PN_NOTE CLOB NOT NULL
+ ,CREATE_USER VARCHAR2(30 CHAR)
+ ,CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,CREATE_INSTITUTION NUMBER(24)
+ ,UPDATE_USER VARCHAR2(30 CHAR)
+ ,UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ )
+/
+
+COMMENT ON TABLE EPIS_PN_DET_HIST IS 'Progress notes detail history'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.ID_EPIS_PN_DET IS 'Progress note detail Id.'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.DT_EPIS_PN_DET_HIST IS 'Date in which the registry was sent to the history.'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.ID_EPIS_PN IS 'Progress note Id.'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.ID_PROFESSIONAL IS 'Id Professional'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.DT_PN IS 'Date in which the progress note detail was created/changed.'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.ID_PN_DATA_BLOCK IS 'Data block id.'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.ID_PN_SOAP_BLOCK IS 'PN SOAP Block. Id of the block. To be used in the free text comments.'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.FLG_STATUS IS 'Progress note detail status. R-removed from the note; A- Active'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.PN_NOTE IS 'Text of the data block.'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.CREATE_USER IS 'Professional ID that creates the registry'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.CREATE_TIME IS 'Date of registry creation'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.CREATE_INSTITUTION IS 'Institution ID where registry was created'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.UPDATE_USER IS 'Professional ID that last updates the registry'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.UPDATE_TIME IS 'Date of registry last update'
+/
+
+COMMENT ON COLUMN EPIS_PN_DET_HIST.UPDATE_INSTITUTION IS 'Institution ID where registry was last updated'
+/
+
+
+alter table epis_pn_det_hist modify pn_note null;
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('COMMENT ON COLUMN EPIS_PN_DET_HIST.ID_PROFESSIONAL IS ''logged Professional identifier''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:45
+-- CHANGE REASON: [ALERT-226174] 
+COMMENT ON COLUMN EPIS_PN_DET_HIST.FLG_STATUS IS 'Progress note detail status. R-removed from the note; A- Active; S-active Suggested record; I-removed suggested record. Z-automatically removed record';
+-- CHANGE END: Luís Maia

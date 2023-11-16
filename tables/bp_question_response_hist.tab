@@ -1,0 +1,84 @@
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/09/2018 11:07
+-- CHANGE REASON: [EMR-6418] 
+create table BP_QUESTION_RESPONSE_HIST
+(
+  dt_bp_question_resp_hist TIMESTAMP(6) WITH LOCAL TIME ZONE default current_timestamp not null,
+  id_bp_question_response  NUMBER(24) not null,
+  id_episode                 NUMBER(24),
+  id_exam_req_det            NUMBER(24),
+  flg_time                   VARCHAR2(2 CHAR),
+  id_questionnaire           NUMBER(24),
+  id_response                NUMBER(24),
+  notes                      CLOB,
+  id_prof_last_update        NUMBER(24),
+  dt_last_update_tstz        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_user                VARCHAR2(24 CHAR),
+  create_time                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution         NUMBER(24),
+  update_user                VARCHAR2(24 CHAR),
+  update_time                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution         NUMBER(24)
+)
+tablespace TABLE_S
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 128K
+    next 128K
+    minextents 1
+    maxextents unlimited
+    pctincrease 0
+  );
+-- Add comments to the table 
+comment on table BP_QUESTION_RESPONSE_HIST
+  is 'Historical data primary key';
+-- Add comments to the columns 
+comment on column BP_QUESTION_RESPONSE_HIST.dt_bp_question_resp_hist
+  is 'Date when the register was made';
+comment on column BP_QUESTION_RESPONSE_HIST.id_bp_question_response
+  is 'Blood Product question response ID';
+comment on column BP_QUESTION_RESPONSE_HIST.id_episode
+  is 'Episode ID';
+comment on column BP_QUESTION_RESPONSE_HIST.id_exam_req_det
+  is 'Exam''s order detail ID';
+comment on column BP_QUESTION_RESPONSE_HIST.flg_time
+  is 'Flag that indicates WHEN the questionnaire was answered';
+comment on column BP_QUESTION_RESPONSE_HIST.id_questionnaire
+  is 'Question ID';
+comment on column BP_QUESTION_RESPONSE_HIST.id_response
+  is 'Response ID';
+comment on column BP_QUESTION_RESPONSE_HIST.notes
+  is 'Notes';
+comment on column BP_QUESTION_RESPONSE_HIST.id_prof_last_update
+  is 'Last update professional ID';
+comment on column BP_QUESTION_RESPONSE_HIST.dt_last_update_tstz
+  is 'Last update date';
+comment on column BP_QUESTION_RESPONSE_HIST.create_user
+  is 'Creation User';
+comment on column BP_QUESTION_RESPONSE_HIST.create_time
+  is 'Creation Time';
+comment on column BP_QUESTION_RESPONSE_HIST.create_institution
+  is 'Creation Institution';
+comment on column BP_QUESTION_RESPONSE_HIST.update_user
+  is 'Update User';
+comment on column BP_QUESTION_RESPONSE_HIST.update_time
+  is 'Update Time';
+comment on column BP_QUESTION_RESPONSE_HIST.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 12/10/2018 17:17
+-- CHANGE REASON: [EMR-7604] 
+ALTER TABLE bp_question_response_hist RENAME COLUMN ID_EXAM_REQ_DET TO ID_BLOOD_PRODUCT_DET;
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/10/2018 14:36
+-- CHANGE REASON: [EMR-7652] 
+ALTER TABLE bp_question_response_hist RENAME COLUMN ID_EXAM_REQ_DET TO ID_BLOOD_PRODUCT_DET;
+COMMENT ON COLUMN BP_QUESTION_RESPONSE_HIST.FLG_TIME IS 'Flag that indicates WHEN the questionnaire was answered (O - Order)';
+-- CHANGE END: Pedro Henriques

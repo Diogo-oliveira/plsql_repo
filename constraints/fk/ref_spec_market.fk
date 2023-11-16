@@ -1,0 +1,32 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 25/01/2011 16:52
+-- CHANGE REASON: [ALERT-157333] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints
+     WHERE table_name = 'REF_SPEC_MARKET'
+       AND constraint_name = 'RSMT_MAT_FK';
+
+    IF l_count <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE "REF_SPEC_MARKET" ADD CONSTRAINT "RSMT_MAT_FK" FOREIGN KEY ("ID_MARKET") REFERENCES "MARKET" ("ID_MARKET") ENABLE';
+    END IF;
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints
+     WHERE table_name = 'REF_SPEC_MARKET'
+       AND constraint_name = 'RSMT_PSY_FK';
+
+    IF l_count <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE "REF_SPEC_MARKET" ADD CONSTRAINT "RSMT_PSY_FK" FOREIGN KEY ("ID_SPECIALITY") REFERENCES "P1_SPECIALITY" ("ID_SPECIALITY") ENABLE';
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso

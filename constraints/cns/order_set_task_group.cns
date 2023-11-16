@@ -1,0 +1,18 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 19/09/2013 10:25
+-- CHANGE REASON: [ALERT-258241] Task groups development
+DECLARE
+    e_pk_already_exists EXCEPTION;
+    e_chk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_exists, -02260); -- table can have only one primary key
+    PRAGMA EXCEPTION_INIT(e_chk_already_exists, -02264); -- name already used by an existing constraint
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ORDER_SET_TASK_GROUP add constraint OSTG_PK primary key (ID_ORDER_SET_TASK, ID_TASK_GROUP)';
+    EXCEPTION
+        WHEN e_pk_already_exists THEN
+            dbms_output.put_line('primary key already exists');
+    END;
+END;
+/
+-- CHANGE END: Tiago Silva

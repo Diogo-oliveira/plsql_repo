@@ -1,0 +1,36 @@
+
+
+  CREATE TABLE BED_SCHEDULE
+   (	ID_BED_SCHEDULED NUMBER(24,0) NOT NULL ENABLE,
+	DT_BED_SCHEDULED DATE NOT NULL ENABLE,
+	ID_SCHEDULE NUMBER(24,0) NOT NULL ENABLE,
+	ID_BED NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_START DATE,
+	DT_END DATE
+   );
+
+
+COMMENT ON COLUMN bed_schedule.id_bed_scheduled IS 'ID único' ;
+COMMENT ON COLUMN bed_schedule.dt_bed_scheduled IS 'Data do agendamento' ;
+COMMENT ON COLUMN bed_schedule.id_schedule IS 'ID do agendamento' ;
+COMMENT ON COLUMN bed_schedule.id_bed IS 'ID da cama' ;
+COMMENT ON COLUMN bed_schedule.flg_status IS 'Estado da cama. Os valores possíveis são: A- Agendada F- Livre, B- Ocupada, C- Em limpeza' ;
+COMMENT ON COLUMN bed_schedule.dt_start IS 'Data de início da ocupação' ;
+COMMENT ON COLUMN bed_schedule.dt_end IS 'Data de fim da ocupação' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE BED_SCHEDULE ADD DT_BED_SCHEDULED_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN BED_SCHEDULE.DT_BED_SCHEDULED_TSTZ IS 'Data do agendamento'; 
+ALTER TABLE BED_SCHEDULE ADD DT_END_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN BED_SCHEDULE.DT_END_TSTZ IS 'Data de fim da ocupa‡Æo'; 
+ALTER TABLE BED_SCHEDULE ADD DT_START_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN BED_SCHEDULE.DT_START_TSTZ IS 'Data de in¡cio da ocupa‡Æo'; 
+
+
+-- INPATIENT LMAIA 22-09-2008
+-- DROP das colunas DT_... que não são Timezone (desnormalização)
+alter table bed_schedule drop (DT_BED_SCHEDULED, DT_START, DT_END);
+-- END
+

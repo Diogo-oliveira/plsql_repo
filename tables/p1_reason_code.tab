@@ -1,0 +1,229 @@
+
+
+  CREATE TABLE "ALERT"."P1_REASON_CODE"
+   (	"ID_REASON_CODE" NUMBER(24,0),
+	"CODE_REASON" VARCHAR2(200),
+	"RANK" NUMBER(6,0) DEFAULT 1,
+	"FLG_TYPE" VARCHAR2(240),
+	"FLG_AVAILABLE" VARCHAR2(1) DEFAULT 'Y',
+	"FLG_OTHER" VARCHAR2(1) DEFAULT 'N',
+	"ADW_LAST_UPDATE" DATE
+   ) ;
+
+
+   COMMENT ON COLUMN "ALERT"."P1_REASON_CODE"."ID_REASON_CODE" IS 'Reason Code. Primary Key';
+
+
+   COMMENT ON COLUMN "ALERT"."P1_REASON_CODE"."FLG_TYPE" IS 'C - Cancelation; D - Medical Decline; R - Medical Refusal; B - Administrative Decline';
+
+
+   COMMENT ON COLUMN "ALERT"."P1_REASON_CODE"."FLG_OTHER" IS 'Is "Other" reason';
+
+
+
+
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 01/09/2010 19:57
+-- CHANGE REASON: [ALERT-98160] 
+COMMENT ON COLUMN P1_REASON_CODE.FLG_TYPE IS 'C - Cancelation; D - Medical Decline; R - Medical Refusal; B - Administrative Decline, T- transf. Resp. , TR - transf resp decline';
+/
+-- CHANGE END:  Filipe Sousa
+
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 06/10/2010 09:27
+-- CHANGE REASON: [ALERT-129275] 
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(1000 CHAR);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+    FROM user_tab_columns WHERE table_name = 'P1_REASON_CODE' AND column_name = 'FLG_DEFAULT';
+
+    IF l_count = 0
+    THEN
+        l_sql := q'[alter table P1_REASON_CODE add FLG_DEFAULT varchar2(1) default 'N']';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+
+comment on table P1_REASON_CODE is 'Referral reason codes';
+
+comment on column P1_REASON_CODE.CODE_REASON is 'Reason code';
+comment on column P1_REASON_CODE.RANK is 'Rank reason codes. For ordering in reason codes list';
+comment on column P1_REASON_CODE.FLG_TYPE is 'C - Cancelation; D - Medical Decline; R - Medical Refusal; B - Administrative Decline, T- transf. Resp. , TR - transf resp decline, X- registrar cancellation';
+comment on column P1_REASON_CODE.FLG_AVAILABLE is 'Record availability Y- available; N- otherwise';
+comment on column P1_REASON_CODE.FLG_DEFAULT is 'Default option';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 06/10/2010 17:10
+-- CHANGE REASON: [ALERT-129828]  O estado "Falta Injustificada"
+COMMENT ON COLUMN P1_REASON_CODE.FLG_TYPE IS 'C - Cancelation; D - Medical Decline; R - Medical Refusal; B - Administrative Decline, T- transf. Resp. , TR - transf resp decline; RC - Cancelation request, F - Failed appointment'
+/
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/11/2010 14:20
+-- CHANGE REASON: [ALERT-137811] ALERT_75390 Possibilidade do médico hospital encaminhar o pedido para o administrativo hospital
+comment on column P1_REASON_CODE.FLG_TYPE is 'C - Cancelation; D - Medical Decline; R - Medical Refusal; B - Administrative Decline, T- transf. Resp. , TR - transf resp decline; RC - Cancelation request, F - Failed appointment; I - Medical decline to the registrar';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/11/2010 14:49
+-- CHANGE REASON: [ALERT-145299 ] 
+COMMENT ON COLUMN p1_reason_code.flg_type
+  IS 'C - Cancelation; D - Medical Decline; X - Medical Refusal; B - Administrative Decline; Z - Cancellation proposal; F - No show';
+  
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 20/12/2010 17:17
+-- CHANGE REASON: [ALERT-150816] 
+COMMENT ON COLUMN p1_reason_code.flg_type
+  IS 'C - Cancelation; D - Medical Decline; X - Medical Refusal; B - Administrative Decline; Z - Cancellation proposal;  T- transf. Resp. , TR - transf resp decline; RC - Cancelation request, F - Failed appointment; I - Medical decline to the registrar';
+  
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 18/03/2011 16:51
+-- CHANGE REASON: [ALERT-167717 ] 
+DECLARE
+    val PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO val
+      FROM user_tab_columns u
+     WHERE u.table_name = 'P1_REASON_CODE'
+       AND u.column_name = 'FLG_VISIBLE';
+
+    IF val <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE P1_REASON_CODE ADD FLG_VISIBLE VARCHAR2(1) DEFAULT ''Y'' NOT NULL';
+        --COMMENT ON COLUMN P1_REASON_CODE.FLG_VISIBLE IS 'Reason code visible Y - Yes , N - No';
+    ELSE
+        dbms_output.put_line('aviso: operação já executada anteriormente.');
+    END IF;
+END;
+/
+
+COMMENT ON COLUMN P1_REASON_CODE.FLG_VISIBLE IS 'Reason code visible Y - Yes , N - No';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 20/04/2011 09:54
+-- CHANGE REASON: [ALERT-169416] 
+alter table  P1_REASON_CODE
+drop constraint PRE_FLG_TYPE_CHK;
+
+alter table P1_REASON_CODE
+  add constraint PRE_FLG_TYPE_CHK
+  check (FLG_TYPE in ('C','D','R','B','F', 'T','TR','X','F','I', 'Z', 'Y'));
+
+comment on column P1_REASON_CODE.flg_type
+  is 'C - Cancelation; D - Medical Decline (Triage); Y - Medical Decline (Clin Dir) X - Medical Refusal; B - Administrative Decline; Z - Cancellation proposal;  T - transf. Resp. , TR - transf resp decline; RC - Cancelation request, F - Failed appointment; I - Medical decline to the registrar';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 12/09/2011 15:26
+-- CHANGE REASON: [ALERT-194915 ] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns
+     WHERE column_name = 'FLG_MCDT'
+       AND table_name = 'P1_REASON_CODE';
+
+    IF l_var = 0
+    THEN
+       EXECUTE IMMEDIATE 'ALTER TABLE p1_reason_code add(flg_mcdt VARCHAR2(1 CHAR) DEFAULT ''N'')';
+    ELSE
+        NULL;
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 23/03/2012 10:44
+-- CHANGE REASON: [ALERT-224618] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tab_columns utc
+     WHERE utc.table_name = 'P1_REASON_CODE'
+       AND utc.column_name = 'ID_CONTENT';
+
+    IF l_var < 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE P1_REASON_CODE ADD ID_CONTENT VARCHAR2(200 CHAR)';
+    END IF;
+END;
+/
+
+COMMENT ON COLUMN P1_REASON_CODE.ID_CONTENT IS 'Content Id ';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 03/04/2012 16:12
+-- CHANGE REASON: [ALERT-224618 ] 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_reason_code add(flg_mcdt VARCHAR2( 1CHAR) DEFAULT ''N'')';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 06/08/2012 15:50
+-- CHANGE REASON: [ALERT-237787] 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE p1_reason_code add(flg_mcdt VARCHAR2(1 CHAR) DEFAULT ''N'')';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    
+END;
+/
+
+comment on column P1_REASON_CODE.flg_mcdt
+  is 'MCDT Reason code  Y - Yes , N - No';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on column P1_REASON_CODE.id_reason_code
+  is 'Reason code id';
+comment on column P1_REASON_CODE.code_reason
+  is 'Code for translation of reason code description';
+comment on column P1_REASON_CODE.flg_type
+  is 'C - Cancelation; D - Medical Decline (Triage); Y - Medical Decline (Clin Dir); X - Medical Refusal; B - Administrative Decline; Z - Cancellation proposal; T - Responsibility Transfer; TR - Responsibility Transfer decline; RC - Cancelation request; F - Failed appointment; I - Medical decline to the registrar';
+comment on column P1_REASON_CODE.flg_available
+  is 'Is record available? Y/N';
+comment on column P1_REASON_CODE.adw_last_update
+  is 'Record last update (ADW)';
+comment on column P1_REASON_CODE.flg_visible
+  is 'Is reason code visible? Y/N';
+comment on column P1_REASON_CODE.flg_mcdt
+  is 'Is MCDT Reason code? Y/N';

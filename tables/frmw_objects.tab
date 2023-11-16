@@ -1,0 +1,29 @@
+--21/12/2010 Rui Batista
+--Alert's data dictionary
+create table FRMW_OBJECTS
+(
+  owner             VARCHAR2(100 CHAR) not null,
+  obj_name          VARCHAR2(100 CHAR) not null,
+  obj_type          VARCHAR2(100 CHAR) not null,
+  flg_category      VARCHAR2(3 CHAR) default 'UNK' not null,
+  dt_creation       TIMESTAMP(6) WITH LOCAL TIME ZONE default CURRENT_TIMESTAMP not null,
+  flg_alert_default VARCHAR2(1 CHAR) not null,
+  delete_script     VARCHAR2(1000 CHAR),
+  flg_default_child VARCHAR2(1 CHAR) default 'N' not null,
+  flg_verified      VARCHAR2(1 CHAR)
+);
+-- Add comments to the table
+comment on table FRMW_OBJECTS is 'objects supported by ALERT Line of Product';
+-- Add comments to the columns
+comment on column FRMW_OBJECTS.owner is 'Primary Key, Schema of object';
+comment on column FRMW_OBJECTS.obj_name is 'Name of object';
+comment on column FRMW_OBJECTS.obj_type is 'Type of Object';
+comment on column FRMW_OBJECTS.flg_category is 'Type of Data stored: DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais';
+comment on column FRMW_OBJECTS.dt_creation is 'Row Date of creation';
+comment on column FRMW_OBJECTS.flg_alert_default is 'Is this table included in ALERT DEFAULT? (Y/N)';
+comment on column FRMW_OBJECTS.delete_script is 'script to delete records';
+comment on column FRMW_OBJECTS.flg_default_child is 'Is this table child of one table in ALERT DEFAULT? (Y/N)';
+comment on column FRMW_OBJECTS.flg_verified is 'Have this record been checked by the "owner" team? (Y/N)';
+
+-- cmf 24-05-2011 Table will be recosntruct in ALERT_CORE_MT schema from scratch
+drop table alert.FRMW_OBJECTS;

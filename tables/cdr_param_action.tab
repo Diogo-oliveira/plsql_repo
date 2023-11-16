@@ -1,0 +1,75 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:25
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'CDR_PARAM_ACTION',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'PRM',
+                                             i_flg_alert_default => 'Y',
+                                             i_delete_script     => '',
+                                             i_flg_default_child => 'N');
+END;
+/
+
+create table CDR_PARAM_ACTION
+(
+  id_cdr_param_action NUMBER(24) not null,
+  id_cdr_parameter    NUMBER(24) not null,
+  id_cdr_action       NUMBER(24) not null,
+  message             CLOB not null,
+  event_span          NUMBER(24,3),
+  id_event_span_umea  NUMBER(24),
+  flg_first_time      VARCHAR2(1 CHAR) default 'N' not null,
+  create_user         VARCHAR2(24 CHAR),
+  create_time         TIMESTAMP WITH LOCAL TIME ZONE,
+  create_institution  NUMBER(24),
+  update_user         VARCHAR2(24 CHAR),
+  update_time         TIMESTAMP WITH LOCAL TIME ZONE,
+  update_institution  NUMBER(24)
+);
+
+comment on table CDR_PARAM_ACTION
+  is 'Clinical decision rule parameter actions. Associates a rule definition parameter with its actions.';
+
+comment on column CDR_PARAM_ACTION.id_cdr_param_action
+  is 'Primary key.';
+comment on column CDR_PARAM_ACTION.id_cdr_parameter
+  is 'Rule parameter identifier.';
+comment on column CDR_PARAM_ACTION.id_cdr_action
+  is 'Rule action identifier.';
+comment on column CDR_PARAM_ACTION.message
+  is 'Rule action message.';
+comment on column CDR_PARAM_ACTION.event_span
+  is 'Minimum time between events.';
+comment on column CDR_PARAM_ACTION.id_event_span_umea
+  is 'Minimum time between events time measurement unit.';
+comment on column CDR_PARAM_ACTION.flg_first_time
+  is 'Fire action only the first time in session? Y/N';
+comment on column CDR_PARAM_ACTION.create_user
+  is 'Creation User';
+comment on column CDR_PARAM_ACTION.create_time
+  is 'Creation Time';
+comment on column CDR_PARAM_ACTION.create_institution
+  is 'Creation Institution';
+comment on column CDR_PARAM_ACTION.update_user
+  is 'Update User';
+comment on column CDR_PARAM_ACTION.update_time
+  is 'Update Time';
+comment on column CDR_PARAM_ACTION.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 07/10/2011 15:22
+-- CHANGE REASON: [ALERT-198677] changes_ddl
+alter table cdr_param_action modify (message null);
+alter table cdr_param_action add (
+id_cdr_message number(24)
+);
+
+comment on column cdr_param_action.message
+  is 'Deprecated (since 2.6.1.2).';
+comment on column cdr_param_action.id_cdr_message
+  is 'Rule action message identifier.';
+-- CHANGE END: Pedro Carneiro

@@ -1,0 +1,37 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/01/2010 17:23
+-- CHANGE REASON: [ALERT-59019] 
+DECLARE
+    l_found NUMBER;
+BEGIN
+     SELECT 1
+      INTO l_found
+      FROM dba_indexes
+     WHERE table_name = 'SYS_FUNC_CATEGORY'
+       AND table_owner = 'ALERT'
+ And index_name = 'SFCY_SFY_FK_IDX';
+EXCEPTION
+    WHEN no_data_found THEN
+        EXECUTE IMMEDIATE 'CREATE INDEX FCT_SFY_FK_IDX ON SFCY_SFY_FK_IDX (ID_SYS_FUNCTIONALITY)';
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 18/01/2010 15:49
+-- CHANGE REASON: [ALERT-67408] 
+DECLARE
+    l_found NUMBER;
+BEGIN
+     SELECT 1
+      INTO l_found
+      FROM dba_indexes
+     WHERE table_name = 'SYS_FUNC_CATEGORY'
+       AND table_owner = 'ALERT'
+       And index_name = 'SFCY_SFY_FK_IDX';
+EXCEPTION
+    WHEN no_data_found THEN
+        EXECUTE IMMEDIATE 'CREATE INDEX SFCY_SFY_FK_IDX ON SYS_FUNC_CATEGORY (ID_SYS_FUNCTIONALITY)';
+END;
+/
+-- CHANGE END: Joana Barroso

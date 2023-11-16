@@ -1,0 +1,84 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 03/07/2010 20:26
+-- CHANGE REASON: [ALERT-109286] 
+CREATE TABLE future_event_approval (
+  id_future_event_type NUMBER(24,0) NOT NULL,
+  id_profile_template  NUMBER(12,0) NOT NULL,
+  id_software          NUMBER(24,0) NOT NULL,
+  id_institution       NUMBER(24,0) NOT NULL,
+  flg_available        VARCHAR2(1 char)  NULL
+);
+
+COMMENT ON COLUMN future_event_approval.id_future_event_type IS 'future event type identifier';
+COMMENT ON COLUMN future_event_approval.id_profile_template IS 'profile template identifier';
+COMMENT ON COLUMN future_event_approval.id_software IS 'software identifier';
+COMMENT ON COLUMN future_event_approval.id_institution IS 'institution identifier';
+COMMENT ON COLUMN future_event_approval.flg_available IS 'flag available';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 20/01/2016 14:40
+-- CHANGE REASON: [ALERT-317983] ALERT-317983 CDOC Functionalities V5 Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table FUTURE_EVENT_APPROVAL
+  is 'Future event requirement approval';
+-- Add comments to the columns 
+comment on column FUTURE_EVENT_APPROVAL.id_future_event_type
+  is 'future event type identifier';
+comment on column FUTURE_EVENT_APPROVAL.id_profile_template
+  is 'profile template identifier';
+comment on column FUTURE_EVENT_APPROVAL.id_software
+  is 'software identifier';
+comment on column FUTURE_EVENT_APPROVAL.id_institution
+  is 'institution identifier';
+comment on column FUTURE_EVENT_APPROVAL.flg_available
+  is 'flag future event available';
+-- CHANGE END: Renato Nunes
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table FUTURE_EVENT_APPROVAL add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column future_event_approval.create_user IS 'Creation User';
+COMMENT ON column future_event_approval.create_time IS 'Creation Time';
+COMMENT ON column future_event_approval.create_institution IS 'Creation Institution';
+COMMENT ON column future_event_approval.update_user IS 'Update User';
+COMMENT ON column future_event_approval.update_time IS 'Update Time';
+COMMENT ON column future_event_approval.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table future_event_approval add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column future_event_approval.create_user IS 'Creation User';
+COMMENT ON column future_event_approval.create_time IS 'Creation Time';
+COMMENT ON column future_event_approval.create_institution IS 'Creation Institution';
+COMMENT ON column future_event_approval.update_user IS 'Update User';
+COMMENT ON column future_event_approval.update_time IS 'Update Time';
+COMMENT ON column future_event_approval.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

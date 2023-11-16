@@ -1,0 +1,56 @@
+CREATE TABLE ALERT_DIAGNOSIS
+ (ID_ALERT_DIAGNOSIS  NUMBER(12) NOT NULL
+ ,ID_DIAGNOSIS  NUMBER(12)
+ ,CODE_ALERT_DIAGNOSIS  VARCHAR2(200)
+ ,FLG_TYPE  VARCHAR2(2)
+ ,FLG_ICD9  VARCHAR2(2)
+ ,FLG_AVAILABLE  VARCHAR2(2)
+ ,ADW_LAST_UPDATE  DATE
+ );
+
+
+comment on column alert_diagnosis.id_alert_diagnosis is 'PK for the ALERT diagnosis';
+comment on column alert_diagnosis.id_diagnosis is 'Diagnosis ID (ICD9 code)';
+comment on column alert_diagnosis.code_alert_diagnosis is 'Code for the translation';
+comment on column alert_diagnosis.flg_type is 'Type of Diagnosis: (M) Medical, (S) Surgical';
+comment on column alert_diagnosis.flg_icd9 is 'If it belongs to ICD (Y) Yes, (N) No';
+comment on column alert_diagnosis.flg_available is 'If it is available (Y) Yes, (N) No';
+comment on column alert_diagnosis.adw_last_update is 'Last update';
+
+alter table alert_diagnosis
+add gender varchar2(1);
+comment on column alert_diagnosis.gender is 'Gender';
+alter table alert_diagnosis
+add age_min number(3);
+comment on column alert_diagnosis.age_min is 'Mininum age';
+alter table alert_diagnosis
+add age_max number(3);
+comment on column alert_diagnosis.age_max is 'Maximum age';
+
+
+
+
+ALTER TABLE ALERT_DIAGNOSIS ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN ALERT_DIAGNOSIS.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 14:40
+-- CHANGE REASON: [ALERT-229308] VERSIONING TRANSACTIONAL MODEL MIGRATION - SCHEMA ALERT - CHANGE NAME AND VIEWS
+DECLARE
+    e_already_renamed EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_already_renamed, -942);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ALERT_DIAGNOSIS RENAME TO MIG_ALERT_DIAGNOSIS';
+EXCEPTION
+    WHEN e_already_renamed THEN
+        dbms_output.put_line('Already renamed.');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+BEGIN
+  pk_dev.add_table_stats_exception(i_owner => 'ALERT', i_table_name => 'DIAGNOSIS');
+  pk_dev.add_table_stats_exception(i_owner => 'ALERT', i_table_name => 'ALERT_DIAGNOSIS');
+END;
+/

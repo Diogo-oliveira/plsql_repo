@@ -1,0 +1,30 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 11/09/2012 15:04
+-- CHANGE REASON: [ALERT-212094 ] 
+-- Create/Recreate primary, unique and foreign key constraints 
+DECLARE
+    e_exception2 EXCEPTION;
+    e_exception3 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception2, -02275);
+    PRAGMA EXCEPTION_INIT(e_exception3, -02275);
+
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table EXT_CAUSE_CODIFICATION
+  add constraint EXTCC_EC_FK foreign key (ID_EXTERNAL_CAUSE)
+  references EXTERNAL_CAUSE (ID_EXTERNAL_CAUSE)';
+    EXCEPTION
+        WHEN e_exception2 THEN
+            dbms_output.put_line('Already done');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table EXT_CAUSE_CODIFICATION
+  add constraint EXTCC_CON_FK foreign key (ID_CODIFICATION)
+  references CODIFICATION (ID_CODIFICATION)';
+    EXCEPTION
+        WHEN e_exception3 THEN
+            dbms_output.put_line('Already done');
+    END;
+END;
+/
+-- CHANGE END: Sérgio Santos

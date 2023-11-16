@@ -1,0 +1,35 @@
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 25/02/2011 17:33
+-- CHANGE REASON: [ALERT-164703] DDL Reports - H & P reformulation in INPATIENT
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TIMEFRAME_OPTION
+ ADD (CONSTRAINT TON_PK PRIMARY KEY 
+  (ID_TIMEFRAME_OPTION))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+--
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TIMEFRAME_OPTION
+ ADD (CONSTRAINT TON_TYPE_CHK CHECK (FLG_TYPE IN (''R'', ''D'', ''I'', ''T'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Tiago Lourenço
+-- CHANGE DATE: 28/11/2011
+-- CHANGE REASON: [ALERT-207295] 
+BEGIN
+    EXECUTE IMMEDIATE 'alter table TIMEFRAME_OPTION add (constraint TON_DATE_TYPE_CHK check (FLG_DATE_TYPE IN (''D'',''I'',''F'')))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Tiago Lourenço

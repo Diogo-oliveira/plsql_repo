@@ -1,0 +1,61 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 26/08/2013 14:49
+-- CHANGE REASON: [ALERT-263008] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists1, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE preg_po_param  ADD CONSTRAINT preg_po_param_pk PRIMARY KEY (id_pat_pregnancy,id_po_param,id_inst_owner,flg_owner)  USING INDEX TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table preg_po_param  add constraint ppp_flg_visible_chk  check (flg_visible IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN e_object_exists1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table preg_po_param  add constraint ppp_flg_owner_chk  check (flg_owner IN (''M'',''F''))';
+    EXCEPTION
+        WHEN e_object_exists1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 26/08/2013 15:40
+-- CHANGE REASON: [ALERT-263008] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists1, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE preg_po_param  ADD CONSTRAINT preg_po_param_pk PRIMARY KEY (id_pat_pregnancy,id_po_param,id_inst_owner,flg_owner)  USING INDEX TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table preg_po_param  add constraint ppp_flg_visible_chk  check (flg_visible IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN e_object_exists1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table preg_po_param  add constraint ppp_flg_owner_chk  check (flg_owner IN (''M'',''F''))';
+    EXCEPTION
+        WHEN e_object_exists1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: mario.mineiro

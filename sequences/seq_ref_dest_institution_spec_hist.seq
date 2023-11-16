@@ -1,0 +1,17 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 20/02/2013 12:07
+-- CHANGE REASON: [ALERT-251862] 
+DECLARE l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_sequences s
+     WHERE s.sequence_name = 'SEQ_REF_DEST_INST_SPEC_HIST';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'create sequence SEQ_REF_DEST_INST_SPEC_HIST minvalue 1 maxvalue 999999999999999999999999 start with 1 increment by 1 cache 500 nocycle NOORDER';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro

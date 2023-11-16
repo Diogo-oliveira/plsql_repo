@@ -1,0 +1,13 @@
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 28/02/2011 09:44
+-- CHANGE REASON: [ALERT-155569] 
+DECLARE e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'create index IIS_ICF_INST_SOFT_IDX on icf_soft_inst (id_icf,id_institution,id_software)';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END:  Nuno Neves

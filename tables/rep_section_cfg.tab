@@ -1,0 +1,48 @@
+--CHANGE BEGIN: rafael.quintao
+--CHANGE REASON: EMR-17465
+--CHANGE DATE: 04/04/2019
+
+DECLARE
+  l_sql VARCHAR2(4000);
+BEGIN
+    l_sql := ' CREATE TABLE rep_section_cfg  (
+         id_rep_section_cfg     NUMBER(24) NOT NULL,
+         id_rep_section         NUMBER(24) NOT NULL,
+         id_reports         NUMBER(24) NOT NULL,
+         id_software        NUMBER(24) NOT NULL,
+         id_institution       NUMBER(24) NOT NULL,
+         id_rep_profile_template  NUMBER(24) NOT NULL,
+         id_market          NUMBER(24) NOT NULL,
+         internal_name      VARCHAR2(200 CHAR),
+         config_value       VARCHAR2(200 CHAR),
+         cfg_rank           NUMBER(24) NOT NULL,
+         --
+         create_user            VARCHAR2(24 CHAR),
+         create_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+         create_institution   NUMBER(24),
+         update_user            VARCHAR2(24 CHAR),
+         update_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+         update_institution     NUMBER(24)
+      )
+      
+     ';
+    pk_versioning.run(l_sql);
+	
+	COMMENT ON table alert.rep_section_cfg is 'configuration of the parameters for section'
+    COMMENT ON column rep_section_cfg.internal_name is 'internal name to identify field we will populate/configure';
+    COMMENT ON column rep_section_cfg.config_value is 'value to be used in configuration , in the case of blood products it will be id_content';
+    COMMENT ON column rep_section_cfg.cfg_rank is 'rank in case of many config values for one internal_name';
+END;
+/
+
+--CHANGE END;
+
+
+-- CMF
+declare
+        l_sql varchar2(1000 char);
+begin
+        l_sql := 'drop table rep_section_cfg';
+        pk_versioning.run( l_sql );
+end;
+/

@@ -1,0 +1,71 @@
+
+
+  CREATE TABLE WOUND_EVALUATION
+   (	ID_WOUND_EVALUATION NUMBER(24,0) NOT NULL ENABLE,
+	DT_WOUND_EVALUATION DATE NOT NULL ENABLE,
+	ID_NURSE_ACTV_REQ_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FREQUENCY NUMBER(6,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE wound_evaluation IS 'Estabelecimento da frequência do tratamento e protocolo de penso.Quando é necessário mudar o protocolo de penso (pelo médico), cria-se novo registo nesta tabela, que fica ligado ao protocolo anterior (registo anterior/ existente) pelo ID_PARENT.' ;
+
+COMMENT ON COLUMN wound_evaluation.frequency IS 'Nº de dias de intervalo entre tratamentos' ;
+COMMENT ON COLUMN wound_evaluation.flg_status IS 'Estado: A - activo, I - inactivo' ;
+
+alter table wound_evaluation 
+add (dt_wound_evaluation_tstz timestamp with local time zone);
+
+
+alter table WOUND_EVALUATION drop column DT_WOUND_EVALUATION;
+
+
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 26/05/2011 18:01
+-- CHANGE REASON: [ALERT-181771] 
+alter table wound_evaluation
+add FREQUENCY_UNITS number;
+
+comment on column WOUND_EVALUATION.FREQUENCY_UNITS
+  is 'Id_unit_measure for wound treatment frequency';
+
+comment on column WOUND_EVALUATION.FREQUENCY
+  is 'Wound treatment frequency';
+-- CHANGE END:  Nuno Neves
+
+--wound_evaluation|table
+comment on table WOUND_EVALUATION
+  is 'Dressing: wound evaluation';
+-- Add comments to the columns 
+comment on column WOUND_EVALUATION.id_wound_evaluation
+  is 'Wound evaluation ID';
+comment on column WOUND_EVALUATION.id_nurse_actv_req_det
+  is 'Dressing''s order detail ID';
+comment on column WOUND_EVALUATION.id_professional
+  is 'Professional ID';
+comment on column WOUND_EVALUATION.frequency
+  is 'Dressing frequency';
+comment on column WOUND_EVALUATION.notes
+  is 'Notes';
+comment on column WOUND_EVALUATION.flg_status
+  is 'Flag that indicates the dressing''s status: A - active, I - inactive';
+comment on column WOUND_EVALUATION.dt_wound_evaluation_tstz
+  is 'Date that indicates when the evaluation was registered';
+comment on column WOUND_EVALUATION.create_user
+  is 'Creation User';
+comment on column WOUND_EVALUATION.create_time
+  is 'Creation Time';
+comment on column WOUND_EVALUATION.create_institution
+  is 'Creation Institution';
+comment on column WOUND_EVALUATION.update_user
+  is 'Update User';
+comment on column WOUND_EVALUATION.update_time
+  is 'Update Time';
+comment on column WOUND_EVALUATION.update_institution
+  is 'Update Institution';
+comment on column WOUND_EVALUATION.frequency_units
+  is 'Unit measure ID';

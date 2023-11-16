@@ -1,0 +1,53 @@
+
+
+  ALTER TABLE SR_DOC_ELEMENT MODIFY (ID_DOC_ELEMENT NOT NULL ENABLE);
+
+  ALTER TABLE SR_DOC_ELEMENT MODIFY (ID_DOCUMENTATION NOT NULL ENABLE);
+
+  ALTER TABLE SR_DOC_ELEMENT MODIFY (ID_DOC_DIMENSION NOT NULL ENABLE);
+
+  ALTER TABLE SR_DOC_ELEMENT MODIFY (RANK NOT NULL ENABLE);
+
+  ALTER TABLE SR_DOC_ELEMENT MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE SR_DOC_ELEMENT MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+
+
+
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SR_DOC_ELEMENT ADD CONSTRAINT SRDE_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SRDE_FLG_AVAILABLE_CHK table SR_DOC_ELEMENT column FLG_AVAILABLE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SR_DOC_ELEMENT ADD CONSTRAINT SRDE_FLG_GENDER_CHK CHECK (FLG_GENDER IN (''T'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SRDE_FLG_GENDER_CHK table SR_DOC_ELEMENT column FLG_GENDER: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SR_DOC_ELEMENT ADD CONSTRAINT SRDE_FLG_TYPE_CHK CHECK (FLG_TYPE IN (''D'', ''T'', ''O'', ''N'', ''S'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SRDE_FLG_TYPE_CHK table SR_DOC_ELEMENT column FLG_TYPE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto

@@ -1,0 +1,1 @@
+grant execute on t_rec_ref_dcs to alert_inter;

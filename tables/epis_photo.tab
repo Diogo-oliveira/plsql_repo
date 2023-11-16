@@ -1,0 +1,26 @@
+
+
+  CREATE TABLE EPIS_PHOTO
+   (	ID_EPIS_PHOTO NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPIS_OBS_PHOTO NUMBER(24,0) NOT NULL ENABLE,
+	OBSERVATION VARCHAR2(4000),
+	IMG_PHOTO LONG RAW NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE epis_photo IS 'Fotos tiradas ao doente, para mostrar lesões físicas' ;
+
+COMMENT ON COLUMN epis_photo.observation IS 'Observações' ;
+COMMENT ON COLUMN epis_photo.img_photo IS 'Foto' ;
+
+--29/10/2010 Rui Batista
+--[ALERT-136492] Database object Cleaning
+begin
+
+  execute immediate 'drop table EPIS_PHOTO';
+--	
+	exception
+	when others then --ORA-00942 Table or view does not exists
+	     null;
+end;
+

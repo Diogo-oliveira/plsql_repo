@@ -1,0 +1,38 @@
+CREATE TABLE EHR_ACCESS_CONTEXT
+ (ID_EHR_ACCESS_CONTEXT NUMBER(24) NOT NULL
+ ,CODE_EHR_ACCESS_CONTEXT VARCHAR2(200) NOT NULL
+ ,FLG_TYPE VARCHAR2(1) NOT NULL
+ ,RANK NUMBER(6)
+ );
+
+COMMENT ON COLUMN EHR_ACCESS_CONTEXT.ID_EHR_ACCESS_CONTEXT IS 'EHR Access context identification';
+COMMENT ON COLUMN EHR_ACCESS_CONTEXT.CODE_EHR_ACCESS_CONTEXT IS 'EHR Access context translation code';
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 10/12/2009
+-- CHANGE REASON: ALERT-58995
+ALTER TABLE ehr_access_context ADD flg_context VARCHAR2(1);
+ALTER TABLE ehr_access_context ADD flg_available VARCHAR2(1);
+ALTER TABLE ALERT.EHR_ACCESS_CONTEXT ADD CONSTRAINT EAT_FLG_CONTEXT_CNS CHECK (FLG_CONTEXT IN ('A', 'N')) ENABLE;
+ALTER TABLE ALERT.EHR_ACCESS_CONTEXT ADD CONSTRAINT EAT_FLG_AVAILABLE_CNS CHECK (FLG_AVAILABLE IN ('Y', 'N')) ENABLE;
+ALTER TABLE ALERT.EHR_ACCESS_CONTEXT DROP CONSTRAINT EAT_FLG_TYPE_CNS;
+ALTER TABLE ALERT.EHR_ACCESS_CONTEXT ADD CONSTRAINT EAT_FLG_TYPE_CNS CHECK (FLG_TYPE IN ('A', 'B', 'C', 'E', 'I', 'L', 'M', 'N', 'P', 'S')) ENABLE;
+
+comment on column ehr_access_context.flg_context is 'Identifies the context in which the access is done';
+comment on column ehr_access_context.flg_available is 'Identifies the context e available';
+-- CHANGE END
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:43
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EHR_ACCESS_CONTEXT
+  is 'EHR Access context';
+-- Add comments to the columns 
+comment on column EHR_ACCESS_CONTEXT.flg_type
+  is 'S- Scheduled episode; C - Ongoing episode;P - Previous episode; E -  Electronic Health Record; I - A cancelled episode; N - New indirect encounter; L - new appointment; M - Schedule appointment; O - A signed-off episode;  T - Conclude;  D - Go to patient record; B - Schedule appointment; A - Accessing a previous activity therapy episode; G - Temporary episode; F - Definitive episode';
+comment on column EHR_ACCESS_CONTEXT.rank
+  is 'Rank for ordering';
+  
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,76 @@
+
+  ALTER TABLE "ALERT"."REFERRAL_EA" ADD CONSTRAINT "REA_PK" PRIMARY KEY ("ID_EXTERNAL_REQUEST") ENABLE;
+
+  ALTER TABLE "ALERT"."REFERRAL_EA" MODIFY ("ID_EXTERNAL_REQUEST" NOT NULL ENABLE);
+
+  ALTER TABLE "ALERT"."REFERRAL_EA" MODIFY ("ID_PATIENT" NOT NULL ENABLE);
+
+  ALTER TABLE "ALERT"."REFERRAL_EA" MODIFY ("FLG_TYPE" NOT NULL ENABLE);
+
+  ALTER TABLE "ALERT"."REFERRAL_EA" MODIFY ("FLG_STATUS" NOT NULL ENABLE);
+
+  ALTER TABLE "ALERT"."REFERRAL_EA" MODIFY ("ID_PROF_STATUS" NOT NULL ENABLE);
+
+  ALTER TABLE "ALERT"."REFERRAL_EA" MODIFY ("DT_STATUS" NOT NULL ENABLE);
+
+  ALTER TABLE "ALERT"."REFERRAL_EA" MODIFY ("FLG_PRIORITY" NOT NULL ENABLE);
+
+  ALTER TABLE "ALERT"."REFERRAL_EA" MODIFY ("ID_INST_ORIG" NOT NULL ENABLE);
+
+  ALTER TABLE "ALERT"."REFERRAL_EA" MODIFY ("ID_PROF_REQUESTED" NOT NULL ENABLE);
+
+  ALTER TABLE "ALERT"."REFERRAL_EA" MODIFY ("DT_REQUESTED" NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: João Almeida
+-- CHANGE DATE: 09/03/2010 10:25
+-- CHANGE REASON: [ALERT-79864] 
+DECLARE
+    l_sql   VARCHAR2(1000 CHAR);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'REA_ID_PROF_ORIG_FK';
+
+    IF l_count = 0
+    THEN
+        l_sql := q'[ALTER TABLE REFERRAL_EA add(CONSTRAINT REA_ID_PROF_ORIG_FK foreign key(ID_PROF_ORIG) references professional(id_professional))]';                
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+DECLARE
+    l_sql   VARCHAR2(1000 CHAR);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_constraints u
+     WHERE u.constraint_name = 'REA_ID_INST_ORIG_REQ_FK';
+
+    IF l_count = 0
+    THEN
+        l_sql := q'[ALTER TABLE REFERRAL_EA add(CONSTRAINT REA_ID_INST_ORIG_REQ_FK foreign key(ID_INST_ORIG_REQ) references institution(id_institution))]';                
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: João Almeida
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 11/02/2014 11:37
+-- CHANGE REASON: [ALERT-275235] 
+BEGIN
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA add constraint REA_FLG_CLIN_COMM_READ_CHK check (FLG_CLIN_COMM_READ in ('Y','N'))]');
+pk_versioning.run(i_sql => q'[alter table REFERRAL_EA add constraint REA_FLG_ADM_COMM_READ_CHK check (FLG_ADM_COMM_READ in ('Y','N'))]');
+END;
+/
+-- CHANGE END: Ana Monteiro

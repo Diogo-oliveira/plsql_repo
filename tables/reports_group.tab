@@ -1,0 +1,45 @@
+
+
+  CREATE TABLE REPORTS_GROUP
+   (	ID_REPORTS_GROUP NUMBER(6,0) NOT NULL ENABLE,
+	ID_REPORTS_MASTER NUMBER(24,0) NOT NULL ENABLE,
+	ID_REPORTS NUMBER(24,0) NOT NULL ENABLE,
+	RANK NUMBER(6,0),
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE reports_group IS 'Definição de grupos de relatórios' ;
+
+COMMENT ON COLUMN reports_group.id_reports_group IS 'Id do grupo de relatórios' ;
+COMMENT ON COLUMN reports_group.id_reports_master IS 'ID do relatório "pai" do grupo' ;
+COMMENT ON COLUMN reports_group.id_reports IS 'ID do relatório' ;
+COMMENT ON COLUMN reports_group.rank IS 'Ordem de visualização' ;
+COMMENT ON COLUMN reports_group.id_software IS 'ID do software' ;
+COMMENT ON COLUMN reports_group.id_institution IS 'ID da instituição' ;
+
+
+-- CHANGED BY: rui.baeta
+-- CHANGE DATE: 12/11/2009 11:51
+-- CHANGE REASON: [ALERT-55962] reports are now parametrized by reports_group, with episode type, software and institution
+alter table reports_group add flg_context varchar2(1);
+comment on column reports_group.flg_context is 'Context for report group (R=report; V=viewer).';
+-- CHANGE END: rui.baeta
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON TABLE REPORTS_GROUP IS 'Report groups definitions';
+-- CHANGE END:  ruben.araujo
+
+-- CHANGED BY:  ruben.araujo
+-- CHANGE DATE: 13/01/2016 12:20
+-- CHANGE REASON: [ALERT-317695] 
+COMMENT ON COLUMN REPORTS_GROUP.ID_REPORTS_GROUP IS 'Reports Group Identifier';
+COMMENT ON COLUMN REPORTS_GROUP.ID_REPORTS_MASTER IS 'Parent Report Identifier';
+COMMENT ON COLUMN REPORTS_GROUP.ID_REPORTS IS 'Report Identifier';
+COMMENT ON COLUMN REPORTS_GROUP.RANK IS 'Line-up';
+COMMENT ON COLUMN REPORTS_GROUP.ID_SOFTWARE IS 'Software Identifier';
+COMMENT ON COLUMN REPORTS_GROUP.ID_INSTITUTION IS 'Institution Identifier';
+-- CHANGE END:  ruben.araujo

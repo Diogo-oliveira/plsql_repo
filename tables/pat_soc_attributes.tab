@@ -1,0 +1,95 @@
+
+
+  CREATE TABLE PAT_SOC_ATTRIBUTES
+   (	ID_PAT_SOC_ATTRIBUTES NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	MARITAL_STATUS VARCHAR2(1),
+	ADDRESS VARCHAR2(200),
+	LOCATION VARCHAR2(200),
+	DISTRICT VARCHAR2(200),
+	ZIP_CODE VARCHAR2(30),
+	NUM_MAIN_CONTACT VARCHAR2(30),
+	NUM_CONTACT VARCHAR2(30),
+	FLG_JOB_STATUS VARCHAR2(1),
+	ID_COUNTRY_NATION NUMBER(12,0),
+
+	ID_COUNTRY_ADDRESS NUMBER(12,0),
+	ID_SCHOLARSHIP NUMBER(12,0),
+	ID_RELIGION NUMBER(12,0),
+	MOTHER_NAME VARCHAR2(200),
+	FATHER_NAME VARCHAR2(200),
+	ID_ISENCAO NUMBER(24,0),
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	DT_ISENCAO DATE,
+	INE_LOCATION VARCHAR2(6),
+	ID_LANGUAGE NUMBER(6,0),
+	NOTES VARCHAR2(4000),
+	CONTACT_NUMBER_3 VARCHAR2(30),
+	CONTACT_NUMBER_4 VARCHAR2(30),
+
+	PENSION NUMBER(7,3),
+	NET_WAGE NUMBER(7,3),
+	UNEMPLOYMENT_SUBSIDY NUMBER(7,3),
+	BIRTH_PLACE VARCHAR2(100)
+   );
+
+
+COMMENT ON TABLE pat_soc_attributes IS 'Outros atributos sociais do paciente' ;
+
+COMMENT ON COLUMN pat_soc_attributes.id_pat_soc_attributes IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_soc_attributes.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_soc_attributes.marital_status IS 'Estado civil: D-  divorciado; F - separado de facto; M - casado; S - solteiro; U - união de facto; W - viúvo' ;
+COMMENT ON COLUMN pat_soc_attributes.location IS 'Localidade' ;
+COMMENT ON COLUMN pat_soc_attributes.num_main_contact IS 'Nº de contacto principal' ;
+COMMENT ON COLUMN pat_soc_attributes.num_contact IS 'Nº de contacto alternativo' ;
+COMMENT ON COLUMN pat_soc_attributes.flg_job_status IS 'Estado actual: activo, reformado por invalidez, reformado por velhice, desempregado' ;
+COMMENT ON COLUMN pat_soc_attributes.mother_name IS 'Nome da mãe' ;
+COMMENT ON COLUMN pat_soc_attributes.father_name IS 'Nome do pai' ;
+COMMENT ON COLUMN pat_soc_attributes.ine_location IS 'Localidade do utente (codificação do INE). Este campo apresenta a estrutura DDCCFF onde: DD - código do distrito; CC - código do concelho; FF - código da freguesia.' ;
+COMMENT ON COLUMN pat_soc_attributes.notes IS 'notes about pat soc attributes' ;
+COMMENT ON COLUMN pat_soc_attributes.contact_number_3 IS 'A CONTACT NUMBER' ;
+COMMENT ON COLUMN pat_soc_attributes.contact_number_4 IS 'A CONTACT NUMBER' ;
+
+COMMENT ON COLUMN pat_soc_attributes.pension IS 'Pensões' ;
+COMMENT ON COLUMN pat_soc_attributes.net_wage IS 'Salário Liquido' ;
+COMMENT ON COLUMN pat_soc_attributes.unemployment_subsidy IS 'Subsídio desemprego' ;
+COMMENT ON COLUMN pat_soc_attributes.birth_place IS 'Place where patient was born' ;
+
+
+
+ALTER TABLE pat_soc_attributes add id_geo_state NUMBER;
+ALTER TABLE pat_soc_attributes add num_contrib VARCHAR2(200);
+COMMENT ON column pat_soc_attributes.id_geo_state IS 'Id do estado de residencia do paciente (FK para GEO_STATE.ID_GEO_STATE)';
+COMMENT ON column pat_soc_attributes.num_contrib IS 'Nif - Número de contribuinte';
+
+
+ALTER TABLE pat_soc_attributes add desc_geo_state varchar2(200);
+COMMENT ON column pat_soc_attributes.desc_geo_state IS 'Estado de residencia do paciente';
+
+
+ALTER TABLE PAT_SOC_ATTRIBUTES ADD (FLG_MIGRATOR VARCHAR2(1) DEFAULT 'N');
+COMMENT ON COLUMN PAT_SOC_ATTRIBUTES.FLG_MIGRATOR IS 'Y if the patient is migrator, N otherwise';
+
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE PAT_SOC_ATTRIBUTES ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN PAT_SOC_ATTRIBUTES.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2020 18:02
+-- CHANGE REASON: [EMR-40083]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00942);
+BEGIN
+EXECUTE IMMEDIATE 'DROP TABLE pat_soc_attributes_old';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos

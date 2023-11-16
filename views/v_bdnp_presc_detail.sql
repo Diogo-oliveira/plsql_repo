@@ -1,0 +1,23 @@
+CREATE OR REPLACE VIEW V_BDNP_PRESC_DETAIL AS
+SELECT flg_presc_type,
+       id_presc,
+       id_patient,
+       name,
+       gender,
+       dt_birth,
+       flg_migrator,
+       id_country_nation,
+       sns,
+       flg_occ_disease,
+       flg_independent,
+       id_health_plan,
+       num_health_plan,
+       migrator_num_doc,
+       dt_mig_doc_expire,
+       id_mig_doc_type,
+       hp_alpha2_code,
+       flg_indfess,
+       hp_national_ident_nbr,
+       hp_dt_effective,
+       flg_isencao
+  FROM bdnp_presc_detail;

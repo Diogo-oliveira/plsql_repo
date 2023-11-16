@@ -1,0 +1,183 @@
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/09/2018 11:07
+-- CHANGE REASON: [EMR-6418] 
+create table BLOOD_PRODUCT_EXECUTION
+(
+  ID_BLOOD_PRODUCT_EXECUTION NUMBER(24) NOT NULL,
+	ID_BLOOD_PRODUCT_DET NUMBER(24) NOT NULL,
+	ACTION VARCHAR2(1000 CHAR),
+	ID_ACTION_REASON NUMBER(24 CHAR),
+	NOTES_REASON VARCHAR2(1000 CHAR),
+	ID_PROF_PERFORMED NUMBER(24),
+	DT_EXECUTION TIMESTAMP(6) WITH LOCAL TIME ZONE,
+	DT_BEGIN TIMESTAMP(6) WITH LOCAL TIME ZONE,
+	DURATION NUMBER(24),
+	ID_UNIT_MEA_DURATION NUMBER(24),
+	DT_END TIMESTAMP(6) WITH LOCAL TIME ZONE,
+	DESCRIPTION VARCHAR2(1000 CHAR),
+	EXEC_NUMBER NUMBER(24),
+	ID_EPIS_DOCUMENTATION NUMBER(24),
+  create_user                 VARCHAR2(24),
+  create_time                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution          NUMBER(24),
+  update_user                 VARCHAR2(24),
+  update_time                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution          NUMBER(24)
+	)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 8M
+    next 2M
+    minextents 1
+    maxextents unlimited
+    pctincrease 0
+  );
+	
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 12/10/2018 17:30
+-- CHANGE REASON: [EMR-7594] 
+ALTER TABLE blood_product_execution
+ add id_prof_match number(24);
+ALTER TABLE blood_product_execution
+ add  dt_match_tstz timestamp(6);
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/10/2018 14:35
+-- CHANGE REASON: [EMR-7652] 
+COMMENT ON  TABLE blood_product_execution IS 'Blood Product Execution workflow';
+COMMENT ON COLUMN blood_product_execution.ID_BLOOD_PRODUCT_EXECUTION IS 'Blood Product Execution ID (SEQ)';
+COMMENT ON COLUMN blood_product_execution.ID_BLOOD_PRODUCT_DET IS 'Blood Product Det ID';
+COMMENT ON COLUMN blood_product_execution.ACTION IS 'ACTION (HOLD, RESUME, MONITORING, ETC ..)';
+COMMENT ON COLUMN blood_product_execution.ID_ACTION_REASON IS 'Cancel action reason Id';
+COMMENT ON COLUMN blood_product_execution.NOTES_REASON IS 'Notes cancel action reason id';
+COMMENT ON COLUMN blood_product_execution.ID_PROF_PERFORMED IS 'Professional Id';
+COMMENT ON COLUMN blood_product_execution.DT_EXECUTION IS 'Execution date';
+COMMENT ON COLUMN blood_product_execution.DT_BEGIN IS 'Begin date';
+COMMENT ON COLUMN blood_product_execution.DURATION IS 'Duration';
+COMMENT ON COLUMN blood_product_execution.ID_UNIT_MEA_DURATION IS 'Unit measure (DURATION)';
+COMMENT ON COLUMN blood_product_execution.DT_END IS 'End date';
+COMMENT ON COLUMN blood_product_execution.DESCRIPTION IS 'Description (Notes)';
+COMMENT ON COLUMN blood_product_execution.EXEC_NUMBER IS 'Exec Number';
+COMMENT ON COLUMN blood_product_execution.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN blood_product_execution.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN blood_product_execution.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN blood_product_execution.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN blood_product_execution.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN blood_product_execution.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN blood_product_execution.ID_EPIS_DOCUMENTATION IS 'Epis Documentation Id';
+COMMENT ON COLUMN blood_product_execution.ID_PROF_MATCH IS 'Professional Id Match';
+COMMENT ON COLUMN blood_product_execution.DT_MATCH_TSTZ IS 'Date Match';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 30/10/2018 16:30
+-- CHANGE REASON: [EMR-8415] 
+ALTER TABLE blood_product_execution
+ add id_professional number(24);
+ALTER TABLE blood_product_execution
+ add  dt_bp_execution_tstz timestamp(6);
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 20/02/2019 11:58
+-- CHANGE REASON: [EMR-12751] 
+ALTER TABLE blood_product_execution MODIFY dt_match_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE;
+ALTER TABLE blood_product_execution MODIFY dt_bp_execution_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE;
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/06/2019 08:42
+-- CHANGE REASON: [EMR-16321]
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE BLOOD_PRODUCT_EXECUTION ADD FLG_COMPATIBILITY VARCHAR2(2 CHAR)';
+EXCEPTION
+WHEN OTHERS THEN
+dbms_output.put_line('WARNING: Operation has been previously executed.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE BLOOD_PRODUCT_EXECUTION ADD NOTES_COMPATIBILITY VARCHAR2(1000 CHAR)';
+EXCEPTION
+WHEN OTHERS THEN
+dbms_output.put_line('WARNING: Operation has been previously executed.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN blood_product_execution.flg_compatibility IS ''Flag of compatibility unit (''''I'''' - Incompatible | ''''C'''' - Compatible | ''''U'''' - Uncrossmatched''';
+EXCEPTION
+WHEN DUP_VAL_ON_INDEX THEN
+dbms_output.put_line('WARNING: Operation has been previously executed.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN blood_product_execution.notes_compatibility IS ''Notes of compatibility test''';
+EXCEPTION
+WHEN DUP_VAL_ON_INDEX THEN
+dbms_output.put_line('WARNING: Operation has been previously executed.');
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 05/07/2019 14:57
+-- CHANGE REASON: [EMR-17642]
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.id_blood_product_execution is 'Blood Product execution ID';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.id_blood_product_det is 'Blood product order detail ID';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.action is 'Performed action (HOLD, RESUME, MONITORING...)';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.id_action_reason is 'Performed action reason ID';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.notes_reason is 'Notes for the performed action';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.id_prof_performed is 'Professional Id';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.dt_execution is 'Execution date';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.dt_begin is 'Begin date';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.duration is 'Duration';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.id_unit_mea_duration is 'Unit measure ID';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.dt_end is 'End date';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.description is 'Notes';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.exec_number is 'Execution order';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.id_epis_documentation is 'Execution documentation ID';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.id_prof_match is 'Professional that performed the match';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.dt_match_tstz is 'Match date';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.flg_compatibility is 'Flag of compatibility unit (''I'' - Incompatible | ''C'' - Compatible | ''U'' - Uncrossmatched)';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.notes_compatibility is 'Notes for the compatibility test';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.ID_PROFESSIONAL is 'Professional ID';
+COMMENT ON COLUMN BLOOD_PRODUCT_EXECUTION.DT_BP_EXECUTION_TSTZ is 'Date that indicates when the execution was registered';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 11/02/2020 11:41
+-- CHANGE REASON: [EMR-26250] - Improvements in the transport starting and transfusions starting screens.
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE BLOOD_PRODUCT_EXECUTION ADD FLG_CONDITION VARCHAR2(1 CHAR)';
+EXCEPTION
+WHEN OTHERS THEN
+dbms_output.put_line('WARNING: Operation has been previously executed.');
+END;
+/
+
+COMMENT ON COLUMN blood_product_execution.flg_condition IS
+'Flag of blood bag condition (''Y'' - In good condition | ''N'' - Not in good condition)';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 17/02/2020 12:23
+-- CHANGE REASON: [EMR-26921] - Ability to automatically request a lab sample collection for the mother of a newborn (until 7 days old) needing a transfusion
+ALTER TABLE blood_product_execution
+ADD flg_lab_mother varchar2(1);
+
+COMMENT ON COLUMN   blood_product_execution.flg_lab_mother IS 'Flag that indicates if a lab test was requested for the mother of the newborn [Y-Yes|N-No]';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 08/04/2021 11:28
+-- CHANGE REASON: [EMR-42843] - Link mother automatically generated lab tests to the blood transfusion of the son
+ALTER TABLE blood_product_execution add id_analysis_req_det NUMBER(24);
+
+COMMENT ON column blood_product_execution.id_analysis_req_det IS 'Lab test order ID requested for the mother of the newborn. (Column only to be used for action LAB_MOTHER_ID)';
+-- CHANGE END: Diogo Oliveira

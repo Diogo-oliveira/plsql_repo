@@ -1,0 +1,1 @@
+grant select on EPIS_DIAGRAM_DETAIL_NOTES to alert_viewer;

@@ -1,0 +1,68 @@
+--TABLE CHILD_FEED_DEV
+
+  CREATE TABLE CHILD_FEED_DEV
+   (	ID_CHILD_FEED_DEV NUMBER(12,0) NOT NULL ENABLE,
+	CODE_CHILD_FEED_DEV VARCHAR2(200) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AGE NUMBER(2,0),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE child_feed_dev IS 'Alimentos durante o 1º ano de vida OU parâmetros de análise do desenvolvimento psicomotor' ;
+
+COMMENT ON COLUMN child_feed_dev.code_child_feed_dev IS 'Código para tradução' ;
+COMMENT ON COLUMN child_feed_dev.flg_type IS 'A - alimento, P - parâmetro de análise do desenvolvimento' ;
+COMMENT ON COLUMN child_feed_dev.flg_age IS 'Indicador da idade aproximada em que são analisados os parâmetros de desenvolvimento psicomotor: A-  antes do 1º ano de vida, B - 18 meses, C - 24 meses, D - 4/5 anos' ;
+COMMENT ON COLUMN child_feed_dev.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE REASON: Acrescentar AGE_MIN e AGE_MAX na tabela
+-- CHANGE DATE: 2007/09/06
+-- Add/modify columns 
+alter table CHILD_FEED_DEV add AGE_MIN number(6);
+alter table CHILD_FEED_DEV add AGE_MAX number(6);
+ALTER TABLE CHILD_FEED_DEV
+ MODIFY FLG_AGE   varchar2(1);
+ALTER TABLE CHILD_FEED_DEV
+ MODIFY FLG_AVAILABLE   varchar2(1) null;
+
+  
+-- Add comments to the columns 
+comment on column CHILD_FEED_DEV.AGE_MIN
+  is 'Preencher se FLG_AGE = A e FLG_TYPE = P, em meses. Mês minimo da actividade';
+comment on column CHILD_FEED_DEV.AGE_MAX
+  is 'Preencher se FLG_AGE = A e FLG_TYPE = P, em meses. Mês máximo da actividade';
+-- CHANGE END
+
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 20/01/2016 11:06
+-- CHANGE REASON: [ALERT-317944 ] 
+-- Add comments to the table 
+comment on table CHILD_FEED_DEV
+  is 'Food during the 1st year of life OR analysis parameters of psychomotor development';
+  
+-- Add comments to the columns 
+comment on column CHILD_FEED_DEV.ID_CHILD_FEED_DEV
+  is 'Child feed development Id';
+comment on column CHILD_FEED_DEV.code_child_feed_dev
+  is 'Code for translation';
+comment on column CHILD_FEED_DEV.flg_type
+  is 'A - food, P - development analysis parameter';
+comment on column CHILD_FEED_DEV.flg_age
+  is 'Indicator of the approximate age at which analyzes the psychomotor development parameters: A - before the 1st year of life, B - 18 months, C - 24 months, D - 4/5 years';
+comment on column CHILD_FEED_DEV.flg_available
+  is 'Registration available at the institution housing the Database';
+comment on column CHILD_FEED_DEV.Rank
+  is 'Rank';
+comment on column CHILD_FEED_DEV.ADW_LAST_UPDATE
+  is 'Last ADW update';    
+comment on column CHILD_FEED_DEV.age_min
+  is 'Fill up if FLG_AGE = A and FLG_TYPE = P, in months. Activity minimum month';
+comment on column CHILD_FEED_DEV.age_max
+  is 'Fill up if FLG_AGE = A and FLG_TYPE = P, in months. Maximum activity month';
+-- CHANGE END: cristina.oliveira

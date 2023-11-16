@@ -1,0 +1,14 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 09:32
+-- CHANGE REASON: [ALERT-12334] 
+alter table SUPPLY_BARCODE
+  add constraint SBE_INT_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION);
+alter table SUPPLY_BARCODE
+  add constraint SBE_SPL_FK foreign key (ID_SUPPLY)
+  references SUPPLY (ID_SUPPLY);
+-- Create/Recreate check constraints 
+alter table SUPPLY_BARCODE
+  add constraint SBE_FLG_AVAILABLE_CHK
+  check (FLG_AVAILABLE IN ('Y','N'));
+-- CHANGE END: Susana Silva

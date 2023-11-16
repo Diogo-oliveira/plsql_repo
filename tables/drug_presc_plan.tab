@@ -1,0 +1,665 @@
+  CREATE TABLE DRUG_PRESC_PLAN
+   (	ID_DRUG_PRESC_PLAN NUMBER(24,0) NOT NULL ENABLE,
+	ID_DRUG_PRESC_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_DRUG_TAKE_TIME NUMBER(12,0),
+	ID_PROF_WRITES NUMBER(24,0),
+	DT_PLAN DATE NOT NULL ENABLE,
+	DT_TAKE DATE,
+	DOSAGE NUMBER(10,3),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE,
+
+	NOTES_CANCEL VARCHAR2(4000),
+	ID_EPISODE NUMBER(24,0),
+	RATE NUMBER(24,0),
+	DOSAGE_EXEC NUMBER(10,3)
+   );
+
+
+COMMENT ON TABLE drug_presc_plan IS 'Plano de tomas para um medicamento' ;
+
+COMMENT ON COLUMN drug_presc_plan.flg_status IS 'A - administrado, N - não administrado, C-  cancelado' ;
+COMMENT ON COLUMN drug_presc_plan.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN drug_presc_plan.notes_cancel IS 'Notas de cancelamento' ;
+COMMENT ON COLUMN drug_presc_plan.id_episode IS 'ID do episódio em que a toma foi administrada.' ;
+COMMENT ON COLUMN drug_presc_plan.id_drug_presc_plan IS 'Chave primaria' ;
+COMMENT ON COLUMN drug_presc_plan.dt_plan IS 'Data planeada para a toma' ;
+COMMENT ON COLUMN drug_presc_plan.dt_take IS 'Data da toma' ;
+COMMENT ON COLUMN drug_presc_plan.dosage IS 'Dosagem para esta toma' ;
+
+comment on column DRUG_PRESC_PLAN.DT_TAKE
+  is 'Data efectiva da toma';
+comment on column DRUG_PRESC_PLAN.DOSAGE_EXEC
+  is 'Dosagem já executada';
+  
+  
+alter table drug_presc_plan add ( value_drip  number(24,4));
+  
+update   drug_presc_plan set value_drip=rate ;
+update   drug_presc_plan set rate =null ;
+
+alter table drug_presc_plan  modify (rate number(24,4));
+
+update   drug_presc_plan set rate =value_drip;
+
+alter table drug_presc_plan drop column value_drip; 
+
+ 
+  
+  
+  -- Add/modify columns 
+alter table DRUG_PRESC_PLAN add flg_advers_react VARCHAR2(2);
+alter table DRUG_PRESC_PLAN add notes_advers_react VARCHAR2(2000);
+alter table DRUG_PRESC_PLAN add application_spot VARCHAR2(20);
+alter table DRUG_PRESC_PLAN add lot_number VARCHAR2(100);
+alter table DRUG_PRESC_PLAN add dt_expiration date;
+alter table DRUG_PRESC_PLAN add ID_VACC_MED_EXT NUMBER(12);
+-- Add comments to the columns 
+comment on column DRUG_PRESC_PLAN.flg_advers_react
+  is 'Indica se o doente teve uma reacção adversa';
+comment on column DRUG_PRESC_PLAN.notes_advers_react
+  is 'Notas da reacção adversa';
+comment on column DRUG_PRESC_PLAN.application_spot
+  is 'Local de administração';
+comment on column DRUG_PRESC_PLAN.lot_number
+  is 'Lote';
+comment on column DRUG_PRESC_PLAN.dt_expiration
+  is 'Data de validade';
+comment on column DRUG_PRESC_PLAN.ID_VACC_MED_EXT
+  is ' medicamentos para as vacinas';
+
+alter table drug_presc_plan 
+add (dt_plan_tstz timestamp with local time zone,
+dt_take_tstz timestamp with local time zone,
+dt_cancel_tstz timestamp with local time zone);
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-MAR-24
+-- CHANGE REASON: Adição de coluna para guardar informação sobre a origem do medicamento administrado
+alter table DRUG_PRESC_PLAN add origin VARCHAR2(100);
+-- Add comments to the columns 
+comment on column DRUG_PRESC_PLAN.origin
+  is 'Contém informação sobre a origem do medicamento administrado (code_message da tabela sys_message).';
+-- CHANGE END
+
+-- CHANGED BY: Teresa Coutinho
+-- CHANGE DATE: 2008-MAY-06
+-- Add/modify columns 
+alter table DRUG_PRESC_PLAN add DT_NEXT_TAKE TIMESTAMP(6) WITH LOCAL TIME ZONE;
+-- Add comments to the columns 
+comment on column DRUG_PRESC_PLAN.DT_NEXT_TAKE
+  is 'Dt Next Take (Only for PNV Vaccines)';
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-MAY-27
+-- CHANGE REASON: Novos campos para a administração de medicamentos
+alter table DRUG_PRESC_PLAN add ID_PROF_ADM NUMBER(24);
+
+-- Add comments to the columns 
+comment on column DRUG_PRESC_PLAN.ID_PROF_ADM
+  is 'Profissional que fez a administração do medicamento.';
+  
+  
+alter table DRUG_PRESC_PLAN add DT_ADM_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE;
+
+-- Add comments to the columns 
+comment on column DRUG_PRESC_PLAN.DT_ADM_TSTZ
+  is 'Data real da administração do medicamento.';
+
+alter table DRUG_PRESC_PLAN add DOSAGE_UNIT_MEASURE NUMBER(24);
+
+-- Add comments to the columns 
+comment on column DRUG_PRESC_PLAN.DOSAGE_UNIT_MEASURE
+  is 'Unidade de medida para a dosagem desta toma.';
+
+
+
+-- CHANGED BY: Rafael Santos
+-- CHANGED DATE: 2008-AGO-27
+-- CHANGED REASON: WO17071 - Data Quality Control - DB Best Practices - 033
+
+comment on column DRUG_PRESC_PLAN.ID_DRUG_PRESC_DET is 'ID da prescrição do fármaco';
+comment on column DRUG_PRESC_PLAN.ID_DRUG_TAKE_TIME is 'ID dos tipos de horário para uma toma';
+comment on column DRUG_PRESC_PLAN.ID_PROF_WRITES is 'ID do Profissional que administra a toma';
+comment on column DRUG_PRESC_PLAN.ID_PROF_ADM is 'ID do Profissional que administra a toma';
+comment on column DRUG_PRESC_PLAN.NOTES is 'Notas da administração do fármaco';
+comment on column DRUG_PRESC_PLAN.ID_PROF_CANCEL is 'ID do Profissional que cancela a toma';
+comment on column DRUG_PRESC_PLAN.DT_PLAN_TSTZ is 'Data/hora planeada para a toma com TIMEZONE';
+comment on column DRUG_PRESC_PLAN.DT_TAKE_TSTZ is 'Data/hora da toma com TIMEZONE';
+comment on column DRUG_PRESC_PLAN.DT_CANCEL_TSTZ is 'Data/hora do cancelamento da toma com TIMEZONE';
+
+-- CHANGE END: Rafael Santos
+
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2008-SET-22
+-- CHANGE REASON: Drop de colunas DATE com correspondentes DATE_TSTZ
+
+ALTER TABLE DRUG_PRESC_PLAN DROP COLUMN DT_PLAN;
+ALTER TABLE DRUG_PRESC_PLAN DROP COLUMN DT_TAKE;
+ALTER TABLE DRUG_PRESC_PLAN DROP COLUMN DT_CANCEL;
+
+-- CHANGE END
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-SEPT-24
+-- CHANGE REASON: Alteração que não foi corrida em clientes, mas que já existia em QC
+alter table drug_presc_plan  modify (rate number(24,4));
+-- CHANGE END
+
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-OCT-06
+-- CHANGE REASON: Alteração que não foi corrida em clientes, mas que já existia em QC
+alter table drug_presc_plan add (rate_2  number(24,4));
+--
+update   drug_presc_plan set rate_2=rate ;
+update   drug_presc_plan set rate =null ;
+alter table drug_presc_plan  modify (rate number(24,4));
+--
+update   drug_presc_plan set rate=rate_2;
+alter table drug_presc_plan drop column rate_2; 
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 2009-FEB-17
+-- CHANGE REASON: Criação de coluna que contém qual é o tipo de escolha efectuada para a data de administração nos outros produtos em texto livre
+alter table drug_presc_plan
+add id_freetext number(1) default null
+comment on column drug_presc_plan.id_freetext is 'Value that indicates which kind of field is filled in the administer screen for other_products in freetext prescriptions' 
+-- CHANGE END
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-MAR-28
+-- CHANGING REASON: OVERDOSAGE MODULE
+alter table drug_presc_plan add FLG_DOSAGE_CHECK VARCHAR2(4);
+-- Add comments to the columns 
+comment on column drug_presc_plan.FLG_DOSAGE_CHECK
+  is 'Indica a presença de alertas de sobredosagem, subdosagem, etc.';
+-- CHANGE END Patrícia Neto
+
+
+
+
+-- CHANGED BY: Sérgio Cunha
+-- CHANGE DATE: 11/09/2009 20:13
+-- CHANGE REASON: [ALERT-42984] 
+   ALTER TABLE DRUG_PRESC_PLAN ADD DOSAGE_CHANGE_JUSTIFY VARCHAR2(4000) ;
+
+   COMMENT ON COLUMN ALERT.DRUG_PRESC_PLAN.DOSAGE_CHANGE_JUSTIFY IS 'Dosage modification justification.';
+-- CHANGE END: Sérgio Cunha
+
+-- CHANGED BY: Patricia Neto
+-- CHANGE DATE: 28/10/2009 18:20
+-- CHANGE REASON: [ ALERT-20754  ] medication_uk - witness controlled drugs
+alter table DRUG_PRESC_PLAN add ID_PROF_WITNESS NUMBER(24);
+-- Add comments to the columns 
+comment on column DRUG_PRESC_PLAN.ID_PROF_WITNESS
+  is 'professional ID that witnessed the administration';
+-- CHANGE END: Patricia Neto
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 28/10/2009 23:02
+-- CHANGE REASON: [ALERT-49774] 
+alter table DRUG_PRESC_PLAN add rate_unit_measure number(24);
+comment on column DRUG_PRESC_PLAN.rate_unit_measure is 'Rate unit measure';
+-- CHANGE END: Tiago Silva
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195] 
+declare
+ l_count pls_integer;
+begin
+
+  select count(1) into l_count from all_tab_columns 
+  where owner = 'ALERT' and table_name = 'DRUG_PRESC_PLAN' and column_name = 'ID_PRESC_DIR_DOSEFREQ';
+
+  if l_count = 0 then
+    execute immediate ( 'ALTER TABLE DRUG_PRESC_PLAN ADD ID_PRESC_DIR_DOSEFREQ NUMBER(24)' );
+  end if;
+
+end;
+-- CHANGE END: Nuno Ferreira
+
+-- CHANGED BY: Nelson Canastro
+-- CHANGE DATE: 14/06/2010 12:15
+-- CHANGE REASON: [ALERT-86150] 
+ALTER TABLE drug_presc_plan add barcode VARCHAR2(200 CHAR);
+ALTER TABLE drug_presc_plan add summary VARCHAR2(30 CHAR);
+ALTER TABLE drug_presc_plan add reason VARCHAR2(4000 CHAR);
+
+COMMENT ON column drug_presc_plan.barcode IS 'Barcode scanned at administration validation';
+COMMENT ON column drug_presc_plan.summary IS 'Result of barcode validation';
+COMMENT ON column drug_presc_plan.reason IS 'Reason for proceading with administration when validation fails';
+-- CHANGE END: Nelson Canastro
+/
+-- CHANGE END: Nuno Ferreira
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195] 
+comment on column drug_presc_plan.ID_PRESC_DIR_DOSEFREQ is 'Prescription directions dose and frequency ID';
+-- CHANGE END: Nuno Ferreira
+
+-- CHANGED BY: Sérgio Cunha
+-- CHANGE DATE: 05/03/2010 15:09
+-- CHANGE REASON: [ALERT-78201] 
+declare
+ l_count pls_integer;
+begin
+
+  select count(1)
+  into l_count
+  from all_tab_columns 
+  where owner = 'ALERT' and table_name = 'DRUG_PRESC_PLAN' and column_name = 'REFERENCE_VALUE';
+
+  if l_count = 0 then
+    execute immediate ( 'alter table drug_presc_plan
+            add (reference_value number(24,4) default null,
+            id_unit_reference_value number(24) default null)');
+  end if;
+
+end;
+/
+comment on column drug_presc_plan.reference_value
+  is 'Reference value for sliding scales';
+comment on column drug_presc_plan.id_unit_reference_value
+  is 'Id unit for reference value on sliding scales';
+-- CHANGE END: Sérgio Cunha
+
+
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 05/11/2010 08:44
+-- CHANGE REASON: [ALERT-126815] 
+alter table drug_presc_plan
+add
+(
+      ID_CANCEL_REASON NUMBER(24),
+      CANCEL_REASON_DESCR VARCHAR2(1000 CHAR)
+); 
+
+alter table drug_presc_plan
+  add constraint PP_CANCEL_REASON_ADM_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+
+comment on column drug_presc_plan.ID_CANCEL_REASON
+  is 'Reason ID for the cancelation of the administration';
+comment on column drug_presc_plan.CANCEL_REASON_DESCR
+  is 'Cancelation administration description'; 
+-- CHANGE END:  NUNO ANTUNES
+
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 30/11/2010 16:00
+-- CHANGE REASON: [ALERT-131718] 
+ALTER TABLE drug_presc_plan
+ADD (
+    DT_VALUE_DRIP_CHANGE TIMESTAMP(6) WITH LOCAL TIME ZONE,
+FLG_CO_SIGN          VARCHAR2(1 CHAR) DEFAULT 'N',
+ID_PROF_CO_SIGN      NUMBER(24),
+DT_CO_SIGN           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+ID_ORDER_TYPE        NUMBER(24),
+    ID_PROF_RATE_CHANGE  NUMBER(24)
+);
+
+comment on column drug_presc_plan.flg_co_sign
+  is 'Co-sign flag. (Y)-Order co-signed. (N)-Order not co-signed.';
+comment on column drug_presc_plan.id_order_type
+  is 'Request order type (telephone, verbal, ...)';
+comment on column drug_presc_plan.dt_co_sign
+  is 'Co-sign moment';
+comment on column drug_presc_plan.id_prof_co_sign
+  is 'Co-sign professional';
+comment on column drug_presc_plan.ID_PROF_RATE_CHANGE
+  is 'ID do Profissional que alterou a velocidade de perfusão.';  
+comment on column drug_presc_plan.DT_VALUE_DRIP_CHANGE
+  is 'Last date for the change to the drip value.';
+-- CHANGE END:  NUNO ANTUNES
+
+-- CHANGED BY:  PEDRO QUINTEIRO
+-- CHANGE DATE: 07/12/2010 15:39
+-- CHANGE REASON: [ALERT-126815] 
+ALTER TABLE drug_presc_plan
+ ADD dt_end_bottle TIMESTAMP WITH LOCAL TIME ZONE;
+						
+comment on column DRUG_PRESC_PLAN.dt_end_bottle
+  is 'IV FLUIDS bottle administration end date';
+-- CHANGE END:  PEDRO QUINTEIRO
+
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 22/02/2011 13:59
+-- CHANGE REASON: [ALERT-163193] 
+alter table
+   drug_presc_plan
+add
+   (
+   id_prof_edit_discontinueNUMBER(24), 
+   dt_edit_discontinueTIMESTAMP(6) WITH LOCAL TIME ZONE,
+   justify_descrVARCHAR2(1000 CHAR),
+   dt_end_bottleTIMESTAMP(6) WITH LOCAL TIME ZONE,
+   flg_totally_adm varchar2(1) DEFAULT NULL   
+   );
+    
+comment on column DRUG_PRESC_PLAN.id_prof_edit_discontinue
+  is 'ID of the Professional who edit/discontinues a take.';  
+comment on column DRUG_PRESC_PLAN.dt_edit_discontinue
+  is 'Date of the edit/discontinue of a take';  
+comment on column DRUG_PRESC_PLAN.justify_descr
+  is 'Justification for edit/discontinue take.';  
+comment on column DRUG_PRESC_PLAN.dt_end_bottle
+  is 'IV FLUIDS bottle administration end date';
+comment on column DRUG_PRESC_PLAN.Flg_Totally_Adm
+  is 'Tells whether the administration that has been edited, was administered in full.';  
+-- CHANGE END:  NUNO ANTUNES
+
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 24/02/2011 07:58
+-- CHANGE REASON: [ALERT-156786] 
+alter table
+   drug_presc_plan
+add
+   (
+   id_prof_edit_discontinue NUMBER(24), 
+   dt_edit_discontinue TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   justify_descr VARCHAR2(1000 CHAR),
+   dt_end_bottle TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   flg_totally_adm varchar2(1) DEFAULT NULL   
+   );
+    
+comment on column DRUG_PRESC_PLAN.id_prof_edit_discontinue
+  is 'ID of the Professional who edit/discontinues a take.';  
+comment on column DRUG_PRESC_PLAN.dt_edit_discontinue
+  is 'Date of the edit/discontinue of a take';  
+comment on column DRUG_PRESC_PLAN.justify_descr
+  is 'Justification for edit/discontinue take.';  
+comment on column DRUG_PRESC_PLAN.dt_end_bottle
+  is 'IV FLUIDS bottle administration end date';
+comment on column DRUG_PRESC_PLAN.Flg_Totally_Adm
+  is 'Tells whether the administration that has been edited, was administered in full.';  
+-- CHANGE END:  NUNO ANTUNES
+
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 25/02/2011 09:54
+-- CHANGE REASON: [ALERT-156786] 
+alter table
+   drug_presc_plan
+add
+   (
+   id_prof_edit_discontinue NUMBER(24), 
+   dt_edit_discontinue TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   justify_descr VARCHAR2(1000 CHAR),
+   flg_totally_adm varchar2(1) DEFAULT NULL   
+   );
+    
+comment on column DRUG_PRESC_PLAN.id_prof_edit_discontinue
+  is 'ID of the Professional who edit/discontinues a take.';  
+comment on column DRUG_PRESC_PLAN.dt_edit_discontinue
+  is 'Date of the edit/discontinue of a take';  
+comment on column DRUG_PRESC_PLAN.justify_descr
+  is 'Justification for edit/discontinue take.';  
+comment on column DRUG_PRESC_PLAN.dt_end_bottle
+  is 'IV FLUIDS bottle administration end date';
+comment on column DRUG_PRESC_PLAN.Flg_Totally_Adm
+  is 'Tells whether the administration that has been edited, was administered in full.';  
+-- CHANGE END:  NUNO ANTUNES
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 19/05/2011 11:42
+-- CHANGE REASON: [ALERT-180399] 
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table DRUG_PRESC_PLAN add FLG_TYPE_DATE varchar2(1)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+
+END;
+/
+
+-- Add comments to the columns 
+comment on column DRUG_PRESC_PLAN.FLG_TYPE_DATE
+  is 'Tipo de data inserido, com marcacao de hora - H; só para um ano - Y; para um ano e mes - M; para ano, mes e dia - D';
+-- CHANGE END: Rita Lopes
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 30/10/2013
+-- CHANGE REASON: ALERT-268016
+ALTER TABLE DRUG_PRESC_PLAN DROP CONSTRAINT DRPRP_EPIS_FK;
+-- CHANGE END
+
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/05/2014 21:57
+-- CHANGE REASON: [ALERT-281683] 
+alter table drug_presc_plan add id_vacc_funding_cat NUMBER(24);
+comment on column drug_presc_plan.id_vacc_funding_cat is 'Vaccine funding program eligibility category Identifier';
+
+alter table drug_presc_plan add id_vacc_funding_source NUMBER(24);
+comment on column drug_presc_plan.id_vacc_funding_source is 'Vaccine funding source Identifier';
+
+alter table drug_presc_plan add id_vacc_doc_vis NUMBER(24);
+comment on column drug_presc_plan.id_vacc_doc_vis is 'Vaccine document Identifier';
+
+alter table drug_presc_plan add doc_vis_desc VARCHAR2(4000);
+comment on column drug_presc_plan.doc_vis_desc is 'Vaccine document description in free text';
+
+alter table drug_presc_plan add id_vacc_origin NUMBER(24);
+comment on column drug_presc_plan.id_vacc_origin is 'This refers to the origin of the vaccine Identifier';
+
+alter table drug_presc_plan add origin_desc VARCHAR2(4000);
+comment on column drug_presc_plan.origin_desc is 'Origin Description in free text';
+
+alter table drug_presc_plan add vacc_route_data VARCHAR2(40);
+comment on column drug_presc_plan.vacc_route_data is 'This vaccination route of the vaccine';
+
+alter table drug_presc_plan add id_ordered NUMBER(24);
+comment on column drug_presc_plan.id_ordered is 'Ordered Professional';
+
+alter table drug_presc_plan add ordered_desc VARCHAR2(4000);
+comment on column drug_presc_plan.ordered_desc is 'Ordered Professional in free text';
+
+alter table drug_presc_plan add id_administred NUMBER(24);
+comment on column drug_presc_plan.id_administred is 'Administred Professional';
+
+alter table drug_presc_plan add administred_desc VARCHAR2(4000);
+comment on column drug_presc_plan.administred_desc is 'Administred Professional in free text';
+
+alter table drug_presc_plan add dt_doc_delivery_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE;
+comment on column drug_presc_plan.dt_doc_delivery_tstz is 'Delivery date of the document to the patient';
+
+alter table drug_presc_plan add id_vacc_adv_reaction NUMBER(24);
+comment on column drug_presc_plan.id_vacc_adv_reaction is 'Id of adverse reactions for table';
+
+alter table drug_presc_plan add application_spot_code VARCHAR2(20);
+comment on column drug_presc_plan.application_spot_code is 'Code of Aplication Spot';
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/05/2014 22:23
+-- CHANGE REASON: [ALERT-281683] 
+alter table drug_presc_plan rename column id_prof_edit_discontinue to id_prof_edit_disc;
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 18/09/2014 14:43
+-- CHANGE REASON: [ALERT-295838 ] 
+-- Add/modify columns 
+alter table DRUG_PRESC_PLAN add funding_source_desc VARCHAR2(4000);
+-- Add comments to the columns 
+comment on column DRUG_PRESC_PLAN.funding_source_desc
+  is 'Vaccine funding source in free text';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:22
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_PRESC_PLAN IS 'Administration plan associated to an medication prescription';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_DRUG_PRESC_PLAN   IS 'Prescription administration plan ID';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_DRUG_PRESC_DET   IS 'Prescription details ID';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_DRUG_TAKE_TIME   IS 'Administration take time ID. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_PROF_WRITES   IS 'Professional ID that registers the administration in the application.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DOSAGE   IS 'Administration dose.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.FLG_STATUS   IS 'Administration plan status. A - administered, N - not administered, C- cancelled';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.NOTES   IS 'Administration notes.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_PROF_CANCEL   IS 'Professional Id that cancelled the record.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.NOTES_CANCEL   IS 'Cancellation notes.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_EPISODE    IS 'Episode ID where the administration was performed.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.RATE    IS 'Administration rate [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DOSAGE_EXEC    IS 'Executed dose [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DOSAGE_EXEC    IS 'Executed dose [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.FLG_ADVERS_REACT   IS 'Identifies if the patient has an adverse reaction.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.NOTES_ADVERS_REACT  IS 'Adverse reaction notes.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.APPLICATION_SPOT   IS 'Administration site.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.LOT_NUMBER   IS 'Lot number of the medication.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DT_EXPIRATION  IS 'Expiration date of the medication.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_VACC_MED_EXT  IS 'Medication used in vaccination.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DT_PLAN_TSTZ  IS 'Administration planned date.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DT_TAKE_TSTZ  IS 'Administration date.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DT_CANCEL_TSTZ  IS 'Cancellation date.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ORIGIN   IS 'Information about medication administered (code_message of table sys_message) [Deprecated].';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DT_NEXT_TAKE   IS 'Next administration date (Only for PNV Vaccines).';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_PROF_ADM   IS 'Professional that performs the administration.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DT_ADM_TSTZ   IS 'Real administration date. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DOSAGE_UNIT_MEASURE   IS 'Dose unit measure.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_FREETEXT   IS 'Value that indicates which kind of field is filled in the administer screen for other_products in freetext prescriptions. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.FLG_DOSAGE_CHECK  IS 'Identifies if there is warnings of overdose, underdosing, ... [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DOSAGE_CHANGE_JUSTIFY  IS 'Dosage modification justification. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.RATE_UNIT_MEASURE  IS 'Rate unit measure. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_PROF_WITNESS  IS 'Professional ID that witnessed the administration. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_PRESC_DIR_DOSEFREQ  IS 'Prescription directions dose and frequency ID. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.REFERENCE_VALUE  IS 'Reference value for sliding scales. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_UNIT_REFERENCE_VALUE  IS 'Id unit for reference value on sliding scales. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.BARCODE  IS 'Barcode scanned at administration validation. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.SUMMARY  IS 'Result of barcode validation. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.REASON  IS 'Reason for proceading with administration when validation fails. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DT_VALUE_DRIP_CHANGE  IS 'Last date for the change to the drip value. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.FLG_CO_SIGN  IS 'Co-sign flag. (Y)-Order co-signed. (N)-Order not co-signed. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_PROF_CO_SIGN  IS 'Co-sign professional. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DT_CO_SIGN   IS 'Co-sign moment. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_ORDER_TYPE   IS 'Request order type (telephone, verbal, ...). [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_PROF_RATE_CHANGE   IS 'Professional id that updated the perfusion rate. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DT_END_BOTTLE   IS 'IV FLUIDS bottle administration end date. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.ID_PROF_EDIT_DISC  IS 'ID of the Professional who edit/discontinues a take. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.DT_EDIT_DISCONTINUE  IS 'Date of the edit/discontinue of a take. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.JUSTIFY_DESCR  IS 'Justification for edit/discontinue take. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.FLG_TOTALLY_ADM  IS 'Tells whether the administration that has been edited, was administered in full. [Deprecated]';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.FLG_TYPE_DATE  IS 'Inserted date type. H - with a defined hour; Y - just for a year; M - defined the year and month; D - defined the year, month and day.';
+/
+
+COMMENT ON COLUMN DRUG_PRESC_PLAN.VACC_ROUTE_DATA  IS 'Vaccination route of the vaccine.';
+/
+-- CHANGE END: Sofia Mendes

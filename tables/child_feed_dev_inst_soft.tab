@@ -1,0 +1,66 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/07/2011 15:01
+-- CHANGE REASON: [ALERT-188174] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects('ALERT', 'CHILD_FEED_DEV_INST_SOFT', 'TABLE', 'PRM', 'N', '', 'N');
+
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE TABLE child_feed_dev_inst_soft (
+  id_child_feed_dev            number(24,0)                      not null,
+  id_institution             NUMBER(24,0)                      NOT NULL,
+  id_software                NUMBER(24,0)                      NOT NULL,
+  id_market                  NUMBER(24,0)                      NOT NULL,
+  flg_available              varchar2(1 char)                  not null,
+  rank                       NUMBER(6,0)                      NULL,
+  create_user            varchar2(24 char)                      null,
+  create_time            timestamp(6) with local time zone null,
+  create_institution     number(24,0)                      null,
+  update_user            varchar2(24 char)                      null,
+  update_time            timestamp(6) with local time zone null,
+  update_institution     NUMBER(24,0)                      NULL
+)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+
+COMMENT ON TABLE child_feed_dev_inst_soft IS 'pediatric areas inst soft';
+COMMENT ON COLUMN child_feed_dev_inst_soft.id_child_feed_dev IS 'pediatric area add identifier';
+COMMENT ON COLUMN child_feed_dev_inst_soft.id_institution  IS 'pediatric area institution ';
+COMMENT ON COLUMN child_feed_dev_inst_soft.id_software     IS 'pediatric area software    ';
+COMMENT ON COLUMN child_feed_dev_inst_soft.id_market       IS 'pediatric area market      ';
+COMMENT ON COLUMN child_feed_dev_inst_soft.flg_available   IS 'flg_available Y/N';
+COMMENT ON COLUMN child_feed_dev_inst_soft.create_user IS 'Creation User';
+COMMENT ON COLUMN child_feed_dev_inst_soft.create_time IS 'Creation Time';
+COMMENT ON COLUMN child_feed_dev_inst_soft.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN child_feed_dev_inst_soft.update_user IS 'Update User';
+COMMENT ON COLUMN child_feed_dev_inst_soft.update_time IS 'Update Time';
+COMMENT ON COLUMN child_feed_dev_inst_soft.update_institution IS 'Update Institution';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 20/01/2016 11:17
+-- CHANGE REASON: [ALERT-317944 ] 
+-- Add comments to the table 
+comment on table CHILD_FEED_DEV_INST_SOFT
+  is 'Food during the 1st year of life OR analysis parameters of psychomotor development, by institution and software';
+-- Add comments to the columns 
+comment on column CHILD_FEED_DEV_INST_SOFT.id_child_feed_dev
+  is 'Child feed development Id';  
+comment on column CHILD_FEED_DEV_INST_SOFT.id_institution
+  is 'Institution Id';
+comment on column CHILD_FEED_DEV_INST_SOFT.id_software
+  is 'Software Id';
+comment on column CHILD_FEED_DEV_INST_SOFT.id_market
+  is 'Market Id';
+comment on column CHILD_FEED_DEV_INST_SOFT.flg_available
+  is 'Availability in the Backoffce. Y-Yes N-No';
+comment on column CHILD_FEED_DEV_INST_SOFT.Rank
+  is 'Rank';  
+-- CHANGE END: cristina.oliveira

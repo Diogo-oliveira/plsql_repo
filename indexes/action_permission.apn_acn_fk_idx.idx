@@ -1,0 +1,17 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:40
+-- CHANGE REASON: [ALERT-117147] 
+declare
+   e_no_existent_index EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_no_existent_index, -01418); -- table already there
+begin
+    BEGIN
+        EXECUTE IMMEDIATE 'drop index apn_acn_fk_idx';
+    EXCEPTION
+        WHEN e_no_existent_index THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+create index apn_acn_fk_idx on action_permission (id_action);
+-- CHANGE END: Sérgio Santos

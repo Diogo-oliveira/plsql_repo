@@ -1,0 +1,102 @@
+
+
+alter table INTERV_PRESC_DET_HIST
+  add constraint IPDH_PK primary key (ID_INTERV_PRESC_DET_HIST)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+
+
+
+-- CHANGE BY: Rita Lopes
+-- CHANGE REASON: As colunas do tipo flg nao tinham chek contrainsts
+-- CHANGE DATE: 20080704
+
+alter table INTERV_PRESC_DET_HIST
+  add constraint IPDH_FLGSTATUS_CK
+  check (flg_status IN ('E','S','R','C','D','I','V','P','A','F','G'));
+
+alter table INTERV_PRESC_DET_HIST
+  add constraint IPDH_FLGIINTERVTYPE_CK
+  check (flg_interv_type IN ('N','S','U','A','C'));
+
+alter table INTERV_PRESC_DET_HIST
+  add constraint IPDH_FLGFREQ_CK
+  check (flg_freq IN ('D','S','M'));
+
+alter table INTERV_PRESC_DET_HIST
+  add constraint IPDH_FLGPRTY_CK
+  check (flg_prty IN ('U','M','N'));
+	
+alter table INTERV_PRESC_DET_HIST
+  add constraint IPDH_FLGCOSIGN_CK
+  check (flg_co_sign IN ('Y','N'));
+
+alter table INTERV_PRESC_DET_HIST
+  add constraint IPDH_FLGMFR_CK
+  check (flg_mfr IN ('Y','N'));
+
+-- CHANGE END:
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/09/2009 17:45
+-- CHANGE REASON: [ALERT-42947] New feature ALERT 910 MCDT INTERNAL EXTERNAL
+alter table interv_presc_det_hist drop constraint IPDH_FLGSTATUS_CK;
+alter table interv_presc_det_hist add constraint IPDH_FLGSTATUS_CK check (flg_status IN ('E','S','R','C','D','I','V','P','A','F','G','X'));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 06/12/2011 17:24
+-- CHANGE REASON: [ALERT-208597 ] 
+alter table INTERV_PRESC_DET_HIST
+  drop constraint IPDH_FLGPRTY_CK;
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 06/12/2011 17:28
+-- CHANGE REASON: [ALERT-208597 ] 
+alter table INTERV_PRESC_DET_HIST
+  add constraint IPDH_FLGPRTY_CK
+  check (flg_prty IN ('U','E','N'));
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 02/10/2012 09:59
+-- CHANGE REASON: [ALERT-241269 ] 
+DECLARE
+    e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE interv_presc_det_hist add CONSTRAINT IPDH_FLG_LATERALITY_CHK CHECK(flg_laterality IN (''N'', ''B'', ''L'', ''R''))';
+
+EXCEPTION
+    WHEN e_constraint_already_there THEN
+        NULL;
+    
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 16/04/2013 15:51
+-- CHANGE REASON: [ALERT-255084] 
+DECLARE
+    e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE interv_presc_det_hist add CONSTRAINT IPDH_FLG_CLINICAL_CHK CHECK(FLG_CLINICAL_PURPOSE IN (''N'', ''T'', ''S'', ''P'',''R'', ''O''))';
+
+EXCEPTION
+    WHEN e_constraint_already_there THEN
+        NULL;
+    
+END;
+-- CHANGE END: cristina.oliveira

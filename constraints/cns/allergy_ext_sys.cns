@@ -1,0 +1,75 @@
+
+
+  ALTER TABLE ALLERGY_EXT_SYS MODIFY (ID_ALLERGY_EXT_SYS NOT NULL ENABLE);
+
+  ALTER TABLE ALLERGY_EXT_SYS MODIFY (ID_EXTERNAL_SYS NOT NULL ENABLE);
+
+  ALTER TABLE ALLERGY_EXT_SYS MODIFY (ID_ALLERGY NOT NULL ENABLE);
+
+  ALTER TABLE ALLERGY_EXT_SYS MODIFY (ID_INSTITUTION NOT NULL ENABLE);
+
+  ALTER TABLE ALLERGY_EXT_SYS MODIFY (VALUE NOT NULL ENABLE);
+
+  alter table ALLERGY_EXT_SYS
+  add constraint AES_PK primary key (ID_ALLERGY_EXT_SYS);
+
+-- CHANGED BY: Rui Spratley
+-- CHANGED DATE: 2009-APR-17
+-- CHANGED REASON: ALERT-20023
+begin
+  alter table ALLERGY_EXT_SYS
+  add constraint AES_PK primary key (ID_ALLERGY_EXT_SYS);
+exception
+when others then null;
+end;
+--CHANGE END
+
+
+-- CHANGED BY: Rui Spratley
+-- CHANGED DATE: 2009-APR-17
+-- CHANGED REASON: ALERT-20023 
+declare
+begin
+  execute immediate 'alter table ALLERGY_EXT_SYS add constraint AES_PK primary key (ID_ALLERGY_EXT_SYS)';
+exception
+when others then null;
+end;
+-- CHANGE END
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 14/12/2012 11:12
+-- CHANGE REASON: [ALERT-246857 ] Issue Replication: FRMW_OBJECTS :: wrong classification / Easy Access :: review / Keys :: missing PK and recursive FK
+--                
+DECLARE
+e_pk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+
+BEGIN    
+ BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE allergy_ext_sys add CONSTRAINT aes_PK primary key(id_allergy_ext_sys)';
+    EXCEPTION
+               WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+    END;
+END;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 02/01/2013 17:25
+-- CHANGE REASON: [ALERT-246857 ] Issue Replication: FRMW_OBJECTS :: wrong classification / Easy Access :: review / Keys :: missing PK and recursive FK
+--                
+DECLARE
+e_pk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+
+BEGIN    
+ BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE allergy_ext_sys add CONSTRAINT AEX_PK primary key(id_allergy_ext_sys)';
+    EXCEPTION
+               WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+    END;
+END;
+/
+-- CHANGE END: Elisabete Bugalho

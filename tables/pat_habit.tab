@@ -1,0 +1,117 @@
+
+
+  CREATE TABLE PAT_HABIT
+   (	ID_PAT_HABIT NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_HABIT NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_HABIT DATE NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_PROF_WRITES NUMBER(24,0),
+	NOTES VARCHAR2(4000),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTE_CANCEL VARCHAR2(4000),
+	YEAR_BEGIN NUMBER(4,0),
+
+	MONTH_BEGIN NUMBER(2,0),
+	DAY_BEGIN NUMBER(2,0),
+	YEAR_END NUMBER(4,0),
+	MONTH_END NUMBER(2,0),
+	DAY_END NUMBER(2,0),
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE pat_habit IS 'Hábitos.Se for registado pelo próprio utente, ID_PROFESSIONAL não está preenchido.' ;
+
+COMMENT ON COLUMN pat_habit.id_pat_habit IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_habit.id_habit IS 'Tipo de nota: hábitos alimentares, sanitários, tabaco, álcool, drogas, café, medicamentos' ;
+COMMENT ON COLUMN pat_habit.dt_pat_habit IS 'Data de registo' ;
+COMMENT ON COLUMN pat_habit.flg_status IS 'Estado: A - activo, C - cancelado pelo prof., U - cancelado pelo utente' ;
+COMMENT ON COLUMN pat_habit.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN pat_habit.note_cancel IS 'Notas de cancelamento' ;
+COMMENT ON COLUMN pat_habit.year_begin IS 'Ano (aproximando) de início do hábito' ;
+COMMENT ON COLUMN pat_habit.month_begin IS 'Mês (aproximando) de início do hábito' ;
+COMMENT ON COLUMN pat_habit.day_begin IS 'Dia (aproximando) de início do hábito' ;
+COMMENT ON COLUMN pat_habit.year_end IS 'Ano (aproximando) de fim do hábito' ;
+COMMENT ON COLUMN pat_habit.month_end IS 'Mês (aproximando) de fim do hábito' ;
+COMMENT ON COLUMN pat_habit.day_end IS 'Dia (aproximando) de fim do hábito' ;
+
+comment on column PAT_HABIT.ID_EPISODE
+  is 'ID do episódio em que foi feito o registo.';
+alter table pat_habit 
+add (dt_pat_habit_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+
+
+--- DROP DATE TYPE
+ALTER table PAT_HABIT  DROP column DT_PAT_HABIT;
+ALTER table PAT_HABIT  DROP column DT_CANCEL;
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 30/03/2009 10:27
+-- CHANGE REASON: [ALERT-12181] Notes Problems / Cancelation reason
+--                CCHIT: ED 25.01
+alter table pat_habit
+add id_cancel_reason number(24);
+comment on column pat_habit.id_cancel_reason is 'Cancel reason ID';
+
+alter table pat_habit
+add cancel_notes varchar2(4000);
+comment on column pat_habit.cancel_notes is 'Cancelation notes';
+-- CHANGE END
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 11/04/2011 13:50
+-- CHANGE REASON: [ALERT-172239] 
+alter table PAT_HABIT
+ADD id_habit_characterization  NUMBER(24);
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+  -- Add comments to the columns 
+comment on column PAT_HABIT.id_pat_habit
+  is 'Primary Key identifier';
+comment on column PAT_HABIT.id_patient
+  is 'Patient ID';
+comment on column PAT_HABIT.id_habit
+  is 'Habit ID (Habit FK) ';
+comment on column PAT_HABIT.flg_status
+  is 'Flag status : A - Active, C - Cancelled., U - Cancelled by patient; R - Resolved; p - Passive';
+comment on column PAT_HABIT.id_prof_writes
+  is 'Professional that registers the habit';
+comment on column PAT_HABIT.notes
+  is 'Habit notes';
+comment on column PAT_HABIT.id_prof_cancel
+  is 'Professional that cancels the habit';
+comment on column PAT_HABIT.note_cancel
+  is 'Cancellation notes';
+comment on column PAT_HABIT.year_begin
+  is 'Begin year of habit';
+comment on column PAT_HABIT.month_begin
+  is 'Begin month of habit';
+comment on column PAT_HABIT.day_begin
+  is 'Begin day of habit';
+comment on column PAT_HABIT.year_end
+  is 'End year of habit';
+comment on column PAT_HABIT.month_end
+  is 'End month of habit';
+comment on column PAT_HABIT.day_end
+  is 'End day of habit';
+comment on column PAT_HABIT.id_institution
+  is 'Institution where the habit was created/updated';
+comment on column PAT_HABIT.id_episode
+  is 'Episode where the habit was created/updated';
+comment on column PAT_HABIT.dt_pat_habit_tstz
+  is 'Registry date';
+comment on column PAT_HABIT.dt_cancel_tstz
+  is 'Cancel date ';
+comment on column PAT_HABIT.id_habit_characterization
+  is 'Habit characterization ID (Habit_characterization FK)';
+-- CHANGE END: Elisabete Bugalho

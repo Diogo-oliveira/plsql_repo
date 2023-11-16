@@ -1,0 +1,68 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/02/2011 14:49
+-- CHANGE REASON: [ALERT-164319 ] Issue Replication: Atitudes terapêuticas
+-- Creating Primary Key on 'ICNP_SUGGEST_INTERV'
+BEGIN
+
+EXECUTE IMMEDIATE 'ALTER TABLE ICNP_SUGGEST_INTERV
+ ADD (CONSTRAINT ISV_PK PRIMARY KEY 
+  (ID_ICNP_SUG_INTERV))';
+EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+
+
+-- Creating Check Constraint on 'ICNP_SUGGEST_INTERV'
+BEGIN
+
+EXECUTE IMMEDIATE 'ALTER TABLE ICNP_SUGGEST_INTERV
+ ADD (CONSTRAINT ISV_STATUS_CHK CHECK (FLG_STATUS IN (''S'',''A'',''R'',''C'')))
+';
+EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 29/07/2011 18:01
+-- CHANGE REASON: [ALERT-182932] Implementation of the recurrence mechanism in ICNP functionality
+DECLARE
+    e_uk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_uk_already_exists, -02261); -- such unique or primary key already exists in table
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE icnp_suggest_interv ADD CONSTRAINT isv_uk UNIQUE (id_task_type, id_req, id_task)';
+EXCEPTION
+  WHEN e_uk_already_exists THEN
+    dbms_output.put_line('Unique key icnp_suggest_interv.isv_uk already exists');   
+END;
+/
+-- CHANGE END: Luis Oliveira
+
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 05/09/2011 15:13
+-- CHANGE REASON: [ALERT-193342] Implementation of the recurrence mechanism in ICNP functionality
+DECLARE
+    e_uk_doesnt_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_uk_doesnt_exists, -02443); -- cannot drop constraint, nonexistent constraint
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE icnp_suggest_interv DROP CONSTRAINT isv_uk';
+EXCEPTION
+  WHEN e_uk_doesnt_exists THEN
+    dbms_output.put_line('Unique key icnp_suggest_interv.isv_uk doesnt exists');   
+END;
+/
+DECLARE
+    e_uk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_uk_already_exists, -02261); -- such unique or primary key already exists in table
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE icnp_suggest_interv ADD CONSTRAINT isv_uk UNIQUE (id_task_type, id_req, id_task, id_composition)';
+EXCEPTION
+  WHEN e_uk_already_exists THEN
+    dbms_output.put_line('Unique key icnp_suggest_interv.isv_uk already exists');   
+END;
+/
+-- CHANGE END: Luis Oliveira

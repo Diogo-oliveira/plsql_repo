@@ -1,0 +1,5 @@
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 12/01/2011 09:54
+-- CHANGE REASON: [ALERT-154804] 
+GRANT SELECT ON v_pat_cit_hist TO ALERT_ADTCOD;
+-- CHANGE END: orlando.antunes

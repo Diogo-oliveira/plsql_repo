@@ -1,0 +1,84 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:25
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'CDR_CONCEPT',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'DSV',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => '',
+                                             i_flg_default_child => 'N');
+END;
+/
+
+create table CDR_CONCEPT
+(
+  id_cdr_concept     NUMBER(24) not null,
+  code_cdr_concept   VARCHAR2(200 CHAR) not null,
+  internal_name      VARCHAR2(200 CHAR) not null,
+  icon               VARCHAR2(200 CHAR),
+  flg_available      VARCHAR2(1 CHAR) default 'Y' not null,
+  flg_identifiable   VARCHAR2(1 CHAR) default 'N' not null,
+  flg_valuable       VARCHAR2(1 CHAR) default 'N' not null,
+  service_desc       VARCHAR2(200 CHAR),
+  service_list       VARCHAR2(200 CHAR),
+  service_value      VARCHAR2(200 CHAR),
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+);
+
+comment on table CDR_CONCEPT
+  is 'Clinical decision rule concepts. Generally, a concept maps an ALERT content universe (lab tests, exams, allergies, etc.).';
+
+comment on column CDR_CONCEPT.id_cdr_concept
+  is 'Primary key.';
+comment on column CDR_CONCEPT.code_cdr_concept
+  is 'Code for translation.';
+comment on column CDR_CONCEPT.internal_name
+  is 'Internal description.';
+comment on column CDR_CONCEPT.icon
+  is 'Rule concept icon.';
+comment on column CDR_CONCEPT.flg_available
+  is 'Record availability (Y/N).';
+comment on column CDR_CONCEPT.flg_identifiable
+  is 'Must this concept be identified? Y/N';
+comment on column CDR_CONCEPT.flg_valuable
+  is 'Must this concept be valued? Y/N';
+comment on column CDR_CONCEPT.service_desc
+  is 'Rule concept describal service.';
+comment on column CDR_CONCEPT.service_list
+  is 'Rule concept listing service.';
+comment on column CDR_CONCEPT.service_value
+  is 'Rule concept value service. Indicates if this concept is valued using a domain, or a list of values.';
+comment on column CDR_CONCEPT.create_user
+  is 'Creation User';
+comment on column CDR_CONCEPT.create_time
+  is 'Creation Time';
+comment on column CDR_CONCEPT.create_institution
+  is 'Creation Institution';
+comment on column CDR_CONCEPT.update_user
+  is 'Update User';
+comment on column CDR_CONCEPT.update_time
+  is 'Update Time';
+comment on column CDR_CONCEPT.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 12/05/2014 14:37
+-- CHANGE REASON: [ALERT-284329] 
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CDR_CONCEPT add (ID_TASK_TYPE       number(24) )';  
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: This already exists.');
+END;
+/
+
+comment on column CDR_CONCEPT.ID_TASK_TYPE  is 'ID of table task_Typ that relation concepts with task_types';
+-- CHANGE END: mario.mineiro

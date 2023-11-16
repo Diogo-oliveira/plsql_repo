@@ -1,0 +1,133 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/05/2014 11:58
+-- CHANGE REASON: [ALERT-282042] data export detail
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                                 i_obj_name          => 'CDA_REQ_DET',
+                                                 i_obj_type          => 'TABLE',
+                                                 i_flg_category      => 'TRS',
+                                                 i_flg_alert_default => 'N',
+                                                 i_delete_script     => NULL,
+                                                 i_flg_default_child => 'N');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE TABLE CDA_REQ_det
+        (id_cda_req_det NUMBER(24) NOT NULL, 
+       id_cda_req NUMBER(24) NOT NULL, 
+       flg_status VARCHAR2(1 CHAR) NOT NULL, 
+       id_report number(24) not null,
+       qrda_type VARCHAR2(1000 CHAR),
+        dt_status_start TIMESTAMP(6) WITH LOCAL TIME ZONE DEFAULT current_timestamp not null, 
+        dt_status_end TIMESTAMP(6) WITH LOCAL TIME ZONE,
+         create_user   VARCHAR2(24 char),
+                                   create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                                   create_institution NUMBER(24),
+                                   update_user        VARCHAR2(24 char),
+                                   update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                                   update_institution NUMBER(24)
+         
+         ) 
+        tablespace alert_data';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Table already exists');
+    END;
+END;
+/
+
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON TABLE CDA_REQ_det IS ''Relational table for responsible professionals in each service.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column CDA_REQ_det.id_cda_req_det IS ''PK id (sequence id).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column CDA_REQ_det.id_cda_req IS ''Request id.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column CDA_REQ_det.flg_status IS ''Request Status.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+        BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column CDA_REQ_det.id_report IS ''Report Generated (reports_software table).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column CDA_REQ_det.qrda_type IS ''Quality measures "|" list(identifier only needed in QRDA reports type).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+        BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column CDA_REQ_det.dt_status_start IS ''Request Start date.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+        BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column CDA_REQ_det.dt_status_end IS ''Request end date.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+            -- audit
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column CDA_REQ_det.create_user IS ''user identifier.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column CDA_REQ_det.create_institution IS ''institution identifier.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column CDA_REQ_det.create_time IS ''Date of record creation.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column CDA_REQ_det.update_user IS ''update user identifier.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column CDA_REQ_det.update_time IS ''update institution identifier.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column CDA_REQ_det.update_institution IS ''update record date.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+end;
+/
+-- CHANGE END:  Rui Gomes

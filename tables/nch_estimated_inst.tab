@@ -1,0 +1,58 @@
+-- Create table
+create table NCH_ESTIMATED_INST
+(
+  ID_NCH_ESTIMATED_INST NUMBER(24) not null,
+  ID_INSTITUTION        NUMBER(24) default 0 not null,
+  ID_CONTEXT            NUMBER(24) not null,
+  FLG_CONTEXT           VARCHAR2(1) not null,
+  VALUE                 NUMBER(24) not null,
+  DT_CREATE_TSTZ        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_CREATE_PROF        NUMBER,
+  CREATE_USER           VARCHAR2(200),
+  CREATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(200),
+  UPDATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+);
+
+-- Add comments to the table 
+comment on table NCH_ESTIMATED_INST
+  is 'Estimated nursing care hours for a given intervention';
+	
+-- Add comments to the columns 
+comment on column NCH_ESTIMATED_INST.ID_NCH_ESTIMATED_INST
+  is 'Primary key';
+comment on column NCH_ESTIMATED_INST.ID_INSTITUTION
+  is 'Institution ID';
+comment on column NCH_ESTIMATED_INST.ID_CONTEXT
+  is 'Context ID';
+comment on column NCH_ESTIMATED_INST.FLG_CONTEXT
+  is 'Context';
+comment on column NCH_ESTIMATED_INST.VALUE
+  is 'Value (in minutes)';
+comment on column NCH_ESTIMATED_INST.DT_CREATE_TSTZ
+  is 'Registry creation date';
+comment on column NCH_ESTIMATED_INST.ID_CREATE_PROF
+  is 'Professional that created this registry';
+comment on column NCH_ESTIMATED_INST.CREATE_USER
+  is 'Creation user';
+comment on column NCH_ESTIMATED_INST.CREATE_TIME
+  is 'Creation time';
+comment on column NCH_ESTIMATED_INST.CREATE_INSTITUTION
+  is 'Creation institution';
+comment on column NCH_ESTIMATED_INST.UPDATE_USER
+  is 'Update user';
+comment on column NCH_ESTIMATED_INST.UPDATE_TIME
+  is 'Update time';
+comment on column NCH_ESTIMATED_INST.UPDATE_INSTITUTION
+  is 'Update institution';
+	
+-- CHANGED BY: Eduardo Reis
+-- CHANGE DATE: 22/03/2010 09:51
+-- CHANGE REASON: [ALERT-82423] id context moved to specific table e.g.: nch_estimated_inst_interv
+alter table NCH_ESTIMATED_INST drop column flg_context;
+alter table NCH_ESTIMATED_INST drop column id_context;
+
+alter table NCH_ESTIMATED_INST rename column dt_create_tstz to dt_create;
+-- CHANGE END: Eduardo Reis

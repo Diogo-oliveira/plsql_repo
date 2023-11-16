@@ -1,0 +1,31 @@
+-- CHANGED BY:  Álvaro Vasconcelos
+-- CHANGE DATE: 23/02/2011 08:26
+-- CHANGE REASON: [ALERT-158645] Release Notes DDL
+CREATE TABLE RELEASE_NOTE_FIX (
+       ID_RELEASE_NOTE        NUMBER(24) NOT NULL,
+ ID_VERSION             NUMBER(24) NOT NULL,
+       ID_FIX                 NUMBER(24) NOT NULL, 
+ ID_JIRA                VARCHAR2(100 CHAR),
+       --
+     CREATE_USER            VARCHAR2(24 CHAR),
+     CREATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+     CREATE_INSTITUTION     NUMBER(24),
+     UPDATE_USER            VARCHAR2(24 CHAR),
+     UPDATE_TIME            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+     UPDATE_INSTITUTION     NUMBER(24)
+);
+
+COMMENT ON TABLE release_note_fix IS 'Table that associates release notes with fix''s';
+
+COMMENT ON COLUMN release_note_fix.id_release_note        IS 'Release note ID';
+COMMENT ON COLUMN release_note_fix.id_fix                 IS 'ALERT fix ID';
+COMMENT ON COLUMN release_note_fix.id_version             IS 'ALERT version ID';
+COMMENT ON COLUMN release_note_fix.id_jira                IS 'Jira ID for the release note - for internal use';
+--
+COMMENT ON COLUMN release_note_fix.create_user            IS 'Professional that created the registry';
+COMMENT ON COLUMN release_note_fix.create_time            IS 'Date of the registry creation';
+COMMENT ON COLUMN release_note_fix.create_institution     IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN release_note_fix.update_user            IS 'Last professional that updated the registry';
+COMMENT ON COLUMN release_note_fix.update_time            IS 'Date of the last update to the registry';
+COMMENT ON COLUMN release_note_fix.update_institution     IS 'Id of the last institution where the registry was updated';
+-- CHANGE END:  Álvaro Vasconcelos

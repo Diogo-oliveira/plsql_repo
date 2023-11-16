@@ -1,0 +1,60 @@
+
+
+  CREATE TABLE DISCHARGE_DEST
+   (	ID_DISCHARGE_DEST NUMBER(12,0) NOT NULL ENABLE,
+	CODE_DISCHARGE_DEST VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(3)
+   );
+
+
+COMMENT ON TABLE discharge_dest IS 'Destinos exteriores à instituição' ;
+
+COMMENT ON COLUMN discharge_dest.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN discharge_dest.flg_type IS 'Tipo: D - médica, A - administrativa, S - social, ou combinações destes valores' ;
+
+
+
+ALTER TABLE DISCHARGE_DEST ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN DISCHARGE_DEST.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+
+-- JSILVA 29-12-2008
+ALTER TABLE discharge_dest MODIFY flg_type VARCHAR2(10);
+COMMENT ON COLUMN discharge_dest.flg_type IS 'Tipo: D - médica, A - administrativa, S - social, ou combinações destes valores, M - encaminhamento feito pelo triador';
+-- END
+
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:25
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.DISCHARGE_DEST MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table DISCHARGE_DEST
+  is 'Discharge destination catalogue';
+-- Add comments to the columns 
+comment on column DISCHARGE_DEST.id_discharge_dest
+  is 'Primary Key ';
+comment on column DISCHARGE_DEST.code_discharge_dest
+  is 'Translation code for discharge destination description';
+comment on column DISCHARGE_DEST.flg_available
+  is 'Availability (Y/N)';
+comment on column DISCHARGE_DEST.rank
+  is 'Rank for ordering';
+comment on column DISCHARGE_DEST.adw_last_update
+  is 'Date of last update';
+comment on column DISCHARGE_DEST.flg_type
+  is 'Availability of record for professional category (concatenation of flag values). CATEGORY.FLG_TYPE';
+comment on column DISCHARGE_DEST.id_content
+  is 'Unique content identifier';
+  
+-- CHANGE END: Elisabete Bugalho

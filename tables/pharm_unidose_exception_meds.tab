@@ -1,0 +1,33 @@
+
+create table pharm_unidose_exception_meds
+(
+	id_drug		varchar2(255) not null,
+	vers		varchar2(10) not null
+) tablespace TABLE_M;
+
+--comments
+comment on table pharm_unidose_exception_meds
+	is 'Table of drugs that are not to be requested as unidose';
+
+comment on column pharm_unidose_exception_meds.id_drug
+	is 'id of the drug';
+comment on column pharm_unidose_exception_meds.vers
+	is 'market';
+
+alter table pharm_unidose_exception_meds
+add (
+	id_institution number(24) default 0 not null,
+	id_dep_clin_serv number(24) null
+);
+
+comment on column pharm_unidose_exception_meds.id_institution
+	is 'id of the institution';
+comment on column pharm_unidose_exception_meds.id_dep_clin_serv
+	is 'id_dep_clin_serv';
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:57
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PHARM_UNIDOSE_EXCEPTION_MEDS IS 'Table of drugs that are not to be requested as unidose [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

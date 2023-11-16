@@ -1,0 +1,72 @@
+-- Create table
+create table PERIODIC_OBSERVATION_PARAM
+(
+  ID_PERIODIC_OBSERVATION_PARAM NUMBER(12) not null,
+  CODE_PERIODIC_OBSERVATION     VARCHAR2(2000) not null,
+  ID_EVENT                      NUMBER,
+  PERIODIC_OBSERVATION_TYPE     VARCHAR2(1),
+  ADW_LAST_UPDATE               DATE not null,
+  ID_CLINICAL_SERVICE           NUMBER(12),
+  ID_TIME_EVENT_GROUP           NUMBER(12),
+  FLG_AVAILABLE                 VARCHAR2(1),
+  FLG_FILL_TYPE                 VARCHAR2(1),
+  RANK                          NUMBER(5),
+  FORMAT_NUM                    VARCHAR2(20),
+  ID_UNIT_MEASURE               NUMBER(24),
+  ID_PATIENT                    NUMBER(24),
+  ID_INSTITUTION                NUMBER(24),
+  ID_SOFTWARE                   NUMBER(24)
+)
+
+-- Add comments to the columns 
+comment on column PERIODIC_OBSERVATION_PARAM.CODE_PERIODIC_OBSERVATION
+  is 'Código da observção periódica';
+comment on column PERIODIC_OBSERVATION_PARAM.ID_EVENT
+  is 'Id do event';
+comment on column PERIODIC_OBSERVATION_PARAM.PERIODIC_OBSERVATION_TYPE
+  is 'T - Trimestral; A - Anual; N - Normal; C - Child ';
+comment on column PERIODIC_OBSERVATION_PARAM.ID_CLINICAL_SERVICE
+  is 'Id do servico clinico (tipo de consulta)';
+comment on column PERIODIC_OBSERVATION_PARAM.FLG_AVAILABLE
+  is 'Y/N';
+comment on column PERIODIC_OBSERVATION_PARAM.FLG_FILL_TYPE
+  is 'Indicador do tipo de auxiliar de preenchimento a mostrar:N - Keypad; V -Multi choice; B - Keypad com barra, D - Data';
+comment on column PERIODIC_OBSERVATION_PARAM.FORMAT_NUM
+  is 'Formato para apresentar ao utilizador (so para os outros parametros)';
+comment on column PERIODIC_OBSERVATION_PARAM.ID_UNIT_MEASURE
+  is 'Unidade de medida (so para os outros parametros)';
+comment on column PERIODIC_OBSERVATION_PARAM.ID_PATIENT
+  is 'Id do paciente no caso de serem outros parametros não referentes ao tipo de consulta';
+comment on column PERIODIC_OBSERVATION_PARAM.ID_INSTITUTION
+  is 'Id da Institutição';
+comment on column PERIODIC_OBSERVATION_PARAM.ID_SOFTWARE
+  is 'Id do Software';
+
+---Sílvia Freitas
+--29-20-2007
+
+alter table periodic_observation_param add (id_context number(24),
+flg_type varchar2(2)); 
+
+comment on column periodic_observation_param.ID_CONTEXT
+  is 'Identificador ao qual é associado o parametro baseado na flag type';
+
+comment on column periodic_observation_param.FLG_TYPE
+  is 'Tipo de identificador: O-Observações Periodicas; I-Intervention;';
+
+
+
+ALTER TABLE PERIODIC_OBSERVATION_PARAM ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN PERIODIC_OBSERVATION_PARAM.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:25
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.PERIODIC_OBSERVATION_PARAM MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 11/11/2009 09:59
+-- CHANGE REASON: [ALERT-56009] 
+ALTER TABLE ALERT.PERIODIC_OBSERVATION_PARAM MODIFY ID_CONTENT NULL;
+-- CHANGE END: Tércio Soares

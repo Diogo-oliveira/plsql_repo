@@ -1,0 +1,106 @@
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 06-02-2013
+-- CHANGE REASON: ALERT-251133
+DECLARE
+	e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+	pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'SCH_GROUP_HIST', i_obj_type => 'TABLE',i_flg_category => 'HST', i_flg_nzd => 'N');
+
+	EXECUTE IMMEDIATE 'CREATE TABLE SCH_GROUP_HIST
+						 (ID_GROUP NUMBER(24) NOT NULL
+						 ,ID_SCHEDULE NUMBER(24) NOT NULL
+						 ,ID_PATIENT NUMBER(24) NOT NULL
+						 ,CREATE_USER VARCHAR2(24 CHAR)
+						 ,CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+						 ,CREATE_INSTITUTION NUMBER(24)
+						 ,UPDATE_USER VARCHAR2(24 CHAR)
+						 ,UPDATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+						 ,UPDATE_INSTITUTION NUMBER(24)
+						 ,FLG_REF_TYPE VARCHAR2(1 CHAR)
+						 ,ID_PROF_REF NUMBER(24)
+						 ,ID_INST_REF NUMBER(24)
+						 ,ID_CANCEL_REASON NUMBER(24)
+						 ,NO_SHOW_NOTES CLOB
+						 ,flg_contact_type VARCHAR2(1 CHAR)
+						 ,id_health_plan NUMBER(24)
+						 ,auth_code VARCHAR2(200 CHAR)
+						 ,dt_auth_code_exp TIMESTAMP(6) WITH LOCAL TIME ZONE
+						 ,DT_UPDATE TIMESTAMP WITH LOCAL TIME ZONE DEFAULT current_timestamp
+						 )
+						tablespace TABLE_L';
+	
+	EXECUTE IMMEDIATE 'alter table SCH_GROUP_HIST move lob(NO_SHOW_NOTES) store as ( tablespace ALERT_LOB)';
+	
+EXCEPTION
+	WHEN e_object_exists THEN dbms_output.put_line('Tentativa de criação da tabela SCH_GROUP_HIST falhou porque já existe');
+END;
+/
+
+COMMENT ON TABLE SCH_GROUP_HIST IS 'History table for updates support';
+COMMENT ON COLUMN SCH_GROUP_HIST.ID_GROUP IS 'Group identifier';
+COMMENT ON COLUMN SCH_GROUP_HIST.ID_SCHEDULE IS 'Schedule identifier';
+COMMENT ON COLUMN SCH_GROUP_HIST.ID_PATIENT IS 'Patient identifier';
+COMMENT ON COLUMN SCH_GROUP_HIST.CREATE_USER IS 'creation user';
+COMMENT ON COLUMN SCH_GROUP_HIST.CREATE_TIME IS 'creation time';
+COMMENT ON COLUMN SCH_GROUP_HIST.CREATE_INSTITUTION IS 'creation institution';
+COMMENT ON COLUMN SCH_GROUP_HIST.UPDATE_USER IS 'update user';
+COMMENT ON COLUMN SCH_GROUP_HIST.UPDATE_TIME IS 'update time';
+COMMENT ON COLUMN SCH_GROUP_HIST.UPDATE_INSTITUTION IS 'update institution';
+COMMENT ON COLUMN SCH_GROUP_HIST.FLG_REF_TYPE IS 'Referral type. Choices are: external (I)nstitution,  external (P)rofessional,  internal (R)equest,  (S)elf referrer';
+COMMENT ON COLUMN SCH_GROUP_HIST.ID_PROF_REF IS 'professional referral. used when type is P';
+COMMENT ON COLUMN SCH_GROUP_HIST.ID_INST_REF IS 'Institution referred. Used when type is I';
+COMMENT ON COLUMN SCH_GROUP_HIST.ID_CANCEL_REASON IS 'No-show reason. These come from table cancel_reason, hence the name';
+COMMENT ON COLUMN SCH_GROUP_HIST.NO_SHOW_NOTES IS 'optional notes in case of no-show';
+COMMENT ON COLUMN SCH_GROUP_HIST.flg_contact_type IS 'contact type. I= patient absent; D=patient present';
+COMMENT ON COLUMN SCH_GROUP_HIST.id_health_plan IS 'patient health plan for this appointment, if any';
+COMMENT ON COLUMN SCH_GROUP_HIST.auth_code IS 'authorization code for insurance';
+COMMENT ON COLUMN SCH_GROUP_HIST.dt_auth_code_exp IS 'expiration date for authorization code';
+COMMENT ON COLUMN SCH_GROUP_HIST.DT_UPDATE IS 'date of update occurrence';
+-- CHANGE END:  Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 20-08-2013
+-- CHANGE REASON: ALERT-263450
+begin
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT',i_obj_name => 'SCH_GROUP_HIST', i_obj_type => 'TABLE', i_flg_category => 'HST', i_flg_nzd => 'Y');
+end;
+/
+-- CHANGE END: Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 07-10-2013
+-- CHANGE REASON: SCH-8268
+alter table SCH_GROUP_HIST add pat_instructions clob;
+comment on column SCH_GROUP_HIST.pat_instructions is 'free text with instructions to the pacient in this row';
+--CHANGE END: Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 09-04-2014
+-- CHANGE REASON: ALERT-280791
+alter table sch_group_hist add id_pat_health_plan number(24);
+comment on column sch_group_hist.id_health_plan is 'health plan selected for this appointment, if any';
+comment on column sch_group_hist.id_pat_health_plan is 'patient health plan id for this appointment';
+--CHANGE END: Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-01-2015
+-- CHANGE REASON: ALERT-303513
+alter table SCH_GROUP_HIST add id_prof_update number(24);
+comment on column SCH_GROUP_HIST.id_prof_update is 'prof. responsible for the update occurring at dt_update';
+-- CHANGE END: Telmo
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:33
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.sch_group_hist move lob(pat_instructions) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

@@ -1,0 +1,34 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE
+    e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02260); -- unique constraint
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE INTF_TYPE ADD CONSTRAINT IFTE_PK PRIMARY KEY (ID_INTF_TYPE) ENABLE';
+EXCEPTION
+    WHEN e_constraint_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+
+DECLARE
+    e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02260); -- unique constraint
+
+    e_constraintname_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraintname_already_there, -02264); -- unique constraint
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE INTF_TYPE ADD CONSTRAINT IFTE_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE in (''Y'', ''N'')) ENABLE';
+EXCEPTION
+    WHEN e_constraint_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    WHEN e_constraintname_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    
+END;
+/
+-- CHANGE END: Joana Barroso

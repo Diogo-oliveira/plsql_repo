@@ -1,0 +1,24 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 21/06/2010 17:57
+-- CHANGE REASON: [ALERT-103305] FERTIS (2.6.0.3)
+DECLARE
+    l_sql   VARCHAR2(1000 CHAR);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM all_indexes u
+     WHERE u.index_name = 'PSV_ESY_FK_IDX'
+       AND owner = 'ALERT';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+        l_sql := q'[create index PSV_ESY_FK_IDX on P1_SPEC_DEP_CLIN_SERV (ID_EXTERNAL_SYS)]';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro

@@ -1,0 +1,12 @@
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 28/10/2009 19:29
+-- CHANGE REASON: [ALERT-52603] Taking responsibility over episode by multiple professionals
+BEGIN
+    EXECUTE IMMEDIATE 'DROP INDEX EMPR_EPIS_FK_IDX';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+CREATE INDEX EMPR_EPIS_FK_IDX ON epis_multi_prof_resp (id_episode) TABLESPACE INDEX_L;
+-- CHANGE END: José Brito

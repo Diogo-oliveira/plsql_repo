@@ -1,0 +1,130 @@
+
+
+  CREATE TABLE CATEGORY
+   (	ID_CATEGORY NUMBER(12,0) NOT NULL ENABLE,
+	CODE_CATEGORY VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_CLINICAL VARCHAR2(1) NOT NULL ENABLE,
+	FLG_PROF VARCHAR2(1) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE category IS 'Categorias profissionais: médico, director de serviço, director clínico, ...' ;
+
+COMMENT ON COLUMN category.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN category.flg_type IS 'Tipo: D - médico, N - enfermeiro, P - farmacêutico, A - administrativo, T - técnico, O - outro, F - fisioterapeuta, C - coordenador, A - anestesista' ;
+COMMENT ON COLUMN category.flg_clinical IS 'Indicação se é uma categoria médica: Y / N' ;
+COMMENT ON COLUMN category.flg_prof IS 'Indicação se é uma categoria (PROF_CAT)' ;
+
+comment on column CATEGORY.FLG_TYPE is 'Tipo: D - médico, N - enfermeiro, P - farmacêutico, A - administrativo, T - técnico, O - outro, F - fisioterapeuta, C - coordenador, A - anestesista, S - assistente social; M - Manchester';
+
+
+
+ALTER TABLE CATEGORY ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN CATEGORY.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+COMMENT ON COLUMN CATEGORY.ID_CATEGOTY IS 'Category ID';
+COMMENT ON COLUMN CATEGORY.CODE_CATEGORY IS 'Category code';
+COMMENT ON COLUMN CATEGORY.ADW_LAST_UPDATE IS 'Last Update Date';
+COMMENT ON COLUMN CATEGORY.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD: Y - yes, N - no';
+COMMENT ON COLUMN CATEGORY.FLG_PROF IS 'Indicação se é uma categoria (PROF_CAT): Y - yes, N - no';
+COMMENT ON COLUMN CATEGORY.FLG_TYPE IS 'Tipo: D - médico, N - enfermeiro, P - farmacêutico, A - administrativo, T - técnico, O - outro, F - fisioterapeuta, C - coordenador, S - assistente social; M - Manchester; V - Visualizador';
+
+
+-- CHANGED BY: Eduardo Lourenco
+-- CHANGE DATE: 19/08/2009 16:36
+-- CHANGE REASON: [ALERT-641] DMLs for Director Profile
+COMMENT ON COLUMN CATEGORY.FLG_TYPE IS 'Tipo: D - médico; N - enfermeiro; P - farmacêutico; A - administrativo; T - técnico; F - fisioterapeuta; C - coordenador; S - assistente social; M - Manchester; V - Visualizador; U - Nutricionista; R - Director; O - outro'
+-- CHANGE END: Eduardo Lourenco
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 24/10/2009 15:44
+-- CHANGE REASON: [ALERT-39097] case manager software
+COMMENT ON COLUMN CATEGORY.FLG_TYPE IS 'Tipo: D - médico; N - enfermeiro; P - farmacêutico; A - administrativo; T - técnico; F - fisioterapeuta; C - coordenador; S - assistente social; M - Manchester; V - Visualizador; U - Nutricionista; R - Director; O - outro; Q - Case manager';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 01/07/2010 15:43
+-- CHANGE REASON: [ALERT-108775]  Activity therapist
+comment on column CATEGORY.FLG_TYPE
+  is 'Tipo: D - médico; N - enfermeiro; P - farmacêutico; A - administrativo; T - técnico; F - fisioterapeuta; C - coordenador; S - assistente social; M - Manchester; V - Visualizador; U - Nutricionista; R - Director; O - outro; Q - Case manager; L - Ludoterapeuta';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 21/01/2016 11:19
+-- CHANGE REASON: [ALERT-318028] ALERT-318028 CDOC Functionalities V7
+-- Add comments to the table 
+comment on table CATEGORY
+  is 'Table with the professional categories, used on Alert, clinical and not clinical
+';
+-- Add comments to the columns 
+comment on column CATEGORY.id_category
+  is 'Category Identifier';
+comment on column CATEGORY.code_category
+  is 'Translation code identifier, to obtain the description for all languages';
+comment on column CATEGORY.flg_available
+  is 'Record availability. Values Y- Yes; N - No; ';
+comment on column CATEGORY.adw_last_update
+  is 'Last Update Date';
+comment on column CATEGORY.flg_type
+  is 'Category type Tipo: D - Physician; N - Nurse; P - farmacêutico; A - Registrar; T - Tecnicias; F - Physical Medicine and Rehabilitation Technician; C - Coordinator; S - Social Worker social; M - Manchester; V - Waiting line viewer; U - Dietitian; R - Director; O - Other; Q - Case manager; L - Activity Therapist';
+comment on column CATEGORY.flg_clinical
+  is 'Indicates if is a medical category or not. Values Y - Yes; N -No;';
+comment on column CATEGORY.flg_prof
+  is 'Indicates if is a category (PROF_CAT). Values Y -Yes; N -No;';
+comment on column CATEGORY.id_content
+  is 'Content identifier ';
+comment on column CATEGORY.create_user
+  is 'Creation User';
+comment on column CATEGORY.create_time
+  is 'Creation Time';
+comment on column CATEGORY.create_institution
+  is 'Creation Institution';
+comment on column CATEGORY.update_user
+  is 'Update User';
+comment on column CATEGORY.update_time
+  is 'Update Time';
+comment on column CATEGORY.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 21/01/2019 10:16
+-- CHANGE REASON: [EMR-8480] [DB] Create Software and profile
+--                
+alter table CATEGORY drop constraint CAT_FLG_TYPE_CHK;
+
+alter table CATEGORY
+  add constraint CAT_FLG_TYPE_CHK
+  check (FLG_TYPE in ('A','C','D','G','F','L','M','N','O','P','Q','R','S','T','U','V'));
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 08/08/2019 08:07
+-- CHANGE REASON: [EMR-17826] - [DB] Versioning
+alter table category drop constraint CAT_FLG_TYPE_CHK;
+
+alter table CATEGORY
+add constraint CAT_FLG_TYPE_CHK
+check (FLG_TYPE in ('A','C','D','E','G','F','L','M','N','O','P','Q','R','S','T','U','V'));
+
+
+comment on column CATEGORY.flg_type
+is 'Category type Tipo: D - Physician; N - Nurse; P - farmacêutico; A - Registrar; T - Tecnicias; F - Physical Medicine and Rehabilitation Technician; C - Coordinator; S - Social Worker social; M - Manchester; V - Waiting line viewer; U - Dietitian; R - Director; O - Other; Q - Case manager; L - Activity Therapist; G - Psychologist; E - Chemicalist';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 29/11/2019 11:02
+-- CHANGE REASON: [EMR-23911] - MHH | Religious Councelor profile
+comment on column CATEGORY.flg_type
+is 'Category type Tipo: D - Physician; N - Nurse; P - farmacêutico; A - Registrar; T - Tecnicias; F - Physical Medicine and Rehabilitation Technician; C - Coordinator; S - Social Worker social; M - Manchester; V - Waiting line viewer; U - Dietitian; R - Director; O - Other; Q - Case manager; L - Activity Therapist; G - Psychologist; E - Chemicalist; I - Religious Councelor';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 13/12/2019 08:42
+-- CHANGE REASON: [EMR-24295] - MHH | Mental Rehabilitation Therapist profile
+comment on column CATEGORY.flg_type
+is 'Category type Tipo: D - Physician; N - Nurse; P - farmacêutico; A - Registrar; T - Tecnicias; F - Physical Medicine and Rehabilitation Technician; C - Coordinator; S - Social Worker social; M - Manchester; V - Waiting line viewer; U - Dietitian; R - Director; O - Other; Q - Case manager; L - Activity Therapist; G - Psychologist; E - Chemicalist; I - Religious Councelor; B - Mental Rehabilitation Therapist';
+-- CHANGE END: Diogo Oliveira

@@ -1,0 +1,85 @@
+
+
+  ALTER TABLE DISCHARGE ADD CONSTRAINT DIS_PK PRIMARY KEY (ID_DISCHARGE) ENABLE;
+
+  ALTER TABLE DISCHARGE MODIFY (ID_DISCHARGE NOT NULL ENABLE);
+
+  ALTER TABLE DISCHARGE MODIFY (ID_DISCH_REAS_DEST NOT NULL ENABLE);
+
+  ALTER TABLE DISCHARGE MODIFY (ID_EPISODE NOT NULL ENABLE);
+
+  ALTER TABLE DISCHARGE MODIFY (FLG_TYPE NOT NULL ENABLE);
+
+
+-- José Brito 07/03/2009 ALERT-10317
+ALTER TABLE discharge ADD CONSTRAINT DIS_FLGCANCELTYPE_CHK CHECK(FLG_CANCEL_TYPE IN ('N', 'R'));
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 21-01-2010
+-- CHANGE REASON: ALERT-70771
+ALTER TABLE discharge add CONSTRAINT dis_flg_bill_type_chk CHECK(flg_bill_type IN ('N', 'R'));
+-- CHANGE END
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 23/04/2010 17:23
+-- CHANGE REASON: [ALERT-92499] Issue Replication: Discharge with NULL FLG_STATUS
+DECLARE
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264); -- name already used by an existing constraint
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE discharge add CONSTRAINT dis_flg_st_chk CHECK(flg_status IN (''A'', ''C'', ''P'', ''R'', ''X''))';
+EXCEPTION
+    WHEN e_check_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 05/05/2010 09:19
+-- CHANGE REASON: [ALERT-92499] Issue Replication: Discharge with NULL FLG_STATUS
+DECLARE
+    e_already_not_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01442); -- alter table modify
+BEGIN
+    EXECUTE IMMEDIATE 'alter table DISCHARGE modify FLG_STATUS not null';
+EXCEPTION
+    WHEN e_already_not_null THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 26/08/2010 22:18
+-- CHANGE REASON: [ALERT-119364] Administrative discharge cancellation
+alter table discharge
+  add constraint DIS_FLG_ST_ADM_CHK
+  check (flg_status_adm IN ('A','C','R'));
+
+alter table discharge
+  add constraint DIS_FLG_MRK_CHK
+  check (flg_market IN ('PT','US'));
+-- CHANGE END: José Silva
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 27/08/2010 00:51
+-- CHANGE REASON: [ALERT-120163] Administrative discharge cancellation
+ALTER TABLE discharge MODIFY (flg_market NOT NULL ENABLE);
+-- CHANGE END: José Silva
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 03/10/2011 14:27
+-- CHANGE REASON: [ALERT-196387] 
+ALTER TABLE discharge DROP CONSTRAINT dis_flg_bill_type_chk;
+ALTER TABLE discharge ADD CONSTRAINT dis_flg_bill_type_chk CHECK(flg_bill_type IN ('N', 'R', 'CIB', 'CIM', 'CIA', 'CCB', 'CCM', 'CCA', 'CSB', 'CSM', 'CSA'));
+-- CHANGE END: José Silva
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 06/10/2011 12:31
+-- CHANGE REASON: [ALERT-196387] 
+ALTER TABLE discharge DROP CONSTRAINT dis_flg_bill_type_chk;
+ALTER TABLE discharge ADD CONSTRAINT dis_flg_bill_type_chk CHECK(flg_bill_type IN ('N', 'R', 'CIB', 'CIM', 'CIA', 'CCB', 'CCM', 'CCA', 'CSB', 'CSM', 'CSA', 'CA', 'CM', 'CB'));
+-- CHANGE END: José Silva

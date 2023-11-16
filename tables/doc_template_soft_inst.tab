@@ -1,0 +1,23 @@
+-- CHANGED BY Joao Martins
+-- CHANGE DATE 2009/07/03
+-- CHANGE REASON ALERT-874 Procedures Time Out
+create table doc_template_soft_inst (id_doc_template_soft_inst number(24), id_doc_template number(24), id_software number(24) default 0 not null, id_institution number(24) default 0 not null, flg_available varchar2(1) default 'Y' not null, create_user varchar2(24), create_time timestamp(6) with local time zone, create_institution number(24), update_user varchar2(24), update_time timestamp(6) with local time zone, update_institution number(24));
+alter table doc_template_soft_inst add constraint DTT_DTE_FK foreign key (id_doc_template) references doc_template(id_doc_template);
+alter table doc_template_soft_inst add constraint DTT_SOE_FK foreign key (id_software) references software(id_software);
+alter table doc_template_soft_inst add constraint DTT_INN_FK foreign key (id_institution) references institution(id_institution);
+alter table doc_template_soft_inst add constraint DTT_PK primary key (id_doc_template, id_software, id_institution);
+alter table doc_template_soft_inst add constraint DTT_UK unique (id_doc_template_soft_inst);
+alter table doc_template_soft_inst add constraint DTT_FLG_AVAILABLE check (flg_available in ('Y', 'N'));
+comment on table doc_template_soft_inst is 'Documentation template parametrization by institution and software';
+comment on column doc_template_soft_inst.id_doc_template_soft_inst is 'Unique key';
+comment on column doc_template_soft_inst.id_doc_template is 'Document template ID';
+comment on column doc_template_soft_inst.id_software is 'Software ID (or 0 for all softwares)';
+comment on column doc_template_soft_inst.id_institution is 'Institution ID (or 0 for all institutions)';
+comment on column doc_template_soft_inst.flg_available is 'Available? Y for yes, N for no';
+comment on column doc_template_soft_inst.create_user is 'Creation user';
+comment on column doc_template_soft_inst.create_time is 'Creation time';
+comment on column doc_template_soft_inst.create_institution is 'Creation institution';
+comment on column doc_template_soft_inst.update_user is 'Update user';
+comment on column doc_template_soft_inst.update_time is 'Update time';
+comment on column doc_template_soft_inst.update_institution is 'Update institution';
+-- CHANGE END

@@ -1,0 +1,364 @@
+
+
+  ALTER TABLE SR_INTERVENTION ADD CONSTRAINT SINT_PK PRIMARY KEY (ID_SR_INTERVENTION) ENABLE;
+
+  ALTER TABLE SR_INTERVENTION MODIFY (ID_SR_INTERVENTION NOT NULL ENABLE);
+
+  ALTER TABLE SR_INTERVENTION MODIFY (CODE_SR_INTERVENTION NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 27/11/2009 12:29
+-- CHANGE REASON: [ALERT-59838] 
+alter table sr_intervention 
+add constraint sin_flg_coding_chk 
+check (flg_coding in ('I', 'S', 'G'))
+enable;
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 17/12/2009 15:38
+-- CHANGE REASON: [ALERT-63208] 
+alter table SR_INTERVENTION
+  drop constraint SIN_FLG_CODING_CHK;
+  
+alter table SR_INTERVENTION
+  add constraint SIN_FLG_CODING_CHK
+  check (flg_coding in ('I', 'S', 'G', 'J', 'A', 'Z', 'C', 'T', 'K'));
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 18/01/2010 17:18
+-- CHANGE REASON: [ALERT-68398] Added new flag coding for CCSD (UK Market)
+alter table SR_INTERVENTION
+  drop constraint SIN_FLG_CODING_CHK;
+  
+alter table SR_INTERVENTION
+  add constraint SIN_FLG_CODING_CHK
+  check (flg_coding in ('I', 'S', 'G', 'J', 'A', 'Z', 'C', 'T', 'K', 'D'));
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 18/01/2010 17:21
+-- CHANGE REASON: [ALERT-68400] Added new flag coding for CCSD (UK Market)
+alter table SR_INTERVENTION
+  drop constraint SIN_FLG_CODING_CHK;
+  
+alter table SR_INTERVENTION
+  add constraint SIN_FLG_CODING_CHK
+  check (flg_coding in ('I', 'S', 'G', 'J', 'A', 'Z', 'C', 'T', 'K', 'D'));
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 17/03/2010 18:33
+-- CHANGE REASON: [ALERT-81660] Added new flag coding for CCAM (FR Market)
+alter table SR_INTERVENTION
+  drop constraint SIN_FLG_CODING_CHK;
+  
+alter table SR_INTERVENTION
+  add constraint SIN_FLG_CODING_CHK
+  check (flg_coding in ('I', 'S', 'G', 'J', 'A', 'Z', 'C', 'T', 'K', 'D', 'F'));
+
+
+select * from sys_domain sd where sd.code_domain = 'SR_INTERVENTION.FLG_CODING' and val = 'D';
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 17/03/2010 18:37
+-- CHANGE REASON: [ALERT-81660] Added new flag coding for CCAM (FR Market)
+alter table SR_INTERVENTION
+  drop constraint SIN_FLG_CODING_CHK;
+  
+alter table SR_INTERVENTION
+  add constraint SIN_FLG_CODING_CHK
+  check (flg_coding in ('I', 'S', 'G', 'J', 'A', 'Z', 'C', 'T', 'K', 'D', 'F'));
+
+
+select * from sys_domain sd where sd.code_domain = 'SR_INTERVENTION.FLG_CODING' and val = 'D';
+-- CHANGE END: Filipe Silva
+
+
+-- CHANGED BY Filipe Faria
+-- Scripts by Filipe Silva
+-- CHANGE DATE: 2010-Mai-17
+-- CHANGE REASON: ALERT-98447
+alter table SR_INTERVENTION
+  drop constraint SIN_FLG_CODING_CHK;
+  
+alter table SR_INTERVENTION
+  add constraint SIN_FLG_CODING_CHK
+  check (flg_coding in ('I', 'S', 'G', 'J', 'A', 'Z', 'C', 'T', 'K', 'D', 'F', 'N'));
+-- END CHANGE BY Filipe Faria 
+
+
+-- CHANGED BY: Jorge Canossa
+-- CHANGE DATE: 10/01/2011 11:52
+-- CHANGE REASON: [ALERT-154076] Flag Coding - "L" for Chile market
+alter table SR_INTERVENTION
+  drop constraint SIN_FLG_CODING_CHK;
+  
+alter table SR_INTERVENTION
+  add constraint SIN_FLG_CODING_CHK
+  check (flg_coding in ('I', 'S', 'G', 'J', 'A', 'Z', 'C', 'T', 'K', 'D', 'F', 'L', 'N'));
+-- CHANGE END: Jorge Canossa
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 01/04/2011 12:03
+-- CHANGE REASON: [ALERT-170655] 
+alter table SR_INTERVENTION
+  drop constraint SIN_FLG_CODING_CHK;
+  
+alter table SR_INTERVENTION
+  add constraint SIN_FLG_CODING_CHK
+  check (flg_coding in ('I', 'S', 'G', 'J', 'A', 'Z', 'C', 'T', 'K', 'D', 'F', 'L', 'N', 'O'));
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 24/05/2011 18:24
+-- CHANGE REASON: [ALERT-181281] 
+DECLARE
+    e_pk_already_there EXCEPTION;
+    e_unique_already_there EXCEPTION;
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.sr_intervention add constraint SIN_FLG_CODING_CHK check (flg_coding in (''I'', ''S'', ''G'', ''J'', ''A'', ''Z'', ''C'', ''T'', ''K'', ''D'', ''F'', ''L'', ''N'',''O''))';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 24/05/2011 18:25
+-- CHANGE REASON: [ALERT-181281] 
+DECLARE
+    e_pk_already_there EXCEPTION;
+    e_unique_already_there EXCEPTION;
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.sr_intervention drop constraint SIN_FLG_CODING_CHK';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 22/07/2011 15:59
+-- CHANGE REASON: [ALERT-189753] FLG_Coding creation - AMB Standard - Surgical Procedures (with new flg_coding) [BR]
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE sr_intervention drop CONSTRAINT SIN_FLG_CODING_CHK';
+
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SIN_FLG_CODING_CHK table sr_intervention column flg_coding: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 22/07/2011 15:59
+-- CHANGE REASON: [ALERT-189753] FLG_Coding creation - AMB Standard - Surgical Procedures (with new flg_coding) [BR]
+BEGIN
+
+EXECUTE IMMEDIATE 'ALTER TABLE sr_intervention ADD CONSTRAINT SIN_FLG_CODING_CHK CHECK (flg_coding in (''I'', ''S'', ''G'', ''J'', ''A'', ''Z'', ''C'', ''T'', ''K'', ''D'', ''F'', ''L'', ''N'', ''O'', ''P'', ''Q'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SIN_FLG_CODING_CHK table sr_intervention column flg_coding: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 14/11/2013 10:55
+-- CHANGE REASON: [ALERT-269599] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02264);
+    e_object_n_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_n_exists, -02443);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_INTERVENTION drop constraint SIN_FLG_CODING_CHK';
+    EXCEPTION
+        WHEN e_object_n_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table sr_intervention add constraint SIN_FLG_CODING_CHK check (flg_coding in (''I'', ''S'', ''G'', ''J'', ''A'', ''Z'', ''C'', ''T'', ''K'', ''D'', ''F'', ''L'', ''N'', ''O'', ''P'', ''Q'', ''M''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+
+-- CHANGED BY: Cesar Santos
+-- CHANGED DATE: 2014-6-2
+-- CHANGED REASON: ALERT-276579
+
+alter table sr_intervention drop constraint SIN_FLG_CODING_CHK;
+alter table sr_intervention add constraint SIN_FLG_CODING_CHK check (flg_coding IN('I', 'S', 'G', 'J', 'A', 'Z', 'C', 'T', 'K', 'D', 'F', 'L', 'N', 'O', 'P', 'Q','M','U','V','X'));
+
+-- CHANGE END: Cesar Santos
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 22/10/2015 11:21
+-- CHANGE REASON: [ALERT-316299 ] 
+DECLARE
+    e_pk_already_there EXCEPTION;
+    e_unique_already_there EXCEPTION;
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_INTERVENTION
+  add constraint SIN_FLG_CODING_CHK
+  check (flg_coding IN(''I'', ''S'', ''G'', ''J'', ''A'', ''Z'', ''C'', ''T'', ''K'', ''D'', ''F'', ''L'', ''N'', ''O'', ''P'', ''Q'',''M'',''U'',''V'',''X'',''R'', ''B''))';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 22/10/2015 11:56
+-- CHANGE REASON: [ALERT-316299 ] 
+alter table sr_intervention drop constraint SIN_FLG_CODING_CHK;
+
+DECLARE
+    e_pk_already_there EXCEPTION;
+    e_unique_already_there EXCEPTION;
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_INTERVENTION
+  add constraint SIN_FLG_CODING_CHK
+  check (flg_coding IN(''I'', ''S'', ''G'', ''J'', ''A'', ''Z'', ''C'', ''T'', ''K'', ''D'', ''F'', ''L'', ''N'', ''O'', ''P'', ''Q'',''M'',''U'',''V'',''X'',''R'', ''B''))';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 22/10/2015 11:56
+-- CHANGE REASON: [ALERT-316299 ] 
+-->sr_intervention|cns
+alter table sr_intervention drop constraint SIN_FLG_CODING_CHK;
+
+DECLARE
+    e_pk_already_there EXCEPTION;
+    e_unique_already_there EXCEPTION;
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_INTERVENTION
+  add constraint SIN_FLG_CODING_CHK
+  check (flg_coding IN(''I'', ''S'', ''G'', ''J'', ''A'', ''Z'', ''C'', ''T'', ''K'', ''D'', ''F'', ''L'', ''N'', ''O'', ''P'', ''Q'',''M'',''U'',''V'',''X'',''R'',''B''))';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 22/10/2015 14:21
+-- CHANGE REASON: [ALERT-316299 ] 
+-->sr_intervention|cns
+alter table sr_intervention drop constraint SIN_FLG_CODING_CHK;
+
+-- CHANGE END: Sérgio Santos

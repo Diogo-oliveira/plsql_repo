@@ -1,0 +1,30 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 07/09/2012 14:22
+-- CHANGE REASON: [ALERT-239430] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+    l_id_pau_next pat_allergy_unawareness.id_pat_allergy_unawareness%TYPE;
+BEGIN
+    BEGIN
+        SELECT nvl(MAX(id_pat_allergy_unawareness) + 1, 1)
+          INTO l_id_pau_next
+          FROM pat_allergy_unawareness;
+    EXCEPTION
+        WHEN no_data_found THEN
+            l_id_pau_next := 1;
+    END;
+
+    EXECUTE IMMEDIATE '
+create sequence seq_pat_allergy_unawareness
+minvalue 1
+maxvalue 999999999999999999999999
+start with ' || l_id_pau_next || '
+increment by 1
+cache 500';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/ 
+-- CHANGE END: Paulo Teixeira

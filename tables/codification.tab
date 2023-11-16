@@ -1,0 +1,91 @@
+-- ADDED BY: Jose Castro
+-- ADDED DATE: 07/07/2009
+-- ADDED REASON: ALERT-910
+-- Create table
+create table CODIFICATION
+(
+  ID_CODIFICATION         NUMBER(24) NOT NULL,
+  CODE_CODIFICATION       VARCHAR2(200) NOT NULL,
+  FLG_AVAILABLE           VARCHAR2(1) NOT NULL,
+  CREATE_USER             VARCHAR2(24),
+  CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION      NUMBER(24),
+  UPDATE_USER             VARCHAR2(24),
+  UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION      NUMBER(24)
+);
+
+-- Add comments to the table 
+comment on table CODIFICATION
+  is 'Codifications to be matched with MCDTs';
+
+-- Add comments to the columns 
+comment on column CODIFICATION.ID_CODIFICATION
+  is 'Codification ID';
+comment on column CODIFICATION.CODE_CODIFICATION
+  is 'Translation Code';
+comment on column CODIFICATION.FLG_AVAILABLE
+  is 'Codification is available';
+comment on column CODIFICATION.CREATE_USER
+  is 'Creation User';
+comment on column CODIFICATION.CREATE_TIME
+  is 'Creation Time';
+comment on column CODIFICATION.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column CODIFICATION.UPDATE_USER
+  is 'Update User';
+comment on column CODIFICATION.UPDATE_TIME
+  is 'Update Time';
+comment on column CODIFICATION.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- ADDED END
+
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 04/03/2010 17:13
+-- CHANGE REASON: [ALERT-79365] 
+ALTER TABLE CODIFICATION ADD (ID_CONTENT VARCHAR2(200));
+comment on column CODIFICATION.ID_CONTENT is 'Identificador único de conteúdo';
+-- CHANGE END: Susana Silva
+
+
+-- ADDED BY: Miguel Moreira
+-- ADDED DATE: 15/03/2012
+-- ADDED REASON: ALERT-223250
+
+DECLARE
+    v_count NUMBER(1) := 0;
+BEGIN
+    SELECT 1
+      INTO v_count
+      FROM user_tab_columns
+     WHERE table_name = 'CODIFICATION'
+       AND column_name = 'ID_MAP_SET';
+EXCEPTION
+    WHEN no_data_found THEN
+        EXECUTE IMMEDIATE 'alter table CODIFICATION add ID_MAP_SET NUMBER(24)';
+END;
+/
+
+comment on column CODIFICATION.ID_MAP_SET is 'Reference to mapping set ID in XMAP_SET';
+
+-- END
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:01
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE CODIFICATION IS 'Codification catalogue';
+
+COMMENT ON COLUMN CODIFICATION.ID_CODIFICATION IS 'Codification ID';
+COMMENT ON COLUMN CODIFICATION.CODE_CODIFICATION IS 'Translation code';
+COMMENT ON COLUMN CODIFICATION.FLG_AVAILABLE IS 'Flag that indicates if the record is available or not (Y/N)';
+COMMENT ON COLUMN CODIFICATION.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN CODIFICATION.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN CODIFICATION.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN CODIFICATION.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN CODIFICATION.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN CODIFICATION.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN CODIFICATION.ID_CONTENT IS 'Content unique ID';
+COMMENT ON COLUMN CODIFICATION.ID_MAP_SET IS 'Reference to mapping set ID in XMAP_SET';
+-- CHANGE END: Ana Matos

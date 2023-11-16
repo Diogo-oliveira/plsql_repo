@@ -1,0 +1,23 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 09:12
+-- CHANGE REASON: [ALERT-12334] 
+alter table SUPPLY_TYPE
+  add constraint STY_PK primary key (ID_SUPPLY_TYPE)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 02/12/2010 16:35
+-- CHANGE REASON: [ALERT-146433] Add FLG_AVAILABLE to SUPPLY, SUPPLY_TYPE
+alter table supply_type add constraint STY_FLG_AVAILABLE_CHK check (flg_Available in ('Y','N'));
+-- CHANGE END: João Martins

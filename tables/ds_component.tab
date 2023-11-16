@@ -1,0 +1,328 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:21
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+CREATE TABLE ds_component (
+       id_ds_component    NUMBER(24) NOT NULL,
+       internal_name      VARCHAR2(200 CHAR) NOT NULL,
+       flg_component_type VARCHAR2(1 CHAR) NOT NULL,
+       code_ds_component  VARCHAR2(200 CHAR) NOT NULL,
+       flg_data_type      VARCHAR2(2 CHAR),
+       slg_internal_name  VARCHAR2(200 CHAR),
+       --
+       create_user        VARCHAR2(24 CHAR),
+       create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution NUMBER(24),
+       update_user        VARCHAR2(24 CHAR),
+       update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution NUMBER(24)
+);
+
+--
+
+COMMENT ON TABLE ds_component IS 'Table for dinamic screens components';
+--
+COMMENT ON COLUMN ds_component.id_ds_component    IS 'Dinamic screen component Id';
+COMMENT ON COLUMN ds_component.internal_name      IS 'Internal name';
+COMMENT ON COLUMN ds_component.flg_component_type IS 'Dinamic screen component type (R - Root / N - Node / L - Leaf - context defined in sys_domain)';
+COMMENT ON COLUMN ds_component.code_ds_component  IS 'Code for translation';
+COMMENT ON COLUMN ds_component.flg_data_type      IS 'Dinamic screen component data type (DT - Date and Time / FT - Free Text / MS - Multichoice of single choice / MM - Multichoice of multiple choice / MD - Multichoice for diagnosis / MC - Multichoice for contagious diseases / MR Multichoice for realtionships / MO Multichoice for organs / MO Multichoice for tissues - context defined in sys_domain)';
+COMMENT ON COLUMN ds_component.slg_internal_name  IS 'Sys list group internal name if ds component data type is a multichoice';
+--
+COMMENT ON COLUMN ds_component.create_user        IS 'Professional that created the registry';
+COMMENT ON COLUMN ds_component.create_time        IS 'Date of the registry creation';
+COMMENT ON COLUMN ds_component.create_institution IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN ds_component.update_user        IS 'Last professional that updated the registry';
+COMMENT ON COLUMN ds_component.update_time        IS 'Date of the last update to the registry';
+COMMENT ON COLUMN ds_component.update_institution IS 'Id of the last institution where the registry was updated';
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:21
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE ds_component MOVE TABLESPACE table_m;
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 17:00
+-- CHANGE REASON: [ALERT-229222] VERSIONING TRANSACTIONAL MODEL - SCHEMA ALERT - DDL
+COMMENT ON COLUMN DS_COMPONENT.FLG_COMPONENT_TYPE IS 'Dynamic screen component type (R - Root / N - Node / L - Leaf - context defined in sys_domain)';
+COMMENT ON COLUMN DS_COMPONENT.FLG_DATA_TYPE IS 'Dynamic screen component data type (DT - Date and Time / FT - Free Text / MS - Multichoice of single choice / MM - Multichoice of multiple choice / MD - Multichoice for diagnosis / MC - Multichoice for contagious diseases / MR Multichoice for realtionships / MO Multichoice for organs / MO Multichoice for tissues / N - Numeric Keypad / FR - Forms) - context defined in sys_domain)';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/06/2013 17:07
+-- CHANGE REASON: [ALERT-260856] Ability to perform triage based on EST (Échelle Suisse de Tri) (ALERT_188926) - VERSIONING DB DDL
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'ALTER TABLE DS_COMPONENT ADD MAX_LEN NUMBER(24)');
+    run_ddl(i_sql => 'ALTER TABLE DS_COMPONENT ADD MIN_VALUE NUMBER(24)');
+    run_ddl(i_sql => 'ALTER TABLE DS_COMPONENT ADD MAX_VALUE NUMBER(24)');
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_COMPONENT.MAX_LEN IS ''Maximum length of free text fields''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_COMPONENT.MIN_VALUE IS ''Minimum value of keypad fields''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_COMPONENT.MAX_VALUE IS ''Maximum value of keypad fields''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 06/12/2013 15:19
+-- CHANGE REASON: [ALERT-269683] 
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'ALTER TABLE DS_COMPONENT ADD GENDER VARCHAR2(1 CHAR)');
+    run_ddl(i_sql => 'ALTER TABLE DS_COMPONENT ADD AGE_MIN_VALUE NUMBER(5,2)');
+    run_ddl(i_sql => 'ALTER TABLE DS_COMPONENT ADD AGE_MIN_UNIT_MEASURE NUMBER(24)');
+    run_ddl(i_sql => 'ALTER TABLE DS_COMPONENT ADD AGE_MAX_VALUE NUMBER(5,2)');
+    run_ddl(i_sql => 'ALTER TABLE DS_COMPONENT ADD AGE_MAX_UNIT_MEASURE NUMBER(24)');
+    run_ddl(i_sql => 'alter table DS_COMPONENT add constraint DS_CMP_MIN_UM foreign key (AGE_MIN_UNIT_MEASURE) references UNIT_MEASURE (ID_UNIT_MEASURE)');
+    run_ddl(i_sql => 'alter table DS_COMPONENT add constraint DS_CMP_MAX_UM foreign key (AGE_MAX_UNIT_MEASURE) references UNIT_MEASURE (ID_UNIT_MEASURE)');
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_COMPONENT.GENDER IS ''Patient gender : F - female, M - male, I - Unkown''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_COMPONENT.AGE_MIN_VALUE IS ''Minimum patient age''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_COMPONENT.AGE_MIN_UNIT_MEASURE IS ''Minimum patient age unit measure''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_COMPONENT.AGE_MAX_VALUE IS ''Maximum patient age''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_COMPONENT.AGE_MAX_UNIT_MEASURE IS ''Maximum patient age unit measure''';
+END;
+/
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 13/01/2017 15:31
+-- CHANGE REASON: [ALERT-327681] Discharge - Death data - Ability to document new fields
+--                
+comment on column DS_COMPONENT.flg_data_type
+  is 'Dynamic screen component data type (DT - Date and Time / FT - Free Text / MS - Multichoice of single choice / MM - Multichoice of multiple choice / MD - Multichoice for diagnosis / MC - Multichoice for contagious diseases / MR Multichoice for realtionships / MO Multichoice for organs / MO Multichoice for tissues / N - Numeric Keypad / FR - Forms,FC - Clues Form, K - Keypad with unit measure, ME - Multichoice entity, MP - Multichoice Minicipy,  ML - Multichoice Location) - context defined in sys_domain)';
+-- CHANGE END: Elisabete Bugalho
+
+declare
+	l_sql	varchar2(4000);
+begin
+	l_sql := 'ALTER TABLE DS_COMPONENT ADD ID_UNIT_MEASURE 		 NUMBER(24)';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_sql	varchar2(4000);
+begin
+	l_sql := 'ALTER TABLE DS_COMPONENT ADD ID_UNIT_MEASURE_SUBTYPE NUMBER(24)';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_sql	varchar2(4000);
+begin
+	l_sql := 'ALTER TABLE DS_COMPONENT ADD MULTI_OPTION_COLUMN	 VARCHAR2(0200 CHAR)';
+	pk_versioning.run(l_sql);
+end;
+/
+
+comment on column ALERT.DS_COMPONENT.ID_UNIT_MEASURE 		 is 'Unit measure of component';
+comment on column ALERT.DS_COMPONENT.ID_UNIT_MEASURE_SUBTYPE is 'Unit measure subtype of component. if filled, id_unit_measure is default.';
+comment on column ALERT.DS_COMPONENT.MULTI_OPTION_COLUMN     is 'Multichoioce associated with component';
+
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/07/2017 14:08
+-- CHANGE REASON: [ALERT-331061]
+ALTER TABLE DS_COMPONENT DROP CONSTRAINT DSCP_DT_CHK;
+ALTER TabLE DS_COMPONENT ADD CONSTRAINT DSCP_DT_CHK CHECK (FLG_DATA_TYPE IN ('DT', 'FT', 'MS', 'MM', 'MD', 'MC', 'MR', 'MO', 'MT','N','FR','FC','K','ME','MP','ML','MJ','D','IA', 'PR', 'SP'));
+-- CHANGE END: Pedro Henriques
+
+--
+declare
+	l_sql varchar2(1000 char);
+begin
+
+	l_sql := 'alter table DS_COMPONENT modify FLG_DATA_TYPE varchar2(003 char)';
+	pk_versioning.run( l_sql );
+end;
+/
+	
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 11/11/2017
+-- CHANGE REASON: CALERT-146
+ALTER TABLE DS_COMPONENT DROP CONSTRAINT DSCP_DT_CHK;
+ALTER TabLE DS_COMPONENT ADD CONSTRAINT DSCP_DT_CHK CHECK (FLG_DATA_TYPE IN ('DT', 'FT', 'MS', 'MM', 'MD', 'MC', 'MR', 'MO', 'MT','N','FR','FC','K','ME','MP','ML','MJ','D','IA', 'PR', 'SP', 'DTP', 'DP', 'MMD' ,'CMP'));
+
+COMMENT ON COLUMN ALERT.DS_COMPONENT.FLG_DATA_TYPE     is 'Dynamic screen component data type (DT - Date and Time / FT - Free Text / MS - Multichoice of single choice / MM - Multichoice of multiple choice / MD - Multichoice for diagnosis / MC - Multichoice for contagious diseases / MR Multichoice for realtionships / MO Multichoice for organs / MO Multichoice for tissues / N - Numeric Keypad / FR - Forms,FC - Clues Form, K - Keypad with unit measure, ME - Multichoice entity, MP - Multichoice Minicipy,  ML - Multichoice Location, CMP - Complication Location) - context defined in sys_domain)';
+-- CHANGE END: Pedro Teixeira
+
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 26/04/2019 15:21
+-- CHANGE REASON: [EMR-15303] - Reason for Compulsory admission
+ALTER TABLE DS_COMPONENT DROP CONSTRAINT DSCP_DT_CHK;   
+ALTER TABLE DS_COMPONENT ADD CONSTRAINT DSCP_DT_CHK CHECK (FLG_DATA_TYPE IN ('DT', 'FT', 'MS', 'MM', 'MD', 'MC', 'MR', 'MO', 'MT','N','FR','FC','K','ME','MP','ML','MJ','D','IA', 'PR', 'SP', 'DTP', 'DP', 'MMD' ,'CMP', 'MF'));
+
+COMMENT ON COLUMN ALERT.DS_COMPONENT.FLG_DATA_TYPE is 'Dynamic screen component data type (DT - Date and Time / FT - Free Text / MS - Multichoice of single choice / MM - Multichoice of multiple choice / MD - Multichoice for diagnosis / MC - Multichoice for contagious diseases / MR Multichoice for realtionships / MO Multichoice for organs / MO Multichoice for tissues / N - Numeric Keypad / FR - Forms,FC - Clues Form, K - Keypad with unit measure, ME - Multichoice entity, MP - Multichoice Minicipy,  ML - Multichoice Location, CMP - Complication Location, MF - Multichoice of single choice with free text option) - context defined in sys_domain)';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 15:13
+-- CHANGE REASON: [ARCH-7603] Changes on DB Model
+--                
+-- Add/modify columns 
+alter table DS_COMPONENT add code_domain  varchar2(200 CHAR);
+alter table DS_COMPONENT add service_name varchar2(200 char);
+--alter table DS_COMPONENT add id_criteria  number(24);
+-- Add comments to the columns 
+comment on column DS_COMPONENT.code_domain   is 'sys_domain code associated with the component';
+
+comment on column DS_COMPONENT.service_name  is 'Service name';  
+--comment on column DS_COMPONENT.id_criteria   is 'ID search criteria';  
+
+declare
+  l_sql varchar2(1000 char);
+begin
+  L_SQL := 'ALTER TABLE DS_COMPONENT ADD internal_sample_text_type varchar2(200 char)';
+  pk_versioning.run( l_sql);
+end;
+/
+
+comment on column DS_COMPONENT.internal_sample_text_type  is 'Sample Text Type associated with component';  
+
+declare
+  pl varchar2(0010 char) := '''';
+  l_sql varchar2(1000 char);
+begin
+
+  l_Sql := pl||'N'||pl
+  L_SQL := 'ALTER TABLE DS_COMPONENT ADD FLG_WRAP_TEXT VARCHAR2(1 char ) not null default '|| l_Sql;
+  pk_versioning.run( l_sql);
+end;
+/
+
+comment on column DS_COMPONENT.flg_wrap_text  is 'Is field multiline? (Y/N)';  
+
+
+comment on column DS_COMPONENT.flg_data_type is 
+'Dynamic screen component data type ( context defined in sys_domain )
+L   - Label
+RB  - RadioButton
+CMP - Complication Location,
+DT  - Date and Time / 
+FR  - Forms,
+FT  - Free Text / 
+K   - Keypad with unit measure, 
+MD  - Multichoice for diagnosis /
+FC  - Clues Form, 
+MF  - Multichoice of single choice with free text option
+ME  - Multichoice entity, 
+ML  - Multichoice Location, 
+MO  - Multichoice for organs / Multichoice for tissues /
+MP  - Multichoice Municipy,  
+MR  - Multichoice for realtionships / 
+MS  - Multichoice of single choice / 
+MM  - Multichoice of multiple choice / 
+N   - Numeric Keypad / 
+D   - Date
+DTP - Partial date ( mm/yyyy )
+FC  - 
+IA  - 
+MC  - 
+MMD - 
+MT  - 
+PR  - 
+SP  - 
+DH - Hijiri Date';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 10/01/2020 14:33
+-- CHANGE REASON: [EMR-25349]
+comment on column DS_COMPONENT.flg_data_type
+is 'Dynamic screen component data type ( context defined in sys_domain )
+L   - Label
+RB  - RadioButton
+CMP - Complication Location,
+DT  - Date and Time /
+FR  - Forms,
+FT  - Free Text /
+K   - Keypad with unit measure,
+MD  - Multichoice for diagnosis /
+FC  - Clues Form,
+MF  - Multichoice of single choice with free text option
+ME  - Multichoice entity,
+ML  - Multichoice Location,
+MO  - Multichoice for organs / Multichoice for tissues /
+MP  - Multichoice Municipy,
+MR  - Multichoice for realtionships /
+MS  - Multichoice of single choice /
+MM  - Multichoice of multiple choice /
+N   - Numeric Keypad /
+D   - Date
+DTP - Partial date ( mm/yyyy )
+FC  -
+IA  -
+MC  -
+MMD -
+MT  -
+PR  -
+LO  - Free Text in CLOB Format
+T   - KEYPAD ( HOUR:MINUTES)
+SP  - DH - Hijiri Date';
+-- CHANGE END: Sofia Mendes
+
+-- CMF
+comment on column DS_COMPONENT.flg_data_type
+  is 'Dynamic screen component data type ( context defined in sys_domain )
+L   - Label
+RB  - RadioButton
+CMP - Complication Location,
+DT  - Date and Time /
+FR  - Forms,
+FT  - Free Text /
+K   - Keypad with unit measure,
+MD  - Multichoice for diagnosis /
+FC  - Clues Form,
+MF  - Multichoice of single choice with free text option
+ME  - Multichoice entity,
+ML  - Multichoice Location,
+MO  - Multichoice for organs / Multichoice for tissues /
+MP  - Multichoice Municipy,
+MR  - Multichoice for realtionships /
+MS  - Multichoice of single choice /
+MM  - Multichoice of multiple choice /
+N   - Numeric Keypad /
+D   - Date
+DTP - Partial date ( mm/yyyy )
+FC  -
+IA  -
+MC  -
+MMD -
+MT  -
+PR  -
+LO  - Free Text in CLOB Format
+T   - KEYPAD ( HOUR:MINUTES)
+TS  - TOGGLE SINGLE
+TB  - TOGGLE GROUP
+SP  - DH - Hijiri Date';
+
+declare
+  l_sql varchar2(4000);
+begin
+  l_sql := q'[alter table ds_component add flg_repeatable varchar2(0001 char) default 'N' not null]';
+  pk_versioning.run( l_sql );
+end;
+/

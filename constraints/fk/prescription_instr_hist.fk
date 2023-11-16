@@ -1,0 +1,26 @@
+alter table PRESCRIPTION_INSTR_HIST add constraint PIH_INST_FK foreign key (ID_INSTITUTION) references INSTITUTION (ID_INSTITUTION);
+alter table PRESCRIPTION_INSTR_HIST add constraint PIH_PROF_FK foreign key (ID_PROFESSIONAL) references PROFESSIONAL (ID_PROFESSIONAL);
+alter table PRESCRIPTION_INSTR_HIST add constraint PIH_SOFT_FK foreign key (ID_SOFTWARE) references SOFTWARE (ID_SOFTWARE);
+
+--CHANGED BY: Pedro Albuquerque
+--CHANGE DATE: 2009-MAR-27 
+--CHANGE REASON: cancel reasons
+
+alter table prescription_instr_hist
+add constraint PIH_ICR_FK
+foreign key (id_cancel_reason) references cancel_reason (id_cancel_reason);
+
+--CHANGE END
+
+
+--CHANGED BY: Pedro Albuquerque
+-- CHANGED DATE: 2009-ABR-02
+--CHANGE REASON: ALERT-22114
+
+ALTER TABLE PRESCRIPTION_INSTR_HIST ADD (CONSTRAINT
+ PIH_UME_DISP_FK FOREIGN KEY 
+  (UNIT_MEASURE_DISPENSE) REFERENCES UNIT_MEASURE
+  (ID_UNIT_MEASURE))
+/
+  
+--CHANGE END

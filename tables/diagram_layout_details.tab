@@ -1,0 +1,49 @@
+-- CHANGED BY: rui.mendonca
+-- CHANGE DATE: 11/12/2017 15:43
+-- CHANGE REASON: [CALERT-1112] New Neurological assessment figure
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'DIAGRAM_LAYOUT_DETAILS',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'DSV',
+                                             i_flg_alert_default => 'N',
+                                             i_flg_nzd           => 'N',
+                                             i_responsible_team  => 'CDOC');
+    pk_versioning.run('
+CREATE TABLE diagram_layout_details (
+  id_diagram_lay_imag NUMBER(24), 
+  id_diagram_tools    NUMBER(24), 
+  x_position          NUMBER(24, 2),
+  y_position          NUMBER(24, 2), 
+  symbol_value        VARCHAR2(240), 
+  internal_name       VARCHAR2(200),
+  flg_orientation     VARCHAR2(2 CHAR), 
+  create_user         VARCHAR2(24 CHAR), 
+  create_time         TIMESTAMP(6) WITH LOCAL TIME ZONE, 
+  create_institution  NUMBER(24), 
+  update_user         VARCHAR2(24 CHAR), 
+  update_time         TIMESTAMP(6) WITH LOCAL TIME ZONE, 
+  update_institution  NUMBER(24), 
+  CONSTRAINT dld_pk PRIMARY KEY (
+    id_diagram_lay_imag, x_position, y_position
+  )
+) TABLESPACE ALERT_DATA');
+END;
+/
+
+COMMENT ON TABLE diagram_layout_details IS 'Table that links body diagrams to predefined symbols with predefined coordinates and values';
+
+COMMENT ON COLUMN diagram_layout_details.id_diagram_lay_imag IS 'ID that identifies the diagram layout and the diagram image to which the symbol belongs';
+COMMENT ON COLUMN diagram_layout_details.id_diagram_tools IS 'ID of the diagram symbol';
+COMMENT ON COLUMN diagram_layout_details.x_position IS 'Diagram symbol''s X coordinate';
+COMMENT ON COLUMN diagram_layout_details.y_position IS 'Diagram symbol''s Y coordinate';
+COMMENT ON COLUMN diagram_layout_details.symbol_value IS 'Description shown next to the symbol';
+COMMENT ON COLUMN diagram_layout_details.internal_name IS 'Name given to the detail to facilitate the search for it';
+COMMENT ON COLUMN diagram_layout_details.flg_orientation IS 'Orientation of the symbol''s label (U - Upper; UR - Upper Right; R - Right; BR - Bottom Right; B - Bottom; BL - Bottom Left; L - Left; UL - Upper Left)';
+COMMENT ON COLUMN diagram_layout_details.create_user IS 'User that created the record';
+COMMENT ON COLUMN diagram_layout_details.create_time IS 'Time when the record was created';
+COMMENT ON COLUMN diagram_layout_details.create_institution IS 'Institution where the record was created';
+COMMENT ON COLUMN diagram_layout_details.update_user IS 'Last user that updated the record';
+COMMENT ON COLUMN diagram_layout_details.update_time IS 'Time of the last update';
+COMMENT ON COLUMN diagram_layout_details.update_institution IS 'Institution where the last update was made';
+-- CHANGE END: rui.mendonca

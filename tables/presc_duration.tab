@@ -1,0 +1,93 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 11:32
+-- CHANGE REASON: [ALERT-38908] Versionamento.
+-- Create table
+create table PRESC_DURATION
+(
+  ID_PRESC_DURATION           NUMBER(24) not null,
+  ID_PRESC_INSTR_DET          NUMBER(24) not null,
+  DURATION_VALUE              NUMBER(24,4),
+  DURATION_VALUE_UNIT         NUMBER(24),
+  DATE_BEGIN                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DATE_END                    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DATE_REG                    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PRESCRIPTION_FIELD_DET   NUMBER(24),
+  PRESCRIPTION_FIELD_DET_RANK NUMBER(24)
+)
+tablespace TABLE_M;
+-- Add comments to the table 
+comment on table PRESC_DURATION
+  is 'Tabela onde irão ser guardadas as durações para as prescrições.';
+-- Add comments to the columns 
+comment on column PRESC_DURATION.ID_PRESC_DURATION
+  is 'primary key';
+comment on column PRESC_DURATION.ID_PRESC_INSTR_DET
+  is 'id das instruções';
+comment on column PRESC_DURATION.DURATION_VALUE
+  is 'valor da duração';
+comment on column PRESC_DURATION.DURATION_VALUE_UNIT
+  is 'unidade do valor da duração';
+comment on column PRESC_DURATION.DATE_BEGIN
+  is 'data de início';
+comment on column PRESC_DURATION.DATE_END
+  is 'data de fim';
+comment on column PRESC_DURATION.DATE_REG
+  is 'data de registo';
+comment on column PRESC_DURATION.ID_PRESCRIPTION_FIELD_DET
+  is 'id do campo';
+comment on column PRESC_DURATION.PRESCRIPTION_FIELD_DET_RANK
+  is 'ordenação dos campos';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 15:19
+-- CHANGE REASON: [ALERT-38908] add audit columns
+-- Create table
+create table PRESC_DURATION
+(
+  ID_PRESC_DURATION           NUMBER(24) not null,
+  ID_PRESC_INSTR_DET          NUMBER(24) not null,
+  DURATION_VALUE              NUMBER(24,4),
+  DURATION_VALUE_UNIT         NUMBER(24),
+  DATE_BEGIN                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DATE_END                    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DATE_REG                    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PRESCRIPTION_FIELD_DET   NUMBER(24),
+  PRESCRIPTION_FIELD_DET_RANK NUMBER(24),
+  CREATE_USER           VARCHAR2(24),
+  CREATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24),
+  UPDATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+)
+tablespace TABLE_M;
+-- Add comments to the table 
+comment on table PRESC_DURATION
+  is 'Tabela onde irão ser guardadas as durações para as prescrições.';
+-- Add comments to the columns 
+comment on column PRESC_DURATION.ID_PRESC_DURATION
+  is 'primary key';
+comment on column PRESC_DURATION.ID_PRESC_INSTR_DET
+  is 'id das instruções';
+comment on column PRESC_DURATION.DURATION_VALUE
+  is 'valor da duração';
+comment on column PRESC_DURATION.DURATION_VALUE_UNIT
+  is 'unidade do valor da duração';
+comment on column PRESC_DURATION.DATE_BEGIN
+  is 'data de início';
+comment on column PRESC_DURATION.DATE_END
+  is 'data de fim';
+comment on column PRESC_DURATION.DATE_REG
+  is 'data de registo';
+comment on column PRESC_DURATION.ID_PRESCRIPTION_FIELD_DET
+  is 'id do campo';
+comment on column PRESC_DURATION.PRESCRIPTION_FIELD_DET_RANK
+  is 'ordenação dos campos';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_DURATION IS 'Tabela onde irão ser guardadas as durações para as prescrições. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

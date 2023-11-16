@@ -1,0 +1,30 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 22/09/2011 09:03
+-- CHANGE REASON: [ALERT-192572] 
+DECLARE e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE home_field_config_mkt
+  ADD CONSTRAINT hfcm_hf_fk FOREIGN KEY (
+    id_home_field
+  ) REFERENCES home_field (id_home_field)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE home_field_config_mkt
+  ADD CONSTRAINT hfcm_market_fk FOREIGN KEY (
+    id_market
+  ) REFERENCES market (id_market)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

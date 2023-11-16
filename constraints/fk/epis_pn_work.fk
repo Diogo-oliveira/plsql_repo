@@ -1,0 +1,54 @@
+--26/01/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+ALTER TABLE EPIS_PN_WORK ADD (CONSTRAINT
+ EPW_PROF_FK FOREIGN KEY 
+  (ID_PROFESSIONAL) REFERENCES PROFESSIONAL
+  (ID_PROFESSIONAL))
+/
+
+ALTER TABLE EPIS_PN_WORK ADD (CONSTRAINT
+ EPW_EPIS_FK FOREIGN KEY 
+  (ID_EPISODE) REFERENCES EPISODE
+  (ID_EPISODE))
+/
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:31
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table epis_pn_work
+  add constraint epnw_pnnt_fk foreign key (id_pn_note_type)
+  references pn_note_type (id_pn_note_type);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table epis_pn_work
+  add constraint epnw_pnnt_fk foreign key (id_pn_note_type)
+  references pn_note_type (id_pn_note_type);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:15
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER TABLE EPIS_PN_WORK ADD CONSTRAINT EPNW_DCS_FK FOREIGN KEY (ID_DEP_CLIN_SERV) REFERENCES DEP_CLIN_SERV(ID_DEP_CLIN_SERV)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:49
+-- CHANGE REASON: [ALERT-226174] 
+begin
+execute immediate ('ALTER TABLE epis_pn_work ADD CONSTRAINT EPNW_ID_AREA_FK FOREIGN KEY (ID_PN_AREA) REFERENCES PN_AREA(ID_PN_AREA)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: Luís Maia

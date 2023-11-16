@@ -1,0 +1,71 @@
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner              => 'ALERT',
+                                             i_obj_name           => 'EPIS_PROF_RESP_H',
+                                             i_obj_type           => 'TABLE',
+                                             i_flg_category       => 'TRS',
+                                             i_flg_nzd            => 'Y',
+                                             i_responsible_team   => 'CDOC',
+                                             i_flg_sensitive_data => 'N');
+END;
+/
+
+create table EPIS_PROF_RESP_H
+(
+  id_epis_prof_resp_H      NUMBER(24) not null,
+  dt_creation			   TIMESTAMP(6) WITH LOCAL TIME ZONE default current_timestamp,
+  id_epis_prof_resp        NUMBER(24),
+  id_episode               NUMBER(24),
+  id_prof_req              NUMBER(24),
+  id_prof_to               NUMBER(24),
+  id_prof_comp             NUMBER(24),
+  id_speciality            NUMBER(12),
+  id_movement              NUMBER(24),
+  notes_old                VARCHAR2(4000),
+  flg_type                 VARCHAR2(1),
+  flg_status               VARCHAR2(1),
+  id_prof_decline          NUMBER(24),
+  id_prof_cancel           NUMBER(24),
+  notes_cancel             VARCHAR2(4000),
+  trf_reason               VARCHAR2(4000),
+  trf_answer               VARCHAR2(4000),
+  id_room                  NUMBER(24),
+  id_bed                   NUMBER(24),
+  id_department_orig       NUMBER(24),
+  id_department_dest       NUMBER(24),
+  id_prof_execute          NUMBER(24),
+  transport_notes          VARCHAR2(4000),
+  id_prof_prev             NUMBER(24),
+  flg_transfer             VARCHAR2(1),
+  id_bed_execute           NUMBER(24),
+  id_room_execute          NUMBER(24),
+  flg_escort               VARCHAR2(1),
+  flg_transf_type          VARCHAR2(1),
+  id_clinical_service_orig NUMBER(24),
+  id_clinical_service_dest NUMBER(24),
+  dt_request_tstz          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_cancel_tstz           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_decline_tstz          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_comp_tstz             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_trf_requested_tstz    TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_trf_accepted_tstz     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_execute_tstz          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_end_transfer_tstz     TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  id_cancel_reason         NUMBER(24),
+  free_text_notes          CLOB,
+  flg_patient_consent      VARCHAR2(1 CHAR),
+  sbar_notes               CLOB,
+  notes_clob               CLOB,
+  id_epis_pn               NUMBER,
+  id_profile_template      NUMBER
+  create_user              VARCHAR2(24),
+  create_time              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution       NUMBER(24),
+  update_user              VARCHAR2(24),
+  update_time              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution       NUMBER(24),
+)
+tablespace ALERT_DATA
+;
+
+
+ALTER TABLE EPIS_PROF_RESP_H ADD CONSTRAINT EPR_H_PK PRIMARY KEY (ID_EPIS_PROF_RESP_H) USING INDEX TABLESPACE ALERT_IDX;

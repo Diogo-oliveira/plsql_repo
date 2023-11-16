@@ -1,0 +1,50 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/07/2011 15:01
+-- CHANGE REASON: [ALERT-188174] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE child_feed_dev_inst_soft
+  ADD CONSTRAINT cfdis_cfd_fk FOREIGN KEY (
+    id_child_feed_dev
+  ) REFERENCES child_feed_dev (id_child_feed_dev)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE child_feed_dev_inst_soft
+  ADD CONSTRAINT cfdis_inst_fk FOREIGN KEY (
+    id_institution
+  ) REFERENCES institution (id_institution)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE child_feed_dev_inst_soft
+  ADD CONSTRAINT cfdis_soft_fk FOREIGN KEY (
+    id_software
+  ) REFERENCES software (id_software)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE child_feed_dev_inst_soft
+  ADD CONSTRAINT cfdis_market_fk FOREIGN KEY (
+    id_market
+  ) REFERENCES market (id_market)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

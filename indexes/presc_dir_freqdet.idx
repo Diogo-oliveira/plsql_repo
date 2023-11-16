@@ -1,0 +1,35 @@
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 02/03/2010
+-- CHANGE REASON: [ALERT-78195]
+declare
+  l_count pls_integer;
+
+begin
+  select count(1) into l_count from all_indexes where owner = 'ALERT' and index_name = 'PDFD_PDFREQ_FK04_IDX';
+  if l_count = 0 then
+    execute immediate ( 'CREATE INDEX ALERT.PDFD_PDFREQ_FK04_IDX ON ALERT.PRESC_DIR_FREQDET (DF_MD_ID_PD_FREQUENCY)' );
+  end if;
+
+  select count(1) into l_count from all_indexes where owner = 'ALERT' and index_name = 'PDFD_PDFREQ_FK03_IDX';
+  if l_count = 0 then
+    execute immediate ( 'CREATE INDEX ALERT.PDFD_PDFREQ_FK03_IDX ON ALERT.PRESC_DIR_FREQDET (DF_WD_ID_PD_FREQUENCY)' );
+  end if;
+
+  select count(1) into l_count from all_indexes where owner = 'ALERT' and index_name = 'PDFD_PDFREQ_FK02_IDX';
+  if l_count = 0 then
+    execute immediate ( 'CREATE INDEX ALERT.PDFD_PDFREQ_FK02_IDX ON ALERT.PRESC_DIR_FREQDET (EDF_MP_ID_PD_FREQUENCY)' );
+  end if;
+
+  select count(1) into l_count from all_indexes where owner = 'ALERT' and index_name = 'PDFD_PDFREQ_FK01_IDX';
+  if l_count = 0 then
+    execute immediate ( 'CREATE INDEX ALERT.PDFD_PDFREQ_FK01_IDX ON ALERT.PRESC_DIR_FREQDET (EDF_M_ID_PD_FREQUENCY)' );
+  end if;
+
+  select count(1) into l_count from all_indexes where owner = 'ALERT' and index_name = 'PDFD_DOSE_FREQ_FK_IDX';
+  if l_count = 0 then
+    execute immediate ( 'CREATE INDEX ALERT.PDFD_DOSE_FREQ_FK_IDX ON ALERT.PRESC_DIR_FREQDET (ID_PRESC_DIR_DOSEFREQ)' );
+  end if;
+
+end;
+/
+-- CHANGE END: Nuno Ferreira

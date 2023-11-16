@@ -1,0 +1,288 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 03/07/2010 20:19
+-- CHANGE REASON: [ALERT-109286] 
+CREATE TABLE consult_req_hist (
+  id_consult_req_hist   NUMBER(24,0)                      NOT NULL,
+  id_consult_req        NUMBER(24,0)                      NOT NULL,
+  consult_type          VARCHAR2(200)                     NULL,
+  id_clinical_service   NUMBER(12,0)                      NULL,
+  id_patient            NUMBER(24,0)                      NOT NULL,
+  id_instit_requests    NUMBER(12,0)                      NOT NULL,
+  id_inst_requested     NUMBER(12,0)                      NULL,
+  id_episode            NUMBER(24,0)                      NULL,
+  id_prof_req           NUMBER(24,0)                      NOT NULL,
+  id_prof_auth          NUMBER(24,0)                      NULL,
+  id_prof_appr          NUMBER(24,0)                      NULL,
+  id_prof_proc          NUMBER(24,0)                      NULL,
+  notes                 VARCHAR2(4000)                    NULL,
+  id_prof_cancel        NUMBER(24,0)                      NULL,
+  notes_cancel          VARCHAR2(4000)                    NULL,
+  id_dep_clin_serv      NUMBER(24,0)                      NULL,
+  id_prof_requested     NUMBER(24,0)                      NULL,
+  flg_status            VARCHAR2(1)                       NOT NULL,
+  notes_admin           VARCHAR2(4000)                    NULL,
+  id_schedule           NUMBER(24,0)                      NULL,
+  dt_consult_req_tstz   TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+  dt_scheduled_tstz     TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  dt_cancel_tstz        TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  next_visit_in_notes   VARCHAR2(4000)                    NULL,
+  flg_instructions      VARCHAR2(1)                       NULL,
+  id_complaint          NUMBER(24,0)                      NULL,
+  flg_type_date         VARCHAR2(1)                       NULL,
+  status_flg            VARCHAR2(100)                     NULL,
+  status_icon           VARCHAR2(100)                     NULL,
+  status_msg            VARCHAR2(100)                     NULL,
+  status_str            VARCHAR2(100)                     NULL,
+  reason_for_visit      VARCHAR2(4000)                    NULL,
+  create_user           VARCHAR2(24)                      NULL,
+  create_time           TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  create_institution    NUMBER(24,0)                      NULL,
+  update_user           VARCHAR2(24)                      NULL,
+  update_time           TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  update_institution    NUMBER(24,0)                      NULL,
+  flg_type              VARCHAR2(1)                       NULL,
+  id_cancel_reason      NUMBER(24,0)                      NULL,
+  id_epis_documentation NUMBER(24,0)                      NULL,
+  id_epis_type          NUMBER(24,0)                      NULL,
+  dt_last_update        TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  id_prof_last_update   NUMBER(24,0)                      NULL,
+  id_inst_last_update   NUMBER(24,0)                      NULL,
+  id_sch_event          NUMBER(24,0)                      NULL,
+  dt_begin_event        TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  dt_end_event          TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  flg_priority          VARCHAR2(1 char)                       NULL,
+  flg_contact_type      VARCHAR2(1 char)                       NULL,
+  instructions          CLOB                              NULL,
+  id_room               NUMBER(24,0)                      NULL,
+  flg_request_type      VARCHAR2(1 char)                       NULL,
+  flg_req_resp          VARCHAR2(1 char)                       NULL,
+  request_reason        CLOB                              NULL,
+  id_language           NUMBER(24,0)                      NULL,
+  flg_recurrence        VARCHAR2(1 char)                       NULL,
+  frequency             NUMBER(12,0)                      NULL,
+  dt_rec_begin          TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  dt_rec_end            TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  nr_events             NUMBER(12,0)                      NULL,
+  week_day              NUMBER(3,0)                       NULL,
+  week_nr               NUMBER(3,0)                       NULL,
+  month_day             NUMBER(3,0)                       NULL,
+  month_nr              NUMBER(3,0)                       NULL,
+  id_soft_reg_by        NUMBER(24,0)                      NULL
+) ;
+
+COMMENT ON TABLE consult_req_hist IS 'Histórico de requisição de consultas ao exterior  e internas';
+
+COMMENT ON COLUMN consult_req_hist.consult_type IS 'Tipo de exame / consulta requisitada. Se requisição é externa, preenche-se ID_CLINICAL_SERVICE (se o tipo de serviço pretendido está registado na BD da instituição requisitante) ou CONSULT_TYPE (campo de texto livre).Se requisição é interna, selecciona-se não só o tipo de serviço, mas tb o departamento (DEP_CLIN_SERV).';
+COMMENT ON COLUMN consult_req_hist.id_clinical_service IS 'Tipo de exame / consulta requisitada. Se requisição é externa, preenche-se ID_CLINICAL_SERVICE (se o tipo de serviço pretendido está registado na BD da instituição requisitante) ou CONSULT_TYPE (campo de texto livre).Se requisição é interna, selecciona-se não só o tipo de serviço, mas tb o departamento (DEP_CLIN_SERV).';
+COMMENT ON COLUMN consult_req_hist.id_patient IS 'patient identifier';
+COMMENT ON COLUMN consult_req_hist.id_episode IS 'Episódio em q foi requisitada a consulta';
+COMMENT ON COLUMN consult_req_hist.notes IS 'notes';
+COMMENT ON COLUMN consult_req_hist.notes_cancel IS 'Notas de cancelamento';
+COMMENT ON COLUMN consult_req_hist.id_dep_clin_serv IS 'appointment type';
+COMMENT ON COLUMN consult_req_hist.id_prof_requested IS 'Profissional requisitado, se é uma requisição interna.';
+COMMENT ON COLUMN consult_req_hist.flg_status IS 'Estado: R - requisitado, F - pedido lido, P - respondido, A - resposta lida, C - cancelado, T - autorizado, V - aprovado, S - processado';
+COMMENT ON COLUMN consult_req_hist.notes_admin IS 'Notas ao administrativo';
+COMMENT ON COLUMN consult_req_hist.id_schedule IS 'Schedule identifier';
+COMMENT ON COLUMN consult_req_hist.next_visit_in_notes IS 'Notes for indicating when will the next visit happen';
+COMMENT ON COLUMN consult_req_hist.flg_instructions IS 'Instructions for the next visit';
+COMMENT ON COLUMN consult_req_hist.id_complaint IS 'appointment reason';
+COMMENT ON COLUMN consult_req_hist.flg_type_date IS 'Tipo de data inserido, com marcacao de hora - H; só para um ano - A; para um ano e mes - M; para ano, mes e dia - D';
+COMMENT ON COLUMN consult_req_hist.status_flg IS 'Request''s status flag (udes to return the icon)';
+COMMENT ON COLUMN consult_req_hist.status_icon IS 'Request''s status icon';
+COMMENT ON COLUMN consult_req_hist.status_msg IS 'Request''s status message code';
+COMMENT ON COLUMN consult_req_hist.status_str IS 'Request''s status (in specific format)';
+COMMENT ON COLUMN consult_req_hist.reason_for_visit IS 'Reason for visit';
+COMMENT ON COLUMN consult_req_hist.create_user IS 'Creation User';
+COMMENT ON COLUMN consult_req_hist.create_time IS 'Creation Time';
+COMMENT ON COLUMN consult_req_hist.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN consult_req_hist.update_user IS 'Update User';
+COMMENT ON COLUMN consult_req_hist.update_time IS 'Update Time';
+COMMENT ON COLUMN consult_req_hist.update_institution IS 'Update Institution';
+COMMENT ON COLUMN consult_req_hist.flg_type IS 'S - Requested by subsequent, E - Requested by speacility ';
+COMMENT ON COLUMN consult_req_hist.id_cancel_reason IS 'id cancel reason';
+COMMENT ON COLUMN consult_req_hist.id_epis_documentation IS 'Indicates id_epis_documentation if this appointment is made by SNAQ evaluation';
+COMMENT ON COLUMN consult_req_hist.id_epis_type IS 'episode type identifier';
+COMMENT ON COLUMN consult_req_hist.dt_last_update IS 'last update date';
+COMMENT ON COLUMN consult_req_hist.id_prof_last_update IS 'last update by  ';
+COMMENT ON COLUMN consult_req_hist.id_inst_last_update IS 'last update institution';
+COMMENT ON COLUMN consult_req_hist.id_sch_event IS 'event type';
+COMMENT ON COLUMN consult_req_hist.dt_begin_event IS 'begin date';
+COMMENT ON COLUMN consult_req_hist.dt_end_event IS 'end date';
+COMMENT ON COLUMN consult_req_hist.flg_priority IS 'priority identifier';
+COMMENT ON COLUMN consult_req_hist.flg_contact_type IS 'contact type';
+COMMENT ON COLUMN consult_req_hist.instructions IS 'patient instructions';
+COMMENT ON COLUMN consult_req_hist.id_room IS 'room identifier';
+COMMENT ON COLUMN consult_req_hist.flg_request_type IS 'request type';
+COMMENT ON COLUMN consult_req_hist.flg_req_resp IS 'request responsable';
+COMMENT ON COLUMN consult_req_hist.request_reason IS 'request reason';
+COMMENT ON COLUMN consult_req_hist.id_language IS 'id_language';
+COMMENT ON COLUMN consult_req_hist.flg_recurrence IS 'recurrence';
+COMMENT ON COLUMN consult_req_hist.frequency IS 'frequency';
+COMMENT ON COLUMN consult_req_hist.dt_rec_begin IS 'begin recurrence date';
+COMMENT ON COLUMN consult_req_hist.dt_rec_end IS 'end recurrence date';
+COMMENT ON COLUMN consult_req_hist.nr_events IS 'number of events';
+COMMENT ON COLUMN consult_req_hist.week_day IS 'week day';
+COMMENT ON COLUMN consult_req_hist.week_nr IS 'week number';
+COMMENT ON COLUMN consult_req_hist.month_day IS 'month day';
+COMMENT ON COLUMN consult_req_hist.month_nr IS 'month number';
+COMMENT ON COLUMN consult_req_hist.id_soft_reg_by IS 'origin software';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 20/01/2016 14:39
+-- CHANGE REASON: [ALERT-317983] ALERT-317983 CDOC Functionalities V5 Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table CONSULT_REQ_HIST
+  is 'Requisition history of appointments to the outside and internal';
+-- Add comments to the columns 
+comment on column CONSULT_REQ_HIST.id_consult_req_hist
+  is 'Primary key';
+comment on column CONSULT_REQ_HIST.id_consult_req
+  is 'Id consult requirement';
+comment on column CONSULT_REQ_HIST.consult_type
+  is 'Type of consult required';
+comment on column CONSULT_REQ_HIST.id_clinical_service
+  is 'Clinical service identifier';
+comment on column CONSULT_REQ_HIST.id_patient
+  is 'Patient identifier';
+comment on column CONSULT_REQ_HIST.id_instit_requests
+  is 'Institution that requests the consult';
+comment on column CONSULT_REQ_HIST.id_inst_requested
+  is 'Institution who was requested the consult';
+comment on column CONSULT_REQ_HIST.id_episode
+  is 'Episódio em q foi requisitada a consulta';
+comment on column CONSULT_REQ_HIST.id_prof_req
+  is 'Professional that requires the consult';
+comment on column CONSULT_REQ_HIST.id_prof_auth
+  is 'Professional that authorizes the consult';
+comment on column CONSULT_REQ_HIST.id_prof_appr
+  is 'Professional that approves the consult';
+comment on column CONSULT_REQ_HIST.id_prof_proc
+  is 'Professional that process the consult';
+comment on column CONSULT_REQ_HIST.notes
+  is 'Notes';
+comment on column CONSULT_REQ_HIST.id_prof_cancel
+  is 'Professional that cancel the register';
+comment on column CONSULT_REQ_HIST.notes_cancel
+  is 'Cancel notes';
+comment on column CONSULT_REQ_HIST.id_dep_clin_serv
+  is 'Appointment type';
+comment on column CONSULT_REQ_HIST.id_prof_requested
+  is 'Required professional, if it was an internal requirement';
+comment on column CONSULT_REQ_HIST.flg_status
+  is 'State: R-Required; F-Read; P-Answered; A-Answer read; C-Canceled; T-Authorized; V-Approved; S-Processed';
+comment on column CONSULT_REQ_HIST.notes_admin
+  is 'Notes to the administrative';
+comment on column CONSULT_REQ_HIST.id_schedule
+  is 'Schedule identifier';
+comment on column CONSULT_REQ_HIST.dt_consult_req_tstz
+  is 'Consult request date';
+comment on column CONSULT_REQ_HIST.dt_scheduled_tstz
+  is 'Consult sheduled date';
+comment on column CONSULT_REQ_HIST.dt_cancel_tstz
+  is 'Consul cancel date';
+comment on column CONSULT_REQ_HIST.next_visit_in_notes
+  is 'Notes for indicating when will the next visit happen';
+comment on column CONSULT_REQ_HIST.flg_instructions
+  is 'Instructions for the next visit';
+comment on column CONSULT_REQ_HIST.id_complaint
+  is 'Appointment reason';
+comment on column CONSULT_REQ_HIST.flg_type_date
+  is 'Date record type: H-Hour; A-Year; M-Year and Month; D-Year, Month and Day';
+comment on column CONSULT_REQ_HIST.status_flg
+  is 'Request''s status flag (udes to return the icon)';
+comment on column CONSULT_REQ_HIST.status_icon
+  is 'Request''s status icon';
+comment on column CONSULT_REQ_HIST.status_msg
+  is 'Request''s status message code';
+comment on column CONSULT_REQ_HIST.status_str
+  is 'Request''s status (in specific format)';
+comment on column CONSULT_REQ_HIST.reason_for_visit
+  is 'Reason for visit';
+comment on column CONSULT_REQ_HIST.create_user
+  is 'Creation User';
+comment on column CONSULT_REQ_HIST.create_time
+  is 'Creation Time';
+comment on column CONSULT_REQ_HIST.create_institution
+  is 'Creation Institution';
+comment on column CONSULT_REQ_HIST.update_user
+  is 'Update User';
+comment on column CONSULT_REQ_HIST.update_time
+  is 'Update Time';
+comment on column CONSULT_REQ_HIST.update_institution
+  is 'Update Institution';
+comment on column CONSULT_REQ_HIST.flg_type
+  is 'S - Requested by subsequent, E - Requested by speacility ';
+comment on column CONSULT_REQ_HIST.id_cancel_reason
+  is 'Id cancel reason';
+comment on column CONSULT_REQ_HIST.id_epis_documentation
+  is 'Indicates id_epis_documentation if this appointment is made by SNAQ evaluation';
+comment on column CONSULT_REQ_HIST.id_epis_type
+  is 'Episode type identifier';
+comment on column CONSULT_REQ_HIST.dt_last_update
+  is 'Last update date';
+comment on column CONSULT_REQ_HIST.id_prof_last_update
+  is 'Last update by  ';
+comment on column CONSULT_REQ_HIST.id_inst_last_update
+  is 'Last update institution';
+comment on column CONSULT_REQ_HIST.id_sch_event
+  is 'Event type';
+comment on column CONSULT_REQ_HIST.dt_begin_event
+  is 'Begin date';
+comment on column CONSULT_REQ_HIST.dt_end_event
+  is 'End date';
+comment on column CONSULT_REQ_HIST.flg_priority
+  is 'Priority identifier';
+comment on column CONSULT_REQ_HIST.flg_contact_type
+  is 'Contact type';
+comment on column CONSULT_REQ_HIST.instructions
+  is 'Patient instructions';
+comment on column CONSULT_REQ_HIST.id_room
+  is 'Room identifier';
+comment on column CONSULT_REQ_HIST.flg_request_type
+  is 'Request type';
+comment on column CONSULT_REQ_HIST.flg_req_resp
+  is 'Request responsable';
+comment on column CONSULT_REQ_HIST.request_reason
+  is 'Request reason';
+comment on column CONSULT_REQ_HIST.id_language
+  is 'Id_language';
+comment on column CONSULT_REQ_HIST.flg_recurrence
+  is 'Recurrence';
+comment on column CONSULT_REQ_HIST.frequency
+  is 'Frequency';
+comment on column CONSULT_REQ_HIST.dt_rec_begin
+  is 'Begin recurrence date';
+comment on column CONSULT_REQ_HIST.dt_rec_end
+  is 'End recurrence date';
+comment on column CONSULT_REQ_HIST.nr_events
+  is 'Number of events';
+comment on column CONSULT_REQ_HIST.week_day
+  is 'Week day';
+comment on column CONSULT_REQ_HIST.week_nr
+  is 'Week number';
+comment on column CONSULT_REQ_HIST.month_day
+  is 'Month day';
+comment on column CONSULT_REQ_HIST.month_nr
+  is 'Month number';
+comment on column CONSULT_REQ_HIST.id_soft_reg_by
+  is 'Origin software';
+-- CHANGE END: Renato Nunes
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:32
+-- CHANGE REASON: [EMR-4796] 
+DECLARE 
+	l_sql VARCHAR2(1000 CHAR);
+	l_sql_1 VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.consult_req_hist move lob(instructions) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+	l_sql_1 := 'ALTER TABLE alert.consult_req_hist move lob(request_reason) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql_1);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

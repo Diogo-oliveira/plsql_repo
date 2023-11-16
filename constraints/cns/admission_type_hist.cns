@@ -1,0 +1,41 @@
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/06/2010 16:00
+-- CHANGE REASON: [ALERT-105487] 
+ALTER TABLE ADMISSION_TYPE_HIST add constraint ATH_PK primary key (ID_ADMISSION_TYPE_HIST) ENABLE;
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:28
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE ADMISSION_TYPE_HIST ADD CONSTRAINT ATH_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint ATH_FLG_AVAILABLE_CHK table ADMISSION_TYPE_HIST column FLG_AVAILABLE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:28
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE ADMISSION_TYPE_HIST ADD CONSTRAINT ATH_FLG_PARAM_TYPE_CHK CHECK (FLG_PARAMETERIZATION_TYPE IN (''C'', ''B'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint ATH_FLG_PARAM_TYPE_CHK table ADMISSION_TYPE_HIST column FLG_PARAMETERIZATION_TYPE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:28
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE ADMISSION_TYPE_HIST ADD CONSTRAINT ATH_FLG_STATUS_CHK CHECK (FLG_STATUS IN (''A'', ''C'', ''E'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint ATH_FLG_STATUS_CHK table ADMISSION_TYPE_HIST column FLG_STATUS: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto

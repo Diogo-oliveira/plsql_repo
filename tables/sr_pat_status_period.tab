@@ -1,0 +1,39 @@
+
+
+  CREATE TABLE SR_PAT_STATUS_PERIOD
+   (	ID_SR_PAT_STATUS_PERIOD NUMBER(24,0) NOT NULL ENABLE,
+	ID_SR_SURG_PERIOD NUMBER(3,0) NOT NULL ENABLE,
+	FLG_PAT_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_REG DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE sr_pat_status_period IS 'Relaciona os estados possíveis para o paciente com o período operatório em que estes acontecem.' ;
+
+COMMENT ON COLUMN sr_pat_status_period.id_sr_pat_status_period IS 'ID da tabela' ;
+COMMENT ON COLUMN sr_pat_status_period.id_sr_surg_period IS 'ID do periodo operatório na tabela SR_SURG_PERIOD' ;
+COMMENT ON COLUMN sr_pat_status_period.flg_pat_status IS 'Flag de status do paciente' ;
+COMMENT ON COLUMN sr_pat_status_period.dt_reg IS 'Data do registo' ;
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização SR - eliminação de colunas
+ALTER TABLE SR_PAT_STATUS_PERIOD drop column DT_REG;
+-- CHANGE END
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 20/01/2016 11:33
+-- CHANGE REASON: [ALERT-317944 ] 
+-- Add comments to the table 
+comment on table SR_PAT_STATUS_PERIOD
+  is 'Relating the possible states for the patient with the operation period in which they occur.';
+-- Add comments to the columns 
+comment on column SR_PAT_STATUS_PERIOD.id_sr_pat_status_period
+  is 'Primary Key';
+comment on column SR_PAT_STATUS_PERIOD.id_sr_surg_period
+  is 'Surgery period Id';
+comment on column SR_PAT_STATUS_PERIOD.flg_pat_status
+  is 'Flag status of the patient';
+comment on column SR_PAT_STATUS_PERIOD.dt_reg_tstz
+  is 'Record date of creation';
+-- CHANGE END: cristina.oliveira

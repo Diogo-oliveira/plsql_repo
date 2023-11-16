@@ -1,0 +1,60 @@
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 30/11/2010 11:16
+-- CHANGE REASON: [ALERT-145613] Issue Replication: Scale of imeline view configurable(v2.6.0.4) 
+DECLARE
+    e_name_already_used EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_name_already_used, -00955);
+    l_table_name VARCHAR2(30) := 'tl_scale_inst_soft_market';
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE ' || l_table_name || ' (' ||
+                      'id_tl_scale_inst_soft_market    NUMBER(24,0) NOT NULL,'             ||
+                      'id_tl_timeline                  NUMBER(24,0) NOT NULL,'             ||
+                      'id_tl_scale_xupper              NUMBER(24,0) NOT NULL,'             ||
+                      'id_tl_scale_xlower              NUMBER(24,0) NOT NULL,'             ||
+                      'flg_available                   VARCHAR2(1) NOT NULL,'              ||
+                      'id_institution                  NUMBER(24,0) NOT NULL,'             ||
+                      'id_software                     NUMBER(24,0) NOT NULL,'             ||
+                      'id_market                       NUMBER(24,0) NOT NULL,'             ||
+                      'rank                            NUMBER(24,0) NOT NULL,'             || 
+'flg_default                     VARCHAR2(1),'                       ||
+'CREATE_USER                     VARCHAR2(24),'                      ||
+'CREATE_TIME                     TIMESTAMP(6) WITH LOCAL TIME ZONE,' ||
+'CREATE_INSTITUTION              NUMBER(24),'                        ||
+'UPDATE_USER                     VARCHAR2(24),'                      ||
+'UPDATE_TIME                     TIMESTAMP(6) WITH LOCAL TIME ZONE,' ||
+'UPDATE_INSTITUTION              NUMBER(24)'                         ||
+                      ')';
+
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE ' || l_table_name || ' IS ''Configuration table for timelines horizontal axis, configures visible scales and the order of appearance''';
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_tl_scale_inst_soft_market IS ''Vertical access configuration ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_tl_timeline IS ''Timeline ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_tl_scale_xupper IS ''Horizontal uppper scale ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_tl_scale_xlower IS ''Horizontal lower scale ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.flg_available IS ''If confonfiguration is still active''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_institution IS ''Configuration institution ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_software IS ''Configuration software ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_market IS ''Configuration market ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.rank IS ''Order of the scales''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.flg_default IS ''Default scale on load''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.CREATE_USER is ''Creation User''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.CREATE_TIME is ''Creation Time''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.CREATE_INSTITUTION is ''Creation Institution''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.UPDATE_USER is ''Update User''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.UPDATE_TIME is ''Update Time''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.UPDATE_INSTITUTION is ''Update Institution''';
+EXCEPTION
+    WHEN e_name_already_used THEN
+        dbms_output.put_line('WARNING - Table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END: Rui Duarte
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:44
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column TL_SCALE_INST_SOFT_MARKET.flg_available
+  is 'If configuration is still active';  
+-- CHANGE END: Elisabete Bugalho

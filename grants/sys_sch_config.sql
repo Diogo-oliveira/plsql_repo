@@ -1,0 +1,2 @@
+
+grant select on ALERT.SYS_SCH_CONFIG to ALERT_VIEWER;

@@ -1,0 +1,37 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 30/10/2015 09:58
+-- CHANGE REASON: [ALERT-316231] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE TABLE sr_epis_interv_mod_fact (  
+  id_sr_epis_interv_hist    NUMBER(24) not null,
+  id_concept_term           NUMBER(24) not null,
+  id_inst_owner             NUMBER(24) not null,
+  create_user            varchar2(24 char)                 null,
+  create_time            timestamp(6) with local time zone null,
+  create_institution     number(24)                      null,
+  update_user            varchar2(24 char)                 null,
+  update_time            timestamp(6) with local time zone null,
+  update_institution     NUMBER(24)                      NULL)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+COMMENT ON TABLE sr_epis_interv_mod_fact IS 'Modifying factors for surgical procedures';
+
+COMMENT ON COLUMN sr_epis_interv_mod_fact.id_sr_epis_interv_hist     IS 'sr_epis_interv_hist identifier';
+COMMENT ON COLUMN sr_epis_interv_mod_fact.id_concept_term            IS 'concept_term identifier';
+COMMENT ON COLUMN sr_epis_interv_mod_fact.id_inst_owner              IS 'inst_owner identifier';
+COMMENT ON COLUMN sr_epis_interv_mod_fact.create_user IS 'Creation User';
+COMMENT ON COLUMN sr_epis_interv_mod_fact.create_time IS 'Creation Time';
+COMMENT ON COLUMN sr_epis_interv_mod_fact.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN sr_epis_interv_mod_fact.update_user IS 'Update User';
+COMMENT ON COLUMN sr_epis_interv_mod_fact.update_time IS 'Update Time';
+COMMENT ON COLUMN sr_epis_interv_mod_fact.update_institution IS 'Update Institution';
+-- CHANGE END: Paulo Teixeira

@@ -1,0 +1,1 @@
+-- CHANGED BY: Paulo Fonseca-- CHANGE DATE: 25/10/2010-- CHANGE REASON: ALERT-130840GRANT SELECT ON vs_patient_ea TO alert_viewer;-- CHANGE END: Paulo Fonseca

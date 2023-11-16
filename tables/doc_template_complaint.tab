@@ -1,0 +1,29 @@
+
+CREATE TABLE doc_template_complaint(
+	id_doc_template_complaint NUMBER NOT NULL,
+	id_complaint NUMBER NOT NULL, --uni
+	id_doc_template NUMBER NOT NULL, --uni
+	id_institution NUMBER NOT NULL, --uni
+	id_software NUMBER NOT NULL, --uni
+	id_profile_template NUMBER,
+	id_dep_clin_serv NUMBER,
+	adw_last_update DATE NOT NULL
+);
+--comments
+COMMENT ON TABLE doc_template_complaint
+	IS 'Associação entre uma queixa e um template';
+COMMENT ON COLUMN doc_template_complaint.id_doc_template_complaint
+	IS 'chave primária';
+COMMENT ON COLUMN doc_template_complaint.id_complaint
+	IS 'id da queixa a que fica associado o template';
+COMMENT ON COLUMN doc_template_complaint.id_complaint
+	IS 'id do template associado a esta queixa';
+COMMENT ON COLUMN doc_template_complaint.id_institution
+	IS 'id da instituição para qual é feita esta parametrização (0 para todas)';
+COMMENT ON COLUMN doc_template_complaint.id_software
+	IS 'id do software para qual é feita esta parametrização';
+COMMENT ON COLUMN doc_template_complaint.id_profile_template
+	IS 'id pela qual se associa um determinado template a uma queixa - mutuamente esclusivo com id_dep_clin_serv';
+COMMENT ON COLUMN doc_template_complaint.id_dep_clin_serv
+	IS 'id pela qual se associa um determinado template a uma queixa - mutuamente esclusivo com id_profile_template';
+

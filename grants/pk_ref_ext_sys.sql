@@ -1,0 +1,1 @@
+GRANT EXECUTE ON pk_ref_ext_sys TO alert_inter;

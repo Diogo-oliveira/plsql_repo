@@ -1,0 +1,1 @@
+GRANT SELECT ON v_field_market TO intf_alert;

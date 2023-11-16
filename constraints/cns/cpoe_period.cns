@@ -1,0 +1,36 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 11/12/2009 00:23
+-- CHANGE REASON: [ALERT-61939] CPOE 2nd phase: versioning of CPOE feature for Diets and Hidrics
+alter table CPOE_PERIOD add constraint CPOEPR_PK primary key (ID_INSTITUTION, ID_SOFTWARE, EXPIRE_TIME);
+alter table CPOE_PERIOD add constraint CPOEPR_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE in ('Y', 'N'));
+alter table CPOE_PERIOD add constraint CPOEPR_EXPIRE_TIME_CHK CHECK (substr(EXPIRE_TIME,1,2) between '00' and '23' 
+                                                                     and substr(EXPIRE_TIME,4,2) in ('00','30') 
+ and substr(EXPIRE_TIME,3,1) in ('h','H')
+ and length(EXPIRE_TIME) = 5);
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 27/09/2011 12:13
+-- CHANGE REASON: [ALERT-185453] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -02441); -- when ORA-02441: Cannot drop nonexistent primary key
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_PERIOD drop primary key drop index';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -02260); -- when ORA-02260: table can have only one primary key
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_PERIOD add constraint CPOEPR_PK primary key (ID_CPOE_PERIOD)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+-- CHANGE END: Tiago Silva

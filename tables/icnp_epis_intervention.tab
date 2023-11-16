@@ -1,0 +1,371 @@
+
+
+  CREATE TABLE ICNP_EPIS_INTERVENTION
+   (	ID_ICNP_EPIS_INTERV NUMBER(24,0) NOT NULL ENABLE,
+	DT_ICNP_EPIS_INTERV DATE NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_COMPOSITION NUMBER(12,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	FREQ NUMBER(6,0),
+	NOTES VARCHAR2(4000),
+	DT_BEGIN DATE NOT NULL ENABLE,
+	DT_END DATE,
+	DT_NEXT DATE,
+
+	ID_PROF NUMBER(24,0) NOT NULL ENABLE,
+	DT_CLOSE DATE,
+	NOTES_CLOSE VARCHAR2(4000),
+	ID_PROF_CLOSE NUMBER(24,0),
+	FORWARD_INTERV NUMBER(24,0),
+	NOTES_ITERACTION VARCHAR2(4000),
+	NOTES_CLOSE_ITERACTION VARCHAR2(4000)
+   );
+
+
+COMMENT ON TABLE icnp_epis_intervention IS 'Nursing actions associated with a diagnosis. This is the main table of nursing actions. For ciclic actions the details are stored at table ICNP_EPIS_INTERV_PLAN.' ;
+
+COMMENT ON COLUMN icnp_epis_intervention.freq IS 'On a ciclic action case, this is the frequency with wich action should be performed' ;
+COMMENT ON COLUMN icnp_epis_intervention.notes IS 'Notes' ;
+COMMENT ON COLUMN icnp_epis_intervention.id_prof IS 'The health profissional who created this action' ;
+COMMENT ON COLUMN icnp_epis_intervention.dt_close IS 'Close date' ;
+COMMENT ON COLUMN icnp_epis_intervention.notes_close IS 'Close notes' ;
+COMMENT ON COLUMN icnp_epis_intervention.id_prof_close IS 'Health profissional who closed the intervention' ;
+COMMENT ON COLUMN icnp_epis_intervention.id_icnp_epis_interv IS 'Intervention identifier' ;
+COMMENT ON COLUMN icnp_epis_intervention.dt_icnp_epis_interv IS 'Intervention creation date' ;
+COMMENT ON COLUMN icnp_epis_intervention.id_episode IS 'Associated episode' ;
+COMMENT ON COLUMN icnp_epis_intervention.id_composition IS 'Associated composition' ;
+COMMENT ON COLUMN icnp_epis_intervention.flg_status IS 'Diagnosis state. Can be: (F)inished, (A)ctive or (C)anceled' ;
+
+ALTER TABLE ICNP_EPIS_INTERVENTION 
+ ADD (FLG_TIME  VARCHAR2(1)
+ ,FLG_TYPE  VARCHAR2(1)
+ );
+
+COMMENT ON COLUMN ICNP_EPIS_INTERVENTION.FLG_TIME IS 'Realização: E - neste episódio; N - próximo episódio; B - entre episódios';
+
+
+ALTER TABLE ICNP_EPIS_INTERVENTION 
+ ADD (INTERVAL NUMBER(12,4),
+	NUM_TAKE NUMBER(3,0)
+ );
+
+
+COMMENT ON COLUMN ICNP_EPIS_INTERVENTION.INTERVAL IS 'Intervalo de tempo entre intervenções de enfermagem consecutivas' ;
+COMMENT ON COLUMN ICNP_EPIS_INTERVENTION.NUM_TAKE IS 'Nº de vezes' ;
+
+
+ALTER TABLE ICNP_EPIS_INTERVENTION MODIFY (DT_BEGIN NULL);
+
+
+
+alter table icnp_epis_intervention 
+add (dt_icnp_epis_interv_tstz timestamp with local time zone,
+     dt_begin_tstz timestamp with local time zone,
+     dt_end_tstz timestamp with local time zone,
+     dt_next_tstz timestamp with local time zone,
+     dt_close_tstz timestamp with local time zone); 
+
+
+ALTER TABLE icnp_epis_intervention MODIFY dt_icnp_epis_interv_tstz NOT NULL;
+ALTER TABLE icnp_epis_intervention MODIFY dt_icnp_epis_interv NULL;
+
+
+
+ALTER TABLE ICNP_EPIS_INTERVENTION
+ADD (FLG_INTERVAL_UNIT VARCHAR2(2));
+
+COMMENT ON COLUMN ICNP_EPIS_INTERVENTION.FLG_INTERVAL_UNIT IS 'Flag que indica que indica qual a unidade de tempo escolhida pelo utilizador';
+
+
+
+ALTER TABLE ICNP_EPIS_INTERVENTION
+ADD (ID_EPISODE_ORIGIN NUMBER(24),
+     ID_EPISODE_DESTINATION NUMBER(24));
+
+COMMENT ON COLUMN ICNP_EPIS_INTERVENTION.ID_EPISODE_ORIGIN IS 'ID do episódio em que foi registada a req. inicialmente (se FLG_TIME = ''N'')';
+COMMENT ON COLUMN ICNP_EPIS_INTERVENTION.ID_EPISODE_DESTINATION IS 'ID do episódio em que foi registada a req. destino (se FLG_TIME = ''N'')';
+
+
+ALTER TABLE ICNP_EPIS_INTERVENTION
+ADD (DURATION NUMBER(12),
+     FLG_DURATION_UNIT VARCHAR2(1));
+
+COMMENT ON COLUMN ICNP_EPIS_INTERVENTION.DURATION IS 'Duração de uma intervenção (se FLG_TYPE = ''C'')';
+COMMENT ON COLUMN ICNP_EPIS_INTERVENTION.FLG_DURATION_UNIT IS 'Flag que indica qual a unidade de tempo para a duração (se FLG_TYPE = ''C'')';
+
+
+
+
+ALTER TABLE ICNP_EPIS_INTERVENTION DROP COLUMN DT_ICNP_EPIS_INTERV;
+ALTER TABLE ICNP_EPIS_INTERVENTION DROP COLUMN DT_BEGIN;
+ALTER TABLE ICNP_EPIS_INTERVENTION DROP COLUMN DT_END;
+ALTER TABLE ICNP_EPIS_INTERVENTION DROP COLUMN DT_NEXT;
+ALTER TABLE ICNP_EPIS_INTERVENTION DROP COLUMN DT_CLOSE;
+
+
+
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+--------------------------------------------
+--  Changed table icnp_epis_intervention  --
+--------------------------------------------
+-- Add/modify columns 
+declare
+   e_column_already_there EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- table already there 
+begin
+-- Add/modify columns 
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION add ID_PROF_LAST_UPDATE NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION add DT_LAST_UPDATE TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION add ID_SUSPEND_REASON NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION add ID_SUSPEND_PROF NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION add SUSPEND_NOTES VARCHAR2(1000 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION add DT_SUSPEND TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION add ID_CANCEL_REASON NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION add ID_CANCEL_PROF NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION add CANCEL_NOTES VARCHAR2(1000 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION add DT_CANCEL TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- Add comments to the columns 
+comment on column ICNP_EPIS_INTERVENTION.ID_PROF_LAST_UPDATE
+  is 'Last update made by (professional identifier).';
+comment on column ICNP_EPIS_INTERVENTION.DT_LAST_UPDATE
+  is 'Last update date.';
+comment on column ICNP_EPIS_INTERVENTION.ID_SUSPEND_REASON
+  is 'Suspension reason identifier.';
+comment on column ICNP_EPIS_INTERVENTION.ID_SUSPEND_PROF
+  is 'Suspended by (professional identifier).';
+comment on column ICNP_EPIS_INTERVENTION.SUSPEND_NOTES
+  is 'Suspension notes.';
+comment on column ICNP_EPIS_INTERVENTION.DT_SUSPEND
+  is 'Suspension date.';
+comment on column ICNP_EPIS_INTERVENTION.ID_CANCEL_REASON
+  is 'Cancellation reason identifier.';
+comment on column ICNP_EPIS_INTERVENTION.ID_CANCEL_PROF
+  is 'Cancelled by (professional identifier).';
+comment on column ICNP_EPIS_INTERVENTION.CANCEL_NOTES
+  is 'Cancellation notes.';
+comment on column ICNP_EPIS_INTERVENTION.DT_CANCEL
+  is 'Cancellation date.';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 29/07/2011 18:00
+-- CHANGE REASON: [ALERT-182932] Implementation of the recurrence mechanism in ICNP functionality
+--  Add columns related with recurrence and PRN (id_order_recurr_plan, flg_prn, prn_notes)
+DECLARE
+  e_column_already_exist EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_column_already_exist, -01430); -- column being added already exists in table
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE icnp_epis_intervention ADD id_order_recurr_plan number(24)';
+  EXCEPTION
+    WHEN e_column_already_exist THEN
+      dbms_output.put_line('The column icnp_epis_intervention.id_order_recurr_plan already exist');
+  END;
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE icnp_epis_intervention ADD flg_prn VARCHAR2(1)';
+  EXCEPTION
+    WHEN e_column_already_exist THEN
+      dbms_output.put_line('The column icnp_epis_intervention.flg_prn already exist');
+  END;
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE icnp_epis_intervention ADD prn_notes CLOB';
+  EXCEPTION
+    WHEN e_column_already_exist THEN
+      dbms_output.put_line('The column icnp_epis_intervention.prn_notes already exist');
+  END;
+END;
+/
+
+COMMENT ON COLUMN icnp_epis_intervention.id_order_recurr_plan is 'Recurrence plan ID';
+COMMENT ON COLUMN icnp_epis_intervention.flg_prn IS 'Flag that indicates if the intervention should only be executed as the situation demands.';
+COMMENT ON COLUMN icnp_epis_intervention.prn_notes IS 'Notes to indicate the conditions under which the intervention should be executed.';
+COMMENT ON COLUMN icnp_epis_intervention.flg_type is 'Frequency type: once (O), no schedule (N), with recurrence (R)';
+-- CHANGE END: Luis Oliveira
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 11/11/2011 08:49
+-- CHANGE REASON: [ALERT-196713] 
+alter table icnp_epis_intervention
+add (ID_ICNP_EPIS_INTERV_PARENT      NUMBER(24));
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 11/11/2011 08:49
+-- CHANGE REASON: [ALERT-196713] 
+comment on column ICNP_EPIS_INTERVENTION.ID_ICNP_EPIS_INTERV_PARENT
+  is 'Intervention parent identifier';
+  
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 10:39
+-- CHANGE REASON: [ALERT-317702] 
+comment on table ICNP_EPIS_INTERVENTION
+  is 'Nursing actions associated with a diagnosis. This is the main table of nursing actions. For ciclic actions the details are stored at table ICNP_EPIS_INTERV_PLAN.';
+-- Add comments to the columns 
+comment on column ICNP_EPIS_INTERVENTION.id_icnp_epis_interv
+  is 'Intervention identifier';
+comment on column ICNP_EPIS_INTERVENTION.id_patient
+  is 'Patient ID';
+comment on column ICNP_EPIS_INTERVENTION.id_episode
+  is 'Associated episode';
+comment on column ICNP_EPIS_INTERVENTION.id_composition
+  is 'Associated composition';
+comment on column ICNP_EPIS_INTERVENTION.flg_status
+  is 'Diagnosis state. Can be: (F)inished, (A)ctive or (C)anceled';
+comment on column ICNP_EPIS_INTERVENTION.freq
+  is 'On a ciclic action case, this is the frequency with which action should be performed';
+comment on column ICNP_EPIS_INTERVENTION.notes
+  is 'Notes';
+comment on column ICNP_EPIS_INTERVENTION.id_prof
+  is 'The health professional who created this action';
+comment on column ICNP_EPIS_INTERVENTION.notes_close
+  is 'Close notes';
+comment on column ICNP_EPIS_INTERVENTION.id_prof_close
+  is 'Health professional who closed the intervention';
+comment on column ICNP_EPIS_INTERVENTION.notes_iteraction
+  is 'Interaction notes';
+comment on column ICNP_EPIS_INTERVENTION.notes_close_iteraction
+  is 'Interaction close notes';
+comment on column ICNP_EPIS_INTERVENTION.flg_time
+  is 'To be performed: E - this episode; B - between episodes; N - next episode';
+comment on column ICNP_EPIS_INTERVENTION.flg_type
+  is 'Frequency type: once (O), no schedule (N), with recurrence (R)';
+comment on column ICNP_EPIS_INTERVENTION.interval
+  is 'Interval';
+comment on column ICNP_EPIS_INTERVENTION.num_take
+  is 'Number of executions';
+comment on column ICNP_EPIS_INTERVENTION.dt_icnp_epis_interv_tstz
+  is 'Date that indicates when the record was registered';
+comment on column ICNP_EPIS_INTERVENTION.dt_begin_tstz
+  is 'Date for which the intervention is to be performed';
+comment on column ICNP_EPIS_INTERVENTION.dt_end_tstz
+  is 'Intervention end date';
+comment on column ICNP_EPIS_INTERVENTION.dt_next_tstz
+  is 'Intervention next planned date';
+comment on column ICNP_EPIS_INTERVENTION.dt_close_tstz
+  is 'Intervention close date';
+comment on column ICNP_EPIS_INTERVENTION.flg_interval_unit
+  is 'Flag that indicates the interval unit measure';
+comment on column ICNP_EPIS_INTERVENTION.id_episode_origin
+  is 'Episode ID where the intervention was registered';
+comment on column ICNP_EPIS_INTERVENTION.id_episode_destination
+  is 'Episode ID where the intervention is going to be performed';
+comment on column ICNP_EPIS_INTERVENTION.duration
+  is 'Duration of the intervention';
+comment on column ICNP_EPIS_INTERVENTION.flg_duration_unit
+  is 'Flag that indicates the duration unit measure';
+comment on column ICNP_EPIS_INTERVENTION.create_user
+  is 'Creation User';
+comment on column ICNP_EPIS_INTERVENTION.create_time
+  is 'Creation Time';
+comment on column ICNP_EPIS_INTERVENTION.create_institution
+  is 'Creation Institution';
+comment on column ICNP_EPIS_INTERVENTION.update_user
+  is 'Update User';
+comment on column ICNP_EPIS_INTERVENTION.update_time
+  is 'Update Time';
+comment on column ICNP_EPIS_INTERVENTION.update_institution
+  is 'Update Institution';
+comment on column ICNP_EPIS_INTERVENTION.id_prof_last_update
+  is 'Last update made by (professional identifier)';
+comment on column ICNP_EPIS_INTERVENTION.dt_last_update
+  is 'Last update date';
+comment on column ICNP_EPIS_INTERVENTION.id_suspend_reason
+  is 'Suspension reason identifier';
+comment on column ICNP_EPIS_INTERVENTION.id_suspend_prof
+  is 'Suspended by (professional identifier)';
+comment on column ICNP_EPIS_INTERVENTION.suspend_notes
+  is 'Suspension notes';
+comment on column ICNP_EPIS_INTERVENTION.dt_suspend
+  is 'Suspension date';
+comment on column ICNP_EPIS_INTERVENTION.id_cancel_reason
+  is 'Cancellation reason identifier';
+comment on column ICNP_EPIS_INTERVENTION.id_cancel_prof
+  is 'Cancelled by (professional identifier)';
+comment on column ICNP_EPIS_INTERVENTION.cancel_notes
+  is 'Cancellation notes';
+comment on column ICNP_EPIS_INTERVENTION.dt_cancel
+  is 'Cancellation date';
+comment on column ICNP_EPIS_INTERVENTION.id_order_recurr_plan
+  is 'Recurrence plan ID';
+comment on column ICNP_EPIS_INTERVENTION.flg_prn
+  is 'Flag that indicates if the intervention should only be executed as the situation demands';
+comment on column ICNP_EPIS_INTERVENTION.prn_notes
+  is 'Notes to indicate the conditions under which the intervention should be executed';
+comment on column ICNP_EPIS_INTERVENTION.id_icnp_epis_interv_parent
+  is 'Intervention parent identifier';
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.icnp_epis_intervention move lob(prn_notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

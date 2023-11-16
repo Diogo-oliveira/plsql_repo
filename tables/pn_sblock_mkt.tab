@@ -1,0 +1,147 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 10:10
+-- CHANGE REASON: [ALERT-164483] soap note blocks configuration data model
+create table PN_SBLOCK_MKT
+(
+  ID_SOFTWARE        NUMBER(24) not null,
+  ID_MARKET          NUMBER(24) not null,
+  ID_PN_SOAP_BLOCK   NUMBER(24) not null,
+  RANK               NUMBER(6),
+  CREATE_USER        VARCHAR2(24 char),
+  CREATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER        VARCHAR2(24 char),
+  UPDATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+)
+;
+
+comment on table PN_SBLOCK_MKT
+  is 'SOAP blocks factory configurations by software and market.';
+
+comment on column PN_SBLOCK_MKT.ID_SOFTWARE
+  is 'Software identifier.';
+comment on column PN_SBLOCK_MKT.ID_MARKET
+  is 'Market identifier.';
+comment on column PN_SBLOCK_MKT.ID_PN_SOAP_BLOCK
+  is 'SOAP block identifier.';
+comment on column PN_SBLOCK_MKT.RANK
+  is 'SOAP block rank.';
+comment on column PN_SBLOCK_MKT.CREATE_USER
+  is 'Creation User';
+comment on column PN_SBLOCK_MKT.CREATE_TIME
+  is 'Creation Time';
+comment on column PN_SBLOCK_MKT.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column PN_SBLOCK_MKT.UPDATE_USER
+  is 'Update User';
+comment on column PN_SBLOCK_MKT.UPDATE_TIME
+  is 'Update Time';
+comment on column PN_SBLOCK_MKT.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:30
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table pn_sblock_mkt add (FLG_IMPORT_MANDATORY varchar2(1 char) default 'N',
+      FLG_EXECUTE_IMPORT varchar2(1 char) default 'N');
+      
+alter table pn_sblock_mkt add (FLG_SHOW_TITLE varchar2(1 char) default 'Y');
+
+COMMENT ON column pn_sblock_mkt.FLG_IMPORT_MANDATORY IS 'Indicate if the item only can be inserted by import.';
+COMMENT ON column pn_sblock_mkt.FLG_EXECUTE_IMPORT IS 'Indicate if the soap block is empty on click goes directly to import screen. otherwise remains on the page';
+COMMENT ON column pn_sblock_mkt.FLG_SHOW_TITLE IS 'Indicate if the soap block title should appear in the application';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/10/2011 09:22
+-- CHANGE REASON: [ALERT-199724 ] H&P fase2
+alter table pn_sblock_mkt add (FLG_EXECUTE_IMPORT varchar2(1 char) default 'N');
+      
+alter table pn_sblock_mkt add (FLG_SHOW_TITLE varchar2(1 char) default 'Y');
+
+COMMENT ON column pn_sblock_mkt.FLG_EXECUTE_IMPORT IS 'Indicate if the soap block is empty on click goes directly to import screen. otherwise remains on the page';
+COMMENT ON column pn_sblock_mkt.FLG_SHOW_TITLE IS 'Indicate if the soap block title should appear in the application';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:21
+-- CHANGE REASON: [ALERT-206287 ] H&P fase2
+alter table pn_sblock_mkt add (FLG_EXECUTE_IMPORT varchar2(1 char) default 'N');
+      
+alter table pn_sblock_mkt add (FLG_SHOW_TITLE varchar2(1 char) default 'Y');
+
+COMMENT ON column pn_sblock_mkt.FLG_EXECUTE_IMPORT IS 'Indicate if the soap block is empty on click goes directly to import screen. otherwise remains on the page';
+COMMENT ON column pn_sblock_mkt.FLG_SHOW_TITLE IS 'Indicate if the soap block title should appear in the application';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 13:12
+-- CHANGE REASON: [ALERT-206287 ] H&P phase 2
+alter table pn_sblock_mkt drop column FLG_IMPORT_MANDATORY;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 24/11/2011 18:04
+-- CHANGE REASON: [ALERT-206356 ] H&P
+alter table pn_sblock_mkt add (id_pn_note_type number(24) not null);
+
+COMMENT ON column pn_sblock_mkt.id_pn_note_type IS 'Note type id.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 24/11/2011 18:28
+-- CHANGE REASON: [ALERT-206356 ] H&P
+alter table pn_sblock_mkt add (id_pn_note_type number(24));
+
+COMMENT ON column pn_sblock_mkt.id_pn_note_type IS 'Note type id.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:56
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+BEGIN
+    execute immediate 'alter table pn_sblock_mkt modify (FLG_EXECUTE_IMPORT VARCHAR2(1 char) not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente');
+END;
+/
+
+BEGIN
+    execute immediate 'alter table pn_sblock_mkt modify (FLG_SHOW_TITLE VARCHAR2(1 char) not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/11/2017 12:43
+-- CHANGE REASON: [CALERT-776] 
+ALTER TABLE pn_sblock_mkt ADD ID_SWF_FILE_VIEWER NUMBER(24);
+COMMENT  ON COLUMN pn_sblock_mkt.ID_SWF_FILE_VIEWER IS 'Viewer screen that is loaded when the area is selected';
+ALTER TABLE pn_sblock_mkt ADD VALUE_VIEWER VARCHAR2(100 CHAR);
+COMMENT  ON COLUMN pn_sblock_mkt.VALUE_VIEWER IS 'Default values for viewer';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Vítor Sá
+-- CHANGE DATE: 28/01/2019 15:12
+-- CHANGE REASON: [EMR-9337] 
+ALTER TABLE pn_sblock_mkt ADD age_min NUMBER(24);
+ALTER TABLE pn_sblock_mkt ADD age_max NUMBER(24);
+COMMENT  ON COLUMN pn_sblock_mkt.age_min IS 'Minimal age in which the soap block should be shown';
+COMMENT  ON COLUMN pn_sblock_mkt.age_max IS 'Maximum age in which the soap block should be shown';
+-- CHANGE END: Vítor Sá
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 14/05/2021 15:48
+-- CHANGE REASON: [EMR-44820] - Initial assessment: "Nota de evaluacion inicial de enfermaria" single page review
+-- Add comments to the columns
+comment on column PN_SBLOCK_MKT.age_min
+is 'Minimal age in which the soap block should be shown IN MONTHS';
+comment on column PN_SBLOCK_MKT.age_max
+is 'Maximum age in which the soap block should be shown IN MONTHS';
+-- CHANGE END: Elisabete Bugalho

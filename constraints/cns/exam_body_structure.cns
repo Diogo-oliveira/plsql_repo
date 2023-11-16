@@ -1,0 +1,35 @@
+-- ADDED BY: Jose Castro
+-- ADDED DATE: 25/05/2010
+-- ADDED REASON: ALERT-14487
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table EXAM_BODY_STRUCTURE
+  add constraint EBE_PK primary key (ID_EXAM, ID_BODY_STRUCTURE, FLG_AVAILABLE);
+
+-- Create/Recreate check constraints 
+alter table EXAM_BODY_STRUCTURE
+  add constraint EBE_FLG_AVAILABLE_CHK
+  check (FLG_AVAILABLE IN ('Y', 'N'));
+
+alter table EXAM_BODY_STRUCTURE
+  add constraint EBE_FLG_MAIN_LAT_CHK
+  check (FLG_MAIN_LATERALITY IN ('N', 'B', 'A', 'L', 'R', NULL));
+-- ADDED END
+
+-- CHANGED BY: José Castro
+-- CHANGE DATE: 18/06/2010 10:48
+-- CHANGE REASON: ALERT-14487
+-- Create/Recreate check constraints 
+alter table EXAM_BODY_STRUCTURE
+  drop constraint EBE_FLG_MAIN_LAT_CHK;
+alter table EXAM_BODY_STRUCTURE
+  add constraint EBE_FLG_MAIN_LAT_CHK
+  check (FLG_MAIN_LATERALITY IN ('N', 'B', 'A', 'L', 'R', 'U', NULL));
+-- CHANGED END: José Castro
+
+-- CHANGED BY: José Castro
+-- CHANGE DATE: 11/11/2010 15:40
+-- CHANGE REASON: ALERT-140067
+alter table EXAM_BODY_STRUCTURE
+  add constraint EBE_FLG_MAIN_LAT_CHK
+  check (FLG_MAIN_LATERALITY IN ('O', 'N', 'B', 'A', 'L', 'R', 'U', NULL)); 
+-- CHANGED END: José Castro

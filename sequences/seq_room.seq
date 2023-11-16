@@ -1,0 +1,98 @@
+
+
+   CREATE SEQUENCE  SEQ_ROOM  MINVALUE 1 MAXVALUE 999999999999 INCREMENT BY 1 START WITH 1 NOCACHE  NOORDER  NOCYCLE ;
+
+
+
+alter sequence SEQ_ROOM noorder cache 500;
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2017 09:00
+-- CHANGE REASON: [ALERT-334520] 
+DECLARE
+		maxVal NUMBER;
+		nxSeq NUMBER;
+BEGIN
+nxSeq := seq_ROOM.nextVal;
+
+SELECT MAX(a.id_ROOM) + 1 INTO maxVal FROM ROOM a;
+maxVal := maxVal - nxSeq + 1;
+
+EXECUTE IMMEDIATE 'ALTER SEQUENCE seq_ROOM MAXVALUE 999999999999999999999999';
+EXECUTE IMMEDIATE 'ALTER SEQUENCE seq_ROOM INCREMENT BY ' || maxVal;
+
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2017 09:00
+-- CHANGE REASON: [ALERT-334520] 
+DECLARE
+    maxVal NUMBER;
+    nxSeq NUMBER;
+BEGIN
+
+BEGIN
+	SELECT z.id_room + 1 INTO maxVal FROM (
+            SELECT t.id_room , (l.id_room - t.id_room) diff 
+            FROM (
+                           SELECT id_room, rownum rn 
+                               FROM room a order by 1) t,
+                         (
+                               SELECT id_room, rownum rn 
+                               FROM room a order by 1 ) l
+            WHERE t.rn+1 = l.rn
+                              ANd l.id_room - t.id_room  > 1000000
+            ) z
+	WHERE rownum = 1 ;
+EXCEPTION WHEN OTHERS THEN
+	SELECT MAX(id_room) + 1 INTO maxVal FROM room;
+END;
+
+
+EXECUTE IMMEDIATE 'DROP SEQUENCE seq_ROOM';
+EXECUTE IMMEDIATE 'CREATE SEQUENCE seq_ROOM  MINVALUE 1 MAXVALUE 999999999999 INCREMENT BY 1 START WITH '|| maxVal || ' NOCACHE  NOORDER  NOCYCLE';
+
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2017 09:00
+-- CHANGE REASON: [ALERT-334520] 
+DECLARE
+    maxVal NUMBER;
+    nxSeq NUMBER;
+BEGIN
+
+BEGIN
+	SELECT z.id_room + 1 INTO maxVal FROM (
+            SELECT t.id_room , (l.id_room - t.id_room) diff 
+            FROM (
+                           SELECT id_room, rownum rn 
+                               FROM room a order by 1) t,
+                         (
+                               SELECT id_room, rownum rn 
+                               FROM room a order by 1 ) l
+            WHERE t.rn+1 = l.rn
+                              ANd l.id_room - t.id_room  > 1000000
+            ) z
+	WHERE rownum = 1 ;
+EXCEPTION WHEN OTHERS THEN
+	SELECT MAX(id_room) + 1 INTO maxVal FROM room;
+END;
+
+IF maxVal = 0 THEN
+	  maxVal := 1;
+END IF;
+
+EXECUTE IMMEDIATE 'DROP SEQUENCE seq_ROOM';
+EXECUTE IMMEDIATE 'CREATE SEQUENCE seq_ROOM  MINVALUE 1 MAXVALUE 9999999999999999 INCREMENT BY 1 START WITH '|| maxVal || ' NOCACHE  NOORDER  NOCYCLE';
+
+END;
+/
+-- CHANGE END: Pedro Henriques

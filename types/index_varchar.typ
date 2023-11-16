@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE index_varchar IS OBJECT(med varchar2(255), typ varchar2(255));

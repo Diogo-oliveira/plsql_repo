@@ -1,0 +1,32 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:26
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+alter table CDR_EVENT
+  add constraint CDRE_CDRIPA_FK foreign key (ID_CDR_INST_PAR_ACTION)
+  references CDR_INST_PAR_ACTION (ID_CDR_INST_PAR_ACTION);
+alter table CDR_EVENT
+  add constraint CDRE_CDRL_FK foreign key (ID_CDR_CALL)
+  references CDR_CALL (ID_CDR_CALL);
+alter table CDR_EVENT
+  add constraint CDRE_PROF_FK foreign key (ID_PROF_ANSWER)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 11/04/2012 11:30
+-- CHANGE REASON: [ALERT-226949] cds popup improvements (ddl changes)
+declare
+  e_fk_exists exception;
+  pragma exception_init(e_fk_exists, -02275);
+begin
+  begin
+    execute immediate 'alter table CDR_EVENT
+  add constraint CDRE_CDRAW_FK foreign key (ID_CDR_ANSWER)
+  references CDR_ANSWER (ID_CDR_ANSWER)
+';
+  exception when e_fk_exists then
+    dbms_output.put_line('foreign key cdre_cdraw_fk already exists!');
+  end;
+end;
+/
+-- CHANGE END: Pedro Carneiro

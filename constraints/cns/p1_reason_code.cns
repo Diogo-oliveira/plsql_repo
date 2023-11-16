@@ -1,0 +1,185 @@
+
+
+  ALTER TABLE "ALERT"."P1_REASON_CODE" ADD CONSTRAINT "PRE_PK" PRIMARY KEY ("ID_REASON_CODE") ENABLE;
+
+
+
+  ALTER TABLE "ALERT"."P1_REASON_CODE" MODIFY ("ID_REASON_CODE" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."P1_REASON_CODE" MODIFY ("CODE_REASON" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."P1_REASON_CODE" MODIFY ("RANK" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."P1_REASON_CODE" MODIFY ("FLG_TYPE" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."P1_REASON_CODE" MODIFY ("FLG_AVAILABLE" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."P1_REASON_CODE" MODIFY ("FLG_OTHER" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."P1_REASON_CODE" MODIFY ("ADW_LAST_UPDATE" NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 06/10/2010 09:27
+-- CHANGE REASON: [ALERT-129275] 
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(1000 CHAR);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+FROM user_constraints
+ WHERE table_name = 'P1_REASON_CODE'
+ AND constraint_name = 'PRE_FLG_TYPE_CHK';
+
+IF l_count = 0
+    THEN
+   l_sql := q'[alter table P1_REASON_CODE add constraint PRE_FLG_TYPE_CHK check (FLG_TYPE in ('C','D','R','B','T','X','TR'))]';
+       EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(1000 CHAR);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+FROM user_constraints
+ WHERE table_name = 'P1_REASON_CODE'
+ AND constraint_name = 'PRE_FLG_AVAILABLE_CHK';
+
+IF l_count = 0
+    THEN
+   l_sql := q'[alter table P1_REASON_CODE add constraint PRE_FLG_AVAILABLE_CHK check (FLG_AVAILABLE in ('Y','N'))]';
+       EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+ 
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(1000 CHAR);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+FROM user_constraints
+ WHERE table_name = 'P1_REASON_CODE'
+ AND constraint_name = 'PRE_FLG_OTHER_CHK';
+
+IF l_count = 0
+    THEN
+   l_sql := q'[alter table P1_REASON_CODE add constraint PRE_FLG_OTHER_CHK check (FLG_OTHER in ('Y','N'))]';
+       EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(1000 CHAR);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+FROM user_constraints
+ WHERE table_name = 'P1_REASON_CODE'
+ AND constraint_name = 'PRE_FLG_DEFAULT_CHK';
+
+IF l_count = 0
+    THEN
+   l_sql := q'[alter table P1_REASON_CODE add constraint PRE_FLG_DEFAULT_CHK check (FLG_DEFAULT in ('Y','N'))]';
+       EXECUTE IMMEDIATE l_sql;
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 06/10/2010 17:10
+-- CHANGE REASON: [ALERT-129828]  O estado "Falta Injustificada" 
+ALTER TABLE P1_REASON_CODE 
+DROP CONSTRAINT PRE_FLG_TYPE_CHK;
+
+PROMPT Creating Check Constraint on 'P1_REASON_CODE'
+ALTER TABLE P1_REASON_CODE
+ ADD (CONSTRAINT PRE_FLG_TYPE_CHK CHECK (FLG_TYPE in ('C','D','R','B','F', 'T','TR','X','F')))
+/
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 18/03/2011 16:51
+-- CHANGE REASON: [ALERT-167717 ] 
+DECLARE
+    val PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO val
+      FROM user_constraints u
+     WHERE u.table_name = 'P1_REASON_CODE'
+       AND u.CONSTRAINT_NAME = 'PRE_FLG_VISIBLE';
+
+    IF val <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE P1_REASON_CODE add CONSTRAINT PRE_FLG_VISIBLE
+                      CHECK(FLG_VISIBLE in (''Y'',''N''))';
+    ELSE
+        dbms_output.put_line('aviso: operação já executada anteriormente.');
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 23/03/2012 10:45
+-- CHANGE REASON: [ALERT-224618] 
+Alter table P1_REASON_CODE
+drop constraint PRE_FLG_TYPE_CHK;
+alter table P1_REASON_CODE
+  add constraint PRE_FLG_TYPE_CHK
+  check (FLG_TYPE in ('C','D','R','B','F', 'T','TR','X','F','I', 'Z', 'Y', 'W'));
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 06/08/2012 15:50
+-- CHANGE REASON: [ALERT-237787] 
+DECLARE
+    e_constraint_not_exist EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_not_exist, -02443);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table P1_REASON_CODE drop constraint PRE_FLG_MCDT_CHK';
+    EXCEPTION
+        WHEN e_constraint_not_exist THEN
+            NULL;
+    END;
+
+    EXECUTE IMMEDIATE 'alter table P1_REASON_CODE add constraint PRE_FLG_MCDT_CHK check (FLG_MCDT in (''Y'', ''N''))';
+
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 22/10/2013 11:33
+-- CHANGE REASON: [ALERT-267542] 
+alter table P1_REASON_CODE drop constraint PRE_FLG_TYPE_CHK;
+alter table P1_REASON_CODE
+  add constraint PRE_FLG_TYPE_CHK
+  check (FLG_TYPE in ('C','D','R','B','F','T','TR','X','F','I','Z','Y','W', 'A'));
+-- CHANGE END: Joana Barroso

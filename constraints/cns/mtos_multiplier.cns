@@ -1,0 +1,13 @@
+ALTER TABLE mtos_multiplier ADD CONSTRAINT MTM_PK PRIMARY KEY (id_mtos_multiplier) ENABLE;
+ALTER TABLE mtos_multiplier ADD CONSTRAINT MTM_FLGPARAM_CHK CHECK(flg_parameter IN ('VS', 'BZ', 'AI'));
+ALTER TABLE mtos_multiplier ADD CONSTRAINT MTM_FLGMULTIPLIER_CHK CHECK(flg_multiplier_type IN ('N', 'B', 'P'));
+ALTER TABLE mtos_multiplier ADD CONSTRAINT MTM_FLGAVAILABLE_CHK CHECK(flg_available IN ('Y', 'N'));
+
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 05/11/2010 14:55
+-- CHANGE REASON: [ALERT-138136] 
+alter table MTOS_MULTIPLIER drop constraint MTM_FLGPARAM_CHK;
+alter table MTOS_MULTIPLIER add constraint MTM_FLGPARAM_CHK check (flg_parameter IN ('VS', 'BZ', 'AI', 'CZ', 'DZ'));
+-- CHANGE END: Tércio Soares

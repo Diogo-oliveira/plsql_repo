@@ -1,0 +1,33 @@
+ALTER TABLE epis_abcde_meth_param ADD CONSTRAINT EAMHP_PK PRIMARY KEY (id_epis_abcde_meth_param) ENABLE;
+ALTER TABLE epis_abcde_meth_param ADD CONSTRAINT EAMHP_FLGSTATUS_CHK CHECK(flg_status IN ('A', 'O'));
+ALTER TABLE epis_abcde_meth_param ADD CONSTRAINT EAMHP_FLGTYPE_CHK CHECK(flg_type IN ('A', 'P', 'H', 'C', 'D', 'M', 'E', 'S', 'I', 'PI', 'DI'));
+
+
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 25/01/2011 17:28
+-- CHANGE REASON: [ALERT-157666] Trauma/Medication changes
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE EPIS_ABCDE_METH_PARAM DROP CONSTRAINT EAMHP_FLGTYPE_CHK';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE EPIS_ABCDE_METH_PARAM ADD CONSTRAINT EAMHP_FLGTYPE_CHK CHECK (flg_type IN (''A'', ''P'', ''PO'', ''H'', ''C'', ''D'', ''M'', ''E'', ''S'', ''I'', ''PI'', ''DI''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 02/09/2011 09:32
+-- CHANGE REASON: [ALERT-161965] New development. Add the flg_type AU -allergy unawareness.
+alter table EPIS_ABCDE_METH_PARAM drop constraint EAMHP_FLGTYPE_CHK;
+alter table EPIS_ABCDE_METH_PARAM
+  add constraint EAMHP_FLGTYPE_CHK
+  check (flg_type IN ('A','AU','P', 'PO', 'H', 'C','D', 'M', 'E', 'S', 'I',  'PI', 'DI'));
+-- CHANGE END: Pedro Fernandes

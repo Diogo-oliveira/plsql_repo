@@ -1,0 +1,23 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 31/07/2009 16:39
+-- CHANGE REASON: [ALERT-18963 ] 
+
+  ALTER TABLE "WF_WORKFLOW" ADD CONSTRAINT "WWW_PK" PRIMARY KEY ("ID_WORKFLOW") ENABLE;
+
+  ALTER TABLE "WF_WORKFLOW" ADD CONSTRAINT "WWW_UK" UNIQUE ("INTERNAL_NAME") ENABLE;
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/01/2015 14:37
+-- CHANGE REASON: [ALERT-280039] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01442);
+BEGIN
+    EXECUTE IMMEDIATE q'[alter table WF_WORKFLOW modify code_workflow not null]';
+EXCEPTION
+    WHEN e_exception THEN
+        dbms_output.put_line('Coluna ja está not null');
+END;
+/
+-- CHANGE END: Ana Monteiro

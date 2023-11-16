@@ -1,0 +1,455 @@
+-- Create table
+create table PAT_PREGNANCY_HIST
+(
+  ID_PAT_PREGNANCY_HIST NUMBER(24) not null,
+  ID_PAT_PREGNANCY      NUMBER(24) not null,
+  DT_PAT_PREGNANCY      DATE not null,
+  ID_PATIENT            NUMBER(24) not null,
+  ID_PROFESSIONAL       NUMBER(24) not null,
+  DT_LAST_MENSTRUATION  DATE,
+  DT_PROB_DELIVERY      DATE not null,
+  DT_PDEL_CORRECT       DATE,
+  FLG_IMMUN_DIAGNOSIS   VARCHAR2(1),
+  DT_IMMUN_DIAGNOSIS    DATE,
+  FIRST_FETAL_MOV       NUMBER(2),
+  FIRST_FETAL_CARDIAC   NUMBER(2),
+  WEIGHT_BEFORE_PREGN   NUMBER(4,1),
+  FLG_MULTIPLE          VARCHAR2(1),
+  N_PREGNANCY           NUMBER(2),
+  DT_CHILDBIRTH         DATE,
+  FLG_CHILDBIRTH_TYPE   VARCHAR2(2),
+  N_CHILDREN            NUMBER(2),
+  FLG_URINE_PREG_TEST   VARCHAR2(2),
+  DT_URINE_PREG_TEST    DATE,
+  FLG_HEMAT_PREG_TEST   VARCHAR2(2),
+  DT_HEMAT_PREG_TEST    DATE,
+  FLG_ANTIGL_AFT_CHB    VARCHAR2(2),
+  FLG_ANTIGL_AFT_ABB    VARCHAR2(2),
+  CONTRAC_METHOD        VARCHAR2(2),
+  CONTRAC_METHOD_LAST   VARCHAR2(2),
+  DT_CONTRAC_METH_BEGIN DATE,
+  DT_CONTRAC_METH_END   DATE,
+  FLG_ABBORT            VARCHAR2(2),
+  FATHER_NAME           VARCHAR2(2000),
+  DT_FATHER_BIRTH       DATE,
+  FATHER_AGE            NUMBER(2),
+  BLOOD_GROUP_FATHER    VARCHAR2(2),
+  BLOOD_RHESUS_FATHER   VARCHAR2(2),
+  FLG_ANTIGL_NEED       VARCHAR2(2),
+  FLG_STATUS            VARCHAR2(2),
+  ID_OCCUPATION_FATHER  NUMBER(12),
+  FLG_ABORTION_TYPE     VARCHAR2(1),
+  DT_ABORTION           DATE,
+  GESTATION_TIME        NUMBER(2),
+  FLG_ECTOPIC_PREGNANCY VARCHAR2(1),
+  DT_PAT_PREGNANCY_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE not null
+)
+
+-- Add comments to the table 
+comment on table PAT_PREGNANCY_HIST
+  is 'Registos do histórico dos estados das gravidezes. Sempre que uma gravidez é alterada é criado um registo nesta tabela para essa gravidez.';
+-- Add comments to the columns 
+comment on column PAT_PREGNANCY_HIST.ID_PAT_PREGNANCY_HIST
+  is 'Primary Key';
+comment on column PAT_PREGNANCY_HIST.ID_PAT_PREGNANCY
+  is 'Foreign Key para a tabela PAT_PREGNANCY';
+comment on column PAT_PREGNANCY_HIST.DT_PAT_PREGNANCY
+  is 'Data de registo';
+comment on column PAT_PREGNANCY_HIST.ID_PATIENT
+  is 'ID do paciente';  
+comment on column PAT_PREGNANCY_HIST.ID_PROFESSIONAL
+  is 'ID do profissional';  
+comment on column PAT_PREGNANCY_HIST.DT_LAST_MENSTRUATION
+  is 'Data do 1º dia da última menstruação ou data de início da gravidez';
+comment on column PAT_PREGNANCY_HIST.DT_PROB_DELIVERY
+  is 'Data da concepção corrigida por ecografia';
+comment on column PAT_PREGNANCY_HIST.DT_PDEL_CORRECT
+  is 'Data provável do parto corrigida por ecografia';
+comment on column PAT_PREGNANCY_HIST.FLG_IMMUN_DIAGNOSIS
+  is 'Realização do diagnóstico imunológico da gravidez: S - sim, N - não, B - não sabe';
+comment on column PAT_PREGNANCY_HIST.DT_IMMUN_DIAGNOSIS
+  is 'Data do diagnóstico imunológico da gravidez';
+comment on column PAT_PREGNANCY_HIST.FIRST_FETAL_MOV
+  is 'Semana de gestação em q se registaram os 1ºs mov. fetais';
+comment on column PAT_PREGNANCY_HIST.FIRST_FETAL_CARDIAC
+  is 'Semana de gestação em q se registaram os 1ºs bat. cardíacos';
+comment on column PAT_PREGNANCY_HIST.WEIGHT_BEFORE_PREGN
+  is 'Peso antes da gravidez (nos casos em q ñ há registos biométricos anteriores)';
+comment on column PAT_PREGNANCY_HIST.FLG_MULTIPLE
+  is 'Se gravidez múltipla: B - bicoriónica; M monocoriónica monoamniótica; A - monocoriónica  biamniótica';
+comment on column PAT_PREGNANCY_HIST.N_PREGNANCY
+  is 'Número da gravidez';
+comment on column PAT_PREGNANCY_HIST.DT_CHILDBIRTH
+  is 'Data do parto';
+comment on column PAT_PREGNANCY_HIST.FLG_CHILDBIRTH_TYPE
+  is 'Tipo de parto (cesariana, normal...)';
+comment on column PAT_PREGNANCY_HIST.N_CHILDREN
+  is 'Número de nados vivos';
+comment on column PAT_PREGNANCY_HIST.FLG_URINE_PREG_TEST
+  is 'Resultado do teste de urina';
+comment on column PAT_PREGNANCY_HIST.DT_URINE_PREG_TEST
+  is 'Data do teste de urina';
+comment on column PAT_PREGNANCY_HIST.FLG_HEMAT_PREG_TEST
+  is 'Resultado do teste de sangue';
+comment on column PAT_PREGNANCY_HIST.DT_HEMAT_PREG_TEST
+  is 'Data do teste de sangue';
+comment on column PAT_PREGNANCY_HIST.FLG_ANTIGL_AFT_CHB
+  is 'Antiglobulina depois de partos';
+comment on column PAT_PREGNANCY_HIST.FLG_ANTIGL_AFT_ABB
+  is 'Antiglobulina depois de abortos';
+comment on column PAT_PREGNANCY_HIST.CONTRAC_METHOD
+  is 'Método normal de contracepção';
+comment on column PAT_PREGNANCY_HIST.CONTRAC_METHOD_LAST
+  is 'Último método utilizado de contracepção';
+comment on column PAT_PREGNANCY_HIST.DT_CONTRAC_METH_BEGIN
+  is 'Data do início do último método utilizado de contracepção';
+comment on column PAT_PREGNANCY_HIST.DT_CONTRAC_METH_END
+  is 'Data do final do último método utilizado de contracepção';
+comment on column PAT_PREGNANCY_HIST.FLG_ABBORT
+  is 'Indicação se é aborto ou gravidez eutoccica';
+comment on column PAT_PREGNANCY_HIST.FATHER_NAME
+  is 'Nome do progenitor';
+comment on column PAT_PREGNANCY_HIST.DT_FATHER_BIRTH
+  is 'Data de nascimento do progenitor';
+comment on column PAT_PREGNANCY_HIST.FATHER_AGE
+  is 'Idade do progenitor';
+comment on column PAT_PREGNANCY_HIST.BLOOD_GROUP_FATHER
+  is 'Grupo sanguíneo do progenitor';
+comment on column PAT_PREGNANCY_HIST.BLOOD_RHESUS_FATHER
+  is 'Rhesus sanguíneo do progenitor';
+comment on column PAT_PREGNANCY_HIST.FLG_ANTIGL_NEED
+  is 'Se necessita de antiglobulina (Y/N)';
+comment on column PAT_PREGNANCY_HIST.FLG_STATUS
+  is 'Estado actual da gravidez: (A)    Active Pregnancy, (P) Past Pregnancy, (C) Canceled Pregnancy';
+comment on column PAT_PREGNANCY_HIST.FLG_ABORTION_TYPE
+  is 'Indicação se é um aborto e qual o tipo: N - não; E - espontâneo; P - provocado';
+comment on column PAT_PREGNANCY_HIST.DT_ABORTION
+  is 'Data em que ocorreu o aborto';
+comment on column PAT_PREGNANCY_HIST.GESTATION_TIME
+  is 'Tempo de gestação até ao aborto';
+comment on column PAT_PREGNANCY_HIST.FLG_ECTOPIC_PREGNANCY
+  is 'Indicação se é uma gravidez ectópica ou não: Y - sim; N - não';
+
+-- JSILVA 13-06-2008
+DROP TABLE pat_pregnancy_hist;
+
+create table pat_pregnancy_hist
+(
+  id_pat_pregnancy_hist NUMBER(24) NOT NULL,
+  id_pat_pregnancy      NUMBER(24) NOT NULL,
+  dt_pat_pregnancy_tstz timestamp with local time zone NOT NULL,
+  id_professional       NUMBER(24) NOT NULL,
+	dt_last_menstruation  DATE,
+	n_pregnancy           NUMBER(2) NOT NULL,
+	dt_intervention       timestamp with local time zone,
+	n_children            NUMBER(2),
+	flg_status            VARCHAR2(2) NOT NULL,
+	flg_complication      VARCHAR2(1),
+	notes_complications   VARCHAR2(4000),
+	desc_intervention     VARCHAR2(200),
+	notes                 VARCHAR2(4000)
+);
+
+COMMENT ON TABLE pat_pregnancy_hist IS 'Table containing all changes made to table pat_pregnancy';
+-- END
+
+-- JSILVA 03-07-2008
+ALTER TABLE pat_pregnancy_hist ADD num_gest_weeks number(2);
+-- END
+
+-- JSILVA 09-09-2008
+alter table pat_pregnancy_hist add id_inst_intervention  NUMBER(24);
+alter table pat_pregnancy_hist add flg_desc_intervention VARCHAR2(1);
+-- END
+
+-- JSILVA 06-01-2009
+ALTER TABLE pat_pregnancy_hist MODIFY flg_complication VARCHAR2(10);
+-- END
+
+
+ALTER TABLE pat_pregnancy_hist ADD id_episode NUMBER(24);
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 11/05/2011 08:04
+-- CHANGE REASON: [ALERT-175003] [EDIS DB] Add id_cdr_call to Pregnancy and Diagnosis areas
+DECLARE
+    e_col_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_col_already_there, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pat_pregnancy_hist add (ID_CDR_CALL NUMBER(24))';
+EXCEPTION
+    WHEN e_col_already_there THEN
+        dbms_output.put_line('Column already added.');
+END;
+/
+
+COMMENT ON COLUMN pat_pregnancy_hist.ID_CDR_CALL IS 'Rule engine call identifier.' ;
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 06/06/2011 11:17
+-- CHANGE REASON: [ALERT-183624] Pregnancy developments
+COMMENT ON TABLE PAT_PREGNANCY_HIST IS 'History table for previous pregnancy records';
+
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD FLG_MENSES VARCHAR2(1 CHAR)';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD CYCLE_DURATION NUMBER(2)';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD FLG_USE_CONSTRACEPTIVES VARCHAR(1 CHAR)';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD DT_CONTRAC_METH_END DATE';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD FLG_DT_CONTRAC_PRECISION VARCHAR2(1 CHAR)';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+ALTER TABLE pat_pregnancy_hist MODIFY num_gest_weeks NUMBER(4,2);
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD DT_PDEL_LMP DATE';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD NUM_GEST_WEEKS_EXAM NUMBER(4,2)';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD NUM_GEST_WEEKS_US NUMBER(4,2)';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD DT_PDEL_CORRECT DATE';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD DT_US_PERFORMED DATE';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD FLG_DEL_ONSET VARCHAR2(1 CHAR)';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD DEL_DURATION VARCHAR2(10 CHAR)';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD FLG_DT_INTERV_PRECISION VARCHAR2(1 CHAR)';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD DT_INIT_PREG_EXAM DATE';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD DT_INIT_PREGNANCY DATE';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD DT_INIT_PREG_LMP DATE';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 21/01/2014 16:49
+-- CHANGE REASON: [ALERT-273786] 
+DECLARE
+    e_column_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_exists, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pat_pregnancy_hist ADD dt_auto_closed TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_column_already_exists THEN
+            dbms_output.put_line('WARNING - Column dt_auto_closed already created in previous version.');
+    END;
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN pat_pregnancy_hist.dt_auto_closed IS ''Automatic closure date''';
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table pat_pregnancy_hist modify num_gest_weeks number(10,2)';
+    EXCEPTION
+        WHEN e_column_already_exists THEN
+            dbms_output.put_line('WARNING - Column dt_auto_closed already created in previous version.');
+    END;    
+BEGIN
+        EXECUTE IMMEDIATE 'alter table pat_pregnancy_hist modify num_gest_weeks_exam number(10,2)';
+    EXCEPTION
+        WHEN e_column_already_exists THEN
+            dbms_output.put_line('WARNING - Column dt_auto_closed already created in previous version.');
+    END; 
+BEGIN
+        EXECUTE IMMEDIATE 'alter table pat_pregnancy_hist modify num_gest_weeks_us number(10,2)';
+    EXCEPTION
+        WHEN e_column_already_exists THEN
+            dbms_output.put_line('WARNING - Column dt_auto_closed already created in previous version.');
+    END; 
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column PAT_PREGNANCY_HIST.id_pat_pregnancy_hist
+  is 'Primary Key';
+comment on column PAT_PREGNANCY_HIST.id_pat_pregnancy
+  is 'Patient pregnancy ID';
+comment on column PAT_PREGNANCY_HIST.dt_pat_pregnancy_tstz
+  is 'Date when the record was made';
+comment on column PAT_PREGNANCY_HIST.id_professional
+  is 'Professional ID';
+comment on column PAT_PREGNANCY_HIST.dt_last_menstruation
+  is 'Date of the 1st day of last menstruation or pregnancy start date';
+comment on column PAT_PREGNANCY_HIST.n_pregnancy
+  is 'Pregnancy number';
+comment on column PAT_PREGNANCY_HIST.dt_intervention
+  is 'Intervention date (delivery or abortion)';
+comment on column PAT_PREGNANCY_HIST.n_children
+  is 'Number of live births';
+comment on column PAT_PREGNANCY_HIST.flg_status
+  is 'Status (A) Active, (C) Cancelled';
+comment on column PAT_PREGNANCY_HIST.flg_complication
+  is 'Complication type during pregnancy (multiple values separated by ''|'' )';
+comment on column PAT_PREGNANCY_HIST.notes_complications
+  is 'Complication notes (free text)';
+comment on column PAT_PREGNANCY_HIST.desc_intervention
+  is 'Description related to the place where the delivery/abortion occured';
+comment on column PAT_PREGNANCY_HIST.notes
+  is 'Pregnancy notes';
+comment on column PAT_PREGNANCY_HIST.num_gest_weeks
+  is 'Number of gestation weeks';
+comment on column PAT_PREGNANCY_HIST.id_inst_intervention
+  is 'Institution ID in which the labor/abortion took place';
+comment on column PAT_PREGNANCY_HIST.flg_desc_intervention
+  is 'Type of register related to the place where the delivery/abortion occured: D - home; I - institution; O - free text';
+comment on column PAT_PREGNANCY_HIST.id_episode
+  is 'ID episode in which the record was made';
+comment on column PAT_PREGNANCY_HIST.flg_menses
+  is 'Type of menses cycle: R - regular, I - irregular, U - unsure';
+comment on column PAT_PREGNANCY_HIST.cycle_duration
+  is 'Menstrual cycle duration (in days)';
+comment on column PAT_PREGNANCY_HIST.flg_use_constraceptives
+  is 'Contraceptives were used: (Y)es or (N)o';
+comment on column PAT_PREGNANCY_HIST.dt_contrac_meth_end
+  is 'End date of the last method of contraception';
+comment on column PAT_PREGNANCY_HIST.flg_dt_contrac_precision
+  is 'Precision of the last use of contraceptives date: (Y)ear, (M)onth, (D)ay';
+comment on column PAT_PREGNANCY_HIST.dt_pdel_lmp
+  is 'Probable delivery date estimated by the last menstruation date';
+comment on column PAT_PREGNANCY_HIST.num_gest_weeks_exam
+  is 'Number of gestation weeks (estimated by examination)';
+comment on column PAT_PREGNANCY_HIST.num_gest_weeks_us
+  is 'Number of gestation weeks (estimated by ultrasound)';
+comment on column PAT_PREGNANCY_HIST.dt_pdel_correct
+  is 'Expected date of labor corrected by ultrasound';
+comment on column PAT_PREGNANCY_HIST.dt_us_performed
+  is 'Date when the ultrasound was performed';
+comment on column PAT_PREGNANCY_HIST.flg_del_onset
+  is 'Labor onset: S - spontaneous, I - induced';
+comment on column PAT_PREGNANCY_HIST.del_duration
+  is 'Labor duration';
+comment on column PAT_PREGNANCY_HIST.flg_dt_interv_precision
+  is 'Precision of the intervention date: (Y)ear, (M)onth, (D)ay or (H)our';
+comment on column PAT_PREGNANCY_HIST.dt_init_preg_exam
+  is 'Pregnancy start date based on examination';
+comment on column PAT_PREGNANCY_HIST.dt_init_pregnancy
+  is 'Pregnancy start date based on the different criterias (last menstruation, examination or ultrasound)';
+comment on column PAT_PREGNANCY_HIST.dt_init_preg_lmp
+  is 'Pregnancy start date based on LMP';
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY:  Anna Kurowska
+-- CHANGE DATE: 31/08/2017 18:02
+-- CHANGE REASON: [ALERT-332724] NOM024 - Additional needs related to guide "SAEH" Pregnancy process
+-- Add/modify columns 
+alter table PAT_PREGNANCY_HIST add flg_extraction VARCHAR2(1 CHAR);
+alter table PAT_PREGNANCY_HIST add num_births NUMBER(2);
+alter table PAT_PREGNANCY_HIST add num_abortions NUMBER(2);
+alter table PAT_PREGNANCY_HIST add num_gestations number(2);
+alter table PAT_PREGNANCY_HIST add flg_preg_out_type VARCHAR2(2);
+alter table PAT_PREGNANCY_HIST add flg_gest_weeks varchar2(1 char);
+alter table PAT_PREGNANCY_HIST add flg_gest_weeks_exam VARCHAR2(1 CHAR);
+alter table PAT_PREGNANCY_HIST add flg_gest_weeks_us VARCHAR2(1 CHAR);
+alter table PAT_PREGNANCY_HIST add flg_gest_weeks_exam VARCHAR2(1 CHAR);
+alter table PAT_PREGNANCY_HIST add flg_gest_weeks_us VARCHAR2(1 CHAR);
+
+-- Add comments to the columns 
+comment on column PAT_PREGNANCY_HIST.flg_extraction
+  is 'Extraction or expulsion done: (Y)es or (N)o';
+comment on column PAT_PREGNANCY_HIST.num_births
+  is 'Number of births';
+comment on column PAT_PREGNANCY_HIST.num_abortions
+  is 'Number of abortions';
+comment on column PAT_PREGNANCY_HIST.num_gestations
+  is 'Number of gestations';
+comment on column PAT_PREGNANCY_HIST.flg_preg_out_type
+  is 'Pregnancy outcome type: B-Birth, AB-Abortion';
+comment on column PAT_PREGNANCY_HIST.flg_gest_weeks
+  is 'Number of gestation weeks: U-Unknown, K-Known';
+comment on column PAT_PREGNANCY_HIST.flg_gest_weeks_exam
+  is 'Number of gestation weeks (estimated by examination): U-Uknown, K-Known';
+comment on column PAT_PREGNANCY_HIST.flg_gest_weeks_us
+  is 'Number of gestation weeks (estimated by ultrasound): U-Uknown, K-Known';
+-- CHANGE END:  Anna Kurowska

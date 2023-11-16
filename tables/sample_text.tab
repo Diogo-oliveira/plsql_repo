@@ -1,0 +1,87 @@
+
+
+  CREATE TABLE SAMPLE_TEXT
+   (	ID_SAMPLE_TEXT NUMBER(12,0) NOT NULL ENABLE,
+	ID_SAMPLE_TEXT_TYPE NUMBER(12,0) NOT NULL ENABLE,
+	CODE_TITLE_SAMPLE_TEXT VARCHAR2(200) NOT NULL ENABLE,
+	CODE_DESC_SAMPLE_TEXT VARCHAR2(4000) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	GENDER VARCHAR2(1),
+	AGE_MAX NUMBER(3,0),
+	AGE_MIN NUMBER(3,0),
+	CODE_ICD VARCHAR2(30),
+	ID_DIAGNOSIS NUMBER(24,0),
+
+	FLG_CLASS VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE sample_text IS 'Textos genéricos, parametrizados inicialmente' ;
+
+COMMENT ON COLUMN sample_text.code_title_sample_text IS 'Código para tradução do título ou descritivo abreviado (a aparecer no keypad)' ;
+COMMENT ON COLUMN sample_text.code_desc_sample_text IS 'Código para tradução do texto' ;
+COMMENT ON COLUMN sample_text.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN sample_text.gender IS 'Género ao qual se aplica' ;
+COMMENT ON COLUMN sample_text.age_max IS 'Idade máxima à qual se aplica' ;
+COMMENT ON COLUMN sample_text.age_min IS 'Idade mínima à qual se aplica' ;
+COMMENT ON COLUMN sample_text.code_icd IS 'Código internacional do diagnóstico.' ;
+COMMENT ON COLUMN sample_text.id_diagnosis IS 'Diagnóstico correspondente ao texto mais frequente (transcrito do standard)' ;
+COMMENT ON COLUMN sample_text.flg_class IS 'A - motivo administrativo de consulta (CARE: texto + frequente do ICPC2)' ;
+
+
+
+
+ALTER TABLE SAMPLE_TEXT ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN SAMPLE_TEXT.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 14/01/2016 10:04
+-- CHANGE REASON: [ALERT-317702] 
+comment on table SAMPLE_TEXT
+  is 'Predefined texts catalogue';
+-- Add comments to the columns 
+comment on column SAMPLE_TEXT.id_sample_text
+  is 'Predefined text ID';
+comment on column SAMPLE_TEXT.id_sample_text_type
+  is 'Predefined text type ID';
+comment on column SAMPLE_TEXT.code_title_sample_text
+  is 'Translation code (title)';
+comment on column SAMPLE_TEXT.code_desc_sample_text
+  is 'Translation code (text)';
+comment on column SAMPLE_TEXT.rank
+  is 'Rank';
+comment on column SAMPLE_TEXT.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column SAMPLE_TEXT.gender
+  is 'Gender';
+comment on column SAMPLE_TEXT.age_max
+  is 'Maximum age';
+comment on column SAMPLE_TEXT.age_min
+  is 'Minimum age';
+comment on column SAMPLE_TEXT.code_icd
+  is 'ICD code';
+comment on column SAMPLE_TEXT.id_diagnosis
+  is 'Diagnosis ID';
+comment on column SAMPLE_TEXT.flg_class
+  is 'Flag that indicates the reason for visit (administrative), if applied (A)';
+comment on column SAMPLE_TEXT.id_content
+  is 'Content unique ID';
+comment on column SAMPLE_TEXT.create_user
+  is 'Creation User';
+comment on column SAMPLE_TEXT.create_time
+  is 'Creation Time';
+comment on column SAMPLE_TEXT.create_institution
+  is 'Creation Institution';
+comment on column SAMPLE_TEXT.update_user
+  is 'Update User';
+comment on column SAMPLE_TEXT.update_time
+  is 'Update Time';
+comment on column SAMPLE_TEXT.update_institution
+  is 'Update Institution';
+comment on column SAMPLE_TEXT.id_diag_inst_owner
+  is 'Institution owner of the concept. Default 0 - ALERT';
+  
+  
+  
+-- CHANGE END: Ana Matos

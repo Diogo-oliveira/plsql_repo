@@ -1,0 +1,45 @@
+-- Create table
+create table INSTITUTION_GROUP
+(
+  ID_INSTITUTION       NUMBER(24) not null,
+  FLG_RELATION         VARCHAR2(30) not null,
+  ID_GROUP             NUMBER(24) not null,
+  CREATE_USER          VARCHAR2(24),
+  CREATE_TIME          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION   NUMBER(24),
+  UPDATE_USER          VARCHAR2(24),
+  UPDATE_TIME          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION   NUMBER(24)
+)
+tablespace TABLE_M
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns 
+comment on column INSTITUTION_GROUP.ID_INSTITUTION
+  is 'Institution id';
+comment on column INSTITUTION_GROUP.FLG_RELATION
+  is 'Type of relation (Ex: ADT)';
+comment on column INSTITUTION_GROUP.ID_GROUP
+  is 'Group id; Sequential number that groups institutions';
+comment on column INSTITUTION_GROUP.CREATE_USER
+  is 'Professional ID which created the record';
+comment on column INSTITUTION_GROUP.CREATE_TIME
+  is 'Date of record creation';
+comment on column INSTITUTION_GROUP.CREATE_INSTITUTION
+  is 'Institution ID where record was created';
+comment on column INSTITUTION_GROUP.UPDATE_USER
+  is 'Professional ID who last updated the record';
+comment on column INSTITUTION_GROUP.UPDATE_TIME
+  is 'Date when record was last updated';
+comment on column INSTITUTION_GROUP.UPDATE_INSTITUTION
+  is 'Institution ID where record was last updated';
+  
+-- CHANGED BY: Joao Sa
+-- CHANGE DATE: 11/01/2016
+-- ISSUE: Refactor: Table comments
+comment on table INSTITUTION_GROUP
+  is 'Define groups of institutions that share same information';

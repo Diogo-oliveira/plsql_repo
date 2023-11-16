@@ -1,0 +1,21 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:40
+-- CHANGE REASON: [ALERT-117147] 
+declare
+   e_no_existent_index EXCEPTION;
+   PRAGMA EXCEPTION_INIT(e_no_existent_index, -00955); -- table already there
+begin
+    BEGIN
+        EXECUTE IMMEDIATE 'create sequence seq_icnp_cplan_stand_compo
+minvalue 1
+maxvalue 999999999999
+start with 1
+increment by 1
+nocache';
+    EXCEPTION
+        WHEN e_no_existent_index THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

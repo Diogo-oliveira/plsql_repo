@@ -1,0 +1,13 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:18
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE death_registry ADD CONSTRAINT dthr_e_fk     FOREIGN KEY(id_episode)             REFERENCES episode(id_episode);
+ALTER TABLE death_registry ADD CONSTRAINT dthr_p_vd_fk  FOREIGN KEY(id_prof_verified_death) REFERENCES professional(id_professional);
+ALTER TABLE death_registry ADD CONSTRAINT dthr_p_dry_fk FOREIGN KEY(id_prof_death_registry) REFERENCES professional(id_professional);
+ALTER TABLE death_registry ADD CONSTRAINT dthr_cr_fk    FOREIGN KEY(id_cancel_reason)       REFERENCES cancel_reason(id_cancel_reason);
+ALTER TABLE death_registry ADD CONSTRAINT dthr_sa_fk    FOREIGN KEY(id_susp_action)         REFERENCES susp_action(id_susp_action);
+ALTER TABLE death_registry ADD CONSTRAINT dthr_slnc_fk  FOREIGN KEY(id_sl_natural_cause)    REFERENCES sys_list(id_sys_list);
+ALTER TABLE death_registry ADD CONSTRAINT dthr_slcw_fk  FOREIGN KEY(id_sl_coroner_warned)   REFERENCES sys_list(id_sys_list);
+ALTER TABLE death_registry ADD CONSTRAINT dthr_sla_fk   FOREIGN KEY(id_sl_autopsy)          REFERENCES sys_list(id_sys_list);
+--
+-- CHANGE END: Filipe Machado

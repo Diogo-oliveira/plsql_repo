@@ -1,0 +1,13 @@
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:23
+-- CHANGE REASON: [ALERT-126939] 
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE epis_report add CONSTRAINT epis_report_flg_status_chk CHECK(flg_status IN
+                                                                            (''D'', ''E'', ''F'', ''I'', ''N'', ''R''))');
+EXCEPTION
+    WHEN OTHERS THEN
+        EXECUTE IMMEDIATE ('ALTER TABLE epis_report add CONSTRAINT epis_report_flg_status_chk CHECK(flg_status IN
+                                                                            (''D'', ''E'', ''F'', ''I'', ''N'', ''R'')) enable novalidate');
+END;
+/
+-- CHANGE END:  carlos.guilherme

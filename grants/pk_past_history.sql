@@ -1,0 +1,11 @@
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 24/01/2011 15:10
+-- CHANGE REASON: [ALERT-157328] New developments in PastHistory, free text values added(DML STEP 2)(v.2.6.0.5)
+GRANT EXECUTE ON ALERT.PK_PAST_HISTORY TO ALERT_VIEWER;
+-- CHANGE END: Rui Duarte
+
+-- CHANGED BY:  Vanessa Barsottelli
+-- CHANGE DATE: 14/01/2014 15:02
+-- CHANGE REASON: [ALERT-272496] CDA Section - Social history BD
+GRANT EXECUTE ON ALERT.PK_PAST_HISTORY TO ALERT_INTER;
+-- CHANGE END:  Vanessa Barsottelli

@@ -1,0 +1,47 @@
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 28/04/2011 08:37
+-- CHANGE REASON: [ALERT-173132] Medication Backoffice - set the severity level at which drug interaction warnings should be displayed
+create table MED_WARNING_MODULES
+(
+  ID_MODULE                 NUMBER(24) NOT NULL,
+  MODULE_DESC               VARCHAR2(200 CHAR),
+CODE_MODULE               VARCHAR2(200 CHAR),
+FLG_HAS_SEVERITIES        VARCHAR2(1 CHAR),
+FLG_AVAILABLE             VARCHAR2(1 CHAR),
+  CREATE_USER               VARCHAR2(24 CHAR),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24 CHAR),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24)
+)
+tablespace TABLE_S;
+
+comment on table MED_WARNING_MODULES
+  is 'Warning Modules: CI, Allergies, Interactions,...';
+-- Add comments to the columns 
+comment on column MED_WARNING_MODULES.ID_MODULE
+  is 'Table PK';
+comment on column MED_WARNING_MODULES.MODULE_DESC
+  is 'Description';
+comment on column MED_WARNING_MODULES.CODE_MODULE
+  is 'Link to translation for ID of module';
+comment on column MED_WARNING_MODULES.CREATE_USER
+  is 'Creation User';
+comment on column MED_WARNING_MODULES.CREATE_TIME
+  is 'Creation Time';
+comment on column MED_WARNING_MODULES.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column MED_WARNING_MODULES.UPDATE_USER
+  is 'Update User';
+comment on column MED_WARNING_MODULES.UPDATE_TIME
+  is 'Update Time';
+comment on column MED_WARNING_MODULES.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- CHANGE END:  Pedro Morais
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:48
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE MED_WARNING_MODULES IS 'Warning Modules: CI, Allergies, Interactions,... [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

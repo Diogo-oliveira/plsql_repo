@@ -1,0 +1,95 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:18
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+CREATE TABLE organ_donor (
+       id_organ_donor          NUMBER(24) NOT NULL,
+       id_patient              NUMBER(24) NOT NULL,
+       id_episode              NUMBER(24),
+       id_sl_able_don_organs   NUMBER(24),
+       reason_not_able_don_org VARCHAR2(200 CHAR),
+       id_sl_able_don_tissues  NUMBER(24),
+       reason_not_able_don_tis VARCHAR2(200 CHAR),
+       id_sl_will_consulted    NUMBER(24),
+       id_sl_will_result       NUMBER(24),
+       reason_will_not_cons    VARCHAR2(200 CHAR),
+       id_sl_other_declaration NUMBER(24),
+       other_declaration_notes VARCHAR2(200 CHAR),
+       id_sl_don_authorized    NUMBER(24),
+       responsible_name        VARCHAR2(200 CHAR),
+       id_family_relationship  NUMBER(24),
+       reason_not_authorized   VARCHAR2(200 CHAR),
+       id_sl_donation_approved NUMBER(24),
+       id_sl_object_research   NUMBER(24),
+       reason_not_approved     VARCHAR2(200 CHAR),
+       id_sl_family_letter     NUMBER(24),
+       family_name             VARCHAR2(200 CHAR),
+       family_address          VARCHAR2(200 CHAR),
+       id_sl_justice_consent   NUMBER(24),
+       id_sl_donor_center      NUMBER(24),
+       reason_donor_center     VARCHAR2(200 CHAR),
+       id_prof_organ_donor     NUMBER(24) NOT NULL,
+       dt_organ_donor          TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+       id_cancel_reason        NUMBER(24),
+       notes_cancel            CLOB,
+       flg_status              VARCHAR2(1 CHAR) NOT NULL,
+       --
+       create_user             VARCHAR2(24 CHAR),
+       create_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution      NUMBER(24),
+       update_user             VARCHAR2(24 CHAR),
+       update_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution      NUMBER(24)
+)
+LOB(notes_cancel) STORE AS od_notes_cancel(ENABLE STORAGE IN ROW TABLESPACE alert_lob)
+;
+
+--
+
+COMMENT ON TABLE organ_donor IS 'Table for the organ donors';
+--
+COMMENT ON COLUMN organ_donor.id_organ_donor          IS 'Organ donor Id';
+COMMENT ON COLUMN organ_donor.id_patient              IS 'Patient Id';
+COMMENT ON COLUMN organ_donor.id_episode              IS 'Episode Id';
+COMMENT ON COLUMN organ_donor.id_sl_able_don_organs   IS 'If it is able to donate organs (Y/N - context defined in sys_list)';
+COMMENT ON COLUMN organ_donor.reason_not_able_don_org IS 'Reason to not being able to donate organs';
+COMMENT ON COLUMN organ_donor.id_sl_able_don_tissues  IS 'If it is able to donate tissues (Y/N - context defined in sys_list)';
+COMMENT ON COLUMN organ_donor.reason_not_able_don_tis IS 'Reason to not being able to donate tissues';
+COMMENT ON COLUMN organ_donor.id_sl_will_consulted    IS 'If the donor registry and will was consulted (Y/N - context defined in sys_list)';
+COMMENT ON COLUMN organ_donor.id_sl_will_result       IS 'Donor registry and will result (A - Allowed /N - Not Allowed - context defined in sys_list)';
+COMMENT ON COLUMN organ_donor.reason_will_not_cons    IS 'Reason to why wasn''t the donor registry and will consulted';
+COMMENT ON COLUMN organ_donor.id_sl_other_declaration IS 'If there are other declaration (Y/N - context defined in sys_list)';
+COMMENT ON COLUMN organ_donor.other_declaration_notes IS 'Other declaration notes';
+COMMENT ON COLUMN organ_donor.id_sl_don_authorized    IS 'If the donation was authorized (Y/N - context defined in sys_list)';
+COMMENT ON COLUMN organ_donor.responsible_name        IS 'The responsible name that authorized the donation';
+COMMENT ON COLUMN organ_donor.id_family_relationship  IS 'The responsible relationship with the deceased';
+COMMENT ON COLUMN organ_donor.reason_not_authorized   IS 'Reason to why the responsible didn''t authorize the donation';
+COMMENT ON COLUMN organ_donor.id_sl_donation_approved IS 'If the donation was approved (Y/N - context defined in sys_list)';
+COMMENT ON COLUMN organ_donor.id_sl_object_research   IS 'If there was objection to transplant research (Y/N - context defined in sys_list)';
+COMMENT ON COLUMN organ_donor.reason_not_approved     IS 'Reason to why the donation wasn''t approved';
+COMMENT ON COLUMN organ_donor.id_sl_family_letter     IS 'If a family letter is needed (Y/N - context defined in sys_list)';
+COMMENT ON COLUMN organ_donor.family_name             IS 'Name to whom to send the family letter';
+COMMENT ON COLUMN organ_donor.family_address          IS 'Address to where to send the family letter';
+COMMENT ON COLUMN organ_donor.id_sl_justice_consent   IS 'If a justice officer consent was obtained (Y/N - context defined in sys_list)';
+COMMENT ON COLUMN organ_donor.id_sl_donor_center      IS 'If the donor was presented to a donor center (Y/N - context defined in sys_list)';
+COMMENT ON COLUMN organ_donor.reason_donor_center     IS 'Reason to why the donor was presented to a donor center';
+COMMENT ON COLUMN organ_donor.id_prof_organ_donor     IS 'Id of the professional that made the registry';
+COMMENT ON COLUMN organ_donor.dt_organ_donor          IS 'Date of the registry';
+COMMENT ON COLUMN organ_donor.id_cancel_reason        IS 'Cancel reason id';
+COMMENT ON COLUMN organ_donor.notes_cancel            IS 'Registry cancel notes';
+COMMENT ON COLUMN organ_donor.flg_status              IS 'Status of the registry (A - Active / C - Cancelled - context defined in sys_domain)';
+--
+COMMENT ON COLUMN organ_donor.create_user             IS 'Professional that created the registry';
+COMMENT ON COLUMN organ_donor.create_time             IS 'Date of the registry creation';
+COMMENT ON COLUMN organ_donor.create_institution      IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN organ_donor.update_user             IS 'Last professional that updated the registry';
+COMMENT ON COLUMN organ_donor.update_time             IS 'Date of the last update to the registry';
+COMMENT ON COLUMN organ_donor.update_institution      IS 'Id of the last institution where the registry was updated';
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:19
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE organ_donor MOVE TABLESPACE table_m;
+--
+-- CHANGE END: Filipe Machado

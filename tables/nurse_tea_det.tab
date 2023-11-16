@@ -1,0 +1,159 @@
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 19/03/2010 20:00
+-- CHANGE REASON: [ALERT-81916] Data model
+CREATE TABLE NURSE_TEA_DET (
+ID_NURSE_TEA_DET NUMBER(24),
+ID_NURSE_TEA_REQ NUMBER(24),
+ID_PROF_PROVIDER NUMBER(24),
+DT_START TIMESTAMP(6) WITH LOCAL TIME ZONE,
+DT_END  TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+ID_DIAGNOSIS NUMBER(24),
+NOTES_DIAGNOSIS CLOB,
+NOTES_EDUCATION CLOB,
+NOTES_EVALUATION CLOB,
+CREATE_USER VARCHAR2(24 CHAR),
+CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION NUMBER(24),
+UPDATE_USER VARCHAR2(24 CHAR),
+UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION NUMBER(24));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 24/03/2010 15:58
+-- CHANGE REASON: [ALERT-81916] Patient education tool - diagnosis (improvements)
+alter table nurse_tea_det drop column id_diagnosis;
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Eduardo Reis
+-- CHANGE DATE: 27/04/2010
+-- CHANGE REASON: [ALERT-92954] Add column to save record creation date
+alter table nurse_tea_det add (dt_nurse_tea_det_tstz timestamp(6) with local time zone);
+comment on column nurse_tea_det.dt_nurse_tea_det_tstz is 'Date of teaching execution insertion';
+-- CHANGE END: Eduardo Reis
+
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 28/04/2010 16:14
+-- CHANGE REASON: [ALERT-93548] 
+alter table nurse_tea_det add duration number(6);
+comment on column nurse_tea_det.duration is 'Duration';
+-- CHANGE END: João Martins
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 05/05/2011 11:40
+-- CHANGE REASON: [ALERT-176423] Patient education: tables and keys
+ALTER TABLE nurse_tea_det add(flg_status VARCHAR2(1 CHAR),
+                              id_cancel_reason NUMBER(24),
+                              num_order NUMBER(6),
+                              description CLOB);
+
+COMMENT ON column nurse_tea_det.flg_status IS 'Execution status';
+
+COMMENT ON column nurse_tea_det.id_cancel_reason IS 'Cancel reason ID';
+
+COMMENT ON column nurse_tea_det.num_order IS 'Execution order number';
+
+COMMENT ON column nurse_tea_det.description IS 'Topic description';
+-- CHANGE END: João Martins
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 06/05/2011 18:19
+-- CHANGE REASON: [ALERT-176423] Patient education: tablespace CLOB
+alter table nurse_tea_det move lob(description) store as (tablespace ALERT_LOB);
+-- CHANGE END: João Martins
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 10/01/2012 14:22
+-- CHANGE REASON: [ALERT-213226] 
+alter table nurse_tea_det
+add id_unit_meas_duration         NUMBER(24);
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 10/01/2012 14:22
+-- CHANGE REASON: [ALERT-213226] 
+comment on column nurse_tea_det.id_unit_meas_duration
+  is 'Duration unit measure';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 17:25
+-- CHANGE REASON: [ALERT-317702] 
+comment on table NURSE_TEA_DET
+  is 'Patient education''s orders detail table';
+-- Add comments to the columns 
+comment on column NURSE_TEA_DET.id_nurse_tea_det
+  is 'Patient education order detail ID';
+comment on column NURSE_TEA_DET.id_nurse_tea_req
+  is 'Order''s ID';
+comment on column NURSE_TEA_DET.id_prof_provider
+  is 'Professional ID';
+comment on column NURSE_TEA_DET.dt_start
+  is 'Start date';
+comment on column NURSE_TEA_DET.dt_end
+  is 'End date';
+comment on column NURSE_TEA_DET.notes_diagnosis
+  is 'Diagnosis notes';
+comment on column NURSE_TEA_DET.notes_education
+  is 'Notes';
+comment on column NURSE_TEA_DET.notes_evaluation
+  is 'Evaluation notes';
+comment on column NURSE_TEA_DET.create_user
+  is 'Creation User';
+comment on column NURSE_TEA_DET.create_time
+  is 'Creation Time';
+comment on column NURSE_TEA_DET.create_institution
+  is 'Creation Institution';
+comment on column NURSE_TEA_DET.update_user
+  is 'Update User';
+comment on column NURSE_TEA_DET.update_time
+  is 'Update Time';
+comment on column NURSE_TEA_DET.update_institution
+  is 'Update Institution';
+comment on column NURSE_TEA_DET.dt_nurse_tea_det_tstz
+  is 'Date that indicates when the order was registered';
+comment on column NURSE_TEA_DET.duration
+  is 'Duration';
+comment on column NURSE_TEA_DET.flg_status
+  is 'Flag that indicates the order''s status';
+comment on column NURSE_TEA_DET.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column NURSE_TEA_DET.num_order
+  is 'Execution order number';
+comment on column NURSE_TEA_DET.description
+  is 'Topic description';
+comment on column NURSE_TEA_DET.id_unit_meas_duration
+  is 'Duration unit measure ID';
+  
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:32
+-- CHANGE REASON: [EMR-4796] 
+DECLARE 
+	l_sql VARCHAR2(1000 CHAR);
+	l_sql_1 VARCHAR2(1000 CHAR);
+	l_sql_2 VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.nurse_tea_det move lob(notes_diagnosis) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+	l_sql_1 := 'ALTER TABLE alert.nurse_tea_det move lob(notes_education) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql_1);
+	l_sql_2 := 'ALTER TABLE alert.nurse_tea_det move lob(notes_evaluation) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql_2);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 02/08/2021 17:15
+-- CHANGE REASON: [EMR-46794]
+ALTER TABLE nurse_tea_det ADD DT_PLANNED TIMESTAMP(6) WITH LOCAL TIME ZONE;
+comment on column nurse_tea_det.dt_planned is 'Planned date';
+-- CHANGE END: Pedro Henriques

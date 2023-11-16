@@ -1,0 +1,59 @@
+ALTER TABLE ROOM_TYPE ADD CONSTRAINT RTY_FAVAI_FK_IDX CHECK (flg_available in ('Y', 'N')) ENABLE;
+
+
+
+ALTER TABLE ROOM_TYPE ADD CONSTRAINT RTY_PK PRIMARY KEY (ID_ROOM_TYPE) ENABLE;
+
+
+
+ALTER TABLE ROOM_TYPE MODIFY (ID_ROOM_TYPE NOT NULL ENABLE);
+
+
+
+ALTER TABLE ROOM_TYPE MODIFY (CODE_ROOM_TYPE NOT NULL ENABLE);
+
+
+
+ALTER TABLE ROOM_TYPE MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+ALTER TABLE room_type modify(id_institution NOT NULL ENABLE);
+
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/06/2010 14:32
+-- CHANGE REASON: [ALERT-105487] 
+ALTER TABLE ROOM_TYPE 
+ADD CONSTRAINT RT_FLG_STATUS_CHK CHECK (FLG_STATUS IN ('A', 'C', 'E')) ENABLE;
+
+ALTER TABLE ROOM_TYPE 
+ADD CONSTRAINT RT_FLG_PARAM_TYPE_CHK CHECK (FLG_PARAMETERIZATION_TYPE IN ('B', 'C')) ENABLE;
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 05/12/2013 14:30
+-- CHANGE REASON: [ALERT-271407] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -06512);
+    e_object_exists3 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists3, -02264);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table room_type
+    add constraint rt_cbt_chk
+    check (case when CODE_room_type is not null and DESC_room_type is not null then 0 else 1 end = 1)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

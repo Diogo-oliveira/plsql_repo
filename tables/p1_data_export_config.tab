@@ -1,0 +1,49 @@
+
+  CREATE TABLE "ALERT"."P1_DATA_EXPORT_CONFIG"
+   (	"ID_DATA_EXPORT_CONFIG" NUMBER(24,0),
+	"CODE_DATA_EXPORT_CONFIG" VARCHAR2(200),
+	"DESC_DATA_EXPORT_CONFIG" VARCHAR2(200),
+	"RANK" NUMBER,
+	"FLG_TYPE" VARCHAR2(1),
+	"FLG_AVAILABLE" VARCHAR2(1),
+	"FLG_P1_DATA_TYPE" VARCHAR2(2),
+	"ID_PARENT" NUMBER(24,0),
+	"ID_SOFTWARE" NUMBER(24,0),
+	"FUNCTION" VARCHAR2(2000)
+   ) ;
+
+
+   COMMENT ON COLUMN "ALERT"."P1_DATA_EXPORT_CONFIG"."ID_DATA_EXPORT_CONFIG" IS 'Primary key';
+
+   COMMENT ON COLUMN "ALERT"."P1_DATA_EXPORT_CONFIG"."DESC_DATA_EXPORT_CONFIG" IS 'Descriptio. For internal use only';
+
+   COMMENT ON COLUMN "ALERT"."P1_DATA_EXPORT_CONFIG"."FLG_TYPE" IS 'F if lists all results from function or S if is represented single row.';
+
+   COMMENT ON COLUMN "ALERT"."P1_DATA_EXPORT_CONFIG"."FLG_P1_DATA_TYPE" IS 'Can be one of p1_detail flg_type or (P)roblem or (D)iagnosis or RA, RE, RI, RP for requisition of analysis, exam, image or intervention';
+
+   COMMENT ON COLUMN "ALERT"."P1_DATA_EXPORT_CONFIG"."ID_PARENT" IS 'Supertype id';
+
+   COMMENT ON COLUMN "ALERT"."P1_DATA_EXPORT_CONFIG"."FUNCTION" IS 'Name of function to get list of values.';
+
+   COMMENT ON TABLE "ALERT"."P1_DATA_EXPORT_CONFIG"  IS 'Configure the correspondence between referral data fields and othe software data';
+
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretionsRefactor
+comment on table P1_DATA_EXPORT_CONFIG
+  is 'Configure the correspondence between referral data fields and other software data';
+-- Add comments to the columns 
+comment on column P1_DATA_EXPORT_CONFIG.code_data_export_config
+  is 'Code to translate field name';
+comment on column P1_DATA_EXPORT_CONFIG.desc_data_export_config
+  is 'Description. For internal use only';
+comment on column P1_DATA_EXPORT_CONFIG.rank
+  is 'Rank';
+comment on column P1_DATA_EXPORT_CONFIG.flg_type
+  is 'Represent as single row (S) or list all results return by the function (F)?';
+comment on column P1_DATA_EXPORT_CONFIG.flg_available
+  is 'Is record available? Y/N';
+comment on column P1_DATA_EXPORT_CONFIG.id_software
+  is 'Alert module that this configuration applies to';
+comment on column P1_DATA_EXPORT_CONFIG.function
+  is 'Name of function to get list of values';

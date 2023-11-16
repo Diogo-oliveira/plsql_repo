@@ -1,0 +1,252 @@
+
+
+  ALTER TABLE HOME ADD CONSTRAINT HOME_PK PRIMARY KEY (ID_HOME) ENABLE;
+
+  ALTER TABLE HOME MODIFY (ID_HOME NOT NULL ENABLE);
+
+  ALTER TABLE HOME MODIFY (ID_PAT_FAMILY NOT NULL ENABLE);
+
+  ALTER TABLE HOME MODIFY (ID_PROFESSIONAL NOT NULL ENABLE);
+
+  ALTER TABLE HOME MODIFY (DT_REGISTRY NOT NULL ENABLE);
+
+
+
+alter table home
+  add constraint home_wc_type
+  check (flg_wc_type IN ('C', 'I', 'N') or flg_wc_type is null);
+
+alter table home
+  add constraint home_wc_location
+  check (flg_wc_location IN ('H', 'F', 'N') or flg_wc_location is null);
+	
+alter table home
+  add constraint home_wc_out
+  check (flg_wc_out IN ('R', 'F', 'N', 'O') or flg_wc_out is null);	
+
+alter table home
+  add constraint home_water_distrib
+  check (flg_water_distrib IN ('D', 'F', 'T', 'M') or flg_water_distrib is null);
+
+alter table home
+  add constraint home_water_origin
+  check (flg_water_origin IN ('P', 'S', 'T', 'I') or flg_water_origin is null);
+
+alter table home
+  add constraint home_conserv
+  check (flg_conserv IN ('B', 'D', 'R', 'O') or flg_conserv is null);
+
+alter table home
+  add constraint home_owner
+  check (flg_owner IN ('A', 'C', 'F', 'O', 'P') or flg_owner is null);
+
+alter table home
+  add constraint home_hab_type
+  check (flg_hab_type IN ('A', 'C', 'B', 'Q', 'R', 'S', 'T', 'U', 'V', 'O', 'I') or flg_hab_type is null);
+
+alter table home
+  add constraint home_light
+  check (flg_light IN ('Y', 'N') or flg_light is null);
+
+alter table home
+  add constraint home_heat
+  check (flg_heat IN ('C', 'L', 'N') or flg_heat is null);
+
+alter table home
+  add constraint home_hab_location
+  check (flg_hab_location IN ('R', 'S', 'U', 'O') or flg_hab_location is null);								
+	
+
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 23/03/2010 09:41
+-- CHANGE REASON: [ALERT-69945] 
+alter table HOME
+  add constraint H_FLG_STATUS_CK
+  check (FLG_STATUS IN ('A', 'C', 'E') or FLG_STATUS is null);
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 22/09/2011 09:03
+-- CHANGE REASON: [ALERT-192572] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -06512);
+    e_object_exists3 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists3, -02264);
+    e_object_exists4 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists4, -02443);
+BEGIN
+--FLG_BATH
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home drop constraint home_fb_chk';
+    EXCEPTION
+        WHEN e_object_exists4 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+--FLG_GARBAGE_DEST
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home drop constraint home_fgd_chk';
+    EXCEPTION
+        WHEN e_object_exists4 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+--HOME_HAB_TYPE
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home drop constraint HOME_HAB_TYPE';
+    EXCEPTION
+        WHEN e_object_exists4 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+--HOME_HEAT
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home drop constraint HOME_HEAT';
+    EXCEPTION
+        WHEN e_object_exists4 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+--HOME_OWNER
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home drop constraint HOME_OWNER';
+    EXCEPTION
+        WHEN e_object_exists4 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+--HOME_WATER_ORIGIN
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home drop constraint HOME_WATER_ORIGIN';
+    EXCEPTION
+        WHEN e_object_exists4 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+--HOME_WC_OUT
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home drop constraint HOME_WC_OUT';
+    EXCEPTION
+        WHEN e_object_exists4 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+--HOME_WC_TYPE
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home drop constraint HOME_WC_TYPE';
+    EXCEPTION
+        WHEN e_object_exists4 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home
+    add constraint home_fb_chk
+    check (FLG_BATH IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home
+    add constraint home_fgd_chk
+    check (fLG_GARBAGE_DEST IN (''C'',''D'',''B''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home
+    add constraint HOME_HAB_TYPE
+    check (fLG_HAB_TYPE IN (''A'',''B'',''C'',''D'',''E'',''F'',''G'',''H'',''I'',''J'',''K'',''M'',''N'',''O'',''Q'',''R'',''S'',''T'',''U'',''V''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home
+    add constraint HOME_HEAT
+    check (fLG_HEAT IN (''A'',''B'',''C'',''D'',''E'',''L'',''N'',''O''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home
+    add constraint HOME_OWNER
+    check (fLG_OWNER IN (''A'',''C'',''D'',''F'',''O'',''P''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home
+    add constraint HOME_WATER_ORIGIN
+    check (FLG_WATER_ORIGIN IN (''E'',''I'',''N'',''O'',''P'',''S'',''T''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home
+    add constraint HOME_FWT_CHK
+    check (fLG_WATER_TREATMENT IN (''C'',''F'',''B'',''N''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home
+    add constraint HOME_WC_OUT
+    check (FLG_WC_OUT IN (''C'',''F'',''N'',''O'',''R''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table home
+    add constraint HOME_WC_TYPE
+    check (FLG_WC_TYPE IN (''A'',''B'',''C'',''I'',''N''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

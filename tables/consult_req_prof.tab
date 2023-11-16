@@ -1,0 +1,99 @@
+
+
+  CREATE TABLE CONSULT_REQ_PROF
+   (	ID_CONSULT_REQ_PROF NUMBER(24,0) NOT NULL ENABLE,
+	DT_CONSULT_REQ_PROF DATE NOT NULL ENABLE,
+	ID_CONSULT_REQ NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DENIAL_JUSTIF VARCHAR2(4000),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_SCHEDULED DATE
+   );
+
+
+COMMENT ON TABLE consult_req_prof IS 'Profissionais que lêem e respondem / rejeitam a um pedido interno de consulta, visto que o pedido pode ser enviado a todos os prof. de um serviço clínico de um departamento.' ;
+
+COMMENT ON COLUMN consult_req_prof.dt_consult_req_prof IS 'Data de registo' ;
+COMMENT ON COLUMN consult_req_prof.denial_justif IS 'Justificação de erjeição do pedido' ;
+COMMENT ON COLUMN consult_req_prof.flg_status IS 'Estado: A - aceite, D - não aceite, R - lido' ;
+COMMENT ON COLUMN consult_req_prof.dt_scheduled IS 'Data / hora da consulta (a marcar pela admin. no Sonho)' ;
+
+ALTER TABLE consult_req_prof ADD dt_consult_req_prof_tstz TIMESTAMP WITH LOCAL TIME ZONE;
+
+ALTER TABLE consult_req_prof ADD dt_scheduled_tstz TIMESTAMP WITH LOCAL TIME ZONE;
+
+alter table CONSULT_REQ_PROF drop column DT_CONSULT_REQ_PROF;
+alter table CONSULT_REQ_PROF drop column DT_SCHEDULED;
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 03/07/2010 20:23
+-- CHANGE REASON: [ALERT-109286] 
+ALTER TABLE consult_req_prof ADD (approve_justif VARCHAR2(1000 char));
+COMMENT ON COLUMN consult_req_prof.approve_justif IS 'approval justification';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table CONSULT_REQ_PROF modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table CONSULT_REQ_PROF modify FLG_STATUS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table CONSULT_REQ_PROF modify DENIAL_JUSTIF varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:27
+-- CHANGE REASON: [ALERT-154361] 
+alter table CONSULT_REQ_PROF modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 20/01/2016 14:39
+-- CHANGE REASON: [ALERT-317983] ALERT-317983 CDOC Functionalities V5 Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table CONSULT_REQ_PROF
+  is 'Professionals who read and answer / reject an internal consultation request, as the request can be sent to all professionals in a clinical service of a department';
+-- Add comments to the columns 
+comment on column CONSULT_REQ_PROF.id_consult_req_prof
+  is 'Primary key';
+comment on column CONSULT_REQ_PROF.id_consult_req
+  is 'Id consult requirement in CONSULT_REQ table';
+comment on column CONSULT_REQ_PROF.id_professional
+  is 'Professional id';
+comment on column CONSULT_REQ_PROF.denial_justif
+  is 'Motif of denied request  ';
+comment on column CONSULT_REQ_PROF.flg_status
+  is 'State: A - accepted, D - not accepted, R - read';
+comment on column CONSULT_REQ_PROF.dt_consult_req_prof_tstz
+  is 'Date of professional requires the consult';
+comment on column CONSULT_REQ_PROF.dt_scheduled_tstz
+  is 'Schedular date';
+comment on column CONSULT_REQ_PROF.create_user
+  is 'Creation User';
+comment on column CONSULT_REQ_PROF.create_time
+  is 'Creation Time';
+comment on column CONSULT_REQ_PROF.create_institution
+  is 'Creation Institution';
+comment on column CONSULT_REQ_PROF.update_user
+  is 'Update User';
+comment on column CONSULT_REQ_PROF.update_time
+  is 'Update Time';
+comment on column CONSULT_REQ_PROF.update_institution
+  is 'Update Institution';
+comment on column CONSULT_REQ_PROF.approve_justif
+  is 'approval justification';
+-- CHANGE END: Renato Nunes

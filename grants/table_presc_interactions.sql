@@ -1,0 +1,1 @@
+grant select on PRESC_INTERACTIONS to ALERT_VIEWER;

@@ -1,0 +1,6 @@
+CREATE OR REPLACE VIEW V_OUTP_EHR_PHOTO
+(id_pat_photo, id_patient, dt_photo, img_photo)
+AS
+SELECT ID_PAT_PHOTO, ID_PATIENT, DT_PHOTO,   dbms_lob.substr(IMG_PHOTO,1,DBMS_LOB.GETLENGTH(IMG_PHOTO)) 
+FROM PAT_PHOTO
+

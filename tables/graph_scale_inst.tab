@@ -1,0 +1,71 @@
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 11/01/2010 15:49
+-- CHANGE REASON: [ALERT-66010] Partogram configurations
+BEGIN
+EXECUTE IMMEDIATE
+'create table graph_scale_inst
+(
+  ID_GRAPH_SCALE NUMBER(24) NOT NULL,
+ID_INSTITUTION NUMBER(24) NOT NULL,
+ID_MARKET NUMBER(24) NOT NULL
+)';
+EXCEPTION
+WHEN OTHERS THEN
+  NULL;
+END;
+/
+
+COMMENT ON TABLE graph_scale_inst IS 'Graph scale configuration';
+
+COMMENT ON COLUMN graph_scale_inst.ID_GRAPH_SCALE IS 'Graph scale ID';
+COMMENT ON COLUMN graph_scale_inst.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN graph_scale_inst.ID_MARKET IS 'Market ID';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table GRAPH_SCALE_INST add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column graph_scale_inst.create_user IS 'Creation User';
+COMMENT ON column graph_scale_inst.create_time IS 'Creation Time';
+COMMENT ON column graph_scale_inst.create_institution IS 'Creation Institution';
+COMMENT ON column graph_scale_inst.update_user IS 'Update User';
+COMMENT ON column graph_scale_inst.update_time IS 'Update Time';
+COMMENT ON column graph_scale_inst.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table graph_scale_inst add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column graph_scale_inst.create_user IS 'Creation User';
+COMMENT ON column graph_scale_inst.create_time IS 'Creation Time';
+COMMENT ON column graph_scale_inst.create_institution IS 'Creation Institution';
+COMMENT ON column graph_scale_inst.update_user IS 'Update User';
+COMMENT ON column graph_scale_inst.update_time IS 'Update Time';
+COMMENT ON column graph_scale_inst.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

@@ -1,0 +1,6 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 24/10/2011 17:18
+-- CHANGE REASON: [ALERT-201238] Medical/Nursing notes. Remove 4k limitation for free text entries using CLOB.
+GRANT EXECUTE ON TABLE_TABLE_CLOB TO ALERT_VIEWER;
+GRANT EXECUTE ON TABLE_TABLE_CLOB TO ALERT_INTER;
+-- CHANGE END: Ariel Machado

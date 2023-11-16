@@ -1,0 +1,43 @@
+  CREATE TABLE SSCR_CRIT
+   (	ID_SEARCH_SCREEN NUMBER,
+	ID_CRITERIA NUMBER,
+	FLG_AVAILABLE VARCHAR2(1),
+	FLG_MANDATORY VARCHAR2(1),
+	RANK NUMBER(3,0)
+   ) ;
+
+
+   COMMENT ON COLUMN SSCR_CRIT.ID_SEARCH_SCREEN IS 'ID_SEARCH_SCREEN foreign key';
+
+
+
+   COMMENT ON COLUMN "ALERT"."SSCR_CRIT"."ID_CRITERIA" IS 'CRITERIA foreign key';
+
+
+
+   COMMENT ON COLUMN "ALERT"."SSCR_CRIT"."FLG_AVAILABLE" IS 'Is this button available on search? Y/N';
+
+
+
+   COMMENT ON COLUMN "ALERT"."SSCR_CRIT"."FLG_MANDATORY" IS 'Is this criteria mandatory? Y/N';
+
+
+
+   COMMENT ON COLUMN "ALERT"."SSCR_CRIT"."RANK" IS 'Sets the order of buttons from same SYS_BUTTON';
+	 
+-- CHANGED BY: Fábio Oliveira
+-- CHANGE DATE: 07/02/2009	 
+-- [ALERT-15901] Reformulação da forma como os critérios multichoices são tratados
+ALTER TABLE sscr_crit add default_value VARCHAR2(30);
+-- CHANGE END: Fábio Oliveira
+
+
+
+-- CHANGED BY: Fábio Oliveira
+-- CHANGE DATE: 05/06/2009	 
+-- [ALERT-25549] Alterações incorrentes da validação de arq.
+COMMENT ON COLUMN SSCR_CRIT.DEFAULT_VALUE IS 'Define o valor por defeito do critério (''i_lang'', ''i_prof_id'', ''i_prof_institution'', ''i_prof_software'', 0 para todos ou um valor passível de aparecer num multichoice)';
+comment on table SSCR_CRIT
+  is 'Esta tabela contém a informação específica dos critérios usados por cada pesquisa';
+-- CHANGE END: Fábio Oliveira
+

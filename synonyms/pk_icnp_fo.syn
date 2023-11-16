@@ -1,0 +1,20 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 20/12/2010 09:52
+-- CHANGE REASON: [ALERT-150268] 
+CREATE OR REPLACE SYNONYM ALERT_VIEWER.PK_ICNP_FO FOR ALERT.PK_ICNP_FO;
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 29/07/2011 18:01
+-- CHANGE REASON: [ALERT-182932] Implementation of the recurrence mechanism in ICNP functionality
+DECLARE
+    e_synonym_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_synonym_not_exists, -01434); -- synonym to be dropped doesnt exist
+BEGIN
+  EXECUTE IMMEDIATE 'drop synonym alert_viewer.pk_icnp_fo';
+EXCEPTION
+  WHEN e_synonym_not_exists THEN
+    dbms_output.put_line('The synonym alert_viewer.pk_icnp_fo doesnt exist');   
+END;
+/
+-- CHANGE END: Luis Oliveira

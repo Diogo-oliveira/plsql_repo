@@ -1,0 +1,1 @@
+GRANT SELECT ON v_stg_files TO intf_alert;

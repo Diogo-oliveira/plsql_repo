@@ -1,0 +1,5 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 13/12/2013 17:43
+-- CHANGE REASON: [ALERT-272118] 
+grant select on V_PRODUCT_FAV to ALERT;
+-- CHANGE END: Joana Barroso

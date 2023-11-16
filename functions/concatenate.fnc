@@ -1,0 +1,3 @@
+CREATE OR REPLACE FUNCTION concatenate(ps_string VARCHAR2) RETURN VARCHAR2
+    AGGREGATE USING aggr_string_concat;
+/

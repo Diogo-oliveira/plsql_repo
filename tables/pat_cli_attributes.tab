@@ -1,0 +1,34 @@
+
+
+  CREATE TABLE PAT_CLI_ATTRIBUTES
+   (	ID_PAT_CLI_ATTRIBUTES NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	FLG_BREAST_FEED VARCHAR2(1),
+	FLG_PREGNANCY VARCHAR2(1),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_RECM NUMBER(24,0),
+	DT_VAL_RECM DATE
+   );
+
+
+COMMENT ON TABLE pat_cli_attributes IS 'Outros atributos clinicos do paciente' ;
+
+COMMENT ON COLUMN pat_cli_attributes.id_pat_cli_attributes IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_cli_attributes.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_cli_attributes.flg_breast_feed IS 'Indicação de amamentação: Y / N' ;
+COMMENT ON COLUMN pat_cli_attributes.flg_pregnancy IS 'Indicação de gravidez: Y / N' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_CLI_ATTRIBUTES ADD DT_VAL_RECM_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+
+ALTER TABLE PAT_CLI_ATTRIBUTES DROP column dt_val_recm_tstz;
+
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE PAT_CLI_ATTRIBUTES ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN PAT_CLI_ATTRIBUTES.ID_EPISODE IS 'Episode ID';
+-- CHANGE END

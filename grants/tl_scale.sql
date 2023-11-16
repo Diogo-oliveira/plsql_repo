@@ -1,0 +1,5 @@
+-- CHANGED BY:  Mauro Sousa
+-- CHANGE DATE: 15/12/2010 17:49
+-- CHANGE REASON: [ALERT-149764] 
+grant references on TL_SCALE to ALERT_DEFAULT;
+-- CHANGE END:  Mauro Sousa

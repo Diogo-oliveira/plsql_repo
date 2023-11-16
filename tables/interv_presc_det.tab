@@ -1,0 +1,395 @@
+  CREATE TABLE INTERV_PRESC_DET
+   (	ID_INTERV_PRESC_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_INTERV_PRESCRIPTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_INTERVENTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_MOVEMENT NUMBER(24,0),
+	FLG_INTERV_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	DT_BEGIN DATE,
+	DT_END DATE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+
+	NOTES_CANCEL VARCHAR2(4000),
+	INTERVAL NUMBER(12,4),
+	NUM_TAKE NUMBER(3,0),
+	DOSAGE NUMBER(19,3),
+	ID_DRUG_PRESC_DET NUMBER(24,0),
+	ID_NURSE_ACTV_REQ_DET NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE interv_presc_det IS 'Prescrição de intervenções. Pressupõe-se que prescrição de intervenções = tratamento c/ alguma continuidade, principalmente quando a prescrição é relativa a intervenções que não vão ser executadas pelo próprio médico, mas servem p/ registar recomendações e/ou o plano de execução. Por ex., para os cuidados de enfermagem (plano de tratamento).' ;
+
+COMMENT ON COLUMN interv_presc_det.flg_interv_type IS 'Tipo: N - normal, S - SOS, U - unitário, A - ad eternum' ;
+COMMENT ON COLUMN interv_presc_det.dt_begin IS 'Data de início do tratamento' ;
+COMMENT ON COLUMN interv_presc_det.dt_end IS 'Data de fim do tratamento' ;
+COMMENT ON COLUMN interv_presc_det.flg_status IS 'Estado: R - em atraso, F - concluído, C - anulado; D - pendente; E - em curso; I - interrompido' ;
+COMMENT ON COLUMN interv_presc_det.interval IS 'Intervalo de tempo entre tomas consecutivas' ;
+COMMENT ON COLUMN interv_presc_det.num_take IS 'Nº de tomas' ;
+COMMENT ON COLUMN interv_presc_det.dosage IS 'Dosagem' ;
+COMMENT ON COLUMN interv_presc_det.id_drug_presc_det IS 'ID da prescrição de medicamento que originou a geração automática da prescrição de procedimento.' ;
+COMMENT ON COLUMN interv_presc_det.id_nurse_actv_req_det IS 'ID da prescrição de penso que originou a geração automática da prescrição de procedimento.' ;
+
+
+alter table INTERV_PRESC_DET add NUM_FREQ NUMBER;
+alter table INTERV_PRESC_DET add FLG_FREQ VARCHAR2(1);
+alter table INTERV_PRESC_DET add NUM_SESS NUMBER;
+alter table INTERV_PRESC_DET add FLG_PRTY VARCHAR2(1);
+
+comment on column INTERV_PRESC_DET.FLG_INTERV_TYPE
+  is 'Tipo: N - normal, S - SOS, U - unitário, A - ad eternum, C - contínuo';
+comment on column INTERV_PRESC_DET.FLG_STATUS
+  is 'Estado: R - em atraso, F - concluído, C - anulado; D - pendente';
+comment on column INTERV_PRESC_DET.NUM_FREQ
+  is 'Frequência com que deve efectuar o tratamento';
+comment on column INTERV_PRESC_DET.FLG_FREQ
+  is 'Periodo de tempo em causa: (D) Dia, (S) Semana, (M) Mês';
+comment on column INTERV_PRESC_DET.NUM_SESS
+  is 'Número de sessões a realizar';
+comment on column INTERV_PRESC_DET.FLG_PRTY
+  is 'Prioridade do tratamento: (U) Urgente, (M) Muito Urgente, (N) Não Urgente';
+
+alter table interv_presc_det 
+add (dt_end_tstz timestamp with local time zone,
+     dt_begin_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+alter table INTERV_PRESC_DET add DT_ORDER TIMESTAMP WITH LOCAL TIME ZONE;
+alter table INTERV_PRESC_DET add ID_PROF_ORDER NUMBER(24);
+alter table INTERV_PRESC_DET add ID_ORDER_TYPE NUMBER(12);
+alter table INTERV_PRESC_DET add FLG_CO_SIGN VARCHAR2(1) DEFAULT 'N' NOT NULL;
+alter table INTERV_PRESC_DET add DT_CO_SIGN TIMESTAMP WITH LOCAL TIME ZONE;
+alter table INTERV_PRESC_DET add NOTES_CO_SIGN VARCHAR2(4000);
+alter table INTERV_PRESC_DET add ID_PROF_CO_SIGN NUMBER(24);
+
+
+COMMENT ON COLUMN INTERV_PRESC_DET.DT_ORDER IS 'Moment when the ordering professional ask the registering professional to request' ;
+COMMENT ON COLUMN INTERV_PRESC_DET.ID_PROF_ORDER IS 'Ordering professional' ;
+COMMENT ON COLUMN INTERV_PRESC_DET.ID_ORDER_TYPE IS 'Request order type (telephone, verbal, ...)' ;
+COMMENT ON COLUMN INTERV_PRESC_DET.FLG_CO_SIGN IS 'Co-sign flag. (Y)-Order co-signed. (N)-Order not co-signed.';
+COMMENT ON COLUMN INTERV_PRESC_DET.DT_CO_SIGN IS 'Co-sign moment';
+COMMENT ON COLUMN INTERV_PRESC_DET.NOTES_CO_SIGN IS 'Co-sign notes';
+COMMENT ON COLUMN INTERV_PRESC_DET.ID_PROF_CO_SIGN IS 'Co-sign professional';
+
+alter table interv_presc_det add num_exec_sess number;
+alter table interv_presc_det add notes_change_status varchar2(4000);
+alter table interv_presc_det add id_prof_change_status number(24);
+alter table interv_presc_det add flg_mfr varchar2(1);
+alter table interv_presc_det add dt_interv_presc_det TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table interv_presc_det add id_change number;
+alter table interv_presc_det add flg_status_change varchar2(1);
+alter table interv_presc_det add code_intervention_alias varchar2(1);
+
+comment on column interv_presc_det.num_exec_sess is 'Numero de exec por sessao. Para ja esta em uso em MFR';
+comment on column interv_presc_det.notes_change_status is 'Notas de alteracao de estado. Para ja esta em uso em MFR';
+comment on column interv_presc_det.id_prof_change_status is 'Profissional que alterou o estado. Para ja esta em uso em MFR';
+comment on column interv_presc_det.flg_mfr is 'Indicates if this is a Physical Medicine and Rehabilitation intervention';
+comment on column interv_presc_det.dt_interv_presc_det is 'Data de criacao/alterracao de estado';
+comment on column interv_presc_det.id_change is 'Numero de pedido de alteracao';
+comment on column interv_presc_det.flg_status_change is 'Flg com o estado da proposta de alteracao';
+comment on column interv_presc_det.code_intervention_alias is 'Codigo para a traducao dos procedimentos';
+
+-- DDL:  Colunas para indicar se requisicao de procedimentos ja foi incluida me algum P1
+ALTER TABLE INTERV_PRESC_DET ADD (FLG_REFERRAL VARCHAR2(1));
+
+COMMENT ON COLUMN INTERV_PRESC_DET.FLG_REFERRAL IS 'Flag that shows if requisiton was added to referral. Options are (A)vailable,  (R)eserved or (S)ent.';
+
+-- cHANGED BY: Joao Martins
+-- CHANGE DATE: 2008-06-11
+-- CHANGE REASON: Columns relative to intervention's effective start date
+alter table interv_presc_det add (dt_pend_req date, dt_pend_req_tstz timestamp(6) with local time zone);
+-- CHANGE END
+
+-- cHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-07-09
+-- CHANGE REASON: Corrigir o tamanho da variável
+alter table interv_presc_det modify code_intervention_alias varchar2(200);
+-- CHANGE END
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 2008/09/19
+-- CHANGE REASON: Drop obsolete columns of type DATE
+alter table interv_presc_det drop column dt_begin;
+alter table interv_presc_det drop column dt_end;
+alter table interv_presc_det drop column dt_cancel;
+alter table interv_presc_det drop column dt_pend_req;
+-- CHANGE END
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/09/2009 17:45
+-- CHANGE REASON: [ALERT-42947] New feature ALERT 910 MCDT INTERNAL EXTERNAL
+alter table interv_presc_det add (id_interv_codification number(24));
+alter table interv_presc_det add (id_exec_institution number(24));
+comment on column interv_presc_det.id_interv_codification is 'Codification for the current prescription';
+comment on column interv_presc_det.id_exec_institution is 'Institution where the procedure will take place';
+comment on column interv_presc_det.flg_referral is 'Flag that shows if requisiton was added to referral. Options are (A)vailable,  (R)eserved, electronically sent (I) or printed (S).';
+-- CHANGE END: João Martins
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 11/04/2011 15:19
+-- CHANGE REASON: [ALERT-163522] 
+BEGIN
+    ALTER TABLE interv_presc_det add id_cancel_reason NUMBER(24);
+
+    COMMENT ON column interv_presc_det.id_cancel_reason IS 'Cancel reason ID';
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/04/2011 12:27
+-- CHANGE REASON: [ALERT-163522] 
+
+    ALTER TABLE interv_presc_det add id_cancel_reason NUMBER(24);
+
+    COMMENT ON column interv_presc_det.id_cancel_reason IS 'Cancel reason ID';
+
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 12/04/2011 12:28
+-- CHANGE REASON: [ALERT-163522] 
+
+    ALTER TABLE interv_presc_det add id_cancel_reason NUMBER(24);
+
+    COMMENT ON column interv_presc_det.id_cancel_reason IS 'Cancel reason ID';
+
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 06/05/2011 10:42
+-- CHANGE REASON: [ALERT-176870] 
+begin
+ALTER TABLE interv_presc_det add id_cdr_event NUMBER(24);
+COMMENT ON column interv_presc_det.id_cdr_event IS 'Rule event identifier';
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 06/12/2011 17:28
+-- CHANGE REASON: [ALERT-208597 ] 
+-- Add comments to the columns 
+comment on column INTERV_PRESC_DET.flg_prty
+  is 'Prioridade do tratamento: (U) Urgente, (E) Muito Urgente, (N) Não Urgente';
+where ipd.FLG_PRTY ='M';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 06/12/2011 17:28
+-- CHANGE REASON: [ALERT-208597 ] 
+-- Add comments to the columns 
+comment on column INTERV_PRESC_DET.flg_prty
+  is 'Prioridade do tratamento: (U) Urgente, (E) Muito Urgente, (N) Não Urgente';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 01/10/2012 17:17
+-- CHANGE REASON: [ALERT-241269 ] 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there,-01430); -- add column
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE interv_presc_det add(flg_laterality VARCHAR2(1 CHAR))';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        NULL;
+END;
+/
+
+COMMENT ON COLUMN interv_presc_det.flg_laterality IS    'Laterality of intervention: N- (N)ot Applicable, B- (B)ilateral, L- (L)eft, R- (R)ight';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/03/2013 16:28
+-- CHANGE REASON: [ALERT-253717 ] 
+comment on column INTERV_PRESC_DET.flg_laterality
+  is 'Laterality of intervention: N- (N)ot Applicable, B- (B)ilateral, L- (L)eft, R- (R)ight, Z- Bilatéral-comparatif';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 16/04/2013 15:20
+-- CHANGE REASON: [ALERT-255084 ] 
+ALTER TABLE INTERV_PRESC_DET 
+ ADD (FLG_CLINICAL_PURPOSE VARCHAR2(1 CHAR),
+      OTHER_CLIN_PURP VARCHAR2(1000 CHAR));
+
+COMMENT ON COLUMN INTERV_PRESC_DET.FLG_CLINICAL_PURPOSE IS 'Flag that indicates the Clinical purpose';
+COMMENT ON COLUMN INTERV_PRESC_DET.OTHER_CLIN_PURP IS 'Clinical purpose others (when flg_clinical_purpose = ''O'')';
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 28/05/2014 09:38
+-- CHANGE REASON: [ALERT-283445 ] 
+ALTER TABLE interv_presc_det add id_not_order_reason NUMBER(24);
+COMMENT ON column interv_presc_det.id_not_order_reason IS 'Not order reason ID';
+/
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 21/10/2014 11:15
+-- CHANGE REASON: [ALERT-298787] 
+ALTER TABLE interv_presc_det add id_presc_plan_task NUMBER(24);
+COMMENT ON column interv_presc_det.id_presc_plan_task IS 'Medication prescription ID';
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 21/04/2015 17:25
+-- CHANGE REASON: [ALERT-310273 ] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); --  column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE interv_presc_det ADD (id_co_sign_order    NUMBER(24), id_co_sign_cancel   NUMBER(24))';
+    EXECUTE IMMEDIATE 'COMMENT ON column interv_presc_det.id_co_sign_order IS ''Co_sign order ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON column interv_presc_det.id_co_sign_cancel IS ''Co_sign cancel ID''';
+  
+EXCEPTION
+    WHEN e_already_exists THEN
+       dbms_output.put_line('id_epis_documentation already exists');
+END;
+/
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 17/06/2015 16:58
+-- CHANGE REASON: [ALERT-312712] 
+ALTER TABLE INTERV_PRESC_DET 
+ ADD (ID_PROF_LAST_UPDATE NUMBER(24)
+ ,DT_LAST_UPDATE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE);
+
+COMMENT ON COLUMN INTERV_PRESC_DET.CODE_INTERVENTION_ALIAS IS 'Translation code';
+COMMENT ON COLUMN INTERV_PRESC_DET.FLG_REFERRAL IS 'Flag that shows if requisiton was added to referral. Options are (A)vailable,  (R)eserved or (S)ent.';
+COMMENT ON COLUMN INTERV_PRESC_DET.DT_PEND_REQ_TSTZ IS 'Date that indicates when the order has been updated from pending to ordered';
+COMMENT ON COLUMN INTERV_PRESC_DET.ID_CDR_EVENT IS 'Clinical decision rule ID';
+COMMENT ON COLUMN INTERV_PRESC_DET.ID_CO_SIGN_ORDER IS 'Co-sign order ID';
+COMMENT ON COLUMN INTERV_PRESC_DET.ID_CO_SIGN_CANCEL IS 'Co-sign cancel ID';
+COMMENT ON COLUMN INTERV_PRESC_DET.ID_PROF_LAST_UPDATE IS 'Last update professional ID';
+COMMENT ON COLUMN INTERV_PRESC_DET.DT_LAST_UPDATE_TSTZ IS 'Last update date';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 26/01/2016 17:33
+-- CHANGE REASON: [ALERT-318118] 
+ALTER TABLE interv_presc_det DROP COLUMN dt_order;
+ALTER TABLE interv_presc_det DROP COLUMN id_prof_order;
+ALTER TABLE interv_presc_det DROP COLUMN id_order_type;
+ALTER TABLE interv_presc_det DROP COLUMN flg_co_sign;
+ALTER TABLE interv_presc_det DROP COLUMN dt_co_sign;
+ALTER TABLE interv_presc_det DROP COLUMN notes_co_sign;
+ALTER TABLE interv_presc_det DROP COLUMN id_prof_co_sign;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 15/06/2016 11:20
+-- CHANGE REASON: [ALERT-322211] 
+ALTER TABLE INTERV_PRESC_DET 
+ ADD (ID_ORDER_RECURRENCE NUMBER(24)
+ ,FLG_FASTING VARCHAR2(1 CHAR)
+ ,FLG_PRN VARCHAR2(1 CHAR)
+ ,PRN_NOTES CLOB
+ ,ID_PAT_HEALTH_PLAN NUMBER(24)
+ ,ID_PAT_EXEMPTION NUMBER(24)
+ ,FLG_REQ_ORIGIN_MODULE VARCHAR2(1 CHAR)
+ ,DT_ORDER_TSTZ TIMESTAMP WITH LOCAL TIME ZONE
+ );
+ 
+ALTER TABLE INTERV_PRESC_DET MODIFY (FLG_STATUS VARCHAR2(2 CHAR));
+
+COMMENT ON COLUMN INTERV_PRESC_DET.ID_ORDER_RECURRENCE IS 'Order recurrence ID';
+COMMENT ON COLUMN INTERV_PRESC_DET.FLG_FASTING IS 'Flag that indicates whether the patient must be fasting for the procedure';
+COMMENT ON COLUMN INTERV_PRESC_DET.FLG_PRN IS 'Flag that indicates whether the procedure is PRN or not';
+COMMENT ON COLUMN INTERV_PRESC_DET.PRN_NOTES IS 'Notes to indicate when a PRN order should be activated';
+COMMENT ON COLUMN INTERV_PRESC_DET.ID_PAT_HEALTH_PLAN IS 'Healthcare insurance plan ID used';
+COMMENT ON COLUMN INTERV_PRESC_DET.ID_PAT_EXEMPTION IS 'Exemption ID used';
+COMMENT ON COLUMN INTERV_PRESC_DET.FLG_REQ_ORIGIN_MODULE IS 'Request created by: D - Default, C - Care Plans, O - Order Sets, P - CPOE, I - Interfaces; S - Scheduler;  R - Referral; M - Medication';
+COMMENT ON COLUMN INTERV_PRESC_DET.DT_ORDER_TSTZ IS 'Order''s date';
+
+ALTER TABLE INTERV_PRESC_DET ADD CONSTRAINT IPD_ID_ORDER_RECURRENCE_FK FOREIGN KEY (ID_ORDER_RECURRENCE) REFERENCES ORDER_RECURR_PLAN (ID_ORDER_RECURR_PLAN);
+ALTER TABLE INTERV_PRESC_DET ADD CONSTRAINT IPD_PHN_FK FOREIGN KEY (ID_PAT_HEALTH_PLAN) REFERENCES ALERT_ADTCOD.PAT_HEALTH_PLAN (ID_PAT_HEALTH_PLAN);
+ALTER TABLE INTERV_PRESC_DET ADD CONSTRAINT IPD_PIO_FK FOREIGN KEY (ID_PAT_EXEMPTION) REFERENCES ALERT_ADTCOD.PAT_ISENCAO (ID_PAT_ISENCAO);
+  
+  
+ALTER TABLE INTERV_PRESC_DET ADD CONSTRAINT IPD_FLG_FASTING_CHK CHECK (flg_fasting IN ('Y', 'N', 'U'));
+ALTER TABLE INTERV_PRESC_DET ADD CONSTRAINT IPD_FLG_PRN_CHK CHECK (flg_prn IN ('Y', 'N'));
+ALTER TABLE INTERV_PRESC_DET ADD CONSTRAINT IPD_FLG_REQ_ORIGIN_MODULE_CHK CHECK (flg_req_origin_module IN ('D', 'E', 'I', 'S', 'C', 'P', 'O', 'R'));
+ALTER TABLE INTERV_PRESC_DET ADD CONSTRAINT IPD_FLG_STATUS_CHK CHECK (flg_status IN ('PD', 'S', 'X', 'E', 'R', 'D', 'W', 'A', 'F', 'I', 'O', 'N', 'C', 'V', 'T', 'G', 'P', 'Z'));
+
+
+CREATE INDEX IPD_ID_ORDER_RECURRENCE_IDX ON INTERV_PRESC_DET (ID_ORDER_RECURRENCE) TABLESPACE INDEX_M;
+CREATE INDEX IPD_PHN_IDX ON INTERV_PRESC_DET (ID_PAT_HEALTH_PLAN) TABLESPACE INDEX_M;
+CREATE INDEX IPD_PIO_IDX ON INTERV_PRESC_DET (ID_PAT_EXEMPTION) TABLESPACE INDEX_M;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/07/2016 09:39
+-- CHANGE REASON: [ALERT-323391] 
+ALTER TABLE INTERV_PRESC_DET MODIFY (FLG_INTERV_TYPE varchar2(1 CHAR) NULL);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/03/2017 09:37
+-- CHANGE REASON: [ALERT-329532] 
+ALTER TABLE INTERV_PRESC_DET DROP COLUMN NUM_EXEC_SESS;
+ALTER TABLE INTERV_PRESC_DET DROP COLUMN NOTES_CHANGE_STATUS;
+ALTER TABLE INTERV_PRESC_DET DROP COLUMN ID_PROF_CHANGE_STATUS;
+ALTER TABLE INTERV_PRESC_DET DROP COLUMN FLG_MFR;
+ALTER TABLE INTERV_PRESC_DET DROP COLUMN ID_CHANGE;
+ALTER TABLE INTERV_PRESC_DET DROP COLUMN FLG_STATUS_CHANGE;
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 04/05/2017 10:17
+-- CHANGE REASON: [ALERT-330278] 
+ALTER TABLE INTERV_PRESC_DET ADD (ID_CLINICAL_PURPOSE NUMBER(24), CLINICAL_PURPOSE_NOTES VARCHAR(1000 CHAR));
+
+COMMENT ON COLUMN INTERV_PRESC_DET.ID_CLINICAL_PURPOSE IS 'Clinical purpose ID';
+COMMENT ON COLUMN INTERV_PRESC_DET.CLINICAL_PURPOSE_NOTES IS 'Clinical purpose free text field (when id_clinical_purpose = 0)';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:30
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.interv_presc_det move lob(prn_notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 27/05/2020 17:24
+-- CHANGE REASON: [EMR-32397]
+ALTER TABLE interv_presc_det ADD FLG_LOCATION VARCHAR2(5 CHAR);
+COMMENT ON COLUMN interv_presc_det.flg_location IS 'Flag Location (In this facility, Care of Point, Others..)';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 05/03/2021 08:07
+-- CHANGE REASON: [EMR-42532] - Change the MCDT's request form in the clinical indication area.
+ALTER TABLE interv_presc_det
+ADD diagnosis_notes varchar2(1000);
+
+comment on column interv_presc_det.diagnosis_notes is 'Diagnosis free text field';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 12/03/2021 15:30
+-- CHANGE REASON: [EMR-42532] - Orders: new field in the Clinical Indication block
+ALTER TABLE INTERV_PRESC_DET
+MODIFY diagnosis_notes VARCHAR2(1000 CHAR);
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 09/11/2021 08:43
+-- CHANGE REASON: [EMR-49451]
+ALTER TABLE interv_presc_det DROP COLUMN other_clin_purp;
+-- CHANGE END: Ana Matos

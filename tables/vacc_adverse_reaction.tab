@@ -1,0 +1,90 @@
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/05/2014 21:46
+-- CHANGE REASON: [ALERT-281683] 
+CREATE TABLE VACC_ADVERSE_REACTION(id_vacc_adverse_reaction NUMBER(24) NOT NULL,
+                                   concept_code VARCHAR2(0030 CHAR) NOT NULL,
+                                   concept_description VARCHAR2(200 char) NOT NULL,
+                                   id_content   VARCHAR2(200 char),      
+                                   id_market NUMBER(24)  default 0,
+                                   flg_available   VARCHAR2(1 char) default 'Y',     
+                                   create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24));
+  
+comment on table VACC_ADVERSE_REACTION is 'Vaccine adverse reaction content';
+comment on column VACC_ADVERSE_REACTION.id_vacc_adverse_reaction IS 'Table identifier' ;
+comment on column VACC_ADVERSE_REACTION.concept_code IS 'Concept code of the adverse reaction' ;
+comment on column VACC_ADVERSE_REACTION.concept_description IS 'Concept name of the adverse reaction';
+comment on column VACC_ADVERSE_REACTION.id_market IS 'Market identifier';
+comment on column VACC_ADVERSE_REACTION.flg_available IS 'Indicates if it is available';
+comment on column VACC_ADVERSE_REACTION.id_content is 'Content identifier';
+comment on column VACC_ADVERSE_REACTION.create_user is 'Creation User';
+comment on column VACC_ADVERSE_REACTION.create_time is 'Creation Time';
+comment on column VACC_ADVERSE_REACTION.create_institution is 'Creation Institution';
+comment on column VACC_ADVERSE_REACTION.update_user is 'Update User';
+comment on column VACC_ADVERSE_REACTION.update_time is 'Update Time';
+comment on column VACC_ADVERSE_REACTION.update_institution is 'Update Institution';
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/05/2014 21:57
+-- CHANGE REASON: [ALERT-281683] 
+CREATE TABLE VACC_ADVERSE_REACTION(id_vacc_adverse_reaction NUMBER(24) NOT NULL,
+                                   concept_code VARCHAR2(0030 CHAR) NOT NULL,
+                                   concept_description VARCHAR2(200 char) NOT NULL,
+                                   id_content   VARCHAR2(200 char),      
+                                   id_market NUMBER(24)  default 0,
+                                   flg_available   VARCHAR2(1 char) default 'Y',     
+                                   create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24));
+  
+comment on table VACC_ADVERSE_REACTION is 'Vaccine adverse reaction content';
+comment on column VACC_ADVERSE_REACTION.id_vacc_adverse_reaction IS 'Table identifier' ;
+comment on column VACC_ADVERSE_REACTION.concept_code IS 'Concept code of the adverse reaction' ;
+comment on column VACC_ADVERSE_REACTION.concept_description IS 'Concept name of the adverse reaction';
+comment on column VACC_ADVERSE_REACTION.id_market IS 'Market identifier';
+comment on column VACC_ADVERSE_REACTION.flg_available IS 'Indicates if it is available';
+comment on column VACC_ADVERSE_REACTION.id_content is 'Content identifier';
+comment on column VACC_ADVERSE_REACTION.create_user is 'Creation User';
+comment on column VACC_ADVERSE_REACTION.create_time is 'Creation Time';
+comment on column VACC_ADVERSE_REACTION.create_institution is 'Creation Institution';
+comment on column VACC_ADVERSE_REACTION.update_user is 'Update User';
+comment on column VACC_ADVERSE_REACTION.update_time is 'Update Time';
+comment on column VACC_ADVERSE_REACTION.update_institution is 'Update Institution';
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 21/05/2014 10:56
+-- CHANGE REASON: [ALERT-281683] 
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN    
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table vacc_advers_react add (id_vacc_adver_reac number(24))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 14:40
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON COLUMN VACC_ADVERSE_REACTION.ID_VACC_ADVERSE_REACTION IS 'Vaccination adverse reaction ID';
+/
+COMMENT ON COLUMN VACC_ADVERSE_REACTION.CONCEPT_DESCRIPTION IS 'Concept description of the adverse reaction';
+/
+COMMENT ON COLUMN VACC_ADVERSE_REACTION.ID_CONTENT IS 'Content unique ID';
+/
+-- CHANGE END: Sofia Mendes

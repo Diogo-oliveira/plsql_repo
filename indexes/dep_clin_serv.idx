@@ -1,0 +1,18 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/12/2012 16:00
+-- CHANGE REASON: [ALERT-243533] validation uk idx
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+    
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'create unique index DCS_UK_IDX on dep_clin_serv (CASE  WHEN (id_department is not null and id_clinical_service is not null and NVL(FLG_AVAILABLE,''Y'')<>''N'') THEN ID_DEPARTMENT END, 
+CASE  WHEN (id_department is not null and id_clinical_service is not null and NVL(FLG_AVAILABLE,''Y'')<>''N'') THEN ID_CLINICAL_SERVICE END) tablespace ALERT_IDX';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('UK idx already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

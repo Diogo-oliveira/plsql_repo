@@ -1,0 +1,11 @@
+
+
+  GRANT EXECUTE ON ALERT.PK_ALERT_CONSTANT ALERT_VIEWER;
+
+
+
+  GRANT EXECUTE ON ALERT.PK_ALERT_CONSTANT TO ALERT_VIEWER;
+
+
+-- cmf 26-03-2012
+grant execute on pk_alert_constant to public;

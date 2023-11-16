@@ -1,0 +1,100 @@
+
+
+   CREATE SEQUENCE  SEQ_SOFTWARE_INSTITUTION  MINVALUE 1 MAXVALUE 999999999999 INCREMENT BY 1 START WITH 1 NOCACHE  NOORDER  NOCYCLE ;
+
+
+
+alter sequence SEQ_SOFTWARE_INSTITUTION noorder cache 500;
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2017 09:00
+-- CHANGE REASON: [ALERT-334520] 
+DECLARE
+		maxVal NUMBER;
+		nxSeq NUMBER;
+BEGIN
+nxSeq := seq_SOFTWARE_INSTITUTION.nextVal;
+
+SELECT MAX(a.id_SOFTWARE_INSTITUTION) + 1 INTO maxVal FROM SOFTWARE_INSTITUTION a;
+maxVal := maxVal - nxSeq + 1;
+
+EXECUTE IMMEDIATE 'ALTER SEQUENCE seq_SOFTWARE_INSTITUTION MAXVALUE 999999999999999999999999';
+EXECUTE IMMEDIATE 'ALTER SEQUENCE seq_SOFTWARE_INSTITUTION INCREMENT BY ' || maxVal;
+
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2017 09:00
+-- CHANGE REASON: [ALERT-334520] 
+DECLARE
+    maxVal NUMBER;
+    nxSeq NUMBER;
+BEGIN
+
+BEGIN
+	SELECT z.id_software_institution + 1 INTO maxVal FROM (
+            SELECT t.id_software_institution , (l.id_software_institution - t.id_software_institution) diff 
+            FROM (
+                           SELECT a.id_software_institution, rownum rn 
+                               FROM SOFTWARE_INSTITUTION a order by 1) t,
+                         (
+                               SELECT a.id_software_institution, rownum rn 
+                               FROM SOFTWARE_INSTITUTION a order by 1 ) l
+            WHERE t.rn+1 = l.rn
+                              ANd l.id_software_institution - t.id_software_institution  > 1000000
+            ) z
+	WHERE rownum = 1 ;
+EXCEPTION WHEN OTHERS THEN
+	SELECT MAX(id_software_institution) + 1 INTO maxVal FROM SOFTWARE_INSTITUTION;
+END;
+
+
+EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_SOFTWARE_INSTITUTION';
+EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_SOFTWARE_INSTITUTION  MINVALUE 1 MAXVALUE 999999999999 INCREMENT BY 1 START WITH '|| maxVal || ' NOCACHE  NOORDER  NOCYCLE';
+
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 07/12/2017 09:00
+-- CHANGE REASON: [ALERT-334520] 
+DECLARE
+    maxVal NUMBER;
+    nxSeq NUMBER;
+BEGIN
+
+BEGIN
+	SELECT z.id_software_institution + 1 INTO maxVal FROM (
+            SELECT t.id_software_institution , (l.id_software_institution - t.id_software_institution) diff 
+            FROM (
+                           SELECT a.id_software_institution, rownum rn 
+                               FROM SOFTWARE_INSTITUTION a order by 1) t,
+                         (
+                               SELECT a.id_software_institution, rownum rn 
+                               FROM SOFTWARE_INSTITUTION a order by 1 ) l
+            WHERE t.rn+1 = l.rn
+                              ANd l.id_software_institution - t.id_software_institution  > 1000000
+            ) z
+  WHERE rownum = 1 ;
+EXCEPTION WHEN OTHERS THEN
+  SELECT MAX(id_software_institution) + 1 INTO maxVal FROM SOFTWARE_INSTITUTION;
+END;
+
+
+IF maxVal = 0 THEN
+	  maxVal := 1;
+END IF;
+
+
+EXECUTE IMMEDIATE 'DROP SEQUENCE SEQ_SOFTWARE_INSTITUTION';
+EXECUTE IMMEDIATE 'CREATE SEQUENCE SEQ_SOFTWARE_INSTITUTION  MINVALUE 1 MAXVALUE 9999999999999999 INCREMENT BY 1 START WITH '|| maxVal || ' NOCACHE  NOORDER  NOCYCLE';
+
+END;
+/
+-- CHANGE END: Pedro Henriques

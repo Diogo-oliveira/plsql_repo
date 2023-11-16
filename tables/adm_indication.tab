@@ -1,0 +1,144 @@
+  CREATE TABLE ADM_INDICATION
+   (	ID_ADM_INDICATION NUMBER(24),
+	CODE_ADM_INDICATION VARCHAR2(200),
+	AVG_DURATION NUMBER(3),
+	ID_WTL_URG_LEVEL NUMBER(24),
+	ID_NCH_LEVEL NUMBER(24),
+	FLG_ESCAPE VARCHAR2(1),
+	ID_CONTENT NUMBER(24,0),
+	CREATE_USER VARCHAR2(24),
+	CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	CREATE_INSTITUTION NUMBER(24),
+	UPDATE_USER VARCHAR2(24),
+	UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	UPDATE_INSTITUTION NUMBER(24)
+   ) ;
+
+
+
+COMMENT ON COLUMN ADM_INDICATION.ID_ADM_INDICATION IS 'Indication for admission primary key';
+
+
+
+COMMENT ON COLUMN ADM_INDICATION.CODE_ADM_INDICATION IS 'Code used for translation';
+
+
+
+COMMENT ON COLUMN ADM_INDICATION.AVG_DURATION IS 'Average admission duration in hours';
+
+
+
+COMMENT ON COLUMN ADM_INDICATION.ID_WTL_URG_LEVEL IS 'Urgency level foreign key';
+
+
+
+COMMENT ON COLUMN ADM_INDICATION.ID_NCH_LEVEL IS 'Nursing care hours level foreign key';
+
+
+
+COMMENT ON COLUMN ADM_INDICATION.FLG_ESCAPE IS 'Flag indicating that an admission can be set on a different ward';
+
+
+
+COMMENT ON COLUMN ADM_INDICATION.ID_CONTENT IS 'Content id';
+
+
+
+COMMENT ON TABLE ADM_INDICATION  IS 'Table with indication for admission content';
+
+
+
+ALTER TABLE adm_indication add(id_institution NUMBER(24), id_group NUMBER(24));
+COMMENT ON column adm_indication.id_institution IS 'Content id';
+COMMENT ON column adm_indication.id_institution IS 'Indication content group id';
+
+ALTER TABLE adm_indication drop column id_content;
+
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/06/2010 14:22
+-- CHANGE REASON: [ALERT-105487] 
+ALTER TABLE ADM_INDICATION add FLG_AVAILABLE VARCHAR2(1 CHAR);
+COMMENT ON COLUMN ADM_INDICATION.FLG_AVAILABLE IS 'Flag that indicates if this record is available';
+
+ALTER TABLE ADM_INDICATION ADD 
+(
+flg_status VARCHAR2(1 CHAR),
+flg_parameterization_type VARCHAR2(1 CHAR) default 'C',
+id_professional NUMBER(24),
+dt_creation TIMESTAMP WITH LOCAL TIME ZONE,
+dt_last_update TIMESTAMP WITH LOCAL TIME ZONE,
+desc_adm_indication VARCHAR2(1000 CHAR)
+);
+
+ALTER TABLE ADM_INDICATION MODIFY 
+(
+avg_duration NUMBER(24)
+);
+
+
+COMMENT ON COLUMN ADM_INDICATION.flg_status IS 'Status of this data: A - active, E - edited, C - canceled.';
+COMMENT ON COLUMN ADM_INDICATION.flg_parameterization_type IS 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+COMMENT ON COLUMN ADM_INDICATION.id_professional IS 'Id professional that creates the data, when using backoffice.';
+COMMENT ON COLUMN ADM_INDICATION.dt_creation IS 'Creation date.';
+COMMENT ON COLUMN ADM_INDICATION.dt_last_update IS 'Last date when this data was updated.';
+COMMENT ON COLUMN ADM_INDICATION.desc_adm_indication IS 'Indication description.';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 16/07/2010 12:12
+-- CHANGE REASON: [ALERT-112517] 
+alter table adm_indication modify code_adm_indication null;
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:42
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table ADM_INDICATION
+  is 'Table with indication for admission content';
+-- Add comments to the columns 
+comment on column ADM_INDICATION.id_adm_indication
+  is 'Indication for admission primary key';
+comment on column ADM_INDICATION.code_adm_indication
+  is 'Code used for translation';
+comment on column ADM_INDICATION.avg_duration
+  is 'Average admission duration in hours';
+comment on column ADM_INDICATION.id_wtl_urg_level
+  is 'Urgency level foreign key';
+comment on column ADM_INDICATION.id_nch_level
+  is 'Nursing care hours level foreign key';
+comment on column ADM_INDICATION.flg_escape
+  is 'Flag indicating that an admission can be set on a different ward';
+comment on column ADM_INDICATION.create_user
+  is 'Create User';
+comment on column ADM_INDICATION.create_time
+  is 'Create Time';
+comment on column ADM_INDICATION.create_institution
+  is 'Create Institution';
+comment on column ADM_INDICATION.update_user
+  is 'Update User';
+comment on column ADM_INDICATION.update_time
+  is 'Update Time';
+comment on column ADM_INDICATION.update_institution
+  is 'Update Institution';
+comment on column ADM_INDICATION.id_institution
+  is 'Indication content group id';
+comment on column ADM_INDICATION.id_group
+  is 'Group identifier';
+comment on column ADM_INDICATION.flg_available
+  is 'Flag that indicates if this record is available';
+comment on column ADM_INDICATION.flg_status
+  is 'Status of this data: A - active, E - edited, C - canceled.';
+comment on column ADM_INDICATION.flg_parameterization_type
+  is 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+comment on column ADM_INDICATION.id_professional
+  is 'Id professional that creates the data, when using backoffice.';
+comment on column ADM_INDICATION.dt_creation
+  is 'Creation date.';
+comment on column ADM_INDICATION.dt_last_update
+  is 'Last date when this data was updated.';
+comment on column ADM_INDICATION.desc_adm_indication
+  is 'Indication description.';
+  
+-- CHANGE END: Pedro Fernandes

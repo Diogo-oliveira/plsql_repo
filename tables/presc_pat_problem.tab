@@ -1,0 +1,107 @@
+
+
+  CREATE TABLE PRESC_PAT_PROBLEM
+   (	ID_PRESC_PAT_PROBLEM NUMBER(24,0) NOT NULL ENABLE,
+	ID_PAT_PROBLEM NUMBER(24,0),
+	ID_PRESCRIPTION_PHARM NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_PRESC_PAT_PROBLEM DATE NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	ID_PAT_ALLERGY NUMBER(24,0),
+	FLG_STATUS VARCHAR2(1),
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE
+   );
+
+
+
+COMMENT ON TABLE presc_pat_problem IS 'Associação de prescrição de farmacos a problemas.' ;
+
+COMMENT ON COLUMN presc_pat_problem.id_presc_pat_problem IS 'Chave primária.' ;
+COMMENT ON COLUMN presc_pat_problem.id_pat_problem IS 'Problema a que está a associada a prescrição do fármaco.' ;
+COMMENT ON COLUMN presc_pat_problem.id_prescription_pharm IS 'Prescrição associada ao problema.' ;
+COMMENT ON COLUMN presc_pat_problem.id_professional IS 'Profissional que regista a associação.' ;
+COMMENT ON COLUMN presc_pat_problem.dt_presc_pat_problem IS 'Data de registo da associação da prescrição ao problema.' ;
+COMMENT ON COLUMN presc_pat_problem.flg_type IS 'Flag que indica se é uma contra-indicação (C) ou uma associação de fármacos a problemas (A).' ;
+COMMENT ON COLUMN presc_pat_problem.id_pat_allergy IS 'Alergia a que está a associada a prescrição do fármaco.' ;
+COMMENT ON COLUMN presc_pat_problem.flg_status IS 'Estado da associação: A - activo, C - cancelado.' ;
+COMMENT ON COLUMN presc_pat_problem.id_prof_cancel IS 'Profissional que cancela.' ;
+COMMENT ON COLUMN presc_pat_problem.dt_cancel IS 'Data de cancelamento.' ;
+
+alter table presc_pat_problem 
+add (dt_presc_pat_problem_tstz timestamp with local time zone,
+dt_cancel_tstz timestamp with local time zone);
+
+-- Adição de coluna
+alter table presc_pat_problem add (ID_PAT_HISTORY_DIAGNOSIS NUMBER(12));
+
+
+ALTER TABLE presc_pat_problem 
+ ADD (id_drug_presc_det number(24),
+      id_drug_req_det number(24));
+
+COMMENT ON COLUMN presc_pat_problem.id_drug_presc_det IS 'ID da requisição de medicação interna: medicação neste local e soros';
+COMMENT ON COLUMN presc_pat_problem.id_drug_req_det IS 'ID da requisição de medicação à farmácia';
+
+ALTER TABLE presc_pat_problem 
+ ADD (id_epis_diagnosis number(24));
+
+COMMENT ON COLUMN presc_pat_problem.id_epis_diagnosis IS 'ID do registo do diagnóstico para qual existe contra-indicação';
+
+
+alter table presc_pat_problem
+modify (ID_PRESCRIPTION_PHARM NUMBER(24) null);
+
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGED DATE: 2008-MAR-14
+-- CHANGING REASON: Alterações para as contra-indicações
+-- Add/modify columns 
+alter table presc_pat_problem add nav_code VARCHAR2(255);
+-- Add comments to the columns 
+comment on column presc_pat_problem.nav_code
+  is 'Identifies whether an ICD9-CM or DXID concept is a narrower concept, a broader concept, or an equal concept, relative to another DXID';
+
+--  
+alter table presc_pat_problem add severity_level VARCHAR2(1);
+  -- Add comments to the columns 
+comment on column presc_pat_problem.severity_level
+  is 'Contains the severity level';
+-- CHANGE END 
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-JUL-09
+-- CHANGING REASON: coluna nova para as constraindicações
+alter table presc_pat_problem add DISEASE_DESC VARCHAR2(255);
+-- CHANGE END Patrícia Neto  
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGED DATE: 2008-SEPT-22
+-- CHANGING REASON: Remoção de colunas do tipo DATE que tenham equivalentes do tipo TIMESTAMP WITH LOCAL TIME ZONE
+ALTER TABLE PRESC_PAT_PROBLEM DROP COLUMN dt_cancel; 
+ALTER TABLE PRESC_PAT_PROBLEM DROP COLUMN dt_presc_pat_problem ; 
+-- CHANGE END
+
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-MAR-28
+-- CHANGING REASON: ALLERGIES MODULE
+comment on column PRESC_PAT_PROBLEM.FLG_TYPE
+  is 'Flag que indica se é uma contra-indicação (C) ou uma associação de fármacos a problemas (A) ou alergia a fármacos (IA).';
+  
+alter table PRESC_PAT_PROBLEM add PAT_ALLERGY_DESCR VARCHAR2(255);
+alter table PRESC_PAT_PROBLEM add PAT_ALRGN_INGRED_DESCR VARCHAR2(255);
+alter table PRESC_PAT_PROBLEM add PAT_ALRGN_GRP_DESCR VARCHAR2(255);
+
+
+alter table PRESC_PAT_PROBLEM modify FLG_TYPE VARCHAR2(2);
+-- CHANGE END Patrícia Neto
+
+alter table PRESC_PAT_PROBLEM add MED_ALRGN_INGRED_DESCR VARCHAR2(255);
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_PAT_PROBLEM IS 'Associação de prescrição de farmacos a problemas. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

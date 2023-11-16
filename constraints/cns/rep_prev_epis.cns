@@ -1,0 +1,15 @@
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 10/07/2013 09:24
+-- CHANGE REASON: [ALERT-261614] 
+DECLARE
+    e_primary_key EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_primary_key, -02260);
+    l_table_name VARCHAR2(30) := 'REP_PREV_EPIS';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT rep_pre_epi_pk PRIMARY KEY (id_rep_prev_epis)';
+EXCEPTION
+    WHEN e_primary_key THEN
+        dbms_output.put_line('WARNING - Primary key in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END: Tércio Soares

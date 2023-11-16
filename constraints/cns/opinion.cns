@@ -1,0 +1,33 @@
+
+
+  ALTER TABLE OPINION ADD CONSTRAINT OPN_PK PRIMARY KEY (ID_OPINION) ENABLE;
+
+  ALTER TABLE OPINION MODIFY (ID_OPINION NOT NULL ENABLE);
+
+  ALTER TABLE OPINION MODIFY (ID_EPISODE NOT NULL ENABLE);
+
+  ALTER TABLE OPINION MODIFY (FLG_STATE NOT NULL ENABLE);
+
+  ALTER TABLE OPINION MODIFY (DT_PROBLEM NOT NULL ENABLE);
+
+  ALTER TABLE OPINION MODIFY (DESC_PROBLEM NOT NULL ENABLE);
+
+
+  ALTER TABLE OPINION MODIFY (ID_PROF_QUESTIONS NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 16/04/2010 15:45
+-- CHANGE REASON: [ALERT-86898] opinion changes
+alter table opinion
+  add constraint opn_flg_state_chk
+check (flg_state in ('R', 'F', 'P', 'A', 'C', 'E', 'X', 'O', 'V', 'N'));
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 28/01/2011 16:53
+-- CHANGE REASON: [ALERT-158109] 
+ALTER TABLE opinion add CONSTRAINT opn_cre_fk foreign key(id_cancel_reason) references cancel_reason(id_cancel_reason);
+-- CHANGE END:  sergio.dias

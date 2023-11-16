@@ -1,0 +1,26 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 21/12/2010 12:25
+-- CHANGE REASON: [ALERT-139534] 
+declare
+  e_protection_1 EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_protection_1, -00955);
+begin
+BEGIN
+        EXECUTE IMMEDIATE 'create index IDX_EA_PSO on EPIS_ADDENDUM (ID_PROFESSIONAL_SIGN_OFF)
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  )';
+    EXCEPTION
+        WHEN e_protection_1 THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

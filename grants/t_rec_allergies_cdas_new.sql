@@ -1,0 +1,5 @@
+--CHANGE BY: Joel Lopes
+--CHANGE DATE: 05-06-2014
+--CHANGE REASON: ALERT-286361 CDA: Set_Problems (reconciliation)
+GRANT EXECUTE ON T_REC_ALLERGIES_CDAS_NEW TO alert_inter;
+--CHANGE END: Joel Lopes

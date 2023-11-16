@@ -1,0 +1,43 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 02/12/2013 09:40
+-- CHANGE REASON: [ALERT-270040] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE TABLE VS_ATTRIBUTE (
+  id_vs_attribute        number(24,0)                      not null,
+  id_parent              number(24,0)                      null,
+  code_vs_attribute      VARCHAR2(200 char)                NOT NULL,
+  flg_free_text          varchar2(1 char)                  not null,
+  id_content             VARCHAR2(200 char)                NULL,
+  create_user            varchar2(24 char)                 null,
+  create_time            timestamp(6) with local time zone null,
+  create_institution     number(24,0)                      null,
+  update_user            varchar2(24 char)                 null,
+  update_time            timestamp(6) with local time zone null,
+  update_institution     NUMBER(24,0)                      NULL
+)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+COMMENT ON TABLE VS_ATTRIBUTE IS 'Vital signs attributes content';
+
+COMMENT ON COLUMN VS_ATTRIBUTE.id_vs_attribute IS 'vs_attribute identifier';
+COMMENT ON COLUMN VS_ATTRIBUTE.id_parent IS 'vs_attribute parent identifier';
+COMMENT ON COLUMN VS_ATTRIBUTE.code_vs_attribute IS 'code vs_attribute';
+COMMENT ON COLUMN VS_ATTRIBUTE.flg_free_text IS 'is attribute free text Y/N';
+COMMENT ON COLUMN VS_ATTRIBUTE.id_content IS 'content identifier';
+COMMENT ON COLUMN VS_ATTRIBUTE.create_user IS 'Creation User';
+COMMENT ON COLUMN VS_ATTRIBUTE.create_time IS 'Creation Time';
+COMMENT ON COLUMN VS_ATTRIBUTE.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN VS_ATTRIBUTE.update_user IS 'Update User';
+COMMENT ON COLUMN VS_ATTRIBUTE.update_time IS 'Update Time';
+COMMENT ON COLUMN VS_ATTRIBUTE.update_institution IS 'Update Institution';
+-- CHANGE END: Paulo Teixeira

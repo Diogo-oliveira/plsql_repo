@@ -1,0 +1,1 @@
+grant select on MI_MED_REGULATION to ALERT_VIEWER;

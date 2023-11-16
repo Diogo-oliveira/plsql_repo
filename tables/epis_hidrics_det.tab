@@ -1,0 +1,169 @@
+
+
+  CREATE TABLE EPIS_HIDRICS_DET
+   (	ID_EPIS_HIDRICS_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPIS_HIDRICS NUMBER(24,0) NOT NULL ENABLE,
+	ID_HIDRICS NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_CREATION DATE NOT NULL ENABLE,
+	VALUE_HIDRICS NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_INSERT_DET NUMBER(24,0),
+	ID_EPIS_HIDRICS_BALANCE NUMBER(24,0) NOT NULL ENABLE,
+
+	DT_EXECUTION DATE,
+	NOTES VARCHAR2(200)
+   );
+
+
+COMMENT ON TABLE epis_hidrics_det IS 'Detalhe dos episódios hidricos' ;
+
+COMMENT ON COLUMN epis_hidrics_det.id_epis_hidrics_det IS 'Chave primária' ;
+COMMENT ON COLUMN epis_hidrics_det.id_epis_hidrics IS 'Episódio hidrico' ;
+COMMENT ON COLUMN epis_hidrics_det.id_hidrics IS 'Hidrico' ;
+COMMENT ON COLUMN epis_hidrics_det.id_professional IS 'Profissional' ;
+COMMENT ON COLUMN epis_hidrics_det.dt_creation IS 'Data de criação' ;
+COMMENT ON COLUMN epis_hidrics_det.value_hidrics IS 'Valor do hidrico' ;
+COMMENT ON COLUMN epis_hidrics_det.id_prof_cancel IS 'Profissional que cancelou' ;
+COMMENT ON COLUMN epis_hidrics_det.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN epis_hidrics_det.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN epis_hidrics_det.id_insert_det IS 'ID que relaciona registos/data' ;
+COMMENT ON COLUMN epis_hidrics_det.id_epis_hidrics_balance IS 'Balanço hidrico ou diurese' ;
+COMMENT ON COLUMN epis_hidrics_det.dt_execution IS 'Data de execução' ;
+COMMENT ON COLUMN epis_hidrics_det.notes IS 'Notas' ;
+
+alter table epis_hidrics_det 
+add (dt_creation_tstz timestamp with local time zone,
+dt_cancel_tstz timestamp with local time zone,
+dt_execution_tstz timestamp with local time zone); 
+
+-- CHANGED BY: Sérgio Santos (sergio.santos)
+-- CHANGE DATE: 03/12/2008 09:16
+-- CHANGE REASON: ALERT-11133 Remoção de colunas com tipo DATE quando existe a equivalente TSTZ
+ALTER TABLE EPIS_HIDRICS_DET DROP COLUMN DT_CREATION;
+ALTER TABLE EPIS_HIDRICS_DET DROP COLUMN DT_CANCEL;
+ALTER TABLE EPIS_HIDRICS_DET DROP COLUMN DT_EXECUTION;
+-- CHANGE END
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/11/2009 13:08
+-- CHANGE REASON: [ALERT-56932] 
+alter table
+   epis_hidrics_det
+drop column
+   ADW_LAST_UPDATE; 
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 22:34
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+alter table EPIS_HIDRICS_DET add FLG_TYPE VARCHAR2(1 CHAR);
+alter table EPIS_HIDRICS_DET add FLG_STATUS VARCHAR2(1 CHAR) default 'A' not null;
+alter table EPIS_HIDRICS_DET add ID_PROF_LINE NUMBER(24);
+alter table EPIS_HIDRICS_DET add DT_PROF_LINE TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table EPIS_HIDRICS_DET add ID_EPIS_HID_COLLECTOR NUMBER(24);
+alter table EPIS_HIDRICS_DET add ID_CANCEL_REASON NUMBER(24);
+alter table EPIS_HIDRICS_DET add NOTES_CANCEL VARCHAR2(1000 CHAR);
+ALTER TABLE EPIS_HIDRICS_DET ADD ID_EPIS_HIDRICS_LINE NUMBER(24);
+alter table EPIS_HIDRICS_DET add ID_PROF_LAST_CHANGE NUMBER(24);
+alter table EPIS_HIDRICS_DET add DT_EPIS_HIDRICS_DET TIMESTAMP(6) WITH LOCAL TIME ZONE;
+
+comment on column EPIS_HIDRICS_DET.FLG_TYPE is 'Intake type. A - Administered; P - Proposed;';
+comment on column EPIS_HIDRICS_DET.FLG_STATUS is 'Intake type. A - Active; C - Cancelled;';
+comment on column EPIS_HIDRICS_DET.ID_PROF_LINE is 'Professional who created/update line info';
+comment on column EPIS_HIDRICS_DET.DT_PROF_LINE is 'Create/update line info time';
+comment on column EPIS_HIDRICS_DET.ID_EPIS_HID_COLLECTOR is 'Collector id';
+comment on column EPIS_HIDRICS_DET.ID_CANCEL_REASON is 'Cancel reason id';
+comment on column EPIS_HIDRICS_DET.NOTES_CANCEL is 'Cancel notes';
+COMMENT ON COLUMN EPIS_HIDRICS_DET.ID_EPIS_HIDRICS_LINE IS 'Episode hidrics line ID where the hidrics record was inserted.';
+comment on column EPIS_HIDRICS_DET.ID_PROF_LAST_CHANGE is 'Professional who entered or last edited the record';
+comment on column EPIS_HIDRICS_DET.DT_EPIS_HIDRICS_DET is 'Insertion date or date of last update';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 06/07/2010 11:54
+-- CHANGE REASON: [ALERT-109624] DB Versioning - TABLES2
+alter table EPIS_HIDRICS_DET add DT_FIRST_REG_BALANCE TIMESTAMP(6) WITH LOCAL TIME ZONE;
+comment on column EPIS_HIDRICS_DET.DT_FIRST_REG_BALANCE
+  is 'First record date of the same balance (NULL if this date is the same as DT_EXECUTION of this record).';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:19
+-- CHANGE REASON: [ALERT-153427] Intake and Output-Have the possibility to register bowel movements.
+ALTER TABLE EPIS_HIDRICS_DET ADD FLG_ACTION VARCHAR2(1 CHAR);
+COMMENT ON COLUMN EPIS_HIDRICS_DET.FLG_ACTION IS 'A - Insertion; E - Edition; C - Cancellaction; I - Interruption';
+
+ALTER TABLE EPIS_HIDRICS_DET ADD ID_HIDRICS_DEVICE NUMBER(24);
+COMMENT ON COLUMN EPIS_HIDRICS_DET.ID_HIDRICS_DEVICE IS 'Device ID.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:21
+-- CHANGE REASON: [ALERT-153427] Intake and Output-Have the possibility to register bowel movements.
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_hidrics_det ADD (nr_times number(12))';
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_hidrics_det.nr_times  is     ''Number of occurences.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Coluna já existe');
+END;
+/
+
+alter table epis_hidrics_det drop column id_insert_det;
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table epis_hidrics_det modify (value_hidrics null)'; 
+
+
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Coluna já existe');
+END;
+/
+
+
+COMMENT ON TABLE epis_hidrics_det IS 'Takes and/or outputs associated to a Registry of Intake and Output.' ;
+
+COMMENT ON COLUMN epis_hidrics_det.id_epis_hidrics_det IS 'Primary Key Identifier' ;
+COMMENT ON COLUMN epis_hidrics_det.id_epis_hidrics IS 'Hidrics episode ID' ;
+COMMENT ON COLUMN epis_hidrics_det.id_professional IS 'Professional that creates/updates the record' ;
+COMMENT ON COLUMN epis_hidrics_det.value_hidrics IS 'Value of the hidrics.' ;
+COMMENT ON COLUMN epis_hidrics_det.id_prof_cancel IS 'Professional that cancelled the registry.' ;
+COMMENT ON COLUMN epis_hidrics_det.id_epis_hidrics_balance IS 'Intake or Output balance.' ;
+COMMENT ON COLUMN epis_hidrics_det.notes IS 'Notes' ;
+COMMENT ON COLUMN epis_hidrics_det.dt_creation_tstz IS 'Creation date' ;
+COMMENT ON COLUMN epis_hidrics_det.dt_cancel_tstz IS 'Cancellation date.' ;
+COMMENT ON COLUMN epis_hidrics_det.dt_execution_tstz IS 'Execution date.' ;
+
+alter table epis_hidrics_det modify ( notes  varchar2(200 char));
+alter table epis_hidrics_det modify ( create_user  varchar2(24 char));
+alter table epis_hidrics_det modify ( update_user  varchar2(24 char));
+
+update epis_hidrics_det e
+set e.flg_action = e.flg_status;
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table EPIS_HIDRICS_DET modify (FLG_ACTION not null)'; 
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Coluna já existe');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 16/06/2011 11:17
+-- CHANGE REASON: [ALERT-185056 ] Intake and Output: It is not possible to use a created free text in more than one line
+ALTER TABLE epis_hidrics_det ADD ID_EPIS_HID_FTXT_DEV NUMBER(24);
+COMMENT ON COLUMN epis_hidrics_det.ID_EPIS_HID_FTXT_DEV IS 'Free Text Id of the device (if the device is inserted in free text)';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 18/04/2016 11:56
+-- CHANGE REASON: [ALERT-320093] PIN Intake and Output improvements - DB Development
+ALTER TABLE epis_hidrics_det MODIFY (value_hidrics NUMBER(26,2));
+-- CHANGE END: Vanessa Barsottelli

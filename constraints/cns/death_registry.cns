@@ -1,0 +1,25 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:18
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE death_registry ADD CONSTRAINT dthr_pk PRIMARY KEY(id_death_registry);
+--
+ALTER TABLE death_registry ADD CONSTRAINT dthr_s_chk CHECK(flg_status IN ('A', 'C'));
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:18
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER INDEX dthr_pk       REBUILD TABLESPACE index_m;
+--
+-- CHANGE END: Filipe Machado
+
+declare
+	pl      varchar2(0010 char) := '''';
+	l_sql	varchar2(4000);
+begin
+    l_sql := 'ALTER TABLE ALERT.DEATH_REGISTRY ADD CONSTRAINT DTH_REG_FLGTYPE_CHK CHECK(FLG_TYPE in (' ||pl||'P'||pl||','||pl||'F'||pl||'))';
+	pk_versioning.run(l_sql);
+end;
+/
+

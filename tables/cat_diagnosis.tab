@@ -1,0 +1,219 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 01/09/2017 12:20
+-- CHANGE REASON: [ALERT-332722] Columns for Diagnosis catalogue NOM024
+--                
+-- Create table
+create table CAT_DIAGNOSIS
+(
+  consec                 NUMBER,
+  letra                  VARCHAR2(255),
+  clave                  VARCHAR2(255),
+  a                      VARCHAR2(255),
+  nombre                 VARCHAR2(255),
+  lsex                   VARCHAR2(255),
+  linf                   VARCHAR2(255),
+  lsup                   VARCHAR2(255),
+  triv                   VARCHAR2(255),
+  errad                  VARCHAR2(255),
+  n_inter                VARCHAR2(255),
+  nin                    VARCHAR2(255),
+  ninmtobs               VARCHAR2(255),
+  no_cbd                 VARCHAR2(255),
+  no_aph                 VARCHAR2(255),
+  fetal                  VARCHAR2(255),
+  capitulo               VARCHAR2(255),
+  lista1                 VARCHAR2(255),
+  grupo1                 VARCHAR2(255),
+  lista5                 VARCHAR2(255),
+  actualizaciones_cie_10 VARCHAR2(50),
+  year_modifi            VARCHAR2(255),
+  year_aplicacion        VARCHAR2(10 CHAR),
+  prinmorta              VARCHAR2(255),
+  prinmorbi              VARCHAR2(255),
+  lm_morbi               VARCHAR2(255),
+  lm_morta               VARCHAR2(255),
+  lgbd165                NUMBER,
+  lomsbeck               NUMBER,
+  lgbd190                NUMBER,
+  notdiaria              VARCHAR2(255),
+  notsemanal             VARCHAR2(255),
+  sistema_especial       VARCHAR2(255),
+  birmm                  VARCHAR2(255),
+  poco_util              NUMBER,
+  epi_morta              VARCHAR2(255),
+  epi_morta_m5           VARCHAR2(255),
+  id_concept_term        NUMBER,
+  flg_available          VARCHAR2(255)
+)
+tablespace ALERT_DATA;
+
+
+
+alter table CAT_DIAGNOSIS  valid                   VARCHAR2(255);
+alter table CAT_DIAGNOSIS  edas_iras_m5            VARCHAR2(255);
+alter table CAT_DIAGNOSIS   csve_maternas_seed_epid VARCHAR2(255);
+alter table CAT_DIAGNOSIS   epi_morbi               VARCHAR2(255);
+alter table CAT_DIAGNOSIS   def_maternas            VARCHAR2(255);
+alter table CAT_DIAGNOSIS   es_causes               VARCHAR2(255);
+alter table CAT_DIAGNOSIS   num_causes              VARCHAR2(255);
+alter table CAT_DIAGNOSIS  es_suive_morta          VARCHAR2(255);
+alter table CAT_DIAGNOSIS  es_suive_morb           VARCHAR2(255);
+alter table CAT_DIAGNOSIS  epi_clave               VARCHAR2(255);
+alter table CAT_DIAGNOSIS  epi_clave_desc          VARCHAR2(255);
+alter table CAT_DIAGNOSIS  es_suive_notin          VARCHAR2(255);
+alter table CAT_DIAGNOSIS   es_suive_est_epi        VARCHAR2(255);
+alter table CAT_DIAGNOSIS  es_suive_est_brote      VARCHAR2(255);
+alter table CAT_DIAGNOSIS   sinac                   VARCHAR2(255);
+alter table CAT_DIAGNOSIS   daga                    VARCHAR2(255);
+alter table CAT_DIAGNOSIS   manifesta_enfer         VARCHAR2(255);
+-- CHANGE END: Elisabete Bugalho
+
+
+-- CHANGED BY: Ana Moita
+-- CHANGED DATE: 2017-9-4
+-- CHANGED REASON: ALERT-332360
+
+ALTER TABLE CAT_DIAGNOSIS
+  RENAME COLUMN CONSEC TO CONSECUTIVO;
+ALTER TABLE CAT_DIAGNOSIS
+  RENAME COLUMN CLAVE TO CATALOG_KEY;
+ALTER TABLE CAT_DIAGNOSIS
+  RENAME COLUMN A TO ASTERISCO;
+ALTER TABLE CAT_DIAGNOSIS
+  RENAME COLUMN TRIV TO TRIVIAL;
+ALTER TABLE CAT_DIAGNOSIS
+  RENAME COLUMN ERRAD TO ERRADICADO;
+ALTER TABLE CAT_DIAGNOSIS
+  RENAME COLUMN POCO_UTIL TO CAUSA_TYPE;
+ALTER TABLE CAT_DIAGNOSIS
+  MODIFY LGBD190 VARCHAR2(4);
+ALTER TABLE CAT_DIAGNOSIS
+  MODIFY LGBD165 VARCHAR2(4);
+    
+-- CHANGE END: Ana Moita
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 01/09/2017 12:20
+-- CHANGE REASON: [ALERT-332722] Columns for Diagnosis catalogue NOM024
+--
+alter table CAT_DIAGNOSIS  add valid                   VARCHAR2(255);
+alter table CAT_DIAGNOSIS  add edas_iras_m5            VARCHAR2(255);
+alter table CAT_DIAGNOSIS   add csve_maternas_seed_epid VARCHAR2(255);
+alter table CAT_DIAGNOSIS   add epi_morbi               VARCHAR2(255);
+alter table CAT_DIAGNOSIS   add def_maternas            VARCHAR2(255);
+alter table CAT_DIAGNOSIS   add es_causes               VARCHAR2(255);
+alter table CAT_DIAGNOSIS   add num_causes              VARCHAR2(255);
+alter table CAT_DIAGNOSIS  add es_suive_morta          VARCHAR2(255);
+alter table CAT_DIAGNOSIS  add es_suive_morb           VARCHAR2(255);
+alter table CAT_DIAGNOSIS add  epi_clave               VARCHAR2(255);
+alter table CAT_DIAGNOSIS  add epi_clave_desc          VARCHAR2(255);
+alter table CAT_DIAGNOSIS  add es_suive_notin          VARCHAR2(255);
+alter table CAT_DIAGNOSIS  add  es_suive_est_epi        VARCHAR2(255);
+alter table CAT_DIAGNOSIS  add es_suive_est_brote      VARCHAR2(255);
+alter table CAT_DIAGNOSIS   add sinac                   VARCHAR2(255);
+alter table CAT_DIAGNOSIS  add  daga                    VARCHAR2(255);
+alter table CAT_DIAGNOSIS   add manifesta_enfer         VARCHAR2(255);
+-- CHANGE END: Elisabete Bugalho
+
+
+
+-- CHANGED BY: Ana Moita
+-- CHANGED DATE: 2017-9-28
+-- CHANGED REASON: ALERT-333158
+
+ALTER TABLE CAT_DIAGNOSIS
+MODIFY LOMSBECK VARCHAR2(10 CHAR);
+-- CHANGE END: Ana Moita
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 02/05/2018 15:51
+-- CHANGE REASON: [EMR-3094] [DB] NOM024 | Update columns from CAT_DIAGNOSIS?
+BEGIN
+    pk_versioning.run('alter table CAT_DIAGNOSIS add descripcion_capitulo    VARCHAR2(255)');
+end;
+/ 
+BEGIN
+    pk_versioning.run('alter table CAT_DIAGNOSIS add rubrica_type    VARCHAR2(255)');
+end;
+/ 
+BEGIN
+    pk_versioning.run('alter table CAT_DIAGNOSIS add codigox    VARCHAR2(255)');
+end;
+/ 
+BEGIN
+    pk_versioning.run('alter table CAT_DIAGNOSIS add cod_sit_lesion    VARCHAR2(255)');
+end;
+/ 
+BEGIN
+    pk_versioning.run('alter table CAT_DIAGNOSIS add ID_CONTENT_EXTERNAL_CAUSE    VARCHAR2(255)');
+end;
+/ 
+
+
+BEGIN
+    pk_versioning.run('ALTER TABLE CAT_DIAGNOSIS RENAME COLUMN CAPITULO TO DIA_CAPITULO_TYPE');
+exception 
+  when others then 
+    dbms_output.put_line('Already Done');     
+end;
+/ 
+BEGIN
+    pk_versioning.run('ALTER TABLE CAT_DIAGNOSIS RENAME COLUMN CAUSA_TYPE TO CVE_CAUSA_TYPE');
+exception 
+  when others then 
+    dbms_output.put_line('Already Done');  
+end;
+/ 
+BEGIN
+    pk_versioning.run('ALTER TABLE CAT_DIAGNOSIS RENAME COLUMN EDAS_IRAS_M5 TO EDAS_E_IRAS_EN_M5');
+exception 
+  when others then 
+    dbms_output.put_line('Already Done');  
+end;
+/ 
+
+BEGIN
+    pk_versioning.run('alter table CAT_DIAGNOSIS drop column GRUPO1');
+exception 
+  when others then 
+    dbms_output.put_line('Already Done');  
+end;
+/
+BEGIN
+    pk_versioning.run('alter table CAT_DIAGNOSIS drop column ACTUALIZACIONES_CIE_10');
+exception 
+  when others then 
+    dbms_output.put_line('Already Done');      
+end;
+/
+BEGIN
+    pk_versioning.run('alter table CAT_DIAGNOSIS drop column CSVE_MATERNAS_SEED_EPID');
+exception 
+  when others then 
+    dbms_output.put_line('Already Done');      
+end;
+/
+BEGIN
+    pk_versioning.run('alter table CAT_DIAGNOSIS drop column EPI_MORBI');
+exception 
+  when others then 
+    dbms_output.put_line('Already Done');      
+end;
+/
+BEGIN
+    pk_versioning.run('alter table CAT_DIAGNOSIS drop column DEF_MATERNAS');
+exception 
+  when others then 
+    dbms_output.put_line('Already Done');      
+end;
+/
+BEGIN
+    pk_versioning.run('alter table CAT_DIAGNOSIS drop column MANIFESTA_ENFER');
+exception 
+  when others then 
+    dbms_output.put_line('Already Done');      
+end;
+/
+  
+-- CHANGE END: Elisabete Bugalho

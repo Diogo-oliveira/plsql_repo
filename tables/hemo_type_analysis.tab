@@ -1,0 +1,111 @@
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/09/2018 11:07
+-- CHANGE REASON: [EMR-6418] 
+CREATE TABLE hemo_type_analysis (
+  ID_hemo_type_analysis NUMBER(24),
+	ID_HEMO_TYPE NUMBER(24) not null,
+	ID_ANALYSIS NUMBER(24) not null,
+	ID_SAMPLE_TYPE NUMBER(24) not null,
+	FLG_AVAILABLE VARCHAR2(2 CHAR),
+	TIME_REQ NUMBER(24),
+	UNIT_TIME_REQ VARCHAR2(10 CHAR),
+	HEMO_TYPE_ANALYSIS NUMBEr(24) DEFAULT 0
+	)
+	tablespace TABLE_S
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 128K
+    next 128K
+    minextents 1
+    maxextents unlimited
+    pctincrease 0
+  );
+  
+  
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/09/2018 11:07
+-- CHANGE REASON: [EMR-6418] 
+ALTER TABLE hemo_type_analysis ADD ID_INSTITUTION NUMBER(24);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/10/2018 14:35
+-- CHANGE REASON: [EMR-7652] 
+COMMENT ON TABLE HEMO_TYPE_ANALYSIS IS 'Configure analysis requested by hemo type';
+COMMENT ON COLUMN HEMO_TYPE_ANALYSIS.ID_HEMO_TYPE_ANALYSIS IS 'Hemo type analysis Id';
+COMMENT ON COLUMN HEMO_TYPE_ANALYSIS.ID_HEMO_TYPE IS 'Hemo type Id';
+COMMENT ON COLUMN HEMO_TYPE_ANALYSIS.ID_ANALYSIS IS 'Analysis Id';
+COMMENT ON COLUMN HEMO_TYPE_ANALYSIS.ID_SAMPLE_TYPE IS 'Sample Type Id';
+COMMENT ON COLUMN HEMO_TYPE_ANALYSIS.FLG_AVAILABLE IS 'Flag available (Y/N)';
+COMMENT ON COLUMN HEMO_TYPE_ANALYSIS.TIME_REQ IS 'Time ';
+COMMENT ON COLUMN HEMO_TYPE_ANALYSIS.UNIT_TIME_REQ IS 'Unit Measure (YEAR | MONTH | DAY  | HOUR | MINUTE | SECOND |)';
+COMMENT ON COLUMN HEMO_TYPE_ANALYSIS.ID_INSTITUTION IS 'Institution Id';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 08/02/2019 15:42
+-- CHANGE REASON: [EMR-11997]
+ALTER TABLE hemo_type_analysis ADD FLG_REACTION_FORM VARCHAR2(1 CHAR) DEFAULT 'N';
+COMMENT ON COLUMN hemo_type_analysis.flg_reaction_form IS 'Analysis to be requested on reaction form action';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 22/02/2019 16:00
+-- CHANGE REASON: [EMR-12949]
+ALTER TABLE hemo_type_analysis ADD CREATE_USER VARCHAR2(50 CHAR);
+ALTER TABLE hemo_type_analysis ADD CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE;
+ALTER TABLE hemo_type_analysis ADD CREATE_INSTITUTION NUMBER(24);
+ALTER TABLE hemo_type_analysis ADD UPDATE_USER VARCHAR2(50 CHAR);
+ALTER TABLE hemo_type_analysis ADD UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE;
+ALTER TABLE hemo_type_analysis ADD UPDATE_INSTITUTION NUMBER(24);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/03/2019 12:15
+-- CHANGE REASON: [EMR-13811]
+ALTER TABLE hemo_type_analysis ADD ID_ORDER_RECURR_OPTION NUMBER(24) DEFAULT 0;
+COMMENT ON COLUMN hemo_type_analysis.ID_ORDER_RECURR_OPTION IS 'ID Order Recurrence Option, only option -1 and 0 are used';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/03/2019 11:15
+-- CHANGE REASON: [EMR-13904]
+ALTER TABLE hemo_type_analysis DROP COLUMN ID_ORDER_RECURR_OPTION;
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 17/02/2020 12:23
+-- CHANGE REASON: [EMR-26921] - Ability to automatically request a lab sample collection for the mother of a newborn (until 7 days old) needing a transfusion
+ALTER TABLE hemo_type_analysis
+ADD flg_newborn varchar2(1);
+
+COMMENT ON COLUMN   hemo_type_analysis.flg_newborn IS 'Flag that indicates if the lab test is to be requested for the mother of a newborn';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 20/11/2020 22:36
+-- CHANGE REASON: [EMR-39051]
+COMMENT ON TABLE hemo_type_analysis IS 'Configure the lab test to be requested by hemo type';
+
+COMMENT ON COLUMN hemo_type_analysis.id_hemo_type_analysis IS 'Primary key';
+COMMENT ON COLUMN hemo_type_analysis.id_hemo_type IS 'Hemo type ID';
+COMMENT ON COLUMN hemo_type_analysis.id_analysIS IS 'Lab test ID';
+COMMENT ON COLUMN hemo_type_analysis.id_sample_type IS 'Sample Type ID';
+COMMENT ON COLUMN hemo_type_analysis.flg_available IS 'Flag that indicates if the record is available or not (Y/N)';
+COMMENT ON COLUMN hemo_type_analysis.time_req IS 'Minimum time for ordering the same lab test';
+COMMENT ON COLUMN hemo_type_analysis.unit_time_req IS 'Unit measure (YEAR; MONTH; DAY; HOUR; MINUTE; SECOND)';
+COMMENT ON COLUMN hemo_type_analysis.id_institution IS 'Institution ID';
+COMMENT ON COLUMN hemo_type_analysis.flg_reaction_form IS 'Flag that indicates if the lab test is displayed in the Reaction Form';
+COMMENT ON COLUMN hemo_type_analysis.flg_newborn IS 'Flag that indicates if the lab test is to ordered for the mother of a newborn';
+COMMENT ON COLUMN hemo_type_analysis.create_user IS 'Creation User';
+COMMENT ON COLUMN hemo_type_analysis.create_time IS 'Creation Time';
+COMMENT ON COLUMN hemo_type_analysis.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN hemo_type_analysis.update_user IS 'Update User';
+COMMENT ON COLUMN hemo_type_analysis.update_time IS 'Update Time';
+COMMENT ON COLUMN hemo_type_analysis.update_institution IS 'Update Institution';
+-- CHANGE END: Ana Matos

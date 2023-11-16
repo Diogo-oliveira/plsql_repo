@@ -1,0 +1,47 @@
+BEGIN
+   EXECUTE IMMEDIATE 'create index ANN_ARR_PRE_HOSP_ACC_FK_IDX on ANNOUNCED_ARRIVAL (ID_PRE_HOSP_ACCIDENT) tablespace INDEX_M';
+   EXECUTE IMMEDIATE 'create index ANN_ARR_EPI_FK_IDX on ANNOUNCED_ARRIVAL (ID_EPISODE) tablespace INDEX_M;';
+   EXECUTE IMMEDIATE 'create index ANN_ARR_SPEC_FK_IDX on ANNOUNCED_ARRIVAL (ID_SPECIALITY) tablespace INDEX_M;';
+   EXECUTE IMMEDIATE 'create index ANN_ARR_CLN_SRV_FK_IDX on ANNOUNCED_ARRIVAL (ID_CLINICAL_SERVICE) tablespace INDEX_M;';
+   EXECUTE IMMEDIATE 'create index ANN_ARR_PROF_FK_IDX on ANNOUNCED_ARRIVAL (ID_ED_PHYSICIAN) tablespace INDEX_M;';
+EXCEPTION
+WHEN others THEN
+    NULL;
+END;
+/	
+
+-- CHANGED BY:  Gisela Couto
+-- CHANGE DATE: 27/05/2014 09:15
+-- CHANGE REASON: [ALERT-285978] Dev DB - Announced Arrival
+create index ANN_ARR_PAT_PK on ANNOUNCED_ARRIVAL (ID_PATIENT)
+  tablespace ALERT_IDX
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 512K
+    next 512K
+    minextents 1
+    maxextents unlimited
+    pctincrease 0
+  );
+-- CHANGE END:  Gisela Couto
+
+-- CHANGED BY:  Gisela Couto
+-- CHANGE DATE: 27/05/2014 09:47
+-- CHANGE REASON: [ALERT-285978] Dev DB - Announced Arrival
+begin
+pk_versioning.run('create index ANN_ARR_PAT_PK on ANNOUNCED_ARRIVAL (ID_PATIENT) tablespace ALERT_IDX');
+end;
+/
+-- CHANGE END:  Gisela Couto
+
+-- CHANGED BY:  Gisela Couto
+-- CHANGE DATE: 28/05/2014 18:18
+-- CHANGE REASON: [ALERT-285978] Dev DB - Announced Arrival
+begin
+pk_versioning.run('create index ANN_ARR_PAT_FK on ANNOUNCED_ARRIVAL (ID_PATIENT) tablespace ALERT_IDX');
+end;
+/
+-- CHANGE END:  Gisela Couto

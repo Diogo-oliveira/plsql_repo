@@ -1,0 +1,1 @@
+grant select on INSTIT_EXT_CLIN_SERV to ALERT_VIEWER;

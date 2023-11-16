@@ -1,0 +1,131 @@
+
+
+  ALTER TABLE CATEGORY ADD CONSTRAINT CAT_PK PRIMARY KEY (ID_CATEGORY) ENABLE;
+
+  ALTER TABLE CATEGORY MODIFY (ID_CATEGORY NOT NULL ENABLE);
+
+  ALTER TABLE CATEGORY MODIFY (CODE_CATEGORY NOT NULL ENABLE);
+
+  ALTER TABLE CATEGORY MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE CATEGORY MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+  ALTER TABLE CATEGORY MODIFY (FLG_TYPE NOT NULL ENABLE);
+
+
+  ALTER TABLE CATEGORY MODIFY (FLG_CLINICAL NOT NULL ENABLE);
+
+  ALTER TABLE CATEGORY MODIFY (FLG_PROF NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:28
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table CATEGORY add constraint CAT_FLG_TYPE_CHK 
+check (FLG_TYPE in (''A'',''C'',''D'',''F'',''L'',''M'',''N'',''O'',''P'',''Q'',''R'',''S'',''T'',''U'',''V''))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:29
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table CATEGORY add constraint CAT_FLG_PROF_CHK check ( (FLG_PROF in (''N'',''Y'')))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:29
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table CATEGORY add constraint CAT_FLG_CLINICAL_CHK check ( ( FLG_CLINICAL in (''N'',''Y'')))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:30
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table CATEGORY add constraint CAT_FLG_AVAILABLE_CHK check ( ( FLG_AVAILABLE in (''N'',''Y'')))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+declare
+l_sql    varchar2(1000 char);
+begin
+l_sql := 'ALTER TABLE CATEGORY ADD CONSTRAINT CATEGORY_FLG_PROF_UK UNIQUE ( ID_CATEGORY, FLG_PROF ) USING INDEX TABLESPACE ALERT_IDX'; 
+pk_versioning.run( l_sql );
+end;
+/
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 29/11/2019 11:02
+-- CHANGE REASON: [EMR-23911] - MHH | Religious Councelor profile
+alter table category
+drop constraint CAT_FLG_TYPE_CHK;
+
+alter table CATEGORY
+add constraint CAT_FLG_TYPE_CHK
+check (FLG_TYPE in ('A','C','D','E','F','G','I','L','M','N','O','P','Q','R','S','T','U','V'));
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 13/12/2019 08:42
+-- CHANGE REASON: [EMR-24295] - MHH | Mental Rehabilitation Therapist profile
+alter table category drop constraint CAT_FLG_TYPE_CHK;
+
+alter table CATEGORY
+add constraint CAT_FLG_TYPE_CHK
+check (FLG_TYPE in ('A','B','C','D','E','F','G','I','L','M','N','O','P','Q','R','S','T','U','V'));
+-- CHANGE END: Diogo Oliveira

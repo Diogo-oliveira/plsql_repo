@@ -1,0 +1,3 @@
+grant execute on ALERT.PK_EHR_VISITS to alert_viewer;
+GRANT EXECUTE ON ALERT.PK_EHR_VISITS TO ALERT_VIEWER;
+

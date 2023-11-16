@@ -1,0 +1,93 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 11:50
+-- CHANGE REASON: [ALERT-164552] soap blocks existing model changes
+declare
+  constraint_exists exception;
+  pragma exception_init(constraint_exists, -02275);
+begin
+  begin
+    execute immediate '
+alter table pn_data_block
+  add constraint pndb_pndb_fk foreign key (id_pndb_parent)
+  references pn_data_block (id_pn_data_block)
+';
+  exception
+    when constraint_exists then dbms_output.put_line('constraint PNDB_PNDB_FK already exists');
+  end;
+  begin
+    execute immediate '
+alter table pn_data_block
+  add constraint pndb_daa_fk foreign key (id_doc_area)
+  references doc_area (id_doc_area)
+';
+  exception
+    when constraint_exists then dbms_output.put_line('constraint PNDB_DAA_FK already exists');
+  end;
+end;
+/
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:30
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table pn_data_block
+  add constraint pdb_sb_fk foreign key (id_sys_button_viewer)
+  references sys_button (id_sys_button);  
+  
+  alter table pn_data_block
+  add constraint pdb_appf_fk foreign key (ID_SWF_FILE_VIEWER)
+  references application_file (id_application_file);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 09:59
+-- CHANGE REASON: H&P phase2
+alter table pn_data_block
+  add constraint pdb_sb_fk foreign key (id_sys_button_viewer)
+  references sys_button (id_sys_button);  
+  
+  alter table pn_data_block
+  add constraint pdb_appf_fk foreign key (ID_SWF_FILE_VIEWER)
+  references application_file (id_application_file);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:10
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table pn_data_block
+  add constraint pdb_sb_fk foreign key (id_sys_button_viewer)
+  references sys_button (id_sys_button);  
+  
+  alter table pn_data_block
+  add constraint pdb_appf_fk foreign key (ID_SWF_FILE_VIEWER)
+  references application_file (id_application_file);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:55
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+begin
+execute immediate ('ALTER TABLE pn_data_block ADD CONSTRAINT PNDB_SUMM_PAGE_FK FOREIGN KEY (id_summary_page) REFERENCES SUMMARY_PAGE(id_summary_page)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 04/07/2013 17:03
+-- CHANGE REASON: [ALERT-259145 ] EDIS nurse single page
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pn_data_block  ADD CONSTRAINT pndb_appf_fk FOREIGN KEY (id_swf_file_detail) REFERENCES application_file (id_application_file)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/ 
+-- CHANGE END: Sofia Mendes

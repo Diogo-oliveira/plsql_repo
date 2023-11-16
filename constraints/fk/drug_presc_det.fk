@@ -1,0 +1,113 @@
+
+
+  ALTER TABLE DRUG_PRESC_DET ADD CONSTRAINT DPDT_DJN_FK FOREIGN KEY (ID_DRUG_JUSTIFICATION)
+	  REFERENCES DRUG_JUSTIFICATION (ID_DRUG_JUSTIFICATION) ENABLE;
+
+  ALTER TABLE DRUG_PRESC_DET ADD CONSTRAINT DPDT_DPN_FK FOREIGN KEY (ID_DRUG_PRESCRIPTION)
+	  REFERENCES DRUG_PRESCRIPTION (ID_DRUG_PRESCRIPTION) ENABLE;
+
+  ALTER TABLE DRUG_PRESC_DET ADD CONSTRAINT DPDT_DRDP_FK FOREIGN KEY (ID_DRUG_DESPACHOS)
+	  REFERENCES DRUG_DESPACHOS (ID_DRUG_DESPACHOS) ENABLE;
+
+  ALTER TABLE DRUG_PRESC_DET ADD CONSTRAINT DPDT_DRUG_FK FOREIGN KEY (ID_DRUG)
+	  REFERENCES DRUG (ID_DRUG) ENABLE;
+
+
+  ALTER TABLE DRUG_PRESC_DET ADD CONSTRAINT DPDT_PROF_FK FOREIGN KEY (ID_PROF_CANCEL)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+	  ALTER TABLE drug_presc_det
+  ADD CONSTRAINT dpdt_um_fk FOREIGN KEY (id_unit_measure)
+  REFERENCES UNIT_MEASURE (id_unit_measure);
+  
+  alter table DRUG_PRESC_DET
+  add constraint DPDT_UM_BOLUS_FK foreign key (ID_UNIT_MEASURE_BOLUS)
+  references unit_measure (ID_UNIT_MEASURE);
+  
+alter table DRUG_PRESC_DET
+  add constraint DPDT_UM_DRIP foreign key (ID_UNIT_MEASURE_DRIP)
+  references unit_measure (ID_UNIT_MEASURE);
+  
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table DRUG_PRESC_DET
+  add constraint DPDT_DGRT_FK foreign key (ID_DRUG_ROUTE)
+  references DRUG_ROUTE (ID_DRUG_ROUTE);
+  
+ -- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-DEC-17
+-- CHANGING REASON: FOREIGN KEY- ID_PAT_MEDICATION_LIST
+alter table DRUG_PRESC_DET
+  add constraint DPD_IPML_FK foreign key (ID_PAT_MEDICATION_LIST)
+  references pat_medication_LIST (ID_PAT_MEDICATION_LIST);
+  -- CHANGE END Patrícia Neto   
+  
+
+
+--CHANGED BY: Pedro Albuquerque
+-- CHANGED DATE: 2009-ABR-02
+--CHANGE REASON: posologias irregulares
+
+alter table drug_presc_det
+  add constraint DPD_ID_FK foreign key (ID_IRREGULAR_DIRECTIONS)
+  references IRREGULAR_DIRECTIONS (ID_IRREGULAR_DIRECTIONS);
+
+--CHANGE END
+
+
+--CHANGED BY: Pedro Albuquerque
+-- CHANGED DATE: 2009-ABR-02
+--CHANGE REASON: ALERT-22114
+
+ALTER TABLE DRUG_PRESC_DET ADD (CONSTRAINT
+ DPD_UME_DISP_FK FOREIGN KEY 
+  (UNIT_MEASURE_DISPENSE) REFERENCES UNIT_MEASURE
+  (ID_UNIT_MEASURE))
+/
+  
+--CHANGE END
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195]
+declare
+  l_count pls_integer;
+begin
+  select count(1)
+  into l_count
+  from all_constraints where owner = 'ALERT' and constraint_name = 'DPD_PDIR_FK';
+
+  if l_count = 0 then
+    execute immediate ( 'ALTER TABLE DRUG_PRESC_DET ADD CONSTRAINT DPD_PDIR_FK FOREIGN KEY(ID_PRESC_DIRECTIONS)
+    REFERENCES PRESC_DIRECTIONS(ID_PRESC_DIRECTIONS)' );
+  end if;
+
+end;
+/
+-- CHANGE END: Nuno Ferreira
+
+
+-- CHANGED BY: Pedro Martins Santos
+-- CHANGE DATE: 07/07/2010
+-- CHANGE REASON: [ALERT-100250] 
+DECLARE
+e_fk_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_fk_already_there,-02275);
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE DRUG_PRESC_DET ADD CONSTRAINT DPDT_TDETD_FK FOREIGN KEY (ID_TASK_DEPENDENCY) REFERENCES TDE_TASK_DEPENDENCY(ID_TASK_DEPENDENCY)'; 
+EXCEPTION
+WHEN e_fk_already_there THEN
+  dbms_output.put_line('Aviso: chave estrangeira anteriormente criada!');
+END;
+/
+-- CHANGE END: Pedro Martins Santos 
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 20/05/2011 11:45
+-- CHANGE REASON: [ALERT-180704] CDR: create concepts and conditions for dietaries, compound medications and other products
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table drug_presc_det
+  add constraint DPD_CC_FK foreign key (ID_CDR_CALL)
+  references cdr_call (ID_CDR_CALL);
+-- CHANGE END:  Pedro Morais

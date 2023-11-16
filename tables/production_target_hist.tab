@@ -1,0 +1,83 @@
+create table PRODUCTION_TARGET_HIST
+(
+  ID_PRODUCTION_TARGET_HIST NUMBER(24) not null,
+  ID_PRODUCTION_TARGET      NUMBER(24) not null,
+  ID_PROFESSIONAL_SUBJECT   NUMBER(24),
+  ID_DCS_SUBJECT            NUMBER(24),
+  ID_DCS_TYPE_SLOT          NUMBER(24) not null,
+  ID_SCH_EVENT              NUMBER(24) not null,
+  ID_SCH_DEP_TYPE           NUMBER(24) not null,
+  ID_INSTITUTION            NUMBER(24) not null,
+  ID_SOFTWARE               NUMBER(24) not null,
+  DT_START                  TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  DT_END                    TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  TARGET                    NUMBER(24) not null,
+  NOTES                     VARCHAR2(4000),
+  FLG_AVAILABLE             VARCHAR2(1) not null,
+  DT_CREATE                 TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  PROF_CREATE               NUMBER(24),
+  CREATE_USER               NUMBER(24),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        VARCHAR2(24),
+  UPDATE_USER               VARCHAR2(24),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        VARCHAR2(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table PRODUCTION_TARGET_HIST
+  is 'Production target history';
+-- Add comments to the columns 
+comment on column PRODUCTION_TARGET_HIST.ID_PRODUCTION_TARGET_HIST
+  is 'Production target history identification';
+comment on column PRODUCTION_TARGET_HIST.ID_PRODUCTION_TARGET
+  is 'Production target identification';
+comment on column PRODUCTION_TARGET_HIST.ID_PROFESSIONAL_SUBJECT
+  is 'Professional identification';
+comment on column PRODUCTION_TARGET_HIST.ID_DCS_SUBJECT
+  is 'Department/clinical service identification - subject';
+comment on column PRODUCTION_TARGET_HIST.ID_DCS_TYPE_SLOT
+  is 'Department/clinical service identification - type of slot';
+comment on column PRODUCTION_TARGET_HIST.ID_SCH_EVENT
+  is 'New patient-1, Follow-up-2, Speciality first appointments-3, Speciality follow-up appointments-4, Appointment-6, Exams-7, Lab tests-8, Group appointment-10, PMR procedures-11, Nursing appointment-12, Other exams-13';
+comment on column PRODUCTION_TARGET_HIST.ID_SCH_DEP_TYPE
+  is 'Schedule type: 2 - Consultas médicas, 3- Exames, 4-Análises, 5-Procedimentos de Medicina Física e Reabilitação,8-Outros exames,6-Consultas de enfermagem,9-Consultas de nutrição,10-Internamento,7-Cirurgia';
+comment on column PRODUCTION_TARGET_HIST.ID_INSTITUTION
+  is 'Institution identification';
+comment on column PRODUCTION_TARGET_HIST.ID_SOFTWARE
+  is 'Software identification';
+comment on column PRODUCTION_TARGET_HIST.DT_START
+  is 'Start date';
+comment on column PRODUCTION_TARGET_HIST.DT_END
+  is 'End Date';
+comment on column PRODUCTION_TARGET_HIST.TARGET
+  is 'Appointment number - target';
+comment on column PRODUCTION_TARGET_HIST.NOTES
+  is 'Notes';
+comment on column PRODUCTION_TARGET_HIST.FLG_AVAILABLE
+  is 'Production target available ';
+comment on column PRODUCTION_TARGET_HIST.DT_CREATE
+  is 'Date create/update';
+comment on column PRODUCTION_TARGET_HIST.PROF_CREATE
+  is 'Professional create identification';
+comment on column PRODUCTION_TARGET_HIST.CREATE_USER
+  is 'Creation User';
+comment on column PRODUCTION_TARGET_HIST.CREATE_TIME
+  is 'Creation Time';
+comment on column PRODUCTION_TARGET_HIST.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column PRODUCTION_TARGET_HIST.UPDATE_USER
+  is 'Update User';
+comment on column PRODUCTION_TARGET_HIST.UPDATE_TIME
+  is 'Update Time';
+comment on column PRODUCTION_TARGET_HIST.UPDATE_INSTITUTION
+  is 'Update Institution';

@@ -1,0 +1,8 @@
+grant execute on ALERT.pk_supplies to alert_viewer;GRANT EXECUTE ON ALERT.PK_SUPPLIES TO ALERT_VIEWER;
+GRANT EXECUTE ON ALERT.PK_SUPPLIES TO ALERT_CODING_TR;
+
+-- CHANGED BY: hugo.madureira
+-- CHANGE DATE: 2014-11-20
+-- CHANGE REASON: CODING-2586
+grant execute on ALERT.PK_SUPPLIES to ALERT_INTER with grant option;
+-- CHANGE END: hugo.madureira

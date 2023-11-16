@@ -1,0 +1,80 @@
+
+
+  CREATE TABLE TRIAGE_N_CONSID
+   (	ID_TRIAGE_N_CONSID NUMBER(24,0) NOT NULL ENABLE,
+	ID_TRIAGE_BOARD NUMBER(12,0) NOT NULL ENABLE,
+	ID_TRIAGE_CONSIDERATIONS NUMBER(24,0) NOT NULL ENABLE,
+	ID_TRIAGE_DISCRIMINATOR NUMBER(12,0) NOT NULL ENABLE,
+	ID_TRIAGE_COLOR NUMBER(12,0) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN triage_n_consid.id_triage_n_consid IS 'Chave primária' ;
+COMMENT ON COLUMN triage_n_consid.id_triage_board IS 'Chave primária' ;
+COMMENT ON COLUMN triage_n_consid.id_triage_considerations IS 'Chave primária' ;
+COMMENT ON COLUMN triage_n_consid.id_triage_discriminator IS 'Chave primária' ;
+COMMENT ON COLUMN triage_n_consid.id_triage_color IS 'Chave primária' ;
+COMMENT ON COLUMN triage_n_consid.flg_available IS 'Disponibilidade do registo' ;
+COMMENT ON COLUMN triage_n_consid.adw_last_update IS 'Data da última alteração' ;
+
+
+--CHANGED BY: Emilia Taborda
+--CHANGED DATE BY:2007/06/18
+--CHANGED REASON BY:Associar considerações sem discriminadores  
+alter table triage_n_consid modify (id_triage_discriminator NUMBER(12) null);
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 02/03/2010 10:50
+-- CHANGE REASON: [ALERT-77123] ESI Triage
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE triage_n_consid ADD rank NUMBER(6)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+COMMENT ON COLUMN triage_n_consid.rank IS 'Number for sorting';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:34
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table TRIAGE_N_CONSID
+  is 'Association between flowchart, discriminators and considerations';
+-- Add comments to the columns 
+comment on column TRIAGE_N_CONSID.id_triage_n_consid
+  is 'Primaty key';
+comment on column TRIAGE_N_CONSID.id_triage_board
+  is 'Triage board (flowchart) ID';
+comment on column TRIAGE_N_CONSID.id_triage_considerations
+  is 'Triage consideration ID';
+comment on column TRIAGE_N_CONSID.id_triage_discriminator
+  is 'Triage discriminator Id';
+comment on column TRIAGE_N_CONSID.id_triage_color
+  is 'Triage color ID';
+comment on column TRIAGE_N_CONSID.flg_available
+  is 'Availability: (Y) Yes (N) No';
+comment on column TRIAGE_N_CONSID.adw_last_update
+  is 'Date of last change';  
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 12/02/2020 14:57
+-- CHANGE REASON: [EMR-25421] - New development ATS Australasian Triage Scale - Mental tool
+-- Add/modify columns
+DECLARE
+l_sql VARCHAR2(1000) := q'[alter table TRIAGE_N_CONSID add flg_confirmation VARCHAR2(24) default 'N']';
+BEGIN
+pk_versioning.run(l_sql);
+END;
+/
+
+-- Add comments to the columns
+comment on column TRIAGE_N_CONSID.flg_confirmation
+is 'For confirmation screen';
+-- CHANGE END: Elisabete Bugalho

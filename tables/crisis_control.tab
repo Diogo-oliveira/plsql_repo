@@ -1,0 +1,30 @@
+
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner         => 'ALERT',
+                                             i_obj_name      => 'CRISIS_CONTROL',
+                                             i_obj_type      => 'TABLE',
+                                             i_flg_category  => 'TRS',
+                                             i_responsible_team => 'ARCH',
+											 i_flg_nzd => 'N');
+END;
+/
+
+-- Create table
+CREATE TABLE CRISIS_CONTROL 
+(	
+	CONTROL_NAME VARCHAR2(200 BYTE) NOT NULL,
+	SERVER_NAME VARCHAR2(200 BYTE),
+	BEGIN_EXECUTION_TIME TIMESTAMP (6) WITH TIME ZONE, 
+	END_EXECUTION_TIME TIMESTAMP (6) WITH TIME ZONE, 
+	CONSTRAINT "CRISIS_CONTROL_PK" PRIMARY KEY ("CONTROL_NAME")
+);
+
+-- Add comments to the table
+COMMENT ON TABLE CRISIS_CONTROL  IS 'Crisis control';
+
+-- Add comments to the columns
+COMMENT ON COLUMN CRISIS_CONTROL.CONTROL_NAME IS 'Control name';
+COMMENT ON COLUMN CRISIS_CONTROL.SERVER_NAME IS 'Managed server which updated this record';
+COMMENT ON COLUMN CRISIS_CONTROL.BEGIN_EXECUTION_TIME IS 'Begin execution time when got lock';
+COMMENT ON COLUMN CRISIS_CONTROL.END_EXECUTION_TIME IS 'End execution time when release lock';
+/

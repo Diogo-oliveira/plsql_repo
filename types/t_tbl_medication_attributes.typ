@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_tbl_medication_attributes IS TABLE OF t_medication_attributes;

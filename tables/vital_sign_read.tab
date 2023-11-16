@@ -1,0 +1,385 @@
+
+
+  CREATE TABLE VITAL_SIGN_READ
+   (	ID_VITAL_SIGN_READ NUMBER(24,0) NOT NULL ENABLE,
+	DT_VITAL_SIGN_READ DATE NOT NULL ENABLE,
+	ID_VITAL_SIGN NUMBER(12,0) NOT NULL ENABLE,
+	ID_VITAL_SIGN_DESC NUMBER(12,0),
+	ID_EPISODE NUMBER(24,0),
+	VALUE NUMBER(10,3),
+	FLG_STATE VARCHAR2(1) NOT NULL ENABLE,
+	ID_PROF_READ NUMBER(24,0),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_MONITORIZATION_VS_PLAN NUMBER(24,0),
+	ID_INSTITUTION_READ NUMBER(12,0),
+	ID_SOFTWARE_READ NUMBER(24,0),
+	ID_INSTITUTION_CANCEL NUMBER(12,0),
+	ID_SOFTWARE_CANCEL NUMBER(24,0),
+	ID_VITAL_SIGN_NOTES NUMBER(24,0),
+	ID_EPIS_TRIAGE NUMBER(24,0),
+	ID_UNIT_MEASURE NUMBER(24,0),
+	FLG_MOST_FREQ VARCHAR2(2)
+   );
+
+
+COMMENT ON TABLE vital_sign_read IS 'Leituras de SV e valores biométricos (peso, estatura, perímetro cefálico)' ;
+
+COMMENT ON COLUMN vital_sign_read.id_monitorization_vs_plan IS 'Plano de monitorização' ;
+COMMENT ON COLUMN vital_sign_read.id_institution_read IS 'Instituição onde foi registada.' ;
+COMMENT ON COLUMN vital_sign_read.id_software_read IS 'Software onde foi registada.' ;
+COMMENT ON COLUMN vital_sign_read.id_institution_cancel IS 'Instituição onde foi cancelada.' ;
+COMMENT ON COLUMN vital_sign_read.id_software_cancel IS 'Software onde foi cancelada.' ;
+COMMENT ON COLUMN vital_sign_read.id_vital_sign_notes IS 'Notas' ;
+COMMENT ON COLUMN vital_sign_read.id_epis_triage IS 'ID do episódio de triagem' ;
+COMMENT ON COLUMN vital_sign_read.id_unit_measure IS 'Unidade de medida' ;
+COMMENT ON COLUMN vital_sign_read.id_vital_sign_read IS 'Chave primária' ;
+COMMENT ON COLUMN vital_sign_read.dt_vital_sign_read IS 'Data da leitura' ;
+COMMENT ON COLUMN vital_sign_read.id_vital_sign IS 'Sinal Vital' ;
+COMMENT ON COLUMN vital_sign_read.id_vital_sign_desc IS 'Descrição do sinal vital' ;
+COMMENT ON COLUMN vital_sign_read.id_episode IS 'Episódio' ;
+
+COMMENT ON COLUMN vital_sign_read.value IS 'Valor' ;
+COMMENT ON COLUMN vital_sign_read.flg_state IS 'Estado: A - activo, C - cancelado' ;
+COMMENT ON COLUMN vital_sign_read.id_prof_read IS 'Profissional que leu' ;
+COMMENT ON COLUMN vital_sign_read.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN vital_sign_read.id_prof_cancel IS 'Profissional que cancelou' ;
+COMMENT ON COLUMN vital_sign_read.notes_cancel IS 'Notas de cancelamento' ;
+COMMENT ON COLUMN vital_sign_read.id_patient IS 'Paciente' ;
+
+comment on column VITAL_SIGN_READ.ID_INSTITUTION_READ
+  is 'Instituição que efectuou a leitura';
+comment on column VITAL_SIGN_READ.ID_SOFTWARE_READ
+  is 'Software que efectuou a leitura';
+comment on column VITAL_SIGN_READ.ID_INSTITUTION_CANCEL
+  is 'Instituição que cancelou';
+comment on column VITAL_SIGN_READ.ID_SOFTWARE_CANCEL
+  is 'Software que cancelou';
+alter table vital_sign_read 
+add (dt_vital_sign_read_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone);
+
+-- Add/modify columns 
+alter table VITAL_SIGN_READ add DT_REGISTRY TIMESTAMP(6) WITH LOCAL TIME ZONE;
+-- Add comments to the columns 
+comment on column VITAL_SIGN_READ.DT_REGISTRY
+  is 'Data efectiva de registo do sinal vital';
+
+ALTER TABLE VITAL_SIGN_READ ADD (FLG_PAIN VARCHAR2(1) );
+COMMENT ON COLUMN VITAL_SIGN_READ.FLG_PAIN IS 'Flag que indica qual das escalas de dor foi usada A-Analógica/F-Faces';
+
+
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2008-SET-22
+-- CHANGE REASON: Drop de colunas DATE com correspondentes DATE_TSTZ
+
+ALTER TABLE VITAL_SIGN_READ DROP COLUMN DT_VITAL_SIGN_READ;
+ALTER TABLE VITAL_SIGN_READ DROP COLUMN DT_CANCEL;
+
+-- CHANGE END
+
+-- CHANGED BY: CArlos Vieira
+-- CHANGE DATE: 2009-jan-09
+-- CHANGE REASON: Escala pediátrica da dor
+
+alter table  vital_sign_read drop column flg_pain;
+
+alter table vital_sign_read  add ID_VS_SCALES_ELEMENT number(24) ;
+
+comment on column VITAL_SIGN_READ.ID_VS_SCALES_ELEMENT
+  is 'Scale Element identifier';
+
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 13/10/2010
+-- CHANGE REASON: ALERT-130837
+DECLARE
+    e_null_val_found EXCEPTION;
+    e_already_not_null EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_null_val_found, -02296);
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01442);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vital_sign_read MODIFY id_prof_read NOT NULL';
+
+EXCEPTION
+    WHEN e_null_val_found THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE vital_sign_read MODIFY id_prof_read NOT NULL NOVALIDATE';
+    
+    WHEN e_already_not_null THEN
+        dbms_output.put_line('WARNING: Changes already made.');
+    
+END;
+/
+
+DECLARE
+    e_null_val_found EXCEPTION;
+    e_already_not_null EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_null_val_found, -02296);
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01442);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vital_sign_read MODIFY dt_vital_sign_read_tstz NOT NULL';
+
+EXCEPTION
+    WHEN e_null_val_found THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE vital_sign_read MODIFY dt_vital_sign_read_tstz NOT NULL NOVALIDATE';
+    
+    WHEN e_already_not_null THEN
+        dbms_output.put_line('WARNING: Changes already made.');
+    
+END;
+/
+
+DECLARE
+    e_null_val_found EXCEPTION;
+    e_already_not_null EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_null_val_found, -02296);
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01442);
+
+BEGIN
+    UPDATE vital_sign_read vsr
+       SET vsr.dt_registry = vsr.dt_vital_sign_read_tstz
+     WHERE vsr.dt_registry IS NULL
+       AND vsr.dt_vital_sign_read_tstz IS NOT NULL;
+
+    EXECUTE IMMEDIATE 'ALTER TABLE vital_sign_read MODIFY dt_registry NOT NULL';
+
+EXCEPTION
+    WHEN e_null_val_found THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE vital_sign_read MODIFY dt_registry NOT NULL NOVALIDATE';
+    
+    WHEN e_already_not_null THEN
+        dbms_output.put_line('WARNING: Changes already made.');
+    
+END;
+/
+-- CHANGE END: Paulo Fonseca
+
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 16/04/2011 12:54
+-- CHANGE REASON: [ALERT-156637] 
+alter table vital_sign_read
+add id_cancel_reason        NUMBER(24);
+
+comment on column vital_sign_read.id_cancel_reason
+  is 'Cancel reason ID';
+  
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 02/12/2013 09:33
+-- CHANGE REASON: [ALERT-270040] 
+DECLARE
+    excep EXCEPTION;
+    PRAGMA EXCEPTION_INIT(excep, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vital_sign_read add id_unit_measure_sel number(24)';
+EXCEPTION
+    WHEN excep THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.'); 
+END;
+/
+COMMENT ON COLUMN vital_sign_read.id_unit_measure_sel IS 'id_unit_measure selected identifier';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 18/02/2014 11:51
+-- CHANGE REASON: [ALERT-275609] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table vital_sign_read add id_edit_reason NUMBER(24)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    
+BEGIN
+        EXECUTE IMMEDIATE 'alter table VITAL_SIGN_READ modify CREATE_USER varchar2(24 CHAR)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table VITAL_SIGN_READ modify FLG_MOST_FREQ varchar2(2 CHAR)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table VITAL_SIGN_READ modify FLG_STATE varchar2(1 CHAR)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table VITAL_SIGN_READ modify NOTES_CANCEL varchar2(4000 CHAR)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table VITAL_SIGN_READ modify UPDATE_USER varchar2(24 CHAR)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter  table VITAL_SIGN_READ modify ID_INSTITUTION_CANCEL number(24)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter  table VITAL_SIGN_READ modify ID_INSTITUTION_READ number(24)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter  table VITAL_SIGN_READ modify ID_VITAL_SIGN number(24)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter  table VITAL_SIGN_READ modify ID_VITAL_SIGN_DESC number(24)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+END;
+/
+
+DECLARE
+    l_sql VARCHAR2(4000);
+BEGIN
+  
+    l_sql := 'ALTER TABLE VITAL_SIGN_READ ADD CODE_NOTES_EDIT VARCHAR2(200 CHAR)GENERATED ALWAYS AS (''ALERT.VITAL_SIGN_READ.CODE_NOTES_EDIT.''|| TO_CHAR(ID_VITAL_SIGN_READ)) VIRTUAL';
+    pk_versioning.run(l_sql);
+END;
+/
+
+COMMENT ON column vital_sign_read.id_edit_reason IS 'Edit Reason identifier';
+COMMENT ON column VITAL_SIGN_READ.DT_CANCEL_TSTZ IS 'date cancel';
+COMMENT ON column VITAL_SIGN_READ.DT_VITAL_SIGN_READ_TSTZ IS 'grid date';
+COMMENT ON column VITAL_SIGN_READ.FLG_MOST_FREQ IS 'flag most frequent';
+comment on column VITAL_SIGN_READ.CODE_NOTES_EDIT  is 'edit reason in free text';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table VITAL_SIGN_READ
+  is 'Transactional table with Vital signs and  biometric measurements
+';
+-- Add comments to the columns 
+comment on column VITAL_SIGN_READ.id_vital_sign_read
+  is 'Vital sign read identifier';
+comment on column VITAL_SIGN_READ.id_vital_sign
+  is 'Vital sign identifier';
+comment on column VITAL_SIGN_READ.id_vital_sign_desc
+  is 'Vital sign description';
+comment on column VITAL_SIGN_READ.id_episode
+  is 'Episode identifier';
+comment on column VITAL_SIGN_READ.value
+  is 'Vital sign value';
+comment on column VITAL_SIGN_READ.flg_state
+  is 'Register status : A - active; C - Cancelled';
+comment on column VITAL_SIGN_READ.id_prof_read
+  is 'Professional identifier that made the measurement';
+comment on column VITAL_SIGN_READ.id_prof_cancel
+  is 'Profissional identifier that made the cancellation';
+comment on column VITAL_SIGN_READ.notes_cancel
+  is 'Cancel Notes';
+comment on column VITAL_SIGN_READ.id_patient
+  is 'Pacient Identifier';
+comment on column VITAL_SIGN_READ.id_monitorization_vs_plan
+  is 'Monitorization plan identifier';
+comment on column VITAL_SIGN_READ.id_institution_read
+  is 'Institution identifier where measurement was done';
+comment on column VITAL_SIGN_READ.id_software_read
+  is 'Software identifier where measurement was done';
+comment on column VITAL_SIGN_READ.id_institution_cancel
+  is 'Institution identifier where cancellation  was done';
+comment on column VITAL_SIGN_READ.id_software_cancel
+  is 'Software identifier where cancellation  was done';
+comment on column VITAL_SIGN_READ.id_vital_sign_notes
+  is 'Notes Identifier (the notes are on vital_sign_notes table)';
+comment on column VITAL_SIGN_READ.id_epis_triage
+  is 'Triage episode identifier (only applies if measurement occours in triage context)';
+comment on column VITAL_SIGN_READ.id_unit_measure
+  is 'Unit measure identifier';
+comment on column VITAL_SIGN_READ.flg_most_freq
+  is 'flag most frequent ( deprecated)';
+comment on column VITAL_SIGN_READ.dt_vital_sign_read_tstz
+  is 'Vital sign read date (clinical date)';
+comment on column VITAL_SIGN_READ.dt_cancel_tstz
+  is 'vital sign cancel date';
+comment on column VITAL_SIGN_READ.dt_registry
+  is 'Vital sign registry date on system ';
+comment on column VITAL_SIGN_READ.id_vs_scales_element
+  is 'Scale Element identifier';
+comment on column VITAL_SIGN_READ.create_user
+  is 'Creation User';
+comment on column VITAL_SIGN_READ.create_time
+  is 'Creation Time';
+comment on column VITAL_SIGN_READ.create_institution
+  is 'Creation Institution';
+comment on column VITAL_SIGN_READ.update_user
+  is 'Update User';
+comment on column VITAL_SIGN_READ.update_time
+  is 'Update Time';
+comment on column VITAL_SIGN_READ.update_institution
+  is 'Update Institution';
+comment on column VITAL_SIGN_READ.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column VITAL_SIGN_READ.id_unit_measure_sel
+  is 'id_unit_measure selected identifier';
+comment on column VITAL_SIGN_READ.id_edit_reason
+  is 'Edit Reason identifier';
+comment on column VITAL_SIGN_READ.code_notes_edit
+  is 'edit reason in free text';
+  
+-- CHANGE END: Pedro Fernandes
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 22/09/2017
+-- CHANGE REASON: CALERT-62
+BEGIN
+    EXECUTE IMMEDIATE 'alter table vital_sign_read add value_high NUMBER(10,3)';
+    EXECUTE IMMEDIATE 'alter table vital_sign_read add value_low NUMBER(10,3)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Operation already executed.');
+END;
+/
+
+COMMENT ON COLUMN vital_sign_read.value_high IS 'Vital sign high value - situation where there is a range of values';
+COMMENT ON COLUMN vital_sign_read.value_low IS 'Vital sign low value - situation where there is a range of values';
+-- CHANGE END: Pedro Teixeira
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 30/06/2021 16:17
+-- CHANGE REASON: [EMR-46761] - Nursing button > Vital signs and indicators > Vital sign associated with assessment scale is not updat
+-- Add/modify columns
+alter table VITAL_SIGN_READ add id_epis_documentation NUMBER(24);
+-- Add comments to the columns
+comment on column VITAL_SIGN_READ.id_epis_documentation
+is 'Epis documentation identifier (only applies if measurement occours in documentation context)';
+-- CHANGE END: Elisabete Bugalho

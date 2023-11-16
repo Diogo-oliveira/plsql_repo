@@ -1,0 +1,74 @@
+
+
+  CREATE TABLE SYS_ALERT_PROF
+   (	ID_SYS_ALERT_PROF NUMBER(24,0) NOT NULL ENABLE,
+	ID_SYS_ALERT NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFILE_TEMPLATE NUMBER(12,0),
+	ID_SOFTWARE NUMBER(24,0)
+   );
+
+
+COMMENT ON COLUMN sys_alert_prof.id_sys_alert_prof IS 'ID único' ;
+COMMENT ON COLUMN sys_alert_prof.id_sys_alert IS 'ID do alerta' ;
+COMMENT ON COLUMN sys_alert_prof.id_institution IS 'ID da instituição' ;
+COMMENT ON COLUMN sys_alert_prof.id_professional IS 'ID do profissional' ;
+COMMENT ON COLUMN sys_alert_prof.id_profile_template IS 'Id do template através do qual foi dado acesso ao alerta. No caso do acesso não ter sido dado via template, esta coluna ficará vazia' ;
+
+
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 01/03/2011 17:33
+-- CHANGE REASON: [ALERT-165367] SMS, Beep and PDA notifications of workflow actions
+--                
+alter table SYS_ALERT_PROF add FLG_SMS VARCHAR2(1 CHAR) default 'Y';
+alter table SYS_ALERT_PROF add FLG_EMAIL VARCHAR2(1 CHAR) default 'Y';
+alter table SYS_ALERT_PROF add FLG_IM VARCHAR2(1 CHAR) default 'Y';
+
+comment on column SYS_ALERT_PROF.FLG_SMS is '(N)  -  sms won''t be sent to this prof; (Y) - sms will be sent to this prof;';
+comment on column SYS_ALERT_PROF.FLG_EMAIL is '(N)  -  email won''t be sent to this prof; (Y) - email will be sent to this prof;';
+comment on column SYS_ALERT_PROF.FLG_IM is '(N)  -  instant messaging won''t be sent to this prof; (Y) - instant messaging will be sent to this prof;';
+
+comment on table SYS_ALERT_PROF is 'This table is used to manage via backoffice the activations of the alerts by professional';
+-- CHANGE END: Rui Duarte
+
+-- cmf 08-01-2016
+comment on column alert.sys_alert_prof.ID_SYS_ALERT_PROF		is 'Primary key';
+comment on column alert.sys_alert_prof.ID_SYS_ALERT				is 'Alert id';
+comment on column alert.sys_alert_prof.ID_INSTITUTION			is 'Institution id';
+comment on column alert.sys_alert_prof.ID_PROFESSIONAL			is 'Professional id';
+comment on column alert.sys_alert_prof.ID_PROFILE_TEMPLATE		is 'Profile_template used to access alert. If access to alert was not through profile_template, column is empty';
+comment on column alert.sys_alert_prof.ID_SOFTWARE				is 'Software id';
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := q'[alter table sys_alert_prof add DAYS_FOR_EXPIRATION number(6)]';
+	pk_versioning.run( l_sql );
+end;
+/
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 28/04/2022 16:43
+-- CHANGE REASON: [EMR-52935]
+begin
+pk_versioning.run('ALTER TABLE sys_alert_prof ADD flg_notification_all VARCHAR2(1 CHAR) DEFAULT ''Y''');
+end;
+/
+
+
+COMMENT ON TABLE sys_alert_prof IS 'Alerts'' configuration by professional';
+
+COMMENT ON COLUMN sys_alert_prof.id_sys_alert_prof IS 'Primary key';
+COMMENT ON COLUMN sys_alert_prof.id_sys_alert IS 'Alert ID';
+COMMENT ON COLUMN sys_alert_prof.id_institution IS 'Institution ID';
+COMMENT ON COLUMN sys_alert_prof.id_professional IS 'Professional ID';
+COMMENT ON COLUMN sys_alert_prof.id_profile_template IS 'Profile template ID';
+COMMENT ON COLUMN sys_alert_prof.id_software IS 'Software ID';
+COMMENT ON COLUMN sys_alert_prof.flg_sms IS 'Flag that indicates if the alert will be sent by sms (Y/N)';
+COMMENT ON COLUMN sys_alert_prof.flg_email IS 'Flag that indicates if the alert will be sent by email (Y/N)';
+COMMENT ON COLUMN sys_alert_prof.flg_im IS 'Flag that indicates if the alert will be sent by instant messaging (Y/N)';
+COMMENT ON COLUMN sys_alert_prof.days_for_expiration IS 'Days for the alert expiration';
+COMMENT ON COLUMN sys_alert_prof.flg_notification_all IS 'Flag that indicates if the alert notification will be sent when there is no specific professional (if FLG_SMS = ''Y'' or FLG_EMAIL = ''Y'' or FLG_IM = ''Y'')';
+-- CHANGE END: Ana Matos

@@ -1,0 +1,1 @@
+grant execute on alert.pk_schedule_bo to alert_viewer;

@@ -1,0 +1,58 @@
+
+
+  CREATE TABLE PAT_MED_DECL
+   (	ID_PAT_MED_DECL NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_WRITES NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_MED_DECL DATE NOT NULL ENABLE,
+	DT_TEMPORARY DATE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	FLG_DEFINITIVE VARCHAR2(1) NOT NULL ENABLE,
+	ID_DIAGNOSIS NUMBER(12,0),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTE_CANCEL VARCHAR2(4000),
+
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE pat_med_decl IS 'Declarações médicas de isenção de pagamento de taxas moderadoras, ou de comparticipação de medicamentos.' ;
+
+COMMENT ON COLUMN pat_med_decl.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_med_decl.dt_pat_med_decl IS 'Data de registo' ;
+COMMENT ON COLUMN pat_med_decl.dt_temporary IS 'Data final do período de isenção temporária' ;
+COMMENT ON COLUMN pat_med_decl.flg_status IS 'Estado: A - activo, C - cancelado' ;
+COMMENT ON COLUMN pat_med_decl.flg_definitive IS 'T - temporária, P - permanente' ;
+COMMENT ON COLUMN pat_med_decl.id_diagnosis IS 'Chave primária' ;
+COMMENT ON COLUMN pat_med_decl.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN pat_med_decl.note_cancel IS 'Notas de cancelamento' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_MED_DECL ADD DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_MED_DECL.DT_CANCEL_TSTZ IS 'Data de cancelamento'; 
+ALTER TABLE PAT_MED_DECL ADD DT_PAT_MED_DECL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_MED_DECL.DT_PAT_MED_DECL_TSTZ IS 'Data de registo'; 
+ALTER TABLE PAT_MED_DECL ADD DT_TEMPORARY_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_MED_DECL.DT_TEMPORARY_TSTZ IS 'Data final do per¡odo de isen‡Æo tempor ria'; 
+
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table PAT_MED_DECL drop (DT_PAT_MED_DECL, DT_TEMPORARY);
+-- CHANGE END
+
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table PAT_MED_DECL drop (DT_CANCEL);
+-- CHANGE END
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE - ALERT-1291 
+alter table PAT_MED_DECL drop (DT_CANCEL);
+-- CHANGE END

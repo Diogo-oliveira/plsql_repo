@@ -1,0 +1,221 @@
+
+  CREATE TABLE P1_TRACKING
+   (	ID_TRACKING NUMBER(24,0) NOT NULL ENABLE,
+	EXT_REQ_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_TRACKING DATE,
+	ID_EXTERNAL_REQUEST NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	ID_PROF_DEST NUMBER(24,0),
+	ID_DEP_CLIN_SERV NUMBER(24,0),
+	ROUND_ID NUMBER(24,0),
+	REASON_CODE VARCHAR2(1),
+	FLG_RESCHEDULE VARCHAR2(1)
+   );
+
+
+
+COMMENT ON COLUMN p1_tracking.ext_req_status IS 'Estado do pedido' ;
+COMMENT ON COLUMN p1_tracking.dt_tracking IS 'Data/hora do registo' ;
+COMMENT ON COLUMN p1_tracking.id_external_request IS 'Id do pedido' ;
+COMMENT ON COLUMN p1_tracking.id_institution IS 'Instituição do profissional responsável pelo registo' ;
+COMMENT ON COLUMN p1_tracking.id_professional IS 'Profissional responsável pelo registo' ;
+COMMENT ON COLUMN p1_tracking.flg_type IS '(S)tatus - Mudança de estado; (P)rofessional - encaminhamento para triador; (C)linical service - encaminhamento para outro serviço clínico; (R)ead - Lido pelo profissional' ;
+COMMENT ON COLUMN p1_tracking.id_prof_dest IS 'Id do profissional - Usado apenas no encaminhamento para outro profissional (FLG_TYPE = P)' ;
+COMMENT ON COLUMN p1_tracking.id_dep_clin_serv IS 'Id dep_clin_serv - Usado apenas no encaminhamento para outro serviço clínico (FLG_TYPE = C)' ;
+COMMENT ON COLUMN p1_tracking.flg_reschedule IS 'Código associado à mudança de estado quando aplicável (Por exemplo EXT_REQ_STATUS "C" (Cancelamento) O - Óbito, E - Engano ou erro, R - Resolvido)' ;
+
+
+-- JS: 10-04-2007
+comment on column P1_TRACKING.FLG_TYPE is '(S)tatus - Mudança de estado; (P)rofessional - encaminhamento para triador; (C)linical service - encaminhamento para outro serviço clínico; (R)ead - Lido pelo profissional; (U)pdate - Actualização de dados';
+
+
+-- JS: 2007/04/14
+alter table P1_TRACKING add FLG_SUBTYPE varchar2(1);
+
+comment on column P1_TRACKING.FLG_SUBTYPE
+  is 'Subtipo do registo - (R)eschedule (Remarcar), foi escolhido "Para Marcar" e já estava em estado A ("Para Marcar")';
+
+-- JS: 2007/04/26
+alter table P1_TRACKING add DECISION_URG_LEVEL number;
+ 
+comment on column P1_TRACKING.DECISION_URG_LEVEL is 'Nivel de prioridade atribuida na triagem';
+
+-- JS: 2007/06/05 - Escolha de profissional no pedido de marcação
+-- Add comments to the columns 
+comment on column P1_TRACKING.ID_PROF_DEST
+  is 'Id do profissional - Usado quando encaminha para outro profissional (FLG_TYPE = ''P'') ou pede para marcar e escolhe o profissional (FLG_TYPE = ''S'' e EXT_REQ_STATUS = ''A'')';
+
+-- Subtipo passa a ser usado também para diferenciar as recusas vindas da interface das feitas pela aplicação. 
+comment on column P1_TRACKING.FLG_SUBTYPE
+  is 'Subtipo do registo - (R)eschedule (Remarcar), foi escolhido "Para Marcar" e já estava em estado A ("Para Marcar"); (E)xternal - Recusa externa (interface)';
+
+comment on column P1_TRACKING.REASON_CODE
+  is 'Código associado à mudança de estado quando aplicável (Por exemplo EXT_REQ_STATUS "C" (Cancelamento) O - Óbito, E - Engano ou erro, R - Resolvido)';
+comment on column P1_TRACKING.FLG_RESCHEDULE
+  is 'Usado para registos de agendamento - Y Indica que já existia um agendamento anterior.';
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE P1_TRACKING ADD DT_TRACKING_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN P1_TRACKING.DT_TRACKING_TSTZ IS 'Data/hora do registo'; 
+
+
+ALTER TABLE P1_TRACKING ADD ID_REASON_CODE NUMBER(24,0) ;
+
+ALTER TABLE P1_TRACKING ADD ID_SCHEDULE NUMBER(24,0) ;
+COMMENT ON COLUMN "ALERT"."P1_TRACKING"."ID_SCHEDULE" IS 'Id_schedule. To keep track of canceled schedules';
+
+ALTER TABLE P1_TRACKING ADD (ID_INST_DEST NUMBER(24));
+COMMENT ON COLUMN P1_TRACKING.ID_INST_DEST IS 'Destination institution';
+
+
+
+
+-- CHANGED BY: Joana Barroso  
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização P1 - eliminação de colunas
+alter table P1_TRACKING drop column DT_TRACKING;
+-- CHANGE END
+
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 21/06/2010 17:56
+-- CHANGE REASON: [ALERT-103305] FERTIS (2.6.0.3)
+comment on table P1_TRACKING is 'Referral tracking history';
+comment on column P1_TRACKING.ID_TRACKING is 'Primary key';
+comment on column P1_TRACKING.EXT_REQ_STATUS is 'Referral status';
+comment on column P1_TRACKING.ID_EXTERNAL_REQUEST is 'Referral identifier';
+comment on column P1_TRACKING.ROUND_ID is 'Round identifier needed to ADW';
+comment on column P1_TRACKING.ID_REASON_CODE is 'Cancelation/Refusal/Decline reason code';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 17/09/2010 21:56
+-- CHANGE REASON: [ALERT-125735] 
+COMMENT ON COLUMN P1_TRACKING.FLG_TYPE IS '(S)tatus - Mudança de estado; (P)rofessional - encaminhamento para triador; (C)linical service - encaminhamento para outro serviço clinico; (R)ead - Lido pelo profissional; (U)pdate - Actualização de dados, T - Transf. Resp.';
+/
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 05/11/2010 14:20
+-- CHANGE REASON: [ALERT-137811] ALERT_75390 Possibilidade do médico hospital encaminhar o pedido para o administrativo hospital
+alter table P1_TRACKING add ID_WORKFLOW_ACTION NUMBER(24);
+
+comment on column P1_TRACKING.ID_WORKFLOW_ACTION is 'Action identifier';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 22/12/2011 10:28
+-- CHANGE REASON: [ALERT-211233] 
+comment on column P1_TRACKING.flg_subtype is 'Record subtype: (R)e-triage; (E)xternal - External refuse (interface); (C)ancel schedule';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 01/06/2012 15:37
+-- CHANGE REASON: [ALERT-230846] 
+alter table P1_TRACKING add id_speciality NUMBER(6);
+alter table P1_TRACKING modify CREATE_USER varchar2(30 CHAR);
+alter table P1_TRACKING modify UPDATE_USER varchar2(30 CHAR);
+
+comment on column P1_TRACKING.id_speciality is 'Referral speciality identifier';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 01/06/2012 16:54
+-- CHANGE REASON: [ALERT-230846] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns i
+     WHERE i.column_name = 'ID_SPECIALITY'
+       AND i.table_name = 'P1_TRACKING';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table P1_TRACKING add id_speciality NUMBER(6)';
+    END IF;
+END;
+/
+
+alter table P1_TRACKING modify CREATE_USER varchar2(30 CHAR);
+alter table P1_TRACKING modify UPDATE_USER varchar2(30 CHAR);
+
+comment on column P1_TRACKING.id_speciality is 'Referral speciality identifier';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 29/10/2012 14:17
+-- CHANGE REASON: [ALERT-242079] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'P1_TRACKING'
+       AND c.column_name = 'DT_CREATE';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table P1_TRACKING add dt_create TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    END IF;
+
+    EXECUTE IMMEDIATE 'comment on column P1_TRACKING.dt_create is ''Real date/time of operation''';
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 16/12/2013 16:54
+-- CHANGE REASON: [ALERT-270853] 
+BEGIN
+    pk_versioning.run(i_sql => 'alter table P1_TRACKING add id_workflow number(24)');
+pk_versioning.run(i_sql => 'alter table P1_TRACKING add id_inst_orig number(24)');
+END;
+/
+
+alter table P1_TRACKING modify create_user VARCHAR2(30 CHAR);
+alter table P1_TRACKING modify update_user VARCHAR2(30 CHAR);
+alter table P1_TRACKING modify ext_req_status VARCHAR2(1 CHAR);
+alter table P1_TRACKING modify flg_type VARCHAR2(1 CHAR);
+alter table P1_TRACKING modify reason_code VARCHAR2(1 CHAR);
+alter table P1_TRACKING modify flg_reschedule VARCHAR2(1 CHAR);
+alter table P1_TRACKING modify flg_subtype VARCHAR2(1 CHAR);
+alter table P1_TRACKING modify ID_INSTITUTION number(24);
+
+comment on column P1_TRACKING.id_workflow is 'Referral workflow identifier';
+comment on column P1_TRACKING.id_inst_orig is 'Referral origin institution identifier';
+comment on column P1_TRACKING.dt_tracking_tstz is 'Real date of this event';
+comment on column P1_TRACKING.dt_create is 'System date of this event (must be greater than DT_TRACKING_TSTZ)';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on column P1_TRACKING.id_institution
+  is 'Institution for professional responsible for the record';
+comment on column P1_TRACKING.id_professional
+  is 'Professional responsible for the record';
+comment on column P1_TRACKING.flg_type
+  is '(S)tatus - Referral status change; (P)rofessional - Forward to triage; (C)linical service - Forward to diferent service/specialty; (R)ead - Read by the requester; (U)pdate - Data update; T - Responsibility transfer';
+comment on column P1_TRACKING.id_prof_dest
+  is 'Destination professional when the referral is forwarded (FLG_TYPE = ''P''). Schedule professional when the referral is set "to schedule" and the professional is chosen (FLG_TYPE = ''S'' and EXT_REQ_STATUS = ''A'')';
+comment on column P1_TRACKING.id_dep_clin_serv
+  is 'Service and specialty. Used only when the referral is forwarded to another service/specialty (FLG_TYPE = C)';
+comment on column P1_TRACKING.reason_code
+  is 'Reason code associated to the status update, when applicable (e.g. EXT_REQ_STATUS: C - Cancel; O - Death, E - Error or mistake, R - Solved)';
+comment on column P1_TRACKING.flg_reschedule
+  is 'Is reschedule? Y means that there was a previous scheduling';
+comment on column P1_TRACKING.decision_urg_level
+  is 'Triage level set in the triage process';
+
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 11/05/2021 14:26
+-- CHANGE REASON: [EMR-44896] - MCDT's referral > Cancel > error
+alter table P1_TRACKING
+drop constraint PTG_PRE_FK;
+-- CHANGE END: Diogo Oliveira

@@ -1,0 +1,23 @@
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 16/04/2010 15:45
+-- CHANGE REASON: [ALERT-89937] 
+--Creating primary_key
+alter table SCALES_ACTION
+  add constraint SCA_PK primary key (ID_SCALES_ACTION);
+
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table SCALES_ACTION
+  add constraint SCA_INTN_UK unique (INTERNAL_NAME);
+
+-- Create/Recreate indexes 
+create unique index SCA_CDSCA_UI on SCALES_ACTION (CODE_SCALES_ACTION);
+
+-- Create/Recreate check constraints 
+alter table SCALES_ACTION
+  add constraint SCA_FLG_AVAIL_CHK
+  check (FLG_AVAILABLE IN ('Y','N'));
+
+alter table SCALES_ACTION
+  add constraint SCA_FLG_DEFAULT_CHK
+  check (FLG_DEFAULT IN ('A','I'));
+-- CHANGE END: Rita Lopes

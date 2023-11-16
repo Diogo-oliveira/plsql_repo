@@ -1,0 +1,72 @@
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 30/11/2010 11:16
+-- CHANGE REASON: [ALERT-145613] Issue Replication: Scale of imeline view configurable(v2.6.0.4) 
+DECLARE
+    e_name_already_used EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_name_already_used, -00955);
+    l_table_name VARCHAR2(30) := 'tl_va_inst_soft_market';
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE ' || l_table_name || ' (' || 
+                      'id_tl_va_inst_soft_market    NUMBER(24,0) NOT NULL,'             ||
+                      'id_tl_timeline               NUMBER(24,0) NOT NULL,'             ||
+                      'id_tl_software               NUMBER(24,0) NOT NULL,'             ||
+                      'flg_available                VARCHAR2(1) NOT NULL,'              ||
+                      'id_institution               NUMBER(24,0) NOT NULL,'             ||
+                      'id_software                  NUMBER(24,0) NOT NULL,'             ||
+                      'id_market                    NUMBER(24,0) NOT NULL,'             ||
+                      'rank                         NUMBER(24,0) NOT NULL,'             ||
+'CREATE_USER                  VARCHAR2(24),'                      ||
+'CREATE_TIME                  TIMESTAMP(6) WITH LOCAL TIME ZONE,' ||
+'CREATE_INSTITUTION           NUMBER(24),'                        ||
+'UPDATE_USER                  VARCHAR2(24),'                      ||
+'UPDATE_TIME                  TIMESTAMP(6) WITH LOCAL TIME ZONE,' ||
+'UPDATE_INSTITUTION           NUMBER(24)'                         ||
+                      ')';
+
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE ' || l_table_name || ' IS ''Configuration table for timelines vertical axis - configures visible softwares and the order of appearance in left column of the timeline''';
+    
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_tl_va_inst_soft_market IS ''Vertical access configuration ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_tl_timeline IS ''Timeline ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_tl_software IS ''Software to show on screen ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.flg_available IS ''If confonfiguration is still active''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_institution IS ''Configuration institution ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_software IS ''Configuration software ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.id_market IS ''Configuration market ID''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.rank IS ''Order of the softwares''';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.CREATE_USER is ''Creation User''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.CREATE_TIME is ''Creation Time''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.CREATE_INSTITUTION is ''Creation Institution''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.UPDATE_USER is ''Update User''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.UPDATE_TIME is ''Update Time''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN ' || l_table_name || '.UPDATE_INSTITUTION is ''Update Institution''';
+EXCEPTION
+    WHEN e_name_already_used THEN
+        dbms_output.put_line('WARNING - Table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END: Rui Duarte
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 11/02/2021 08:48
+-- CHANGE REASON: [EMR-41846] - Reorganize the episode time line by software
+-- Drop columns
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'alter table TL_VA_INST_SOFT_MARKET drop constraint TL_VA_ISM_PK cascade';
+pk_versioning.run(l_sql);
+
+end;
+/
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00904);
+l_sql varchar2(4000);
+BEGIN
+EXECUTE IMMEDIATE 'alter table TL_VA_INST_SOFT_MARKET drop column id_tl_va_inst_soft_market';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Elisabete Bugalho

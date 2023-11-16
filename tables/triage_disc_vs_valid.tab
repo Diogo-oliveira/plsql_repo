@@ -1,0 +1,152 @@
+
+
+  CREATE TABLE TRIAGE_DISC_VS_VALID
+   (	ID_TRIAGE_DISC_VS_VALID NUMBER(12,0) NOT NULL ENABLE,
+	ID_VITAL_SIGN NUMBER(12,0),
+	ID_TRIAGE_DISCRIMINATOR NUMBER(12,0) NOT NULL ENABLE,
+	FLG_ACTIVE VARCHAR2(1) NOT NULL ENABLE,
+	VAL_MIN NUMBER(10,3),
+	VAL_MAX NUMBER(10,3),
+	AGE_MIN NUMBER(3,0),
+	AGE_MAX NUMBER(3,0),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+
+	ID_UNIT_MEASURE NUMBER(24,0)
+   );
+
+comment on table TRIAGE_DISC_VS_VALID
+  is 'Indicação dos SVs que devem ser lidos antes de responder (quer negativa, quer afirmativamente) ao discriminador associado.VAL_MIN e VAL_MAX limitam o intervalo de valores do SV que implica a resposta afirmativa ao discriminador.AGE_MIN e AGE_MAX limitam o intervalo de idades do doente para as quais o discriminador é validado com o SV.';
+
+comment on column TRIAGE_DISC_VS_VALID.ID_TRIAGE_DISC_VS_VALID
+  is 'Chave primária';
+comment on column TRIAGE_DISC_VS_VALID.ID_VITAL_SIGN
+  is 'Sinal vital';
+comment on column TRIAGE_DISC_VS_VALID.ID_TRIAGE_DISCRIMINATOR
+  is 'Discriminador';
+comment on column TRIAGE_DISC_VS_VALID.FLG_ACTIVE
+  is 'Activo: S / N';
+comment on column TRIAGE_DISC_VS_VALID.VAL_MIN
+  is 'Valor mínimo para o SV';
+comment on column TRIAGE_DISC_VS_VALID.VAL_MAX
+  is 'Valor máximo para o SV';
+comment on column TRIAGE_DISC_VS_VALID.AGE_MIN
+  is 'Idade mínima para validação do discriminador com o SV';
+comment on column TRIAGE_DISC_VS_VALID.AGE_MAX
+  is 'Idade máxima para validação do discriminador com o SV';
+comment on column TRIAGE_DISC_VS_VALID.FLG_AVAILABLE
+  is 'Disponibilidade do registo na instituição onde está instalada a BD';
+comment on column TRIAGE_DISC_VS_VALID.RANK
+  is 'Ordem de visualização';
+comment on column TRIAGE_DISC_VS_VALID.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+comment on column TRIAGE_DISC_VS_VALID.ID_UNIT_MEASURE
+  is 'Unidade de medida';
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 24/01/2010 19:50
+-- CHANGE REASON: [ALERT-70160] Triage refactoring
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DISC_VS_VALID ADD ID_PARENT NUMBER(24)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DISC_VS_VALID ADD ID_VITAL_SIGN_RELATED NUMBER(24)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DISC_VS_VALID ADD ID_VITAL_SIGN_DESC_RELATED NUMBER(24)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DISC_VS_VALID ADD FLG_MANDATORY VARCHAR2(1)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+
+COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.ID_PARENT IS 'Parent record in ID_TRIAGE_DISC_VS_VALID';
+COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.ID_VITAL_SIGN_RELATED IS 'Vital sign to be validated along with the current specified in ID_VITAL_SIGN';
+COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.ID_VITAL_SIGN_DESC_RELATED IS 'Value that allows the discriminator to be accepted';
+COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.FLG_MANDATORY IS 'Is the vital sign mandatory to validate the discriminator? (Y) Yes (N) No (X) Exclusive validation ? only one needs to be specified';
+COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.ID_UNIT_MEASURE IS 'Unit measure ID of the specified minimum and maximum values';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 02/03/2010 10:50
+-- CHANGE REASON: [ALERT-77123] ESI Triage
+ALTER TABLE TRIAGE_DISC_VS_VALID MODIFY FLG_MANDATORY VARCHAR2(1 CHAR);
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 09/04/2010 11:14
+-- CHANGE REASON: [ALERT-87635] Manchester triage improvements - replication in 2.6
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE triage_disc_vs_valid ADD id_market NUMBER(24) DEFAULT 0';
+EXCEPTION
+   WHEN OTHERS THEN
+      dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.ID_MARKET IS 'Market(s) to which the limit is applicable. Zero (0) for all markets.';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 11/11/2010 19:13
+-- CHANGE REASON: [ALERT-140177] Vicenza triage
+ALTER TABLE triage_disc_vs_valid MODIFY age_min NUMBER(4, 1);
+ALTER TABLE triage_disc_vs_valid MODIFY age_max NUMBER(4, 1);
+-- CHANGE END: José Silva
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 14/11/2012 00:21
+-- CHANGE REASON: [ALERT-244705] 
+alter table triage_disc_vs_valid 
+modify (
+            age_min number(5,2),
+            age_max number(5,2));
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/06/2013 17:05
+-- CHANGE REASON: [ALERT-260856] Ability to perform triage based on EST (Échelle Suisse de Tri) (ALERT_188926) - VERSIONING DB DDL
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'ALTER TABLE TRIAGE_DISC_VS_VALID MODIFY FLG_ACTIVE NULL');
+    run_ddl(i_sql => 'ALTER TABLE TRIAGE_DISC_VS_VALID MODIFY FLG_AVAILABLE NULL');
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.ID_VITAL_SIGN IS ''Deprecated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.FLG_ACTIVE IS ''Deprecated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.VAL_MIN IS ''Deprecated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.VAL_MAX IS ''Deprecated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.AGE_MIN IS ''Deprecated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.AGE_MAX IS ''Deprecated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.FLG_AVAILABLE IS ''Deprecated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.RANK IS ''Deprecated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.ADW_LAST_UPDATE IS ''Deprecated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.ID_UNIT_MEASURE IS ''Deprecated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.ID_PARENT IS ''Deprecated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.ID_VITAL_SIGN_RELATED IS ''Deprecated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.ID_VITAL_SIGN_DESC_RELATED IS ''Deprecated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DISC_VS_VALID.FLG_MANDATORY IS ''Deprecated''';
+END;
+/
+-- CHANGE END: Alexandre Santos

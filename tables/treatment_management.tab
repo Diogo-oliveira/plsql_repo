@@ -1,0 +1,50 @@
+
+
+  CREATE TABLE TREATMENT_MANAGEMENT
+   (	ID_TREATMENT_MANAGEMENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_TREATMENT NUMBER(24,0) NOT NULL ENABLE,
+	DESC_TREATMENT_MANAGEMENT VARCHAR2(200) NOT NULL ENABLE,
+	DT_CREATION DATE NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+comment on table TREATMENT_MANAGEMENT
+  is 'Notas de tratamento associadas à medicação e/ou procedimento de um episódio';
+
+comment on column TREATMENT_MANAGEMENT.ID_TREATMENT_MANAGEMENT
+  is 'Chave primária';
+comment on column TREATMENT_MANAGEMENT.ID_TREATMENT
+  is 'Procedimento ou medicação';
+comment on column TREATMENT_MANAGEMENT.DESC_TREATMENT_MANAGEMENT
+  is 'Nota de tratamento';
+comment on column TREATMENT_MANAGEMENT.DT_CREATION
+  is 'Data de criação da nota de tratamento';
+comment on column TREATMENT_MANAGEMENT.ID_PROFESSIONAL
+  is 'Profissional';
+comment on column TREATMENT_MANAGEMENT.FLG_TYPE
+  is 'Tipo de tratamento: I - Intervention;D - Drug';
+comment on column TREATMENT_MANAGEMENT.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+
+alter table treatment_management 
+add (dt_creation_tstz timestamp with local time zone); 
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 2008/09/22
+-- CHANGE REASON: Drop obsolete columns of type DATE
+ALTER TABLE TREATMENT_MANAGEMENT DROP COLUMN DT_CREATION;
+-- CHANGE END
+
+-- CHANGED BY: Joao Martins
+-- CHANGE DATE: 25/09/08
+-- CHANGE REASON: Discontinuation of adw_last_update
+ALTER TABLE TREATMENT_MANAGEMENT DROP COLUMN ADW_LAST_UPDATE;
+-- CHANGE END
+
+
+-- JSILVA 25-11-2008
+ALTER TABLE treatment_management MODIFY DESC_TREATMENT_MANAGEMENT VARCHAR2(4000);
+-- END
+

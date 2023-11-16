@@ -1,0 +1,42 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+declare
+   e_fk_already_there EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); -- table already there
+begin
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table view_option_config_inst
+  add constraint voci_voc_fk foreign key (id_view_option, id_profile_template)
+  references view_option_config (id_view_option, id_profile_template)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table view_option_config_inst
+  add constraint voci_von_fk foreign key (id_view_option)
+  references view_option (id_view_option)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table view_option_config_inst
+  add constraint voci_spt_fk foreign key (id_profile_template)
+  references profile_template (id_profile_template)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table view_option_config_inst
+  add constraint voci_inst_fk foreign key (id_institution)
+  references institution (id_institution)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

@@ -1,0 +1,64 @@
+
+
+  ALTER TABLE TRIAGE_DISC_VS_VALID MODIFY (ID_TRIAGE_DISC_VS_VALID NOT NULL ENABLE);
+
+  ALTER TABLE TRIAGE_DISC_VS_VALID MODIFY (ID_TRIAGE_DISCRIMINATOR NOT NULL ENABLE);
+
+  ALTER TABLE TRIAGE_DISC_VS_VALID MODIFY (FLG_ACTIVE NOT NULL ENABLE);
+
+  ALTER TABLE TRIAGE_DISC_VS_VALID MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE TRIAGE_DISC_VS_VALID MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+alter table TRIAGE_DISC_VS_VALID
+  add constraint TDVV_PK primary key (ID_TRIAGE_DISC_VS_VALID);
+
+
+--CREATED BY:Emilia Taborda
+--CREATED DATE BY:2007/06/19
+--CREATED REASON: Chave única com id_vital_sign e id_triage_discriminator 
+ALTER TABLE triage_disc_vs_valid ADD CONSTRAINT triage_disc_vs_valid_uni  UNIQUE (id_vital_sign,id_triage_discriminator); 
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 24/01/2010 19:50
+-- CHANGE REASON: [ALERT-70160] Triage refactoring
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_DISC_VS_VALID ADD CONSTRAINT TDVV_FLG_MANDATORY_CHK CHECK(FLG_MANDATORY IN (''Y'', ''X'', ''N''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- Updated constraint after required changes to triage
+BEGIN
+EXECUTE IMMEDIATE 'alter table TRIAGE_DISC_VS_VALID add constraint TRIAGE_DISC_VS_VALID_UNI unique (ID_VITAL_SIGN, ID_TRIAGE_DISCRIMINATOR, VAL_MIN, VAL_MAX, ID_PARENT)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 09/04/2010 11:14
+-- CHANGE REASON: [ALERT-87635] Manchester triage improvements - replication in 2.6
+-- New constraint
+ALTER TABLE TRIAGE_DISC_VS_VALID ADD CONSTRAINT TRIAGE_DISC_VS_VALID_UNI UNIQUE (ID_VITAL_SIGN, ID_TRIAGE_DISCRIMINATOR, VAL_MIN, VAL_MAX, ID_PARENT, ID_MARKET);
+-- CHANGE END: José Brito
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/06/2013 17:05
+-- CHANGE REASON: [ALERT-260856] Ability to perform triage based on EST (Échelle Suisse de Tri) (ALERT_188926) - VERSIONING DB DDL
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'ALTER TABLE TRIAGE_DISC_VS_VALID DROP CONSTRAINT TDVV_FLG_MANDATORY_CHK');
+END;
+/
+-- CHANGE END: Alexandre Santos

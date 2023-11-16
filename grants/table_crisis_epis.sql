@@ -1,0 +1,5 @@
+
+
+  GRANT SELECT ON ALERT.crisis_epis TO ALERT_VIEWER;
+
+

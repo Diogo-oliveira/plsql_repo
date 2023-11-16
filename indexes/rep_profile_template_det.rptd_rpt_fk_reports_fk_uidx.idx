@@ -1,0 +1,18 @@
+CREATE UNIQUE INDEX rptd_rpt_fk_reports_fk_uidx ON rep_profile_template_det(id_rep_profile_template_det, id_reports, id_rep_profile_template); 
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 11/04/2011 11:50
+-- CHANGE REASON: [ALERT-172090] Define reports as the formal health record for disclosure purposes (ALERT_60289)
+--Drop motive detail in issue ALERT_165689
+DECLARE
+    e_already_run EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_run, -1418); -- unique constraint
+BEGIN
+    EXECUTE IMMEDIATE 'drop index RPTD_RPT_FK_REPORTS_FK_UIDX';
+EXCEPTION
+    WHEN e_already_run THEN
+        dbms_output.put_line('Index RPTD_RPT_FK_REPORTS_FK_UIDX already dropped.');
+END;
+/
+-- CHANGE END: Alexandre Santos

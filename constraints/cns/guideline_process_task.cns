@@ -1,0 +1,26 @@
+  ALTER TABLE GUIDELINE_PROCESS_TASK ADD CONSTRAINT GPK_PK PRIMARY KEY (ID_GUIDELINE_PROCESS_TASK) ENABLE;
+
+  ALTER TABLE GUIDELINE_PROCESS_TASK ADD CONSTRAINT GPK_UK UNIQUE (ID_GUIDELINE_PROCESS, ID_TASK, TASK_TYPE, ID_TASK_ATTACH);
+  
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 11/11/2009 15:20
+-- CHANGE REASON: [ALERT-54623] 
+alter table GUIDELINE_PROCESS_TASK drop constraint GPK_UK drop index;
+alter table GUIDELINE_PROCESS_TASK add constraint GPK_UK unique (ID_GUIDELINE_PROCESS, ID_TASK, TASK_TYPE, ID_TASK_ATTACH, TASK_CODIFICATION);
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 28/03/2011 09:23
+-- CHANGE REASON: [ALERT-168339] Insert constraints for flag_status columns defined in sys_domain
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -02264); -- name already used by an existing constraint
+BEGIN
+    EXECUTE IMMEDIATE 'alter table GUIDELINE_PROCESS_TASK add constraint GPK_FLG_STATUS_LAST_CHK check (FLG_STATUS_LAST in (''H'', ''C'', ''F'', ''E'', ''I'', ''P'', ''R'', ''S'', ''O''))';
+EXCEPTION
+    WHEN e_already_exists THEN
+        NULL;
+END;
+/
+-- CHANGE END: Carlos Loureiro

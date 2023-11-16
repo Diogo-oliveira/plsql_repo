@@ -1,0 +1,61 @@
+-- Create table
+create table DRUG_PRESC_PLAN_HIST
+(
+  ID_PRESCRIPTION_INSTR_HIST NUMBER(24) not null,
+  ID_DRUG_PRESC_DET          NUMBER(24) not null,
+  ID_DRUG_PRESC_PLAN         NUMBER(24) not null
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the columns 
+comment on column DRUG_PRESC_PLAN_HIST.ID_PRESCRIPTION_INSTR_HIST
+  is 'HISTORY TABLE ID';
+comment on column DRUG_PRESC_PLAN_HIST.ID_DRUG_PRESC_DET
+  is 'PRESCRIPTION TABEL ID - DRUG_PRESC_DET';
+comment on column DRUG_PRESC_PLAN_HIST.ID_DRUG_PRESC_PLAN
+  is 'TAKES TABLE ID - DRUG_PRESC_PLAN';
+
+
+
+
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 30/11/2010 16:00
+-- CHANGE REASON: [ALERT-131718] 
+ALTER TABLE drug_presc_plan_hist
+ADD (
+ID_PROF_RATE_CHANGE  NUMBER(24),
+RATE     NUMBER(24,4),
+ID_RATE_UNIT_MEASURE NUMBER(24),
+DOSAGE_EXEC     NUMBER(10,3),
+FLG_CO_SIGN          VARCHAR2(1 CHAR),
+ID_PROF_CO_SIGN      NUMBER(24),
+DT_CO_SIGN           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+ID_ORDER_TYPE        NUMBER(24)
+);
+
+comment on column drug_presc_plan_hist.ID_PROF_RATE_CHANGE
+  is 'ID do Profissional que alterou a velocidade de perfusão.';
+comment on column drug_presc_plan_hist.RATE
+  is 'Velocidade de administração.';
+comment on column drug_presc_plan_hist.ID_RATE_UNIT_MEASURE
+  is 'Rate unit measure.';
+comment on column drug_presc_plan_hist.DOSAGE_EXEC
+  is 'Dosage already performed.';
+comment on column drug_presc_plan_hist.flg_co_sign
+  is 'Co-sign flag. (Y)-Order co-signed. (N)-Order not co-signed.';
+comment on column drug_presc_plan_hist.id_order_type
+  is 'Request order type (telephone, verbal, ...)';
+comment on column drug_presc_plan_hist.dt_co_sign
+  is 'Co-sign moment';
+comment on column drug_presc_plan_hist.id_prof_co_sign
+  is 'Co-sign professional';
+  
+-- CHANGE END:  NUNO ANTUNES

@@ -1,0 +1,14 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 12/10/2010 10:06
+-- CHANGE REASON: [ALERT-128784] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -00955); -- when ORA-00955: name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'create index CPOEP_FLG_CPOE_REFRESH_IDX on CPOE_PROCESS (FLG_CPOE_PROC_AUTO_REFRESH)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+-- CHANGE END: Tiago Silva

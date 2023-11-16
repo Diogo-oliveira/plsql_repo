@@ -1,0 +1,173 @@
+drop table ERR$_EPISODE;
+drop table ERR$_EPIS_INFO;
+drop table ERR$_DISCHARGE_NOTES;
+drop table ERR$_EPIS_DIAGNOSIS;
+drop table ERR$_EPIS_DIAGRAM;
+drop table ERR$_EPIS_RECOMEND;
+drop table ERR$_NURSE_ACTIVITY_REQ;
+drop table ERR$_MONITORIZATION;
+drop table ERR$_INTERV_PRESCRIPTION;
+drop table ERR$_care_plan;
+drop table ERR$_care_plan_hist;
+drop table ERR$_clin_record;
+drop table ERR$_event_most_freq;
+drop table ERR$_p1_external_request;
+drop table ERR$_p1_match;
+drop table ERR$_pat_child_feed_dev;
+drop table ERR$_pat_cli_attributes;
+drop table ERR$_pat_dmgr_hist;
+drop table ERR$_pat_family_member;
+drop table ERR$_pat_family_prof;
+drop table ERR$_pat_graffar_crit;
+drop table ERR$_pat_health_plan;
+drop table ERR$_pat_history;
+drop table ERR$_pat_job;
+drop table ERR$_pat_medication_det;
+drop table ERR$_pat_necessity;
+drop table ERR$_pat_soc_attributes;
+drop table ERR$_pat_vacc;
+drop table ERR$_pat_vaccine;
+drop table ERR$_sr_surgery_record;
+drop table ERR$_unidose_car_patient;
+drop table ERR$_unidose_car_patient_hist;
+drop table ERR$_vaccine_det;
+drop table ERR$_VS_PATIENT_EA;
+drop table ERR$_VS_VISIT_EA;
+drop table ERR$_VITAL_SIGNS_EA;
+drop table ERR$_PROCEDURES_EA;
+
+begin
+
+dbms_errlog.create_error_log('EPISODE');
+dbms_errlog.create_error_log('EPIS_INFO');
+dbms_errlog.create_error_log('DISCHARGE_NOTES');
+dbms_errlog.create_error_log('EPIS_DIAGNOSIS');
+dbms_errlog.create_error_log('EPIS_DIAGRAM');
+dbms_errlog.create_error_log('EPIS_RECOMEND');
+dbms_errlog.create_error_log('NURSE_ACTIVITY_REQ');
+dbms_errlog.create_error_log('MONITORIZATION');
+dbms_errlog.create_error_log('INTERV_PRESCRIPTION');
+
+
+dbms_errlog.create_error_log('care_plan');
+dbms_errlog.create_error_log('care_plan_hist');
+dbms_errlog.create_error_log('clin_record');
+dbms_errlog.create_error_log('event_most_freq');
+dbms_errlog.create_error_log('p1_external_request');
+dbms_errlog.create_error_log('p1_match');
+dbms_errlog.create_error_log('pat_child_feed_dev');
+dbms_errlog.create_error_log('pat_cli_attributes');
+dbms_errlog.create_error_log('pat_dmgr_hist');
+dbms_errlog.create_error_log('pat_family_member');
+dbms_errlog.create_error_log('pat_family_prof');
+dbms_errlog.create_error_log('pat_graffar_crit');
+dbms_errlog.create_error_log('pat_health_plan');
+dbms_errlog.create_error_log('pat_history');
+dbms_errlog.create_error_log('pat_job');
+dbms_errlog.create_error_log('pat_medication_det');
+dbms_errlog.create_error_log('pat_necessity');
+dbms_errlog.create_error_log('pat_soc_attributes');
+dbms_errlog.create_error_log('pat_vacc');
+dbms_errlog.create_error_log('pat_vaccine');
+dbms_errlog.create_error_log('sr_surgery_record');
+dbms_errlog.create_error_log('unidose_car_patient');
+dbms_errlog.create_error_log('unidose_car_patient_hist');
+dbms_errlog.create_error_log('vaccine_det');
+
+dbms_errlog.create_error_log('VS_PATIENT_EA');
+dbms_errlog.create_error_log('VS_VISIT_EA');
+dbms_errlog.create_error_log('VITAL_SIGNS_EA');
+dbms_errlog.create_error_log('PROCEDURES_EA');
+
+end;
+/
+
+-- cmf 22-12-2010
+declare
+
+my_tables		table_varchar;
+G_prefixo		constant varchar2(0050 char) := 'ERR$_';
+G_DROP			CONSTANT VARCHAR2(0100 CHAR) := 'DROP TABLE';
+L_SQL				VARCHAR2(1000);
+
+BEGIN
+	
+my_tables := table_varchar(
+'EPISODE',
+'EPIS_INFO',
+'DISCHARGE_NOTES',
+'EPIS_DIAGNOSIS',
+'EPIS_DIAGRAM',
+'EPIS_RECOMEND',
+'NURSE_ACTIVITY_REQ',
+'MONITORIZATION',
+'INTERV_PRESCRIPTION',
+'CARE_PLAN',
+'CARE_PLAN_HIST',
+'CLIN_RECORD',
+'EVENT_MOST_FREQ',
+'P1_EXTERNAL_REQUEST',
+'P1_MATCH',
+'PAT_CHILD_FEED_DEV',
+'PAT_CLI_ATTRIBUTES',
+'PAT_DMGR_HIST',
+'PAT_FAMILY_MEMBER',
+'PAT_FAMILY_PROF',
+'PAT_GRAFFAR_CRIT',
+'PAT_HEALTH_PLAN',
+'PAT_HISTORY',
+'PAT_JOB',
+'PAT_MEDICATION_DET',
+'PAT_NECESSITY',
+'PAT_SOC_ATTRIBUTES',
+'PAT_VACC',
+'PAT_VACCINE',
+'SR_SURGERY_RECORD',
+'UNIDOSE_CAR_PATIENT',
+'UNIDOSE_CAR_PATIENT_HIST',
+'VACCINE_DET',
+'VS_PATIENT_EA',
+'VS_VISIT_EA',
+'VITAL_SIGNS_EA',
+'PROCEDURES_EA'
+)
+;
+
+<<DROPING_TABLES>>
+FOR I IN 1..MY_TABLES.COUNT LOOP 
+
+	DECLARE
+
+	TABLE_DOESNT_EXISTS EXCEPTION;
+	PRAGMA EXCEPTION_INIT(TABLE_DOESNT_EXISTS, -00942);
+
+	BEGIN
+	L_SQL := G_DROP|| CHR(32)|| G_PREFIXO|| MY_TABLES(I);
+
+	pk_utils.put_line( L_SQL );
+	EXECUTE IMMEDIATE L_SQL;
+
+	EXCEPTION
+	WHEN TABLE_DOESNT_EXISTS THEN
+	PK_UTILS.PUT_LINE('TABLE ALREADY EXISTS...CONTINUING..');
+	END;
+
+END LOOP DROPING_TABLES;
+
+
+<<CREATING_TABLES>>
+FOR I IN 1..MY_TABLES.COUNT LOOP 
+
+	DECLARE
+	BEGIN
+	pk_utils.put_line( 'CREATING TABLE '|| MY_TABLES(I) );
+	dbms_errlog.create_error_log( MY_TABLES(I) );
+	exception
+	when others then
+	pk_utils.put_line('ERROR CREATING TABLE MY_TABLES(I)...');
+	end;
+
+END LOOP CREATING_TABLES;
+
+end;
+/

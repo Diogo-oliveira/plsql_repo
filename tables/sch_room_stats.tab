@@ -1,0 +1,44 @@
+-- CHANGED BY: Telmo
+-- CHANGED DATE: 01-06-2009
+-- CHANGE REASON: ALERT-694 BED SCHEDULING
+
+CREATE TABLE SCH_ROOM_STATS
+ (ID_DEPARTMENT NUMBER(24) NOT NULL
+ ,ID_ROOM NUMBER(24) NOT NULL
+ ,DT_DAY NUMBER(24) NOT NULL
+ ,TOTAL_BEDS NUMBER(24)
+ ,TOTAL_BLOCKED NUMBER(24)
+ ,TOTAL_OCCUPIED NUMBER(24)
+ ,TOTAL_FREE NUMBER(24)
+ ,TOTAL_FREE_WITH_DCS NUMBER(24)
+ ,CREATE_USER VARCHAR2(24)
+ ,CREATE_TIME TIMESTAMP WITH TIME ZONE
+ ,CREATE_INSTITUTION NUMBER(24)
+ ,UPDATE_USER VARCHAR2(24)
+ ,UPDATE_TIME TIMESTAMP WITH TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ );
+ 
+COMMENT ON TABLE SCH_ROOM_STATS IS 'Holds pre-calculated total fields for admission scheduler';
+COMMENT ON COLUMN SCH_ROOM_STATS.ID_DEPARTMENT IS 'department id';
+COMMENT ON COLUMN SCH_ROOM_STATS.ID_ROOM IS 'room id';
+COMMENT ON COLUMN SCH_ROOM_STATS.DT_DAY IS 'day to which this stats applies. this is a julian date since timestamps cannot be part of primary keys';
+COMMENT ON COLUMN SCH_ROOM_STATS.TOTAL_BEDS IS 'total number of beds in this room counted for dt_day date and sch_inp_dep_time.admission_time time';
+COMMENT ON COLUMN SCH_ROOM_STATS.TOTAL_BLOCKED IS 'total number of blocked beds in this room counted for dt_day date and sch_inp_dep_time.admission_time time';
+COMMENT ON COLUMN SCH_ROOM_STATS.TOTAL_OCCUPIED IS 'total number of beds with a patient in this room counted for dt_day date and sch_inp_dep_time.admission_time time';
+COMMENT ON COLUMN SCH_ROOM_STATS.TOTAL_FREE IS 'total number of free beds without assigned dep_clin_serv in this room counted for dt_day date and sch_inp_dep_time.admission_time time';
+COMMENT ON COLUMN SCH_ROOM_STATS.TOTAL_FREE_WITH_DCS IS 'total number of free beds with assigned dep_clin_serv in this room counted for dt_day date and sch_inp_dep_time.admission_time time';
+COMMENT ON COLUMN SCH_ROOM_STATS.CREATE_USER IS 'Creation user';
+COMMENT ON COLUMN SCH_ROOM_STATS.CREATE_TIME IS 'creation time';
+COMMENT ON COLUMN SCH_ROOM_STATS.CREATE_INSTITUTION IS 'creation institution';
+COMMENT ON COLUMN SCH_ROOM_STATS.UPDATE_USER IS 'update user';
+COMMENT ON COLUMN SCH_ROOM_STATS.UPDATE_TIME IS 'update time';
+COMMENT ON COLUMN SCH_ROOM_STATS.UPDATE_INSTITUTION IS 'update institution';
+--END
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 15/01/2016 17:24
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON COLUMN SCH_ROOM_STATS.UPDATE_TIME IS 'Time of the update';
+COMMENT ON COLUMN SCH_ROOM_STATS.CREATE_TIME IS 'Time of the creation';
+-- CHANGE END:  jose.m.silva

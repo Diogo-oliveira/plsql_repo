@@ -1,0 +1,1 @@
+GRANT SELECT ON v_p1_exr_diagnosis TO INTF_ALERT;

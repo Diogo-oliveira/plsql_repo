@@ -1,0 +1,117 @@
+
+
+  CREATE TABLE OPINION_PROF
+   (	ID_OPINION_PROF NUMBER(24,0) NOT NULL ENABLE,
+	DT_OPINION_PROF DATE NOT NULL ENABLE,
+	ID_OPINION NUMBER(24,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DESC_REPLY VARCHAR2(4000)
+   );
+
+
+COMMENT ON TABLE opinion_prof IS 'Profissionais que lêem ou respondem a um pedido de parecer, visto que o pedido pode ser enviado a todos os prof. de uma especialidade.' ;
+
+COMMENT ON COLUMN opinion_prof.dt_opinion_prof IS 'Data do registo' ;
+COMMENT ON COLUMN opinion_prof.flg_type IS 'R - leitura, P - reply' ;
+COMMENT ON COLUMN opinion_prof.desc_reply IS 'Resposta ao pedido de parecer' ;
+
+alter table opinion_prof 
+add (dt_opinion_prof_tstz timestamp with local time zone);
+
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-JUL-31
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 16501
+
+COMMENT ON COLUMN  OPINION_PROF.ID_OPINION_PROF IS 'Professional opinion ID'; 
+COMMENT ON COLUMN  OPINION_PROF.ID_OPINION IS 'Opinion ID'; 
+COMMENT ON COLUMN  OPINION_PROF.ID_PROFESSIONAL IS 'Professional ID'; 
+COMMENT ON COLUMN  OPINION_PROF.DT_OPINION_PROF_TSTZ IS 'Opinion date';
+
+-- CHANGED END: Nuno Ferreira
+
+
+-- CHANGED BY: Carlos Vieira
+-- CHANGE DATE: 2008-Set-22
+-- CHANGE REASON:date columns, timestamp 
+
+alter table OPINION_PROF drop column DT_OPINION_PROF;
+
+--End change
+
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 2008-03-23
+-- CHANGE REASON:[ALERT-20674] Added new column for face to face contact
+
+alter table opinion_prof add (FLG_FACE_TO_FACE VARCHAR2(1) default 'U');
+COMMENT ON COLUMN opinion_prof.flg_face_to_face IS 'Face to face contact reply status: Y – yes, N – no, U – unknown';
+
+--CHANGE END: Rui Duarte
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 16/04/2010 15:56
+-- CHANGE REASON: [ALERT-86898] opinion_prof
+alter table opinion_prof add (id_cancel_reason number(24));
+
+comment on column opinion_prof.id_cancel_reason
+  is 'Request rejection reason identifier.';
+comment on column opinion_prof.flg_type
+  is 'R - leitura, P - reply, C - conclusion, V - approved, N - not approved, E - accepted, X - rejected.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 22/03/2011 15:02
+-- CHANGE REASON: [ALERT-168666] 
+alter table opinion_prof
+add
+(
+   flg_co_sign               VARCHAR2(1 CHAR) default 'N',
+   id_prof_co_sign           NUMBER(24),
+   id_order_type             NUMBER(12),
+   dt_co_sign                TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   notes_co_sign             VARCHAR2(1000 CHAR)
+);
+comment on column opinion_prof.flg_co_sign
+  is 'Flag that indicates if this record was created using co-sign';
+comment on column opinion_prof.id_prof_co_sign
+  is 'ID of the professional that replied to this consult using co-sign';
+comment on column opinion_prof.id_order_type
+  is 'Order type ID that was used in co-sign';
+comment on column opinion_prof.dt_co_sign
+  is 'Date when this record was replied usign co-sign';
+comment on column opinion_prof.notes_co_sign
+  is 'Notes of the co-sign opertaion';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table OPINION_PROF
+  is 'Professionals who read or respond to a request for an opinion, given that the request can be sent to all proessional of a specialty.';
+-- Add comments to the columns 
+comment on column OPINION_PROF.flg_type
+  is 'Record type. (SYS_DOMAIN OPINION_PROF.FLG_TYPE)';
+comment on column OPINION_PROF.desc_reply
+  is 'Response to the opinion request';  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 30/09/2022 11:41
+-- CHANGE REASON: [EMR-55049] - Documentation > Consults > Actions > Mark as read > Details > Missing action info
+BEGIN
+pk_versioning.run(i_sql =>'ALTER TABLE OPINION_PROF DROP CONSTRAINT OPF_FLG_TYPE_CHK');
+END;
+/
+
+BEGIN
+pk_versioning.run(i_sql =>'alter table OPINION_PROF
+add constraint OPF_FLG_TYPE_CHK
+check (flg_type in ('R','P','C','V','N','E','X','F'))');
+END;
+/
+-- CHANGE END: Diogo Oliveira

@@ -1,0 +1,21 @@
+alter table PERIODIC_OBSERVATION_REG
+  add constraint POR primary key (ID_PERIODIC_OBSERVATION_REG)
+  using index 
+  tablespace TABLE_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 10/01/2011 15:10
+-- CHANGE REASON: [ALERT-71518] periodic observation value cancelation
+alter table periodic_observation_reg
+  add constraint por_flg_cancel_type_chk
+  check (flg_cancel_type IN ('P', 'V'));
+-- CHANGE END: Pedro Carneiro

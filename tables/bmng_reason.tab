@@ -1,0 +1,40 @@
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/07/2009 10:05
+-- CHANGE REASON: [ALERT-38622] Added database model related with table BMNG_REASON
+CREATE TABLE "ALERT"."BMNG_REASON"(  
+    "ID_BMNG_REASON" NUMBER(24,0) NOT NULL,
+"ID_BMNG_REASON_TYPE" NUMBER(24,0) NOT NULL,
+    "CODE_BMNG_REASON" VARCHAR2(200) NOT NULL,
+"ID_INSTITUTION" NUMBER(24,0) DEFAULT 0 NOT NULL,
+"FLG_AVAILABLE" VARCHAR2(1) DEFAULT 'Y' NOT NULL,
+"FLG_REALOCATE_PATIENT" VARCHAR2(1) DEFAULT 'N' NOT NULL,
+"RANK" NUMBER(24,0) NOT NULL,
+    --
+    "CREATE_USER"  VARCHAR2(24),
+    "CREATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    "CREATE_INSTITUTION"  NUMBER(24),
+    "UPDATE_USER"  VARCHAR2(24),
+    "UPDATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    "UPDATE_INSTITUTION"  NUMBER(24)
+);
+
+-- Table Comment
+COMMENT ON TABLE BMNG_REASON IS 'This table has information about all reasons that can be choosen for justify actions in bed management functionality.';
+
+-- Collumns Comments
+COMMENT ON COLUMN "ALERT"."BMNG_REASON"."ID_BMNG_REASON" IS 'Bed management reason identifier (Primary Key)';
+COMMENT ON COLUMN "ALERT"."BMNG_REASON"."ID_BMNG_REASON_TYPE" IS 'Bed management reason type identifier associated with current reason';
+COMMENT ON COLUMN "ALERT"."BMNG_REASON"."CODE_BMNG_REASON" IS 'Code that associates current reason with translation description';
+COMMENT ON COLUMN "ALERT"."BMNG_REASON"."ID_INSTITUTION" IS 'Institution identifier associated with current reason (DEFAULT: 0 - All institutions)';
+COMMENT ON COLUMN "ALERT"."BMNG_REASON"."FLG_AVAILABLE" IS 'Availability of current registry (''Y''- Yes; ''N''- No) (DEFAULT: ''Y'')';
+COMMENT ON COLUMN "ALERT"."BMNG_REASON"."FLG_REALOCATE_PATIENT" IS 'This reason implies patient realocation because some reasons for reserving may implies patient realocation (''Y''- Yes; ''N''- No) (DEFAULT: ''N'')';
+COMMENT ON COLUMN "ALERT"."BMNG_REASON"."RANK" IS 'Ranking information for each registry';
+--
+COMMENT ON COLUMN "ALERT"."BMNG_REASON"."CREATE_USER" IS 'Professional ID that creates the registry';
+COMMENT ON COLUMN "ALERT"."BMNG_REASON"."CREATE_TIME" IS 'Date of registry creation';
+COMMENT ON COLUMN "ALERT"."BMNG_REASON"."CREATE_INSTITUTION" IS 'Institution ID where registry was created';
+COMMENT ON COLUMN "ALERT"."BMNG_REASON"."UPDATE_USER" IS 'Professional ID that last updates the registry';
+COMMENT ON COLUMN "ALERT"."BMNG_REASON"."UPDATE_TIME" IS 'Date of registry last update';
+COMMENT ON COLUMN "ALERT"."BMNG_REASON"."UPDATE_INSTITUTION" IS 'Institution ID where registry was last updated';
+--
+-- CHANGE END: Luís Maia

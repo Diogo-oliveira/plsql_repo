@@ -1,0 +1,195 @@
+
+
+  CREATE TABLE WL_QUEUE
+   (	ID_WL_QUEUE NUMBER(24,0) NOT NULL ENABLE,
+	INTER_NAME_QUEUE VARCHAR2(200) NOT NULL ENABLE,
+	CODE_MSG VARCHAR2(200) NOT NULL ENABLE,
+	CHAR_QUEUE VARCHAR2(1) NOT NULL ENABLE,
+	COLOR VARCHAR2(200) NOT NULL ENABLE,
+	NUM_QUEUE NUMBER(6,0) NOT NULL ENABLE,
+	RESET_TIME DATE NOT NULL ENABLE,
+	FLG_RESET_ACTIVE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_VISIBLE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_SYSTEM VARCHAR2(1) NOT NULL ENABLE,
+	FLG_PRIORITY VARCHAR2(1) NOT NULL ENABLE,
+
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_AT_PRIOR VARCHAR2(1) NOT NULL ENABLE,
+	ID_DEPARTMENT NUMBER(24,0) NOT NULL ENABLE,
+	FLG_NURSE VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE wl_queue IS 'Tipos de atendimento' ;
+
+COMMENT ON COLUMN wl_queue.id_wl_queue IS 'Chave primária' ;
+COMMENT ON COLUMN wl_queue.inter_name_queue IS 'Nome interno (utilizado no código)' ;
+COMMENT ON COLUMN wl_queue.code_msg IS 'Código para tradução da mensagem a mostrar no ecrã de impressão de tickets.' ;
+COMMENT ON COLUMN wl_queue.char_queue IS 'Caracter que distingue as filas (e os tickets): M - marcação; E - efectivação; O - outros; P - prioritário' ;
+COMMENT ON COLUMN wl_queue.color IS 'Cor do botão para o utente' ;
+COMMENT ON COLUMN wl_queue.num_queue IS 'Actual nº de senha' ;
+COMMENT ON COLUMN wl_queue.reset_time IS 'Data / hora de reset de NEXT_NUM' ;
+COMMENT ON COLUMN wl_queue.flg_reset_active IS 'Reset activo: S/N' ;
+COMMENT ON COLUMN wl_queue.flg_visible IS 'Fila visível na máq dos tickets: Y / N' ;
+COMMENT ON COLUMN wl_queue.flg_system IS 'Fila de sistema: Y / N' ;
+COMMENT ON COLUMN wl_queue.flg_priority IS 'Fila prioritária: Y / N' ;
+COMMENT ON COLUMN wl_queue.flg_at_prior IS 'Atende Prioritarios: Y / N' ;
+
+
+
+
+ALTER TABLE WL_QUEUE ADD RESET_TIME_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN WL_QUEUE.RESET_TIME_TSTZ IS 'Data / hora de reset de NEXT_NUM'; 
+
+ALTER TABLE WL_QUEUE ADD ID_WL_QUEUE_GROUP NUMBER(24);
+
+comment on column WL_QUEUE.ID_WL_QUEUE_GROUP is 'ID do grupo';
+
+
+-- INPATIENT Ricardo Nuno Almeida 2008/09/22
+-- Drop às colunas DATE
+ALTER TABLE WL_QUEUE DROP COLUMN RESET_TIME;
+--END
+
+-- CHANGED BY: RicardoNunoAlmeida
+-- CHANGE DATE: 23/04/2010 17:53
+-- CHANGE REASON: [ALERT-91338] 
+ALTER TABLE wl_queue drop column flg_reset_active;
+ALTER TABLE wl_queue drop column reset_time_tstz;
+ALTER TABLE wl_queue drop column flg_at_prior;
+-- CHANGE END: RicardoNunoAlmeida
+
+-- CHANGED BY: marcio.dias
+-- CHANGE DATE: 29/11/2011 14:16
+-- CHANGE REASON: [ALERT-207676] Demo environment for Waiting room workflow
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE wl_queue add flg_demo VARCHAR2(1) DEFAULT ''N'' NOT NULL';
+
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+COMMENT ON column wl_queue.flg_demo IS 'Flag specifying if it is a demo queue or not : (''Y''- Yes; ''N''- No)';
+-- CHANGE END: marcio.dias
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table WL_QUEUE
+  is 'Table with queue types records';
+-- Add comments to the columns 
+comment on column WL_QUEUE.id_wl_queue
+  is 'Waiting line queue identifier (primary key of the table).';
+comment on column WL_QUEUE.code_msg
+  is 'Code of the Translation for display in the kiosk.';
+comment on column WL_QUEUE.char_queue
+  is 'The queue''s descriptive character, which will be printed on every ticket (when appliable).';
+comment on column WL_QUEUE.color
+  is 'The queue''s descriptive wl color.';
+comment on column WL_QUEUE.num_queue
+  is 'Value of the last ticket issued in this queue. Updated whenever a new ticket is created.';
+comment on column WL_QUEUE.flg_visible
+  is 'Flag specifying if this queue should be displayed in the kiosk. Note that Nurse and System queues will not be displayed nevertheless of the field''s value. Possible values: Y - Yes, N - No';
+comment on column WL_QUEUE.flg_priority
+  is 'Flag specifying if this is a prioritary queue. Possible values: Y - Yes, N - No';
+comment on column WL_QUEUE.adw_last_update
+  is 'Date of last change, useb by adw';
+comment on column WL_QUEUE.id_department
+  is 'Department identifier where queue is associated';
+comment on column WL_QUEUE.id_wl_queue_group
+  is 'Waiting line queue group identifier';
+comment on column WL_QUEUE.code_name_queue
+  is 'Translation code of queue name. ';
+comment on column WL_QUEUE.flg_type_queue
+  is 'Type of the WR queue: A-Registar, N-Nurse, D-doctor, C-Nursing intervention';
+comment on column WL_QUEUE.create_user
+  is 'Creation User';
+comment on column WL_QUEUE.create_time
+  is 'Creation Time';
+comment on column WL_QUEUE.create_institution
+  is 'Creation Institution';
+comment on column WL_QUEUE.update_user
+  is 'Update User';
+comment on column WL_QUEUE.update_time
+  is 'Update Time';
+comment on column WL_QUEUE.update_institution
+  is 'Update Institution';
+comment on column WL_QUEUE.flg_demo
+  is 'Flag specifying if it is a demo queue or not : (''Y''- Yes; ''N''- No)';
+  
+-- CHANGE END: Pedro Fernandes
+
+--
+declare
+	l_sql varchar2(4000);
+begin
+
+	l_sql := 'alter table wl_queue add init_num_queue number(6) default 0';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_sql varchar2(4000);
+begin
+
+	l_sql := 'alter table wl_queue add dt_last_reset TIMESTAMP(6) WITH LOCAL TIME ZONE default current_timestamp';
+	pk_versioning.run(l_sql);
+	l_sql := 'alter table wl_queue add DAYS_FOR_RESET number(2) default 1';
+	pk_versioning.run(l_sql);
+end;
+/
+
+
+comment on column WL_QUEUE.init_num_queue  is 'starting number to be used for queue when resetting';
+comment on column WL_QUEUE.dt_last_reset  is 'Date of last queue reset';
+comment on column WL_QUEUE.days_for_reset  is 'interval of days between reset of queue';
+
+----
+declare
+       l_sql varchar2(4000);
+begin
+       l_sql := q'[alter table wl_queue modify char_queue varchar2(0005 char)]';
+       pk_versioning.run(l_sql);
+end;
+/
+
+declare
+       l_sql varchar2(4000);
+begin
+       l_sql := q'[alter table wl_queue add id_parent number(24)]';
+       pk_versioning.run(l_sql);
+end;
+/
+
+COMMENT ON COLUMN WL_QUEUE.ID_PARENT IS 'use for sub_queues';
+
+declare
+       l_sql varchar2(4000);
+begin
+       l_sql := q'[alter table wl_queue add foreground_color varchar2(0010 char)]';
+       pk_versioning.run(l_sql);
+end;
+/
+
+COMMENT ON COLUMN WL_QUEUE.ID_PARENT IS 'Color of text';
+
+declare
+       l_sql varchar2(4000);
+begin
+  
+       l_sql := q'[alter table wl_queue add rank number(6) default 0 not null]';
+       pk_versioning.run(l_sql);
+end;
+/
+
+COMMENT ON COLUMN WL_QUEUE.RANK IS 'for sorting purposes';
+

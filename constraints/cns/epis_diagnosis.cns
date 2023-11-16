@@ -1,0 +1,85 @@
+
+
+  ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_PK PRIMARY KEY (ID_EPIS_DIAGNOSIS) ENABLE;
+
+  ALTER TABLE EPIS_DIAGNOSIS MODIFY (ID_EPIS_DIAGNOSIS NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_DIAGNOSIS MODIFY (ID_EPISODE NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_DIAGNOSIS MODIFY (ID_DIAGNOSIS NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_DIAGNOSIS MODIFY (FLG_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_DIAGNOSIS MODIFY (FLG_STATUS NOT NULL ENABLE);
+
+--CHANGED BY: Ariel Geraldo Machado
+--CHANGE DATE: 2008-SEP-16
+--CHANGE REASON: Database denormalization
+ALTER TABLE epis_diagnosis modify(id_patient NOT NULL enable);
+--CHANGE END
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 29/10/2010 17:29
+-- CHANGE REASON: [ALERT-136121] REPLICATION: Final diagnoses - SEARHC requirement (ALERT_136054)
+--                   Versioning table changes
+ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_FLG_ADD_PROB_CHK CHECK (FLG_ADD_PROBLEM IN ('Y','N'));
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/02/2011 17:33
+-- CHANGE REASON: [ALERT-159846] Admission Surgery request -> Create an admission surgery request with diagnosis associated to surgical procedures, these aren't replicated to the inpatient episode (ALERT_155247)
+alter table EPIS_DIAGNOSIS add constraint EDS_FLG_TYPE_CHK check (FLG_TYPE IN ('P','D','B','X'));
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 19/05/2011 14:42
+-- CHANGE REASON: [ALERT-180459] Issue Replication: [MU] - TESTS BUTTON_IMAGING EXAMS MENU - An error occurs when we are trying to request more than one exam
+DECLARE
+    e_already_done EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_done, -2443);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS DROP CONSTRAINT EDS_EPIS_DIAG_TYP_UK';
+EXCEPTION
+    WHEN e_already_done THEN
+        dbms_output.put_line('Constraint already dropped!');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 16:16
+-- CHANGE REASON: [ALERT-229222] VERSIONING TRANSACTIONAL MODEL - SCHEMA ALERT - DDL
+DECLARE
+    e_pk EXCEPTION;
+    e_uk1 EXCEPTION;
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2264);
+    PRAGMA EXCEPTION_INIT(e_pk, -2260);
+    PRAGMA EXCEPTION_INIT(e_uk1, -2261);
+BEGIN
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_FLG_RECURR_CHK CHECK (FLG_RECURRENCE IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+            EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_FLG_MLT_TUM_CHK CHECK (FLG_MULT_TUMORS IN (''Y'',''N''))';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_uk1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 18/10/2012 08:36
+-- CHANGE REASON: [ALERT-235889] Status check constraint added to prevent invalid values such as: 'A' and 'I'
+ALTER TABLE EPIS_DIAGNOSIS ADD CONSTRAINT EDS_FLG_STATUS_CHK CHECK (FLG_STATUS IN ('B', 'C', 'D', 'F', 'R')) NOVALIDATE;
+-- CHANGE END: Alexandre Santos

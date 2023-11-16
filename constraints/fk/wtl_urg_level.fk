@@ -1,0 +1,37 @@
+ALTER TABLE "WTL_URG_LEVEL" ADD CONSTRAINT "WUL_INST_FK" FOREIGN KEY ("ID_INSTITUTION") REFERENCES "INSTITUTION" ("ID_INSTITUTION") ENABLE;
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 15:45
+-- CHANGE REASON: [ALERT-160874] [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE WTL_URG_LEVEL ADD CONSTRAINT WUL_PROF_AN0973_FK 
+FOREIGN KEY (ID_PROFESSIONAL) REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'WUL_PROF_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:02
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE WTL_URG_LEVEL ADD CONSTRAINT WUL_PROF_FK 
+FOREIGN KEY (ID_PROFESSIONAL) REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'WUL_PROF_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto

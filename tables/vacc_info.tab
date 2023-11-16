@@ -1,0 +1,44 @@
+-- Create table vacc_info
+create table VACC_INFO
+(
+  ID_VACC_INFO       NUMBER(12) not null,
+  ID_VACC            NUMBER(12) not null,
+  ADVERS_REACT_DESCR VARCHAR2(2000) not null,
+  ADW_LAST_UPDATE    DATE,
+  CONTRA_INDIC       VARCHAR2(2000),
+  PRECAUTIONS        VARCHAR2(2000)
+)
+
+-- CHANGED REASON: Adição da coluna id_language
+-- APPLICATION: CARE (3)
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 05/10/2007
+ALTER TABLE vacc_info
+ADD id_language NUMBER(6);
+
+COMMENT ON COLUMN vacc_info.id_language IS 'Informação sobre a lingua a que os registos pertencem.';
+--CHANGE END
+
+-- CHANGED REASON: Adição de uma coluna para descrever o detalhe de uma vacina em formato html 
+-- APPLICATION: CARE (3)
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 11/01/2008
+ALTER TABLE VACC_INFO
+ADD DESC_HTML VARCHAR2(4000);
+COMMENT ON COLUMN VACC_INFO.DESC_HTML IS 'Detalhe da vacina com formatação html.';
+--END
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2009-05-04
+-- CHANGE REASON: ALERT-26735
+alter table vacc_info modify (ID_VACC NUMBER(24));
+alter table vacc_info modify (ID_VACC_INFO NUMBER(24));
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2009-06-01
+-- CHANGE REASON: ALERT-30829
+alter table vacc_info drop column adw_last_update;
+-- CHANGE END

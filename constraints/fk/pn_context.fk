@@ -1,0 +1,39 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 13/03/2014 10:00
+-- CHANGE REASON: [ALERT-278983] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+e_object_exists1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists1, -02260);
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -06512);
+    e_object_exists3 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists3, -02264);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE pn_context
+  ADD CONSTRAINT pnc_af_fk FOREIGN KEY (
+    id_application_file
+  ) REFERENCES application_file (id_application_file)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_context
+    add constraint pnc_fc_chk
+    check (flg_context IN (''S'',''D'',''SC''))';
+    EXCEPTION
+        WHEN e_object_exists1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

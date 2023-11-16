@@ -1,0 +1,31 @@
+CREATE TABLE schedule_exam
+(
+  id_schedule_exam  NUMBER(24),
+	id_schedule       NUMBER(24),
+	id_exam           NUMBER(24),
+	flg_preparation  VARCHAR2(1)
+);
+
+COMMENT ON TABLE schedule_exam IS 'Contains specific information for exam schedules';
+COMMENT ON COLUMN schedule_exam.id_schedule_exam IS 'Primary key';
+COMMENT ON COLUMN schedule_exam.id_schedule IS 'Schedule identifier';
+COMMENT ON COLUMN schedule_exam.id_exam IS 'Exam identifier';
+COMMENT ON COLUMN schedule_exam.flg_preparation IS 'Indicates if the exam has preparation instructions';
+
+COMMENT ON COLUMN SCHEDULE_EXAM.ID_SCHEDULE_EXAM IS 'Exam schedule identifier';
+COMMENT ON COLUMN SCHEDULE_EXAM.FLG_PREPARATION IS 'Indicates if the exam has preparation instructions, at the time of creation of the appointment: ''Y'' yes, ''N'' no';
+
+ALTER TABLE SCHEDULE_EXAM MODIFY ID_EXAM NUMBER(12);
+
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 17-06-2008
+-- CHANGE REASON: novo campo id_exam_req
+alter table SCHEDULE_EXAM add ID_EXAM_REQ number(24);
+--END
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 15/01/2016 17:23
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON COLUMN SCHEDULE_EXAM.ID_EXAM_REQ IS 'Exam requisition ID';
+-- CHANGE END:  jose.m.silva

@@ -1,0 +1,101 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:22
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+CREATE TABLE ds_event_target (
+       id_ds_event_target NUMBER(24) NOT NULL,
+       id_ds_event        NUMBER(24) NOT NULL,
+       id_ds_cmpt_mkt_rel NUMBER(24) NOT NULL,
+       flg_event_type     VARCHAR2(1 CHAR) NOT NULL,
+       --
+       create_user        VARCHAR2(24 CHAR),
+       create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution NUMBER(24),
+       update_user        VARCHAR2(24 CHAR),
+       update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution NUMBER(24)
+);
+
+--
+
+COMMENT ON TABLE ds_event_target IS 'Table for dinamic screens events targets';
+--
+COMMENT ON COLUMN ds_event_target.id_ds_event_target IS 'Dinamic screens events target Id';
+COMMENT ON COLUMN ds_event_target.id_ds_event        IS 'Dinamic screens components event ID';
+COMMENT ON COLUMN ds_event_target.id_ds_cmpt_mkt_rel IS 'Components relation Id target for the event';
+COMMENT ON COLUMN ds_event_target.flg_event_type     IS 'Type of event (I - Inactivate / A - Activate / M - Activate and set to Mandatory / E - Exclusive - context defined in sys_domain)';
+--
+COMMENT ON COLUMN ds_event_target.create_user        IS 'Professional that created the registry';
+COMMENT ON COLUMN ds_event_target.create_time        IS 'Date of the registry creation';
+COMMENT ON COLUMN ds_event_target.create_institution IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN ds_event_target.update_user        IS 'Last professional that updated the registry';
+COMMENT ON COLUMN ds_event_target.update_time        IS 'Date of the last update to the registry';
+COMMENT ON COLUMN ds_event_target.update_institution IS 'Id of the last institution where the registry was updated';
+
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:22
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE ds_event_target MOVE TABLESPACE table_m;
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 24/07/2019 16:35
+-- CHANGE REASON: [ARCH-7603] Changes on DB Model
+--                
+declare
+	l_sql	varchar2(1000 char);
+begin
+	l_sql := 'alter table  DS_EVENT_TARGET add field_mask varchar2(100 char)';
+	pk_versioning.run( l_sql );
+end;
+/
+
+COMMENT ON COLUMN ds_event_target.field_mask is 'Mask to be used when event triggered';
+
+COMMENT ON COLUMN ds_event_target.flg_event_type     IS 
+'Type of event(
+M - Activate and set to Mandatory 
+I - Inactivate 
+C - Activate and Clear componente
+R - Readonly, inactivate but mantain value
+A - Activate
+)';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 17:03
+-- CHANGE REASON: [ARCH-7603] Changes on DB Model
+--                
+declare
+	l_sql	varchar2(1000 char);
+begin
+	l_sql := 'alter table  DS_EVENT_TARGET add field_mask varchar2(100 char)';
+	pk_versioning.run( l_sql );
+end;
+/
+
+COMMENT ON COLUMN ds_event_target.field_mask is 'Mask to be used when event triggered';
+
+COMMENT ON COLUMN ds_event_target.flg_event_type     IS 
+'Type of event(
+M - Activate and set to Mandatory 
+I - Inactivate 
+C - Activate and Clear componente
+R - Readonly, inactivate but mantain value
+A - Activate
+)';
+-- CHANGE END: Elisabete Bugalho
+
+-- CMF 02-08-2019
+comment on column DS_EVENT_TARGET.flg_event_type
+  is 'Type of event(
+M - Activate and set to Mandatory
+I - Inactivate
+C - Activate and Clear componente
+R - Readonly, inactivate but mantain value
+X - Regex, FIELD_MASK should be filled with regex expression
+A - Activate
+)';

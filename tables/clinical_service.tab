@@ -1,0 +1,71 @@
+
+
+  CREATE TABLE CLINICAL_SERVICE
+   (	ID_CLINICAL_SERVICE NUMBER(12,0) NOT NULL ENABLE,
+	ID_CLINICAL_SERVICE_PARENT NUMBER(12,0),
+	CODE_CLINICAL_SERVICE VARCHAR2(200) NOT NULL ENABLE,
+	IMAGE_NAME VARCHAR2(240),
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE clinical_service IS 'Serviços clínicos prestados pelos profissionais de saúde. Tipos de consulta - por exemplo a ginecologia, mas também os respectivos sub-especialidades, como planeamento familiar. Se se registar ginecologia e planeamento familiar, pode-se indicar que a primeira é "pai" da segunda, por ser mais genérica. Exames - por exemplo a audiologia ou cardiopneumologia' ;
+
+COMMENT ON COLUMN clinical_service.id_clinical_service_parent IS 'Especialidade "pai" das subespecialidades registadas. Por ex: existindo 2 registos, p/ Ginecologia e p/ Planeamento Familiar, pode-se considerar o 1º como pai do 2º.' ;
+COMMENT ON COLUMN clinical_service.code_clinical_service IS 'Código para nome. Por exemplo a ortopedia, mas também os respectivos sub-níveis como ortotraumatismo da mão.' ;
+COMMENT ON COLUMN clinical_service.image_name IS 'Nome da imagem correspondente ao botão de chamada do form correspondente ao "tipo de consulta"' ;
+COMMENT ON COLUMN clinical_service.rank IS 'Ordem de apresentação' ;
+
+ALTER TABLE CLINICAL_SERVICE 
+ ADD (FLG_AVAILABLE  VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ );
+
+COMMENT ON COLUMN CLINICAL_SERVICE.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD';
+
+ALTER TABLE CLINICAL_SERVICE MODIFY FLG_AVAILABLE default null;
+
+
+ALTER TABLE CLINICAL_SERVICE  ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN CLINICAL_SERVICE.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/07/2009 08:59
+-- CHANGE REASON: [ALERT-38601] Modifications to table CLINICAL_SERVICE
+ALTER TABLE CLINICAL_SERVICE ADD "ABBREVIATION" VARCHAR2(30);
+COMMENT ON COLUMN "ALERT"."CLINICAL_SERVICE"."ABBREVIATION" IS 'Clinical Service abbreviation';
+--
+ALTER TABLE CLINICAL_SERVICE MODIFY FLG_AVAILABLE VARCHAR2(1) DEFAULT 'Y';
+COMMENT ON COLUMN "ALERT"."CLINICAL_SERVICE"."FLG_AVAILABLE" IS 'Is this clinical service available in current institution: (''Y''- Yes; ''N''- No) (DEFAULT: ''Y'')';
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:24
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.CLINICAL_SERVICE MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Joao Sa
+-- CHANGE DATE: 11/01/2016
+-- ISSUE: Refactor: Table comments
+comment on table CLINICAL_SERVICE
+  is 'Clinical specialties provided by the clinicians in the institution';
+-- Add comments to the columns 
+comment on column CLINICAL_SERVICE.id_clinical_service
+  is 'Specialty id';
+comment on column CLINICAL_SERVICE.id_clinical_service_parent
+  is 'Parent specialty';
+comment on column CLINICAL_SERVICE.code_clinical_service
+  is 'Code to translate the speciality name';
+comment on column CLINICAL_SERVICE.image_name
+  is '';
+comment on column CLINICAL_SERVICE.rank
+  is 'Rank';
+comment on column CLINICAL_SERVICE.adw_last_update
+  is 'Record last update (ADW)';
+comment on column CLINICAL_SERVICE.flg_available
+  is 'Available in this implementation? Y/N';
+comment on column CLINICAL_SERVICE.id_content
+  is 'Alert''s uid for specialty';
+comment on column CLINICAL_SERVICE.abbreviation
+  is 'Specialty acronym or abbreviation';

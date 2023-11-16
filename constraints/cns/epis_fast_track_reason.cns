@@ -1,0 +1,11 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 13/06/2016 15:37
+-- CHANGE REASON: [ALERT-322139] Issue Replication: Fast Tracks Manual Activation
+--                
+BEGIN
+   pk_versioning.run('ALTER TABLE epis_fast_track_reason ADD CONSTRAINT epis_fast_track_reason_pk PRIMARY KEY (id_epis_triage, id_fast_track_reason, flg_add_cancel) USING INDEX TABLESPACE ALERT_IDX');  
+   pk_versioning.run('alter table epis_fast_track_reason add constraint eftr_fac_CHK check (flg_add_cancel IN (''A'',''C''))' );
+   pk_versioning.run('alter table epis_fast_track_reason add constraint eftr_fa_CHK check (flg_active IN (''A'',''I''))');
+END;
+/
+-- CHANGE END: Elisabete Bugalho

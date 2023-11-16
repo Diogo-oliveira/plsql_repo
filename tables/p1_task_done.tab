@@ -1,0 +1,99 @@
+
+  CREATE TABLE P1_TASK_DONE
+   (	ID_TASK_DONE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0),
+	ID_TASK NUMBER(6,0) NOT NULL ENABLE,
+	ID_EXTERNAL_REQUEST NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	NOTES VARCHAR2(2000),
+	DT_INSERTED DATE NOT NULL ENABLE,
+	DT_COMPLETED DATE
+   );
+
+
+
+COMMENT ON COLUMN p1_task_done.id_professional IS 'Id do profissional que relizou a tarefa' ;
+COMMENT ON COLUMN p1_task_done.flg_status IS 'Estado em que está documento' ;
+COMMENT ON COLUMN p1_task_done.flg_type IS 'Tipo de tarefa (''S'' - Para agendamento; ''C'' - Para a consulta; ''P'' - Completar dados do paciente )' ;
+COMMENT ON COLUMN p1_task_done.notes IS 'Notas' ;
+COMMENT ON COLUMN p1_task_done.dt_inserted IS 'data de inserção' ;
+COMMENT ON COLUMN p1_task_done.dt_completed IS 'data em tarefa completada.' ;
+
+comment on column P1_TASK_DONE.FLG_STATUS  is 'Y - Tarefa executada; N - Por executar';
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE P1_TASK_DONE ADD DT_COMPLETED_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN P1_TASK_DONE.DT_COMPLETED_TSTZ IS 'data em tarefa completada.'; 
+ALTER TABLE P1_TASK_DONE ADD DT_INSERTED_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN P1_TASK_DONE.DT_INSERTED_TSTZ IS 'data de inser‡Æo'; 
+
+
+-- CHANGED BY: Joana Barroso  
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização P1 - eliminação de colunas
+alter table P1_TASK_DONE drop column DT_INSERTED;
+alter table P1_TASK_DONE drop column DT_COMPLETED;
+-- CHANGE END
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 2009-APR-25
+-- CHANGE REASON: ALERT-24627
+-- Add comments to the columns 
+comment on column P1_TASK_DONE.FLG_TYPE
+  is 'Task type (''S'' - For scheduling; ''C'' - For the appointment; ''Z'' - Complete missing patient data )';
+-- CHANGE END: Ana Monteiro
+
+
+
+
+-- CHANGED BY: Joana Barroso
+-- CHANGED DATE: 2009-AGU-17
+-- CHANGED REASON: ALERT-18963
+-- CHANGED BY: Ana Monteiro
+-- CHANGED DATE: 2009-JUL-14
+-- CHANGED REASON: ALERT-36003
+alter table P1_TASK_DONE rename column FLG_STATUS to FLG_TASK_DONE;
+alter table P1_TASK_DONE add FLG_STATUS varchar2(1) default 'A' not null;
+alter table P1_TASK_DONE add ID_GROUP number(3);
+
+alter table P1_TASK_DONE rename column ID_PROFESSIONAL to ID_PROF_EXEC;
+
+alter table P1_TASK_DONE add ID_INST_EXEC number(24);
+alter table P1_TASK_DONE add ID_PROFESSIONAL number(24);
+alter table P1_TASK_DONE add ID_INSTITUTION number(24);
+ 
+comment on column P1_TASK_DONE.FLG_TASK_DONE is 'Y - Tarefa executada; N - Por executar';
+comment on column P1_TASK_DONE.FLG_STATUS is '(A)ctive; (O)utdated; (C)anceled';
+comment on column P1_TASK_DONE.ID_GROUP is 'Groups task records having the same id_external_request';
+
+comment on column P1_TASK_DONE.ID_PROF_EXEC is 'Professional executing the task';
+comment on column P1_TASK_DONE.ID_INST_EXEC  is 'Institution of professional executing the task';
+comment on column P1_TASK_DONE.ID_PROFESSIONAL is 'Professional who requested the task';
+comment on column P1_TASK_DONE.ID_INSTITUTION is 'Professional institution  who requested the task';
+  
+-- CHANGE END: Ana Monteiro
+-- CHANGE END: Joana Barroso
+
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on table P1_TASK_DONE
+  is 'Tasks chosen for each referral';
+-- Add comments to the columns 
+comment on column P1_TASK_DONE.id_task_done
+  is 'Internal id';
+comment on column P1_TASK_DONE.id_task
+  is 'Task';
+comment on column P1_TASK_DONE.id_external_request
+  is 'Referral';
+comment on column P1_TASK_DONE.flg_task_done
+  is 'Was task already performed? Y/N';
+comment on column P1_TASK_DONE.notes
+  is 'Task notes';
+comment on column P1_TASK_DONE.dt_completed_tstz
+  is 'Task completion date';
+comment on column P1_TASK_DONE.dt_inserted_tstz
+  is 'Task insertion date';
+

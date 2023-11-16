@@ -1,0 +1,27 @@
+alter table profile_template_desc add constraint PTD_PT_FK foreign key (id_profile_template) references profile_template (id_profile_template);
+
+alter table profile_template_desc add constraint PTD_CNTRY_FK foreign key (id_country) references country (id_country);
+
+
+alter table profile_template_desc add constraint PTD_SOFT_FK foreign key (id_software) references software(id_software);
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 15/07/2011 15:10
+-- CHANGE REASON: [ALERT-188516] missing FK on BO tables
+
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROFILE_TEMPLATE_DESC
+  add constraint PTDESC_PTEMPL_FK foreign key (ID_PROFILE_TEMPLATE)
+  references ALERT.PROFILE_TEMPLATE(ID_PROFILE_TEMPLATE) novalidate';
+    
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

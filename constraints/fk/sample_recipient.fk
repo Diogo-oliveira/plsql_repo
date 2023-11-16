@@ -1,0 +1,15 @@
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 07/07/2014 10:50
+-- CHANGE REASON: [ALERT-289537 ] 
+DECLARE e_fk_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SAMPLE_RECIPIENT ADD CONSTRAINT SRT_UME_FK FOREIGN KEY (ID_UNIT_MEASURE) REFERENCES UNIT_MEASURE (ID_UNIT_MEASURE)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: teresa.coutinho

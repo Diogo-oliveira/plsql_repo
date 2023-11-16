@@ -1,0 +1,39 @@
+
+
+  ALTER TABLE PATIENT ADD CONSTRAINT PAT_PK PRIMARY KEY (ID_PATIENT) ENABLE;
+
+  ALTER TABLE PATIENT MODIFY (ID_PATIENT NOT NULL ENABLE);
+
+  ALTER TABLE PATIENT MODIFY (NAME NOT NULL ENABLE);
+
+  ALTER TABLE PATIENT MODIFY (FLG_STATUS NOT NULL ENABLE);
+
+  ALTER TABLE PATIENT MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+  
+  ALTER TABLE patient add CONSTRAINT gender_domain CHECK(gender IN ('F', 'M', 'I') OR gender IS NULL);
+
+--Emilia Taborda 2007/11/23
+--Novo valor no caso de ser em ingles U
+  alter table patient drop constraint GENDER_DOMAIN;
+
+  alter table PATIENT
+    add constraint GENDER_DOMAIN
+    check (gender IN ('F', 'M', 'I','U') OR gender IS NULL);
+
+ALTER TABLE PATIENT ADD (CONSTRAINT PAT_MIG_CHK CHECK (FLG_MIGRATION in ('A','T','M')));
+
+-- CHANGED BY: Thiago Brito
+-- CHANGED DATE: 2008-MAI-29
+-- CHANGE REASON: New column
+--
+--
+-- PROMPT Altering Table 'PATIENT' 
+ALTER TABLE PATIENT 
+ ADD (TOTAL_FAM_MEMBERS NUMBER(6)
+ )
+/
+
+COMMENT ON COLUMN PATIENT.TOTAL_FAM_MEMBERS IS 'Total number of family members'
+/
+
+-- CHANGE END

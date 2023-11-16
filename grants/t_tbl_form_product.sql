@@ -1,0 +1,6 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/11/2011 16:41
+-- CHANGE REASON: [ALERT-207180] Medicaton - Alert_product_mt
+GRANT EXECUTE ON T_TBL_FORM_PRODUCT TO ALERT;
+
+-- CHANGE END: Elisabete Bugalho

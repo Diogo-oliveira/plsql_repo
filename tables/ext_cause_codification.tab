@@ -1,0 +1,75 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 11/09/2012 15:03
+-- CHANGE REASON: [ALERT-212094 ] 
+-- Criar a tabela de codificacao de external causes
+-- Create table
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -00955);
+
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'create table EXT_CAUSE_CODIFICATION
+(
+  id_ext_cause_codification NUMBER(24) not null,
+  id_codification          NUMBER(24) not null,
+  id_external_cause        NUMBER(24) not null,
+  flg_available            VARCHAR2(1) default ''Y'' not null,
+  standard_code            VARCHAR2(200 CHAR),
+  standard_desc            VARCHAR2(200 CHAR),
+  dt_standard_begin        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_standard_end          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_user              VARCHAR2(24),
+  create_time              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution       NUMBER(24),
+  update_user              VARCHAR2(24),
+  update_time              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution       NUMBER(24)  
+)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('Already done');
+    END;
+END;
+/
+-- Add comments to the table 
+comment on table EXT_CAUSE_CODIFICATION
+  is 'External cause for each codification';
+-- Add comments to the columns 
+comment on column EXT_CAUSE_CODIFICATION.id_EXT_CAUSE_codification
+  is 'External cause Codification ID';
+comment on column EXT_CAUSE_CODIFICATION.id_codification
+  is 'Codification ID';
+comment on column EXT_CAUSE_CODIFICATION.id_EXTERNAL_CAUSE
+  is 'External Cause ID';
+comment on column EXT_CAUSE_CODIFICATION.flg_available
+  is 'Record is available for External cause codification combination';
+comment on column EXT_CAUSE_CODIFICATION.create_user
+  is 'Creation User';
+comment on column EXT_CAUSE_CODIFICATION.create_time
+  is 'Creation Time';
+comment on column EXT_CAUSE_CODIFICATION.create_institution
+  is 'Creation Institution';
+comment on column EXT_CAUSE_CODIFICATION.update_user
+  is 'Update User';
+comment on column EXT_CAUSE_CODIFICATION.update_time
+  is 'Update Time';
+comment on column EXT_CAUSE_CODIFICATION.update_institution
+  is 'Update Institution';
+comment on column EXT_CAUSE_CODIFICATION.standard_code
+  is 'Standard code';
+comment on column EXT_CAUSE_CODIFICATION.standard_desc
+  is 'Standard desc';
+comment on column EXT_CAUSE_CODIFICATION.dt_standard_begin
+  is 'Date Standard begin';
+comment on column EXT_CAUSE_CODIFICATION.dt_standard_end
+  is 'Date Standard end';
+  
+-- CHANGE END: Sérgio Santos
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2017-10-20
+-- CHANGED REASON: ALERT-332297
+alter table EXT_CAUSE_CODIFICATION modify standard_desc VARCHAR2(400 CHAR);
+-- CHANGE END: Humberto Cardoso

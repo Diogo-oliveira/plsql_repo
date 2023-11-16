@@ -1,0 +1,53 @@
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 27/03/2009 10:12
+-- CHANGE REASON: [ALERT-21438] Acrescentadas as constraints para as tabelas tl_task, tl_task_timeline e tl_task_timeline_exception.
+ALTER TABLE TL_TASK ADD CONSTRAINT TTK_PK PRIMARY KEY (ID_TL_TASK) ENABLE;
+-- CHANGE END
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:34
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table tl_task
+  add constraint tt_flg_func_chk
+  check (flg_functionality IN ('T', 'P', 'H', 'TP', 'TPH', 'TH', 'PH'));
+  
+alter table tl_task
+  add constraint tlt_prt_fk foreign key (id_parent)
+  references tl_task (id_tl_task);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table tl_task
+  add constraint tt_flg_func_chk
+  check (flg_functionality IN ('T', 'P', 'H', 'TP', 'TPH', 'TH', 'PH'));
+  
+alter table tl_task
+  add constraint tlt_prt_fk foreign key (id_parent)
+  references tl_task (id_tl_task);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:49
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE tl_task ADD (CONSTRAINT TLT_FLG_SYNCH_AREA_CHK CHECK (flg_synch_area IN (''Y'', ''N'')))';
+EXCEPTION
+    WHEN others THEN
+        null;
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/10/2012 16:01
+-- CHANGE REASON: [ALERT-242379 ] Single page note for Discharge Summary
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE tl_task ADD (CONSTRAINT TT_FLG_EA_CHK CHECK (FLG_EA IN (''Y'', ''N'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

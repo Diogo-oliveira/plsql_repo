@@ -1,0 +1,97 @@
+
+
+  ALTER TABLE "ALERT"."P1_EXR_TEMP" ADD CONSTRAINT "PEP_FPRIO_CNS" CHECK (FLG_PRIORITY in ('Y','N')) ENABLE;
+
+
+
+  ALTER TABLE "ALERT"."P1_EXR_TEMP" ADD CONSTRAINT "PEP_PK" PRIMARY KEY ("ID_EXR_TEMP") ENABLE;
+
+
+
+  ALTER TABLE "ALERT"."P1_EXR_TEMP" MODIFY ("ID_EXR_TEMP" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."P1_EXR_TEMP" MODIFY ("ID_EXTERNAL_REQUEST" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."P1_EXR_TEMP" MODIFY ("FLG_PRIORITY" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."P1_EXR_TEMP" MODIFY ("FLG_HOME" NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 14/09/2009 16:59
+-- CHANGE REASON: [ALERT-43086] 
+ALTER TABLE P1_EXR_TEMP ADD (CONSTRAINT
+ PEP_COF_FK FOREIGN KEY 
+  (ID_CODIFICATION) REFERENCES CODIFICATION
+  (ID_CODIFICATION));
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 23/09/2012 22:36
+-- CHANGE REASON: [ALERT-240371] 
+alter table P1_EXR_TEMP
+  add constraint PEP_FLG_ALD_CHK
+  check (FLG_ALD in ('Y','N'));
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 21/12/2012 16:39
+-- CHANGE REASON: [ALERT-248066 ] 
+DECLARE
+     e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_temp add CONSTRAINT PEP_FPRIO_CNS CHECK(flg_priority IN (''N'', ''Y'', ''0'', ''1'', ''2'', ''3''))';
+    EXCEPTION
+        WHEN e_constraint_already_there THEN        
+            EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_temp drop CONSTRAINT PEP_FPRIO_CNS';
+            EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_temp add CONSTRAINT PEP_FPRIO_CNS CHECK(flg_priority IN(''N'', ''Y'', ''0'', ''1'', ''2'', ''3''))';
+    END;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 13/08/2013 16:21
+-- CHANGE REASON: [ALERT-263123] 
+DECLARE
+     e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_temp add CONSTRAINT PEP_FPRIO_CNS CHECK(flg_priority IN (''N'', ''Y'',''W'', ''U'',''R'', ''0'', ''1'', ''2'', ''3''))';
+    EXCEPTION
+        WHEN e_constraint_already_there THEN        
+            EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_temp drop CONSTRAINT PEP_FPRIO_CNS';
+            EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_temp add CONSTRAINT PEP_FPRIO_CNS CHECK(flg_priority IN(''N'', ''Y'',''W'', ''R'',''U'', ''0'', ''1'', ''2'', ''3''))';
+    END;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 16/09/2013 17:02
+-- CHANGE REASON: [ALERT-265105 ] 
+DECLARE
+     e_constraint_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_there, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_temp add CONSTRAINT PEP_FPRIO_CNS CHECK(flg_priority IN (''N'', ''Y'',''W'', ''U'',''R'', ''0'', ''1'', ''2'', ''3'',''X'', ''Z''))';
+    EXCEPTION
+        WHEN e_constraint_already_there THEN        
+            EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_temp drop CONSTRAINT PEP_FPRIO_CNS';
+            EXECUTE IMMEDIATE 'ALTER TABLE p1_exr_temp add CONSTRAINT PEP_FPRIO_CNS CHECK(flg_priority IN(''N'', ''Y'',''W'', ''R'',''U'', ''0'', ''1'', ''2'', ''3'', ''X'', ''Z''))';
+    END;
+END;
+/
+-- CHANGE END: Joana Barroso

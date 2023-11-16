@@ -1,0 +1,39 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 30/07/2010 10:00
+-- CHANGE REASON: [ALERT-116048] Rehab profiles development
+alter table REHAB_DIAGNOSIS
+  add constraint RDG_EPIS_FK foreign key (ID_EPISODE)
+  references EPISODE (ID_EPISODE);
+
+alter table REHAB_DIAGNOSIS
+  add constraint RDG_EPISORIG_FK foreign key (ID_EPISODE_ORIGIN)
+  references EPISODE (ID_EPISODE);
+
+alter table REHAB_DIAGNOSIS
+  add constraint RDG_PAT_FK foreign key (ID_PATIENT)
+  references PATIENT (ID_PATIENT);
+
+alter table REHAB_DIAGNOSIS
+  add constraint RDG_ICF_FK foreign key (ID_ICF)
+  references ICF (ID_ICF);
+
+alter table REHAB_DIAGNOSIS
+  add constraint RDG_IQII_FK foreign key (ID_IQS_INITIAL_INCAPACITY, ID_IQ_INITIAL_INCAPACITY)
+  references ICF_QUALIF_SCALE_REL (ID_ICF_QUALIFICATION_SCALE, ID_ICF_QUALIFICATION);
+
+alter table REHAB_DIAGNOSIS
+  add constraint RDG_IQER_FK foreign key (ID_IQS_EXPECTED_RESULT, ID_IQ_EXPECTED_RESULT)
+  references ICF_QUALIF_SCALE_REL (ID_ICF_QUALIFICATION_SCALE, ID_ICF_QUALIFICATION);
+
+alter table REHAB_DIAGNOSIS
+  add constraint RDG_IQAI_FK foreign key (ID_IQS_ACTIVE_INCAPACITY, ID_IQ_ACTIVE_INCAPACITY)
+  references ICF_QUALIF_SCALE_REL (ID_ICF_QUALIFICATION_SCALE, ID_ICF_QUALIFICATION);
+
+alter table REHAB_DIAGNOSIS
+  add constraint RDG_CR_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+
+alter table REHAB_DIAGNOSIS
+  add constraint RDG_PROF_FK foreign key (ID_PROF_LAST_UPDATE)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+-- CHANGE END: Gustavo Serrano

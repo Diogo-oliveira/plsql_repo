@@ -1,0 +1,12 @@
+ 
+declare
+	e_object_exists EXCEPTION;
+	PRAGMA EXCEPTION_INIT(e_object_exists,-00955);
+begin
+    execute immediate 'CREATE INDEX pharm_drdhm_presc_dir_fk_idx ON drug_req_det_hist_modif(ID_PRESC_DIRECTIONS)';
+
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('NOTE: index pharm_drdhm_presc_dir_fk_idx already exists');
+END;
+/

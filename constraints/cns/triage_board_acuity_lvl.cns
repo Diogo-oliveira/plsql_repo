@@ -1,0 +1,40 @@
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 03/05/2012 18:42
+-- CHANGE REASON: [ALERT-229201] EST simplified triage
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TRIAGE_BOARD_ACUITY_LVL ADD CONSTRAINT TBAL_PK PRIMARY KEY (ID_TRIAGE_BOARD_ACUITY_LVL) ENABLE';
+EXCEPTION
+    WHEN OTHERS THEN
+      dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: José Silva
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2018-12-10
+-- CHANGED REASON: EMR-9798
+DECLARE
+  e_ck EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_ck, -02443);
+BEGIN
+  -- Drop the current primary key
+  EXECUTE IMMEDIATE 'alter table TRIAGE_BOARD_ACUITY_LVL drop constraint TBAL_PK';
+EXCEPTION
+  WHEN e_ck THEN
+    NULL;
+END;
+/
+
+DECLARE
+  e_pk EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_pk, -02260);
+BEGIN
+  -- Create the new primary key ...
+  EXECUTE IMMEDIATE 'alter table TRIAGE_BOARD_ACUITY_LVL add constraint TBAL_PK primary key (ID_TRIAGE_BOARD, ID_TRIAGE_ESI_LEVEL)';
+EXCEPTION
+  WHEN e_pk THEN
+    NULL;
+END;
+/
+-- CHANGE END: Humberto Cardoso

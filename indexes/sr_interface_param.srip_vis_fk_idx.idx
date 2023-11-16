@@ -1,0 +1,23 @@
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 2014-08-29
+-- CHANGE REASON: ADT-8454
+
+DECLARE
+    e_object_exists EXCEPTION;
+    e_already_indexed EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01408);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX SRIP_VIS_FK_IDX ON SR_INTERFACE_PARAM(ID_VISIT)';
+    EXCEPTION
+        WHEN e_object_exists OR e_already_indexed THEN
+            dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+    END;
+
+END;
+/
+
+-- CHANGED END: Bruno Martins

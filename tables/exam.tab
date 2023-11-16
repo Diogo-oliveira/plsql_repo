@@ -1,0 +1,164 @@
+
+
+  CREATE TABLE EXAM
+   (	ID_EXAM NUMBER(12,0) NOT NULL ENABLE,
+	CODE_EXAM VARCHAR2(200) NOT NULL ENABLE,
+	FLG_PAT_RESP VARCHAR2(1) NOT NULL ENABLE,
+	FLG_PAT_PREP VARCHAR2(1) NOT NULL ENABLE,
+	DURATION NUMBER(6,0),
+	RESULT_TIME NUMBER(6,0),
+	INTERVAL NUMBER(6,0),
+	FLG_MOV_PAT VARCHAR2(1) NOT NULL ENABLE,
+	COST NUMBER(18,4),
+	PRICE NUMBER(18,4),
+	CODE_HELP_EXAM VARCHAR2(200),
+
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(2) NOT NULL ENABLE,
+	GENDER VARCHAR2(1),
+	AGE_MIN NUMBER(3,0),
+	AGE_MAX NUMBER(3,0),
+	ID_EXAM_CAT NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE exam IS 'Parametrização de exames' ;
+
+COMMENT ON COLUMN exam.code_exam IS 'Código para nome' ;
+COMMENT ON COLUMN exam.flg_pat_resp IS 'Indicação da necessidade de entrega do termo de responsabilidade ao utente: Y / N' ;
+COMMENT ON COLUMN exam.flg_pat_prep IS 'Indicação da necessidade de entrega de indicações de preparação ao utente: Y / N' ;
+COMMENT ON COLUMN exam.duration IS 'Duração prevista para a realização (minutos)' ;
+COMMENT ON COLUMN exam.result_time IS 'Tempo previsto para obtenção dos resultados (minutos)' ;
+COMMENT ON COLUMN exam.interval IS 'Intervalo de tempo entre agendamentos (minutos)' ;
+COMMENT ON COLUMN exam.flg_mov_pat IS 'Necessidade de movimentação do doente' ;
+COMMENT ON COLUMN exam.cost IS 'Custo monetário' ;
+COMMENT ON COLUMN exam.price IS 'Preço de de venda' ;
+COMMENT ON COLUMN exam.code_help_exam IS 'Código p/ tradução da ajuda aos profissionais: resultados habituais de acordo com a idade e sexo, parâmetros q inclui, ...' ;
+COMMENT ON COLUMN exam.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN exam.rank IS 'Ordem de apresentação' ;
+COMMENT ON COLUMN exam.flg_type IS 'Tipo: I - imagem; F - prova funcional; O - ortóptica; A - audiometria; GE - endoscopias gastro; FE - endoscopias respiratórias; G - gastro; F - provas funcionais' ;
+
+COMMENT ON COLUMN exam.gender IS 'Género ao qual se aplica' ;
+COMMENT ON COLUMN exam.age_min IS 'Idade mínima à qual se aplica' ;
+COMMENT ON COLUMN exam.age_max IS 'Idade máxima à qual se aplica' ;
+
+alter table EXAM add MDM_CODING NUMBER(12);
+
+comment on column EXAM.MDM_CODING
+  is 'Codificação de  MDM "Medical Decision Making"';
+
+ALTER TABLE EXAM 
+ ADD (CPT_CODE VARCHAR2(100));
+
+COMMENT ON COLUMN EXAM.CPT_CODE IS 'EXAM CPT CODE';
+
+COMMENT ON COLUMN EXAM.FLG_TYPE IS 'Tipo: I - Imagem; E - Outros exames';
+
+ALTER TABLE EXAM ADD (REF_FORM_CODE VARCHAR2(1))
+/
+COMMENT ON COLUMN EXAM.REF_FORM_CODE IS 'Categorização utilizada no formulário de P1 ‘MOD 330.10’'
+/
+
+
+
+
+ALTER TABLE EXAM  ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN EXAM.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+
+COMMENT ON COLUMN EXAM.ID_EXAM IS 'Id do exame';
+COMMENT ON COLUMN EXAM.CODE_EXAM IS 'Código para nome';
+COMMENT ON COLUMN EXAM.FLG_MOV_PAT IS 'Necessidade de movimentação do doente: Y / N';
+COMMENT ON COLUMN EXAM.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD: Y / N';
+COMMENT ON COLUMN EXAM.GENDER IS 'Género ao qual se aplica: F / M';
+COMMENT ON COLUMN EXAM.ID_EXAM_CAT IS 'Id da categoria do exame';
+
+
+
+
+ALTER TABLE EXAM ADD (BARCODE VARCHAR2(30))
+/
+COMMENT ON COLUMN EXAM.BARCODE IS 'Exam barcode'
+/
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:24
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.EXAM MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: José Castro
+-- CHANGE DATE: 26/05/2010 18:55
+-- CHANGE REASON: ALERT-14487
+-- Add/modify columns 
+alter table EXAM modify ID_EXAM NUMBER(24);
+-- CHANGE END: José Castro
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 06/01/2016 17:51
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE EXAM IS 'Exams catalogue';
+
+COMMENT ON COLUMN EXAM.ID_EXAM IS 'Exam ID';
+COMMENT ON COLUMN EXAM.CODE_EXAM IS 'Translation code';
+COMMENT ON COLUMN EXAM.FLG_PAT_RESP IS 'Flag that indicates if the patient needs a term of responsability';
+COMMENT ON COLUMN EXAM.FLG_PAT_PREP IS 'Flag that indicates if the patient needs preparation instructions';
+COMMENT ON COLUMN EXAM.DURATION IS 'Duration of the exam execution (in minutes)';
+COMMENT ON COLUMN EXAM.RESULT_TIME IS 'Time to have the exam results (in minutes)';
+COMMENT ON COLUMN EXAM.INTERVAL IS 'Interval of time between scheduling (in minutes)';
+COMMENT ON COLUMN EXAM.FLG_MOV_PAT IS 'Flag that indicates if the patient needs to be moved';
+COMMENT ON COLUMN EXAM.COST IS 'Exam cost';
+COMMENT ON COLUMN EXAM.PRICE IS 'Exam price';
+COMMENT ON COLUMN EXAM.CODE_HELP_EXAM IS 'Translation code for context help';
+COMMENT ON COLUMN EXAM.FLG_AVAILABLE IS 'Flag that indicates if the record is available or not (Y/N)';
+COMMENT ON COLUMN EXAM.RANK IS 'Rank';
+COMMENT ON COLUMN EXAM.ADW_LAST_UPDATE IS 'Update date';
+COMMENT ON COLUMN EXAM.FLG_TYPE IS 'Exam type: I - Imaging; E - Other exams';
+COMMENT ON COLUMN EXAM.GENDER IS 'Gender';
+COMMENT ON COLUMN EXAM.AGE_MIN IS 'Minimum age';
+COMMENT ON COLUMN EXAM.AGE_MAX IS 'Maximum age';
+COMMENT ON COLUMN EXAM.ID_EXAM_CAT IS 'Exam category ID';
+COMMENT ON COLUMN EXAM.MDM_CODING IS 'MDM code';
+COMMENT ON COLUMN EXAM.CPT_CODE IS 'CPT code';
+COMMENT ON COLUMN EXAM.REF_FORM_CODE IS 'Referral code';
+COMMENT ON COLUMN EXAM.ID_CONTENT IS 'Content unique ID';
+COMMENT ON COLUMN EXAM.BARCODE IS 'Exam barcode';
+COMMENT ON COLUMN EXAM.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN EXAM.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN EXAM.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN EXAM.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN EXAM.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN EXAM.UPDATE_INSTITUTION IS 'Update Institution';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 12/06/2017 09:00
+-- CHANGE REASON: [ALERT-331066]
+ALTER TABLE EXAM
+ADD FLG_TECHNICAL VARCHAR2(1) DEFAULT 'N';
+
+ALTER TABLE EXAM
+ADD CONSTRAINT EXAM_FLG_TECHNICAL CHECK (FLG_TECHNICAL IN ('Y','N'));
+
+ALTER TABLE EXAM MODIFY flg_technical NOT NULL;  
+
+COMMENT ON COLUMN EXAM.FLG_TECHNICAL
+        IS 'Flag that indicates if the exam is an invasive exam';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 14/11/2017 08:00
+-- CHANGE REASON: [CALERT-719]
+ALTER TABLE EXAM
+DROP CONSTRAINT EXAM_FLG_TECHNICAL;
+
+ALTER TABLE EXAM
+ADD CONSTRAINT EXAM_FLG_TECHNICAL CHECK (FLG_TECHNICAL IN ('Y','N','X','P'));
+
+COMMENT ON COLUMN EXAM.FLG_TECHNICAL
+        IS 'Y-"INVASIVE EXAM" / N-"NON-INVASIVE EXAM" / X-"CHEST X-RAY (only used in TW market) / P-"Pathology"';
+-- CHANGE END: Diogo Oliveira

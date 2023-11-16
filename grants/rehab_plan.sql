@@ -1,0 +1,11 @@
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 29/07/2010 14:59
+-- CHANGE REASON: [ALERT-116048] 
+GRANT SELECT ON ALERT.REHAB_PLAN TO ALERT_VIEWER;
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Ana Coelho
+-- CHANGE DATE: 11-APR-2010
+-- CHANGE REASON: [ALERT-171286] 
+grant insert on rehab_plan to alert_reset;
+-- CHANGE END: Ana Coelho

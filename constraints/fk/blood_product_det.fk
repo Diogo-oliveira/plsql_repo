@@ -1,0 +1,56 @@
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/09/2018 11:06
+-- CHANGE REASON: [EMR-6418] 
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_CRN_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_CSC_FK foreign key (ID_CO_SIGN_CANCEL)
+  references CO_SIGN_HIST (ID_CO_SIGN_HIST);
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_CSHO_FK foreign key (ID_CO_SIGN_ORDER)
+  references CO_SIGN_HIST (ID_CO_SIGN_HIST);
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_ID_ORDER_RECURRENCE_FK foreign key (ID_ORDER_RECURRENCE)
+  references ORDER_RECURR_PLAN (ID_ORDER_RECURR_PLAN);
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_INN_FK foreign key (ID_EXEC_INSTITUTION)
+  references ALERT_CORE_DATA.AB_INSTITUTION (ID_AB_INSTITUTION);
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_HEMO_FK foreign key (ID_HEMO_TYPE)
+  references HEMO_TYPE (ID_HEMO_TYPE);
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_MOP_FK foreign key (ID_CLINICAL_PURPOSE)
+  references ALERT_CORE_DATA.MULTICHOICE_OPTION (ID_MULTICHOICE_OPTION);
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_MOV_FK foreign key (ID_MOVEMENT)
+  references MOVEMENT (ID_MOVEMENT);
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_NOR_FK foreign key (ID_NOT_ORDER_REASON)
+  references NOT_ORDER_REASON (ID_NOT_ORDER_REASON);
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_PHN_FK foreign key (ID_PAT_HEALTH_PLAN)
+  references ALERT_ADTCOD.PAT_HEALTH_PLAN (ID_PAT_HEALTH_PLAN);
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_PIO_FK foreign key (ID_PAT_EXEMPTION)
+  references ALERT_ADTCOD.PAT_ISENCAO (ID_PAT_ISENCAO);
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_PRESC_FK foreign key (ID_BLOOD_PRODUCT_REQ)
+  references BLOOD_PRODUCT_REQ (ID_BLOOD_PRODUCT_REQ);
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_PROF_FK foreign key (ID_PROF_CANCEL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_FLG_FASTING_CHK
+  check (flg_fasting IN ('Y', 'N', 'U'));
+alter table BLOOD_PRODUCT_DET
+  add constraint BPD_FLG_REQ_ORIGIN_MODULE_CHK
+  check (flg_req_origin_module IN ('D', 'E', 'I', 'S', 'C', 'P', 'O', 'R', 'M'));
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 01/10/2018 14:53
+-- CHANGE REASON: [EMR-7246] 
+ALTER TABLE blood_product_det DROP CONSTRAINT BPD_CSHO_FK;
+ALTER TABLE blood_product_det ADD CONSTRAINT BPD_CSHO_FK FOREIGN KEY (ID_CO_SIGN_ORDER) REFERENCES CO_SIGN (ID_CO_SIGN);
+-- CHANGE END: Pedro Henriques

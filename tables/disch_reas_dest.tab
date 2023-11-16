@@ -1,0 +1,175 @@
+
+
+  CREATE TABLE DISCH_REAS_DEST
+   (	ID_DISCH_REAS_DEST NUMBER(24,0) NOT NULL ENABLE,
+	ID_DISCHARGE_REASON NUMBER(12,0) NOT NULL ENABLE,
+	ID_DISCHARGE_DEST NUMBER(12,0),
+	ID_DEP_CLIN_SERV NUMBER(24,0),
+	FLG_ACTIVE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_DIAG VARCHAR2(1) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0),
+	ID_INSTIT_PARAM NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOFTWARE_PARAM NUMBER(24,0) NOT NULL ENABLE,
+	REPORT_NAME VARCHAR2(240),
+	ID_EPIS_TYPE NUMBER(12,0),
+
+	TYPE_SCREEN VARCHAR2(200),
+	ID_DEPARTMENT NUMBER(24,0)
+   );
+
+
+COMMENT ON COLUMN disch_reas_dest.flg_active IS 'A - activo, I - inactivo' ;
+COMMENT ON COLUMN disch_reas_dest.flg_diag IS 'Indica se é obrigatória a existência de diagnóstico no epis. (Y / N)' ;
+COMMENT ON COLUMN disch_reas_dest.id_instit_param IS 'Instituição para a qual é válido o registo' ;
+COMMENT ON COLUMN disch_reas_dest.id_software_param IS 'Aplicação Alert para a qual é válido o registo' ;
+COMMENT ON COLUMN disch_reas_dest.report_name IS 'Nome do relatório a  imprimir' ;
+COMMENT ON COLUMN disch_reas_dest.id_epis_type IS 'Tipo de episódio' ;
+COMMENT ON COLUMN disch_reas_dest.type_screen IS 'Estado do tipo de episódio e ecran a ser visualizado' ;
+COMMENT ON COLUMN disch_reas_dest.id_department IS 'Departamento' ;
+
+comment on table DISCH_REAS_DEST
+  is 'Nome do relatório a  imprimir';
+
+comment on column DISCH_REAS_DEST.TYPE_SCREEN
+  is 'Estado do tipo de episódio e ecran a ser visualizado.Valores:T-Temporário;D-Definitivo(parametrizados da seguinte forma:T|';
+
+alter table disch_reas_dest add id_reports number(24);
+
+COMMENT ON COLUMN disch_reas_dest.id_reports IS 'ID de reports a imprimir aquando da alta' ;
+
+alter table disch_reas_dest add flg_mcdt varchar2(200);
+
+COMMENT ON COLUMN disch_reas_dest.flg_mcdt IS 'validacao de mcdts em atraso na alta , A-analises, D- Drugs, I-interventions, E-Exames contrucao com |' ;
+
+alter table disch_reas_dest add rank number(6);
+
+
+-- José Brito 07/03/2009 ALERT-10317
+ALTER TABLE disch_reas_dest ADD flg_specify_dest VARCHAR2(1);
+
+COMMENT ON COLUMN disch_reas_dest.flg_specify_dest IS 'Indicates whether the discharge destination should be specified with free text (Y) or not (N). Applicable to the USA market.';
+
+
+
+-- jsilva 31-07-2009
+ALTER TABLE disch_reas_dest ADD FLG_CARE_STAGE VARCHAR2(30);
+COMMENT ON COLUMN disch_reas_dest.FLG_CARE_STAGE IS 'Automatic patient care stage after the patient discharge (column DOMAIN_VAL in table CARE_STAGE_SET_PERMISSIONS).';
+-- end
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 22/09/2009 19:25
+-- CHANGE REASON: [ALERT-45400] Discharge improvements
+BEGIN
+    EXECUTE IMMEDIATE 'alter table DISCH_REAS_DEST add FLG_DEFAULT varchar2(1) default ''N''';
+    EXECUTE IMMEDIATE 'comment on column DISCH_REAS_DEST.FLG_DEFAULT
+is ''Used by flash to automatically select a default discharge dest. Y - Selected by default; N - otherwise''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 06/11/2009 17:54
+-- CHANGE REASON: [ALERT-55066] Issue Replication: Alta com SOROS em atraso.
+COMMENT ON COLUMN disch_reas_dest.flg_mcdt IS 'Validar MCDTs em atraso na alta: (A) Analises (D) Drugs (I) Interventions (E) Exames (C) Continuous Medication; Construcao com |';
+-- CHANGE END: José Brito
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 11/03/2010 19:09
+-- CHANGE REASON: [ALERT-80873] Reason for pending discharge: DB developments
+ALTER TABLE DISCH_REAS_DEST ADD FLG_REP_NOTES VARCHAR2(1 CHAR);
+COMMENT ON COLUMN DISCH_REAS_DEST.FLG_REP_NOTES IS 'Allows the user to use the actions button to send a message or print the discharge notes report.';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 22/10/2010 13:36
+-- CHANGE REASON: [ALERT-134299] 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE disch_reas_dest ADD FLG_DEF_DISCH_STATUS VARCHAR2(1 CHAR)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN disch_reas_dest.flg_def_disch_status IS ''Default discharge status for current disch_reas_dest (P - Pending, R - Reopened, X - Invalid, A - Final, C - Cancelled)''';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operation done previously');
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 22/10/2010 14:02
+-- CHANGE REASON: [ALERT-134299] 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE disch_reas_dest ADD ID_DEF_DISCH_STATUS NUMBER(24)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN disch_reas_dest.id_def_disch_status IS ''Default id discharge status for current disch_reas_dest available on table discharge_status''';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operation done previously');
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 04/09/2013 17:39
+-- CHANGE REASON: [ALERT-256742] 
+alter table disch_reas_dest
+add flg_needs_overall_resp VARCHAR2(1 CHAR) default 'Y' not null;
+
+comment on column alert.DISCH_REAS_DEST.flg_needs_overall_resp
+  is 'Flag that indicates if it is necessary to have an Overall responsible assigned to the patient when using this discharge reason. Values Y/N ';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table DISCH_REAS_DEST
+  is 'Association between discharge reason and discharge destination';
+-- Add comments to the columns 
+comment on column DISCH_REAS_DEST.id_disch_reas_dest
+  is 'Primary Key';
+comment on column DISCH_REAS_DEST.id_discharge_reason
+  is 'Discharge reason ID';
+comment on column DISCH_REAS_DEST.id_discharge_dest
+  is 'Discharge destination ID';
+comment on column DISCH_REAS_DEST.id_dep_clin_serv
+  is 'Dep_clin serv';
+comment on column DISCH_REAS_DEST.flg_active
+  is 'A - Active, I - Inactive';
+comment on column DISCH_REAS_DEST.flg_diag
+  is 'It indicates whether it is mandatory to provide diagnosis. (Y / N)';
+comment on column DISCH_REAS_DEST.id_institution
+  is 'Discharge destination institution ';
+comment on column DISCH_REAS_DEST.id_instit_param
+  is 'Institution to which the record is valid';
+comment on column DISCH_REAS_DEST.id_software_param
+  is 'Software to which the record is valid';
+comment on column DISCH_REAS_DEST.report_name
+  is 'Report name to be printed';
+comment on column DISCH_REAS_DEST.id_epis_type
+  is 'Episode type to be created on discharge';
+comment on column DISCH_REAS_DEST.type_screen
+  is 'Episode type to be created.Values:T-Temporary;D-Definitive(parameterized as follows:T|';
+comment on column DISCH_REAS_DEST.id_department
+  is 'Department';
+comment on column DISCH_REAS_DEST.id_reports
+  is 'Report ID to be printed on discharge';
+comment on column DISCH_REAS_DEST.flg_mcdt
+  is 'Check MCDT''s on discharge: (A) Analysis (D) Drugs (I) Interventions (E) Exams (C) Continuous Medication; Build with |';
+comment on column DISCH_REAS_DEST.rank
+  is 'Rank for ordering';  
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 11/07/2016 16:18
+-- CHANGE REASON: [ALERT-322610 ] Automatic cancellation/discontinuation of active medication order after discharge
+--                
+BEGIN
+pk_versioning.run('ALTER TABLE disch_reas_dest add  flg_auto_presc_cancel varchar2(1char) DEFAULT ''N'' not null');
+END ;
+/
+COMMENT ON COLUMN disch_reas_dest.flg_auto_presc_cancel is 'flag to indicate if presciption is cancelled automatically when discharge is made.';
+-- CHANGE END: Elisabete Bugalho

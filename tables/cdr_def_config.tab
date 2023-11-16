@@ -1,0 +1,64 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:25
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'CDR_DEF_CONFIG',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'PRM',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => '',
+                                             i_flg_default_child => 'N');
+END;
+/
+
+create table CDR_DEF_CONFIG
+(
+  id_cdr_def_config   NUMBER(24) not null,
+  id_cdr_def_severity NUMBER(24) not null,
+  id_cdr_param_action NUMBER(24) not null,
+  id_institution      NUMBER(24) not null,
+  id_software         NUMBER(24) not null,
+  id_profile_template NUMBER(12) not null,
+  id_dep_clin_serv    NUMBER(24) not null,
+  id_professional     NUMBER(24) not null,
+  create_user         VARCHAR2(24 CHAR),
+  create_time         TIMESTAMP WITH LOCAL TIME ZONE,
+  create_institution  NUMBER(24),
+  update_user         VARCHAR2(24 CHAR),
+  update_time         TIMESTAMP WITH LOCAL TIME ZONE,
+  update_institution  NUMBER(24)
+);
+
+comment on table CDR_DEF_CONFIG
+  is 'Clinical decision rule definition disablings configuration.';
+
+comment on column CDR_DEF_CONFIG.id_cdr_def_config
+  is 'Primary key.';
+comment on column CDR_DEF_CONFIG.id_cdr_def_severity
+  is 'Rule definition severities identifier.';
+comment on column CDR_DEF_CONFIG.id_cdr_param_action
+  is 'Rule parameter actions identifier.';
+comment on column CDR_DEF_CONFIG.id_institution
+  is 'Institution identifier.';
+comment on column CDR_DEF_CONFIG.id_software
+  is 'Software identifier.';
+comment on column CDR_DEF_CONFIG.id_profile_template
+  is 'Profile template identifier.';
+comment on column CDR_DEF_CONFIG.id_dep_clin_serv
+  is 'Service/specialty identifier.';
+comment on column CDR_DEF_CONFIG.id_professional
+  is 'Professional identifier.';
+comment on column CDR_DEF_CONFIG.create_user
+  is 'Creation User';
+comment on column CDR_DEF_CONFIG.create_time
+  is 'Creation Time';
+comment on column CDR_DEF_CONFIG.create_institution
+  is 'Creation Institution';
+comment on column CDR_DEF_CONFIG.update_user
+  is 'Update User';
+comment on column CDR_DEF_CONFIG.update_time
+  is 'Update Time';
+comment on column CDR_DEF_CONFIG.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro

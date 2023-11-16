@@ -1,0 +1,32 @@
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 28/04/2011 08:37
+-- CHANGE REASON: [ALERT-173132] Medication Backoffice - set the severity level at which drug interaction warnings should be displayed
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table MED_SEVERITY_CLIN_SERV
+  add constraint MSCS_PK primary key (id_institution, id_module, id_software, id_profile_template, id_clinical_service, id_severity)
+  using index 
+  tablespace INDEX_S;
+alter table MED_SEVERITY_CLIN_SERV
+  add constraint MSCS_CS_FK foreign key (ID_CLINICAL_SERVICE)
+  references CLINICAL_SERVICE (ID_CLINICAL_SERVICE);
+alter table MED_SEVERITY_CLIN_SERV
+  add constraint MSCS_INST_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION);
+alter table MED_SEVERITY_CLIN_SERV
+  add constraint MSCS_S_FK foreign key (ID_SOFTWARE)
+  references SOFTWARE (ID_SOFTWARE);
+alter table MED_SEVERITY_CLIN_SERV
+  add constraint MSCS_MWM_FK foreign key (ID_MODULE)
+  references med_warning_modules (ID_MODULE);
+alter table MED_SEVERITY_CLIN_SERV
+  add constraint MSCS_PT_FK foreign key (ID_PROFILE_TEMPLATE)
+  references profile_template (ID_PROFILE_TEMPLATE);
+
+-- Create/Recreate check constraints 
+alter table MED_SEVERITY_CLIN_SERV
+  add constraint MSCS_FSS_CHK
+  check (FLG_SEVERITY_STATUS IN (null,'Y','N'));
+alter table MED_SEVERITY_CLIN_SERV
+  add constraint MSCS_FMS_CHK
+  check (FLG_MODULE_STATUS IN (null,'Y','N'));
+-- CHANGE END:  Pedro Morais

@@ -1,0 +1,28 @@
+-- CHANGED BY: Paulo Fonseca
+-- CHANGED DATE: 28/10/2009
+-- CHANGING REASON: ALERT-52637
+ALTER TABLE NECESSITY_DEPT_INST_SOFT ADD CONSTRAINT NDIS_UK UNIQUE (ID_DEPARTMENT, FLG_TYPE, ID_INSTITUTION, ID_SOFTWARE);
+ALTER TABLE NECESSITY_DEPT_INST_SOFT ADD CONSTRAINT NDIS_DEPARTMENT_TYPE_CHK CHECK ((ID_DEPARTMENT IS NOT NULL AND FLG_TYPE IS NULL) OR (ID_DEPARTMENT IS NULL AND FLG_TYPE IS NOT NULL));
+ALTER TABLE NECESSITY_DEPT_INST_SOFT ADD CONSTRAINT NDIS_DEPARTMENT_CHK CHECK ((ID_DEPARTMENT IS NOT NULL AND ID_INSTITUTION = 0) OR ID_DEPARTMENT IS NULL);
+-- CHANGE END
+
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 26/09/2013 11:14
+-- CHANGE REASON: [ALERT-264768] 
+alter table NECESSITY_DEPT_INST_SOFT
+  add constraint NDIS_FLG_AREA_CHK
+  check (FLG_AREA IN ('MOVEMENT', 'NECESSITY_INST_SOFT'));
+
+alter table NECESSITY_DEPT_INST_SOFT
+  add constraint NDIS_FLG_SELECTED_CHK
+  check (flg_selected IN ('Y', 'N'));
+
+ALTER TABLE necessity_dept_inst_soft drop CONSTRAINT ndis_department_type_chk;
+ALTER TABLE necessity_dept_inst_soft drop CONSTRAINT ndis_uk;
+ALTER TABLE alert.necessity_dept_inst_soft add CONSTRAINT ndis_uk UNIQUE(id_necessity,
+                                                                   id_department,
+                                                                   flg_type,
+                                                                   id_institution,
+                                                                   id_software);
+-- CHANGE END:  sergio.dias

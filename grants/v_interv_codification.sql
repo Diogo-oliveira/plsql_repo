@@ -1,0 +1,6 @@
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 15/06/2016 11:20
+-- CHANGE REASON: [ALERT-322211] 
+GRANT SELECT ON v_interv_codification TO ALERT_INTER;
+GRANT SELECT ON v_interv_codification TO INTER_ALERT_V2;
+-- CHANGE END: Ana Matos

@@ -1,0 +1,36 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 22/09/2011 09:03
+-- CHANGE REASON: [ALERT-192572] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists2 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists2, -06512);
+    e_object_exists3 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists3, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE home_field
+  ADD CONSTRAINT home_field_pk PRIMARY KEY (id_home_field)
+  USING INDEX TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table home_field
+    add constraint hf_fdt_chk
+    check (flg_data_type IN (''M'',''T'',''N'',''D''))';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists2 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+        WHEN e_object_exists3 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+---------------------------------------------------------------------------------------
+-- CHANGE END: Paulo Teixeira

@@ -1,0 +1,79 @@
+
+
+  CREATE TABLE SR_EQUIP_KIT
+   (	ID_SR_EQUIP_KIT NUMBER(24,0) NOT NULL ENABLE,
+	ID_SR_EQUIP_PARENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_SR_EQUIP NUMBER(24,0) NOT NULL ENABLE,
+	DESC_EQUIP_KIT VARCHAR2(2000),
+	FLG_AVAILABLE VARCHAR2(1),
+	ID_SPECIALITY NUMBER(12,0),
+	ID_PROFESSIONAL NUMBER(24,0),
+	CREATE_DATE DATE,
+	QTY NUMBER(6,3) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE
+   );
+
+
+
+COMMENT ON COLUMN sr_equip_kit.id_sr_equip_kit IS 'ID único' ;
+COMMENT ON COLUMN sr_equip_kit.id_sr_equip_parent IS 'ID do Kit na tabela de equipamentos' ;
+COMMENT ON COLUMN sr_equip_kit.id_sr_equip IS 'ID do intrumento na tabela de equipamentos' ;
+COMMENT ON COLUMN sr_equip_kit.desc_equip_kit IS 'Descrição do kit de instrumentos' ;
+COMMENT ON COLUMN sr_equip_kit.flg_available IS 'Disponibilidade do kit' ;
+COMMENT ON COLUMN sr_equip_kit.id_speciality IS 'Id da especialidade a que o kit se destina' ;
+COMMENT ON COLUMN sr_equip_kit.id_professional IS 'ID do profissional que construiu o kit' ;
+COMMENT ON COLUMN sr_equip_kit.create_date IS 'Data de criação do kit' ;
+COMMENT ON COLUMN sr_equip_kit.qty IS 'Quantidade' ;
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table SR_EQUIP_KIT drop (CREATE_DATE);
+-- CHANGE END
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table SR_EQUIP_KIT drop (CREATE_DATE);
+-- CHANGE END
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 17:41
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table SR_EQUIP_KIT
+  is 'Table that allow to create a kit with several instruments';
+-- Add comments to the columns 
+comment on column SR_EQUIP_KIT.id_sr_equip_kit
+  is 'Primary key';
+comment on column SR_EQUIP_KIT.id_sr_equip_parent
+  is 'Instrument id in SR_EQUIP table (Parent one - to definy an hierarchical behaviour)';
+comment on column SR_EQUIP_KIT.id_sr_equip
+  is 'Instrument id in SR_EQUIP table';
+comment on column SR_EQUIP_KIT.desc_equip_kit
+  is 'Kit instruments descriptions';
+comment on column SR_EQUIP_KIT.flg_available
+  is 'Kit availability';
+comment on column SR_EQUIP_KIT.id_speciality
+  is 'Id of speciality that this kit is to be used';
+comment on column SR_EQUIP_KIT.id_professional
+  is 'Id of professional that buids the kit';
+comment on column SR_EQUIP_KIT.qty
+  is 'Quantity';
+comment on column SR_EQUIP_KIT.adw_last_update
+  is 'Last change update : deprecated';
+comment on column SR_EQUIP_KIT.create_date_tstz
+  is 'Kit creation date';
+comment on column SR_EQUIP_KIT.create_user
+  is 'Creation User';
+comment on column SR_EQUIP_KIT.create_time
+  is 'Creation Time';
+comment on column SR_EQUIP_KIT.create_institution
+  is 'Creation Institution';
+comment on column SR_EQUIP_KIT.update_user
+  is 'Update User';
+comment on column SR_EQUIP_KIT.update_time
+  is 'Update Time';
+comment on column SR_EQUIP_KIT.update_institution
+  is 'Update Institution';
+-- CHANGE END: Renato Nunes

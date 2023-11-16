@@ -1,0 +1,23 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 04/06/2012 17:28
+-- CHANGE REASON: [ALERT-232352 ] Recheck corrections
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PN_GROUP_TASK_TYPES
+  add constraint pgtt_tt_fk foreign key (id_task_type)
+  references tl_task (id_tl_task)';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table PN_GROUP_TASK_TYPES
+  add constraint pgtt_png_fk foreign key (id_pn_group)
+  references pn_group (id_pn_group)';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

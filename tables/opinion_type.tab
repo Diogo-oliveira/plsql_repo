@@ -1,0 +1,58 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 16/04/2010 16:02
+-- CHANGE REASON: [ALERT-86898] opinion_type
+create table opinion_type
+(
+  id_opinion_type        number(24) not null,
+  code_opinion_type      varchar2(200 char) not null,
+  id_category            number(12) not null,
+  create_user            varchar2(24 char),
+  create_time            timestamp with local time zone,
+  create_institution     number(24),
+  update_user            varchar2(24 char),
+  update_time            timestamp with local time zone,
+  update_institution     number(24)
+);
+
+comment on table opinion_type
+  is 'Opinion types.';
+
+comment on column opinion_type.id_opinion_type
+  is 'Primary key.';
+comment on column opinion_type.code_opinion_type
+  is 'Code for translation.';
+comment on column opinion_type.id_category
+  is 'Category identifier.';
+comment on column opinion_type.create_user
+  is 'Create User';
+comment on column opinion_type.create_time
+  is 'Create Time';
+comment on column opinion_type.create_institution
+  is 'Create Institution';
+comment on column opinion_type.update_user
+  is 'Update User';
+comment on column opinion_type.update_time
+  is 'Update Time';
+comment on column opinion_type.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Ana Moita
+-- CHANGE DATE: 07/08/2019 15:48
+-- CHANGE REASON: [EMR-18707] - CDC - FollowUp
+alter table OPINION_TYPE add CODE_START_FOLLOW_UP GENERATED ALWAYS AS ('OPINION_TYPE.CODE_START_FOLLOW_UP.'||TO_CHAR(ID_OPINION_TYPE)) VIRTUAL;
+comment on column opinion_type.code_start_follow_up is 'Text in start follow-up pop up.';
+-- CHANGE END: Ana Moita
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 18/12/2019 11:57
+-- CHANGE REASON: [EMR-24615]
+COMMENT ON COLUMN OPINION_TYPE.ID_CATEGORY IS 'DEPRECATED - Use OPINION_TYPE_CATEGORY';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 05/11/2021 16:18
+-- CHANGE REASON: [EMR-49295] - Improvements on rehabilitation profiles
+ALTER TABLE opinion_type ADD ID_PARENT NUMBER(24);
+ALTER TABLE opinion_type ADD CONSTRAINT OPINION_TYPE_PARENT_FK FOREIGN KEY (ID_PARENT) REFERENCES OPINION_TYPE(ID_OPINION_TYPE);
+-- CHANGE END: Elisabete Bugalho

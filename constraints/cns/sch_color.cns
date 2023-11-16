@@ -1,0 +1,11 @@
+ALTER TABLE sch_color ADD CONSTRAINT sch_color_pk PRIMARY KEY(id_sch_color) ENABLE;
+ALTER TABLE sch_color MODIFY (id_institution NOT NULL ENABLE);
+ALTER TABLE sch_color MODIFY (color_name NOT NULL ENABLE);
+ALTER TABLE sch_color MODIFY (color_hex NOT NULL ENABLE);
+
+ALTER TABLE sch_color ADD CONSTRAINT sco_flgtype_ck CHECK (flg_type IN ('D','N'));
+ALTER TABLE sch_color ADD CONSTRAINT sco_namedcs_ck CHECK (flg_type IS NULL OR id_dep_clin_serv IS NULL);
+
+ALTER TABLE sch_color MODIFY COLOR_NAME NULL;
+ALTER TABLE sch_color DROP CONSTRAINT SCO_NAMEDCS_CK;
+ALTER TABLE sch_color ADD CONSTRAINT SCO_NAMEDCS_CK CHECK (id_dep_Clin_serv IS NULL or color_name IS NULL);

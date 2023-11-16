@@ -1,0 +1,91 @@
+-- Create table
+create table UNIDOSE_CAR_HIST
+(
+  ID_UNIDOSE_CAR NUMBER(24) not null,
+  CODE_UNIDOSE_CAR    VARCHAR2(200) not null,
+  ID_INSTITUTION      NUMBER(12) not null,
+  ADW_LAST_UPDATE     DATE not null,
+  ID_CONTAINER_CONFIG NUMBER(24),
+  STATUS              VARCHAR2(1),
+  DATA_STATUS         DATE
+)
+;
+-- Add comments to the table 
+comment on table UNIDOSE_CAR_HIST
+  is 'Carro de distribuição da medicação em unidose';
+-- Add comments to the columns 
+comment on column UNIDOSE_CAR_HIST.ID_UNIDOSE_CAR
+  is 'Chave primária';
+comment on column UNIDOSE_CAR_HIST.CODE_UNIDOSE_CAR
+  is 'Código para tradução';
+comment on column UNIDOSE_CAR_HIST.ID_INSTITUTION
+  is 'ID da instituição a que o carro pertence';
+comment on column UNIDOSE_CAR_HIST.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+comment on column UNIDOSE_CAR_HIST.ID_CONTAINER_CONFIG
+  is 'ID da configuração do carro';
+comment on column UNIDOSE_CAR_HIST.STATUS
+  is 'Estado do carro: A -Pronto para aviamento; T -Pronto para transporte; S -Em transporte para o serviço; D -Disponovel no serviço';
+comment on column UNIDOSE_CAR_HIST.DATA_STATUS
+  is 'Data da alteração do estado';
+-- Create/Recreate primary, unique and foreign key constraints 
+
+-- Grant/Revoke object privileges 
+grant select, insert, update, delete, references, alter, index on UNIDOSE_CAR_HIST to INTER_ALERT_V2;
+
+
+
+ALTER TABLE UNIDOSE_CAR_HIST ADD DATA_STATUS_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN UNIDOSE_CAR_HIST.DATA_STATUS_TSTZ IS 'Data da altera‡Æo do estado'; 
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGED DATE: 2008-SEPT-22
+-- CHANGING REASON: Remoção de colunas do tipo DATE que tenham equivalentes do tipo TIMESTAMP WITH LOCAL TIME ZONE
+ALTER TABLE UNIDOSE_CAR_HIST DROP COLUMN data_status; 
+-- CHANGE END
+
+
+--RUI MARANTE
+--2009-03-25
+--script to add PK to unidose tables + seq's   (required CCHIT)
+
+-- UNIDOSE_CAR_HIST
+alter table unidose_car_hist
+add id_unidose_car_hist number(24);
+
+update unidose_car_hist uch
+set uch.id_unidose_car_hist = rownum;
+
+commit;
+
+alter table unidose_car_hist
+modify id_unidose_car_hist number(24) not null;
+
+alter table unidose_car_hist
+add constraint unidose_car_hist_pk primary key (id_unidose_car_hist)
+using index tablespace INDEX_M;
+
+
+declare
+	l_seq_next_value number(24) := 0;
+begin
+	select nvl(max(uch.id_unidose_car_hist),0) + 1
+	into l_seq_next_value
+	from unidose_car_hist uch;
+
+	execute immediate 'create sequence seq_unidose_car_hist minvalue 1 maxvalue 999999999999999999999999 start with ' || to_char(l_seq_next_value) || ' increment by 1';
+end;
+/
+
+--comment
+comment on column unidose_car_hist.id_unidose_car_hist is
+	'this column is the table primary key (sequence to use: seq_unidose_car_hist)';
+
+-- CHANGE END
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE UNIDOSE_CAR_HIST IS 'Carro de distribuição da medicação em unidose [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

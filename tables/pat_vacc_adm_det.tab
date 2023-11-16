@@ -1,0 +1,439 @@
+create table PAT_VACC_ADM_DET
+(
+  ID_PAT_VACC_ADM_DET NUMBER(24) not null,
+  ID_PAT_VACC_ADM     NUMBER(24) not null,
+  DT_TAKE             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_DRUG_PRESC_PLAN  NUMBER(24),
+  ID_EPISODE          NUMBER(24),
+  FLG_STATUS          VARCHAR2(1),
+  DT_CANCEL           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROF_CANCEL      NUMBER(24),
+  NOTES_CANCEL        VARCHAR2(4000),
+  DESC_VACCINE        VARCHAR2(2000),
+  LOT_NUMBER          VARCHAR2(100),
+  DT_EXPIRATION       DATE,
+  FLG_ADVERS_REACT    VARCHAR2(2),
+  NOTES_ADVERS_REACT  VARCHAR2(2000),
+  APPLICATION_SPOT    VARCHAR2(20),
+  REPORT_ORIG         VARCHAR2(200),
+  NOTES               VARCHAR2(400),
+  EMB_ID              VARCHAR2(255),
+  ID_UNIT_MEASURE     NUMBER(24),
+  ID_PROF_WRITES      NUMBER(24),
+  DT_REG              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ADW_LAST_UPDATE     DATE
+)
+;
+-- Add comments to the columns 
+comment on column PAT_VACC_ADM_DET.ID_PAT_VACC_ADM_DET
+  is 'Chave primária';
+comment on column PAT_VACC_ADM_DET.DT_TAKE
+  is 'Data da toma';
+comment on column PAT_VACC_ADM_DET.ID_DRUG_PRESC_PLAN
+  is 'Id da prescrição';
+comment on column PAT_VACC_ADM_DET.ID_EPISODE
+  is 'Id do episódio';
+comment on column PAT_VACC_ADM_DET.FLG_STATUS
+  is 'A - Administrado; N - Não administrado; C - Cancelado';
+comment on column PAT_VACC_ADM_DET.DT_CANCEL
+  is 'Data de cancelamento';
+comment on column PAT_VACC_ADM_DET.ID_PROF_CANCEL
+  is 'Id do profissional que cancela';
+comment on column PAT_VACC_ADM_DET.NOTES_CANCEL
+  is 'Notas de cancelamento';
+comment on column PAT_VACC_ADM_DET.DESC_VACCINE
+  is 'Nome da vacina (usado para os relatos de medicação e fora do PNV)';
+comment on column PAT_VACC_ADM_DET.LOT_NUMBER
+  is 'Nome do lote (usado para os relatos de medicação e fora do PNV)';
+comment on column PAT_VACC_ADM_DET.DT_EXPIRATION
+  is 'Data de validade (usado para os relatos de medicação e fora do PNV)';
+comment on column PAT_VACC_ADM_DET.FLG_ADVERS_REACT
+  is 'Indica se o doente teve uma reacção adversa(usado para os relatos de medicação e fora do PNV)';
+comment on column PAT_VACC_ADM_DET.NOTES_ADVERS_REACT
+  is 'Notas da reacção adversa(usado para os relatos de medicação e fora do PNV)';
+comment on column PAT_VACC_ADM_DET.APPLICATION_SPOT
+  is 'Local de administração(usado para os relatos de medicação e fora do PNV)';
+comment on column PAT_VACC_ADM_DET.REPORT_ORIG
+  is 'Origem do relato';
+comment on column PAT_VACC_ADM_DET.NOTES
+  is 'Notas';
+comment on column PAT_VACC_ADM_DET.EMB_ID
+  is 'Id do medicamento para as vacinas fora do PNV';
+comment on column PAT_VACC_ADM_DET.ID_UNIT_MEASURE
+  is 'Unidade de medida';
+comment on column PAT_VACC_ADM_DET.ID_PROF_WRITES
+  is 'Profissional que administra';
+comment on column PAT_VACC_ADM_DET.DT_REG
+  is 'data em que foi feito o registo (útil nos relatos em que não é obrigatório o preenchimento da data de administração)';
+
+-- Add/modify columns 
+alter table PAT_VACC_ADM_DET add ID_PAT_MEDICATION_LIST NUMBER(24);
+-- Add comments to the columns 
+comment on column PAT_VACC_ADM_DET.ID_PAT_MEDICATION_LIST
+  is 'No caso de ser um relato irá ser inserido um registo na pat_medication_list';
+
+-- Add/modify columns 
+alter table PAT_VACC_ADM_DET add DT_NEXT_TAKE TIMESTAMP(6) WITH LOCAL TIME ZONE;
+-- Add comments to the columns 
+comment on column PAT_VACC_ADM_DET.DT_NEXT_TAKE
+  is 'Dt Next Take (Only for PNV Vaccines)';
+
+
+
+-- Pedro Teixeira: não é necessário apagar a coluna ADW_LAST_UPDATE
+--ALTER TABLE PAT_VACC_ADM_DET DROP COLUMN ADW_LAST_UPDATE;
+
+
+-- Pedro Teixeira: colunas aliminadas em QC, necessário acrescentar
+ALTER TABLE PAT_VACC_ADM_DET ADD ADW_LAST_UPDATER DATE;
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 06/04/2011 09:42
+-- CHANGE REASON: [ALERT-171418] 
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PAT_VACC_ADM_DET add FLG_TYPE_DATE varchar2(1)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+
+END;
+/
+
+-- Add comments to the columns 
+comment on column PAT_VACC_ADM_DET.FLG_TYPE_DATE
+  is 'Tipo de data inserido, com marcacao de hora - H; só para um ano - Y; para um ano e mes - M; para ano, mes e dia - D';
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 10/05/2011 15:45
+-- CHANGE REASON: [ALERT-177865] 
+DECLARE
+e_column_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_column_already_there,-01430);
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE PAT_VACC_ADM_DET ADD ID_VACC_MANUFACTURER NUMBER(24)'; 
+EXCEPTION
+WHEN e_column_already_there THEN
+  dbms_output.put_line('Aviso: coluna anteriormente criada!');
+END;
+/
+
+DECLARE
+e_column_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_column_already_there,-01430);
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE PAT_VACC_ADM_DET ADD CODE_MVX VARCHAR2(200)'; 
+EXCEPTION
+WHEN e_column_already_there THEN
+  dbms_output.put_line('Aviso: coluna anteriormente criada!');
+END;
+/
+
+COMMENT ON COLUMN pat_vacc_adm_det.ID_VACC_MANUFACTURER IS 'Id vacc manufacturer'; 
+COMMENT ON COLUMN pat_vacc_adm_det.CODE_MVX IS 'Code vacc manufacturer';
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 26/07/2011 10:36
+-- CHANGE REASON: [ALERT-190003] 
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PAT_VACC_ADM_DET add FLG_REPORTED varchar2(1)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+
+-- Add comments to the columns 
+comment on column PAT_VACC_ADM_DET.FLG_REPORTED
+  is 'Indica se é uma administracao ou um relato de administracao nas vacinas fora do PNV: Y se relato, N se nao';
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/05/2014 21:57
+-- CHANGE REASON: [ALERT-281683] 
+alter table pat_vacc_adm_det add id_information_source Number(24);
+alter table pat_vacc_adm_det add id_vacc_funding_cat NUMBER(24);
+alter table pat_vacc_adm_det add id_vacc_funding_source NUMBER(24);
+alter table pat_vacc_adm_det add id_vacc_doc_vis NUMBER(24);
+alter table pat_vacc_adm_det add doc_vis_desc VARCHAR2(4000);
+alter table pat_vacc_adm_det add id_vacc_origin NUMBER(24);
+alter table pat_vacc_adm_det add origin_desc VARCHAR2(4000);
+alter table pat_vacc_adm_det add vacc_route_data VARCHAR2(40);  
+alter table pat_vacc_adm_det add id_administred NUMBER(24);
+alter table pat_vacc_adm_det add administred_desc VARCHAR2(4000);
+alter table pat_vacc_adm_det add dt_doc_delivery_tstz TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table pat_vacc_adm_det add id_vacc_adv_reaction NUMBER(24);
+alter table pat_vacc_adm_det add application_spot_code VARCHAR2(20);
+alter table pat_vacc_adm_det add ID_CANCEL_REASON NUMBER(24);
+alter table pat_vacc_adm_det add suspended_notes VARCHAR2(4000);
+alter table pat_vacc_adm_det add  id_reason_sus Number(24);
+alter table pat_vacc_adm_det add dt_suspended TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table pat_vacc_adm_det add vers VARCHAR2(10);
+
+comment on column pat_vacc_adm_det.id_information_source is 'Information source of report';
+comment on column pat_vacc_adm_det.id_vacc_funding_cat is 'Vaccine funding program eligibility category Identifier';
+comment on column pat_vacc_adm_det.id_vacc_funding_source is 'Vaccine funding source Identifier';
+comment on column pat_vacc_adm_det.id_vacc_doc_vis is 'Vaccine document Identifier';
+comment on column pat_vacc_adm_det.doc_vis_desc is 'Vaccine document description in free text';
+comment on column pat_vacc_adm_det.id_vacc_origin is 'This refers to the origin of the vaccine Identifier';
+comment on column pat_vacc_adm_det.origin_desc is 'Origin Description in free text';
+comment on column pat_vacc_adm_det.vacc_route_data is 'This vaccination route of the vaccine';
+comment on column pat_vacc_adm_det.id_administred is 'Administred Professional';
+comment on column pat_vacc_adm_det.administred_desc is 'Administred Professional in free text';
+comment on column pat_vacc_adm_det.dt_doc_delivery_tstz is 'Delivery date of the document to the patient';
+comment on column pat_vacc_adm_det.id_vacc_adv_reaction is 'Id of adverse reactions for table';
+comment on column pat_vacc_adm_det.application_spot_code is 'Code of Aplication Spot';
+comment on column pat_vacc_adm_det.ID_CANCEL_REASON is 'Reason ID for the cancelation of the administration';
+comment on column pat_vacc_adm_det.suspended_notes is 'Notes when discontinue';
+comment on column pat_vacc_adm_det.id_reason_sus is 'Reason when discontinue';
+comment on column pat_vacc_adm_det.dt_suspended is 'Date when discontinue';
+comment on column pat_vacc_adm_det.vers is 'Versão: PT, USA, etc';
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify VERS varchar2(10 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify VACC_ROUTE_DATA varchar2(40 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify SUSPENDED_NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify REPORT_ORIG varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify ORIGIN_DESC varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify NOTES_CANCEL varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify NOTES_ADVERS_REACT varchar2(2000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify NOTES varchar2(400 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify LOT_NUMBER varchar2(100 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify FUNDING_SOURCE_DESC varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify FLG_TYPE_DATE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify FLG_STATUS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify FLG_REPORTED varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify FLG_ADVERS_REACT varchar2(2 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify EMB_ID varchar2(255 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify DOC_VIS_DESC varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify DESC_VACCINE varchar2(2000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify CODE_MVX varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify APPLICATION_SPOT_CODE varchar2(20 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify APPLICATION_SPOT varchar2(20 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:32
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_VACC_ADM_DET modify ADMINISTRED_DESC varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 14:38
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON TABLE PAT_VACC_ADM_DET IS 'This table stores all vaccines administration details';
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 14:40
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON COLUMN PAT_VACC_ADM_DET.ID_PAT_VACC_ADM_DET IS 'Unique identifier for the administered vaccine detail';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.ID_PAT_VACC_ADM IS 'Unique identifier for the administered vaccine';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.ID_PAT_MEDICATION_LIST IS 'Home medication ID. When it is created a local prescription based on a home medication [Deprecated]';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.DT_TAKE IS 'Date of administration';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.ID_DRUG_PRESC_PLAN IS 'Prescription administration plan ID';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.ID_EPISODE IS 'Episode ID';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.FLG_STATUS IS 'Flag indicating the status of administration';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.DT_CANCEL IS 'Date the vaccine administration was canceled';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.ID_PROF_CANCEL IS 'Professional ID that canceled the record';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.NOTES_CANCEL IS 'Cancellation notes';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.DESC_VACCINE IS 'Description of the vaccine';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.LOT_NUMBER IS 'Lot number';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.DT_EXPIRATION IS 'Expiration date';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.FLG_ADVERS_REACT IS 'Flg that identifies whether the patient has an adverse reaction(use only on vacination or home medication not included in the national vaccination plan(Y - yes; N - no)';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.NOTES_ADVERS_REACT IS 'Adverse reaction notes (use only on vacination or home medication not included in the national vaccination plan)';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.APPLICATION_SPOT IS 'Aplication spot(use only on vacination or home medication not included in the national vaccination plan)';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.REPORT_ORIG IS 'Vaccine origin';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.NOTES IS 'Notes';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.EMB_ID IS 'Medication with packaging ID';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.ID_UNIT_MEASURE IS 'The numeric ID of the UNIT_MEASURE table';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.ID_PROF_WRITES IS 'Profissional ID that created the recorded';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.DT_REG IS 'The date where the row was recorded';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.ADW_LAST_UPDATE  IS 'Update date';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.DT_NEXT_TAKE IS 'Next take date (Only for PNV Vaccines)';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.FLG_TYPE_DATE IS 'Date format';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.ID_VACC_MANUFACTURER IS 'Vaccine manufacturer ID';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.CODE_MVX IS 'Manufacturer MVX code';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.FLG_REPORTED IS 'Flg that identifies if is vacination or home medication not included in the national vaccination plan(Y - yes; N - no)';
+/
+COMMENT ON COLUMN PAT_VACC_ADM_DET.VERS IS 'Version';
+/
+-- CHANGE END: Sofia Mendes

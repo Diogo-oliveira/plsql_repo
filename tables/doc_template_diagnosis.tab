@@ -1,0 +1,71 @@
+  CREATE TABLE DOC_TEMPLATE_DIAGNOSIS
+   (	ID_DOC_TEMPLATE_DIAGNOSIS NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOC_TEMPLATE NUMBER(24,0) NOT NULL ENABLE,
+	ID_DIAGNOSIS NUMBER(12,0) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN doc_template_diagnosis.id_doc_template_diagnosis IS 'Chave primária' ;
+COMMENT ON COLUMN doc_template_diagnosis.id_doc_template IS 'Template' ;
+COMMENT ON COLUMN doc_template_diagnosis.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN doc_template_diagnosis.adw_last_update IS 'Data da última alteração' ;
+
+comment on column DOC_TEMPLATE_DIAGNOSIS.ID_DIAGNOSIS
+  is 'Diagnóstico';
+	
+-- CHANGED BY: José Brito
+-- CHANGE REASON: Eliminada coluna ID_DOC_TEMPLATE e acrescentada ID_COMPLAINT.
+-- CHANGE DATE: 2008/03/17
+ALTER TABLE doc_template_diagnosis DROP COLUMN id_doc_template;
+        
+ALTER TABLE doc_template_diagnosis ADD id_complaint NUMBER(24) NOT NULL;
+-- CHANGE END: José Brito
+
+COMMENT ON COLUMN doc_template_diagnosis.id_complaint IS 'Queixa associada ao diagnóstico';
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:43
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table DOC_TEMPLATE_DIAGNOSIS
+  is 'Association between complaint and diagnoses (Most frequent diagnosis by complaint)';
+-- Add comments to the columns 
+comment on column DOC_TEMPLATE_DIAGNOSIS.id_doc_template_diagnosis
+  is 'Primary Key';
+comment on column DOC_TEMPLATE_DIAGNOSIS.id_diagnosis
+  is 'Diagnosis ID';
+comment on column DOC_TEMPLATE_DIAGNOSIS.flg_available
+  is 'Availability (Y/N)';
+comment on column DOC_TEMPLATE_DIAGNOSIS.adw_last_update
+  is 'Date of last change';
+comment on column DOC_TEMPLATE_DIAGNOSIS.id_complaint
+  is 'Complaint ID';
+-- CHANGE END: Elisabete Bugalho
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2019-09-10
+-- CHANGED REASON: EMR-20122
+DECLARE
+  e_ex EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_ex, -01430);
+BEGIN
+  -- Add/modify columns 
+  EXECUTE IMMEDIATE 'alter table DOC_TEMPLATE_DIAGNOSIS add migration_status VARCHAR2(400 CHAR)';
+EXCEPTION
+  WHEN e_ex THEN
+    NULL;
+END;
+/
+
+-- Add comments to the columns 
+comment on column DOC_TEMPLATE_DIAGNOSIS.migration_status
+  is 'Current status of this record in the migration for terminology server configurations.';
+
+-- CHANGE END: Humberto Cardoso
+

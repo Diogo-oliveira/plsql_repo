@@ -1,0 +1,5 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 12/02/2016 11:55
+-- CHANGE REASON: [ALERT-318527] Constraint in care stage to avoid dup active values for episode
+create unique index CS_EPIS_ACT_UK on CARE_STAGE (CASE  WHEN (ID_EPISODE IS NOT NULL AND NVL(FLG_ACTIVE,'Y')NOT IN ('N','H')) THEN ID_EPISODE END, CASE  WHEN (ID_EPISODE IS NOT NULL AND NVL(FLG_ACTIVE,'Y')NOT IN('N','H')) THEN FLG_ACTIVE END);
+-- CHANGE END: Elisabete Bugalho

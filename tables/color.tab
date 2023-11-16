@@ -1,0 +1,42 @@
+
+
+  CREATE TABLE COLOR
+   (	ID_COLOR NUMBER(12,0) NOT NULL ENABLE,
+	CODE_COLOR VARCHAR2(200) NOT NULL ENABLE,
+	ALERT_TIME NUMBER(6,0) NOT NULL ENABLE,
+	OBS_TIME NUMBER(6,0) NOT NULL ENABLE,
+	SCALE_TIME NUMBER(6,0) NOT NULL ENABLE,
+	FLG_REF_LINE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN color.code_color IS 'Código para tradução do nome da cor' ;
+COMMENT ON COLUMN color.alert_time IS 'Tempo a partir do qual a aplicação envia alertas para avisar q o doente ainda ñ foi observado' ;
+COMMENT ON COLUMN color.obs_time IS 'Tempo máximo para observação' ;
+COMMENT ON COLUMN color.flg_type IS 'Tipo: M - manchester, N - N/A, S - sem cor, W - branco' ;
+COMMENT ON COLUMN color.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 18/03/2015 11:43
+-- CHANGE REASON: [ALERT-309049] [STABLE] EDIS patient grids changes
+--                
+BEGIN
+  pk_versioning.run(i_sql => q'[alter table COLOR add INTERNAL_NAME varchar2(200 char)]');
+  pk_versioning.run(i_sql => q'[alter table COLOR drop column alert_time]');
+  pk_versioning.run(i_sql => q'[alter table color drop column obs_time]');
+  pk_versioning.run(i_sql => q'[alter table color drop column scale_time]');
+  pk_versioning.run(i_sql => q'[alter table color drop column flg_ref_line]');
+  pk_versioning.run(i_sql => q'[alter table color drop column flg_type]');
+  pk_versioning.run(i_sql => q'[alter table color drop column adw_last_update]');
+  pk_versioning.run(i_sql => q'[alter  table COLOR modify ID_COLOR number(24)]');
+END;
+/
+
+COMMENT ON COLUMN COLOR.ID_COLOR IS 'color identifier';
+COMMENT ON COLUMN COLOR.INTERNAL_NAME IS 'color internal name';
+COMMENT ON TABLE COLOR IS 'Table with colors';
+-- CHANGE END: Elisabete Bugalho

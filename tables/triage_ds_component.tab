@@ -1,0 +1,97 @@
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 03/05/2012 18:23
+-- CHANGE REASON: [ALERT-228955] EST simplified triage
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -00955);
+BEGIN
+    --i_flg_category
+    --DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'TRIAGE_DS_COMPONENT',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'DSV',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+
+    BEGIN
+        EXECUTE IMMEDIATE '
+CREATE TABLE TRIAGE_DS_COMPONENT (
+  ID_TRIAGE_DS_COMPONENT NUMBER(24) NOT NULL, 
+  INTERNAL_NAME          VARCHAR2(200 CHAR) NOT NULL, 
+  FLG_COMPONENT_TYPE     VARCHAR2(1 CHAR) NOT NULL, 
+  CREATE_USER            VARCHAR2(24), 
+  CREATE_TIME            TIMESTAMP(6), 
+  CREATE_INSTITUTION     NUMBER(24), 
+  UPDATE_USER            VARCHAR2(24), 
+  UPDATE_TIME            TIMESTAMP(6), 
+  UPDATE_INSTITUTION     NUMBER(24)) TABLESPACE TABLE_M';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE TRIAGE_DS_COMPONENT IS ''Has the Triage available dynamic screen components''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.ID_TRIAGE_DS_COMPONENT IS ''Primary key''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.INTERNAL_NAME IS ''Dynamic screen internal name''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.FLG_COMPONENT_TYPE IS ''Dynamic screen component type (Only R - Root components are accepted here)''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.CREATE_USER IS ''Creation User''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.CREATE_TIME IS ''Creation Time''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.CREATE_INSTITUTION IS ''Creation Institution''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.UPDATE_USER IS ''Update User''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.UPDATE_TIME IS ''Update Time''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.UPDATE_INSTITUTION IS ''Update Institution''';
+END;
+/
+-- CHANGE END: José Silva
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 03/05/2012 18:39
+-- CHANGE REASON: [ALERT-228955] EST simplified triage
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -00955);
+BEGIN
+    --i_flg_category
+    --DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'TRIAGE_DS_COMPONENT',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'DSV',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+
+    BEGIN
+        EXECUTE IMMEDIATE '
+CREATE TABLE TRIAGE_DS_COMPONENT (
+  ID_TRIAGE_DS_COMPONENT NUMBER(24) NOT NULL, 
+  INTERNAL_NAME          VARCHAR2(200 CHAR) NOT NULL, 
+  FLG_COMPONENT_TYPE     VARCHAR2(1 CHAR) NOT NULL, 
+  CREATE_USER            VARCHAR2(24), 
+  CREATE_TIME            TIMESTAMP(6), 
+  CREATE_INSTITUTION     NUMBER(24), 
+  UPDATE_USER            VARCHAR2(24), 
+  UPDATE_TIME            TIMESTAMP(6), 
+  UPDATE_INSTITUTION     NUMBER(24)) TABLESPACE TABLE_M';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE TRIAGE_DS_COMPONENT IS ''Has the Triage available dynamic screen components''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.ID_TRIAGE_DS_COMPONENT IS ''Primary key''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.INTERNAL_NAME IS ''Dynamic screen internal name''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.FLG_COMPONENT_TYPE IS ''Dynamic screen component type (Only R - Root components are accepted here)''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.CREATE_USER IS ''Creation User''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.CREATE_TIME IS ''Creation Time''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.CREATE_INSTITUTION IS ''Creation Institution''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.UPDATE_USER IS ''Update User''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.UPDATE_TIME IS ''Update Time''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN TRIAGE_DS_COMPONENT.UPDATE_INSTITUTION IS ''Update Institution''';
+END;
+/
+-- CHANGE END: José Silva

@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_table_diag_terminology IS TABLE OF t_rec_diag_terminology;

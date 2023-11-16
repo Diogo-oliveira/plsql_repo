@@ -1,0 +1,33 @@
+  CREATE TABLE "SR_POS_INST"
+(  
+  "ID_SR_POS_INST" NUMBER(24,0) NOT NULL,
+  "ID_SR_POS_STATUS" NUMBER(24,0) NOT NULL,
+  "FLG_TYPE_APPROVAL" VARCHAR2(1) NOT NULL,
+  "ID_INSTITUTION" NUMBER(24,0) NOT NULL,
+  "FLG_AVAILABLE" VARCHAR2(1),
+  "CREATE_USER"  VARCHAR2(24),
+  "CREATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  "CREATE_INSTITUTION"  NUMBER(24),                         
+  "UPDATE_USER"  VARCHAR2(24),                       
+  "UPDATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,  
+  "UPDATE_INSTITUTION"  NUMBER(24)                  
+);
+
+COMMENT ON TABLE "SR_POS_INST"  IS 'This table stores the possible values for the Pre Operative Sreening status per institution';
+COMMENT ON COLUMN "SR_POS_INST"."ID_SR_POS_INST" IS 'Primary Key';
+COMMENT ON COLUMN "SR_POS_INST"."ID_SR_POS_STATUS"  IS 'type of Pre Operative Screening status';
+COMMENT ON COLUMN "SR_POS_INST"."FLG_TYPE_APPROVAL"  IS 'Impact of this type of POS on the waiting list: Y - ready for scheduling/placed on WList; N - not ready to be placed on the WList';
+COMMENT ON COLUMN "SR_POS_INST"."ID_INSTITUTION"  IS 'Institution using this POS type';
+COMMENT ON COLUMN "SR_POS_INST"."FLG_AVAILABLE"  IS 'Indicates if this Pre-Operative screening status is available on this institution Y available N not available';
+COMMENT ON COLUMN "SR_POS_INST"."CREATE_USER" IS 'ID of the professional who created the record';
+COMMENT ON COLUMN "SR_POS_INST"."CREATE_TIME" IS 'Date of record creation';
+COMMENT ON COLUMN "SR_POS_INST"."CREATE_INSTITUTION" IS 'ID of institution where record was created'; 
+COMMENT ON COLUMN "SR_POS_INST"."UPDATE_USER" IS 'ID of the professional who last updated the record';
+COMMENT ON COLUMN "SR_POS_INST"."UPDATE_TIME" IS 'Date when record was last updated';
+COMMENT ON COLUMN "SR_POS_INST"."UPDATE_INSTITUTION" IS 'ID of the institution where record was last updated'; 
+
+-- CHANGED BY: Jorge Canossa
+-- CHANGE DATE: 2009-07-02
+-- CHANGE REASON: ALERT-31102 
+drop table SR_POS_INST cascade constraints;
+-- CHANGE END

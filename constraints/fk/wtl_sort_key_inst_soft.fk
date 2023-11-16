@@ -1,0 +1,34 @@
+-- CHANGED BY: RicardoNunoAlmeida
+-- CHANGE DATE: 12/03/2010 17:47
+-- CHANGE REASON: [ALERT-60382] 
+alter table wtl_sort_key_inst_soft
+  add constraint WSKIS_WSK_FK foreign key (id_wtl_sort_key)
+  references wtl_sort_key (id_wtl_sort_key);
+
+alter table wtl_sort_key_inst_soft
+  add constraint WSKIS_S_FK foreign key (id_wtl_sort_key)
+  references software(id_software);
+
+alter table wtl_sort_key_inst_soft
+  add constraint WSKIS_INST_FK foreign key (id_wtl_sort_key)
+  references institution(id_institution);
+-- CHANGE END: RicardoNunoAlmeida
+
+-- CHANGED BY: RicardoNunoAlmeida
+-- CHANGE DATE: 16/03/2010 18:08
+-- CHANGE REASON: [ALERT-81110] 
+alter table wtl_sort_key_inst_soft
+drop constraint WSKIS_S_FK;
+
+alter table wtl_sort_key_inst_soft
+drop constraint WSKIS_INST_FK;
+
+
+alter table wtl_sort_key_inst_soft
+  add constraint WSKIS_S_FK foreign key (id_software)
+  references software(id_software);
+
+alter table wtl_sort_key_inst_soft
+  add constraint WSKIS_INST_FK foreign key (id_institution)
+  references institution(id_institution);
+-- CHANGE END: RicardoNunoAlmeida

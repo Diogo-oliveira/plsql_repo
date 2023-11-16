@@ -1,0 +1,14 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 10/12/2013 15:54
+-- CHANGE REASON: [ALERT-271758] 
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create index CDREX_CALL_FK_IDX on CDR_EXTERNAL (ID_CDR_CALL)
+';
+exception when others then
+  dbms_output.put_line('index CDREX_CALL_FK_IDX exists!');
+end;
+/
+-- CHANGE END: mario.mineiro

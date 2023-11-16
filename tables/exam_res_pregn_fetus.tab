@@ -1,0 +1,38 @@
+CREATE TABLE EXAM_RES_PREGN_FETUS
+(
+ID_EXAM_RES_PREGN_FETUS   NUMBER(24) NOT NULL
+,ID_EXAM_RESULT_PREGNANCY NUMBER(24) NOT NULL
+,ID_PAT_PREGN_FETUS       NUMBER(24) NOT NULL
+,ID_EPIS_DOCUMENTATION    NUMBER(24) NOT NULL
+);
+
+COMMENT ON TABLE EXAM_RES_PREGN_FETUS                           IS 'Associa fetus a um resultado de imagem/processo de gravidez';
+COMMENT ON COLUMN EXAM_RES_PREGN_FETUS.ID_EXAM_RES_PREGN_FETUS  IS 'Chave primária';
+COMMENT ON COLUMN EXAM_RES_PREGN_FETUS.ID_EXAM_RESULT_PREGNANCY IS 'Associação a EXAM_RESULT_PREGNANCY';
+COMMENT ON COLUMN EXAM_RES_PREGN_FETUS.ID_PAT_PREGN_FETUS       IS 'Associação aos feto';
+COMMENT ON COLUMN EXAM_RES_PREGN_FETUS.ID_EPIS_DOCUMENTATION    IS 'Id da documentation correspondente para determinado feto';
+
+
+ALTER TABLE EXAM_RES_PREGN_FETUS ADD FLG_GENDER VARCHAR2(1);
+comment on column EXAM_RES_PREGN_FETUS.FLG_GENDER is 'Sexo registado para o feto neste resultado do exame';
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:50
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EXAM_RES_PREGN_FETUS
+  is 'Associate a image result with a pregancy fetus';
+-- Add comments to the columns 
+comment on column EXAM_RES_PREGN_FETUS.id_exam_res_pregn_fetus
+  is 'Primary Key';
+comment on column EXAM_RES_PREGN_FETUS.id_exam_result_pregnancy
+  is 'Pregnancy exam result  (EXAM_RESULT_PREGANCY FK)';
+comment on column EXAM_RES_PREGN_FETUS.id_pat_pregn_fetus
+  is 'Patient pregnancy fetus ID';
+comment on column EXAM_RES_PREGN_FETUS.id_epis_documentation
+  is 'Corresponding Documentation ID for the fetus';
+comment on column EXAM_RES_PREGN_FETUS.flg_gender
+  is 'Fetus gender on this exam';  
+-- CHANGE END: Elisabete Bugalho

@@ -1,0 +1,1 @@
+grant execute on pk_rehab_pbl to alert_viewer;

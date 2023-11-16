@@ -1,0 +1,21 @@
+-- CHANGED BY: filipe.f.pereira
+-- CHANGE DATE: 18/07/2013
+-- CHANGE REASON: ALERT-217073
+
+CREATE UNIQUE INDEX RETI_INST_SOFT_LANG_IDX ON REP_EDITABLE_TEXT_INST_SOFT
+ (ID_REPORTS
+ ,ID_INSTITUTION
+ ,ID_SOFTWARE
+ ,ID_LANGUAGE)
+/
+
+
+begin
+execute immediate ('ALTER index RETI_INST_SOFT_LANG_IDX REBUILD TABLESPACE INDEX_M');
+exception
+when others then
+null;
+end;
+/
+
+-- CHANGE END: filipe.f.pereira

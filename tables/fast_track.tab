@@ -1,0 +1,55 @@
+create table FAST_TRACK
+(
+  ID_FAST_TRACK      NUMBER(24) NOT NULL,
+  CODE_FAST_TRACK    VARCHAR2(200) NOT NULL,
+	ICON               VARCHAR2(100) NOT NULL,
+  FLG_AVAILABLE      VARCHAR2(1) NOT NULL,
+	RANK               NUMBER(6) NOT NULL,	
+);
+
+COMMENT ON TABLE FAST_TRACK IS 'Table containg all the available fast tracks';
+ 
+COMMENT ON COLUMN FAST_TRACK.ID_FAST_TRACK IS 'Primary key ID';
+COMMENT ON COLUMN FAST_TRACK.CODE_FAST_TRACK IS 'Translation code';
+COMMENT ON COLUMN FAST_TRACK.ICON IS 'Associated icon(s) to show in the patients grid';
+COMMENT ON COLUMN FAST_TRACK.CODE_FAST_TRACK IS 'Translation code';
+COMMENT ON COLUMN FAST_TRACK.FLG_AVAILABLE IS 'Availability of the record in the institution DB';
+COMMENT ON COLUMN FAST_TRACK.RANK IS 'Rank for priority reasons';
+
+
+-- JSILVA 19-05-2009
+BEGIN
+     EXECUTE IMMEDIATE 'ALTER TABLE FAST_TRACK ADD FLG_PERMISSION VARCHAR2(10)';
+EXCEPTION
+  WHEN OTHERS THEN
+   NULL;
+END;
+/
+
+BEGIN
+     EXECUTE IMMEDIATE 'ALTER TABLE FAST_TRACK ADD CODE_FAST_TRACK_HEADER VARCHAR2(200)';
+EXCEPTION
+  WHEN OTHERS THEN
+   NULL;
+END;
+/
+
+COMMENT ON COLUMN fast_track.flg_permission IS 'Professional categories that can disable the fast track (NULL if not specified).';
+COMMENT ON COLUMN fast_track.code_fast_track_header IS 'Translation code for header description.';
+-- END
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 13/06/2016 15:37
+-- CHANGE REASON: [ALERT-322139] Issue Replication: Fast Tracks Manual Activation
+--                
+BEGIN
+pk_versioning.run('ALTER TABLE FAST_TRACK ADD ID_ACTION NUMBER(24)');
+pk_versioning.run('alter table fast_track add (id_content             VARCHAR2(200 char))');
+
+END;
+/
+COMMENT ON COLUMN FAST_TRACK.ID_ACTION IS 'Action ID for manual activation';
+COMMENT ON COLUMN fast_track.id_content              IS 'content identifier';
+-- CHANGE END: Elisabete Bugalho

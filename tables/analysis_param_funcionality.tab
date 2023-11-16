@@ -1,0 +1,74 @@
+CREATE TABLE ANALYSIS_PARAM_FUNCIONALITY
+ (ID_ANALYSIS_PARAM_FUNCIONALITY  NUMBER(24) NOT NULL
+ ,ID_PARAMETER_ANALYSIS  NUMBER(12) NOT NULL
+ ,FLG_TYPE  VARCHAR2(1) NOT NULL
+ ,ID_SOFTWARE  NUMBER(24) NOT NULL
+ ,ID_INSTITUTION  NUMBER(24) NOT NULL
+ ,ADW_LAST_UPDATE  DATE NOT NULL
+ );
+
+COMMENT ON TABLE ANALYSIS_PARAM_FUNCIONALITY IS 'Tabela de definição de parâmetros de análises';
+
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.ID_PARAMETER_ANALYSIS IS 'Id analysis parameter';
+
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.FLG_TYPE IS 'Tipo de funcionalidade para a qual o parâmetro é parametrizado. S - Análises Seriadas; M - Saúde Materna';
+
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.ID_SOFTWARE IS 'Aplicação Alert para a qual se verifica o registo';
+
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.ID_INSTITUTION IS 'Instituição para a qual o parâmetro está disponível';
+
+
+
+ALTER TABLE ANALYSIS_PARAM_FUNCIONALITY
+ADD (ID_ANALYSIS NUMBER(12));
+
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.ID_ANALYSIS IS 'ID da análise associada ao parâmetro';
+
+-- CHANGED BY: Rui Spratley
+-- CHANGED DATE: 2007-OUT-10
+-- CHANGED REASON: Reformulação das análises
+
+-- Add/modify columns 
+alter table ANALYSIS_PARAM_FUNCIONALITY add ID_ANALYSIS_PARAM NUMBER(12);
+-- Add comments to the columns 
+comment on column ANALYSIS_PARAM_FUNCIONALITY.ID_ANALYSIS_PARAM
+  is 'Parâmetros da análise';
+-- CHANGE END: Rui Spratley
+
+-- CHANGED BY: Rui Spratley
+-- CHANGED DATE: 2007-DEC-04
+-- CHANGED REASON: Woman Health
+-- Add/modify columns 
+alter table ANALYSIS_PARAM_FUNCIONALITY add FLG_FILL_TYPE VARCHAR2(2);
+alter table ANALYSIS_PARAM_FUNCIONALITY add RANK NUMBER(6);
+-- Add comments to the columns 
+comment on column ANALYSIS_PARAM_FUNCIONALITY.FLG_FILL_TYPE
+  is 'Forma de preenchimento da análise: (N) Keypad, (V) Multichoice, (T) Texto livre';
+-- CHANGE END: Rui Spratley
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 10/05/2012 14:50
+-- CHANGE REASON: [ALERT-211362 ] [Oncology] - ALERT CCIS Dashboard
+-- Add comments to the columns 
+comment on column ANALYSIS_PARAM_FUNCIONALITY.flg_type
+  is 'Tipo de funcionalidade para a qual o parâmetro é parametrizado. S - Análises Seriadas; M - Saúde Materna; D - Dashboard';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:00
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS_PARAM_FUNCIONALITY IS 'Lab test parameter configuration for a functionality';
+
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.ID_ANALYSIS_PARAM_FUNCIONALITY IS 'Primary key';
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.FLG_TYPE IS 'Functionality type: S - Lab tests'' history, M - Woman health, D - Dashboard';
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.ADW_LAST_UPDATE IS 'Update date';
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.ID_ANALYSIS_PARAM IS 'Lab test parameter association ID';
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.FLG_FILL_TYPE IS 'Flag that indicates how the lab test result should be filled: N - Keypad, V - Multichoice, T - Text';
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.RANK IS 'Rank';
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ANALYSIS_PARAM_FUNCIONALITY.UPDATE_INSTITUTION IS 'Update Institution';
+-- CHANGE END: Ana Matos

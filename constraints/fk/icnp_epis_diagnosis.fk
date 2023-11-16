@@ -1,0 +1,105 @@
+
+
+  ALTER TABLE ICNP_EPIS_DIAGNOSIS ADD CONSTRAINT EIPD_EIPD_FK FOREIGN KEY (ID_PARENT)
+	  REFERENCES ICNP_EPIS_DIAGNOSIS (ID_ICNP_EPIS_DIAG) ENABLE;
+
+  ALTER TABLE ICNP_EPIS_DIAGNOSIS ADD CONSTRAINT EIPD_EPIS_FK FOREIGN KEY (ID_EPISODE)
+	  REFERENCES EPISODE (ID_EPISODE) ENABLE;
+
+  ALTER TABLE ICNP_EPIS_DIAGNOSIS ADD CONSTRAINT EIPD_ICN_FK FOREIGN KEY (ID_COMPOSITION)
+	  REFERENCES ICNP_COMPOSITION (ID_COMPOSITION) ENABLE;
+
+  ALTER TABLE ICNP_EPIS_DIAGNOSIS ADD CONSTRAINT EIPD_PAT_FK FOREIGN KEY (ID_PATIENT)
+	  REFERENCES PATIENT (ID_PATIENT) ENABLE;
+
+
+  ALTER TABLE ICNP_EPIS_DIAGNOSIS ADD CONSTRAINT EIPD_PROF_CANC_FK FOREIGN KEY (ID_PROF_CLOSE)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE ICNP_EPIS_DIAGNOSIS ADD CONSTRAINT EIPD_PROF_FK FOREIGN KEY (ID_PROFESSIONAL)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+	  
+	-- INPATIENT LMAIA 30-09-2008
+	-- Database denormalization
+	ALTER TABLE icnp_epis_diagnosis add CONSTRAINT eipd_vis_fk foreign key(id_visit) 
+		references visit(id_visit) enable;
+	ALTER TABLE icnp_epis_diagnosis add CONSTRAINT eipd_epty_fk foreign key(id_epis_type) 
+		references epis_type(id_epis_type) enable;
+	-- END
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+-- Create/Recreate primary, unique and foreign key constraints 
+declare
+   e_fk_already_there EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); -- table already there
+begin
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS
+  add constraint EIPD_CRE_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS
+  add constraint EIPD_CRE_SUSP_FK foreign key (ID_SUSPEND_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS
+  add constraint EIPD_PROF_CANCELS_FK foreign key (ID_CANCEL_PROF)
+  references PROFESSIONAL (ID_PROFESSIONAL)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS
+  add constraint EIPD_PROF_SUSP_FK foreign key (ID_SUSPEND_PROF)
+  references PROFESSIONAL (ID_PROFESSIONAL)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS
+  add constraint EIPD_PROF_UPD_FK foreign key (ID_PROF_LAST_UPDATE)
+  references PROFESSIONAL (ID_PROFESSIONAL)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS
+  add constraint IEIPD_ICN2_FK foreign key (ICNP_COMPO_REEVAL)
+  references ICNP_COMPOSITION (ID_COMPOSITION)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- Enable/Disable primary, unique and foreign key constraints 
+alter table ICNP_EPIS_DIAGNOSIS
+  enable constraint EIPD_EIPD_FK;
+alter table ICNP_EPIS_DIAGNOSIS
+  enable constraint EIPD_EPIS_FK;
+alter table ICNP_EPIS_DIAGNOSIS
+  enable constraint EIPD_EPTY_FK;
+alter table ICNP_EPIS_DIAGNOSIS
+  enable constraint EIPD_PAT_FK;
+alter table ICNP_EPIS_DIAGNOSIS
+  enable constraint EIPD_PROF_CANC_FK;
+alter table ICNP_EPIS_DIAGNOSIS
+  enable constraint EIPD_PROF_FK;
+alter table ICNP_EPIS_DIAGNOSIS
+  enable constraint EIPD_VIS_FK;
+-- CHANGE END: Sérgio Santos

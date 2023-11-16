@@ -1,0 +1,62 @@
+
+  CREATE TABLE GUIDELINE_PROCESS_TASK_HIST
+   (	ID_GUIDELINE_PROCESS_TASK_HIST NUMBER(24,0) NOT NULL ENABLE,
+	ID_GUIDELINE_PROCESS_TASK NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS_OLD VARCHAR2(1),
+	ID_REQUEST_OLD NUMBER(24,0),
+	DT_REQUEST_OLD DATE,
+	FLG_STATUS_NEW VARCHAR2(1),
+	DT_STATUS_CHANGE DATE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE
+   );
+
+COMMENT ON COLUMN guideline_process_task_hist.id_guideline_process_task_hist IS 'ID status hist of guideline' ;
+COMMENT ON COLUMN guideline_process_task_hist.id_guideline_process_task IS 'ID of process task of guideline' ;
+COMMENT ON COLUMN guideline_process_task_hist.flg_status_old IS 'Status of task when status changed' ;
+COMMENT ON COLUMN guideline_process_task_hist.id_request_old IS 'ID of request returned for this task when status changed' ;
+COMMENT ON COLUMN guideline_process_task_hist.dt_request_old IS 'Date of request when status changed' ;
+COMMENT ON COLUMN guideline_process_task_hist.flg_status_new IS 'New status of flag after change' ;
+COMMENT ON COLUMN guideline_process_task_hist.dt_status_change IS 'date of status change' ;
+COMMENT ON COLUMN guideline_process_task_hist.id_professional IS 'ID of professional responsible for changing state of guideline' ;
+
+alter table guideline_process_task_hist modify (dt_request_old timestamp with local time zone,
+										dt_status_change timestamp with local time zone);
+										
+alter table guideline_process_task_hist add (id_request_new NUMBER(24,0),
+						dt_request_new timestamp with local time zone);
+							
+COMMENT ON COLUMN guideline_process_task_hist.id_request_new IS 'New ID of request returned for this task when status changed';
+COMMENT ON COLUMN guideline_process_task_hist.dt_request_new IS 'New date of request when status changed';
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 15/04/2011 11:24
+-- CHANGE REASON: [ALERT-173333] Cancel reason for Guidelines, Protocols, Order Sets and CPOE
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); --  column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table GUIDELINE_PROCESS_TASK_HIST add ID_CANCEL_REASON number(24)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        NULL;
+END;
+/
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); --  column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table GUIDELINE_PROCESS_TASK_HIST add CANCEL_NOTES varchar2(1000 char)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        NULL;
+END;
+/
+comment on column GUIDELINE_PROCESS_TASK_HIST.ID_CANCEL_REASON is 'Cancel reason ID';
+comment on column GUIDELINE_PROCESS_TASK_HIST.CANCEL_NOTES is 'Cancel notes';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 10:00
+-- CHANGE REASON: [ALERT-317912] 
+comment on table GUIDELINE_PROCESS_TASK_HIST is 'Guidelines process task hisotry';
+-- CHANGE END: Ana Matos

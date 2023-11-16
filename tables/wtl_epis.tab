@@ -1,0 +1,33 @@
+  CREATE TABLE "WTL_EPIS"
+(  
+  "ID_EPISODE" NUMBER(24,0) NOT NULL,
+  "ID_WAITING_LIST" NUMBER(24,0) NOT NULL,
+  "ID_EPIS_TYPE" NUMBER(24,0), 
+  "ID_SCHEDULE" NUMBER(24,0),
+  "FLG_STATUS" VARCHAR2(1) DEFAULT 'N',
+  "CREATE_USER"  VARCHAR2(24),
+  "CREATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  "CREATE_INSTITUTION"  NUMBER(24),                         
+  "UPDATE_USER"  VARCHAR2(24),                       
+  "UPDATE_TIME"  TIMESTAMP(6) WITH LOCAL TIME ZONE,  
+  "UPDATE_INSTITUTION"  NUMBER(24)                  
+) ;
+
+COMMENT ON TABLE "WTL_EPIS"  IS 'This table associates episodes with admission/surgery requests';
+COMMENT ON COLUMN "WTL_EPIS"."ID_EPISODE" IS 'Episode Id';
+COMMENT ON COLUMN "WTL_EPIS"."ID_WAITING_LIST"  IS 'Surgery/admission request ID';
+COMMENT ON COLUMN "WTL_EPIS"."ID_EPIS_TYPE"  IS 'Type of episode';
+COMMENT ON COLUMN "WTL_EPIS"."ID_SCHEDULE"  IS 'Scheduled Id';
+COMMENT ON COLUMN "WTL_EPIS"."FLG_STATUS"  IS 'Indicates scheduling state: S Scheduled; N not scheduled; C cancelled';
+COMMENT ON COLUMN "WTL_EPIS"."CREATE_USER" IS 'ID of the professional who created the record';
+COMMENT ON COLUMN "WTL_EPIS"."CREATE_TIME" IS 'Date of record creation';
+COMMENT ON COLUMN "WTL_EPIS"."CREATE_INSTITUTION" IS 'ID of institution where record was created'; 
+COMMENT ON COLUMN "WTL_EPIS"."UPDATE_USER" IS 'ID of the professional who last updated the record';
+COMMENT ON COLUMN "WTL_EPIS"."UPDATE_TIME" IS 'Date when record was last updated';
+COMMENT ON COLUMN "WTL_EPIS"."UPDATE_INSTITUTION" IS 'ID of the institution where record was last updated'; 
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 01/07/2011 15:41
+-- CHANGE REASON: [ALERT-186814 ] Scheduled grid: wrong icon
+COMMENT ON COLUMN "WTL_EPIS"."FLG_STATUS"  IS 'Indicates scheduling state: S Scheduled; N not scheduled; C cancelled; P-Cancelled by No show';
+-- CHANGE END: Sofia Mendes

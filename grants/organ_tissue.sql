@@ -1,0 +1,13 @@
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 19-Jul-2010
+-- CHANGE REASON: ALERT-112811
+GRANT SELECT ON organ_tissue TO alert_viewer;
+-- CHANGE END: Paulo Fonseca
+
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2017-1-03
+-- CHANGED REASON: ALERT-327486
+grant SELECT on ALERT.ORGAN_TISSUE to ALERT_APEX_TOOLS;
+-- CHANGE END: Humberto Cardoso

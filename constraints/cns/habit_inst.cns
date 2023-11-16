@@ -1,0 +1,72 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 07/12/2010 15:05
+-- CHANGE REASON: [ALERT-147592] Issue Replication v2605 : [Habits] - habits aren't configurable by institution (v2.6.0.5)
+DECLARE
+    e_name_already_used_constraint EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_name_already_used_constraint, -02264);
+    l_const_name VARCHAR2(30) := 'HTI_FLG_AVAILABLE';
+    l_sql_clob CLOB;
+BEGIN
+
+l_sql_clob:= 'alter table HABIT_INST add constraint HTI_FLG_AVAILABLE check (FLG_AVAILABLE IN (''Y'', ''N''))';
+
+EXECUTE IMMEDIATE pk_string_utils.clob_to_sqlvarchar2(l_sql_clob);
+
+
+EXCEPTION
+    WHEN e_name_already_used_constraint THEN
+        dbms_output.put_line('WARNING - constraint ' || l_const_name || ' already created in previous version.');
+END;
+/
+
+DECLARE
+    e_constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_exists, -02275);
+    l_const_name VARCHAR2(30) := 'HTI_HAT_FK';
+    l_sql_clob CLOB;
+BEGIN
+
+l_sql_clob:= 'ALTER TABLE HABIT_INST ADD CONSTRAINT hti_hat_fk      FOREIGN KEY (id_habit)           REFERENCES habit (id_habit)';
+EXECUTE IMMEDIATE pk_string_utils.clob_to_sqlvarchar2(l_sql_clob);
+
+EXCEPTION
+    WHEN e_constraint_already_exists THEN
+        dbms_output.put_line('WARNING - constraint ' || l_const_name || ' already created in previous version.');
+END;
+/
+
+
+DECLARE
+    e_constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_exists, -02275);
+    l_const_name VARCHAR2(30) := 'HTI_INST_FK';
+    l_sql_clob CLOB;
+BEGIN
+
+l_sql_clob:= 'ALTER TABLE HABIT_INST ADD CONSTRAINT hti_inst_fk     FOREIGN KEY (id_institution)     REFERENCES institution (id_institution)';
+EXECUTE IMMEDIATE pk_string_utils.clob_to_sqlvarchar2(l_sql_clob);
+
+
+EXCEPTION
+    WHEN e_constraint_already_exists THEN
+        dbms_output.put_line('WARNING - constraint ' || l_const_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 07/12/2010 15:09
+-- CHANGE REASON: [ALERT-147592] Issue Replication v2605 : [Habits] - habits aren't configurable by institution (v2.6.0.5)
+DECLARE
+    e_primary_key EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_primary_key, -02260);
+    l_table_name VARCHAR2(30) := 'HABIT_INST';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT HAB_INST_PK PRIMARY KEY (ID_HABIT, ID_INSTITUTION, FLG_AVAILABLE)';
+EXCEPTION
+    WHEN e_primary_key THEN
+        dbms_output.put_line('WARNING - Primary key in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END: Filipe Machado

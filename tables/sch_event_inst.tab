@@ -1,0 +1,34 @@
+
+
+  CREATE TABLE SCH_EVENT_INST
+   (	ID_SCH_EVENT_INST NUMBER NOT NULL ENABLE,
+	ID_SCH_EVENT_REF NUMBER(24,0) NOT NULL ENABLE,
+	ID_SCH_EVENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ACTIVE VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE sch_event_inst IS 'Table used to define if a given institution will use generic appointments' ;
+
+COMMENT ON COLUMN sch_event_inst.id_sch_event_inst IS 'Table unique identifier' ;
+COMMENT ON COLUMN sch_event_inst.id_sch_event_ref IS 'Reference to the generic sch event' ;
+COMMENT ON COLUMN sch_event_inst.id_sch_event IS 'Reference to the events associated to the generic event. This will be used mainly to update the SCH_CONSULT_VACANCY.USED_VACANCIES column' ;
+COMMENT ON COLUMN sch_event_inst.id_institution IS 'Refer to the institution which this configuration is associated to' ;
+COMMENT ON COLUMN sch_event_inst.active IS 'Set if the configuration is active or not. Possible values : ''Y''es or ''N''o' ;
+
+COMMENT ON COLUMN SCH_EVENT_INST.ID_INSTITUTION IS 'Institution identifier';
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 23-09-2008
+-- CHANGE REASON: igualar datatype a institution.id_institution
+alter table SCH_EVENT_INST modify ID_INSTITUTION NUMBER(24);
+--END
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 08/07/2009 17:51
+-- CHANGE REASON: [ALERT-32069] Making appointments
+alter table SCH_EVENT_INST add FLG_VISIBLE varchar2(1) default 'Y';
+
+comment on column SCH_EVENT_INST.FLG_VISIBLE is 'is this event visible for the get_events function?';
+-- CHANGE END: Telmo Castro

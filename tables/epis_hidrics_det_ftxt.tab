@@ -1,0 +1,77 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 22:35
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+CREATE TABLE EPIS_HIDRICS_DET_FTXT
+(
+   ID_EPIS_HIDRICS_DET_FTXT  NUMBER(24) NOT NULL,
+   ID_EPIS_HIDRICS           NUMBER(24) NOT NULL,
+   ID_EPIS_HIDRICS_DET       NUMBER(24),
+ ID_EPIS_HIDRICS_LINE      NUMBER(24),
+   ID_WAY            NUMBER(24),
+   ID_HIDRICS_LOCATION       NUMBER(24),
+   ID_HIDRICS                NUMBER(24),
+   ID_HIDRICS_CHARACT        NUMBER(24),
+   FREE_TEXT                 VARCHAR2(1000 CHAR),
+   CREATE_USER               VARCHAR2(24),
+   CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   CREATE_INSTITUTION        NUMBER(24),
+   UPDATE_USER               VARCHAR2(24),
+   UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+   UPDATE_INSTITUTION        NUMBER(24),
+   ID_PROF_LAST_CHANGE       NUMBER(24),
+   DT_EH_DET_FTXT            TIMESTAMP(6) WITH LOCAL TIME ZONE
+);
+
+ALTER TABLE EPIS_HIDRICS_DET_FTXT MOVE TABLESPACE TABLE_M;
+
+comment on table EPIS_HIDRICS_DET_FTXT is 'Epis hidrics detail free text';
+
+comment on column EPIS_HIDRICS_DET_FTXT.ID_EPIS_HIDRICS_DET_FTXT is 'Primary key';
+comment on column EPIS_HIDRICS_DET_FTXT.ID_EPIS_HIDRICS is 'Epis Hidrics';
+comment on column EPIS_HIDRICS_DET_FTXT.ID_EPIS_HIDRICS_DET is 'Epis Hidrics detail ID';
+COMMENT ON COLUMN EPIS_HIDRICS_DET_FTXT.ID_EPIS_HIDRICS_LINE IS 'Episode hidrics line ID.';
+comment on column EPIS_HIDRICS_DET_FTXT.ID_WAY is 'Hidrics way ID';
+comment on column EPIS_HIDRICS_DET_FTXT.ID_HIDRICS_LOCATION is 'Hidrics location ID';
+comment on column EPIS_HIDRICS_DET_FTXT.ID_HIDRICS is 'Hidrics ID';
+comment on column EPIS_HIDRICS_DET_FTXT.ID_HIDRICS_CHARACT is 'Hidrics characteristics ID';
+comment on column EPIS_HIDRICS_DET_FTXT.FREE_TEXT is 'Free text';
+comment on column EPIS_HIDRICS_DET_FTXT.CREATE_USER is 'Creation User';
+comment on column EPIS_HIDRICS_DET_FTXT.CREATE_TIME is 'Creation Time';
+comment on column EPIS_HIDRICS_DET_FTXT.CREATE_INSTITUTION is 'Creation Institution';
+comment on column EPIS_HIDRICS_DET_FTXT.UPDATE_USER is 'Update User';
+comment on column EPIS_HIDRICS_DET_FTXT.UPDATE_TIME is 'Update Time';
+comment on column EPIS_HIDRICS_DET_FTXT.UPDATE_INSTITUTION is 'Update Institution';
+comment on column EPIS_HIDRICS_DET_FTXT.ID_PROF_LAST_CHANGE is 'Professional who entered or last edited the record';
+comment on column EPIS_HIDRICS_DET_FTXT.DT_EH_DET_FTXT is 'Insertion date or date of last update';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:22
+-- CHANGE REASON: [ALERT-153427] Intake and Output-Have the possibility to register bowel movements.
+alter table epis_hidrics_det_ftxt modify ( create_user  varchar2(24 char));
+alter table epis_hidrics_det_ftxt modify ( update_user  varchar2(24 char));
+
+ALTER TABLE EPIS_HIDRICS_DET_FTXT ADD ID_PATIENT NUMBER(24);
+COMMENT ON COLUMN EPIS_HIDRICS_DET_FTXT.ID_PATIENT IS 'Patient ID.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:46
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+ALTER TABLE EPIS_HIDRICS_det_ftxt ADD id_hidrics_device NUMBER(24);
+COMMENT ON COLUMN EPIS_HIDRICS_det_ftxt.id_hidrics_device IS 'Hidrics Device ID.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:47
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+CREATE INDEX HHDFT_DEV_FK_IDX ON EPIS_HIDRICS_DET_FTXT (ID_HIDRICS_DEVICE) TABLESPACE INDEX_L;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 16/06/2011 18:25
+-- CHANGE REASON: [ALERT-185058 ] Intake and Output: It is not possible to use a created free text in more than one line
+alter table epis_hidrics_det_ftxt drop column id_epis_hidrics_det;
+alter table epis_hidrics_det_ftxt drop column id_epis_hidrics;
+alter table epis_hidrics_det_ftxt drop column id_epis_hidrics_line;
+-- CHANGE END: Sofia Mendes

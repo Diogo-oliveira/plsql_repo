@@ -1,0 +1,24 @@
+
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 2009/07/03 14:49
+-- CHANGE REASON: ALERT-32705 [CLONE -Relatório de nota de alta médica, para todas as aplicações]
+--                ALERT-34577 [[CLONE] Setting up "predefined text area" and "cancel reason area" [2.5]]
+
+alter table PHY_DISCHARGE_NOTES
+  add constraint PDHN_PAT_FK foreign key (ID_PATIENT)
+  references ALERT_ADTCOD.PATIENT (ID_PATIENT);
+alter table PHY_DISCHARGE_NOTES
+  add constraint PDHN_PROF_CANCEL_FK foreign key (ID_PROFESSIONAL_CANCEL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table PHY_DISCHARGE_NOTES
+  add constraint PDHN_PROF_FK foreign key (ID_PROFESSIONAL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table PHY_DISCHARGE_NOTES
+  add constraint PHDN_CRE_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+alter table PHY_DISCHARGE_NOTES
+  add constraint PHDN_EPIS_FK foreign key (ID_EPISODE)
+  references EPISODE (ID_EPISODE);
+
+-- CHANGE END: Filipe Machado

@@ -1,0 +1,50 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 07/07/2011 09:41
+-- CHANGE REASON: [ALERT-183150] Settle conditions between touch-option elements
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'DOC_ELEMENT_CRIT_INT',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'CNT',
+                                             i_flg_alert_default => 'N',
+                                             i_flg_default_child => 'N',
+                                             i_flg_nzd           => 'N');
+END;
+/
+
+CREATE TABLE DOC_ELEMENT_CRIT_INT
+(
+  ID_DOC_ELEMENT_CRIT_INT NUMBER(24) NOT NULL,
+  ID_DOC_ELEMENT_CRIT NUMBER(24) NOT NULL,
+MIN_VALUE NUMBER(24,3),
+MAX_VALUE NUMBER(24,3),
+  CODE_ELEMENT_CLOSE  VARCHAR2(200 CHAR),
+CODE_REF_VAL_ABOVE  VARCHAR2(200 CHAR),
+  CODE_REF_VAL_BELOW VARCHAR2(200 CHAR),
+  CODE_REF_VAL_NORMAL  VARCHAR2(200 CHAR),
+  FLG_AVAILABLE       VARCHAR2(1 CHAR) NOT NULL,
+  CREATE_USER         VARCHAR2(24),
+  CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24),
+  UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24)
+);
+
+COMMENT ON TABLE DOC_ELEMENT_CRIT_INT IS 'Value intervals of an element and associated description to be used instead of its description';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.ID_DOC_ELEMENT_CRIT_INT  IS 'Primary key';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.ID_DOC_ELEMENT_CRIT IS 'Related element';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.MIN_VALUE IS 'Minimum interval value expressed in the reference UOM';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.MAX_VALUE IS 'Maximum interval value expressed in the reference UOM';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.CODE_ELEMENT_CLOSE IS 'Code to retrieve translated description associated to this interval';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.CODE_REF_VAL_ABOVE IS 'Code to retrieve translated description associated to a value above the reference value';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.CODE_REF_VAL_BELOW IS 'Code to retrieve translated description associated to a value below the reference value';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.CODE_REF_VAL_NORMAL IS 'Code to retrieve translated description associated to a value between the reference values';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.FLG_AVAILABLE IS 'Entry is available for use: (Y)es, (N)o';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.CREATE_USER  IS 'Creation User';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.CREATE_TIME  IS 'Creation Time';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.CREATE_INSTITUTION  IS 'Creation Institution';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.UPDATE_USER  IS 'Update User';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.UPDATE_TIME  IS 'Update Time';
+COMMENT ON COLUMN DOC_ELEMENT_CRIT_INT.UPDATE_INSTITUTION  IS 'Update Institution';
+-- CHANGE END: Ariel Machado

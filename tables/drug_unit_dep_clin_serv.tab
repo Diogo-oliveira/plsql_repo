@@ -1,0 +1,54 @@
+-- CHANGED BY: Orlando Antunes
+-- CHANGED DATE: 2008-MAR-18
+-- CHANGING REASON: unit measure for drug parametrized by institution/software
+-- Create table
+create table DRUG_UNIT_DEP_CLIN_SERV
+(
+  ID_DRUG            VARCHAR2(255) not null,
+  ID_UNIT_MEASURE    NUMBER(24) not null,
+  FLG_TYPE           VARCHAR2(1),
+  FLG_AVAILABLE      VARCHAR2(1),
+  FLG_DEFAULT        VARCHAR2(1),
+  VERS               VARCHAR2(255) not null,
+  ID_INSTITUTION     NUMBER(24) not null,
+  ID_PROFESSIONAL    NUMBER(24),
+  ID_SOFTWARE        NUMBER(24) not null,
+  ID_DEP_CLIN_SERV   NUMBER(12),
+  CREATE_USER        VARCHAR2(24),
+  CREATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER        VARCHAR2(24),
+  UPDATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+);
+
+COMMENT ON TABLE DRUG_UNIT_DEP_CLIN_SERV IS 'Parametrização de unidades de medida de medicação por institution/software' ;
+
+COMMENT ON COLUMN DRUG_UNIT_DEP_CLIN_SERV.id_drug IS 'Id do medicamento para o qual são parametrizadas as unidades de medida' ;
+COMMENT ON COLUMN DRUG_UNIT_DEP_CLIN_SERV.ID_UNIT_MEASURE IS 'Id da unidade de medida' ;
+COMMENT ON COLUMN DRUG_UNIT_DEP_CLIN_SERV.flg_type IS 'Tipo de medicação: I - local, E - exterior' ;
+COMMENT ON COLUMN DRUG_UNIT_DEP_CLIN_SERV.FLG_AVAILABLE IS 'Indicação se a parametrização está disponível' ;
+COMMENT ON COLUMN DRUG_UNIT_DEP_CLIN_SERV.FLG_DEFAULT IS 'Indicação se a unidade de medida é default' ;
+COMMENT ON COLUMN DRUG_UNIT_DEP_CLIN_SERV.VERS IS 'Versão da medicação (significa o mercado)' ;
+COMMENT ON COLUMN DRUG_UNIT_DEP_CLIN_SERV.id_institution IS 'Instituição' ;
+COMMENT ON COLUMN DRUG_UNIT_DEP_CLIN_SERV.id_professional IS 'Profissional' ;
+COMMENT ON COLUMN DRUG_UNIT_DEP_CLIN_SERV.id_software IS 'Aplicação Alert' ;
+COMMENT ON COLUMN DRUG_UNIT_DEP_CLIN_SERV.ID_DEP_CLIN_SERV IS 'Id do serviço clinico' ;
+/
+
+
+
+-- CHANGED BY: Rafael Santos
+-- CHANGED DATE: 2008-MAI-06
+-- CHANGING REASON: ALERT-27054
+
+ALTER TABLE drug_unit_dep_clin_serv
+MODIFY (id_dep_clin_serv number(24));
+
+-- END CHANGE: Rafael Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:48
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_UNIT_DEP_CLIN_SERV IS 'Parametrização de unidades de medida de medicação por institution/software [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

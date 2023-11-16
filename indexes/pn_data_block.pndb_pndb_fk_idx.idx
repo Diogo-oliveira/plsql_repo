@@ -1,0 +1,15 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 11:50
+-- CHANGE REASON: [ALERT-164552] soap blocks existing model changes
+declare
+  index_exists exception;
+  pragma exception_init(index_exists, -00955);
+begin
+  execute immediate '
+create index pndb_pndb_fk_idx on pn_data_block (id_pndb_parent)
+';
+exception
+  when index_exists then dbms_output.put_line('index PNDB_PNDB_FK_IDX already exists');
+end;
+/
+-- CHANGE END: Pedro Carneiro

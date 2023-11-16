@@ -1,0 +1,21 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 10/12/2013 15:54
+-- CHANGE REASON: [ALERT-271758] 
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create sequence SEQ_CDR_EXTERNAL
+minvalue 1
+maxvalue 999999999999
+start with 1
+increment by 1
+cache 500
+noorder
+nocycle
+';
+exception when e_obj_exists then
+  dbms_output.put_line('sequence SEQ_CDR_EXTERNAL exists!');
+end;
+/
+-- CHANGE END: mario.mineiro

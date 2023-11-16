@@ -1,0 +1,14 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 10/12/2013 15:58
+-- CHANGE REASON: [ALERT-271758] 
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create index CDRE_UK_CIPA_IDX on CDR_EVENT (ID_CDR_EVENT,ID_CDR_INST_PAR_ACTION)
+';
+exception when others then
+  dbms_output.put_line('index CDRE_PK_IDX exists!');
+end;
+/
+-- CHANGE END: mario.mineiro

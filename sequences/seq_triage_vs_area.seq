@@ -1,0 +1,34 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 28/06/2013 17:03
+-- CHANGE REASON: [ALERT-260856] Ability to perform triage based on EST (Échelle Suisse de Tri) (ALERT_188926) - VERSIONING DB DDL
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'CREATE SEQUENCE SEQ_TRIAGE_VS_AREA MINVALUE 1 MAXVALUE 999999999999 INCREMENT BY 1 START WITH 1 CACHE 500 NOORDER NOCYCLE');
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2019-01-28
+-- CHANGED REASON: EMR-11226
+DECLARE
+  e_not_exists EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_not_exists, -02289);
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'drop sequence SEQ_TRIAGE_VS_AREA';
+  EXCEPTION
+    WHEN e_not_exists THEN
+      NULL;
+  END;
+END;
+/
+-- CHANGE END: Humberto Cardoso

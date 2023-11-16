@@ -1,0 +1,19 @@
+
+
+
+CREATE INDEX TRANSLATION_LIDX ON translation(desc_translation) 
+indextype is lucene.LuceneIndex
+parameters ('IncludeMasterColumn:false;FormatCols:id_language(NOT_ANALYZED);ExtraCols:translate(upper(desc_translation), ''аимсзюхлрыбйнтшцугдкожэя'', ''AEIOUAEIOUAEIOUAOCAEIOUN'') "desc_tr",to_char(id_language) "id_language";LobStorageParameters:PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS NOLOGGING;Analyzer:org.apache.lucene.analysis.standard.StandardAnalyzer;LogLevel:INFO;MergeFactor:500;AutoTuneMemory:true;WhereCondition: code_translation like ''ALERT_DIAGNOSIS.CODE_ALERT_DIAGNOSIS.%'' OR code_translation like ''DIAGNOSIS.CODE_DIAGNOSIS.%'';');
+
+alter index TRANSLATION_LIDX rebuild parameters('MergeFactor:2;MaxBufferedDocs:100;');
+
+
+
+-- JSILVA 30-10-2009
+CREATE INDEX TRANSLATION_LIDX ON translation(desc_translation)
+indextype is lucene.LuceneIndex
+parameters ('IncludeMasterColumn:false;FormatCols:id_language(NOT_ANALYZED);ExtraCols:translate(upper(desc_translation), ''аимсзюхлрыбйнтшцугдкожэя'', ''AEIOUAEIOUAEIOUAOCAEIOUN'') "desc_tr",to_char(id_language) "id_language";LobStorageParameters:PCTVERSION 10 ENABLE STORAGE IN ROW CACHE READS NOLOGGING;Analyzer:org.apache.lucene.analysis.standard.StandardAnalyzer;LogLevel:INFO;MergeFactor:500;AutoTuneMemory:true;WhereCondition: (code_translation like ''ALERT_DIAGNOSIS.CODE_ALERT_DIAGNOSIS.%'' OR code_translation like ''DIAGNOSIS.CODE_DIAGNOSIS.%'');');
+
+alter index TRANSLATION_LIDX rebuild parameters('MergeFactor:2;MaxBufferedDocs:100;');
+-- END
+

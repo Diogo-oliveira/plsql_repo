@@ -1,0 +1,297 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 11:32
+-- CHANGE REASON: [ALERT-38908] Versionamento.
+-- Create table
+create table PRESC_FREQ_DET
+(
+  ID_PRESC_FREQ_DET         NUMBER(24) not null,
+  ID_PRESC_INSTR_FREQ       NUMBER(24) not null,
+  ID_PRESC_FREQUENCY        NUMBER(24),
+  NTAKE_VALUE               NUMBER(24,4),
+  NTAKE_VALUE_UNIT          NUMBER(24),
+  NTAKE_PER_UNIT            VARCHAR2(1),
+  NTAKE_DENOMINATOR_VALUE   NUMBER(24,4),
+  ID_PARENT                 NUMBER(24),
+  EXACT_TIME                NUMBER(24,4),
+  EXACT_TIME_UNIT           NUMBER(24),
+  EXACT_VALUE               NUMBER(24),
+  ID_PRESCRIPTION_FIELD_DET NUMBER(24),
+  DATE_REG                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  OTHER_FREQ_TYPE           VARCHAR2(2),
+  PARITY                    VARCHAR2(1),
+  FLG_MEAL                  VARCHAR2(1),
+  ID_PRESC_FREQUENCY_TYPE   NUMBER(24),
+  EXACT_DAILY_HOUR          INTERVAL DAY(3) TO SECOND(3)
+)
+tablespace TABLE_M;
+-- Add comments to the table 
+comment on table PRESC_FREQ_DET
+  is 'Tabela onde constam os detalhes de cada frequência associadas à prescrição';
+-- Add comments to the columns 
+comment on column PRESC_FREQ_DET.ID_PRESC_FREQ_DET
+  is 'CHAVE PRIMÁRIA';
+comment on column PRESC_FREQ_DET.ID_PRESC_INSTR_FREQ
+  is 'id da tabela das relações entre prescrições e frequências';
+comment on column PRESC_FREQ_DET.ID_PRESC_FREQUENCY
+  is 'tabela de conteúdos onde estão guardadas as frequências default';
+comment on column PRESC_FREQ_DET.NTAKE_VALUE
+  is 'valor do numero de tomas';
+comment on column PRESC_FREQ_DET.NTAKE_VALUE_UNIT
+  is 'unidade para o valor do numero de tomas';
+comment on column PRESC_FREQ_DET.NTAKE_PER_UNIT
+  is 'Y se NTAKE_VALUE/NTAKE_VALUE_UNIT, N caso contrário.';
+comment on column PRESC_FREQ_DET.NTAKE_DENOMINATOR_VALUE
+  is 'caso NTAKE_PER_UNIT estiver a Y, então podemos definir um valor de unidade para o denominador';
+comment on column PRESC_FREQ_DET.ID_PARENT
+  is 'o campo é preenchido se a frequência em causa for um período da refeição. neste caso, o campo é preenchido com o id da frequência para a refeição em causa';
+comment on column PRESC_FREQ_DET.EXACT_TIME
+  is 'tempo exacto';
+comment on column PRESC_FREQ_DET.EXACT_TIME_UNIT
+  is 'unidade de medida para o tempo exacto';
+comment on column PRESC_FREQ_DET.EXACT_VALUE
+  is 'valor exacto';
+comment on column PRESC_FREQ_DET.ID_PRESCRIPTION_FIELD_DET
+  is 'id do campo';
+comment on column PRESC_FREQ_DET.DATE_REG
+  is 'data de registo';
+comment on column PRESC_FREQ_DET.OTHER_FREQ_TYPE
+  is 'tipo de frequência: ED(frequência em cada dia - each day); DL(frequência diária - daily)';
+comment on column PRESC_FREQ_DET.PARITY
+  is 'par (E); ímpar (O)';
+comment on column PRESC_FREQ_DET.FLG_MEAL
+  is 'frequência é refeição (Y) ou não (N)';
+comment on column PRESC_FREQ_DET.ID_PRESC_FREQUENCY_TYPE
+  is 'tipo de frequência';
+comment on column PRESC_FREQ_DET.EXACT_DAILY_HOUR
+  is 'hora diária exacta';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 15:17
+-- CHANGE REASON: [ALERT-38908] add audit columns
+-- Create table
+create table PRESC_FREQ_DET
+(
+  ID_PRESC_FREQ_DET         NUMBER(24) not null,
+  ID_PRESC_INSTR_FREQ       NUMBER(24) not null,
+  ID_PRESC_FREQUENCY        NUMBER(24),
+  NTAKE_VALUE               NUMBER(24,4),
+  NTAKE_VALUE_UNIT          NUMBER(24),
+  NTAKE_PER_UNIT            VARCHAR2(1),
+  NTAKE_DENOMINATOR_VALUE   NUMBER(24,4),
+  ID_PARENT                 NUMBER(24),
+  EXACT_TIME                NUMBER(24,4),
+  EXACT_TIME_UNIT           NUMBER(24),
+  EXACT_VALUE               NUMBER(24),
+  ID_PRESCRIPTION_FIELD_DET NUMBER(24),
+  DATE_REG                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  OTHER_FREQ_TYPE           VARCHAR2(2),
+  PARITY                    VARCHAR2(1),
+  FLG_MEAL                  VARCHAR2(1),
+  ID_PRESC_FREQUENCY_TYPE   NUMBER(24),
+  EXACT_DAILY_HOUR          INTERVAL DAY(3) TO SECOND(3),
+  CREATE_USER           VARCHAR2(24),
+  CREATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24),
+  UPDATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+)
+tablespace TABLE_M;
+-- Add comments to the table 
+comment on table PRESC_FREQ_DET
+  is 'Tabela onde constam os detalhes de cada frequência associadas à prescrição';
+-- Add comments to the columns 
+comment on column PRESC_FREQ_DET.ID_PRESC_FREQ_DET
+  is 'CHAVE PRIMÁRIA';
+comment on column PRESC_FREQ_DET.ID_PRESC_INSTR_FREQ
+  is 'id da tabela das relações entre prescrições e frequências';
+comment on column PRESC_FREQ_DET.ID_PRESC_FREQUENCY
+  is 'tabela de conteúdos onde estão guardadas as frequências default';
+comment on column PRESC_FREQ_DET.NTAKE_VALUE
+  is 'valor do numero de tomas';
+comment on column PRESC_FREQ_DET.NTAKE_VALUE_UNIT
+  is 'unidade para o valor do numero de tomas';
+comment on column PRESC_FREQ_DET.NTAKE_PER_UNIT
+  is 'Y se NTAKE_VALUE/NTAKE_VALUE_UNIT, N caso contrário.';
+comment on column PRESC_FREQ_DET.NTAKE_DENOMINATOR_VALUE
+  is 'caso NTAKE_PER_UNIT estiver a Y, então podemos definir um valor de unidade para o denominador';
+comment on column PRESC_FREQ_DET.ID_PARENT
+  is 'o campo é preenchido se a frequência em causa for um período da refeição. neste caso, o campo é preenchido com o id da frequência para a refeição em causa';
+comment on column PRESC_FREQ_DET.EXACT_TIME
+  is 'tempo exacto';
+comment on column PRESC_FREQ_DET.EXACT_TIME_UNIT
+  is 'unidade de medida para o tempo exacto';
+comment on column PRESC_FREQ_DET.EXACT_VALUE
+  is 'valor exacto';
+comment on column PRESC_FREQ_DET.ID_PRESCRIPTION_FIELD_DET
+  is 'id do campo';
+comment on column PRESC_FREQ_DET.DATE_REG
+  is 'data de registo';
+comment on column PRESC_FREQ_DET.OTHER_FREQ_TYPE
+  is 'tipo de frequência: ED(frequência em cada dia - each day); DL(frequência diária - daily)';
+comment on column PRESC_FREQ_DET.PARITY
+  is 'par (E); ímpar (O)';
+comment on column PRESC_FREQ_DET.FLG_MEAL
+  is 'frequência é refeição (Y) ou não (N)';
+comment on column PRESC_FREQ_DET.ID_PRESC_FREQUENCY_TYPE
+  is 'tipo de frequência';
+comment on column PRESC_FREQ_DET.EXACT_DAILY_HOUR
+  is 'hora diária exacta';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 21/08/2009 11:09
+-- CHANGE REASON: [ALERT-37067] 
+
+create table PRESC_FREQ_DET
+(
+  ID_PRESC_FREQ_DET         NUMBER(24) not null,
+  ID_PRESC_INSTR_FREQ       NUMBER(24) not null,
+  ID_PRESC_FREQUENCY        NUMBER(24),
+  NTAKE_VALUE               NUMBER(24),
+  NTAKE_VALUE_UNIT          NUMBER(24),
+  NTAKE_PER_UNIT            VARCHAR2(1),
+  NTAKE_DENOMINATOR_VALUE   NUMBER(24),
+  ID_PARENT                 NUMBER(24),
+  EXACT_TIME                NUMBER(24),
+  EXACT_TIME_UNIT           NUMBER(24),
+  EXACT_VALUE               NUMBER(24),
+  ID_PRESCRIPTION_FIELD_DET NUMBER(24),
+  DATE_REG                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  OTHER_FREQ_TYPE           VARCHAR2(2),
+  PARITY                    VARCHAR2(1),
+  FLG_MEAL                  VARCHAR2(1),
+  ID_PRESC_FREQUENCY_TYPE   NUMBER(24),
+  EXACT_DAILY_HOUR          INTERVAL DAY(3) TO SECOND(3),
+  CREATE_USER               VARCHAR2(24),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24)
+)
+tablespace TABLE_M;
+
+-- Add comments to the table 
+comment on table PRESC_FREQ_DET
+  is 'Tabela onde constam os detalhes de cada frequência associadas à prescrição';
+-- Add comments to the columns 
+comment on column PRESC_FREQ_DET.ID_PRESC_FREQ_DET
+  is 'CHAVE PRIMÁRIA';
+comment on column PRESC_FREQ_DET.ID_PRESC_INSTR_FREQ
+  is 'id da tabela das relações entre prescrições e frequências';
+comment on column PRESC_FREQ_DET.ID_PRESC_FREQUENCY
+  is 'tabela de conteúdos onde estão guardadas as frequências default';
+comment on column PRESC_FREQ_DET.NTAKE_VALUE
+  is 'valor do numero de tomas';
+comment on column PRESC_FREQ_DET.NTAKE_VALUE_UNIT
+  is 'unidade para o valor do numero de tomas';
+comment on column PRESC_FREQ_DET.NTAKE_PER_UNIT
+  is 'Y se NTAKE_VALUE/NTAKE_VALUE_UNIT, N caso contrário.';
+comment on column PRESC_FREQ_DET.NTAKE_DENOMINATOR_VALUE
+  is 'caso NTAKE_PER_UNIT estiver a Y, então podemos definir um valor de unidade para o denominador';
+comment on column PRESC_FREQ_DET.ID_PARENT
+  is 'o campo é preenchido se a frequência em causa for um período da refeição. neste caso, o campo é preenchido com o id da frequência para a refeição em causa';
+comment on column PRESC_FREQ_DET.EXACT_TIME
+  is 'tempo exacto';
+comment on column PRESC_FREQ_DET.EXACT_TIME_UNIT
+  is 'unidade de medida para o tempo exacto';
+comment on column PRESC_FREQ_DET.EXACT_VALUE
+  is 'valor exacto';
+comment on column PRESC_FREQ_DET.ID_PRESCRIPTION_FIELD_DET
+  is 'id do campo';
+comment on column PRESC_FREQ_DET.DATE_REG
+  is 'data de registo';
+comment on column PRESC_FREQ_DET.OTHER_FREQ_TYPE
+  is 'tipo de frequência: ED(frequência em cada dia - each day); DL(frequência diária - daily)';
+comment on column PRESC_FREQ_DET.PARITY
+  is 'par (E); ímpar (O)';
+comment on column PRESC_FREQ_DET.FLG_MEAL
+  is 'frequência é refeição (Y) ou não (N)';
+comment on column PRESC_FREQ_DET.ID_PRESC_FREQUENCY_TYPE
+  is 'tipo de frequência';
+comment on column PRESC_FREQ_DET.EXACT_DAILY_HOUR
+  is 'hora diária exacta';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 21/08/2009 12:26
+-- CHANGE REASON: [ALERT-38908] 
+
+create table PRESC_FREQ_DET
+(
+  ID_PRESC_FREQ_DET         NUMBER(24) not null,
+  ID_PRESC_INSTR_FREQ       NUMBER(24) not null,
+  ID_PRESC_FREQUENCY        NUMBER(24),
+  NTAKE_VALUE               NUMBER(24),
+  NTAKE_VALUE_UNIT          NUMBER(24),
+  NTAKE_PER_UNIT            VARCHAR2(1),
+  NTAKE_DENOMINATOR_VALUE   NUMBER(24),
+  ID_PARENT                 NUMBER(24),
+  EXACT_TIME                NUMBER(24),
+  EXACT_TIME_UNIT           NUMBER(24),
+  EXACT_VALUE               NUMBER(24),
+  ID_PRESCRIPTION_FIELD_DET NUMBER(24),
+  DATE_REG                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  OTHER_FREQ_TYPE           VARCHAR2(2),
+  PARITY                    VARCHAR2(1),
+  FLG_MEAL                  VARCHAR2(1),
+  ID_PRESC_FREQUENCY_TYPE   NUMBER(24),
+  EXACT_DAILY_HOUR          INTERVAL DAY(3) TO SECOND(3),
+  CREATE_USER               VARCHAR2(24),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24)
+)
+tablespace TABLE_M;
+
+-- Add comments to the table 
+comment on table PRESC_FREQ_DET
+  is 'Tabela onde constam os detalhes de cada frequência associadas à prescrição';
+-- Add comments to the columns 
+comment on column PRESC_FREQ_DET.ID_PRESC_FREQ_DET
+  is 'CHAVE PRIMÁRIA';
+comment on column PRESC_FREQ_DET.ID_PRESC_INSTR_FREQ
+  is 'id da tabela das relações entre prescrições e frequências';
+comment on column PRESC_FREQ_DET.ID_PRESC_FREQUENCY
+  is 'tabela de conteúdos onde estão guardadas as frequências default';
+comment on column PRESC_FREQ_DET.NTAKE_VALUE
+  is 'valor do numero de tomas';
+comment on column PRESC_FREQ_DET.NTAKE_VALUE_UNIT
+  is 'unidade para o valor do numero de tomas';
+comment on column PRESC_FREQ_DET.NTAKE_PER_UNIT
+  is 'Y se NTAKE_VALUE/NTAKE_VALUE_UNIT, N caso contrário.';
+comment on column PRESC_FREQ_DET.NTAKE_DENOMINATOR_VALUE
+  is 'caso NTAKE_PER_UNIT estiver a Y, então podemos definir um valor de unidade para o denominador';
+comment on column PRESC_FREQ_DET.ID_PARENT
+  is 'o campo é preenchido se a frequência em causa for um período da refeição. neste caso, o campo é preenchido com o id da frequência para a refeição em causa';
+comment on column PRESC_FREQ_DET.EXACT_TIME
+  is 'tempo exacto';
+comment on column PRESC_FREQ_DET.EXACT_TIME_UNIT
+  is 'unidade de medida para o tempo exacto';
+comment on column PRESC_FREQ_DET.EXACT_VALUE
+  is 'valor exacto';
+comment on column PRESC_FREQ_DET.ID_PRESCRIPTION_FIELD_DET
+  is 'id do campo';
+comment on column PRESC_FREQ_DET.DATE_REG
+  is 'data de registo';
+comment on column PRESC_FREQ_DET.OTHER_FREQ_TYPE
+  is 'tipo de frequência: ED(frequência em cada dia - each day); DL(frequência diária - daily)';
+comment on column PRESC_FREQ_DET.PARITY
+  is 'par (E); ímpar (O)';
+comment on column PRESC_FREQ_DET.FLG_MEAL
+  is 'frequência é refeição (Y) ou não (N)';
+comment on column PRESC_FREQ_DET.ID_PRESC_FREQUENCY_TYPE
+  is 'tipo de frequência';
+comment on column PRESC_FREQ_DET.EXACT_DAILY_HOUR
+  is 'hora diária exacta';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_FREQ_DET IS 'Tabela onde constam os detalhes de cada frequência associadas à prescrição [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

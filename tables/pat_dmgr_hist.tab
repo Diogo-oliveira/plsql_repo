@@ -1,0 +1,133 @@
+
+
+  CREATE TABLE PAT_DMGR_HIST
+   (	ID_PAT_DMGR_HIST NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	DT_CHANGE DATE NOT NULL ENABLE,
+	NAME VARCHAR2(200),
+	GENDER VARCHAR2(1),
+	DT_BIRTH DATE,
+	NICK_NAME VARCHAR2(200),
+	AGE NUMBER(3,0),
+	MARITAL_STATUS VARCHAR2(1),
+
+	ADDRESS VARCHAR2(200),
+	DISTRICT VARCHAR2(200),
+	ZIP_CODE VARCHAR2(30),
+	NUM_MAIN_CONTACT VARCHAR2(30),
+	NUM_CONTACT VARCHAR2(30),
+	FLG_JOB_STATUS VARCHAR2(1),
+	ID_COUNTRY_NATION NUMBER(12,0),
+	ID_SCHOLARSHIP NUMBER(12,0),
+	FATHER_NAME VARCHAR2(200),
+	ID_ISENCAO NUMBER(24,0),
+	BIRTH_PLACE VARCHAR2(100),
+	NUM_HEALTH_PLAN VARCHAR2(30),
+	ID_RECM NUMBER(24,0),
+
+	ID_OCCUPATION NUMBER(12,0),
+	OCCUPATION_DESC VARCHAR2(400),
+	MOTHER_NAME VARCHAR2(200),
+	LOCATION VARCHAR2(200)
+   );
+
+
+COMMENT ON TABLE pat_dmgr_hist IS 'Histórico da informação geográfica dos pacientes.' ;
+
+COMMENT ON COLUMN pat_dmgr_hist.id_pat_dmgr_hist IS 'Chave Primária' ;
+COMMENT ON COLUMN pat_dmgr_hist.id_patient IS 'Paciente a que se refere o registo' ;
+COMMENT ON COLUMN pat_dmgr_hist.id_professional IS 'Profissional que fez a alteração' ;
+COMMENT ON COLUMN pat_dmgr_hist.id_institution IS 'Instituição onde ocorreu a alteração' ;
+COMMENT ON COLUMN pat_dmgr_hist.dt_change IS 'Data da alteração' ;
+COMMENT ON COLUMN pat_dmgr_hist.name IS 'Nome do paciente. Origem na tabela Patient.' ;
+COMMENT ON COLUMN pat_dmgr_hist.gender IS 'Sexo do paciente. Origem na tabela Patient.' ;
+COMMENT ON COLUMN pat_dmgr_hist.dt_birth IS 'Data de nascimento. Origem na tabela Patient.' ;
+COMMENT ON COLUMN pat_dmgr_hist.nick_name IS 'Nome por que gosta de ser tratado.  Origem na tabela Patient.' ;
+COMMENT ON COLUMN pat_dmgr_hist.age IS 'Idade estimada.  Origem na tabela Patient.' ;
+COMMENT ON COLUMN pat_dmgr_hist.marital_status IS 'Estado civil: D-  divorciado; F - separado de facto; M - casado; S - solteiro; U - união de facto; W - viúvo. Origem na tabela PAT_SOC_ATTRIBUTES' ;
+COMMENT ON COLUMN pat_dmgr_hist.address IS 'Morada. Origem na tabela PAT_SOC_ATTRIBUTES.' ;
+COMMENT ON COLUMN pat_dmgr_hist.district IS 'Distrito.  Origem em PAT_SOC_ATTRIBUTES.' ;
+
+COMMENT ON COLUMN pat_dmgr_hist.zip_code IS 'Código Postal. Origem em PAT_SOC_ATTRIBUTES.' ;
+COMMENT ON COLUMN pat_dmgr_hist.num_main_contact IS 'Contacto principal.  Origem em PAT_SOC_ATTRIBUTES.' ;
+COMMENT ON COLUMN pat_dmgr_hist.num_contact IS 'Outro contacto/contacto do emprego.  Origem em PAT_SOC_ATTRIBUTES.' ;
+COMMENT ON COLUMN pat_dmgr_hist.flg_job_status IS 'Estado actual: activo, reformado por invalidez, reformado por velhice, desempregado. Origem em PAT_SOC_ATTRIBUTES.' ;
+COMMENT ON COLUMN pat_dmgr_hist.id_country_nation IS 'Nacionalidade. Origem em PAT_SOC_ATTRIBUTES.' ;
+COMMENT ON COLUMN pat_dmgr_hist.id_scholarship IS 'Escolaridade. Origem em PAT_SOC_ATTRIBUTES.' ;
+COMMENT ON COLUMN pat_dmgr_hist.father_name IS 'Nome do pai. Origem em PAT_SOC_ATTRIBUTES.' ;
+COMMENT ON COLUMN pat_dmgr_hist.id_isencao IS 'Tipo de isenção.  Origem em PAT_SOC_ATTRIBUTES.' ;
+COMMENT ON COLUMN pat_dmgr_hist.birth_place IS 'Place where patient was born. Origem em PAT_SOC_ATTRIBUTES.' ;
+COMMENT ON COLUMN pat_dmgr_hist.num_health_plan IS 'Plano de saúde por defeito (SNS) ou outro. Origem em PAT_HEALTH_PLAN.' ;
+COMMENT ON COLUMN pat_dmgr_hist.id_recm IS 'Regime de comparticipação de medicamentos. Origem em PAT_CLI_ATTRIBUTES' ;
+COMMENT ON COLUMN pat_dmgr_hist.id_occupation IS 'Profissão. Origem em PAT_JOB.' ;
+COMMENT ON COLUMN pat_dmgr_hist.occupation_desc IS 'Descrição da profissão. Origem em PAT_JOB' ;
+
+COMMENT ON COLUMN pat_dmgr_hist.mother_name IS 'Nome da mãe. Origem em PAT_SOC_ATTRIBUTES' ;
+COMMENT ON COLUMN pat_dmgr_hist.location IS 'Localidade. Origem em PAT_SOC_ATTRIBUTES' ;
+
+alter table pat_dmgr_hist modify id_professional null;
+
+alter table pat_dmgr_hist add num_doc_external varchar2(200);
+COMMENT ON COLUMN pat_dmgr_hist.num_doc_external IS 'Nºde Segurança Social. Origem em DOC_EXTERNAL.';
+
+ 
+
+alter table pat_dmgr_hist 
+add (dt_change_tstz timestamp with local time zone); 
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_DMGR_HIST ADD DT_BIRTH_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_DMGR_HIST.DT_BIRTH_TSTZ IS 'Data de nascimento. Origem na tabela Patient.'; 
+
+
+ALTER TABLE pat_dmgr_hist add id_geo_state NUMBER;
+ALTER TABLE pat_dmgr_hist add num_contrib VARCHAR2(200);
+COMMENT ON column pat_dmgr_hist.id_geo_state IS 'Id do estado de residencia do paciente (FK para GEO_STATE.ID_GEO_STATE)';
+COMMENT ON column pat_dmgr_hist.num_contrib IS 'Nif - Número de contribuinte';
+
+
+ALTER TABLE pat_dmgr_hist add desc_geo_state varchar2(200);
+COMMENT ON column pat_dmgr_hist.desc_geo_state IS 'Estado de residencia do paciente';
+
+ALTER TABLE pat_dmgr_hist ADD (FLG_MIGRATOR VARCHAR2(1));
+COMMENT ON COLUMN pat_dmgr_hist.FLG_MIGRATOR IS 'Y if the patient is migrator, N otherwise';
+
+
+ALTER TABLE PAT_DMGR_HIST ADD (ID_COUNTRY_ADDRESS NUMBER(12));
+COMMENT ON COLUMN pat_dmgr_hist.ID_COUNTRY_ADDRESS IS 'Adrress country id';
+
+--CHANGED BY: Rui Spratley
+--CHANGE DATE: 2008/09/23
+--CHANGE REASON: Drop colunas DATE
+alter table PAT_DMGR_HIST drop column DT_CHANGE;
+alter table PAT_DMGR_HIST drop column DT_BIRTH_TSTZ;
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE PAT_DMGR_HIST ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN PAT_DMGR_HIST.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2020 18:02
+-- CHANGE REASON: [EMR-40083]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00942);
+BEGIN
+EXECUTE IMMEDIATE 'DROP TABLE pat_dmgr_hist_old';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos

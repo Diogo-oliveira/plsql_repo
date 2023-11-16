@@ -1,0 +1,50 @@
+--2008/08/05 Rui Batista
+--Alerta de interfaces
+create table SYS_ALERT_EVENT_DETAIL
+(
+  ID_SYS_ALERT_EVENT             NUMBER(24) not null,
+  ID_SYS_ALERT_EVENT_DETAIL      NUMBER(24) not null,
+  DT_SYS_ALERT_EVENT_DETAIL_TSTZ TIMESTAMP(6) WITH TIME ZONE not null,
+  DT_EVENT                       TIMESTAMP(6) WITH TIME ZONE,
+  ID_PROFESSIONAL                NUMBER(24),
+  PROF_NICK_NAME                 VARCHAR2(200),
+  DESC_DETAIL                    VARCHAR2(2000),
+  ID_DETAIL_GROUP                NUMBER(24),
+  DESC_DETAIL_GROUP              VARCHAR2(2000)
+);
+
+-- Add comments to the table 
+comment on table SYS_ALERT_EVENT_DETAIL
+  is 'Contains the details do be shown in the alert detail.';
+-- Add comments to the columns 
+comment on column SYS_ALERT_EVENT_DETAIL.ID_SYS_ALERT_EVENT
+  is 'ID of the SYS_ALERT_EVENT that this detail belongs to.';
+comment on column SYS_ALERT_EVENT_DETAIL.ID_SYS_ALERT_EVENT_DETAIL
+  is 'ID of the detail (unique for each ID_SYS_ALERT_EVENT)';
+comment on column SYS_ALERT_EVENT_DETAIL.DT_SYS_ALERT_EVENT_DETAIL_TSTZ
+  is 'Date of the registry';
+comment on column SYS_ALERT_EVENT_DETAIL.DT_EVENT
+  is 'Date of the event that originated the detail';
+comment on column SYS_ALERT_EVENT_DETAIL.ID_PROFESSIONAL
+  is 'Professional that originated the detail';
+comment on column SYS_ALERT_EVENT_DETAIL.PROF_NICK_NAME
+  is 'Professional''s Nick Name';
+comment on column SYS_ALERT_EVENT_DETAIL.DESC_DETAIL
+  is 'Detail Description';
+comment on column SYS_ALERT_EVENT_DETAIL.ID_DETAIL_GROUP
+  is 'ID of this detail group (you can have several details for the same group)';
+comment on column SYS_ALERT_EVENT_DETAIL.DESC_DETAIL_GROUP
+  is 'Description of the detail group';
+
+
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table SYS_ALERT_EVENT_DETAIL
+  add constraint SAED_PK primary key (ID_SYS_ALERT_EVENT, ID_SYS_ALERT_EVENT_DETAIL)
+  using index tablespace INDEX_L;
+  
+alter table SYS_ALERT_EVENT_DETAIL
+  add constraint SAED_PROF_FK foreign key (ID_PROFESSIONAL)
+  references PROFESSIONAL (ID_PROFESSIONAL) on delete set null;
+alter table SYS_ALERT_EVENT_DETAIL
+  add constraint SAED_SAE_FK foreign key (ID_SYS_ALERT_EVENT)
+  references SYS_ALERT_EVENT (ID_SYS_ALERT_EVENT) on delete cascade;

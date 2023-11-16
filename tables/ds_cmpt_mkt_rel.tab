@@ -1,0 +1,490 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:21
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+CREATE TABLE ds_cmpt_mkt_rel (
+       id_ds_cmpt_mkt_rel        NUMBER(24) NOT NULL,
+       id_market                 NUMBER(24) NOT NULL,
+       id_ds_component_parent    NUMBER(24),
+       internal_name_parent      VARCHAR2(200 CHAR),
+       flg_component_type_parent VARCHAR2(1 CHAR),
+       id_ds_component_child     NUMBER(24) NOT NULL,
+       internal_name_child       VARCHAR2(200 CHAR) NOT NULL,
+       flg_component_type_child  VARCHAR2(1 CHAR) NOT NULL,
+       rank                      NUMBER(24) NOT NULL,
+       --
+       create_user               VARCHAR2(24 CHAR),
+       create_time               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       create_institution        NUMBER(24),
+       update_user               VARCHAR2(24 CHAR),
+       update_time               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       update_institution        NUMBER(24)
+);
+
+--
+
+COMMENT ON TABLE ds_cmpt_mkt_rel IS 'Table for dinamic screens components relations by market';
+--
+COMMENT ON COLUMN ds_cmpt_mkt_rel.id_ds_cmpt_mkt_rel        IS 'Dinamic screens components relations Id';
+COMMENT ON COLUMN ds_cmpt_mkt_rel.id_market                 IS 'Market Id';
+COMMENT ON COLUMN ds_cmpt_mkt_rel.id_ds_component_parent    IS 'Parent component Id';
+COMMENT ON COLUMN ds_cmpt_mkt_rel.internal_name_parent      IS 'Parent component internal name';
+COMMENT ON COLUMN ds_cmpt_mkt_rel.flg_component_type_parent IS 'Parent component type';
+COMMENT ON COLUMN ds_cmpt_mkt_rel.id_ds_component_child     IS 'Child component Id';
+COMMENT ON COLUMN ds_cmpt_mkt_rel.internal_name_child       IS 'Child component internal name';
+COMMENT ON COLUMN ds_cmpt_mkt_rel.flg_component_type_child  IS 'Child component type';
+COMMENT ON COLUMN ds_cmpt_mkt_rel.rank                      IS 'Child component rank';
+--
+COMMENT ON COLUMN ds_cmpt_mkt_rel.create_user               IS 'Professional that created the registry';
+COMMENT ON COLUMN ds_cmpt_mkt_rel.create_time               IS 'Date of the registry creation';
+COMMENT ON COLUMN ds_cmpt_mkt_rel.create_institution        IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN ds_cmpt_mkt_rel.update_user               IS 'Last professional that updated the registry';
+COMMENT ON COLUMN ds_cmpt_mkt_rel.update_time               IS 'Date of the last update to the registry';
+COMMENT ON COLUMN ds_cmpt_mkt_rel.update_institution        IS 'Id of the last institution where the registry was updated';
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:21
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE ds_cmpt_mkt_rel MOVE TABLESPACE table_m;
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 30/04/2012 15:26
+-- CHANGE REASON: [ALERT-228936] EST simplified triage
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL ADD ID_INSTITUTION NUMBER(24) DEFAULT 0 NOT NULL';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL ADD ID_SOFTWARE NUMBER(24) DEFAULT 0 NOT NULL';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_CMPT_MKT_REL.ID_INSTITUTION IS ''Institution id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_CMPT_MKT_REL.ID_SOFTWARE IS ''Software id''';
+END;
+/
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 17:20
+-- CHANGE REASON: [ALERT-229222] VERSIONING TRANSACTIONAL MODEL - SCHEMA ALERT - DDL
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL ADD ID_INSTITUTION NUMBER(24) DEFAULT 0 NOT NULL';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE DS_CMPT_MKT_REL ADD ID_SOFTWARE NUMBER(24) DEFAULT 0 NOT NULL';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_CMPT_MKT_REL.ID_INSTITUTION IS ''Institution id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_CMPT_MKT_REL.ID_SOFTWARE IS ''Software id''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 06/12/2013 15:19
+-- CHANGE REASON: [ALERT-269683] 
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'ALTER TABLE DS_CMPT_MKT_REL ADD GENDER VARCHAR2(1 CHAR)');
+    run_ddl(i_sql => 'ALTER TABLE DS_CMPT_MKT_REL ADD AGE_MIN_VALUE NUMBER(5,2)');
+    run_ddl(i_sql => 'ALTER TABLE DS_CMPT_MKT_REL ADD AGE_MIN_UNIT_MEASURE NUMBER(24)');
+    run_ddl(i_sql => 'ALTER TABLE DS_CMPT_MKT_REL ADD AGE_MAX_VALUE NUMBER(5,2)');
+    run_ddl(i_sql => 'ALTER TABLE DS_CMPT_MKT_REL ADD AGE_MAX_UNIT_MEASURE NUMBER(24)');
+    run_ddl(i_sql => 'alter table DS_CMPT_MKT_REL add constraint DS_CMP_MR_MIN_UM foreign key (AGE_MIN_UNIT_MEASURE) references UNIT_MEASURE (ID_UNIT_MEASURE)');
+    run_ddl(i_sql => 'alter table DS_CMPT_MKT_REL add constraint DS_CMP_MR_MAX_UM foreign key (AGE_MAX_UNIT_MEASURE) references UNIT_MEASURE (ID_UNIT_MEASURE)');
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_CMPT_MKT_REL.GENDER IS ''Patient gender : F - female, M - male, I - Unkown''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_CMPT_MKT_REL.AGE_MIN_VALUE IS ''Minimum patient age''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_CMPT_MKT_REL.AGE_MIN_UNIT_MEASURE IS ''Minimum patient age unit measure''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_CMPT_MKT_REL.AGE_MAX_VALUE IS ''Maximum patient age''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN DS_CMPT_MKT_REL.AGE_MAX_UNIT_MEASURE IS ''Maximum patient age unit measure''';
+END;
+/
+-- CHANGE END:  sergio.dias
+
+declare
+	l_sql	varchar2(4000);
+begin
+	l_sql := 'ALTER TABLE DS_CMPT_MKT_REL ADD ID_UNIT_MEASURE 		NUMBER(24)';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_sql	varchar2(4000);
+begin
+	l_sql := 'ALTER TABLE DS_CMPT_MKT_REL ADD ID_UNIT_MEASURE_SUBTYPE 		NUMBER(24)';
+	pk_versioning.run(l_sql);
+end;
+/
+
+comment on column ALERT.DS_CMPT_MKT_REL.ID_UNIT_MEASURE 		is 'Unit measure of component';
+comment on column ALERT.DS_CMPT_MKT_REL.ID_UNIT_MEASURE_SUBTYPE is 'Unit measure subtype of component. if filled, id_unit_measure is default.';
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 17/10/2017 09:10
+-- CHANGE REASON: [ALERT-333267 ] NOM024 - New developmen on Muertes Generales
+declare
+tbl_sql table_varchar := table_varchar(
+       'alter table ds_cmpt_mkt_rel add max_len    NUMBER(24)'
+      ,'alter table ds_cmpt_mkt_rel add min_value  NUMBER(24)'
+      ,'alter table ds_cmpt_mkt_rel add max_value  NUMBER(24)'
+      );
+
+begin
+  pk_versioning.run( tbl_sql(1) );
+  pk_versioning.run( tbl_sql(2) );
+  pk_versioning.run( tbl_sql(3) );
+end;
+/
+
+
+comment on column ds_cmpt_mkt_rel.max_len  is 'Maximum length of free text fields';
+comment on column ds_cmpt_mkt_rel.min_value  is 'Minimum value of keypad fields';
+comment on column ds_cmpt_mkt_rel.max_value  is 'Maximum value of keypad fields';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 17:08
+-- CHANGE REASON: [ARCH-7603] - [DB] Changes on DB Model
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL drop column id_institution';
+pk_versioning.run( l_sql);
+end;
+/
+
+
+-- Add/modify columns
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL add flg_def_event_type VARCHAR2(1 CHAR)';
+pk_versioning.run( l_sql);
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL add id_profile_template number(24) default 0';
+pk_versioning.run( l_sql);
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL add position NUMBER(24) default 0';
+pk_versioning.run( l_sql);
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL add flg_configurable varchar2(1 CHAR)';
+pk_versioning.run( l_sql);
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL add slg_internal_name VARCHAR2(200 CHAR)';
+pk_versioning.run( l_sql);
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL add multi_option_column VARCHAR2(200 CHAR)';
+pk_versioning.run( l_sql);
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL add code_domain VARCHAR2(200 CHAR)';
+pk_versioning.run( l_sql);
+end;
+/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL add service_name VARCHAR2(200 CHAR)';
+pk_versioning.run( l_sql);
+end;
+/
+
+-- Add comments to the columns
+comment on column DS_CMPT_MKT_REL.slg_internal_name   is 'Sys list group internal name if ds component data type is a multichoice';
+comment on column DS_CMPT_MKT_REL.multi_option_column is 'Multichoioce associated with component';
+comment on column DS_CMPT_MKT_REL.code_domain         is 'sys_domain code associated with the component';
+comment on column DS_CMPT_MKT_REL.service_name        is 'Service name';
+
+-- Add comments to the columns
+comment on column DS_CMPT_MKT_REL.flg_def_event_type   is 'Type of event (I - Inactivate / A - Activate / M - Activate and set to Mandatory / E - Exclusive - context defined in sys_domain)';
+comment on column DS_CMPT_MKT_REL.id_profile_template  is 'Profile that has access to the field';
+comment on column DS_CMPT_MKT_REL.position             is 'child component position in  line (RANK) - multiple fields by line';
+--comment on column DS_CMPT_MKT_REL.id_criteria          is 'ID search criteria';
+comment on column DS_CMPT_MKT_REL.flg_configurable     is 'Is the field possible to configure locally';
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table ds_cmpt_mkt_rel  add id_category number(24) default -1 not null';
+pk_versioning.run( l_sql);
+end;
+/
+
+COMMENT ON COLUMN DS_CMPT_MKT_REL.ID_CATEGORY IS 'ENABLED CATEGORY CONFIGURATION';
+
+
+-- cmf 12/04/2019
+/*
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := q'[alter table alert.ds_cmpt_mkt_rel add flg_default_value varchar2(1 char) default 'N' not null]';
+pk_versioning.run( l_sql);
+end;
+/
+
+comment on column DS_CMPT_MKT_REL.flg_default_value is 'Use Default Value? (Y/N)';
+*/
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table ds_cmpt_mkt_rel add min_len number(4)';
+pk_versioning.run( l_sql);
+end;
+/
+comment on column DS_CMPT_MKT_REL.MIN_LEN is 'minimum number of characters for valid input';
+
+declare
+xpl varchar2(0001 char) := '''';
+l_sql varchar2(1000 char);
+begin
+l_sql := xpl||'A'||xpl|| ' not null';
+l_sql := 'alter table ds_cmpt_mkt_rel add flg_comp_size varchar2(0001 char) default '||l_sql;
+pk_versioning.run( l_sql);
+end;
+/
+comment on column DS_CMPT_MKT_REL.flg_comp_size is 'Size of component: (S)mall, (M)edium, (L)arge, (A)utomated';
+
+declare
+xpl varchar2(0001 char) := '''';
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table ds_cmpt_mkt_rel add DS_ALIAS varchar2(0200 char)';
+pk_versioning.run( l_sql);
+end;
+/
+comment on column DS_CMPT_MKT_REL.DS_ALIAS is 'Alternate field for row identification';
+
+
+declare
+xpl varchar2(0001 char) := '''';
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table ds_cmpt_mkt_rel add CODE_ALT_DESC varchar2(0200 char)';
+pk_versioning.run( l_sql);
+end;
+/
+comment on column DS_CMPT_MKT_REL.CODE_ALT_DESC is 'Alternate Translation for component';
+
+declare
+xpl varchar2(0001 char) := '''';
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table ds_cmpt_mkt_rel add service_params varchar2(1000 char)';
+pk_versioning.run( l_sql);
+end;
+/
+comment on column DS_CMPT_MKT_REL.service_params is 'Parameters identifiers for field service_name';
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := q'[alter table ds_cmpt_mkt_rel add FLG_EXP_TYPE varchar2(1 char) default 'N' not null]';
+pk_versioning.run( l_sql);
+end;
+/
+comment on column DS_CMPT_MKT_REL.FLG_EXP_TYPE is 'defines how to interpret input_expression (REGEX/EVAL/etc..)';
+
+
+declare
+xpl varchar2(0001 char) := '''';
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table ds_cmpt_mkt_rel add input_expression varchar2(1000 char)';
+pk_versioning.run( l_sql);
+end;
+/
+comment on column DS_CMPT_MKT_REL.input_expression is 'REGEX/EVAL expression for input format purpose';
+
+declare
+xpl varchar2(0001 char) := '''';
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table ds_cmpt_mkt_rel add input_mask varchar2(0200 char)';
+pk_versioning.run( l_sql);
+end;
+/
+comment on column DS_CMPT_MKT_REL.input_mask is 'default value format. Example: dd-mm-yyyy, 999,999,999.00';
+
+-- 2019-07-08
+declare
+xpl varchar2(0001 char) := '''';
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table ds_cmpt_mkt_rel add desc_function varchar2(1000 char)';
+pk_versioning.run( l_sql);
+end;
+/
+comment on column DS_CMPT_MKT_REL.desc_function is '3º alternate description with placeholders( @i_lang, @PROFESSIONAL, @INSTITUTION, @SOFTWARE';
+
+
+
+declare
+xpl varchar2(0001 char) := '''';
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL add comp_size NUMBER(2)';
+pk_versioning.run( l_sql);
+end;
+/
+
+comment on column DS_CMPT_MKT_REL.comp_size
+is 'Size of component:1 - 12';
+
+declare
+xpl varchar2(0001 char) := '''';
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table DS_CMPT_MKT_REL add comp_offset NUMBER(2)';
+pk_versioning.run( l_sql);
+end;
+/
+
+comment on column DS_CMPT_MKT_REL.comp_offset
+is 'Component Offset of previous component';
+-- CHANGE END: Elisabete Bugalho
+
+declare
+       l_sql  varchar2(1000 char);
+begin
+       l_sql := q'[alter table ds_cmpt_mkt_rel add flg_hidden varchar2(1 char) default 'N' not null ]';
+       pk_versioning.run(l_sql);
+end;
+/
+
+COMMENT ON COLUMN ds_event.id_action IS 'Hide Section (Y/N) ( only considered for Node records )' ;
+
+-- CMF
+declare
+	l_sql	varchar2(1000 char);
+begin
+
+	l_sql := q'[alter table ds_cmpt_mkt_rel add flg_clearable varchar2(1 char) default 'Y' not null]';
+	pk_versioning.run( l_sql);
+
+end;
+/
+
+COMMENT ON COLUMN ds_cmpt_mkt_rel.FLG_CLEARABLE IS 'Flag that indicates if component is clearable (Y/N)';
+
+declare
+       l_Sql varchar2(1000 char);
+begin
+       l_sql := q'[alter table ds_cmpt_mkt_rel add code_validation_message varchar2(0200 char)]';
+       pk_versioning.run( l_sql);
+end;
+/
+COMMENT ON COLUMN ds_cmpt_mkt_rel.code_validation_message IS 'Validation Message';
+
+declare
+       l_sql varchar2(4000);
+begin
+       l_sql := q'[alter table ds_cmpt_mkt_rel add FLG_LABEL_VISIBLE VARCHAR2(1 char) default 'Y' not null]';
+       pk_versioning.run( l_sql);
+end;
+/
+comment on column DS_CMPT_MKT_REL.FLG_LABEL_VISIBLE          is 'Set if label is visible (Y/N)';
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := 'alter table ds_cmpt_mkt_rel add internal_sample_text_type varchar2(0100 char)';
+	pk_versioning.run(l_sql);
+end;
+/
+
+comment on column DS_CMPT_MKT_REL.internal_sample_text_type   is 'Sample Text Type associated with component';
+
+declare
+  l_sql varchar2(4000);
+begin
+  l_sql := q'[alter table DS_CMPT_MKT_REL add flg_data_type2 varchar2(0001 char)]';
+  pk_versioning.run( l_sql );
+end;
+/
+
+-- cmf
+DECLARE
+  L_SQL VARCHAR2(4000);
+BEGIN
+  l_Sql := q'[alter table ds_cmpt_mkt_rel add TEXT_LINE_NR number(6) default 1]';
+	pk_versioning.run(l_Sql);
+end;
+/
+
+COMMENT ON COLUMN ds_cmpt_mkt_rel.text_line_nr IS 'Nr of lines for textbox type components';
+
+declare
+       l_Sql varchar2(4000);
+begin
+       l_sql := q'[alter table ds_cmpt_mkt_rel modify flg_data_type2 varchar2(0002 char)]';
+       pk_versioning.run(l_sql);
+end;
+/
+
+COMMENT ON COLUMN ds_cmpt_mkt_rel.flg_data_type2 IS 'PD: Partial Dates, LL: Land Line, ML: Mobile Line';

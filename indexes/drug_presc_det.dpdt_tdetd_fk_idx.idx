@@ -1,0 +1,14 @@
+-- CHANGED BY: Pedro Martins Santos
+-- CHANGE DATE: 07/07/2010
+-- CHANGE REASON: [ALERT-100250] 
+DECLARE
+e_object_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_object_exists,-00955);
+BEGIN
+EXECUTE IMMEDIATE 'create index DPDT_TDETD_FK_IDX on DRUG_PRESC_DET (ID_TASK_DEPENDENCY) tablespace INDEX_L'; 
+EXCEPTION
+WHEN e_object_exists THEN
+  dbms_output.put_line('Aviso: indice anteriormente criada!');
+END;
+/
+-- CHANGE END: Pedro Martins Santos

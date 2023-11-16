@@ -1,0 +1,20 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 25/01/2011 16:52
+-- CHANGE REASON: [ALERT-157333] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_indexes
+     WHERE index_name = 'RSMT_ID_MARKET_IDX'
+       AND table_name = 'REF_SPEC_MARKET';
+
+    IF l_count <> 1
+    THEN
+        EXECUTE IMMEDIATE 'CREATE INDEX "RSMT_ID_MARKET_IDX" ON "REF_SPEC_MARKET" ("ID_MARKET")';
+    END IF;
+
+END;
+/
+-- CHANGE END: Joana Barroso

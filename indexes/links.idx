@@ -1,0 +1,34 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/08/2011 09:00
+-- CHANGE REASON: [ALERT-190334] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX links_ppt_fk_idx
+  ON links (
+    id_institution,
+id_software,
+id_profile_template
+  )
+  TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX links_parent_idx
+  ON links (
+    id_parent
+  )
+  TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    
+END;
+/
+-- CHANGE END: Paulo Teixeira

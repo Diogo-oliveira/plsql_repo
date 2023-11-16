@@ -1,0 +1,62 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 10/09/2014 17:29
+-- CHANGE REASON: [ALERT-290969] Nursing Care Plan: NANDA, NIC, NOC - Data Model
+BEGIN
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'NNN_EPIS_ACTV_DET_TASK', i_obj_type => 'TABLE', i_flg_category => 'TRS', i_flg_alert_default => 'N', i_delete_script => '', i_flg_default_child => 'N', i_flg_nzd => 'Y', i_responsible_team => 'NURSING');
+END;
+/
+CREATE TABLE NNN_EPIS_ACTV_DET_TASK
+  (
+    ID_NNN_EPIS_ACTV_DET_TASK NUMBER (24) NOT NULL ,
+    ID_NNN_EPIS_ACTIVITY_DET  NUMBER (24) NOT NULL ,
+    ID_NIC_ACTIVITY           NUMBER (24) NOT NULL ,
+    FLG_EXECUTED              VARCHAR2 (1 CHAR) NOT NULL ,
+    CODE_NOTES                VARCHAR2 (200 CHAR) AS ( 'NNN_EPIS_ACTV_DET_TASK.CODE_NOTES.'
+    ||TO_CHAR(ID_NNN_EPIS_ACTV_DET_TASK) ) VIRTUAL NOT NULL ,
+    CREATE_USER        VARCHAR2 (30 CHAR) ,
+    CREATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE ,
+    CREATE_INSTITUTION NUMBER (24) ,
+    UPDATE_USER        VARCHAR2 (30 CHAR) ,
+    UPDATE_TIME        TIMESTAMP WITH LOCAL TIME ZONE ,
+    UPDATE_INSTITUTION NUMBER (24)
+  )
+  TABLESPACE ALERT_DATA ;
+
+COMMENT ON TABLE NNN_EPIS_ACTV_DET_TASK
+IS
+  'NIC Activity tasks associated to an execution of a NIC Activity (child activities of another which was defined as tasklist) in the context of a patient''s nursing care plan' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTV_DET_TASK.ID_NNN_EPIS_ACTV_DET_TASK
+IS
+  'Surrogate key' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTV_DET_TASK.ID_NNN_EPIS_ACTIVITY_DET
+IS
+  'Executed NIC Activity ID' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTV_DET_TASK.ID_NIC_ACTIVITY
+IS
+  'NIC Activity ID defined as task' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTV_DET_TASK.FLG_EXECUTED
+IS
+  'Execution status: Executed / Not Executed' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTV_DET_TASK.CODE_NOTES
+IS
+  'Notes of activity task performed by the professional' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTV_DET_TASK.CREATE_USER
+IS
+  'Creation User' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTV_DET_TASK.CREATE_TIME
+IS
+  'Creation Time' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTV_DET_TASK.CREATE_INSTITUTION
+IS
+  'Creation Institution' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTV_DET_TASK.UPDATE_USER
+IS
+  'Update User' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTV_DET_TASK.UPDATE_TIME
+IS
+  'Update Time' ;
+  COMMENT ON COLUMN NNN_EPIS_ACTV_DET_TASK.UPDATE_INSTITUTION
+IS
+  'Update Institution' ;
+  
+-- CHANGE END: Ariel Machado

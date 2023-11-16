@@ -1,0 +1,60 @@
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 06-02-2013
+-- CHANGE REASON: ALERT-251133
+DECLARE
+	e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'SCHEDULE_BED_HIST', i_obj_type => 'TABLE',i_flg_category => 'HST', i_flg_nzd => 'N');
+
+  EXECUTE IMMEDIATE 'CREATE TABLE SCHEDULE_BED_HIST
+					(ID_SCHEDULE NUMBER(24) NOT NULL
+					 ,ID_BED NUMBER(24) NOT NULL
+					 ,ID_WAITING_LIST NUMBER(24)
+					 ,FLG_TEMPORARY VARCHAR2(1 CHAR) DEFAULT ''Y''
+					 ,FLG_CONFLICT VARCHAR2(1 CHAR) DEFAULT ''N'' NOT NULL
+					 ,CREATE_USER VARCHAR2(24 CHAR)
+					 ,CREATE_INSTITUTION NUMBER(24)
+					 ,UPDATE_USER VARCHAR2(24 CHAR)
+					 ,UPDATE_INSTITUTION NUMBER(24)
+					 ,CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+					 ,UPDATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+					 ,DT_UPDATE TIMESTAMP WITH LOCAL TIME ZONE DEFAULT current_timestamp
+					 )
+                    TABLESPACE TABLE_L';
+EXCEPTION
+	WHEN e_object_exists THEN dbms_output.put_line('Tentativa de criação da tabela SCHEDULE_BED_HIST falhou porque já existe');
+END;
+/
+
+COMMENT ON TABLE SCHEDULE_BED_HIST IS 'History table for updates support';
+COMMENT ON COLUMN SCHEDULE_BED_HIST.ID_SCHEDULE IS 'trans. table primary key';
+COMMENT ON COLUMN SCHEDULE_BED_HIST.ID_BED IS 'bed id';
+COMMENT ON COLUMN SCHEDULE_BED_HIST.ID_WAITING_LIST IS 'waiting list id that originated this schedule';
+COMMENT ON COLUMN SCHEDULE_BED_HIST.FLG_TEMPORARY IS 'Y=temporary, not confirmed by planner. N=definitive';
+COMMENT ON COLUMN SCHEDULE_BED_HIST.FLG_CONFLICT IS 'Y=this schedule in overlapping with another. N=no conflict';
+COMMENT ON COLUMN SCHEDULE_BED_HIST.CREATE_USER IS 'creation user';
+COMMENT ON COLUMN SCHEDULE_BED_HIST.CREATE_TIME IS 'creation time';
+COMMENT ON COLUMN SCHEDULE_BED_HIST.CREATE_INSTITUTION IS 'creation institution';
+COMMENT ON COLUMN SCHEDULE_BED_HIST.UPDATE_USER IS 'update user';
+COMMENT ON COLUMN SCHEDULE_BED_HIST.UPDATE_TIME IS 'update time';
+COMMENT ON COLUMN SCHEDULE_BED_HIST.UPDATE_INSTITUTION IS 'update institution';
+COMMENT ON COLUMN SCHEDULE_BED_HIST.DT_UPDATE IS 'date of update occurrence';
+
+-- CHANGE END:  Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 20-08-2013
+-- CHANGE REASON: ALERT-263450
+begin
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT',i_obj_name => 'SCHEDULE_BED_HIST', i_obj_type => 'TABLE', i_flg_category => 'HST', i_flg_nzd => 'Y');
+end;
+/
+-- CHANGE END: Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-01-2015
+-- CHANGE REASON: ALERT-303513
+alter table SCHEDULE_BED_HIST add id_prof_update number(24);
+comment on column SCHEDULE_BED_HIST.id_prof_update is 'prof. responsible for the update occurring at dt_update';
+-- CHANGE END: Telmo

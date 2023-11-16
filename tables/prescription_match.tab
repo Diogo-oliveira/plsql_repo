@@ -1,0 +1,42 @@
+-- Create table
+create table Prescription_match
+(
+  numero_receita        number(24),
+  id_institution        number(24),
+  id_prescription       number(24),
+  id_prescription_xml   number(24),
+  ip_prescription_print number(24),
+  status                varchar2(1),
+  msg_error             varchar2(2500)
+)
+;
+-- Add comments to the table 
+comment on table Prescription_match
+  is 'Numero de receita para igif ';
+-- Add comments to the columns 
+comment on column Prescription_match.numero_receita
+  is 'Numero da receita';
+comment on column Prescription_match.id_institution
+  is 'Id da instituição';
+comment on column Prescription_match.id_prescription
+  is 'id da prescrição';
+comment on column Prescription_match.id_prescription_xml
+  is 'id da prescription_xml';
+comment on column Prescription_match.ip_prescription_print
+  is 'id da prescription_print';
+comment on column Prescription_match.status
+  is 'Estado E erro, F - terminado, X em curso';
+comment on column Prescription_match.msg_error
+  is 'Mensagem de erro';
+
+alter table prescription_match add STATUS_DATE DATE default sysdate; 
+
+comment on column Prescription_match.STATUS_DATE 
+  is 'Data do registo';
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:57
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESCRIPTION_MATCH IS 'Numero de receita para igif  [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

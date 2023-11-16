@@ -1,0 +1,38 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 05/09/2012 14:28
+-- CHANGE REASON: [ALERT-239422] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN    
+        EXECUTE IMMEDIATE '
+create table pat_group_note_hist
+(  
+  id_group_note_hist NUMBER(24) NOT NULL,  
+  id_patient         NUMBER(24) NOT NULL,
+  id_episode         NUMBER(24) NOT NULL, 
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+-- Add comments to the columns
+COMMENT ON TABLE pat_group_note_hist IS 'patient group note history table';
+COMMENT ON COLUMN pat_group_note_hist.id_group_note_hist  is 'group note history identifier';      
+COMMENT ON COLUMN pat_group_note_hist.id_patient is 'patient identifier';  
+COMMENT ON COLUMN pat_group_note_hist.id_episode  is 'episode identifier';     
+COMMENT ON COLUMN pat_group_note_hist.create_user is 'Creation User';
+COMMENT ON COLUMN pat_group_note_hist.create_time is 'Creation Time';
+COMMENT ON COLUMN pat_group_note_hist.create_institution is 'Creation Institution';
+COMMENT ON COLUMN pat_group_note_hist.update_user is 'Update User';
+COMMENT ON COLUMN pat_group_note_hist.update_time is 'Update Time';
+COMMENT ON COLUMN pat_group_note_hist.update_institution is 'Update Institution';
+-- CHANGE END: Paulo Teixeira

@@ -1,0 +1,2 @@
+
+GRANT SELECT ON ALERT.prof_team_hist TO ALERT_VIEWER;

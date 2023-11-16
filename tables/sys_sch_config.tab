@@ -1,0 +1,53 @@
+create table sys_sch_config (
+key varchar2(2000),
+value varchar2(2000),
+CONSTRAINT unique_cfg UNIQUE (key)
+);
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table SYS_SCH_CONFIG add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column sys_sch_config.create_user IS 'Creation User';
+COMMENT ON column sys_sch_config.create_time IS 'Creation Time';
+COMMENT ON column sys_sch_config.create_institution IS 'Creation Institution';
+COMMENT ON column sys_sch_config.update_user IS 'Update User';
+COMMENT ON column sys_sch_config.update_time IS 'Update Time';
+COMMENT ON column sys_sch_config.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 28/03/2019 18:04
+-- CHANGE REASON: [EMR-14514] - [DB] Audit Columns missing - ADT
+BEGIN
+    EXECUTE IMMEDIATE 'alter table sys_sch_config add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column sys_sch_config.create_user IS 'Creation User';
+COMMENT ON column sys_sch_config.create_time IS 'Creation Time';
+COMMENT ON column sys_sch_config.create_institution IS 'Creation Institution';
+COMMENT ON column sys_sch_config.update_user IS 'Update User';
+COMMENT ON column sys_sch_config.update_time IS 'Update Time';
+COMMENT ON column sys_sch_config.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

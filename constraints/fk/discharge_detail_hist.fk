@@ -1,0 +1,37 @@
+ALTER TABLE DISCHARGE_detail_HIST  ADD CONSTRAINT disdh_dischd_fk FOREIGN KEY (id_discharge_detail) REFERENCES discharge_detail (id_discharge_detail) ENABLE;
+ALTER TABLE DISCHARGE_detail_HIST  ADD CONSTRAINT disdh_disc_fk   FOREIGN KEY (id_discharge)        REFERENCES discharge (id_discharge) ENABLE;
+ALTER TABLE DISCHARGE__detail_HIST ADD CONSTRAINT disdh_disch_fk  FOREIGN KEY (id_discharge_hist) REFERENCES discharge_hist (id_discharge_hist) ENABLE;
+
+ALTER TABLE DISCHARGE_DETAIL_HIST ADD CONSTRAINT DISDH_CRQ_FK FOREIGN KEY (ID_CONSULT_REQ) REFERENCES CONSULT_REQ (ID_CONSULT_REQ) ENABLE;
+ALTER TABLE DISCHARGE_DETAIL_HIST ADD CONSTRAINT DISDH_SCH_FK FOREIGN KEY (ID_SCHEDULE) REFERENCES SCHEDULE (ID_SCHEDULE) ENABLE;
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 22/03/2010 17:11
+-- CHANGE REASON: [ALERT-69945] social harmless ddl - discharge_detail and discharge_detail_hist
+alter table discharge_detail_hist
+  add constraint disdh_unitm_fk foreign key (id_unit_measure)
+  references unit_measure (id_unit_measure);
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 10/10/2010 21:27
+-- CHANGE REASON: [ALERT-130722] Tracking view ward
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE discharge_detail_hist ADD CONSTRAINT DISDH_ROOM_FK FOREIGN KEY (id_room_admit)
+  REFERENCES ROOM (ID_ROOM) ENABLE';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+  
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 07/09/2018 15:53
+-- CHANGE REASON: [EMR-5115] New Button for admission order
+alter table DISCHARGE_DETAIL_HIST
+  add constraint DISDH_EPIS_FK foreign key (ID_EPISODE_CREATED)
+  references episode (ID_EPISODE);
+-- CHANGE END: Elisabete Bugalho

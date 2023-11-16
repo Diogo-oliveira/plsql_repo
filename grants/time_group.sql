@@ -1,0 +1,1 @@
+GRANT SELECT ON time_group TO alert_inter;

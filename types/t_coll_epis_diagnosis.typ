@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_coll_epis_diagnosis AS TABLE OF t_rec_epis_diagnosis;

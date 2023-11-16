@@ -1,0 +1,63 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/01/2010 17:23
+-- CHANGE REASON: [ALERT-59019] 
+DECLARE
+    l_found NUMBER;
+BEGIN
+    SELECT 1
+      INTO l_found
+      FROM dba_constraints
+     WHERE table_name = 'SYS_FUNC_CATEGORY'
+       AND constraint_name = 'SFCY_FLG_AVAILABLE_CHK';
+EXCEPTION
+    WHEN no_data_found THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE SYS_FUNC_CATEGORY ADD CONSTRAINT SFCY_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE in (''Y'', ''N'')) ENABLE';
+END;
+/
+
+DECLARE
+    l_found NUMBER;
+BEGIN
+    SELECT 1
+      INTO l_found
+      FROM  dba_constraints
+     WHERE table_name = 'SYS_FUNC_CATEGORY'
+       AND constraint_name = 'SFCY_PK';
+EXCEPTION
+    WHEN no_data_found THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE SYS_FUNC_CATEGORY ADD CONSTRAINT SFCY_PK PRIMARY KEY (ID_SYS_FUNCTIONALITY, ID_CATEGORY) ENABLE';
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 18/01/2010 15:49
+-- CHANGE REASON: [ALERT-67408] 
+DECLARE
+    l_found NUMBER;
+BEGIN
+    SELECT 1
+      INTO l_found
+      FROM dba_constraints
+     WHERE table_name = 'SYS_FUNC_CATEGORY'
+       AND constraint_name = 'SFCY_FLG_AVAILABLE_CHK';
+EXCEPTION
+    WHEN no_data_found THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE SYS_FUNC_CATEGORY ADD CONSTRAINT SFCY_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE in (''Y'', ''N'')) ENABLE';
+END;
+/
+
+DECLARE
+    l_found NUMBER;
+BEGIN
+    SELECT 1
+     INTO l_found
+      FROM  dba_constraints
+     WHERE table_name = 'SYS_FUNC_CATEGORY'
+       AND constraint_name = 'SFCY_PK';
+EXCEPTION
+    WHEN no_data_found THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE SYS_FUNC_CATEGORY ADD CONSTRAINT SFCY_PK PRIMARY KEY (ID_SYS_FUNCTIONALITY, ID_CATEGORY) ENABLE';
+END;
+/
+-- CHANGE END: Joana Barroso

@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE table_index_varchar IS TABLE OF index_varchar;s

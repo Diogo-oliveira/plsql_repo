@@ -1,0 +1,55 @@
+create table TRANSFER_INSTITUTION
+(
+  ID_INSTITUTION_ORIGIN   NUMBER(24) NOT NULL,
+  ID_INSTITUTION_DEST     NUMBER(24) NOT NULL,
+  DT_CREATION_TSTZ        timestamp with local time zone NOT NULL,
+  ID_TRANSP_ENTITY        NUMBER(24),
+  NOTES                   VARCHAR2(4000),
+  DT_BEGIN_TSTZ           timestamp with local time zone,
+  DT_END_TSTZ             timestamp with local time zone,
+  FLG_STATUS              VARCHAR2(1) NOT NULL,
+  ID_PROF_REG             NUMBER(24) NOT NULL,
+  ID_PROF_BEGIN           NUMBER(24),
+  ID_PROF_END             NUMBER(24),
+  ID_EPISODE              NUMBER(24) NOT NULL,
+  ID_PATIENT              NUMBER(24) NOT NULL,	
+  ID_CLINICAL_SERVICE     NUMBER(24),
+  ID_TRANSFER_OPTION      NUMBER(24),
+  ID_PROF_CANCEL          NUMBER(24),
+  DT_CANCEL_TSTZ          timestamp with local time zone,
+	NOTES_CANCEL            VARCHAR2(4000)
+);
+
+COMMENT ON TABLE TRANSFER_INSTITUTION IS 'Institution transfer requests';
+
+COMMENT ON COLUMN TRANSFER_INSTITUTION.ID_INSTITUTION_ORIGIN IS 'Institution ID from which the patient leaves';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.ID_INSTITUTION_DEST IS 'Institution ID in which the patient arrives';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.DT_CREATION_TSTZ IS 'Record creation date';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.ID_TRANSP_ENTITY IS 'Transport ID to be used during the transfer';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.NOTES IS 'Request notes';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.DT_BEGIN_TSTZ IS 'Beginning of the transfer';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.DT_END_TSTZ IS 'Date of the patient arrival';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.FLG_STATUS IS 'Transfer status: R - requested; T - transport; F - finished; C - canceled';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.ID_PROF_REG IS 'Professional who requested the transfer';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.ID_PROF_BEGIN IS 'Professional who registered the patient departure';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.ID_PROF_END IS 'Professional who registered the patient arrival';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.ID_PATIENT IS 'Patient ID';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.ID_CLINICAL_SERVICE IS 'Clinical service ID';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.ID_TRANSFER_OPTION IS 'Transfer reason selected during the request';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.ID_PROF_CANCEL IS 'Professional who canceled the transfer request';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.DT_CANCEL_TSTZ IS 'Cancellation date';
+COMMENT ON COLUMN TRANSFER_INSTITUTION.NOTES_CANCEL IS 'Cancellation notes';
+
+alter table transfer_institution drop column id_clinical_service;
+alter table transfer_institution add id_dep_clin_serv NUMBER(24);
+
+COMMENT ON COLUMN TRANSFER_INSTITUTION.id_dep_clin_serv IS 'dep_clin_serv ID';
+
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 01/06/2011 15:11
+-- CHANGE REASON: [ALERT-182942] 
+alter table transfer_institution add (id_cancel_reason number(24));
+COMMENT ON COLUMN transfer_institution.id_cancel_reason IS 'Cancel reason ID';
+-- CHANGE END: Filipe Silva

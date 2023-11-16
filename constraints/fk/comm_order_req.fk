@@ -1,0 +1,30 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/04/2014 11:21
+-- CHANGE REASON: [ALERT-275664] 
+BEGIN
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_wsw_fk foreign key (ID_WORKFLOW, ID_STATUS) references wf_status_workflow (ID_WORKFLOW, ID_STATUS)]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_pat_fk foreign key (ID_PATIENT) references alert_adtcod.patient (ID_PATIENT)]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_epis_fk foreign key (ID_EPISODE) references episode (ID_EPISODE)]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_prof_req_fk foreign key (ID_PROF_REQ) references professional (ID_PROFESSIONAL)]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_ainst_req_fk foreign key (ID_INST_REQ) references alert_core_data.ab_institution (ID_AB_INSTITUTION)]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_prof_fk foreign key (ID_PROFESSIONAL) references professional (ID_PROFESSIONAL)]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_ainst_fk foreign key (ID_INSTITUTION) references alert_core_data.ab_institution (ID_AB_INSTITUTION)]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_prof_cs_fk foreign key (ID_PROF_CO_SIGN) references professional (ID_PROFESSIONAL)]');
+pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_prof_ord_fk foreign key (ID_PROF_ORDER) references professional (ID_PROFESSIONAL)]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_otp_fk foreign key (ID_ORDER_TYPE) references order_type (ID_ORDER_TYPE)]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_cncptv_fk foreign key (id_concept_version,id_cncpt_vrs_inst_owner) references alert_core_data.concept_version (id_concept_version,id_inst_owner)]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_cncpttr_fk foreign key (id_concept_term,id_cncpt_trm_inst_owner) references alert_core_data.concept_term (id_concept_term, id_inst_owner)]');
+    pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_cncptty_fk foreign key (id_concept_type) references alert_core_data.concept_type (id_concept_type)]');
+pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint coq_cre_fk foreign key (id_cancel_reason) references cancel_reason (id_cancel_reason)]');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/12/2014 08:14
+-- CHANGE REASON: [ALERT-304679] 
+BEGIN
+  pk_versioning.run(i_sql => q'[alter table COMM_ORDER_REQ add constraint COQ_WSW_STS_PREV_FK foreign key (ID_WORKFLOW, ID_PREVIOUS_STATUS) references WF_STATUS_WORKFLOW (ID_WORKFLOW, ID_STATUS)]');
+END;
+/
+-- CHANGE END: Ana Monteiro

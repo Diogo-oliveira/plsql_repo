@@ -1,0 +1,29 @@
+-- cdsddl.tab
+--
+-- Generated for Oracle 7.3 on Thu Jun 14  11:30:33 2007 by Server Generator 6.5.52.1.0
+ 
+
+PROMPT Creating Table 'DOC_FILE_TYPE' 
+CREATE TABLE DOC_FILE_TYPE
+ (ID_DOC_FILE_TYPE  NUMBER(12) NOT NULL
+ ,CODE_DOC_FILE_TYPE  VARCHAR2(200) NOT NULL
+ ,EXTENSION  VARCHAR2(30) NOT NULL
+ ,MIME_TYPE  VARCHAR2(200)
+ ,IMG_NAME  VARCHAR2(240)
+ ,RANK  NUMBER(6)
+ ,ADW_LAST_UPDATE  DATE
+ ,VIEWING_STYLE  VARCHAR2(1)
+ );
+
+COMMENT ON COLUMN DOC_FILE_TYPE.EXTENSION IS 'File type extension.';
+
+
+COMMENT ON COLUMN DOC_FILE_TYPE.MIME_TYPE IS 'File mime type';
+
+
+COMMENT ON COLUMN DOC_FILE_TYPE.IMG_NAME IS 'Name of the icon for this type';
+
+
+COMMENT ON COLUMN DOC_FILE_TYPE.VIEWING_STYLE IS '(I)nternal: Inside de application or (E)xternal: using a pop-up';
+
+

@@ -1,0 +1,102 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 25/01/2011 16:52
+-- CHANGE REASON: [ALERT-157333] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tables
+     WHERE table_name = 'REF_SPEC_MARKET';
+
+    IF l_count <> 1
+    THEN
+        EXECUTE IMMEDIATE 'CREATE TABLE "REF_SPEC_MARKET"(
+ID_SPECIALITY NUMBER(6,0) NOT NULL,
+ID_MARKET NUMBER(24,0) NOT NULL,
+FLG_AVAILABLE VARCHAR2(1) NOT NULL,
+CREATE_USER VARCHAR2(24) ,
+CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+CREATE_INSTITUTION NUMBER(24,0) ,
+UPDATE_USER VARCHAR2(24) ,
+UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+UPDATE_INSTITUTION NUMBER(24,0) )';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN "REF_SPEC_MARKET"."ID_SPECIALITY" IS ''P1_speciality''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN "REF_SPEC_MARKET"."ID_MARKET" IS ''Market Id''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN "REF_SPEC_MARKET"."FLG_AVAILABLE" IS ''P1_speciality available by market Y - Yes, N- No''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN "REF_SPEC_MARKET"."CREATE_USER" IS ''Creation User''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN "REF_SPEC_MARKET"."CREATE_TIME" IS ''Creation Time''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN "REF_SPEC_MARKET"."CREATE_INSTITUTION" IS ''Creation Institution''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN "REF_SPEC_MARKET"."UPDATE_USER" IS ''Update User''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN "REF_SPEC_MARKET"."UPDATE_TIME" IS ''Update Time''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN "REF_SPEC_MARKET"."UPDATE_INSTITUTION" IS ''Update Institution''';
+        EXECUTE IMMEDIATE 'COMMENT ON TABLE "REF_SPEC_MARKET"  IS ''P1_speciality available by market''';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ref_spec_market add( standard_code VARCHAR2(200 CHAR), standard_desc VARCHAR2(200 CHAR), standard_type VARCHAR2(3 CHAR))';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    
+END;
+/
+
+COMMENT ON column ref_spec_market.standard_code IS 'Standard code';
+COMMENT ON column ref_spec_market.standard_desc IS 'Standard desc';
+COMMENT ON column ref_spec_market.standard_type IS 'Standard type CTH - Conslta a tempo e hora, REFB - Botão REF ALL - Todos';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 08/05/2013 15:21
+-- CHANGE REASON: [ALERT-257523 ] 
+alter table 
+   ref_spec_market
+modify 
+( 
+   STANDARD_DESC    varchar2(4000 char)
+);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 09/05/2013 14:58
+-- CHANGE REASON: [ALERT-257518 ] 
+alter table 
+   ref_spec_market
+modify 
+( 
+   STANDARD_DESC    varchar2(1000 char)
+);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 16/06/2015 16:38
+-- CHANGE REASON: [ALERT-312671] 
+begin
+pk_versioning.run(i_sql => 'ALTER TABLE REF_SPEC_MARKET MODIFY ID_SPECIALITY NUMBER(24)');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on table REF_SPEC_MARKET
+  is 'Referral specialty available by market';
+-- Add comments to the columns 
+comment on column REF_SPEC_MARKET.id_speciality
+  is 'Referral specialty';
+comment on column REF_SPEC_MARKET.id_market
+  is 'Market';
+comment on column REF_SPEC_MARKET.flg_available
+  is 'Is record available? Y/N';
+comment on column REF_SPEC_MARKET.standard_type
+  is 'Standard type: CTH - Project "Consulta a tempo e horas"; REFB - Referral button; ALL - all';

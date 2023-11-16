@@ -1,0 +1,39 @@
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 12-03-2010
+-- CHANGE REASON: SCH-386
+create table APPOINTMENT
+(
+  id_content         VARCHAR2(200) not null,
+  id_clinical_service number not null,
+  id_sch_event       number not null,
+  flg_available      varchar2(1) not null,
+  create_user        varchar2(24),
+  create_time        timestamp with local time zone,
+  create_institution number,
+  update_user        varchar2(24),
+  update_time        timestamp with local time zone,
+  update_institution number,
+  code_APPOINTMENT varchar2(200)
+);
+
+comment on table APPOINTMENT is 'content ids for clinical services + events combos. Content table';
+comment on column APPOINTMENT.ID_CONTENT is 'content key';
+comment on column APPOINTMENT.ID_CLINICAL_SERVICE is 'clinical service id from pfh';
+comment on column APPOINTMENT.ID_SCH_EVENT is 'event id from pfh';
+comment on column APPOINTMENT.FLG_AVAILABLE is 'Y= this record is queriable  N = disabled record';
+comment on column APPOINTMENT.CREATE_USER is 'Creation User';
+comment on column APPOINTMENT.CREATE_TIME is 'Creation time';
+comment on column APPOINTMENT.CREATE_INSTITUTION is 'Creation Institution';
+comment on column APPOINTMENT.UPDATE_USER is 'Update user';
+comment on column APPOINTMENT.UPDATE_TIME is 'Update time';
+comment on column APPOINTMENT.UPDATE_INSTITUTION is 'Update institution';
+comment on column APPOINTMENT.CODE_APPOINTMENT is 'translation code';
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 19-10-2010
+-- CHANGE REASON: ALERT-104816
+alter table APPOINTMENT add ID_APPOINTMENT varchar2(200 CHAR);
+
+comment on column APPOINTMENT.ID_APPOINTMENT is 'this is the procedure identifier exchanged with the scheduler';
+-- CHANGE END: Telmo Castro

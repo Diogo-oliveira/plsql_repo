@@ -1,0 +1,126 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 11/04/2012 11:30
+-- CHANGE REASON: [ALERT-226949] cds popup improvements (ddl changes)
+begin
+  pk_frmw_objects.insert_into_frmw_objects(i_owner        => 'ALERT',
+                                           i_obj_name     => 'CDR_ANSWER',
+                                           i_obj_type     => 'TABLE',
+                                           i_flg_category => 'DSV');
+end;
+/
+
+declare
+  e_tbl_exists exception;
+  pragma exception_init(e_tbl_exists, -00955);
+begin
+  execute immediate 'create table CDR_ANSWER
+(
+  id_cdr_answer      NUMBER(24) not null,
+  code_cdr_answer    VARCHAR2(200 char) as (''CDR_ANSWER.CODE_CDR_ANSWER.'' || id_cdr_answer),
+  internal_name      VARCHAR2(200 char) not null,
+  flg_available      VARCHAR2(1 char) default ''Y'' not null,
+  rank               NUMBER(24) not null,
+  flg_req_notes      VARCHAR2(1 char) default ''N'' not null,
+  create_user        VARCHAR2(24 char),
+  create_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 char),
+  update_time        TIMESTAMP WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+)
+';
+exception when e_tbl_exists then
+  dbms_output.put_line('table alert.cdr_answer already exists!');
+end;
+/
+
+comment on table CDR_ANSWER
+  is 'Clinical decision rule warning answers.';
+
+comment on column CDR_ANSWER.id_cdr_answer
+  is 'Primary key.';
+comment on column CDR_ANSWER.code_cdr_answer
+  is 'Code for translation.';
+comment on column CDR_ANSWER.internal_name
+  is 'Internal description.';
+comment on column CDR_ANSWER.flg_available
+  is 'Record availability (Y/N).';
+comment on column CDR_ANSWER.rank
+  is 'Answer rank.';
+comment on column CDR_ANSWER.flg_req_notes
+  is 'Are notes required for this answer? Y/N';
+comment on column CDR_ANSWER.create_user
+  is 'Creation User';
+comment on column CDR_ANSWER.create_time
+  is 'Creation Time';
+comment on column CDR_ANSWER.create_institution
+  is 'Creation Institution';
+comment on column CDR_ANSWER.update_user
+  is 'Update User';
+comment on column CDR_ANSWER.update_time
+  is 'Update Time';
+comment on column CDR_ANSWER.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 27/06/2012 15:47
+-- CHANGE REASON: [ALERT-234510] gfr v2 changes ddl
+declare
+  e_col_exists exception;
+  pragma exception_init(e_col_exists, -01430);
+begin
+  execute immediate 'alter table CDR_ANSWER add
+(
+  id_workflow        NUMBER(24),
+  id_status_begin    NUMBER(24),
+  id_status_end      NUMBER(24),
+  id_workflow_action NUMBER(24)
+)
+';
+exception when e_col_exists then
+  dbms_output.put_line('columns id_workflow, id_status_begin, id_status_end, id_workflow_action already exist in alert.cdr_answer!');
+end;
+/
+
+comment on column CDR_ANSWER.id_workflow
+  is 'Workflow identifier.';
+comment on column CDR_ANSWER.id_status_begin
+  is 'Origin status identifier.';
+comment on column CDR_ANSWER.id_status_end
+  is 'Destiny status identifier.';
+comment on column CDR_ANSWER.id_workflow_action
+  is 'Workflow action identifier.';
+
+  
+-- CHANGE END: Pedro Carneiro
+
+-- cmf 23-04-2015
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'ALTER TABLE cdr_answer ADD CODE_DOMAIN VARCHAR2(200 CHAR)';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+xpl	varchar2(0020 char) := '''';
+l_sql varchar2(4000);
+begin
+l_sql := 'ALTER TABLE cdr_answer ADD CODE_DOMAIN_LABEL GENERATED ALWAYS AS ('||xpl||'CDR_ANSWER.CODE_DOMAIN_LABEL.'||xpl||'|| to_char(id_cdr_answer) ) VIRTUAL';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'ALTER TABLE cdr_answer ADD FLG_OTHER_DOMAIN VARCHAR2(0001 CHAR);';
+pk_versioning.run( l_sql );
+end;
+/
+
+COMMENT ON COLUMN cdr_answer.CODE_DOMAIN        IS 'SYS_DOMAIN associate with answer';
+COMMENT ON COLUMN cdr_answer.CODE_DOMAIN_LABEL  IS 'Label of domain';
+COMMENT ON COLUMN cdr_answer.FLG_OTHER_DOMAIN   IS 'Value of SYS_DOMAIN to trigger OTHER/Free text option';

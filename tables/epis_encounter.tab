@@ -1,0 +1,106 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 27/10/2009 12:08
+-- CHANGE REASON: Case Manager
+create table EPIS_ENCOUNTER
+(
+  ID_EPIS_ENCOUNTER  NUMBER(24) not null,
+  ID_EPISODE         NUMBER(24) not null,
+  ID_PATIENT         NUMBER(24) not null,
+  ID_PROF_CREATE     NUMBER(24) not null,
+  DT_CREATE          TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  DT_EPIS_ENCOUNTER  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROFESSIONAL    NUMBER(24) not null,
+  FLG_STATUS         VARCHAR2(1) not null,
+  FLG_TYPE           VARCHAR2(1) not null,
+  NOTES              CLOB,
+  ID_CANCEL_REASON   NUMBER(24),
+  NOTES_CANCEL       VARCHAR2(4000),
+  ID_PARENT          NUMBER(24),
+  CREATE_USER        VARCHAR2(24),
+  CREATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER        VARCHAR2(24),
+  UPDATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24),
+  DT_INIT_ENCOUNTER  TIMESTAMP(6) WITH LOCAL TIME ZONE
+);
+-- Add comments to the table 
+comment on table EPIS_ENCOUNTER
+  is 'Encounters of CM episode';
+-- Add comments to the columns 
+comment on column EPIS_ENCOUNTER.ID_EPIS_ENCOUNTER
+  is 'ID Epis encounter';
+comment on column EPIS_ENCOUNTER.ID_EPISODE
+  is 'ID episode';
+comment on column EPIS_ENCOUNTER.ID_PATIENT
+  is 'ID Patient';
+comment on column EPIS_ENCOUNTER.ID_PROF_CREATE
+  is 'ID professional created record';
+comment on column EPIS_ENCOUNTER.DT_CREATE
+  is 'Creation date';
+comment on column EPIS_ENCOUNTER.DT_EPIS_ENCOUNTER
+  is 'Encounter date';
+comment on column EPIS_ENCOUNTER.ID_PROFESSIONAL
+  is 'id encounter professional';
+comment on column EPIS_ENCOUNTER.FLG_STATUS
+  is 'status of encounter ''A'' - Active; ''O'' - Outdated; ''C'' - Canceled, I - Inactive; O - Outdated; R - Requested';
+comment on column EPIS_ENCOUNTER.FLG_TYPE
+  is 'type of encounter ''F'' - First encounter; ''U'' - follow-up';
+comment on column EPIS_ENCOUNTER.NOTES
+  is 'Notes for encounter';
+comment on column EPIS_ENCOUNTER.ID_CANCEL_REASON
+  is 'Id reason for cancelation';
+comment on column EPIS_ENCOUNTER.NOTES_CANCEL
+  is 'Cancelation notes';
+comment on column EPIS_ENCOUNTER.ID_PARENT
+  is 'Id parent related';
+comment on column EPIS_ENCOUNTER.CREATE_USER
+  is 'Creation User';
+comment on column EPIS_ENCOUNTER.CREATE_TIME
+  is 'Creation Time';
+comment on column EPIS_ENCOUNTER.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column EPIS_ENCOUNTER.UPDATE_USER
+  is 'Update User';
+comment on column EPIS_ENCOUNTER.UPDATE_TIME
+  is 'Update Time';
+comment on column EPIS_ENCOUNTER.UPDATE_INSTITUTION
+  is 'Update Institution';
+comment on column EPIS_ENCOUNTER.DT_INIT_ENCOUNTER
+  is 'Encounter date init';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_ENCOUNTER modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_ENCOUNTER modify NOTES_CANCEL varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_ENCOUNTER modify FLG_TYPE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_ENCOUNTER modify FLG_STATUS varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table EPIS_ENCOUNTER modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro

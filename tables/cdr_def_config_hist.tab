@@ -1,0 +1,31 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 12/05/2014 14:36
+-- CHANGE REASON: [ALERT-284329] 
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create table CDR_DEF_CONFIG_HIST
+(
+  ID_CDR_DEF_CONFIG   NUMBER(24) not null,
+  id_cdr_def_severity NUMBER(24) not null,
+  id_cdr_param_action NUMBER(24) not null,
+  id_institution      NUMBER(24) not null,
+  id_software         NUMBER(24) not null,
+  id_profile_template NUMBER(12) not null,
+  id_dep_clin_serv    NUMBER(24) not null,
+  id_professional     NUMBER(24) not null,
+  create_user         VARCHAR2(24 CHAR),
+  create_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution  NUMBER(24),
+  update_user         VARCHAR2(24 CHAR),
+  update_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution  NUMBER(24),
+  status            varchar2(1 CHAR) 
+
+)';
+exception when e_obj_exists then
+  dbms_output.put_line('table CDR_DEF_CONFIG_HIST exists!');
+end;
+/
+-- CHANGE END: mario.mineiro

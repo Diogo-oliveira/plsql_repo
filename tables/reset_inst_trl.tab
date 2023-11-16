@@ -1,0 +1,64 @@
+-- Create table
+create table RESET_INST_TRL
+(
+  ID_LANGUAGE      NUMBER(6) not null,
+  ID_INSTITUTION   NUMBER(24) not null,
+  DESC_TRANSLATION VARCHAR2(4000) not null
+);
+
+-- Add comments to the columns 
+comment on column RESET_INST_TRL.ID_LANGUAGE
+  is 'ID do idioma';
+comment on column RESET_INST_TRL.ID_INSTITUTION
+  is 'ID da instituição';
+comment on column RESET_INST_TRL.DESC_TRANSLATION
+  is 'Nome da instituição no respectivo idioma';
+
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 25/03/2019 15:16
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table RESET_INST_TRL add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column reset_inst_trl.create_user IS 'Creation User';
+COMMENT ON column reset_inst_trl.create_time IS 'Creation Time';
+COMMENT ON column reset_inst_trl.create_institution IS 'Creation Institution';
+COMMENT ON column reset_inst_trl.update_user IS 'Update User';
+COMMENT ON column reset_inst_trl.update_time IS 'Update Time';
+COMMENT ON column reset_inst_trl.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 01/04/2019 08:43
+-- CHANGE REASON: [EMR-13842] - [DB] Audit Columns missing - CDOC
+BEGIN
+    EXECUTE IMMEDIATE 'alter table reset_inst_trl add (create_user VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+COMMENT ON column reset_inst_trl.create_user IS 'Creation User';
+COMMENT ON column reset_inst_trl.create_time IS 'Creation Time';
+COMMENT ON column reset_inst_trl.create_institution IS 'Creation Institution';
+COMMENT ON column reset_inst_trl.update_user IS 'Update User';
+COMMENT ON column reset_inst_trl.update_time IS 'Update Time';
+COMMENT ON column reset_inst_trl.update_institution IS 'Update Institution';
+-- CHANGE END: Nuno Coelho

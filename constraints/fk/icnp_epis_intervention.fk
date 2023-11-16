@@ -1,0 +1,110 @@
+
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION ADD CONSTRAINT EIPI_EIPI_FK FOREIGN KEY (FORWARD_INTERV)
+	  REFERENCES ICNP_EPIS_INTERVENTION (ID_ICNP_EPIS_INTERV) ENABLE;
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION ADD CONSTRAINT EIPI_EPIS_FK FOREIGN KEY (ID_EPISODE)
+	  REFERENCES EPISODE (ID_EPISODE) ENABLE;
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION ADD CONSTRAINT EIPI_ICN_FK FOREIGN KEY (ID_COMPOSITION)
+	  REFERENCES ICNP_COMPOSITION (ID_COMPOSITION) ENABLE;
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION ADD CONSTRAINT EIPI_PAT_FK FOREIGN KEY (ID_PATIENT)
+	  REFERENCES PATIENT (ID_PATIENT) ENABLE;
+
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION ADD CONSTRAINT EIPI_PROF_CANC_FK FOREIGN KEY (ID_PROF_CLOSE)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION ADD CONSTRAINT EIPI_PROF_FK FOREIGN KEY (ID_PROF)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION ADD CONSTRAINT IEI_EPIS_DEST_FK FOREIGN KEY (ID_EPISODE_DESTINATION)
+	  REFERENCES EPISODE (ID_EPISODE) ENABLE;
+
+  ALTER TABLE ICNP_EPIS_INTERVENTION ADD CONSTRAINT IEI_EPIS_ORIGIN_FK FOREIGN KEY (ID_EPISODE_ORIGIN)
+	  REFERENCES EPISODE (ID_EPISODE) ENABLE;
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+-- Create/Recreate primary, unique and foreign key constraints 
+declare
+   e_fk_already_there EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); -- table already there
+begin
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION
+  add constraint EIPI_CRE_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION
+  add constraint EIPI_CRE_SUSP_FK foreign key (ID_SUSPEND_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION
+  add constraint EIPI_PROF_CANCELS_FK foreign key (ID_CANCEL_PROF)
+  references PROFESSIONAL (ID_PROFESSIONAL)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION
+  add constraint EIPI_PROF_SUSP_FK foreign key (ID_SUSPEND_PROF)
+  references PROFESSIONAL (ID_PROFESSIONAL)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_INTERVENTION
+  add constraint EIPI_PROF_UPD_FK foreign key (ID_PROF_LAST_UPDATE)
+  references PROFESSIONAL (ID_PROFESSIONAL)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- Enable/Disable primary, unique and foreign key constraints 
+alter table ICNP_EPIS_INTERVENTION
+  enable constraint EIPI_EIPI_FK;
+alter table ICNP_EPIS_INTERVENTION
+  enable constraint EIPI_EPIS_FK;
+alter table ICNP_EPIS_INTERVENTION
+  enable constraint EIPI_PAT_FK;
+alter table ICNP_EPIS_INTERVENTION
+  enable constraint EIPI_PROF_CANC_FK;
+alter table ICNP_EPIS_INTERVENTION
+  enable constraint EIPI_PROF_FK;
+alter table ICNP_EPIS_INTERVENTION
+  enable constraint IEI_EPIS_DEST_FK;
+alter table ICNP_EPIS_INTERVENTION
+  enable constraint IEI_EPIS_ORIGIN_FK;
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 29/07/2011 18:00
+-- CHANGE REASON: [ALERT-182932] Implementation of the recurrence mechanism in ICNP functionality
+DECLARE
+    e_fk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_exists, -02275); -- such a referential constraint already exists in the table
+BEGIN
+  EXECUTE IMMEDIATE 'alter table icnp_epis_intervention add constraint iei_orp_fk foreign key (id_order_recurr_plan) references order_recurr_plan (id_order_recurr_plan)';
+EXCEPTION
+  WHEN e_fk_already_exists THEN
+    dbms_output.put_line('Foreign key icnp_epis_intervention.iei_orp_fk already exists');   
+END;
+/
+-- CHANGE END: Luis Oliveira

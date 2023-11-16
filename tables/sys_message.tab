@@ -1,0 +1,56 @@
+  CREATE TABLE SYS_MESSAGE
+   (	CODE_MESSAGE VARCHAR2(200) NOT NULL ENABLE,
+	DESC_MESSAGE VARCHAR2(4000) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	ID_LANGUAGE NUMBER(6,0) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	IMG_NAME VARCHAR2(200),
+	ID_SYS_MESSAGE NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0),
+	ID_INSTITUTION NUMBER(24,0),
+	ADW_LAST_UPDATE DATE
+   );
+
+
+
+COMMENT ON TABLE sys_message IS 'Mensagens de ajuda, erro, aplicacionais, etc.As traduções encontram-se na própria tabela.' ;
+
+COMMENT ON COLUMN sys_message.code_message IS 'Nome: <nome>_<tipo><seq. de 3 algarismos>  O tipo é: T - título, M - conteúdo' ;
+COMMENT ON COLUMN sys_message.desc_message IS 'Mensagem, na língua dada por ID_LANG' ;
+COMMENT ON COLUMN sys_message.flg_type IS 'Tipo de mensagem: H - ecrãs de ajuda, A - títulos e headers aplicacionais, R - reports, E - erro' ;
+COMMENT ON COLUMN sys_message.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN sys_message.img_name IS 'Nome da imagem correspondente' ;
+
+ALTER TABLE SYS_MESSAGE ADD MODULE VARCHAR2(30);
+COMMENT ON COLUMN SYS_MESSAGE.MODULE IS 'Campo para filtrar Módulo ( ADT, ORIS, etc )';
+
+-- CHANGED BY: Fábio Oliveira
+-- CHANGE DATE: 26-Jul-2010
+-- CHANGE REASON: [ALERT-112076] SYS_MESSAGE Functionality Helps Cleaning
+comment on column SYS_MESSAGE.flg_type
+  is 'Tipo de mensagem: A - títulos e headers aplicacionais, R - reports, E - erros, T- títulos';
+-- CHANGE END: Fábio Oliveira
+
+--- CMF 06-01-2016
+COMMENT ON TABLE  alert.sys_message IS 'Text for errors, warnings, help are stored here.' ;
+COMMENT ON COLUMN alert.sys_message.code_message IS 'Codification: <Name>_<Type><seq. of 3 numbers>' ;
+COMMENT ON COLUMN alert.sys_message.desc_message IS 'Message or text. Language is identified by ID_LANGUAGE' ;
+COMMENT ON COLUMN alert.sys_message.flg_available IS 'Availability of record' ;
+COMMENT ON COLUMN alert.sys_message.img_name IS 'Name of matching image' ;
+COMMENT ON COLUMN alert.SYS_MESSAGE.MODULE IS 'Field used by some modules to filter records ( ADT, ORIS, etc )';
+comment on column alert.SYS_MESSAGE.flg_type  is 'Tipo de mensagem: A - títulos e headers aplicacionais, R - reports, E - erros, T- títulos';
+
+declare
+l_sql varchar2(4000);
+begin
+L_SQL := 'ALTER TABLE ALERT.SYS_MESSAGE ADD ID_MARKET NUMBER(24) DEFAULT 0 NOT NULL';
+pk_versioning.run( l_sql);
+end;
+/
+
+COMMENT ON COLUMN ALERT.SYS_MESSAGE.ADW_LAST_UPDATE is 'Deprecated';
+COMMENT ON COLUMN ALERT.SYS_MESSAGE.ID_INSTITUTION is 'Institution identifier';
+COMMENT ON COLUMN ALERT.SYS_MESSAGE.ID_LANGUAGE is 'Language identifier';
+COMMENT ON COLUMN ALERT.SYS_MESSAGE.ID_MARKET is 'Market identifier';
+COMMENT ON COLUMN ALERT.SYS_MESSAGE.ID_SOFTWARE is 'Software Identifier';
+COMMENT ON COLUMN ALERT.SYS_MESSAGE.ID_SYS_MESSAGE is 'Message identifier';

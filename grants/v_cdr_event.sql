@@ -1,0 +1,19 @@
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 23/09/2015 11:08
+-- CHANGE REASON: [ALERT-315281] 
+begin
+pk_versioning.run('GRANT SELECT ON V_CDR_EVENT TO ALERT_INTER');
+pk_versioning.run('GRANT SELECT ON V_CDR_EVENT TO INTER_ALERT_V2');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 23/09/2015 11:10
+-- CHANGE REASON: [ALERT-315332] 
+begin
+pk_versioning.run('GRANT SELECT ON V_CDR_EVENT TO ALERT_INTER');
+pk_versioning.run('GRANT SELECT ON V_CDR_EVENT TO INTER_ALERT_V2');
+end;
+/
+-- CHANGE END: Ana Matos

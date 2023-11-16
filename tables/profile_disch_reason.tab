@@ -1,0 +1,67 @@
+
+CREATE TABLE PROFILE_DISCH_REASON
+(	
+ID_PROFILE_DISCH_REASON		NUMBER(24,0),
+ID_DISCHARGE_REASON		NUMBER(24,0),
+ID_PROFILE_TEMPLATE		NUMBER(24,0),
+ID_INSTITUTION			NUMBER(24,0),
+FLG_AVAILABLE			VARCHAR2(1),
+ID_DISCHARGE_FLASH_FILES  NUMBER(24)
+);
+
+COMMENT ON TABLE PROFILE_DISCH_REASON IS 'Tipo de altas conforme o perfil, instituição e software' ;
+
+COMMENT ON COLUMN PROFILE_DISCH_REASON.ID_PROFILE_DISCH_REASON IS 'Chave primária' ;
+COMMENT ON COLUMN PROFILE_DISCH_REASON.ID_DISCHARGE_REASON     IS 'Tipo de alta' ;
+COMMENT ON COLUMN PROFILE_DISCH_REASON.ID_PROFILE_TEMPLATE     IS 'perfil de utilizador' ;
+COMMENT ON COLUMN PROFILE_DISCH_REASON.ID_INSTITUTION	       IS 'instituição parametrizada' ;
+COMMENT ON COLUMN PROFILE_DISCH_REASON.FLG_AVAILABLE	       IS 'Flag (Y/N) a indicar disponibilidade' ;
+COMMENT ON COLUMN PROFILE_DISCH_REASON.ID_DISCHARGE_FLASH_FILES	       IS 'Ecrã de enfermagem/medico associado' ;
+
+
+alter table PROFILE_DISCH_REASON add flg_access varchar2(10);
+
+
+COMMENT ON COLUMN PROFILE_DISCH_REASON.flg_access IS 'Tipo de alta: D - médica, A - administrativa, S - social, N - Nurse, ou combinações destes valores' ;
+
+
+-- 15-11-2007
+alter table profile_disch_REason add rank number(6);
+COMMENT ON COLUMN PROFILE_DISCH_REASON.RANK IS 'campo para ordenação' ;
+
+alter table profile_disch_REason add flg_Default number(6);
+COMMENT ON COLUMN PROFILE_DISCH_REASON.RANK IS 'alta por defeito Y-por defeito, só pode haver uma, conforme perfil e instituição' ;
+-- end
+
+-- 15-11-2007 inpatient
+alter table profile_disch_REason modify flg_Default varchar2(1);
+-- end
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:25
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table PROFILE_DISCH_REASON
+  is 'configuration of discharge reason by profile template';
+-- Add comments to the columns 
+comment on column PROFILE_DISCH_REASON.id_profile_disch_reason
+  is 'Primary Key';
+comment on column PROFILE_DISCH_REASON.id_discharge_reason
+  is 'Discharge reason ';
+comment on column PROFILE_DISCH_REASON.id_profile_template
+  is 'Profile ID';
+comment on column PROFILE_DISCH_REASON.id_institution
+  is 'Institution ID';
+comment on column PROFILE_DISCH_REASON.flg_available
+  is 'Availability (Y/N)';
+comment on column PROFILE_DISCH_REASON.id_discharge_flash_files
+  is 'Discharge flash file name';
+comment on column PROFILE_DISCH_REASON.flg_access
+  is 'Discharge Type: D - Medical, A - Administrtive, S - social, N - Nurse';
+comment on column PROFILE_DISCH_REASON.rank
+  is 'Rank for ordering';
+comment on column PROFILE_DISCH_REASON.flg_default
+  is 'Default reason (Y/N) there can only be one by profile/institution';  
+-- CHANGE END: Elisabete Bugalho

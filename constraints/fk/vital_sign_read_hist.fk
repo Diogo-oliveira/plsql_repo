@@ -1,0 +1,35 @@
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 21/04/2011 17:41
+-- CHANGE REASON: [ALERT-165349] 
+alter table VITAL_SIGN_READ_HIST
+  add constraint VSRH_PROF_READ_FK foreign key (ID_PROF_READ)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table VITAL_SIGN_READ_HIST
+  add constraint VSRH_UNITM_FK foreign key (ID_UNIT_MEASURE)
+  references UNIT_MEASURE (ID_UNIT_MEASURE);
+alter table VITAL_SIGN_READ_HIST
+  add constraint VSRH_VSR_FK foreign key (ID_VITAL_SIGN_READ)
+  references VITAL_SIGN_READ (ID_VITAL_SIGN_READ);
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 02/12/2013 09:33
+-- CHANGE REASON: [ALERT-270040] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE vital_sign_read_hist
+  ADD CONSTRAINT vsrh_ums_fk FOREIGN KEY (
+    ID_UNIT_MEASURE_sel
+  ) REFERENCES UNIT_MEASURE (ID_UNIT_MEASURE)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: Paulo Teixeira

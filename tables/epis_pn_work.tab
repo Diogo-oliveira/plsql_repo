@@ -1,0 +1,250 @@
+--26/01/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+CREATE TABLE EPIS_PN_WORK
+ (ID_EPIS_PN NUMBER(24) 
+ ,ID_EPISODE NUMBER(24) NOT NULL
+ ,ID_PROFESSIONAL NUMBER(24) NOT NULL
+ ,ID_DEP_CLIN_SERV NUMBER(24)
+ ,FLG_TYPE VARCHAR2(3 CHAR) NOT NULL
+ ,DT_PN TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ ,DT_LAST_UPDATE TIMESTAMP(6) WITH LOCAL TIME ZONE
+ )
+/
+COMMENT ON TABLE EPIS_PN_WORK IS 'Progress note WORKING TABLE.'
+/
+COMMENT ON COLUMN EPIS_PN_WORK.ID_EPIS_PN IS 'Progress note Id.'
+/
+COMMENT ON COLUMN EPIS_PN_WORK.ID_EPISODE IS 'Episode ID'
+/
+COMMENT ON COLUMN EPIS_PN_WORK.ID_PROFESSIONAL IS 'logged Professional ID'
+/
+COMMENT ON COLUMN EPIS_PN_WORK.ID_DEP_CLIN_SERV IS 'Dep_clin_serv ID.'
+/
+COMMENT ON COLUMN EPIS_PN_WORK.FLG_TYPE IS 'Progress note type. P-Progress Note; L-Prolonged Progress Note; CC-Intensive Care Note; H- History and Physician Note'
+/
+COMMENT ON COLUMN EPIS_PN_WORK.DT_PN IS 'Date in which the progress note detail was created/changed.'
+/
+COMMENT ON COLUMN EPIS_PN_WORK.DT_LAST_UPDATE IS 'This progress note last update date'
+/
+
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/10/2011 10:26
+-- CHANGE REASON: [ALERT-199727] H&P phase 2
+alter table epis_pn_work drop column flg_type;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:31
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table epis_pn_work add (id_pn_note_type number(24));
+
+COMMENT ON column epis_pn_work.id_pn_note_type IS 'Note type id.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table epis_pn_work add (id_pn_note_type number(24));
+
+COMMENT ON column epis_pn_work.id_pn_note_type IS 'Note type id.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 12:59
+-- CHANGE REASON: [ALERT-206417] H&P phase 2
+alter table epis_pn_work drop column flg_type;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table EPIS_PN_WORK add  create_user VARCHAR2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table EPIS_PN_WORK add  create_time TIMESTAMP(6) WITH LOCAL TIME ZONE');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table EPIS_PN_WORK add  create_institution NUMBER(24)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table EPIS_PN_WORK add  update_user VARCHAR2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table EPIS_PN_WORK add  update_time TIMESTAMP(6) WITH LOCAL TIME ZONE');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table EPIS_PN_WORK add  update_institution NUMBER(24)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('COMMENT ON COLUMN EPIS_PN_WORK.create_user IS ''Professional ID that creates the registry''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('COMMENT ON COLUMN EPIS_PN_WORK.create_time IS ''Date of registry creation''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('COMMENT ON COLUMN EPIS_PN_WORK.create_institution IS ''Institution ID where registry was created''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('COMMENT ON COLUMN EPIS_PN_WORK.update_user IS ''Professional ID that last updates the registry''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('COMMENT ON COLUMN EPIS_PN_WORK.update_time IS ''Date of registry last update''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('COMMENT ON COLUMN EPIS_PN_WORK.update_institution IS ''Institution ID where registry was last updated''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:44
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    execute immediate 'alter table epis_pn_work add (id_pn_area NUMBER(24) NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:44
+-- CHANGE REASON: [ALERT-226174] 
+begin
+execute immediate ('COMMENT ON COLUMN epis_pn_work.id_pn_area IS ''Area Identifier''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/04/2012 11:51
+-- CHANGE REASON: [ALERT-226245] BD - Versioning DDL (Migrations) after migrate - EDIS restructuring - Present Illness / Current visit
+BEGIN
+    execute immediate 'alter table epis_pn_work modify (ID_PN_AREA NOT NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 27/07/2012 13:57
+-- CHANGE REASON: [ALERT-237533 ] The system must be able to autosave user notes as a draft during the note creation
+BEGIN
+    execute immediate 'drop table epis_pn_work';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('operacao ja executada anteriormente');
+END;
+/
+-- CHANGE END: Sofia Mendes

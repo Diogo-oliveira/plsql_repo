@@ -1,0 +1,26 @@
+
+
+  CREATE TABLE HEALTH_PLAN_INSTIT
+   (	ID_HEALTH_PLAN_INSTIT NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_HEALTH_PLAN NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE health_plan_instit IS 'Instituições para as quais está parametrizado um plano de saúde' ;
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2020 18:02
+-- CHANGE REASON: [EMR-40083]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00942);
+BEGIN
+EXECUTE IMMEDIATE 'DROP TABLE health_plan_instit_old';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos

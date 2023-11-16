@@ -1,0 +1,29 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 16:35
+-- CHANGE REASON: [ALERT-229222] VERSIONING TRANSACTIONAL MODEL - SCHEMA ALERT - DDL
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAG_NOTES_HIST ADD CONSTRAINT EDNH_EDN_FK FOREIGN KEY(ID_EPIS_DIAGNOSIS_NOTES) REFERENCES EPIS_DIAGNOSIS_NOTES(ID_EPIS_DIAGNOSIS_NOTES)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAG_NOTES_HIST ADD CONSTRAINT EDNH_EPIS_FK FOREIGN KEY(ID_EPISODE) REFERENCES EPISODE(ID_EPISODE)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE EPIS_DIAG_NOTES_HIST ADD CONSTRAINT EDNH_PROF_FK FOREIGN KEY(ID_PROF_CREATE) REFERENCES PROFESSIONAL(ID_PROFESSIONAL)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

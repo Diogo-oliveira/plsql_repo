@@ -1,0 +1,115 @@
+
+
+  CREATE TABLE SR_INTERV_DEP_CLIN_SERV
+   (	ID_SR_INTERV_DEP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	ID_DEP_CLIN_SERV NUMBER(24,0),
+	ID_SR_INTERVENTION NUMBER(24,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(2),
+	ID_PROFESSIONAL NUMBER(24,0),
+	ID_INSTITUTION NUMBER(12,0),
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	RANK NUMBER(6,0),
+	ADW_LAST_UPDATE DATE
+   );
+
+
+COMMENT ON TABLE sr_interv_dep_clin_serv IS 'Tabela de intervenções cirúrgicas mais frequentes' ;
+
+COMMENT ON COLUMN sr_interv_dep_clin_serv.id_sr_interv_dep_clin_serv IS 'ID único' ;
+COMMENT ON COLUMN sr_interv_dep_clin_serv.id_dep_clin_serv IS 'ID departamento e serviço clínico' ;
+COMMENT ON COLUMN sr_interv_dep_clin_serv.id_sr_intervention IS 'ID da intervenção cirúrgica' ;
+COMMENT ON COLUMN sr_interv_dep_clin_serv.flg_type IS 'Tipo de acção. Valores possíveis: M- mais frequentes' ;
+COMMENT ON COLUMN sr_interv_dep_clin_serv.id_professional IS 'ID do profissional para o qual a intervenção cirúrgica é mais frequente' ;
+COMMENT ON COLUMN sr_interv_dep_clin_serv.id_institution IS 'ID da instituição para a qual a intervenção cirúrgica é mais frequente' ;
+COMMENT ON COLUMN sr_interv_dep_clin_serv.id_software IS 'ID do software' ;
+COMMENT ON COLUMN sr_interv_dep_clin_serv.rank IS 'Ordem de visualização' ;
+COMMENT ON COLUMN sr_interv_dep_clin_serv.adw_last_update IS 'Data da última alteração' ;
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/01/2012 09:54
+-- CHANGE REASON: [ALERT-214581] DEMOS UK - UK1006 - Surgical procedures missing
+DECLARE
+    e_already_not_null EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01442); -- alter table modify
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table sr_interv_dep_clin_serv modify ID_INSTITUTION NUMBER(12,0) not null novalidate';
+EXCEPTION
+    WHEN e_already_not_null THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON COLUMN sr_interv_dep_clin_serv.id_software IS 'ID do software. The surgical procedures should be defined for ORIS software even though they appear in other softwares.' ;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/01/2012 10:00
+-- CHANGE REASON: [ALERT-214586 ] DEMOS UK - UK1006 - Surgical procedures missing
+DECLARE
+    e_already_not_null EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01442); -- alter table modify
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table sr_interv_dep_clin_serv modify ID_INSTITUTION NUMBER(12,0) not null novalidate';
+EXCEPTION
+    WHEN e_already_not_null THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+
+COMMENT ON COLUMN sr_interv_dep_clin_serv.id_software IS 'ID do software. The surgical procedures should be defined for ORIS software even though they appear in other softwares.' ;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 21/01/2016 11:18
+-- CHANGE REASON: [ALERT-318028] ALERT-318028 CDOC Functionalities V7
+-- Add comments to the table 
+comment on table SR_INTERV_DEP_CLIN_SERV
+  is 'Parametrization table wiht the most frequent surgical interventions';
+-- Add comments to the columns 
+comment on column SR_INTERV_DEP_CLIN_SERV.id_sr_interv_dep_clin_serv
+  is 'ID_SR_INTERV_DEP_CLIN_SERV identifier';
+comment on column SR_INTERV_DEP_CLIN_SERV.id_dep_clin_serv
+  is 'Departement and clinical service identifier';
+comment on column SR_INTERV_DEP_CLIN_SERV.id_sr_intervention
+  is 'Surgical intervention identifier';
+comment on column SR_INTERV_DEP_CLIN_SERV.flg_type
+  is 'Record intervention type. Value: M - Most frequent.';
+comment on column SR_INTERV_DEP_CLIN_SERV.id_professional
+  is 'Professional identifier for which surgical intervention is most frequent';
+comment on column SR_INTERV_DEP_CLIN_SERV.id_institution
+  is 'Institution identifer ,for which the surgical intervention is most frequent.
+';
+comment on column SR_INTERV_DEP_CLIN_SERV.id_software
+  is ' Software identifier. The surgical procedures should be defined for ORIS software even though they appear in other softwares.';
+comment on column SR_INTERV_DEP_CLIN_SERV.rank
+  is 'Rank order';
+comment on column SR_INTERV_DEP_CLIN_SERV.adw_last_update
+  is 'Date of lst update, used by adw';
+comment on column SR_INTERV_DEP_CLIN_SERV.create_user
+  is 'Creation User';
+comment on column SR_INTERV_DEP_CLIN_SERV.create_time
+  is 'Creation Time';
+comment on column SR_INTERV_DEP_CLIN_SERV.create_institution
+  is 'Creation Institution';
+comment on column SR_INTERV_DEP_CLIN_SERV.update_user
+  is 'Update User';
+comment on column SR_INTERV_DEP_CLIN_SERV.update_time
+  is 'Update Time';
+comment on column SR_INTERV_DEP_CLIN_SERV.update_institution
+  is 'Update Institution';
+  
+-- CHANGE END: Pedro Fernandes
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/07/2017 14:08
+-- CHANGE REASON: [ALERT-331061]
+begin
+pk_frmw_objects.set_category_dpc(i_owner => 'ALERT',i_obj_name => 'SR_INTERV_DEP_CLIN_SERV');
+end;
+-- CHANGE END: Pedro Henriques

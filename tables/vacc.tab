@@ -1,0 +1,83 @@
+--Table Vacc
+CREATE TABLE VACC
+( ID_VACC         NUMBER(12) not null,
+  CODE_VACC       VARCHAR2(200) not null,
+  CODE_DESC_VACC  VARCHAR2(200),
+  RANK            NUMBER(5),
+  ADW_LAST_UPDATE DATE not null
+);
+
+
+comment on table VACC is 'Esta tabela contem todas as vacinas';
+
+COMMENT ON COLUMN VACC.ID_VACC IS 'Chave primária';
+COMMENT ON COLUMN VACC.CODE_VACC IS 'Código da Vacina';
+COMMENT ON COLUMN VACC.CODE_DESC_VACC IS 'Descrição do código da vacina';
+COMMENT ON COLUMN VACC.RANK IS 'Ordem da vacina';
+COMMENT ON COLUMN VACC.ADW_LAST_UPDATE IS 'Data da última alteração';
+
+-- CHANGED REASON: Adição de uma coluna para a descrição externa das vacinas 
+-- APPLICATION: CARE (3)
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 30/08/2007
+ALTER TABLE VACC
+ADD DESC_VACC_EXT VARCHAR2(200);
+COMMENT ON COLUMN VACC.DESC_VACC_EXT IS 'Descrição da vacina no exterior. Este campo é usado para consultar os medicamentos associados a uma vacina (exemplo: Infarmed).';
+--END
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 2008-SEP-02
+-- CHANGE REASON: ID_CONTENT
+ALTER TABLE VACC ADD (ID_CONTENT VARCHAR2(200));
+comment on column VACC.ID_CONTENT is 'Identificador único de conteúdo';
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2009-05-04
+-- CHANGE REASON: ALERT-26735
+alter table vacc modify (ID_VACC NUMBER(24));
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2009-06-01
+-- CHANGE REASON: ALERT-30829
+alter table vacc drop column adw_last_update;
+-- CHANGE END
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 11/11/2014 15:26
+-- CHANGE REASON: [ALERT-301386] 
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table vacc add ID_MAX_AGE NUMBER(12)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    EXECUTE IMMEDIATE 'comment on column VACC.ID_MAX_AGE   is ''Idade máxima para a toma da dose em dias''';
+END;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Lillian Lu
+-- CHANGE DATE: 04/10/2014 16:30
+-- CHANGE REASON: [CALERT-110]
+BEGIN
+    EXECUTE IMMEDIATE 'alter table vacc add age_min NUMBER(12)';
+    EXECUTE IMMEDIATE 'alter table vacc add age_max NUMBER(12)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Operation already executed.');
+END;
+/
+
+COMMENT ON COLUMN vacc.age_min IS 'vacc min value - min age for vaccine';
+COMMENT ON COLUMN vacc.age_max IS 'vacc max value - max age for vaccine';
+-- CHANGE END: Lillian Lu

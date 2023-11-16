@@ -1,0 +1,71 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 26/08/2013 14:46
+-- CHANGE REASON: [ALERT-263008] 
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create table PO_PARAM_UM
+(
+  id_po_param_um          NUMBER(24) not null,
+  id_po_param             NUMBER(24) not null,
+  id_inst_owner           NUMBER(24) not null,
+  id_institution          NUMBER(24) not null,
+  id_software             NUMBER(24) not null,
+  id_unit_measure_type    NUMBER(24),
+  id_unit_measure_subtype NUMBER(24),
+  val_min                 NUMBER(24,3),
+  val_max                 NUMBER(24,3),
+  format_num              VARCHAR2(200 CHAR),
+  flg_available           VARCHAR2(1 CHAR) not null,
+  create_user             VARCHAR2(24 CHAR),
+  create_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution      NUMBER(24),
+  update_user             VARCHAR2(24 CHAR),
+  update_time             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution      NUMBER(24)
+)
+';
+exception when e_obj_exists then
+  dbms_output.put_line('table PO_PARAM_UM exists!');
+end;
+/
+
+comment on table PO_PARAM_UM
+  is 'Periodic observation parameter measurement units configuration.';
+
+comment on column PO_PARAM_UM.id_po_param_um
+  is 'Primary key.';
+comment on column PO_PARAM_UM.id_po_param
+  is 'Periodic observation parameter identifier.';
+comment on column PO_PARAM_UM.id_inst_owner
+  is 'Owner institution identifier.';
+comment on column PO_PARAM_UM.id_institution
+  is 'Institution identifier.';
+comment on column PO_PARAM_UM.id_software
+  is 'Software identifier.';
+comment on column PO_PARAM_UM.id_unit_measure_type
+  is 'Measurement unit type identifier.';
+comment on column PO_PARAM_UM.id_unit_measure_subtype
+  is 'Measurement unit subtype identifier.';
+comment on column PO_PARAM_UM.val_min
+  is 'Minimum permitted value.';
+comment on column PO_PARAM_UM.val_max
+  is 'Maximum permitted value.';
+comment on column PO_PARAM_UM.format_num
+  is 'Number format mask.';
+comment on column PO_PARAM_UM.flg_available
+  is 'Record availability (Y/N).';
+comment on column PO_PARAM_UM.create_user
+  is 'Creation User';
+comment on column PO_PARAM_UM.create_time
+  is 'Creation Time';
+comment on column PO_PARAM_UM.create_institution
+  is 'Creation Institution';
+comment on column PO_PARAM_UM.update_user
+  is 'Update User';
+comment on column PO_PARAM_UM.update_time
+  is 'Update Time';
+comment on column PO_PARAM_UM.update_institution
+  is 'Update Institution';
+-- CHANGE END: mario.mineiro

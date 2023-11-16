@@ -1,0 +1,56 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 09:51
+-- CHANGE REASON: [ALERT-12334 ] 
+alter table SUPPLY_SOFT_INST
+  add constraint SOI_PK primary key (ID_SUPPLY_SOFT_INST)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 19/11/2010 10:20
+-- CHANGE REASON: [ALERT-142789] Missing constraint
+DECLARE
+    e_key_exists EXCEPTION;
+    e_duplicate_keys EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_key_exists, -02261);
+    PRAGMA EXCEPTION_INIT(e_duplicate_keys, -02299);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table supply_soft_inst add constraint soi_soft_inst_uk unique (id_supply, id_software, id_institution, flg_cons_type)';
+EXCEPTION
+    WHEN e_key_exists THEN
+        dbms_output.put_line('Warning: unique constraint SOI_SOFT_INST_UK already exists');
+    WHEN e_duplicate_keys THEN
+        dbms_output.put_line('Error: duplicate keys found. Each set of (ID_SUPPLY, ID_INSTITUTION, ID_SOFTWARE, FLG_CONS_TYPE) must be unique. Contact parametrizations team.');
+END;
+/
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 02/12/2010 16:48
+-- CHANGE REASON: [ALERT-146441] Associate a surgical procedure to supplies
+ALTER TABLE supply_soft_inst
+  ADD CONSTRAINT SOI_FLG_PREPARING_CHK
+  CHECK (FLG_PREPARING IN ('Y','N'));
+
+ALTER TABLE supply_soft_inst
+  ADD CONSTRAINT SOI_FLG_COUNTABLE_CHK
+  CHECK (FLG_COUNTABLE IN ('Y','N'));
+
+ALTER TABLE supply_soft_inst
+  DROP CONSTRAINT SOI_FLG_CONS_TYPE_CHK ;
+
+ALTER TABLE supply_soft_inst
+  ADD CONSTRAINT SOI_FLG_CONS_TYPE_CHK
+ CHECK (FLG_CONS_TYPE in ('L','C','I'));
+-- CHANGE END: Filipe Silva
+

@@ -1,0 +1,95 @@
+CREATE TABLE TASK_TYPE
+ (ID_TASK_TYPE NUMBER(24) NOT NULL
+ ,ID_TASK_TYPE_PARENT NUMBER(24)
+ ,CODE_TASK_TYPE VARCHAR2(200) NOT NULL
+ ,ICON VARCHAR2(200)
+ ,FLG_TYPE VARCHAR2(2) NOT NULL
+ );
+
+
+COMMENT ON TABLE ORDER_SET_TASK_LINK IS 'Task types existing in Alert';
+COMMENT ON COLUMN TASK_TYPE.ID_TASK_TYPE IS 'Task type ID';
+COMMENT ON COLUMN TASK_TYPE.ID_TASK_TYPE_PARENT IS 'Task type parent ID';
+COMMENT ON COLUMN TASK_TYPE.CODE_TASK_TYPE IS 'Code task type for translation';
+COMMENT ON COLUMN TASK_TYPE.ICON IS 'Task icon';
+COMMENT ON COLUMN TASK_TYPE.FLG_TYPE IS 'Flag that indicates the task type (P - Appointment; PF - Follow-up appointment; PS - Specialty appointment; O - Consult; D - Discharge instruction; E - Exam; EI - Image exam; EO - Other exam; M - Monitoring; I - procedure; A - Analysis; M - Medication; ML - Local medication; MD - Dietary and formulation; ME - Outside medication; MF - Hospital pharmacy medication; MP - IV Fluids)';
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 04/07/2010 02:29
+-- CHANGE REASON: [ALERT-109296] TDE Core versioning (DDL)
+alter table TASK_TYPE add FLG_DEPENDENCY_SUPPORT VARCHAR2(1 char) default 'N' not null;
+alter table TASK_TYPE add FLG_EPISODE_TASK VARCHAR2(1 char) default 'T' not null;
+comment on table TASK_TYPE                         is 'Task Type table (TTY)';
+comment on column TASK_TYPE.FLG_DEPENDENCY_SUPPORT is 'Task Type record supports dependencies between tasks: (A)ll relationship types, Only (S)tart2Start relationship types, Only (F)inish2Start relationship types, (N)o dependency support';
+comment on column TASK_TYPE.FLG_EPISODE_TASK       is 'Flag that indicates if the task type represents an episode, task or can be considered as an episode: (T)ask, (E)pisode, (B)oth';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 16/08/2010 16:44
+-- CHANGE REASON: [ALERT-117300] 
+comment on column TASK_TYPE.FLG_TYPE is 'Flag that indicates the task type (P - Appointment; PF - Follow-up appointment; PS - Specialty appointment; O - Consult; D - Discharge instruction; E - Exam; EI - Image exam; EO - Other exam; M - Monitoring; I - procedure; A - Analysis; M - Medication; ML - Local medication; MD - Dietary and formulation; ME - Outside medication; MF - Hospital pharmacy medication; MP - IV Fluids; DP - Predefined diet; PA - Social assistance appointment; PE - Nursing appointment; PM - Medical appointment; PN - Nutrition appointment; PP - Psychology appointment; PR - Rehabilitation appointment; T - Inpatient episode (for all markets except PT/BR); TP - Inpatient episode (for PT/BR markets); TC - Inpatient episode with surgery (for all markets except PT/BR); TS - Inpatient episode with surgery (for PT/BR markets); EP - Episode; FE - Future episode; CE - Current episode)';
+ 
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 16/05/2011 10:03
+-- CHANGE REASON: [ALERT-140655] The column flg_type of the table task_type was changed to include two more states:
+--                - R - Rehabilitation;
+--                - W - Dressings - wound treatment
+--                
+comment on column TASK_TYPE.FLG_TYPE is 'Flag that indicates the task type (P - Appointment; PF - Follow-up appointment; PS - Specialty appointment; O - Consult; D - Discharge instruction; E - Exam; EI - Image exam; EO - Other exam; M - Monitoring; I - procedure; A - Analysis; M - Medication; ML - Local medication; MD - Dietary and formulation; ME - Outside medication; MF - Hospital pharmacy medication; MP - IV Fluids; DP - Predefined diet; PA - Social assistance appointment; PE - Nursing appointment; PM - Medical appointment; PN - Nutrition appointment; PP - Psychology appointment; PR - Rehabilitation appointment; T - Inpatient episode (for all markets except PT/BR); TP - Inpatient episode (for PT/BR markets); TC - Inpatient episode with surgery (for all markets except PT/BR); TS - Inpatient episode with surgery (for PT/BR markets); EP - Episode; FE - Future episode; CE - Current episode; R - Rehabilitation; W - Dressings - wound treatment)';
+-- CHANGE END: Luis Oliveira
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 10/11/2011 15:01
+-- CHANGE REASON: [ALERT-198676] Institutionalized diet task type integration in Order Sets
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); -- column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table TASK_TYPE add FLG_MODULAR_WORKFLOW varchar2(1 char) default ''N'' not null';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('FLG_MODULAR_WORKFLOW column already exists in TASK_TYPE table');
+END;
+/
+COMMENT ON column TASK_TYPE.FLG_MODULAR_WORKFLOW IS 'Flag that indicates if task''s workflow and parameters belongs to the task type data model: 
+Y: controlled in the task type data model
+N: controlled in the order set data model';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 09/05/2012 18:33
+-- CHANGE REASON: [ALERT-229222] 
+comment on column TASK_TYPE.flg_type
+is 'Flag that indicates the task type (P - Appointment; PF - Follow-up appointment; PS - Specialty appointment; O - Consult; D - Discharge instruction; E - Exam; EI - Image exam; EO - Other exam; M - Monitoring; I - procedure; A - Analysis; M - Medication; ML - Local medication; MD - Dietary and formulation; ME - Outside medication; MF - Hospital pharmacy medication; MP - IV Fluids; DP - Predefined diet; PA - Social assistance appointment; PE - Nursing appointment; PM - Medical appointment; PN - Nutrition appointment; PP - Psychology appointment; PR - Rehabilitation appointment; T - Inpatient episode (for all markets except PT/BR); TP - Inpatient episode (for PT/BR markets); TC - Inpatient episode with surgery (for all markets except PT/BR); TS - Inpatient episode with surgery (for PT/BR markets); EP - Episode; FE - Future episode; CE - Current episode; R - Rehabilitation; W - Dressings - wound treatment; PL - Problems; SH - Surgical History; MH - Medical history; DG - Diagnosis; CA - Congenital Anomalies)';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 18/08/2014 15:51
+-- CHANGE REASON: [ALERT-292781] 
+comment on column TASK_TYPE.flg_type is 'Flag that indicates the task type (P - Appointment; PF - Follow-up appointment; PS - Specialty appointment; O - Consult; D - Discharge instruction; E - Exam; EI - Image exam; EO - Other exam; M - Monitoring; I - procedure; A - Analysis; M - Medication; ML - Local medication; MD - Dietary and formulation; ME - Outside medication; MF - Hospital pharmacy medication; MP - IV Fluids; DP - Predefined diet; PA - Social assistance appointment; PE - Nursing appointment; PM - Medical appointment; PN - Nutrition appointment; PP - Psychology appointment; PR - Rehabilitation appointment; T - Inpatient episode (for all markets except PT/BR); TP - Inpatient episode (for PT/BR markets); TC - Inpatient episode with surgery (for all markets except PT/BR); TS - Inpatient episode with surgery (for PT/BR markets); EP - Episode; FE - Future episode; CE - Current episode; R - Rehabilitation; W - Dressings - wound treatment; PL - Problems; SH - Surgical History; MH - Medical history; DG - Diagnosis; CA - Congenital Anomalies; NC - Nursing Care Plan; ND - Nusing Diagnoses; NO - Nursing Outcomes; NI - Nursing Interventions; NL - NNN Linkages; S- Supplies; SS- Surgical Supplies';
+-- CHANGE END: Ana Monteiro
+/
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 11/08/2016 08:12
+-- CHANGE REASON: [ALERT-323541]
+ALTER TABLE TASK_TYPE ADD ID_TARGET_TASK_TYPE NUMBER(24);
+--CHANGE END: Pedro Henriques
+/
+
+COMMENT ON COLUMN ALERT.TASK_TYPE.ID_TARGET_TASK_TYPE is 'Task type target identifier';
+
+-- CHANGED BY: Adriana Ramos
+-- CHANGE DATE: 21/05/2019
+-- CHANGE REASON: [EMR-4779]
+comment on column TASK_TYPE.FLG_TYPE
+  is 'Flag that indicates the task type (P - Appointment; PF - Follow-up appointment; PS - Specialty appointment; O - Consult; D - Discharge instruction; E - Exam; EI - Image exam; EO - Other exam; M - Monitoring; I - procedure; A - Analysis; M - Medication; ML - Local medication; MD - Dietary and formulation; ME - Outside medication; MF - Hospital pharmacy medication; MP - IV Fluids; DP - Predefined diet; PA - Social assistance appointment; PE - Nursing appointment; PM - Medical appointment; PN - Nutrition appointment; PP - Psychology appointment; PR - Rehabilitation appointment; T - Inpatient episode (for all markets except PT/BR); TP - Inpatient episode (for PT/BR markets); TC - Inpatient episode with surgery (for all markets except PT/BR); TS - Inpatient episode with surgery (for PT/BR markets); EP - Episode; FE - Future episode; CE - Current episode; R - Rehabilitation; W - Dressings - wound treatment; PL - Problems; SH - Surgical History; MH - Medical history; DG - Diagnosis; CA - Congenital Anomalies; NC - Nursing Care Plan; ND - Nusing Diagnoses; NO - Nursing Outcomes; NI - Nursing Interventions; NL - NNN Linkages; S- Supplies; SS- Surgical Supplies; OO - Out On Pass';
+-- CHANGE END: Adriana Ramos
+
+-- CHANGED BY: Ana Moita
+-- CHANGE DATE: 07/08/2019 17:25
+-- CHANGE REASON: [EMR-18707] - CDC - Sch events
+comment on column TASK_TYPE.FLG_TYPE
+is 'Flag that indicates the task type (P - Appointment; PF - Follow-up appointment; PS - Specialty appointment; O - Consult; D - Discharge instruction; E - Exam; EI - Image exam; EO - Other exam; M - Monitoring; I - procedure; A - Analysis; M - Medication; ML - Local medication; MD - Dietary and formulation; ME - Outside medication; MF - Hospital pharmacy medication; MP - IV Fluids; DP - Predefined diet; PA - Social assistance appointment; PE - Nursing appointment; PM - Medical appointment; PN - Nutrition appointment; PP - Psychology appointment; PR - Rehabilitation appointment; T - Inpatient episode (for all markets except PT/BR); TP - Inpatient episode (for PT/BR markets); TC - Inpatient episode with surgery (for all markets except PT/BR); TS - Inpatient episode with surgery (for PT/BR markets); EP - Episode; FE - Future episode; CE - Current episode; R - Rehabilitation; W - Dressings - wound treatment; PL - Problems; SH - Surgical History; MH - Medical history; DG - Diagnosis; CA - Congenital Anomalies; NC - Nursing Care Plan; ND - Nusing Diagnoses; NO - Nursing Outcomes; NI - Nursing Interventions; NL - NNN Linkages; S- Supplies; SS- Surgical Supplies; OO - Out On Pass; PC - CDC Appointment)';
+-- CHANGE END: Ana Moita

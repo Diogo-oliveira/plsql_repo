@@ -1,0 +1,39 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/05/2014 11:58
+-- CHANGE REASON: [ALERT-282042] suport table
+DECLARE
+    e_pk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+    e_unique_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table REPORT_SOFTWARE add constraint REPSW_PK primary key (id_report,id_software) using index tablespace alert_idx';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already exists');
+    END;
+    
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 22/10/2014 15:44
+-- CHANGE REASON: [ALERT-299375] table review type of report association
+DECLARE
+    i_sql VARCHAR2(1000 CHAR);
+BEGIN
+    i_sql := 'alter table report_software drop constraint REPSW_PK';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'alter table report_software add constraint REPSW_PK primary key (id_report, id_software, flg_cda_Type)';
+    pk_versioning.run(i_sql => i_sql);
+    i_sql := 'alter table report_software add constraint REPSW_CDA_TYPE_CHK check (flg_cda_type in (''M'', ''P''))';
+    pk_versioning.run(i_sql => i_sql);
+END;
+/
+-- CHANGE END:  Rui Gomes

@@ -1,0 +1,76 @@
+
+
+  CREATE TABLE PAT_NOTES
+   (	ID_PAT_NOTES NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000) NOT NULL ENABLE,
+	DT_NOTE DATE NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_PROF_WRITES NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE,
+	NOTE_CANCEL VARCHAR2(2000),
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0)
+
+   );
+
+
+COMMENT ON TABLE pat_notes IS 'Notas e observações gerais sobre o utente' ;
+
+COMMENT ON COLUMN pat_notes.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_notes.dt_note IS 'Data da nota' ;
+COMMENT ON COLUMN pat_notes.flg_status IS 'Estado: A - activo, C - cancelado' ;
+COMMENT ON COLUMN pat_notes.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN pat_notes.note_cancel IS 'Notas de cancelamento' ;
+
+comment on column PAT_NOTES.ID_EPISODE
+  is 'ID do episódio em que foi feito o registo.';
+
+alter table pat_notes
+add id_pat_notes_new varchar2(2);
+comment on column pat_notes.id_pat_notes_new is 'ID of the record that makes it outdated';
+
+alter table pat_notes 
+add (dt_note_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table PAT_NOTES drop (DT_NOTE, DT_CANCEL);
+
+COMMENT ON COLUMN pat_notes.dt_note_tstz IS 'Data da nota' ;
+COMMENT ON COLUMN pat_notes.dt_cancel_tstz IS 'Data de cancelamento' ;
+-- CHANGE END
+
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-09-22
+-- CHANGE REASON: Drop columns DATE
+alter table PAT_NOTES drop (DT_NOTE, DT_CANCEL);
+
+COMMENT ON COLUMN pat_notes.dt_note_tstz IS 'Data da nota' ;
+COMMENT ON COLUMN pat_notes.dt_cancel_tstz IS 'Data de cancelamento' ;
+-- CHANGE END
+
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 18/02/2011 14:22
+-- CHANGE REASON: [ALERT-163246] When the user tries to cancel a relevant note in the past history, appears a data base error(v2.6.0.5.2)
+alter table pat_notes add id_cancel_reason number(24);
+comment on column pat_notes.id_cancel_reason is 'Cancel reason ID';
+-- CHANGE END: Rui Duarte
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:30
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.pat_notes move lob(notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

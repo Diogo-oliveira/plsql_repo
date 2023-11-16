@@ -1,0 +1,36 @@
+
+
+  CREATE TABLE EPIS_DOC_TEMPLATE
+   (	
+    ID_EPIS_DOC_TEMPLATE NUMBER(24,0) NOT NULL,
+	DT_REGISTER TIMESTAMP WITH LOCAL TIME ZONE NOT NULL,
+	ID_PROF_REGISTER NUMBER(24,0) NOT NULL,
+	ID_EPISODE NUMBER(24,0) NOT NULL,
+	ID_DOC_TEMPLATE NUMBER(24,0) NOT NULL,
+	ID_PROFILE_TEMPLATE NUMBER(24,0), 
+	DT_CANCEL TIMESTAMP WITH LOCAL TIME ZONE,	
+	ID_PROF_CANCEL NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE epis_doc_template IS 'Episode selected templates' ;
+
+COMMENT ON COLUMN epis_doc_template.ID_EPIS_DOC_TEMPLATE IS 'Primary key.' ;
+COMMENT ON COLUMN epis_doc_template.DT_REGISTER IS 'Register moment.' ;
+COMMENT ON COLUMN epis_doc_template.ID_PROF_REGISTER IS 'Register professional id.' ;
+COMMENT ON COLUMN epis_doc_template.ID_EPISODE IS 'Episode id.' ;
+COMMENT ON COLUMN epis_doc_template.ID_DOC_TEMPLATE IS 'Doc template id selected.' ;
+COMMENT ON COLUMN epis_doc_template.ID_PROFILE_TEMPLATE IS 'The user profile template id that selected the template. Diferent user profiles may use diferent templates when documenting an episode.' ;
+COMMENT ON COLUMN epis_doc_template.DT_CANCEL IS 'Cancel moment.' ;
+COMMENT ON COLUMN epis_doc_template.ID_PROF_CANCEL IS 'Cancel professional id.' ;
+
+ALTER TABLE EPIS_DOC_TEMPLATE ADD id_epis_complaint NUMBER(24);
+COMMENT ON COLUMN EPIS_DOC_TEMPLATE.id_epis_complaint IS 'Queixa associada ao template escolhido';
+
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 07/04/2011 11:33
+-- CHANGE REASON: [ALERT-159798] E/M documentation guidelines
+ALTER TABLE EPIS_DOC_TEMPLATE ADD ID_DOC_AREA NUMBER(24);
+COMMENT ON COLUMN EPIS_DOC_TEMPLATE.ID_DOC_AREA IS 'DOC_AREA identifier';
+-- CHANGE END: Gustavo Serrano

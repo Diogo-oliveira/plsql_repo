@@ -1,0 +1,41 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/07/2011 15:01
+-- CHANGE REASON: [ALERT-188174] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ped_area_add
+  ADD CONSTRAINT paa_dt_fk FOREIGN KEY (id_doc_template) REFERENCES doc_template (id_doc_template)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ped_area_add
+  ADD CONSTRAINT paa_par_fk FOREIGN KEY (id_parent) REFERENCES ped_area_add (id_ped_area_add)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ped_area_add
+  ADD CONSTRAINT paa_pa_fk FOREIGN KEY (id_ped_area) REFERENCES ped_area (id_ped_area)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ped_area_add
+  ADD CONSTRAINT paa_um_fk FOREIGN KEY (id_unit_measure) REFERENCES unit_measure (id_unit_measure)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

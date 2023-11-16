@@ -1,0 +1,35 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 19/03/2013 15:42
+-- CHANGE REASON: [ALERT-254065 ] 
+drop index ICNP_COMPOSITION_CNT_UK; 
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 19/03/2013 15:46
+-- CHANGE REASON: [ALERT-254065 ] 
+-->icnp_composition.cnp_composition_cnt_uk|index
+DECLARE 
+    e_object_exists EXCEPTION; 
+    e_index_not_exists EXCEPTION; 
+
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955); 
+    PRAGMA EXCEPTION_INIT(e_index_not_exists, -01418); 
+BEGIN 
+    BEGIN 
+        EXECUTE IMMEDIATE 'drop index ICNP_COMPOSITION_CNT_UK'; 
+    EXCEPTION 
+        WHEN e_index_not_exists THEN 
+            dbms_output.put_line('Non existing Index'); 
+    END; 
+    BEGIN 
+        EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX ICNP_COMPOSITION_CNT_UK ON icnp_composition(CASE WHEN (ID_CONTENT IS NOT NULL AND NVL(FLG_AVAILABLE,''Y'')<>''N'') THEN ID_CONTENT END, 
+  CASE WHEN (ID_CONTENT IS NOT NULL AND NVL(FLG_AVAILABLE,''Y'')<>''N'') THEN ID_INSTITUTION END, 
+    CASE WHEN (ID_CONTENT IS NOT NULL AND NVL(FLG_AVAILABLE,''Y'')<>''N'') THEN ID_SOFTWARE END, 
+  CASE WHEN (ID_CONTENT IS NOT NULL AND NVL(FLG_AVAILABLE,''Y'')<>''N'') THEN FLG_AVAILABLE END)'; 
+    EXCEPTION 
+        WHEN e_object_exists THEN 
+            dbms_output.put_line('Index already there'); 
+    END; 
+END; 
+/ 
+-- CHANGE END: Sérgio Santos

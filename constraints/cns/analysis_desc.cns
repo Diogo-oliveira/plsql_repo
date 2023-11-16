@@ -1,0 +1,76 @@
+
+
+  ALTER TABLE ANALYSIS_DESC ADD CONSTRAINT ADC_PK PRIMARY KEY (ID_ANALYSIS_DESC) ENABLE;
+
+  ALTER TABLE ANALYSIS_DESC MODIFY (ID_ANALYSIS_DESC NOT NULL ENABLE);
+
+  ALTER TABLE ANALYSIS_DESC MODIFY (ID_ANALYSIS NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 17/01/2011 14:57
+-- CHANGE REASON: [ALERT-155887] 
+ALTER TABLE ANALYSIS_DESC ADD (CONSTRAINT ADC_FLG_AVAILABLE_CHK CHECK (flg_available IN ('Y', 'N')));
+ALTER TABLE ANALYSIS_DESC ADD (CONSTRAINT ADC_FLG_BLOOD_TYPE_CHK CHECK (flg_blood_type IN ('ARh-', 'ARh+', 'BRh-', 'BRh+', 'ABRh-', 'ABRh+','ORh-',  'ORh+', 'ADFraco', 'ADParcial', 'BDFraco', 'BDParcial', 'ABDFraco', 'ABDParcial', 'ODFraco', 'ODParcial')));
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 20/09/2011 18:06
+-- CHANGE REASON: [ALERT-187042] constraints
+DECLARE
+e_pk_already_there EXCEPTION;
+    e_unique_already_there EXCEPTION;
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+
+BEGIN
+    
+BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.ANALYSIS_DESC
+  add constraint ADC_FLG_AVAILABLE_CHK
+  check (flg_available IN (''Y'', ''N''))';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.ANALYSIS_DESC
+  add constraint ADC_FLG_BLOOD_TYPE_CHK
+  check (flg_blood_type IN (''ARh-'', ''ARh+'', ''BRh-'', ''BRh+'', ''ABRh-'', ''ABRh+'',''ORh-'',  ''ORh+'', ''ADFraco'', ''ADParcial'', ''BDFraco'', ''BDParcial'', ''ABDFraco'', ''ABDParcial'', ''ODFraco'', ''ODParcial''))';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:26
+-- CHANGE REASON: [ALERT-246248] 
+ALTER TABLE ANALYSIS_DESC ADD (CONSTRAINT ADC_ASE_FK FOREIGN KEY (ID_ANALYSIS, ID_SAMPLE_TYPE) REFERENCES ANALYSIS_SAMPLE_TYPE (ID_ANALYSIS, ID_SAMPLE_TYPE));
+-- CHANGE END: Ana Matos

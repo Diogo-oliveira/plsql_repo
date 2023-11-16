@@ -1,0 +1,72 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 11:30
+-- CHANGE REASON: [ALERT-12334 ] 
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_CRS_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_EPI_FK foreign key (ID_EPISODE)
+  references EPISODE (ID_EPISODE);
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_PCA_FK foreign key (ID_PROF_CANCEL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_PRF_FK foreign key (ID_PROFESSIONAL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_PRJ_FK foreign key (ID_PROF_REJECT)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_SLO_FK foreign key (ID_SUPPLY_LOCATION)
+  references SUPPLY_LOCATION (ID_SUPPLY_LOCATION);
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_SPY_FK foreign key (ID_SUPPLY)
+  references SUPPLY (ID_SUPPLY);
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_SRQ_FK foreign key (ID_SUPPLY_REQUEST)
+  references SUPPLY_REQUEST (ID_SUPPLY_REQUEST);
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_UME_FK foreign key (ID_UNIT_MEASURE)
+  references UNIT_MEASURE (ID_UNIT_MEASURE);
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SWWH_SPS_FK foreign key (ID_SUPPLY_SET)
+  references SUPPLY (ID_SUPPLY);
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SWWH_SRND_FK foreign key (ID_DEL_REASON)
+  references SUPPLY_REASON (ID_SUPPLY_REASON);
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SWWH_SRNR_FK foreign key (ID_REQ_REASON)
+  references SUPPLY_REASON (ID_SUPPLY_REASON);
+-- Create/Recreate check constraints 
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_FLG_CONTEXT_CHK
+  check (FLG_CONTEXT IN ('M','P','F','I','A','E','O','Q'));
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_FLG_REASON_CHK
+  check (FLG_REASON IN ('L','C'));
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_FLG_STATUS_CHK
+  check (FLG_STATUS IN ('A','S','J','H','V','E','Y','T','P','L','O','N','I','F','C','D'));
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 01/07/2010 15:10
+-- CHANGE REASON: [ALERT-108775] Activity therapist
+alter table SUPPLY_WORKFLOW_HIST drop constraint SPFH_FLG_STATUS_CHK;
+
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_FLG_STATUS_CHK
+  check (FLG_STATUS IN ('A','S','J','H','V','E','Y','T','P','L','O','N','I','F','C','D','X','G','Q'));
+
+
+alter table SUPPLY_WORKFLOW_HIST drop constraint SPFH_FLG_CONTEXT_CHK;
+
+alter table SUPPLY_WORKFLOW_HIST
+  add constraint SPFH_FLG_CONTEXT_CHK
+  check (FLG_CONTEXT IN ('M','P','F','I','A','E','O','Q','L'));
+
+
+alter table SUPPLY_WORKFLOW
+  add constraint SPH_FLG_OUTDATED_CHK
+  check (FLG_OUTDATED IN ('A','O','E'));
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,117 @@
+
+
+  CREATE TABLE DOC_ELEMENT_QUALIF
+   (	ID_DOC_ELEMENT_QUALIF NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOC_ELEMENT_CRIT NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOC_QUALIFICATION NUMBER NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN doc_element_qualif.id_doc_element_qualif IS 'Chave primária' ;
+COMMENT ON COLUMN doc_element_qualif.id_doc_element_crit IS 'Critério do elemento' ;
+COMMENT ON COLUMN doc_element_qualif.id_doc_qualification IS 'Qualificação' ;
+COMMENT ON COLUMN doc_element_qualif.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN doc_element_qualif.adw_last_update IS 'Data da última alteração' ;
+
+
+--Emilia Taborda 2007/08/28
+--Novas colunas
+alter table DOC_ELEMENT_QUALIF add (ID_DOC_CRITERIA	NUMBER(24),
+ID_DOC_QUANTIFICATION	NUMBER(24),
+CODE_DOC_ELEMENT_QUALIF	VARCHAR2(2000));
+
+
+--Emilia Taborda 2007/08/29
+alter table doc_element_qualif drop column code_doc_element_qualif;
+
+ALTER TABLE DOC_ELEMENT_QUALIF 
+ ADD (CODE_DOC_ELEM_QUALIF_CLOSE VARCHAR2(200)
+ ,CODE_DOC_ELEM_QUALIF_VIEW VARCHAR2(200);
+
+COMMENT ON COLUMN doc_element_qualif.id_doc_criteria IS 'Critério' ;
+COMMENT ON COLUMN doc_element_qualif.id_doc_quantification IS 'Quantificador' ;
+COMMENT ON COLUMN doc_element_qualif.CODE_DOC_ELEM_QUALIF_CLOSE IS 'Descrição final da relação entre elemento/qualificador e/ou quantificador, quando ele está fechado' ;
+COMMENT ON COLUMN doc_element_qualif.CODE_DOC_ELEM_QUALIF_VIEW IS 'Descrição final da relação entre elemento/qualificador e/ou quantificador para a pág resumo' ;
+
+
+--Emilia Taborda 2007/08/30
+--Coluna id_doc_qualification pode ter valores nulos
+ALTER TABLE DOC_ELEMENT_QUALIF modify id_doc_qualification number null;
+
+--Emilia Taborda 2007/09/10
+-- Nova coluna
+ALTER TABLE DOC_ELEMENT_QUALIF 
+ ADD (ID_DOC_CRITERIA_QUANT NUMBER(24));
+
+--Ariel Machado 2008/04/21
+--Nova coluna para ordenação
+ALTER TABLE DOC_ELEMENT_QUALIF 
+ ADD (RANK NUMBER(6));
+COMMENT ON COLUMN doc_element_qualif.rank IS 'Records order';
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-MAR-23
+-- CHANGED REASON: ALERT-11985 - Changes on Touch-Option database model to include id content
+ALTER TABLE DOC_ELEMENT_QUALIF ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN DOC_ELEMENT_QUALIF.ID_CONTENT  IS 'Content identifier';
+--CHANGE END Ariel Machado
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 14/10/2010 18:42
+-- CHANGE REASON: [ALERT-129567] Touch-Option formatting text rules
+ALTER TABLE DOC_ELEMENT_QUALIF
+ADD CODE_DOC_ELEMENT_QUANTIF_CLOSE VARCHAR2(200 CHAR);
+
+COMMENT ON COLUMN doc_element_qualif.code_doc_element_quantif_close IS 'Description for the element quantified';
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/01/2016 14:58
+-- CHANGE REASON: [ALERT-317702] 
+comment on table DOC_ELEMENT_QUALIF
+  is 'Documentation element''s qualification catalogue';
+-- Add comments to the columns 
+comment on column DOC_ELEMENT_QUALIF.id_doc_element_qualif
+  is 'Primary key';
+comment on column DOC_ELEMENT_QUALIF.id_doc_element_crit
+  is 'Documentation element criteria ID';
+comment on column DOC_ELEMENT_QUALIF.id_doc_qualification
+  is 'Documentation qualificator ID';
+comment on column DOC_ELEMENT_QUALIF.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column DOC_ELEMENT_QUALIF.adw_last_update
+  is 'Update date';
+comment on column DOC_ELEMENT_QUALIF.id_doc_criteria
+  is 'Documentation criteria ID';
+comment on column DOC_ELEMENT_QUALIF.id_doc_quantification
+  is 'Documentation quantification ID';
+comment on column DOC_ELEMENT_QUALIF.code_doc_elem_qualif_close
+  is 'Translation code (when qualificator is closed)';
+comment on column DOC_ELEMENT_QUALIF.code_doc_elem_qualif_view
+  is 'Translation code (in summary)';
+comment on column DOC_ELEMENT_QUALIF.id_doc_criteria_quant
+  is 'Documentation criteria quantificator';
+comment on column DOC_ELEMENT_QUALIF.rank
+  is 'Rank';
+comment on column DOC_ELEMENT_QUALIF.id_content
+  is 'Content unique ID';
+comment on column DOC_ELEMENT_QUALIF.create_user
+  is 'Creation User';
+comment on column DOC_ELEMENT_QUALIF.create_time
+  is 'Creation Time';
+comment on column DOC_ELEMENT_QUALIF.create_institution
+  is 'Creation Institution';
+comment on column DOC_ELEMENT_QUALIF.update_user
+  is 'Update User';
+comment on column DOC_ELEMENT_QUALIF.update_time
+  is 'Update Time';
+comment on column DOC_ELEMENT_QUALIF.update_institution
+  is 'Update Institution';
+comment on column DOC_ELEMENT_QUALIF.code_doc_element_quantif_close
+  is 'Translation code (when quantificator is closed)';
+  
+  
+-- CHANGE END: Ana Matos

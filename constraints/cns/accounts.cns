@@ -1,0 +1,32 @@
+alter table ACCOUNTS add constraint ACC_PK primary key (ID_ACCOUNT);
+
+alter table ACCOUNTS add constraint ACC_PK primary key (ID_ACCOUNT);
+
+ALTER TABLE ACCOUNTS add CONSTRAINT ACC_FILL_CHK CHECK (FILL_TYPE IN ('K', 'M', 'T'));
+ALTER TABLE ACCOUNTS add CONSTRAINT ACC_FLG_AVL_CHK CHECK (FLG_AVAILABLE IN ('Y', 'N'));
+alter table ACCOUNTS add constraint ACC_FLG_TYPE_CHK check (FLG_TYPE IN ('I', 'P', 'B'));
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 24/09/2012 14:23
+-- CHANGE REASON: [ALERT-240388] new fields in accounts model
+DECLARE
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE accounts drop CONSTRAINT acc_fill_chk';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Check constraint not there');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE accounts add CONSTRAINT acc_fill_chk CHECK (fill_type IN(''K'', ''M'', ''T'', ''MM''))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

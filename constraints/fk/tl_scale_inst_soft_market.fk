@@ -1,0 +1,20 @@
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 30/11/2010 11:16
+-- CHANGE REASON: [ALERT-145613] Issue Replication: Scale of imeline view configurable(v2.6.0.4) 
+DECLARE
+    e_constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_constraint_already_exists, -02275);
+    l_table_name VARCHAR2(30) := 'tl_scale_inst_soft_market';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT tl_s_ism_tlt_fk FOREIGN KEY (id_tl_timeline) REFERENCES tl_timeline (id_tl_timeline)';
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT tl_s_ism_su_fk FOREIGN KEY (id_tl_scale_xupper) REFERENCES tl_scale (id_tl_scale)';
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT tl_s_ism_sl_fk FOREIGN KEY (id_tl_scale_xlower) REFERENCES tl_scale (id_tl_scale)';
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT tl_s_ism_inst_fk FOREIGN KEY (id_institution) REFERENCES institution (id_institution)';
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT tl_s_ism_soft_fk FOREIGN KEY (id_software) REFERENCES software (id_software)';
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name || ' ADD CONSTRAINT tl_s_ism_mark_fk FOREIGN KEY (id_market) REFERENCES market (id_market)';
+EXCEPTION
+    WHEN e_constraint_already_exists THEN
+        dbms_output.put_line('WARNING - Foreign keys in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END: Rui Duarte

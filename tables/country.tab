@@ -1,0 +1,44 @@
+
+
+  CREATE TABLE COUNTRY
+   (	ID_COUNTRY NUMBER(12,0) NOT NULL ENABLE,
+	CODE_COUNTRY VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	CODE_NATIONALITY VARCHAR2(200)
+   );
+
+
+COMMENT ON COLUMN country.code_country IS 'Código para nome' ;
+COMMENT ON COLUMN country.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+
+comment on table COUNTRY is 'Represents geographic location dependent on a country. For instance it could be a state or a district';
+
+
+-- Add/modify columns 
+alter table COUNTRY add ALPHA2_CODE varchar2(2);
+-- Add comments to the columns 
+comment on column COUNTRY.ALPHA2_CODE
+  is 'Código de país de duas letras segundo norma ISO 3166-1 (alpha-2 code elements)';
+
+
+
+ALTER TABLE COUNTRY ADD (ID_CONTENT VARCHAR2(200));
+
+-- CHANGED BY: Joao Sa
+-- CHANGE DATE: 11/01/2016
+-- ISSUE: Refactor: Table comments 
+comment on column COUNTRY.id_country
+  is 'Internal id';
+comment on column COUNTRY.code_country
+  is 'Code to translate the country name';
+comment on column COUNTRY.flg_available
+  is 'Available in this implementation? Y/N';
+comment on column COUNTRY.adw_last_update
+  is 'Record last update (ADW)';
+comment on column COUNTRY.code_nationality
+  is 'Code to translate the nationality description that corresponds to this country';
+comment on column COUNTRY.alpha2_code
+  is 'Two letters code according to ISO 3166-1 (alpha-2 code elements)';
+comment on column COUNTRY.id_content
+  is 'ALERT uid for this country';

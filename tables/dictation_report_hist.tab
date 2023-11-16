@@ -1,0 +1,66 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 25/08/2010 10:41
+-- CHANGE REASON: [ALERT-95691] 
+CREATE TABLE dictation_report_hist (
+  id_dictation_report_hist    NUMBER(24,0)                      NOT NULL,
+  id_external                 NUMBER(24,0)                      NOT NULL,
+  id_dictation_report         NUMBER(24,0)                      NOT NULL,
+  id_patient                  NUMBER(24,0)                      NOT NULL,
+  id_episode                  NUMBER(24,0)                      NOT NULL,
+  id_work_type                NUMBER(24,0)                      NOT NULL,
+  report_status               NUMBER(2,0)                       NOT NULL,
+  report_information          clob                              NOT NULL,
+  id_prof_dictated            NUMBER(24,0)                      NOT NULL,
+  id_prof_transcribed         NUMBER(24,0)                      NOT NULL,
+  id_prof_signoff             NUMBER(24,0)                      NULL,
+  dictated_date               TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  transcribed_date            TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  signoff_date                TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  last_update_date            TIMESTAMP(6) WITH LOCAL TIME ZONE NULL
+);
+
+ALTER TABLE DICTATION_REPORT_HIST ADD (
+   CREATE_USER VARCHAR2(24),
+   CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+   CREATE_INSTITUTION NUMBER(24,0),
+   UPDATE_USER VARCHAR2(24),
+   UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+   UPDATE_INSTITUTION NUMBER(24,0)
+);
+
+COMMENT ON COLUMN DICTATION_REPORT_HIST.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN DICTATION_REPORT_HIST.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN DICTATION_REPORT_HIST.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN DICTATION_REPORT_HIST.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN DICTATION_REPORT_HIST.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN DICTATION_REPORT_HIST.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN dictation_report_hist.id_dictation_report_hist IS 'dictation report history identifier';
+COMMENT ON COLUMN dictation_report_hist.id_dictation_report IS 'dictation_report identifier';
+COMMENT ON COLUMN dictation_report_hist.id_external IS 'external identifier';
+COMMENT ON COLUMN dictation_report_hist.id_patient IS 'patient identifier';
+COMMENT ON COLUMN dictation_report_hist.id_episode IS 'episode identifier';
+COMMENT ON COLUMN dictation_report_hist.id_work_type IS 'work type identifier';
+COMMENT ON COLUMN dictation_report_hist.report_status IS 'status: ';
+COMMENT ON COLUMN dictation_report_hist.report_information IS 'report information detail';
+COMMENT ON COLUMN dictation_report_hist.id_prof_dictated IS 'professional dictated identifier';
+COMMENT ON COLUMN dictation_report_hist.id_prof_transcribed IS 'professional transcribed identifier';
+COMMENT ON COLUMN dictation_report_hist.id_prof_signoff IS 'professional sign_off identifier';
+COMMENT ON COLUMN dictation_report_hist.dictated_date IS 'dictation date';
+COMMENT ON COLUMN dictation_report_hist.transcribed_date IS 'transcribed date';
+COMMENT ON COLUMN dictation_report_hist.signoff_date IS 'signoff date';
+COMMENT ON COLUMN dictation_report_hist.last_update_date IS 'last update date';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:32
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.dictation_report_hist move lob(report_information) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

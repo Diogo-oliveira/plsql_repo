@@ -1,0 +1,44 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 13/06/2016 15:37
+-- CHANGE REASON: [ALERT-322139] Issue Replication: Fast Tracks Manual Activation
+--                
+BEGIN
+
+pk_versioning.run('CREATE TABLE FAST_TRACK_REASON_SI (
+  id_fast_track_reason    NUMBER(24) not null,
+  id_fast_track           NUMBER(24) not null,
+  id_market               NUMBER(24) not null,
+  id_institution          NUMBER(24) not null,
+  id_software             NUMBER(24) not null,
+  flg_add_cancel          VARCHAR2(1 char)   not null,
+  age_min                 NUMBER(24) null,
+  age_max                 NUMBER(24) null,
+  rank                    NUMBER(24) null,
+  flg_available           VARCHAR2(1 char) not null,
+  create_user            varchar2(24 char)                 null,
+  create_time            timestamp(6) with local time zone null,
+  create_institution     number(24)                      null,
+  update_user            varchar2(24 char)                 null,
+  update_time            timestamp(6) with local time zone null,
+  update_institution     NUMBER(24)                      NULL)');
+END;
+/
+COMMENT ON TABLE FAST_TRACK_REASON_SI IS 'fast_track_reason_ configuration table';
+
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.id_fast_track_reason     IS 'fast_track_reason identifier';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.id_fast_track            IS 'fast_track identifier';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.id_market              IS 'market identifier';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.id_institution              IS 'institution identifier';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.id_software                 IS 'software identifier';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.flg_add_cancel              IS 'add or cancel reason - A/C';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.age_min                     IS 'minimum age in years';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.age_max                     IS 'maximum age in years';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.rank                        IS 'rank order by';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.flg_available              IS 'available Y/N';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.create_user IS 'Creation User';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.create_time IS 'Creation Time';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.update_user IS 'Update User';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.update_time IS 'Update Time';
+COMMENT ON COLUMN FAST_TRACK_REASON_SI.update_institution IS 'Update Institution';
+-- CHANGE END: Elisabete Bugalho

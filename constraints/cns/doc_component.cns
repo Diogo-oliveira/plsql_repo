@@ -1,0 +1,83 @@
+
+
+  ALTER TABLE DOC_COMPONENT ADD CONSTRAINT DOCCOMP_PK PRIMARY KEY (ID_DOC_COMPONENT) ENABLE;
+
+  ALTER TABLE DOC_COMPONENT MODIFY (ID_DOC_COMPONENT NOT NULL ENABLE);
+
+  ALTER TABLE DOC_COMPONENT MODIFY (CODE_DOC_COMPONENT NOT NULL ENABLE);
+
+  ALTER TABLE DOC_COMPONENT MODIFY (FLG_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE DOC_COMPONENT MODIFY (FLG_AVAILABLE NOT NULL ENABLE);
+
+  ALTER TABLE DOC_COMPONENT MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+--Ariel Machado 2008/05/16
+ALTER TABLE DOC_COMPONENT ADD CONSTRAINT DOCCOMP_FLG_BEHAVIOR_CHK CHECK (FLG_BEHAVIOR IN ('N', 'R', 'M')) ENABLE;
+--Changed End
+
+
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 15/02/2011 15:43
+-- CHANGE REASON: [ALERT-162460] Insert constraints in FLG_STATUS columns
+DECLARE
+    constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(constraint_already_exists, -02264);
+    l_constraint_name VARCHAR2(30) := 'DOCCOMP_FLG_AVAILABLE_CHK';
+    l_ddl             VARCHAR(32767) := 'ALTER TABLE DOC_COMPONENT ADD CONSTRAINT DOCCOMP_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N''))';
+BEGIN
+    EXECUTE IMMEDIATE l_ddl;
+EXCEPTION
+    WHEN constraint_already_exists THEN
+        NULL;
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error creating constraint ' || l_constraint_name || ': ' || SQLERRM);
+END;
+/
+
+
+DECLARE
+    constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(constraint_already_exists, -02264);
+    l_constraint_name VARCHAR2(30) := 'DOCCOMP_FLG_TYPE_CHK';
+    l_ddl             VARCHAR(32767) := 'ALTER TABLE DOC_COMPONENT ADD CONSTRAINT DOCCOMP_FLG_TYPE_CHK CHECK (FLG_TYPE IN (''D'', ''T'', ''N''))';
+BEGIN
+    EXECUTE IMMEDIATE l_ddl;
+EXCEPTION
+    WHEN constraint_already_exists THEN
+        NULL;
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error creating constraint ' || l_constraint_name || ': ' || SQLERRM);
+END;
+/
+ 
+DECLARE
+    constraint_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(constraint_already_exists, -02264);
+    l_constraint_name VARCHAR2(30) := 'DOCCOMP_FLG_GENDER_CHK';
+    l_ddl             VARCHAR(32767) := 'ALTER TABLE DOC_COMPONENT ADD CONSTRAINT DOCCOMP_FLG_GENDER_CHK CHECK (FLG_GENDER IN (''F'', ''M'') OR FLG_GENDER IS NULL)';
+BEGIN
+    EXECUTE IMMEDIATE l_ddl;
+EXCEPTION
+    WHEN constraint_already_exists THEN
+        NULL;
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error creating constraint ' || l_constraint_name || ': ' || SQLERRM);
+END;
+/
+
+ 
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 03/05/2013 15:11
+-- CHANGE REASON: [ALERT-256903] Ophthalmologic exam - Ocular Motility: Improvement in the representation of cardinal positions of gaze
+alter table DOC_COMPONENT
+  drop constraint DOCCOMP_FLG_TYPE_CHK;
+alter table DOC_COMPONENT
+  add constraint DOCCOMP_FLG_TYPE_CHK
+  check (FLG_TYPE IN ('D', 'T', 'N', 'X'));
+  
+    
+-- CHANGE END: Ariel Machado

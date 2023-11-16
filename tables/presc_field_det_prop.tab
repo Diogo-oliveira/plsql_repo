@@ -1,0 +1,101 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGED DATE: 2009-JUL-27
+-- CHANGING REASON: posologias irregulares
+-- Create table
+create table PRESC_FIELD_DET_PROP
+(
+  ID_PRESCRIPTION_FIELD_REL NUMBER(24) not null,
+  FLG_TAKE_TYPE             VARCHAR2(2) not null,
+  FIELD_TYPE                VARCHAR2(2),
+  FLG_AVAILABLE             VARCHAR2(1) not null,
+  FORMAT                    VARCHAR2(30),
+  ALIGNMENT                 VARCHAR2(20),
+  VALUE_MIN                 VARCHAR2(30),
+  VALUE_MAX                 VARCHAR2(30),
+  FLG_SHOW                  VARCHAR2(1)
+)
+tablespace TABLE_S
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table PRESC_FIELD_DET_PROP
+  is 'This table has fields properties';
+-- Add comments to the columns 
+comment on column PRESC_FIELD_DET_PROP.ID_PRESCRIPTION_FIELD_REL
+  is 'unique key from prescriprion_field_rel';
+comment on column PRESC_FIELD_DET_PROP.FLG_TAKE_TYPE
+  is 'take type configuration (''-'' when flg_take_type is not applicable)';
+comment on column PRESC_FIELD_DET_PROP.FIELD_TYPE
+  is 'L: multichoice; N: keypad; F: keypad com texto; D: keypad com data; T: keypad com hora; DT: keypad com data e hora; OP: open other popup; LM: multichoice de escolha multipla';
+comment on column PRESC_FIELD_DET_PROP.FLG_AVAILABLE
+  is 'field is available(Y) or not(N)';
+comment on column PRESC_FIELD_DET_PROP.FORMAT
+  is 'formato do campo';
+comment on column PRESC_FIELD_DET_PROP.ALIGNMENT
+  is 'alinhamento valor do campo; right; left; center';
+comment on column PRESC_FIELD_DET_PROP.VALUE_MIN
+  is 'Valor mínimo. É VARCHAR2 porque nos campos de data podemos querer escrever, por exemplo, SYSDATE.';
+comment on column PRESC_FIELD_DET_PROP.VALUE_MAX
+  is 'Valor máximo. É VARCHAR2 porque nos campos de data podemos querer escrever, por exemplo, SYSDATE.';
+comment on column PRESC_FIELD_DET_PROP.FLG_SHOW
+  is 'campos aparecem(Y) / não aparecem(N) nos popups principais';
+-- CHANGE END Pedro Albuquerque
+
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 21/08/2009 15:17
+-- CHANGE REASON: [ALERT-37067] 
+-- Create table
+create table PRESC_FIELD_DET_PROP
+(
+  ID_PRESCRIPTION_FIELD_REL NUMBER(24) not null,
+  FIELD_TYPE                VARCHAR2(2),
+  FLG_AVAILABLE             VARCHAR2(1) not null,
+  FORMAT                    VARCHAR2(30),
+  ALIGNMENT                 VARCHAR2(20),
+  VALUE_MIN                 VARCHAR2(30),
+  VALUE_MAX                 VARCHAR2(30),
+  FLG_SHOW                  VARCHAR2(1),
+  CREATE_USER               VARCHAR2(24),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24)
+)
+tablespace TABLE_S;
+-- Add comments to the table 
+comment on table PRESC_FIELD_DET_PROP
+  is 'This table has fields properties';
+-- Add comments to the columns 
+comment on column PRESC_FIELD_DET_PROP.ID_PRESCRIPTION_FIELD_REL
+  is 'unique key from prescriprion_field_rel';
+comment on column PRESC_FIELD_DET_PROP.FIELD_TYPE
+  is 'L: multichoice; N: keypad; F: keypad com texto; D: keypad com data; T: keypad com hora; DT: keypad com data e hora; OP: open other popup; LM: multichoice de escolha multipla';
+comment on column PRESC_FIELD_DET_PROP.FLG_AVAILABLE
+  is 'field is available(Y) or not(N). If N, then field appears with "Not applicable"';
+comment on column PRESC_FIELD_DET_PROP.FORMAT
+  is 'formato do campo';
+comment on column PRESC_FIELD_DET_PROP.ALIGNMENT
+  is 'alinhamento valor do campo; right; left; center';
+comment on column PRESC_FIELD_DET_PROP.VALUE_MIN
+  is 'Valor mínimo. É VARCHAR2 porque nos campos de data podemos querer escrever, por exemplo, SYSDATE.';
+comment on column PRESC_FIELD_DET_PROP.VALUE_MAX
+  is 'Valor máximo. É VARCHAR2 porque nos campos de data podemos querer escrever, por exemplo, SYSDATE.';
+comment on column PRESC_FIELD_DET_PROP.FLG_SHOW
+  is 'campos aparecem(Y) / não aparecem(N) nos popups principais';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_FIELD_DET_PROP IS 'This table has fields properties [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

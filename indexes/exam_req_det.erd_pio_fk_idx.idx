@@ -1,0 +1,15 @@
+-- CHANGED BY: Teresa Coutinho
+-- CHANGE DATE: 26/02/2014 12:12
+-- CHANGE REASON: [ALERT-277097 ] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX ERD_PIO_FK_IDX ON EXAM_REQ_DET (id_pat_exemption) TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/

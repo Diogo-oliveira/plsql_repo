@@ -1,0 +1,22 @@
+-- CHANGED BY: tiago.pereira
+-- CHANGED DATE: 19-03-2015
+-- CHANGING REASON: ALERT-307109
+
+
+alter table REP_LOGOS
+  add constraint PK_RLID primary key (INTERNAL_NAME, ID_REP_GROUP_LOGOS)
+  using index 
+  tablespace ALERT_DATA
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table REP_LOGOS
+  add constraint PK_RL foreign key (ID_REP_GROUP_LOGOS)
+  references REP_GROUP_LOGOS (ID_REP_GROUP_LOGOS);

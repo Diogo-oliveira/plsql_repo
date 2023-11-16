@@ -1,0 +1,38 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 14/04/2011 18:02
+-- CHANGE REASON: [ALERT-173251 ] [NZD] Correct problem with tables: BED_HIST, ROOM_HIST, ADM_INDICATION_HIST
+CREATE TABLE ADM_IND_DCS_HIST
+( ID_ADM_INDICATION_HIST NUMBER(24),
+  ID_ADM_INDICATION NUMBER(24),
+  ID_DEP_CLIN_SERV NUMBER(24),
+  FLG_AVAILABLE VARCHAR2(1 char),
+  FLG_PREF VARCHAR2(1 char),
+  CREATE_USER VARCHAR2(24 char),
+  CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER VARCHAR2(24 char),
+  UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+) ;
+
+
+COMMENT ON COLUMN ADM_IND_DCS_HIST.ID_ADM_INDICATION_HIST IS 'Admission indication history id';
+COMMENT ON COLUMN ADM_IND_DCS_HIST.ID_ADM_INDICATION IS 'Admission indication (ADM_INDICATION) foreign key';
+COMMENT ON COLUMN ADM_IND_DCS_HIST.ID_DEP_CLIN_SERV IS 'DEP_CLIN_SERV foreign key';
+COMMENT ON COLUMN ADM_IND_DCS_HIST.FLG_AVAILABLE IS 'Flag that indicates if this record is available';
+COMMENT ON COLUMN ADM_IND_DCS_HIST.FLG_PREF IS 'Flag that indicates if this is the preferred specialty for this department';
+COMMENT ON TABLE ADM_IND_DCS_HIST  IS 'History of the parameterization table to assign an adm_indication to a dep_clin_serv that can be set as responsible';
+comment on column ADM_IND_DCS_HIST.CREATE_USER
+  is 'Creation User';
+comment on column ADM_IND_DCS_HIST.CREATE_TIME
+  is 'Creation Time';
+comment on column ADM_IND_DCS_HIST.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column ADM_IND_DCS_HIST.UPDATE_USER
+  is 'Update User';
+comment on column ADM_IND_DCS_HIST.UPDATE_INSTITUTION
+  is 'Update Institution';
+comment on column ADM_IND_DCS_HIST.UPDATE_TIME
+  is 'Update Time';
+  
+-- CHANGE END: Sofia Mendes

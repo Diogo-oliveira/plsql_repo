@@ -1,0 +1,35 @@
+
+
+  ALTER TABLE "ALERT"."TL_SOFTWARE" MODIFY ("ID_SOFTWARE" NOT NULL ENABLE);
+
+
+
+  ALTER TABLE "ALERT"."TL_SOFTWARE" ADD CONSTRAINT "TSE_PK" PRIMARY KEY ("ID_SOFTWARE") ENABLE;
+
+
+-- Create/Recreate primary, unique and foreign key constraints 
+
+alter table TL_SOFTWARE
+  drop constraint TSE_PK cascade;
+alter table TL_SOFTWARE
+  add constraint TSE_PK primary key (ID_TL_SOFTWARE)
+  using index 
+  tablespace INDEX_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+
+
+
+
+
+-- Create/Recreate check constraints 
+alter table TL_SOFTWARE
+  add constraint chk_flg_available
+  check (flg_available in ('Y','N'));

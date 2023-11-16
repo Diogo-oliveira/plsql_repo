@@ -1,0 +1,207 @@
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 01/09/2010 15:49
+-- CHANGE REASON: [ALERT-822] 
+PROMPT Creating Table 'REF_TRANS_RESPONSIBILITY'
+CREATE TABLE REF_TRANS_RESPONSIBILITY
+ (ID_TRANS_RESP NUMBER(24) NOT NULL
+ ,ID_STATUS NUMBER(24) NOT NULL
+ ,ID_WORKFLOW NUMBER(24) NOT NULL
+ ,ID_EXTERNAL_REQUEST NUMBER(24) NOT NULL
+ ,ID_PROF_REF_OWNER NUMBER(24) NOT NULL
+ ,ID_PROF_TRANSF_OWNER NUMBER(24) NOT NULL
+ ,ID_PROF_DEST NUMBER(24) NOT NULL
+ ,DT_CREATED TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ ,DT_UPDATE TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_REASON_CODE NUMBER(24)
+ ,REASON_CODE_TEXT VARCHAR2(4000)
+ ,FLG_ACTIVE VARCHAR2(1)
+ ,NOTES VARCHAR2(240)
+ ,CREATE_INSTITUTION NUMBER(24) NOT NULL
+ ,CREATE_USER NUMBER(24) NOT NULL
+ ,CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ ,UPDATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ ,UPDATE_USER NUMBER(24)
+ )
+ TABLESPACE "TABLE_L"
+/
+COMMENT ON TABLE REF_TRANS_RESPONSIBILITY IS 'Transf. Resp.'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.ID_TRANS_RESP IS 'Primary Key'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.ID_STATUS IS 'WF Status'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.ID_WORKFLOW IS 'WF'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.ID_EXTERNAL_REQUEST IS 'External request ID'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.ID_PROF_REF_OWNER IS 'Owner physician'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.ID_PROF_TRANSF_OWNER IS 'Tranf. physician'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.ID_PROF_DEST IS 'Destination physician'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.DT_CREATED IS 'create record'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.DT_UPDATE IS 'Update date'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.ID_REASON_CODE IS 'reason for status'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.REASON_CODE_TEXT IS 'Reason notes'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.FLG_ACTIVE IS 'is active values (Y- yes, N-no)'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.NOTES IS 'Status Notes'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.CREATE_INSTITUTION IS 'Institution'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.CREATE_USER IS 'Creation by'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.CREATE_TIME IS 'Creation date'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.UPDATE_TIME IS 'last update date'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.UPDATE_INSTITUTION IS 'Institution'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESPONSIBILITY.UPDATE_USER IS 'updated by'
+/
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 19/12/2012 10:26
+-- CHANGE REASON: [ALERT-247719] 
+alter table REF_TRANS_RESPONSIBILITY modify notes VARCHAR2(4000 CHAR);
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/02/2013 12:19
+-- CHANGE REASON: [ALERT-251048] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN    
+SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REF_TRANS_RESPONSIBILITY'
+       AND c.column_name = 'ID_PROFESSIONAL';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_TRANS_RESPONSIBILITY add id_professional NUMBER(24) default 0 not null ';
+        EXECUTE IMMEDIATE 'comment on column REF_TRANS_RESPONSIBILITY.id_professional is ''Professional that created/updated the record''';
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REF_TRANS_RESPONSIBILITY'
+       AND c.column_name = 'ID_INSTITUTION';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_TRANS_RESPONSIBILITY add id_institution NUMBER(24) default 0 not null ';
+        EXECUTE IMMEDIATE 'comment on column REF_TRANS_RESPONSIBILITY.id_institution is ''Institution where the record was created/updated''';
+    END IF;
+END;
+/
+ 
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/02/2013 12:29
+-- CHANGE REASON: [ALERT-251048] 
+alter table REF_TRANS_RESPONSIBILITY modify id_professional default null;
+alter table REF_TRANS_RESPONSIBILITY modify id_institution default null;
+
+ 
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 16/12/2013 16:54
+-- CHANGE REASON: [ALERT-270853] 
+BEGIN
+pk_versioning.run(i_sql => 'alter table REF_TRANS_RESPONSIBILITY add id_inst_orig_tr NUMBER(24)');
+pk_versioning.run(i_sql => 'alter table REF_TRANS_RESPONSIBILITY add id_inst_dest_tr NUMBER(24)');
+END;
+/
+
+DECLARE
+    e_exp EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exp, -01451);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table REF_TRANS_RESPONSIBILITY modify id_prof_dest null';
+EXCEPTION
+    WHEN e_exp THEN
+        dbms_output.put_line('Ja alterado para null');
+END;
+/
+
+alter table REF_TRANS_RESPONSIBILITY modify reason_code_text VARCHAR2(1000 CHAR);
+--alter table REF_TRANS_RESPONSIBILITY modify notes VARCHAR2(1000 CHAR); -- deu erro em QC261, foi comentado (está como VARCHAR2(4000 CHAR))
+
+DROP INDEX RTR_ACTIVE_UK; -- so para alterar o tipo da coluna
+alter table REF_TRANS_RESPONSIBILITY modify flg_active VARCHAR2(1 CHAR);
+create unique index RTR_ACTIVE_UK on REF_TRANS_RESPONSIBILITY (DECODE(FLG_ACTIVE,'Y',ID_EXTERNAL_REQUEST,NULL));
+
+comment on column REF_TRANS_RESPONSIBILITY.id_trans_resp is 'Hand off identifier';
+comment on column REF_TRANS_RESPONSIBILITY.id_status is 'Hand off status identifier';
+comment on column REF_TRANS_RESPONSIBILITY.id_workflow is 'Hand off workflow identifier';
+comment on column REF_TRANS_RESPONSIBILITY.id_external_request is 'Referral identifier';
+comment on column REF_TRANS_RESPONSIBILITY.id_prof_ref_owner is 'Referral owner professional';
+comment on column REF_TRANS_RESPONSIBILITY.id_prof_transf_owner is 'Professional that requested referral hand off';
+comment on column REF_TRANS_RESPONSIBILITY.id_prof_dest is 'Professional to which the referral is being hand off';
+comment on column REF_TRANS_RESPONSIBILITY.dt_created is 'Create Date';
+comment on column REF_TRANS_RESPONSIBILITY.dt_update is 'Update Date';
+comment on column REF_TRANS_RESPONSIBILITY.id_reason_code is 'Reason code identifier';
+comment on column REF_TRANS_RESPONSIBILITY.reason_code_text is 'Reason code text (in case of "Other")';
+comment on column REF_TRANS_RESPONSIBILITY.flg_active is 'Y- active hand off N- otherwise';
+comment on column REF_TRANS_RESPONSIBILITY.notes is 'Hand off notes';
+comment on column REF_TRANS_RESPONSIBILITY.create_institution is 'Creation Institution';
+comment on column REF_TRANS_RESPONSIBILITY.create_user is 'Creation User';
+comment on column REF_TRANS_RESPONSIBILITY.create_time is 'Creation Time';
+comment on column REF_TRANS_RESPONSIBILITY.update_time is 'Update Time';
+comment on column REF_TRANS_RESPONSIBILITY.update_institution is 'Update Institution';
+comment on column REF_TRANS_RESPONSIBILITY.update_user is 'Update User';
+comment on column REF_TRANS_RESPONSIBILITY.id_inst_orig_tr is 'Orig institution of referral hand off';
+comment on column REF_TRANS_RESPONSIBILITY.id_inst_dest_tr is 'Dest institution of referral hand off';
+ 
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 16/12/2013 16:58
+-- CHANGE REASON: [ALERT-270853] 
+DECLARE
+    e_exp EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exp, -01442);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table REF_TRANS_RESPONSIBILITY modify id_inst_orig_tr NOT NULL';
+EXCEPTION
+    WHEN e_exp THEN
+        dbms_output.put_line('Ja alterado para not null');
+END;
+/
+-- CHANGE END: Ana Monteiro

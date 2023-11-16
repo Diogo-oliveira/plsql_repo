@@ -1,0 +1,33 @@
+-- ADDED BY: Jose Castro
+-- ADDED DATE: 25/05/2010
+-- ADDED REASON: ALERT-14487
+grant select on ALERT.BODY_STRUCTURE to ALERT_VIEWER;
+-- ADDED END
+
+-- CHANGED BY: Pedro Miranda
+-- CHANGE DATE: 09/05/2014 05:31
+-- CHANGE REASON: [ALERT-284224]
+grant all on body_structure to alert_inter;
+-- CHANGE END: Pedro Miranda
+
+
+
+
+-- CHANGED BY: Humberto Cardoso
+-- CHANGED DATE: 2017-1-03
+-- CHANGED REASON: ALERT-327486
+grant SELECT on ALERT.BODY_STRUCTURE to ALERT_APEX_TOOLS;
+-- CHANGE END: Humberto Cardoso
+
+
+
+-- CHANGED BY: Ana Moita
+-- CHANGED DATE: 2018-7-23
+-- CHANGED REASON: CEMR-1835
+
+-- CHANGED BY: Lillian Lu
+-- CHANGE DATE: 2018-05-29
+-- CHANGE REASON: [CEMR-1590] [Subtask] [CNT] DB alert_core_cnt_api.pk_cnt_api_exam and alert_core_cnt.pk_cnt_exam
+GRANT SELECT ON ALERT.BODY_STRUCTURE TO ALERT_CORE_CNT WITH GRANT OPTION;
+-- CHANGE END: Lillian Lu
+-- CHANGE END: Ana Moita

@@ -1,0 +1,165 @@
+
+
+  ALTER TABLE EXAM_DEP_CLIN_SERV ADD CONSTRAINT ECST_PK PRIMARY KEY (ID_EXAM_DEP_CLIN_SERV) ENABLE;
+
+  ALTER TABLE EXAM_DEP_CLIN_SERV MODIFY (ID_EXAM_DEP_CLIN_SERV NOT NULL ENABLE);
+
+  ALTER TABLE EXAM_DEP_CLIN_SERV MODIFY (FLG_TYPE NOT NULL ENABLE);
+
+  ALTER TABLE EXAM_DEP_CLIN_SERV MODIFY (RANK NOT NULL ENABLE);
+
+  ALTER TABLE EXAM_DEP_CLIN_SERV MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+  ALTER TABLE EXAM_DEP_CLIN_SERV MODIFY (ID_SOFTWARE NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: José Castro
+-- CHANGED DATE: 13-10-2010
+-- CHANGED REASON: ALERT-29500: Time out capability for exams  
+-- Create/Recreate check constraints 
+alter table EXAM_DEP_CLIN_SERV
+  add constraint ECST_FLG_TIMEOUT_CHK
+  check (FLG_TIMEOUT IN ('N', 'Y'));
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 17/01/2011 14:57
+-- CHANGE REASON: [ALERT-155887] 
+ALTER TABLE EXAM_DEP_CLIN_SERV ADD (CONSTRAINT ECST_FLG_EXECUTE_CHK CHECK (flg_execute IN ('Y', 'N')));
+ALTER TABLE EXAM_DEP_CLIN_SERV ADD (CONSTRAINT ECST_FLG_FIRST_RESULT_CHK CHECK (instr(flg_first_result, 'T') > 0 OR instr(flg_first_result, 'D') > 0 OR instr(flg_first_result, 'N') > 0));
+ALTER TABLE EXAM_DEP_CLIN_SERV ADD (CONSTRAINT ECST_FLG_MOV_PAT_CHK CHECK (flg_mov_pat IN ('Y', 'N')));
+ALTER TABLE EXAM_DEP_CLIN_SERV ADD (CONSTRAINT ECST_FLG_TYPE_CHK CHECK (flg_type IN ('P', 'M', 'W', 'C', 'H')));
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/02/2011 14:33
+-- CHANGE REASON: [ALERT-162892] 
+ALTER TABLE exam_dep_clin_serv drop CONSTRAINT ECST_FLG_TYPE_CHK;
+ALTER TABLE exam_dep_clin_serv add CONSTRAINT ECST_FLG_TYPE_CHK CHECK (flg_type IN ('P', 'M', 'W', 'C', 'H', 'E', 'X'));
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 18/08/2011 16:12
+-- CHANGE REASON: [ALERT-190780] 
+ALTER TABLE EXAM_DEP_CLIN_SERV drop constraint ECST_FLG_TYPE_CHK;
+ALTER TABLE EXAM_DEP_CLIN_SERV ADD (CONSTRAINT ECST_FLG_TYPE_CHK CHECK (flg_type IN ('A','B','P', 'M', 'W', 'C', 'H')));
+
+ALTER TABLE EXAM_DEP_CLIN_SERV drop constraint ECST_FLG_TYPE_CHK;
+ALTER TABLE interv_dep_clin_serv ADD (CONSTRAINT INST_TYPE_CC CHECK ((id_institution IS NOT NULL AND flg_type NOT IN ('M', 'R', 'P')) OR (flg_type IN ('M', 'R', 'P'))));
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 19/08/2011 11:33
+-- CHANGE REASON: [ALERT-190780] 
+ALTER TABLE EXAM_DEP_CLIN_SERV drop constraint ECST_FLG_TYPE_CHK;
+ALTER TABLE EXAM_DEP_CLIN_SERV ADD (CONSTRAINT ECST_FLG_TYPE_CHK CHECK (flg_type IN ('A','B','P', 'M', 'W', 'C', 'H')));
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 19/08/2011 16:18
+-- CHANGE REASON: [ALERT-190780] 
+ALTER TABLE EXAM_DEP_CLIN_SERV ADD (CONSTRAINT ECST_FLG_TYPE_CHK CHECK (flg_type IN ('A','B','P', 'M', 'W', 'C', 'H')));
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 06/09/2011 14:55
+-- CHANGE REASON: [ALERT-193892] 
+ALTER TABLE EXAM_DEP_CLIN_SERV DROP CONSTRAINT ECST_FLG_TYPE_CHK;
+ALTER TABLE EXAM_DEP_CLIN_SERV ADD CONSTRAINT ECST_FLG_TYPE_CHK CHECK (flg_type IN ('A','B','P', 'M', 'W', 'C', 'H', 'E', 'I', 'X'));
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 20/09/2011 18:06
+-- CHANGE REASON: [ALERT-187042] constraints
+DECLARE
+e_pk_already_there EXCEPTION;
+    e_unique_already_there EXCEPTION;
+    e_non_existant EXCEPTION;
+    e_check_already_there EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+
+BEGIN
+   
+
+BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.EXAM_CLIN_SERV
+  add constraint ECST_FLG_FIRST_RESULT_CHK
+  check (instr(flg_first_result, ''T'') > 0 OR instr(flg_first_result, ''D'') > 0 OR instr(flg_first_result, ''N'') > 0)';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.EXAM_CLIN_SERV
+  add constraint ECST_FLG_MOV_PAT_CHK
+  check (flg_mov_pat IN (''Y'', ''N''))';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table alert_default.EXAM_CLIN_SERV
+  add constraint ECST_FLG_TYPE_CHK
+  check (flg_type IN (''A'', ''B'', ''P'', ''M'', ''W'', ''C'', ''H''))';
+    EXCEPTION
+           WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('Unique already there');
+        WHEN e_non_existant THEN
+            dbms_output.put_line('Non existing CNS');
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 01/03/2012 09:44
+-- CHANGE REASON: [ALERT-221190] 
+ALTER TABLE EXAM_DEP_CLIN_SERV ADD CONSTRAINT ECST_FLG_RESULT_NOTES_CHK CHECK (flg_result_notes IN ('Y', 'N'));
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 23/09/2014 10:00
+-- CHANGE REASON: [ALERT-296188] 
+ALTER TABLE EXAM_DEP_CLIN_SERV
+ DROP CONSTRAINT ECST_FLG_TYPE_CHK
+ DROP CONSTRAINT ECST_FLG_FIRST_RESULT_CHK
+ DROP CONSTRAINT ECST_FLG_TIMEOUT_CHK;
+
+
+ALTER TABLE EXAM_DEP_CLIN_SERV ADD (CONSTRAINT ECST_FLG_TYPE_CHK CHECK (flg_type IN ('P', 'M', 'W', 'C', 'H', 'B', 'A', 'E')));
+
+ALTER TABLE EXAM_DEP_CLIN_SERV ADD (CONSTRAINT ECST_FLG_FIRST_RESULT_CHK CHECK (instr(flg_first_result, 'D') > 0 OR instr(flg_first_result, 'N') > 0 OR instr(flg_first_result, 'T') > 0 OR instr(flg_first_result, 'U') > 0));
+
+ALTER TABLE EXAM_DEP_CLIN_SERV ADD (CONSTRAINT ECST_FLG_TIMEOUT_CHK CHECK (flg_timeout IN ('Y', 'N')));
+
+ALTER TABLE EXAM_DEP_CLIN_SERV ADD (CONSTRAINT ECST_FLG_FIRST_EXECUTE_CHK CHECK (instr(flg_first_result, 'D') > 0 OR instr(flg_first_result, 'N') > 0 OR instr(flg_first_result, 'T') > 0 OR instr(flg_first_result, 'U') > 0));
+-- CHANGE END: Ana Matos

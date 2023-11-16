@@ -1,0 +1,245 @@
+
+
+  CREATE TABLE OPINION
+   (	ID_OPINION NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATE VARCHAR2(1) NOT NULL ENABLE,
+	DT_PROBLEM DATE NOT NULL ENABLE,
+	DESC_PROBLEM VARCHAR2(4000) NOT NULL ENABLE,
+	ID_PROF_QUESTIONS NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_QUESTIONED NUMBER(24,0),
+	DT_CANCEL DATE,
+	ID_SPECIALITY NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000)
+   );
+
+
+
+COMMENT ON TABLE opinion IS 'Pareceres' ;
+
+COMMENT ON COLUMN opinion.id_episode IS 'Chave primaria' ;
+COMMENT ON COLUMN opinion.flg_state IS 'Estado: R - requisitado, F - pedido lido, P - respondido, A - resposta lida, C - cancelado' ;
+COMMENT ON COLUMN opinion.dt_problem IS 'Data de colocação da questão' ;
+COMMENT ON COLUMN opinion.desc_problem IS 'Questão colocada' ;
+COMMENT ON COLUMN opinion.dt_cancel IS 'Data de cancelamento' ;
+
+alter table opinion 
+add (dt_problem_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-JUL-31
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 16494
+
+COMMENT ON COLUMN  OPINION.ID_OPINION IS 'Opinion ID'; 
+COMMENT ON COLUMN  OPINION.ID_PROF_QUESTIONS IS 'Questions professional ID'; 
+COMMENT ON COLUMN  OPINION.ID_PROF_QUESTIONED IS 'Questioned professional ID'; 
+COMMENT ON COLUMN  OPINION.ID_SPECIALITY IS 'Speciality ID'; 
+COMMENT ON COLUMN  OPINION.NOTES_CANCEL IS 'Cancel Notes'; 
+COMMENT ON COLUMN  OPINION.DT_PROBLEM_TSTZ IS 'Problem date'; 
+COMMENT ON COLUMN  OPINION.DT_CANCEL_TSTZ IS 'Cancel date'; 
+
+-- CHANGED END: Nuno Ferreira
+
+
+
+-- CHANGED BY: Carlos Vieira
+-- CHANGE DATE: 2008-Set-22
+-- CHANGE REASON:date columns, timestamp 
+
+alter table OPINION drop column DT_PROBLEM;
+alter table OPINION drop column DT_CANCEL;
+
+--End change
+
+
+--
+-- CHANGED BY: Thiago Brito
+-- CHANGE DATE: 2008-OCT-08
+-- CHANGE REASON: In order to perform the denormilization task, for this table, these columns need to be added
+--
+
+ALTER TABLE ALERT.opinion ADD STATUS_FLG VARCHAR2(100);
+/
+
+ALTER TABLE ALERT.opinion ADD STATUS_ICON VARCHAR2(100);
+/
+
+ALTER TABLE ALERT.opinion ADD STATUS_MSG VARCHAR2(100);
+/
+
+ALTER TABLE ALERT.opinion ADD STATUS_STR VARCHAR2(100);
+/
+
+COMMENT ON COLUMN opinion.STATUS_FLG IS 'Request''s status flag (udes to return the icon)';
+/
+
+COMMENT ON COLUMN opinion.STATUS_ICON IS 'Request''s status icon';
+/
+
+COMMENT ON COLUMN opinion.STATUS_MSG IS 'Request''s status message code';
+/
+
+COMMENT ON COLUMN opinion.STATUS_STR IS 'Request''s status (in specific format)';
+/
+
+-- CHANGE END
+--
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 01/06/2009 14:49
+-- CHANGE REASON: [ALERT-889] Perfil nutricionista
+alter table opinion add FLG_TYPE varchar2(1);
+comment on column OPINION.FLG_TYPE is 'Type of opinon - U - nutritionist, O - other';
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 27/10/2009 12:08
+-- CHANGE REASON: Case Manager
+alter table OPINION add(  ID_MANAGEMENT_LEVEL NUMBER(24),
+  ID_EPISODE_ANSWER   NUMBER(24),
+  ID_CANCEL_REASON    NUMBER(24),
+  ID_PATIENT          NUMBER(24));
+
+comment on column OPINION.ID_MANAGEMENT_LEVEL
+  is 'Id management level - em uso para o Case Manager';
+comment on column OPINION.ID_EPISODE_ANSWER
+  is 'Id episode answer - em uso para o Case Manager';
+comment on column OPINION.ID_CANCEL_REASON
+  is 'Id cancel reason';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 06/11/2009 11:49
+-- CHANGE REASON: Case Manager
+alter table OPINION modify DESC_PROBLEM null;
+comment on column OPINION.DESC_PROBLEM
+  is 'Questão colocada. Nos pareceres de Case Manager este campo contem as notas do pedido de CM.';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 16/04/2010 15:45
+-- CHANGE REASON: [ALERT-86898] opinion changes
+alter table opinion add (dt_last_update      timestamp with local time zone,
+                         id_opinion_type     number(24),
+ id_clinical_service number(12),
+ dt_approved         timestamp with local time zone,
+ id_prof_approved    number(24),
+ notes               clob)
+LOB (notes) STORE AS (TABLESPACE alert_lob ENABLE STORAGE IN ROW);
+
+comment on column opinion.flg_state
+  is 'Estado: R - requisitado, F - pedido lido, P - respondido, A - resposta lida, C - cancelado, E - aceite, X - rejeitado, O - concluido, V - aprovado, N - nao aprovado.';
+comment on column opinion.flg_type
+  is 'Deprecated. Use ID_OPINION_TYPE.';
+comment on column opinion.dt_last_update
+  is 'Request last change date.';
+comment on column opinion.id_opinion_type
+  is 'Opinion type identifier.';
+comment on column opinion.id_clinical_service
+  is 'Clinical service identifier.';
+comment on column opinion.dt_approved
+  is 'Request approval date.';
+comment on column opinion.id_prof_approved
+  is 'Request approved by.';
+comment on column opinion.notes
+  is 'Request notes.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 19/04/2010 11:03
+-- CHANGE REASON: [ALERT-90102] added field to opinion
+alter table opinion add (id_episode_approval number(24));
+
+comment on column opinion.id_episode_approval
+  is 'Approval episode identifier.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/10/2011 12:22
+-- CHANGE REASON: [ALERT-200521] 
+alter table opinion add FLG_AUTO_FOLLOW_UP varchar2(1 CHAR) DEFAULT 'N' NOT NULL ;
+
+comment on column OPINION.FLG_AUTO_FOLLOW_UP
+  is 'Follow-up done automatically';
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table OPINION
+  is 'Table for Consults (opinion) request';
+-- Add comments to the columns 
+comment on column OPINION.id_episode
+  is 'Primary Key';
+comment on column OPINION.flg_state
+  is 'Opinion status. (SYS_DOMAIN OPINION.FLG_STATE)';
+comment on column OPINION.desc_problem
+  is 'Consult request message. In Case Manager opinions this field contains the notes of the request for CM.';
+comment on column OPINION.id_management_level
+  is 'Id management level -Only for Case Manager';
+comment on column OPINION.id_episode_answer
+  is 'Id episode answer - Only for Case Manager';
+comment on column OPINION.id_patient
+  is 'Patient ID';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 26/03/2018
+-- CHANGE REASON: [CEMR-945]
+ALTER TABLE ALERT.opinion ADD ID_PROF_CANCEL NUMBER(24,0);
+COMMENT ON COLUMN  OPINION.ID_PROF_CANCEL IS 'Professional ID that cancelled the consultation request'; 
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 04/04/2019 15:07
+-- CHANGE REASON: [EMR-14672] - [DB] Improvements in the physician consults area
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE OPINION ADD (FLG_PRIORITY VARCHAR2(1))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+ALTER TABLE opinion add CONSTRAINT opn_flg_priority_chk CHECK(flg_priority IN ('N', 'U'));
+
+COMMENT ON column opinion.flg_priority IS 'Flag that indicates the priority ((U)rgent or (N)on-Urgent)';
+-- CHANGE END: Nuno Coelho
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 18/02/2023 22:13
+-- CHANGE REASON: [EMR-56895] - HTML Migration - DDLs
+BEGIN
+pk_versioning.run(i_sql => 'ALTER TABLE OPINION
+MODIFY flg_state VARCHAR2(2)');
+END;
+/
+
+BEGIN
+pk_versioning.run(i_sql => 'ALTER TABLE OPINION DROP CONSTRAINT OPN_FLG_STATE_CHK');
+END;
+/
+
+BEGIN
+pk_versioning.run(i_sql => 'alter table OPINION
+add constraint OPN_FLG_STATE_CHK
+check (flg_state in (''R'', ''F'', ''P'', ''A'', ''C'', ''E'', ''X'', ''O'', ''V'', ''N'', ''PD''))');
+END;
+/
+
+BEGIN
+pk_versioning.run(i_sql => 'ALTER TABLE OPINION
+MODIFY id_episode NULL ');
+END;
+/
+
+BEGIN
+pk_versioning.run(i_sql => 'ALTER TABLE OPINION
+MODIFY ID_PATIENT NULL');
+END;
+/
+-- CHANGE END: Diogo Oliveira

@@ -1,0 +1,455 @@
+
+
+  CREATE TABLE DRUG_REQ_DET
+   (	ID_DRUG_REQ_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_DRUG_REQ NUMBER(24,0) NOT NULL ENABLE,
+	ID_DRUG NUMBER(12,0) NOT NULL ENABLE,
+	QTY_REQ NUMBER(6,0) NOT NULL ENABLE,
+	QTY_SUPPLIED NUMBER(6,0),
+	NOTES VARCHAR2(4000),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	ID_DEP_CLIN_SERV NUMBER(24,0),
+
+	DOSAGE VARCHAR2(1000),
+	NOTES_JUSTIF VARCHAR2(4000),
+	FLG_CI VARCHAR2(1),
+	FLG_CHEAPER VARCHAR2(1),
+	FLG_JUSTIF VARCHAR2(1),
+	FLG_ATTENTION VARCHAR2(2),
+	FLG_ATTENTION_PRINT VARCHAR2(1),
+	ID_DRUG_DESPACHOS NUMBER(24,0),
+	ID_PROF_PENDING NUMBER(24,0),
+	DT_PENDING DATE,
+	NOTES_PENDING VARCHAR2(4000),
+	PHARMACIST_VALIDATION VARCHAR2(1)
+   );
+
+
+
+COMMENT ON TABLE drug_req_det IS 'Medicamentos requisitados' ;
+
+COMMENT ON COLUMN drug_req_det.qty_supplied IS 'Quantidade fornecida' ;
+COMMENT ON COLUMN drug_req_det.flg_status IS 'T - temporária; D - pendente; R - requisitado; E - em execução; P - fornecimento parcial; F - terminado; C - cancelado; J - pedido rejeitado' ;
+COMMENT ON COLUMN drug_req_det.id_dep_clin_serv IS 'Departamento e serv. clínico requisitado.No caso de estar parametrizado em DRUG_DEP_CLIN_SERV que o medicamento pode ser fornecido em mais do que um departamento e / ou serv. clínico, é necessário indicar na requisição qual o pretendido.' ;
+COMMENT ON COLUMN drug_req_det.dosage IS 'Posologia.' ;
+COMMENT ON COLUMN drug_req_det.notes_justif IS 'Justificação da prescrição.' ;
+COMMENT ON COLUMN drug_req_det.flg_ci IS 'Chamada de atenção de contra-indicações: Y - sim; N - não; R - lida.' ;
+COMMENT ON COLUMN drug_req_det.flg_cheaper IS 'Chamada de atenção de medicamentos mais baratos: Y - sim; N - não; R - lida.' ;
+COMMENT ON COLUMN drug_req_det.flg_justif IS 'Chamada de atenção de justificação de prescrição: Y - sim; N - não; R - lida.' ;
+COMMENT ON COLUMN drug_req_det.flg_attention IS 'Flag que indica a chamada de atenção prioritária: CI - contra-indicações; B - medicamentos mais baratos; J - justificação de prescrição; IM - interacções medicamentosas' ;
+COMMENT ON COLUMN drug_req_det.flg_attention_print IS 'Flag que indica se o profissional prosseguiu (Y) ou não (N) com a impressão apesar das chamadas de atenção.' ;
+COMMENT ON COLUMN drug_req_det.id_drug_despachos IS 'Despacho associado a esta requisição.' ;
+COMMENT ON COLUMN drug_req_det.id_prof_pending IS 'ID do profissional que passou a requisição para pendente.' ;
+COMMENT ON COLUMN drug_req_det.dt_pending IS 'Data em que a requisição passou para pendente.' ;
+
+COMMENT ON COLUMN drug_req_det.notes_pending IS 'Notas de passagem para pendente.' ;
+COMMENT ON COLUMN drug_req_det.pharmacist_validation IS 'Indicação se a receita foi validado pelo farmacêutico.' ;
+COMMENT ON COLUMN drug_req_det.id_drug IS 'Medicamento requisitado' ;
+COMMENT ON COLUMN drug_req_det.qty_req IS 'Quantidade requisitada' ;
+
+
+ALTER TABLE DRUG_REQ_DET add (FLG_INCIDENT VARCHAR2(1), DATE_INCIDENT DATE, INCIDENT_USER  VARCHAR2(200), INCIDENT_QUANTITY   NUMBER(24,4));
+
+COMMENT ON COLUMN DRUG_REQ_DET.FLG_INCIDENT IS 'Y- Foi reportado um incidente, N- Não tem incidentes reportados';
+COMMENT ON COLUMN DRUG_REQ_DET.DATE_INCIDENT IS 'Data em que foi reportado o incidente';
+COMMENT ON COLUMN DRUG_REQ_DET.INCIDENT_USER IS 'User que reportou o incidente';
+COMMENT ON COLUMN DRUG_REQ_DET.INCIDENT_QUANTITY IS 'Quantidade em falta reportada no incidente';
+
+
+alter table drug_req_det 
+add (dt_cancel_tstz timestamp with local time zone,
+dt_pending_tstz timestamp with local time zone,
+date_incident_tstz timestamp with local time zone);
+
+
+
+
+alter table drug_req_det add (
+  DT_ORDER             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROF_ORDER        NUMBER(24),
+  ID_ORDER_TYPE        NUMBER(24),
+  FLG_CO_SIGN          VARCHAR2(1) default 'N' not null,
+  DT_CO_SIGN           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  NOTES_CO_SIGN        VARCHAR2(4000),
+  ID_PROF_CO_SIGN      NUMBER(24));
+	
+	
+	
+	comment on column drug_req_det.DT_ORDER
+  is 'Moment when the ordering professional ask the registering professional to request';
+comment on column drug_req_det.ID_PROF_ORDER
+  is 'Ordering professional';
+comment on column drug_req_det.ID_ORDER_TYPE
+  is 'Request order type (telephone, verbal, ...)';
+comment on column drug_req_det.FLG_CO_SIGN
+  is 'Co-sign flag. (Y)-Order co-signed. (N)-Order not co-signed.';
+comment on column drug_req_det.DT_CO_SIGN
+  is 'Co-sign moment';
+comment on column drug_req_det.NOTES_CO_SIGN
+  is 'Co-sign notes';
+comment on column drug_req_det.ID_PROF_CO_SIGN
+  is 'Co-sign professional';
+
+alter table drug_req_det add(
+ID_UNIT_MEASURE     number(24)
+);
+alter table drug_req_det add(
+duration      number(24)
+);
+alter table drug_req_det add(
+id_unit_measure_dur      number(24)
+);
+alter table drug_req_det add(
+Frequency     number(24)
+);
+alter table drug_req_det add(
+id_unit_measure_freq      number(24)
+);
+alter table drug_req_det add(
+DT_START_PRESC_TSTZ     TIMESTAMP(6) WITH LOCAL TIME ZONE 
+);
+alter table drug_req_det add(
+DT_END_PRESC_TSTZ     TIMESTAMP(6) WITH LOCAL TIME ZONE 
+);
+alter table drug_req_det add (refill    number(24,4));
+alter table Drug_req_det     add (qty_inst  number(24,4));
+alter table Drug_req_det     add (unit_measure_inst  number(24,4));                       
+alter table drug_req_det add( first_dose  varchar2(1), 
+dt_expire_tstz timestamp(6) with local time zone ,
+package_number varchar2(100));
+
+
+
+-- Add comments to the columns 
+comment on column DRUG_REQ_DET.ID_UNIT_MEASURE
+  is 'Unidade de medida relativa à quantidade';
+comment on column DRUG_REQ_DET.FREQUENCY
+  is 'Frequencia (Posologia)';
+comment on column DRUG_REQ_DET.ID_UNIT_MEASURE_FREQ
+  is 'Unidade de medida da frequencia';
+comment on column DRUG_REQ_DET.DURATION
+  is 'Duração (Posologia)';
+comment on column DRUG_REQ_DET.ID_UNIT_MEASURE_DUR
+  is 'Unidade de medida da duração';
+comment on column DRUG_REQ_DET.DT_START_PRESC_TSTZ
+  is 'Data inicio do tratamento (Posologia)';
+comment on column DRUG_REQ_DET.DT_END_PRESC_TSTZ
+  is 'Data end do tratamento (Posologia)';
+comment on column DRUG_REQ_DET.REFILL
+  is 'Reffil';
+comment on column DRUG_REQ_DET.QTY_INST
+  is 'Quantidade';
+comment on column DRUG_REQ_DET.UNIT_MEASURE_INST
+  is 'Unidade de medida da qty_inst';
+-- Add comments to the columns 
+comment on column DRUG_REQ_DET.PACKAGE_NUMBER
+  is 'Lote';
+comment on column DRUG_REQ_DET.DT_EXPIRE_TSTZ
+  is 'Data de validade';  
+  
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2007-NOV-30
+-- CHANGED REASON: Modify Orders/Refills
+-- Add/modify columns 
+alter table DRUG_REQ_DET add ORDER_MODIFIED VARCHAR2(1);
+alter table DRUG_REQ_DET add DT_ORDER_MODIFIED TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table DRUG_REQ_DET add PATIENT_NOTIFIED VARCHAR2(1);
+alter table DRUG_REQ_DET add ID_PROF_LAST_CHANGE NUMBER(24);
+alter table DRUG_REQ_DET add ID_SW_LAST_CHANGE NUMBER(24);
+alter table DRUG_REQ_DET add ID_INST_LAST_CHANGE NUMBER(12);
+alter table DRUG_REQ_DET add DT_LAST_CHANGE TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table DRUG_REQ_DET add ORDER_MODIFIED_ID_ISSUE NUMBER(24);
+alter table DRUG_REQ_DET add ORDER_MODIFIED_MESSAGE VARCHAR2(4000);
+-- Add comments to the columns 
+comment on column DRUG_REQ_DET.ORDER_MODIFIED
+  is '''Y'', se a posologia foi modificada após a prescrição ter sido feita';
+comment on column DRUG_REQ_DET.DT_ORDER_MODIFIED
+  is 'data da alteração da posologia, preencher sempre que ORFDER_MODIFIED estiver a ''Y''';
+comment on column DRUG_REQ_DET.PATIENT_NOTIFIED
+  is 'parâmetro associado ao ORDER_MODIFIED. ''R'', se o paciente já foi notificado da modificação, ''U'', se o paciente ainda não foi notificado da modificação.';
+  comment on column DRUG_REQ_DET.ID_PROF_LAST_CHANGE
+  is 'id do profissional que fez a ultima alteração dos dados desta prescrição';
+comment on column DRUG_REQ_DET.ID_SW_LAST_CHANGE
+  is 'id do software em que o profissional fez a ultima alteração dos dados desta prescrição';
+comment on column DRUG_REQ_DET.ID_INST_LAST_CHANGE
+  is 'id do instituição em que o profissional fez a ultima alteração dos dados desta prescrição';
+ comment on column DRUG_REQ_DET.DT_LAST_CHANGE
+  is 'data da ultima alteração dos dados desta prescrição';
+comment on column DRUG_REQ_DET.ORDER_MODIFIED_ID_ISSUE
+  is 'id_issue.parâmetro associado ao ORDER_MODIFIED.  Quando é criado um pending issue.';
+comment on column DRUG_REQ_DET.ORDER_MODIFIED_MESSAGE
+  is 'mensagem do pending issue, gerada quando é criado um id_issue.'; 
+--CHANGES END      
+
+				
+alter table drug_req_det
+modify (FLG_CI default 'N',
+				FLG_CHEAPER default 'N',
+				FLG_JUSTIF default 'N',
+				FLG_INTERAC_MED default 'N',
+				FLG_INTERAC_ALLERGY default 'N');	
+				
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2008-SET-22
+-- CHANGE REASON: Drop de colunas DATE com correspondentes DATE_TSTZ
+
+ALTER TABLE DRUG_REQ_DET DROP COLUMN DT_CANCEL;
+ALTER TABLE DRUG_REQ_DET DROP COLUMN DT_PENDING;
+ALTER TABLE DRUG_REQ_DET DROP COLUMN DATE_INCIDENT;
+
+-- CHANGE END
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGED DATE: 2008-OCT-30
+-- CHANGING REASON: Possibilidade de requisição à farmácia sem quantidade
+-- Add/modify columns 
+alter table DRUG_REQ_DET modify QTY_REQ null;
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGED DATE: 2009-JAN-08
+-- CHANGING REASON: Possibilidade de requisição à farmácia sem quantidade
+-- Add/modify columns 
+alter table DRUG_REQ_DET modify QTY_REQ null;
+-- CHANGE END
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 2009-FEB-05
+-- CHANGE REASON: ALERT-13612
+
+alter table drug_req_det 
+add (id_other_product number(24) null);
+
+comment on column drug_req_det.id_other_product is 'ID OUTROS PRODUTOS';
+-- CHANGED END
+
+
+-- CHANGED REASON: New fields for Dispense
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 19/03/2009
+ALTER TABLE ALERT.DRUG_REQ_DET ADD DISPENSE NUMBER(24,4);
+/
+ALTER TABLE ALERT.DRUG_REQ_DET ADD UNIT_MEASURE_DISPENSE NUMBER(24);
+/
+COMMENT ON COLUMN DRUG_REQ_DET.DISPENSE IS 'Dispensed quantity';
+/
+COMMENT ON COLUMN DRUG_REQ_DET.UNIT_MEASURE_DISPENSE IS 'Unit measure for dispense quantity';
+/
+-- CHANGE END
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-MAR-28
+-- CHANGING REASON: OVERDOSAGE MODULE
+alter table drug_req_det add FLG_DOSAGE_CHECK VARCHAR2(4);
+-- Add comments to the columns 
+comment on column drug_req_det.FLG_DOSAGE_CHECK
+  is 'Indica a presença de alertas de sobredosagem, subdosagem, etc.';
+-- CHANGE END Patrícia Neto
+
+
+alter table drug_req_det
+modify refill varchar2(100);
+
+
+alter table drug_req_det
+add (
+	flg_co_sign_temp varchar2(1),
+	dt_co_sign_temp timestamp with local time zone,
+	id_prof_co_sign_temp number(24),
+	notes_co_sign_temp varchar2(4000)
+);
+
+update drug_req_det drd
+set drd.flg_co_sign_temp = drd.flg_co_sign,
+	drd.dt_co_sign_temp = drd.dt_co_sign,
+	drd.id_prof_co_sign_temp = drd.id_prof_co_sign,
+	drd.notes_co_sign_temp = drd.notes_co_sign;
+
+alter table drug_req_det
+drop ( 
+	flg_co_sign, dt_co_sign, id_prof_co_sign, notes_co_sign
+);
+
+alter table drug_req_det
+add (
+	flg_co_sign varchar2(1) default 'N' not null,
+	id_prof_co_sign number(24),
+	id_type_co_sign number(12),
+	dt_co_sign timestamp with local time zone,
+	notes_co_sign varchar2(4000)
+);
+
+update drug_req_det drd
+set drd.flg_co_sign = drd.flg_co_sign_temp,
+	drd.id_prof_co_sign = drd.id_prof_co_sign_temp,
+	drd.dt_co_sign = drd.dt_co_sign_temp,
+	drd.notes_co_sign = drd.notes_co_sign_temp;
+	
+alter table drug_req_det
+drop (
+	flg_co_sign_temp, dt_co_sign_temp, id_prof_co_sign_temp, notes_co_sign_temp
+);
+
+-- CHANGED BY: Rui Marante
+-- CHANGED DATE: 2009-07-03
+-- CHANGING REASON: ALERT-31058
+
+alter table drug_req_det
+add (
+	qty_to_prep number(6),
+	id_unit_measure_prep number(24)
+);
+
+comment on column drug_req_det.qty_to_prep is
+	'quantity to prepare (can be diferent from the ordered quantiry)';
+
+comment on column drug_req_det.id_unit_measure_prep is
+	'unit measure of the quantity to prepare';
+
+-- CHANGE END: Rui Marante
+
+-- CHANGED BY: Rui Marante
+-- CHANGED DATE: 2009-07-03
+-- CHANGING REASON: ALERT-31058
+
+alter table drug_req_det
+add req_to_be_delivered_at_home varchar2(1) default 'N' not null;
+
+comment on column drug_req_det.req_to_be_delivered_at_home is
+	'Y - Medication to be delivered at patient home';
+
+-- CHANGE END: Rui Marante
+
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 2009-JUL-10
+-- CHANGE REASON: ALERT-35531
+
+alter table DRUG_REQ_DET modify ID_DRUG VARCHAR2(255);
+
+-- CHANGED END
+
+-- CHANGED BY: Rui Marante
+-- CHANGE DATE: 2009-JUL-31
+-- CHANGE REASON: ALERT-32919
+alter table DRUG_REQ_DET
+drop constraint DRD_HOME_CHK;
+  
+alter table DRUG_REQ_DET
+add constraint DRD_HOME_CHK
+check (req_to_be_delivered_at_home in ('Y','N','-'));
+-- CHANGED END
+
+
+alter table drug_req_det
+add dt_next_dispense timestamp with local time zone;
+
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 20/04/2010 15:52
+-- CHANGE REASON: [ALERT-90671] 
+alter table drug_req_det drop column id_prescription_instruction;
+alter table drug_req_det add id_presc_directions number(24);
+comment on column drug_req_det.id_presc_directions is 'Prescription Directions ID';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 20/04/2010 16:59
+-- CHANGE REASON: [ALERT-90671] 
+alter table drug_req_det add id_presc_directions number(24);
+comment on column drug_req_det.id_presc_directions is 'Prescription Directions ID';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 20/04/2010 17:08
+-- CHANGE REASON: [ALERT-89691] 
+alter table drug_req_det add id_presc_directions number(24);
+comment on column drug_req_det.id_presc_directions is 'Prescription Directions ID';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 31/05/2010 10:59
+-- CHANGE REASON: [ALERT-101366] 
+alter table drug_req_det
+add (GENERICO VARCHAR2(1 CHAR));
+
+comment on column drug_req_det.GENERICO
+  is 'Autorização de genérico.';
+comment on column drug_req_det.FIRST_DOSE
+  is 'Is first dose ? (Y)es | (N)o';
+-- CHANGE END: Pedro Albuquerque
+
+
+-- CHANGED BY: Rui Marante
+-- CHANGE DATE: 21/05/2010
+-- CHANGE REASON: [ALERT-101477] 
+declare
+	e_column_already_there EXCEPTION;
+	PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+begin
+	execute immediate 'alter table drug_req_det add flg_uni_out_off_car varchar2(1 char) default ''N'' not null';
+exception
+when e_column_already_there then
+	dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+end;
+/
+
+comment on column drug_req_det.flg_uni_out_off_car is
+	'Y - unidose order but transported as a "normal" order.';
+
+begin
+	execute immediate 'alter table drug_req_det add constraint drd_flg_unioutofcar_chk check (flg_uni_out_off_car in (''Y'',''N''))';
+exception
+when others then
+	dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+end;
+/  
+-- CHANGE END: Rui Marante
+
+-- CHANGED BY: Rui Marante
+-- CHANGE DATE: 21/05/2010
+-- CHANGE REASON: [ALERT-101477] 
+declare
+	e_column_already_there EXCEPTION;
+	PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+begin
+	execute immediate 'alter table drug_req_det add flg_uni_out_off_car varchar2(1 char) default ''N'' not null';
+exception
+when e_column_already_there then
+	dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+end;
+/
+
+comment on column drug_req_det.flg_uni_out_off_car is
+	'Y - unidose order but transported as a "normal" order.';
+
+begin
+	execute immediate 'alter table drug_req_det add constraint drd_flg_unioutofcar_chk check (flg_uni_out_off_car in (''Y'',''N''))';
+exception
+when others then
+	dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+end;
+/  
+-- CHANGE END: Rui Marante
+
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 20/05/2011 11:45
+-- CHANGE REASON: [ALERT-180704] CDR: create concepts and conditions for dietaries, compound medications and other products
+-- Add/modify columns 
+alter table DRUG_REQ_DET add ID_CDR_CALL number(24);
+-- CHANGE END:  Pedro Morais
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:36
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_REQ_DET IS 'Medicamentos requisitados [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

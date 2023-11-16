@@ -1,0 +1,52 @@
+create table SUMMARY_PAGE
+(
+  ID_SUMMARY_PAGE NUMBER(24) not null,
+  INTERNAL_NAME     VARCHAR2(200) not null,
+  CODE_SUMMARY_PAGE  VARCHAR2(200) not null,
+  ADW_LAST_UPDATE DATE not null
+);
+
+
+
+COMMENT ON COLUMN summary_page.id_summary_page IS 'Chave primária' ;
+COMMENT ON COLUMN summary_page.internal_name IS 'Nome interno' ;
+COMMENT ON COLUMN summary_page.code_summary_page IS 'Suporte para descrição multi-língua de summary page' ;
+COMMENT ON COLUMN summary_page.adw_last_update IS 'Data da última alteração' ;
+
+alter table summary_page add     flg_access        varchar2(1) default 'Y';
+
+COMMENT ON COLUMN summary_page.flg_access IS 'Y - A summary page tem secções diferentes por perfil com diferentes níveis de acesso (só leitura / leitura e ecrita). N - A summary page tem as mesmas secções para qualquer perfil com acessos de leitura e escrita.' ;
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 10:59
+-- CHANGE REASON: [ALERT-317912] 
+comment on table SUMMARY_PAGE
+  is 'Summary page catalogue';
+-- Add comments to the columns 
+comment on column SUMMARY_PAGE.id_summary_page
+  is 'Summary page ID';
+comment on column SUMMARY_PAGE.internal_name
+  is 'Internal description';
+comment on column SUMMARY_PAGE.code_summary_page
+  is 'Translation code';
+comment on column SUMMARY_PAGE.adw_last_update
+  is 'Update date';
+comment on column SUMMARY_PAGE.flg_access
+  is 'Flag that indicates if the summary page has different sections per profile (Y/N)';
+comment on column SUMMARY_PAGE.create_user
+  is 'Creation User';
+comment on column SUMMARY_PAGE.create_time
+  is 'Creation Time';
+comment on column SUMMARY_PAGE.create_institution
+  is 'Creation Institution';
+comment on column SUMMARY_PAGE.update_user
+  is 'Update User';
+comment on column SUMMARY_PAGE.update_time
+  is 'Update Time';
+comment on column SUMMARY_PAGE.update_institution
+  is 'Update Institution';
+  
+  
+  
+-- CHANGE END: Ana Matos

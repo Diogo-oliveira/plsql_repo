@@ -1,0 +1,72 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 04/05/2012 16:36
+-- CHANGE REASON: [ALERT-229222] VERSIONING TRANSACTIONAL MODEL - SCHEMA ALERT - DDL
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -00955);
+BEGIN
+    --i_flg_category
+    --DSV:Dados Desenvolvimento, PRM:Parametrizações, CNT:conteúdos, TRS:Transacionais
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'EPIS_DIAG_STAG_PFACT',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'TRS',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+
+    BEGIN
+        EXECUTE IMMEDIATE '
+CREATE TABLE EPIS_DIAG_STAG_PFACT
+(
+ID_EPIS_DIAGNOSIS         NUMBER(24) NOT NULL, 
+NUM_STAGING_BASIS         NUMBER(24) NOT NULL, 
+ID_FIELD                  NUMBER(24) NOT NULL, 
+ID_FIELD_INST_OWNER       NUMBER(24) NOT NULL, 
+FIELD_RANK                NUMBER(24) NOT NULL,
+ID_VALUE                  NUMBER(24), 
+ID_VALUE_INST_OWNER       NUMBER(24), 
+DESC_VALUE                VARCHAR2(1000 CHAR), 
+  CREATE_USER VARCHAR2(24 CHAR),
+  CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER VARCHAR2(24 CHAR),
+  UPDATE_TIME TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+) TABLESPACE ALERT_DATA';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    EXECUTE IMMEDIATE 'COMMENT ON TABLE EPIS_DIAG_STAG_PFACT IS ''Cancer diagnosis tumors list''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAG_STAG_PFACT.ID_EPIS_DIAGNOSIS IS ''Episode diagnosis id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAG_STAG_PFACT.NUM_STAGING_BASIS IS ''Staging basis number''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAG_STAG_PFACT.ID_FIELD IS ''Field id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAG_STAG_PFACT.ID_FIELD_INST_OWNER IS ''Field content owner. Default 0 - ALERT''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAG_STAG_PFACT.FIELD_RANK IS ''Field rank''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAG_STAG_PFACT.ID_VALUE IS ''Value id''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAG_STAG_PFACT.ID_VALUE_INST_OWNER IS ''Value content owner. Default 0 - ALERT''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAG_STAG_PFACT.DESC_VALUE IS ''Free text values''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAG_STAG_PFACT.CREATE_USER is ''Professional ID which created the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAG_STAG_PFACT.CREATE_TIME is ''Date of record creation''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAG_STAG_PFACT.CREATE_INSTITUTION is ''Institution ID where record was created''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAG_STAG_PFACT.UPDATE_USER is ''Professional ID who last updated the record''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAG_STAG_PFACT.UPDATE_TIME is ''Date when record was last updated''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN EPIS_DIAG_STAG_PFACT.UPDATE_INSTITUTION is ''Institution ID where record was last updated''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column EPIS_DIAG_STAG_PFACT.id_staging_basis
+  is 'Staging basis id';
+comment on column EPIS_DIAG_STAG_PFACT.id_sbasis_inst_owner
+  is 'Staging basis content owner. Default 0 - ALERT';  
+  
+-- CHANGE END: Elisabete Bugalho

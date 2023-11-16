@@ -1,0 +1,650 @@
+
+
+  CREATE TABLE "ALERT"."LAB_TESTS_EA"
+   (	"ID_ANALYSIS_REQ" NUMBER(24,0),
+	"ID_ANALYSIS_REQ_DET" NUMBER(24,0),
+	"ID_ANALYSIS_RESULT" NUMBER(24,0),
+	"ID_ANALYSIS" NUMBER(24,0),
+	"DT_REQ" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_TARGET" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_PEND_REQ" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"DT_HARVEST" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"STATUS_STR" VARCHAR2(4000),
+	"STATUS_MSG" VARCHAR2(4000),
+	"STATUS_ICON" VARCHAR2(4000),
+	"STATUS_FLG" VARCHAR2(4000),
+	"FLG_STATUS_REQ" VARCHAR2(1),
+	"FLG_STATUS_DET" VARCHAR2(1),
+	"FLG_STATUS_HARVEST" VARCHAR2(1),
+	"FLG_NOTES" VARCHAR2(1),
+	"FLG_TIME_HARVEST" VARCHAR2(1),
+	"ID_ROOM_REQ" NUMBER(24,0),
+	"FLG_COL_INST" VARCHAR2(1),
+	"ID_PROF_ORDER" NUMBER(24,0),
+	"DT_ORDER" TIMESTAMP (6) WITH LOCAL TIME ZONE,
+	"ID_ORDER_TYPE" NUMBER(12,0),
+	"FLG_ABNORMALITY" VARCHAR2(1),
+	"ID_PATIENT" NUMBER(24,0),
+	"ID_EPISODE" NUMBER(24,0),
+	"ID_VISIT" NUMBER(24,0),
+	"ID_PREV_EPISODE" NUMBER(24,0),
+	"ID_INSTITUTION" NUMBER(24,0)
+   ) ;
+
+
+-- Para adicionar colunas pode ser usado código comentado
+-- De momento só são suportados os tipos de dados mais comuns.
+-- ALTER TABLE LAB_TESTS_EA ADD ID_ANALYSIS_REQ NUMBER(24,0) NOT NULL;
+-- ALTER TABLE LAB_TESTS_EA ADD ID_ANALYSIS_REQ_DET NUMBER(24,0) NOT NULL;
+-- ALTER TABLE LAB_TESTS_EA ADD ID_ANALYSIS_RESULT NUMBER(24,0) ;
+-- ALTER TABLE LAB_TESTS_EA ADD ID_ANALYSIS NUMBER(24,0) NOT NULL;
+-- ALTER TABLE LAB_TESTS_EA ADD DT_REQ TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL;
+-- ALTER TABLE LAB_TESTS_EA ADD DT_TARGET TIMESTAMP(6) WITH LOCAL TIME ZONE ;
+-- ALTER TABLE LAB_TESTS_EA ADD DT_PEND_REQ TIMESTAMP(6) WITH LOCAL TIME ZONE ;
+-- ALTER TABLE LAB_TESTS_EA ADD DT_HARVEST TIMESTAMP(6) WITH LOCAL TIME ZONE ;
+-- ALTER TABLE LAB_TESTS_EA ADD STATUS_STR VARCHAR2(4000) ;
+-- ALTER TABLE LAB_TESTS_EA ADD STATUS_MSG VARCHAR2(4000) ;
+-- ALTER TABLE LAB_TESTS_EA ADD STATUS_ICON VARCHAR2(4000) ;
+-- ALTER TABLE LAB_TESTS_EA ADD STATUS_FLG VARCHAR2(4000) ;
+-- ALTER TABLE LAB_TESTS_EA ADD FLG_STATUS_REQ VARCHAR2(1) NOT NULL;
+-- ALTER TABLE LAB_TESTS_EA ADD FLG_STATUS_DET VARCHAR2(1) NOT NULL;
+-- ALTER TABLE LAB_TESTS_EA ADD FLG_STATUS_HARVEST VARCHAR2(1) ;
+-- ALTER TABLE LAB_TESTS_EA ADD FLG_NOTES VARCHAR2(1) NOT NULL;
+-- ALTER TABLE LAB_TESTS_EA ADD FLG_TIME_HARVEST VARCHAR2(1) NOT NULL;
+-- ALTER TABLE LAB_TESTS_EA ADD ID_ROOM_REQ NUMBER(24,0) ;
+-- ALTER TABLE LAB_TESTS_EA ADD FLG_COL_INST VARCHAR2(1) NOT NULL;
+-- ALTER TABLE LAB_TESTS_EA ADD ID_PROF_ORDER NUMBER(24,0) ;
+-- ALTER TABLE LAB_TESTS_EA ADD DT_ORDER TIMESTAMP(6) WITH LOCAL TIME ZONE ;
+-- ALTER TABLE LAB_TESTS_EA ADD ID_ORDER_TYPE NUMBER(12,0) ;
+-- ALTER TABLE LAB_TESTS_EA ADD FLG_ABNORMALITY VARCHAR2(1) ;
+-- ALTER TABLE LAB_TESTS_EA ADD ID_PATIENT NUMBER(24,0) NOT NULL;
+-- ALTER TABLE LAB_TESTS_EA ADD ID_EPISODE NUMBER(24,0) NOT NULL;
+-- ALTER TABLE LAB_TESTS_EA ADD ID_VISIT NUMBER(24,0) NOT NULL;
+-- ALTER TABLE LAB_TESTS_EA ADD ID_PREV_EPISODE NUMBER(24,0) ;
+-- ALTER TABLE LAB_TESTS_EA ADD ID_INSTITUTION NUMBER(24,0) NOT NULL;
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."ID_ANALYSIS_REQ" IS 'Request ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."ID_ANALYSIS_REQ_DET" IS 'Request''s detail ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."ID_ANALYSIS_RESULT" IS 'Result ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."ID_ANALYSIS" IS 'Lab test ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."DT_REQ" IS 'Request''s registry date';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."DT_TARGET" IS 'Begin date';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."DT_PEND_REQ" IS 'Change from pending to requested status date';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."DT_HARVEST" IS 'Harvest date';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."STATUS_STR" IS 'Request''s status (in a specific format)';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."STATUS_MSG" IS 'Request''s status message code';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."STATUS_ICON" IS 'Request''s status icon';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."STATUS_FLG" IS 'Request''s status flag (used to return the icon)';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."FLG_STATUS_REQ" IS 'Request''s status';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."FLG_STATUS_DET" IS 'Request''s detail status';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."FLG_STATUS_HARVEST" IS 'Harvest''s status';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."FLG_NOTES" IS 'Indication of whether there''re notes (Y) or not (N). Notes: registry notes, cancellation notes, notes for the lab technician or justification notes.';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."FLG_TIME_HARVEST" IS 'Execution type: in this (E)pisode, (B)etween episodes, (N)ext episode';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."ID_ROOM_REQ" IS 'Execution place ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."FLG_COL_INST" IS 'Indication of whether the lab test was harvested in the institution (Y) or not (N)';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."ID_PROF_ORDER" IS 'Request''s professional ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."DT_ORDER" IS 'Request''s date';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."ID_ORDER_TYPE" IS 'Request''s type';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."FLG_ABNORMALITY" IS 'Indication of whether the lab test has an abnormal result (Y) or not (N)';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."ID_PATIENT" IS 'Patient ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."ID_EPISODE" IS 'Episode ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."ID_VISIT" IS 'Visit ID';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."ID_PREV_EPISODE" IS 'Filled when the lab test was requested on an environment, the patient is discharged to another environment and the request is ended in this second environment. This column contains the episode ID created on this second environment';
+
+
+
+   COMMENT ON COLUMN "ALERT"."LAB_TESTS_EA"."ID_INSTITUTION" IS 'Institution ID where the request was created';
+
+
+
+   COMMENT ON TABLE "ALERT"."LAB_TESTS_EA"  IS 'This table contains all the necessary information for lab test request listings (doctor, nurse and lab technician), summary page and viewer workflow';
+
+
+-- INPATIENT LMAIA 10-10-2008
+alter table lab_tests_ea add (id_prof_writes NUMBER(24), dt_analysis_result TIMESTAMP);
+alter table lab_tests_ea add (id_movement NUMBER(24));
+alter table lab_tests_ea add (flg_referral VARCHAR2(1));
+alter table lab_tests_ea add (flg_orig_analysis VARCHAR2(1));
+alter table lab_tests_ea add (id_sample_type NUMBER(24));
+
+COMMENT ON column lab_tests_ea.id_prof_writes IS 'Request creation professional ID';
+COMMENT ON column lab_tests_ea.dt_analysis_result IS 'Analysis result date';
+COMMENT ON column lab_tests_ea.id_movement IS 'Movement ID';
+COMMENT ON column lab_tests_ea.flg_referral IS 'Flag that shows if requisiton was added to referral. Options are (A)vailable, (R)eserved or (S)ent.';
+COMMENT ON column lab_tests_ea.flg_orig_analysis IS 'Indicates results origin: O - observações periódicas; S - análises seriadas; M - saúde materna; X - outro';
+COMMENT ON column lab_tests_ea.id_sample_type IS 'Sample Type ID';
+-- END
+
+
+-- INPATIENT LMAIA 10-10-2008
+alter table lab_tests_ea add (DT_DG_LAST_UPDATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+COMMENT ON column lab_tests_ea.dt_dg_last_update IS 'Date of the last update';
+-- END
+
+
+-- INPATIENT LMAIA 10-10-2008
+alter table lab_tests_ea modify id_prof_writes not null;
+-- END
+
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 2010-05-10
+-- CHANGE REASON: ALERT-812
+
+ALTER TABLE LAB_TESTS_EA MODIFY (ID_EPISODE NULL);
+ALTER TABLE LAB_TESTS_EA MODIFY (ID_VISIT NULL);
+
+-- CHANGE END: Ana Matos
+
+
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 07/07/2010 15:50
+-- CHANGE REASON: [ALERT-110074] Order sets - TDE
+ALTER TABLE LAB_TESTS_EA ADD (
+    ID_TASK_DEPENDENCY NUMBER(24),
+    FLG_REQ_ORIGIN_MODULE VARCHAR2(1 CHAR));
+    
+COMMENT ON COLUMN LAB_TESTS_EA.ID_TASK_DEPENDENCY IS 'Task dependency identifier';
+COMMENT ON COLUMN LAB_TESTS_EA.FLG_REQ_ORIGIN_MODULE IS 'Request created by : D - Default, O - Order Sets, I - Interfaces';
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/02/2011 09:01
+-- CHANGE REASON: [ALERT-158503] 
+alter table lab_tests_ea add (id_episode_origin number(24));
+alter table lab_tests_ea add (id_episode_destination number(24));
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 16/02/2011 12:25
+-- CHANGE REASON: [ALERT-41171] 
+  CREATE TABLE LAB_TESTS_EA
+   (ID_ANALYSIS_REQ NUMBER(24,0),
+ID_ANALYSIS_REQ_DET NUMBER(24,0),
+ID_ANALYSIS_RESULT NUMBER(24,0),
+ID_ANALYSIS NUMBER(24,0),
+DT_REQ TIMESTAMP (6) WITH LOCAL TIME ZONE,
+DT_TARGET TIMESTAMP (6) WITH LOCAL TIME ZONE,
+DT_PEND_REQ TIMESTAMP (6) WITH LOCAL TIME ZONE,
+DT_HARVEST TIMESTAMP (6) WITH LOCAL TIME ZONE,
+DT_ANALYSIS_RESULT TIMESTAMP (6) WITH LOCAL TIME ZONE,
+STATUS_STR VARCHAR2(4000),
+STATUS_MSG VARCHAR2(4000),
+STATUS_ICON VARCHAR2(4000),
+STATUS_FLG VARCHAR2(4000),
+STATUS_FLG_HARVEST VARCHAR2(4000),
+STATUS_STR_HARVEST VARCHAR2(4000),
+STATUS_MSG_HARVEST VARCHAR2(4000),
+STATUS_ICON_HARVEST VARCHAR2(4000),
+ID_SAMPLE_TYPE NUMBER(24,0),
+ID_EXAM_CAT NUMBER(24,0),
+FLG_NOTES VARCHAR2(1),
+FLG_TIME_HARVEST VARCHAR2(1),
+FLG_STATUS_REQ VARCHAR2(1),
+FLG_STATUS_DET VARCHAR2(1),
+FLG_STATUS_HARVEST VARCHAR2(1),
+FLG_STATUS_RESULT VARCHAR2(1),
+FLG_PRIORITY VARCHAR2(1),
+FLG_COL_INST VARCHAR2(1),
+FLG_REFERRAL VARCHAR2(1),
+ID_PROF_WRITES NUMBER(24,0),
+ID_PROF_ORDER NUMBER(24,0),
+DT_ORDER TIMESTAMP (6) WITH LOCAL TIME ZONE,
+ID_ORDER_TYPE NUMBER(12,0),
+FLG_ABNORMALITY VARCHAR2(1),
+ID_ROOM_REQ NUMBER(24,0),
+ID_INSTITUTION NUMBER(24,0),
+ID_MOVEMENT NUMBER(24,0),
+ID_TASK_DEPENDENCY NUMBER(24,0),
+FLG_REQ_ORIGIN_MODULE VARCHAR2(1),
+FLG_ORIG_ANALYSIS VARCHAR2(1),
+ID_PATIENT NUMBER(24,0),
+ID_VISIT NUMBER(24,0),
+ID_EPISODE NUMBER(24,0),
+ID_EPISODE_ORIGIN NUMBER(24,0),
+ID_EPISODE_DESTINATION NUMBER(24,0),
+ID_PREV_EPISODE NUMBER(24,0),
+DT_DG_LAST_UPDATE TIMESTAMP (6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+CREATE_USER VARCHAR2(24),
+CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION NUMBER(24,0),
+UPDATE_USER VARCHAR2(24),
+UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION NUMBER(24,0)
+   ) ;
+
+
+   COMMENT ON COLUMN ID_ANALYSIS_REQ IS 'Request ID';
+   COMMENT ON COLUMN ID_ANALYSIS_REQ_DET IS 'Request''s detail ID';
+   COMMENT ON COLUMN ID_ANALYSIS_RESULT IS 'Result ID';
+   COMMENT ON COLUMN ID_ANALYSIS IS 'Lab test ID';
+   COMMENT ON COLUMN DT_REQ IS 'Request''s registry date';
+   COMMENT ON COLUMN DT_TARGET IS 'Begin date';
+   COMMENT ON COLUMN DT_PEND_REQ IS 'Change from pending to requested status date';
+   COMMENT ON COLUMN DT_HARVEST IS 'Harvest date';
+   COMMENT ON COLUMN DT_ANALYSIS_RESULT IS 'Analysis result date';
+   COMMENT ON COLUMN STATUS_STR IS 'Request''s status (in a specific format)';
+   COMMENT ON COLUMN STATUS_MSG IS 'Request''s status message code';
+   COMMENT ON COLUMN STATUS_ICON IS 'Request''s status icon';
+   COMMENT ON COLUMN STATUS_FLG IS 'Request''s status flag (used to return the icon)';
+   COMMENT ON COLUMN STATUS_STR_HARVEST IS 'Harvest''s status (in a specific format)';
+   COMMENT ON COLUMN STATUS_MSG_HARVEST IS 'Harvest''s status message code';
+   COMMENT ON COLUMN STATUS_ICON_HARVEST IS 'Harvest''s status icon';
+   COMMENT ON COLUMN STATUS_FLG_HARVEST IS 'Harvest''s status flag (used to return the icon)';
+   COMMENT ON COLUMN ID_SAMPLE_TYPE IS 'Sample Type ID';
+   COMMENT ON COLUMN ID_EXAM_CAT IS 'Lab test''s category ID';
+   COMMENT ON COLUMN FLG_NOTES IS 'Indication of whether there''re notes (Y) or not (N). Notes: registry notes, cancellation notes, notes for the lab technician or justification notes.';
+   COMMENT ON COLUMN FLG_TIME_HARVEST IS 'Execution type: in this (E)pisode, (B)etween episodes, (N)ext episode';
+   COMMENT ON COLUMN FLG_STATUS_REQ IS 'Request''s status';
+   COMMENT ON COLUMN FLG_STATUS_DET IS 'Request''s detail status';
+   COMMENT ON COLUMN FLG_STATUS_HARVEST IS 'Harvest''s status';
+   COMMENT ON COLUMN FLG_STATUS_RESULT IS 'Result''s status';
+   COMMENT ON COLUMN FLG_PRIORITY IS 'Indication of the request''s priority';
+   COMMENT ON COLUMN FLG_COL_INST IS 'Indication of whether the lab test was harvested in the institution (Y) or not (N)';
+   COMMENT ON COLUMN FLG_REFERRAL IS 'Flag that shows if requisiton was added to referral. Options are (A)vailable, (R)eserved or (S)ent.';
+   COMMENT ON COLUMN ID_PROF_WRITES IS 'Request creation professional ID';
+   COMMENT ON COLUMN ID_PROF_ORDER IS 'Request''s professional ID';
+   COMMENT ON COLUMN DT_ORDER IS 'Request''s date';
+   COMMENT ON COLUMN ID_ORDER_TYPE IS 'Request''s type';
+   COMMENT ON COLUMN FLG_ABNORMALITY IS 'Indication of whether the lab test has an abnormal result (Y) or not (N)';
+   COMMENT ON COLUMN ID_ROOM_REQ IS 'Execution place ID';
+   COMMENT ON COLUMN ID_INSTITUTION IS 'Institution ID where the request was created';
+   COMMENT ON COLUMN ID_MOVEMENT IS 'Movement ID';
+   COMMENT ON COLUMN ID_TASK_DEPENDENCY IS 'Task dependency identifier TDE_TASK_DEPENDENCY';
+   COMMENT ON COLUMN FLG_REQ_ORIGIN_MODULE IS 'Request created by: D - Default, O - Order Sets, I - Interfaces; S - Scheduler;  R - Referral';
+   COMMENT ON COLUMN FLG_ORIG_ANALYSIS IS 'Indicates results origin: O - observações periódicas; S - análises seriadas; M - saúde materna; X - outro';
+   COMMENT ON COLUMN ID_PATIENT IS 'Patient ID';
+   COMMENT ON COLUMN ID_VISIT IS 'Visit ID';
+   COMMENT ON COLUMN ID_EPISODE IS 'Episode ID';
+   COMMENT ON COLUMN ID_EPISODE_ORIGIN IS 'When the patient has an episode with an exam request with FLG_TIME = ''N'', then the patient comes to another appointment and that request is duplicated to this new episode. In this new request, this column is filled with the episode ID of the first request';
+   COMMENT ON COLUMN ID_EPISODE_DESTINATION IS 'Episode destination ID';
+   COMMENT ON COLUMN ID_PREV_EPISODE IS 'Filled when the exam was requested on an evironment, the patient is discharged to another environment and the request is ended in this second environment. This column contains the episode ID created on this second environment';
+   COMMENT ON COLUMN DT_DG_LAST_UPDATE IS 'Date of the last update';
+   COMMENT ON COLUMN CREATE_USER IS 'Creation user';
+   COMMENT ON COLUMN CREATE_TIME IS 'Creation time';
+   COMMENT ON COLUMN CREATE_INSTITUTION IS 'Creation institution';
+   COMMENT ON COLUMN UPDATE_USER IS 'Update user';
+   COMMENT ON COLUMN UPDATE_TIME IS 'Update time';
+   COMMENT ON COLUMN UPDATE_INSTITUTION IS 'Update institution';
+   COMMENT ON TABLE LAB_TESTS_EA  IS 'This table contains all the necessary information for lab test request listings (doctor, nurse and lab technician), summary page and viewer workflow';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 17/02/2011 16:41
+-- CHANGE REASON: [ALERT-41171] 
+  CREATE TABLE LAB_TESTS_EA
+   (ID_ANALYSIS_REQ NUMBER(24,0),
+ID_ANALYSIS_REQ_DET NUMBER(24,0),
+ID_ANALYSIS_RESULT NUMBER(24,0),
+ID_ANALYSIS NUMBER(24,0),
+DT_REQ TIMESTAMP (6) WITH LOCAL TIME ZONE,
+DT_TARGET TIMESTAMP (6) WITH LOCAL TIME ZONE,
+DT_PEND_REQ TIMESTAMP (6) WITH LOCAL TIME ZONE,
+DT_HARVEST TIMESTAMP (6) WITH LOCAL TIME ZONE,
+DT_ANALYSIS_RESULT TIMESTAMP (6) WITH LOCAL TIME ZONE,
+STATUS_STR VARCHAR2(4000),
+STATUS_MSG VARCHAR2(4000),
+STATUS_ICON VARCHAR2(4000),
+STATUS_FLG VARCHAR2(4000),
+STATUS_FLG_HARVEST VARCHAR2(4000),
+STATUS_STR_HARVEST VARCHAR2(4000),
+STATUS_MSG_HARVEST VARCHAR2(4000),
+STATUS_ICON_HARVEST VARCHAR2(4000),
+ID_SAMPLE_TYPE NUMBER(24,0),
+ID_EXAM_CAT NUMBER(24,0),
+FLG_NOTES VARCHAR2(1),
+FLG_TIME_HARVEST VARCHAR2(1),
+FLG_STATUS_REQ VARCHAR2(1),
+FLG_STATUS_DET VARCHAR2(1),
+FLG_STATUS_HARVEST VARCHAR2(1),
+FLG_STATUS_RESULT VARCHAR2(1),
+FLG_PRIORITY VARCHAR2(1),
+FLG_COL_INST VARCHAR2(1),
+FLG_REFERRAL VARCHAR2(1),
+ID_PROF_WRITES NUMBER(24,0),
+ID_PROF_ORDER NUMBER(24,0),
+DT_ORDER TIMESTAMP (6) WITH LOCAL TIME ZONE,
+ID_ORDER_TYPE NUMBER(12,0),
+FLG_ABNORMALITY VARCHAR2(1),
+ID_ROOM_REQ NUMBER(24,0),
+ID_INSTITUTION NUMBER(24,0),
+ID_MOVEMENT NUMBER(24,0),
+ID_TASK_DEPENDENCY NUMBER(24,0),
+FLG_REQ_ORIGIN_MODULE VARCHAR2(1),
+FLG_ORIG_ANALYSIS VARCHAR2(1),
+ID_PATIENT NUMBER(24,0),
+ID_VISIT NUMBER(24,0),
+ID_EPISODE NUMBER(24,0),
+ID_EPISODE_ORIGIN NUMBER(24,0),
+ID_EPISODE_DESTINATION NUMBER(24,0),
+ID_PREV_EPISODE NUMBER(24,0),
+DT_DG_LAST_UPDATE TIMESTAMP (6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+CREATE_USER VARCHAR2(24),
+CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+CREATE_INSTITUTION NUMBER(24,0),
+UPDATE_USER VARCHAR2(24),
+UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+UPDATE_INSTITUTION NUMBER(24,0)
+   ) ;
+
+
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_ANALYSIS_REQ IS 'Request ID';
+   COMMENT ON COLUMN LAB_TESTS_EA.LAB_TESTS_EA.ID_ANALYSIS_REQ_DET IS 'Request''s detail ID';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_ANALYSIS_RESULT IS 'Result ID';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_ANALYSIS IS 'Lab test ID';
+   COMMENT ON COLUMN LAB_TESTS_EA.DT_REQ IS 'Request''s registry date';
+   COMMENT ON COLUMN LAB_TESTS_EA.DT_TARGET IS 'Begin date';
+   COMMENT ON COLUMN LAB_TESTS_EA.DT_PEND_REQ IS 'Change from pending to requested status date';
+   COMMENT ON COLUMN LAB_TESTS_EA.DT_HARVEST IS 'Harvest date';
+   COMMENT ON COLUMN LAB_TESTS_EA.DT_ANALYSIS_RESULT IS 'Analysis result date';
+   COMMENT ON COLUMN LAB_TESTS_EA.STATUS_STR IS 'Request''s status (in a specific format)';
+   COMMENT ON COLUMN LAB_TESTS_EA.STATUS_MSG IS 'Request''s status message code';
+   COMMENT ON COLUMN LAB_TESTS_EA.STATUS_ICON IS 'Request''s status icon';
+   COMMENT ON COLUMN LAB_TESTS_EA.STATUS_FLG IS 'Request''s status flag (used to return the icon)';
+   COMMENT ON COLUMN LAB_TESTS_EA.STATUS_STR_HARVEST IS 'Harvest''s status (in a specific format)';
+   COMMENT ON COLUMN LAB_TESTS_EA.STATUS_MSG_HARVEST IS 'Harvest''s status message code';
+   COMMENT ON COLUMN LAB_TESTS_EA.STATUS_ICON_HARVEST IS 'Harvest''s status icon';
+   COMMENT ON COLUMN LAB_TESTS_EA.STATUS_FLG_HARVEST IS 'Harvest''s status flag (used to return the icon)';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_SAMPLE_TYPE IS 'Sample Type ID';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_EXAM_CAT IS 'Lab test''s category ID';
+   COMMENT ON COLUMN LAB_TESTS_EA.FLG_NOTES IS 'Indication of whether there''re notes (Y) or not (N). Notes: registry notes, cancellation notes, notes for the lab technician or justification notes.';
+   COMMENT ON COLUMN LAB_TESTS_EA.FLG_TIME_HARVEST IS 'Execution type: in this (E)pisode, (B)etween episodes, (N)ext episode';
+   COMMENT ON COLUMN LAB_TESTS_EA.FLG_STATUS_REQ IS 'Request''s status';
+   COMMENT ON COLUMN LAB_TESTS_EA.FLG_STATUS_DET IS 'Request''s detail status';
+   COMMENT ON COLUMN LAB_TESTS_EA.FLG_STATUS_HARVEST IS 'Harvest''s status';
+   COMMENT ON COLUMN LAB_TESTS_EA.FLG_STATUS_RESULT IS 'Result''s status';
+   COMMENT ON COLUMN LAB_TESTS_EA.FLG_PRIORITY IS 'Indication of the request''s priority';
+   COMMENT ON COLUMN LAB_TESTS_EA.FLG_COL_INST IS 'Indication of whether the lab test was harvested in the institution (Y) or not (N)';
+   COMMENT ON COLUMN LAB_TESTS_EA.FLG_REFERRAL IS 'Flag that shows if requisiton was added to referral. Options are (A)vailable, (R)eserved or (S)ent.';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_PROF_WRITES IS 'Request creation professional ID';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_PROF_ORDER IS 'Request''s professional ID';
+   COMMENT ON COLUMN LAB_TESTS_EA.DT_ORDER IS 'Request''s date';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_ORDER_TYPE IS 'Request''s type';
+   COMMENT ON COLUMN LAB_TESTS_EA.FLG_ABNORMALITY IS 'Indication of whether the lab test has an abnormal result (Y) or not (N)';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_ROOM_REQ IS 'Execution place ID';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_INSTITUTION IS 'Institution ID where the request was created';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_MOVEMENT IS 'Movement ID';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_TASK_DEPENDENCY IS 'Task dependency identifier TDE_TASK_DEPENDENCY';
+   COMMENT ON COLUMN LAB_TESTS_EA.FLG_REQ_ORIGIN_MODULE IS 'Request created by: D - Default, O - Order Sets, I - Interfaces; S - Scheduler;  R - Referral';
+   COMMENT ON COLUMN LAB_TESTS_EA.FLG_ORIG_ANALYSIS IS 'Indicates results origin: O - observações periódicas; S - análises seriadas; M - saúde materna; X - outro';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_PATIENT IS 'Patient ID';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_VISIT IS 'Visit ID';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_EPISODE IS 'Episode ID';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_EPISODE_ORIGIN IS 'When the patient has an episode with an exam request with FLG_TIME = ''N'', then the patient comes to another appointment and that request is duplicated to this new episode. In this new request, this column is filled with the episode ID of the first request';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_EPISODE_DESTINATION IS 'Episode destination ID';
+   COMMENT ON COLUMN LAB_TESTS_EA.ID_PREV_EPISODE IS 'Filled when the exam was requested on an evironment, the patient is discharged to another environment and the request is ended in this second environment. This column contains the episode ID created on this second environment';
+   COMMENT ON COLUMN LAB_TESTS_EA.DT_DG_LAST_UPDATE IS 'Date of the last update';
+   COMMENT ON COLUMN LAB_TESTS_EA.CREATE_USER IS 'Creation user';
+   COMMENT ON COLUMN LAB_TESTS_EA.CREATE_TIME IS 'Creation time';
+   COMMENT ON COLUMN LAB_TESTS_EA.CREATE_INSTITUTION IS 'Creation institution';
+   COMMENT ON COLUMN LAB_TESTS_EA.UPDATE_USER IS 'Update user';
+   COMMENT ON COLUMN LAB_TESTS_EA.UPDATE_TIME IS 'Update time';
+   COMMENT ON COLUMN LAB_TESTS_EA.UPDATE_INSTITUTION IS 'Update institution';
+   COMMENT ON TABLE LAB_TESTS_EA  IS 'This table contains all the necessary information for lab test request listings (doctor, nurse and lab technician), summary page and viewer workflow';
+-- CHANGE END: Ana Matos
+-- CHANGED BY: Carlos Nogueira
+-- CHANGE DATE: 24/02/2011 14:41
+-- CHANGE REASON: [ALERT-842] 
+alter table lab_tests_ea drop column STATUS_STR_HARVEST; 
+alter table lab_tests_ea drop column STATUS_MSG_HARVEST;
+alter table lab_tests_ea drop column STATUS_ICON_HARVEST;
+alter table lab_tests_ea drop column STATUS_FLG_HARVEST;
+-- CHANGE END: Carlos Nogueira
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 27/04/2011 10:27
+-- CHANGE REASON: [ALERT-174844] 
+alter table lab_tests_ea modify (flg_status_req varchar2(2 char));
+alter table lab_tests_ea modify (flg_status_det varchar2(2 char));
+
+ALTER TABLE LAB_TESTS_EA ADD (ID_ANALYSIS_CODIFICATION NUMBER(24));
+
+COMMENT ON COLUMN LAB_TESTS_EA.ID_ANALYSIS_CODIFICATION IS 'Lab test codification ID';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 01/09/2011 17:25
+-- CHANGE REASON: [ALERT-193514] 
+ALTER TABLE LAB_TESTS_EA 
+ ADD (NOTES VARCHAR2(4000)
+ ,NOTES_TECHNICIAN VARCHAR2(4000)
+ ,NOTES_PATIENT CLOB
+ ,NOTES_CANCEL VARCHAR2(4000)
+ );
+
+COMMENT ON COLUMN LAB_TESTS_EA.ID_ANALYSIS_CODIFICATION IS 'Lab test codification ID';
+COMMENT ON COLUMN LAB_TESTS_EA.NOTES IS 'Lab tests'' notes';
+COMMENT ON COLUMN LAB_TESTS_EA.NOTES_TECHNICIAN IS 'Lab tests'' technician notes';
+COMMENT ON COLUMN LAB_TESTS_EA.NOTES_PATIENT IS 'Lab tests'' patient notes';
+COMMENT ON COLUMN LAB_TESTS_EA.NOTES_CANCEL IS 'Lab tests'' cancel notes';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 14/09/2012 14:47
+-- CHANGE REASON: [ALERT-240117] 
+ALTER TABLE LAB_TESTS_EA ADD (ID_EXEC_INSTITUTION NUMBER(24));
+
+COMMENT ON COLUMN LAB_TESTS_EA.ID_EXEC_INSTITUTION IS 'Instituion that executes the lab test';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/09/2013 12:15
+-- CHANGE REASON: [ ALERT-264901] 
+ALTER TABLE LAB_TESTS_EA 
+ ADD (STATUS_STR_REQ VARCHAR2(4000)
+ ,STATUS_MSG_REQ VARCHAR2(4000)
+ ,STATUS_ICON_REQ VARCHAR2(4000)
+ ,STATUS_FLG_REQ VARCHAR2(4000));
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 07/07/2014 10:50
+-- CHANGE REASON: [ALERT-289537 ] 
+DECLARE e_column_already_there EXCEPTION;
+e_invalid_identifier EXCEPTION;
+e_already_not_null EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+PRAGMA EXCEPTION_INIT(e_already_not_null, -01442);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA 
+ ADD (FLG_DOC VARCHAR2(1 CHAR) 
+ ,ID_ARD_PARENT NUMBER(24))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY CREATE_USER VARCHAR2(24 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY FLG_ABNORMALITY VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY FLG_COL_INST VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY FLG_DOC VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY FLG_NOTES VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY FLG_ORIG_ANALYSIS VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY FLG_PRIORITY VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY FLG_REFERRAL VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY FLG_REQ_ORIGIN_MODULE VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY FLG_STATUS_DET VARCHAR2(2 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY FLG_STATUS_HARVEST VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY FLG_STATUS_REQ VARCHAR2(2 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY FLG_STATUS_RESULT VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY FLG_TIME_HARVEST VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY NOTES VARCHAR2(1000 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY NOTES_CANCEL VARCHAR2(1000 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY NOTES_TECHNICIAN VARCHAR2(1000 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY STATUS_FLG VARCHAR2(100 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY STATUS_FLG_REQ VARCHAR2(100 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY STATUS_ICON VARCHAR2(100 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY STATUS_ICON_REQ VARCHAR2(100 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY STATUS_MSG VARCHAR2(100 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY STATUS_MSG_REQ VARCHAR2(100 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY STATUS_STR VARCHAR2(100 CHAR)';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    EXECUTE IMMEDIATE 'ALTER TABLE LAB_TESTS_EA MODIFY STATUS_STR_REQ VARCHAR2(100 CHAR)';
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN LAB_TESTS_EA.ID_ARD_PARENT IS ''Lab tests order detail parent ID''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN LAB_TESTS_EA.FLG_DOC IS ''Indication of wether there are documents (Y) or not (N)''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 09/03/2015 11:22
+-- CHANGE REASON: [ALERT-308718] 
+begin
+pk_versioning.run('ALTER TABLE LAB_TESTS_EA ADD (NOTES_SCHEDULER VARCHAR2(1000 CHAR))');
+end;
+/
+COMMENT ON COLUMN LAB_TESTS_EA.NOTES IS 'Gerneral notes';
+COMMENT ON COLUMN LAB_TESTS_EA.NOTES_SCHEDULER IS 'Scheduling notes';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:01
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE LAB_TESTS_EA IS 'Lab tests'' easy access';
+
+COMMENT ON COLUMN LAB_TESTS_EA.ID_ANALYSIS_REQ IS 'Order''s ID';
+COMMENT ON COLUMN LAB_TESTS_EA.ID_ANALYSIS_REQ_DET IS 'Lab test''s order detail ID';
+COMMENT ON COLUMN LAB_TESTS_EA.ID_ANALYSIS_RESULT IS 'Lab test result ID';
+COMMENT ON COLUMN LAB_TESTS_EA.ID_EXEC_INSTITUTION IS 'Institution that executes the lab test';
+COMMENT ON COLUMN LAB_TESTS_EA.FLG_ABNORMALITY IS 'Indication of whether the lab test has an abnormal result or not (Y/N)';
+COMMENT ON COLUMN LAB_TESTS_EA.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN LAB_TESTS_EA.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN LAB_TESTS_EA.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN LAB_TESTS_EA.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN LAB_TESTS_EA.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN LAB_TESTS_EA.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN LAB_TESTS_EA.STATUS_STR_REQ IS 'Request''s status (in specific format)';
+COMMENT ON COLUMN LAB_TESTS_EA.STATUS_MSG_REQ IS 'Request''s status message code';
+COMMENT ON COLUMN LAB_TESTS_EA.STATUS_ICON_REQ IS 'Request''s status icon';
+COMMENT ON COLUMN LAB_TESTS_EA.STATUS_FLG_REQ IS 'Request''s status flag (used to return the icon)';
+COMMENT ON COLUMN LAB_TESTS_EA.STATUS_STR IS 'Request''s status (in specific format)';
+COMMENT ON COLUMN LAB_TESTS_EA.STATUS_MSG IS 'Request''s status message code';
+COMMENT ON COLUMN LAB_TESTS_EA.STATUS_ICON IS 'Request''s status icon';
+COMMENT ON COLUMN LAB_TESTS_EA.STATUS_FLG IS 'Request''s status flag (used to return the icon)';
+COMMENT ON COLUMN LAB_TESTS_EA.DT_ANALYSIS_RESULT IS 'Lab test result date';
+COMMENT ON COLUMN LAB_TESTS_EA.FLG_ORIG_ANALYSIS IS 'Functionality result origin:  S - Lab tests'' history, M - Woman health, O - Flowsheets';
+COMMENT ON COLUMN LAB_TESTS_EA.ID_TASK_DEPENDENCY IS 'Task dependency ID';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/04/2017 11:33
+-- CHANGE REASON: [ALERT-329997] 
+ALTER TABLE LAB_TESTS_EA ADD (FLG_RELEVANT VARCHAR (1 CHAR));
+COMMENT ON COLUMN LAB_TESTS_EA.FLG_RELEVANT IS 'Indication of the result''s relevance';
+COMMENT ON COLUMN LAB_TESTS_EA.ID_PREV_EPISODE IS 'Filled when the lab test was requested on an environment, the patient is discharged to another environment and the request is ended in this second environment. This column contains the episode ID created on this second environment';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:32
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.lab_tests_ea move lob(notes_patient) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 24/02/2021 14:38
+-- CHANGE REASON: [EMR-42343] - Change the descriptions of the "Start date" and "Date to be defined" fields.
+comment on column LAB_TESTS_EA.FLG_TIME_HARVEST is 'To be performed: E - this episode; B - before next episode; N - next episode; D - On a defined or to be defined date';
+-- CHANGE END: Diogo Oliveira

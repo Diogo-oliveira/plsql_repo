@@ -1,0 +1,177 @@
+
+
+  CREATE TABLE ICNP_COMPOSITION
+   (	ID_COMPOSITION NUMBER(12,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_NURSE_TEA VARCHAR2(1) NOT NULL ENABLE,
+	FLG_REPEAT VARCHAR2(1) NOT NULL ENABLE,
+	FLG_GENDER VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	CODE_ICNP_COMPOSITION VARCHAR2(4000) NOT NULL ENABLE,
+	ID_VS VARCHAR2(8)
+   );
+
+
+COMMENT ON TABLE icnp_composition IS 'Composition of nursering terms. It can be diagnoses or nursing actions. Some of them can have special caracteristics like being nursing teachings, ciclic actions.' ;
+
+COMMENT ON COLUMN icnp_composition.id_composition IS 'Composition identifier' ;
+COMMENT ON COLUMN icnp_composition.flg_type IS 'Composition type, (D)iagnosis or (A)ction' ;
+COMMENT ON COLUMN icnp_composition.flg_nurse_tea IS 'Nursing Teaching? (Y/N)' ;
+COMMENT ON COLUMN icnp_composition.flg_repeat IS 'Only affects action compositions. Defines if it can or not be used more than once in a single clinical intervention' ;
+COMMENT ON COLUMN icnp_composition.flg_gender IS '(M)ale, (F)emale, (B)oth, to whom composition applies' ;
+COMMENT ON COLUMN icnp_composition.flg_available IS 'Is the composition avaible? (Y/N)' ;
+COMMENT ON COLUMN icnp_composition.code_icnp_composition IS 'Deprecated. Translation code if not using PK_ICNP.DESC_COMPOSITION to do the translation.' ;
+
+ALTER TABLE ICNP_COMPOSITION
+ ADD (ID_DOC_TEMPLATE  NUMBER(24)
+ );
+
+COMMENT ON COLUMN ICNP_COMPOSITION.ID_DOC_TEMPLATE IS 'ID do template da documentation';
+
+ALTER TABLE ICNP_COMPOSITION
+ADD (FLG_TASK VARCHAR2(2));
+
+COMMENT ON COLUMN ICNP_COMPOSITION.FLG_TASK IS 'Flag que indica a que funcionalidade uma intervenção está ligada. SV - Sinais Vitais; B - Biometria; H - Registo Hídricos';
+
+
+ALTER TABLE ICNP_COMPOSITION 
+ ADD (FLG_SOLVED  VARCHAR2(1));
+
+COMMENT ON COLUMN ICNP_COMPOSITION.FLG_SOLVED IS 'Flag que indica se o diagnóstico é o esperado ou n. Y';
+
+
+
+ALTER TABLE ICNP_COMPOSITION ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN ICNP_COMPOSITION.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+
+
+-- CHANGED BY: Pedro Lopes
+-- CHANGE DATE: 2009-JUN-30
+-- CHANGE REASON: ALERT-913
+
+ALTER TABLE ICNP_COMPOSITION
+ ADD (ID_APPLICATION_AREA  NUMBER(24)
+ );
+
+COMMENT ON COLUMN ICNP_COMPOSITION.ID_APPLICATION_AREA   IS 'Application area ID (Area>Parameter)';
+
+ALTER TABLE icnp_composition MODIFY (id_composition number(24,0));
+
+ALTER TABLE icnp_composition MODIFY (id_doc_template number(24,0));
+
+--CHANGE END
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:25
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.ICNP_COMPOSITION MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 18/10/2010 16:40
+-- CHANGE REASON: [ALERT-132797] 
+begin
+  execute immediate 'alter table icnp_composition modify id_content varchar2(200 char) null';
+exception
+  when others then
+    null;
+end;
+/
+-- CHANGE END: João Martins
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 18/10/2010 16:40
+-- CHANGE REASON: [ALERT-129897] 
+begin
+  execute immediate 'alter table icnp_composition modify id_content null';
+exception
+  when others then
+    null;
+end;
+/
+-- CHANGE END: João Martins
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 22/05/2012 15:10
+-- CHANGE REASON: [ALERT-230953] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE icnp_composition ADD ( id_institution NUMBER(24), id_software NUMBER(24))';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('Column being added already exists in table');
+END;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 22/05/2012 15:10
+-- CHANGE REASON: [ALERT-230953] 
+comment on column icnp_composition.id_institution
+  is 'Institution ID';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 22/05/2012 15:10
+-- CHANGE REASON: [ALERT-230953] 
+comment on column icnp_composition.id_software
+  is 'Software ID';
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 10:39
+-- CHANGE REASON: [ALERT-317702] 
+comment on table ICNP_COMPOSITION
+  is 'Composition of nursering terms. It can be diagnoses or nursing actions';
+-- Add comments to the columns 
+comment on column ICNP_COMPOSITION.id_composition
+  is 'Composition ID';
+comment on column ICNP_COMPOSITION.flg_type
+  is 'Flag that indicates the composition type: D - Diagnosis, A - Action';
+comment on column ICNP_COMPOSITION.flg_nurse_tea
+  is 'Flag that indicates if it is related to patient education';
+comment on column ICNP_COMPOSITION.flg_repeat
+  is 'Only affects action compositions. Defines if it can or not be used more than once in a single clinical intervention';
+comment on column ICNP_COMPOSITION.flg_gender
+  is 'Gender';
+comment on column ICNP_COMPOSITION.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column ICNP_COMPOSITION.adw_last_update
+  is 'Update date';
+comment on column ICNP_COMPOSITION.code_icnp_composition
+  is 'Deprecated. Translation code if not using PK_ICNP.DESC_COMPOSITION to do the translation.';
+comment on column ICNP_COMPOSITION.id_vs
+  is 'Vital sign ID';
+comment on column ICNP_COMPOSITION.id_doc_template
+  is 'Documentation template ID';
+comment on column ICNP_COMPOSITION.flg_task
+  is 'Flag that indicates the related context: SV - vital signs, B - biometrics, H - hidrics';
+comment on column ICNP_COMPOSITION.flg_solved
+  is 'Flag that indicates if the diagnostic is the expected result';
+comment on column ICNP_COMPOSITION.id_content
+  is 'Content unique ID';
+comment on column ICNP_COMPOSITION.create_user
+  is 'Creation User';
+comment on column ICNP_COMPOSITION.create_time
+  is 'Creation Time';
+comment on column ICNP_COMPOSITION.create_institution
+  is 'Creation Institution';
+comment on column ICNP_COMPOSITION.update_user
+  is 'Update User';
+comment on column ICNP_COMPOSITION.update_time
+  is 'Update Time';
+comment on column ICNP_COMPOSITION.update_institution
+  is 'Update Institution';
+comment on column ICNP_COMPOSITION.id_application_area
+  is 'Application area ID (Area>Parameter)';
+comment on column ICNP_COMPOSITION.id_institution
+  is 'Institution ID';
+comment on column ICNP_COMPOSITION.id_software
+  is 'Software ID';
+  
+  
+-- CHANGE END: Ana Matos

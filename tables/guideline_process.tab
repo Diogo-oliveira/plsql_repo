@@ -1,0 +1,83 @@
+
+  CREATE TABLE GUIDELINE_PROCESS
+   (	ID_GUIDELINE_PROCESS NUMBER(24,0) NOT NULL ENABLE,
+	ID_BATCH NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0),
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_GUIDELINE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1),
+	DT_STATUS DATE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE
+   );
+
+COMMENT ON COLUMN guideline_process.id_guideline_process IS 'ID of guideline process' ;
+COMMENT ON COLUMN guideline_process.id_batch IS 'ID of batch that originated this process' ;
+COMMENT ON COLUMN guideline_process.id_episode IS 'ID of episode to which this process applies' ;
+COMMENT ON COLUMN guideline_process.id_patient IS 'ID of the patient associated to this process' ;
+COMMENT ON COLUMN guideline_process.id_guideline IS 'ID of guideline that generated this process' ;
+COMMENT ON COLUMN guideline_process.flg_status IS 'Status of process: active / inactive / canceled' ;
+COMMENT ON COLUMN guideline_process.dt_status IS 'Date when status changed the last time' ;
+COMMENT ON COLUMN guideline_process.id_professional IS 'ID of professional associated to this process' ;
+
+alter table guideline_process modify (dt_status timestamp with local time zone);
+
+-- CHANGED BY:  Ines Azevedo
+-- CHANGE DATE: 15/11/2010 10:33
+-- CHANGE REASON: [ALERT-140029] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table GUIDELINE_PROCESS add ID_CANCEL_REASON number(24)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+
+
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+   EXECUTE IMMEDIATE 'alter table GUIDELINE_PROCESS add CANCEL_NOTES varchar2(1000 char)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -01430); -- when ORA-01430: column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table GUIDELINE_PROCESS add ID_PROF_CANCEL number(24)';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/
+
+comment on column GUIDELINE_PROCESS.ID_CANCEL_REASON is 'Cancel reason ID';
+comment on column GUIDELINE_PROCESS.CANCEL_NOTES is 'Cancel notes';
+comment on column GUIDELINE_PROCESS.ID_PROF_CANCEL is 'ID professional that cancelled guideline';
+-- CHANGE END:  Ines Azevedo
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 28/03/2011 09:23
+-- CHANGE REASON: [ALERT-168339] Insert constraints for flag_status columns defined in sys_domain
+comment on column GUIDELINE_PROCESS.FLG_STATUS is 'Guideline process status:
+H - scheduled
+C - cancelled
+F - finished
+E - in progress
+P - pending
+R - recommended
+S - on hold';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 10:00
+-- CHANGE REASON: [ALERT-317912] 
+comment on table GUIDELINE_PROCESS is 'Guidelines process';
+-- CHANGE END: Ana Matos

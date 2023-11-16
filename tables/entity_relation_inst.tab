@@ -1,0 +1,81 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 15/06/2010 12:21
+-- CHANGE REASON: [ALERT-94601] entity_relation_inst
+create table entity_relation_inst
+(
+  id_entity_req       number(24) not null,
+  id_sys_list_req     number(24) not null,
+  id_entity           number(24) not null,
+  id_sys_list         number(24) not null,
+  id_relation_service number(24) not null,
+  id_relation_set     number(24) not null,
+  flg_status          varchar2(1 char) not null,
+  id_institution      number(24) not null,
+  rank                number(24) not null,
+  val_min             number,
+  val_max             number,
+  id_prof_created     number(24) not null,
+  dt_created          timestamp with local time zone not null,
+  id_cancel_info_det  number(24),
+  create_user         varchar2(24 char),
+  create_time         timestamp with local time zone,
+  create_institution  number(24),
+  update_user         varchar2(24 char),
+  update_time         timestamp with local time zone,
+  update_institution  number(24)
+)
+tablespace table_m;
+
+comment on table entity_relation_inst
+  is 'User entity relations.';
+
+comment on column entity_relation_inst.id_entity_req
+  is 'Requested entity identifier.';
+comment on column entity_relation_inst.id_sys_list_req
+  is 'Requested entity type (SYS_LIST identifier).';
+comment on column entity_relation_inst.id_entity
+  is 'Interacted entity identifier.';
+comment on column entity_relation.id_sys_list
+  is 'Interacted entity type (SYS_LIST identifier).';
+comment on column entity_relation_inst.id_relation_service
+  is 'Relation service identifier.';
+comment on column entity_relation_inst.id_relation_set
+  is 'Relation set identifier, to aggregate relations. Relations with the same set identifier are checked conjunctively.';
+comment on column entity_relation_inst.flg_status
+  is 'Record status: (A)ctive, (I)nactive, (C)ancelled.';
+comment on column entity_relation_inst.id_institution
+  is 'Institution identifier.';
+comment on column entity_relation_inst.rank
+  is 'Entity relation rank.';
+comment on column entity_relation_inst.val_min
+  is 'Value domain left bound (used on value domain relation services).';
+comment on column entity_relation_inst.val_max
+  is 'Value domain right bound (used on value domain relation services).';
+comment on column entity_relation_inst.id_prof_created
+  is 'Relation created by (professional identifier).';
+comment on column entity_relation_inst.dt_created
+  is 'Relation creation date.';
+comment on column entity_relation_inst.id_cancel_info_det
+  is 'Cancel information identifier.';
+comment on column entity_relation_inst.create_user
+  is 'Creation User';
+comment on column entity_relation_inst.create_time
+  is 'Creation Time';
+comment on column entity_relation_inst.create_institution
+  is 'Creation Institution';
+comment on column entity_relation_inst.update_user
+  is 'Update User';
+comment on column entity_relation_inst.update_time
+  is 'Update Time';
+comment on column entity_relation_inst.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 12/03/2012 15:29
+-- CHANGE REASON: [ALERT-215533] drop unused objects
+begin
+  pk_frmw_objects.set_category_dpc(i_owner => 'ALERT', i_obj_name => 'ENTITY_RELATION_INST');
+end;
+/
+-- CHANGE END: Pedro Carneiro

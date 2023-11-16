@@ -1,0 +1,355 @@
+PROMPT Creating Table 'REF_TRANS_RESP_HIST'
+CREATE TABLE REF_TRANS_RESP_HIST
+ (ID_TRANS_RESP_HIST NUMBER(24) NOT NULL
+ ,ID_TRANS_RESP NUMBER(24) NOT NULL
+ ,ID_STATUS NUMBER(24)
+ ,ID_WORKFLOW NUMBER(24)
+ ,ID_EXTERNAL_REQUEST NUMBER(24)
+ ,ID_PROF_REF_OWNER NUMBER(24)
+ ,ID_PROF_TRANSF_OWNER NUMBER(24)
+ ,ID_PROF_DEST VARCHAR2(240)
+ ,DT_CREATED TIMESTAMP WITH LOCAL TIME ZONE
+ ,DT_UPDATE TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_REASON_CODE NUMBER(24)
+ ,REASON_CODE_TEXT VARCHAR2(4000)
+ ,FLG_ACTIVE VARCHAR2(1)
+ ,NOTES VARCHAR2(4000)
+ ,CREATE_USER NUMBER(24) NOT NULL
+ ,CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ ,CREATE_INSTITUTION NUMBER(24) NOT NULL
+ ,UPDATE_USER VARCHAR2(24)
+ ,UPDATE_INSTITUTION NUMBER(24)
+ ,UPDATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+ )
+ STORAGE
+ (
+   INITIAL 65536
+   MINEXTENTS 1
+   MAXEXTENTS UNLIMITED
+ )
+ TABLESPACE TABLE_L
+/
+
+COMMENT ON TABLE REF_TRANS_RESP_HIST IS 'Transf. Resp. History'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.ID_TRANS_RESP IS 'Request Resp ID'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.ID_STATUS IS 'WF status'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.ID_WORKFLOW IS 'WF'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.ID_EXTERNAL_REQUEST IS 'Referral Number'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.ID_PROF_REF_OWNER IS 'Owner professional'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.ID_PROF_TRANSF_OWNER IS 'Transf. Professional'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.ID_PROF_DEST IS 'Dest. Professional'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.DT_CREATED IS 'Created Date'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.DT_UPDATE IS 'Update Date'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.ID_REASON_CODE IS 'reason code for status'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.REASON_CODE_TEXT IS 'Notes for Reason Code'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.FLG_ACTIVE IS 'If Active Y or N'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.NOTES IS 'Notes'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.CREATE_USER IS 'Create user'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.CREATE_TIME IS 'Create date'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.CREATE_INSTITUTION IS 'create institution'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.UPDATE_USER IS 'update user'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.UPDATE_INSTITUTION IS 'update institution'
+/
+
+COMMENT ON COLUMN REF_TRANS_RESP_HIST.UPDATE_TIME IS 'update date'
+/
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 19/12/2012 10:27
+-- CHANGE REASON: [ALERT-247719] 
+alter table REF_TRANS_RESP_HIST modify id_prof_dest NUMBER(24);
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/02/2013 12:19
+-- CHANGE REASON: [ALERT-251048] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REF_TRANS_RESP_HIST'
+       AND c.column_name = 'ID_PROFESSIONAL';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_TRANS_RESP_HIST add id_professional NUMBER(24) default 0 not null ';
+        EXECUTE IMMEDIATE 'comment on column REF_TRANS_RESP_HIST.id_professional is ''Professional that created the record''';
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REF_TRANS_RESP_HIST'
+       AND c.column_name = 'ID_INSTITUTION';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_TRANS_RESP_HIST add id_institution NUMBER(24) default 0 not null';
+        EXECUTE IMMEDIATE 'comment on column REF_TRANS_RESP_HIST.id_institution is ''Institution where the record was created''';
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REF_TRANS_RESP_HIST'
+       AND c.column_name = 'ID_STATUS'
+       AND c.nullable = 'Y';
+
+    IF l_count = 1
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_TRANS_RESP_HIST modify id_status not null';
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REF_TRANS_RESP_HIST'
+       AND c.column_name = 'ID_WORKFLOW'
+       AND c.nullable = 'Y';
+
+    IF l_count = 1
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_TRANS_RESP_HIST modify id_workflow not null';
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REF_TRANS_RESP_HIST'
+       AND c.column_name = 'ID_EXTERNAL_REQUEST'
+       AND c.nullable = 'Y';
+
+    IF l_count = 1
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_TRANS_RESP_HIST modify id_external_request not null';
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM ref_trans_resp_hist
+     WHERE dt_created IS NULL;
+
+    IF l_count > 0
+    THEN
+        -- dados existentes antes deste bug... nao sao de ambientes de producao
+        UPDATE ref_trans_resp_hist
+           SET dt_created = create_time
+         WHERE dt_created IS NULL;
+    
+        l_count := NULL;
+    END IF;
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REF_TRANS_RESP_HIST'
+       AND c.column_name = 'DT_CREATED'
+       AND c.nullable = 'Y';
+
+    IF l_count = 1
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_TRANS_RESP_HIST modify dt_created not null';
+    END IF;
+END;
+/
+
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM ref_trans_resp_hist
+     WHERE flg_active IS NULL;
+
+    IF l_count > 0
+    THEN
+        -- dados existentes antes deste bug... nao sao de ambientes de producao
+        UPDATE ref_trans_resp_hist
+           SET flg_active = 'N'
+         WHERE flg_active IS NULL;
+    
+        l_count := NULL;
+    END IF;
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns c
+     WHERE c.table_name = 'REF_TRANS_RESP_HIST'
+       AND c.column_name = 'FLG_ACTIVE'
+       AND c.nullable = 'Y';
+
+    IF l_count = 1
+    THEN
+        EXECUTE IMMEDIATE 'alter table REF_TRANS_RESP_HIST modify flg_active not null';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/02/2013 12:29
+-- CHANGE REASON: [ALERT-251048] 
+alter table REF_TRANS_RESP_HIST modify id_professional default null;
+alter table REF_TRANS_RESP_HIST modify id_institution default null;
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 16/12/2013 16:54
+-- CHANGE REASON: [ALERT-270853] 
+BEGIN
+    pk_versioning.run(i_sql => 'alter table REF_TRANS_RESP_HIST add id_workflow_action NUMBER(24)');
+pk_versioning.run(i_sql => 'alter table REF_TRANS_RESP_HIST add id_inst_orig_tr NUMBER(24)');
+pk_versioning.run(i_sql => 'alter table REF_TRANS_RESP_HIST add id_inst_dest_tr NUMBER(24)');
+END;
+/
+
+alter table REF_TRANS_RESP_HIST modify update_user VARCHAR2(30 CHAR);
+alter table REF_TRANS_RESP_HIST modify reason_code_text VARCHAR2(1000 CHAR);
+alter table REF_TRANS_RESP_HIST modify flg_active VARCHAR2(1 CHAR);
+alter table REF_TRANS_RESP_HIST modify notes VARCHAR2(1000 CHAR);
+
+comment on column REF_TRANS_RESP_HIST.id_trans_resp_hist is 'Primary key';
+comment on column REF_TRANS_RESP_HIST.id_workflow_action is 'Workflow action identifier';
+comment on column REF_TRANS_RESP_HIST.id_trans_resp is 'Hand off identifier';
+comment on column REF_TRANS_RESP_HIST.id_status is 'Hand off status identifier';
+comment on column REF_TRANS_RESP_HIST.id_workflow is 'Hand off workflow identifier';
+comment on column REF_TRANS_RESP_HIST.id_external_request is 'Referral identifier';
+comment on column REF_TRANS_RESP_HIST.id_prof_ref_owner is 'Referral owner professional';
+comment on column REF_TRANS_RESP_HIST.id_prof_transf_owner is 'Professional that requested referral hand off';
+comment on column REF_TRANS_RESP_HIST.id_prof_dest is 'Professional to which the referral is being hand off';
+comment on column REF_TRANS_RESP_HIST.dt_created is 'Create Date';
+comment on column REF_TRANS_RESP_HIST.id_reason_code is 'Reason code identifier';
+comment on column REF_TRANS_RESP_HIST.reason_code_text is 'Reason code text (in case of "Other")';
+comment on column REF_TRANS_RESP_HIST.flg_active is 'Y- active hand off N- otherwise';
+comment on column REF_TRANS_RESP_HIST.notes is 'Hand off notes';
+comment on column REF_TRANS_RESP_HIST.create_user is 'Creation User';
+comment on column REF_TRANS_RESP_HIST.create_time is 'Creation Time';
+comment on column REF_TRANS_RESP_HIST.create_institution is 'Creation Institution';
+comment on column REF_TRANS_RESP_HIST.update_user is 'Update User';
+comment on column REF_TRANS_RESP_HIST.update_institution is 'Update Institution';
+comment on column REF_TRANS_RESP_HIST.update_time is 'Update Time';
+comment on column REF_TRANS_RESP_HIST.id_inst_orig_tr is 'Orig institution of referral hand off';
+comment on column REF_TRANS_RESP_HIST.id_inst_dest_tr is 'Dest institution of referral hand off';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 16/12/2013 16:58
+-- CHANGE REASON: [ALERT-270853] 
+DECLARE
+    e_exp EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exp, -01442);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table REF_TRANS_RESP_HIST modify id_inst_orig_tr NOT NULL';
+EXCEPTION
+    WHEN e_exp THEN
+        dbms_output.put_line('Ja alterado para not null');
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/12/2013
+-- CHANGE REASON: [ALERT-270853] 
+BEGIN
+    pk_versioning.run(i_sql => 'alter table REF_TRANS_RESP_HIST add id_workflow_action NUMBER(24)');
+pk_versioning.run(i_sql => 'alter table REF_TRANS_RESP_HIST add id_inst_orig_tr NUMBER(24)');
+pk_versioning.run(i_sql => 'alter table REF_TRANS_RESP_HIST add id_inst_dest_tr NUMBER(24)');
+END;
+/
+
+alter table REF_TRANS_RESP_HIST modify update_user VARCHAR2(30 CHAR);
+alter table REF_TRANS_RESP_HIST modify reason_code_text VARCHAR2(1000 CHAR);
+alter table REF_TRANS_RESP_HIST modify flg_active VARCHAR2(1 CHAR);
+alter table REF_TRANS_RESP_HIST modify notes VARCHAR2(4000 CHAR);
+
+comment on column REF_TRANS_RESP_HIST.id_trans_resp_hist is 'Primary key';
+comment on column REF_TRANS_RESP_HIST.id_workflow_action is 'Workflow action identifier';
+comment on column REF_TRANS_RESP_HIST.id_trans_resp is 'Hand off identifier';
+comment on column REF_TRANS_RESP_HIST.id_status is 'Hand off status identifier';
+comment on column REF_TRANS_RESP_HIST.id_workflow is 'Hand off workflow identifier';
+comment on column REF_TRANS_RESP_HIST.id_external_request is 'Referral identifier';
+comment on column REF_TRANS_RESP_HIST.id_prof_ref_owner is 'Referral owner professional';
+comment on column REF_TRANS_RESP_HIST.id_prof_transf_owner is 'Professional that requested referral hand off';
+comment on column REF_TRANS_RESP_HIST.id_prof_dest is 'Professional to which the referral is being hand off';
+comment on column REF_TRANS_RESP_HIST.dt_created is 'Create Date';
+comment on column REF_TRANS_RESP_HIST.id_reason_code is 'Reason code identifier';
+comment on column REF_TRANS_RESP_HIST.reason_code_text is 'Reason code text (in case of "Other")';
+comment on column REF_TRANS_RESP_HIST.flg_active is 'Y- active hand off N- otherwise';
+comment on column REF_TRANS_RESP_HIST.notes is 'Hand off notes';
+comment on column REF_TRANS_RESP_HIST.create_user is 'Creation User';
+comment on column REF_TRANS_RESP_HIST.create_time is 'Creation Time';
+comment on column REF_TRANS_RESP_HIST.create_institution is 'Creation Institution';
+comment on column REF_TRANS_RESP_HIST.update_user is 'Update User';
+comment on column REF_TRANS_RESP_HIST.update_institution is 'Update Institution';
+comment on column REF_TRANS_RESP_HIST.update_time is 'Update Time';
+comment on column REF_TRANS_RESP_HIST.id_inst_orig_tr is 'Orig institution of referral hand off';
+comment on column REF_TRANS_RESP_HIST.id_inst_dest_tr is 'Dest institution of referral hand off';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on table REF_TRANS_RESP_HIST
+  is 'Transference of responsibility (or referral hand off) History ';

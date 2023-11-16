@@ -1,0 +1,54 @@
+
+
+  CREATE TABLE EPIS_ATTENDING_NOTES
+   (	ID_EPIS_ATTENDING_NOTES NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_CREATION DATE NOT NULL ENABLE,
+	PROFILE_REVIEWED NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_REVIEWED NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	DT_REVIEWED DATE NOT NULL ENABLE,
+	NOTES_REVIEWED VARCHAR2(2000),
+	NOTES_ADDITIONAL VARCHAR2(2000),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_AGREE VARCHAR2(10)
+
+   );
+
+
+COMMENT ON COLUMN epis_attending_notes.flg_agree IS 'Indica se concorda ou não com os registos de concordância' ;
+
+comment on table EPIS_ATTENDING_NOTES
+  is 'Notas de atendimento associadas a um episódio';
+
+comment on column EPIS_ATTENDING_NOTES.ID_EPIS_ATTENDING_NOTES
+  is 'Chave primária';
+comment on column EPIS_ATTENDING_NOTES.ID_PROFESSIONAL
+  is 'Profissional';
+comment on column EPIS_ATTENDING_NOTES.DT_CREATION
+  is 'Data de criação da nota de atendimento';
+comment on column EPIS_ATTENDING_NOTES.PROFILE_REVIEWED
+  is 'Perfil de quem está a ser avaliado';
+comment on column EPIS_ATTENDING_NOTES.ID_PROF_REVIEWED
+  is 'Profissional avaliado';
+comment on column EPIS_ATTENDING_NOTES.ID_EPISODE
+  is 'Episódio';
+comment on column EPIS_ATTENDING_NOTES.DT_REVIEWED
+  is 'Data da avaliação';
+comment on column EPIS_ATTENDING_NOTES.NOTES_REVIEWED
+  is 'Notas de avaliação';
+comment on column EPIS_ATTENDING_NOTES.NOTES_ADDITIONAL
+  is 'Notas adicionais';
+comment on column EPIS_ATTENDING_NOTES.ADW_LAST_UPDATE
+  is 'Data da última alteração';
+
+
+alter table epis_attending_notes add FLG_TYPE varchar2(1);
+
+comment on column epis_attending_notes.flg_type is '(A)ttending Notes or (C)osigned'; 
+
+alter table epis_attending_notes 
+add (dt_creation_tstz timestamp with local time zone,
+dt_reviewed_tstz timestamp with local time zone); 
+
+ALTER TABLE EPIS_ATTENDING_NOTES DROP (DT_CREATION, DT_REVIEWED);

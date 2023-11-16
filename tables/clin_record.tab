@@ -1,0 +1,63 @@
+
+
+  CREATE TABLE CLIN_RECORD
+   (	ID_CLIN_RECORD NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0),
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_PAT_FAMILY NUMBER(24,0),
+	NUM_CLIN_RECORD VARCHAR2(12),
+	ID_INSTIT_ENROLED NUMBER(12,0)
+   );
+
+
+COMMENT ON TABLE clin_record IS 'Números dos processos clínicos nas diferentes instituições' ;
+
+COMMENT ON COLUMN clin_record.flg_status IS 'Estado: A - activo, I - inactivo' ;
+COMMENT ON COLUMN clin_record.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN clin_record.num_clin_record IS 'Instituição (centro saúde / extensão) em que está inscrito' ;
+
+comment on column CLIN_RECORD.NUM_CLIN_RECORD
+  is 'Nº processo clínico na instituição';
+comment on column CLIN_RECORD.ID_INSTIT_ENROLED
+  is 'Instituição (centro saúde / extensão) em que está inscrito';
+
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE CLIN_RECORD ADD ID_EPISODE NUMBER(24,0);	
+COMMENT ON COLUMN CLIN_RECORD.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2020 18:02
+-- CHANGE REASON: [EMR-40083]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00942);
+BEGIN
+EXECUTE IMMEDIATE 'DROP TABLE clin_record_old';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2020 18:10
+-- CHANGE REASON: [EMR-40083]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00942);
+BEGIN
+EXECUTE IMMEDIATE 'DROP TABLE clin_record_old';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos

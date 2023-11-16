@@ -1,0 +1,48 @@
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 01/03/2010
+-- CHANGE REASON: [ALERT-78195]
+declare
+  l_count pls_integer;
+	l_sql_stat varchar2(4000):='ALTER TABLE ALERT.PRESC_DIR_FREQ_SOFT_INST ADD CONSTRAINT PDF_SOFT_INST_PK PRIMARY KEY (ID_PRESC_DIR_FREQ_SOFT_INST) ENABLE';
+begin
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDF_SOFT_INST_PK';
+  if l_count = 0 then
+    execute immediate ('ALTER TABLE ALERT.PRESC_DIR_FREQ_SOFT_INST ADD CONSTRAINT PDF_SOFT_INST_PK PRIMARY KEY (ID_PRESC_DIR_FREQ_SOFT_INST) ENABLE');
+  end if;
+
+
+  select count(1) into l_count from all_constraints where owner = 'ALERT' and constraint_name = 'PDFSI_FLGAVAILABLE_CHK';
+  if l_count = 0 then
+    execute immediate ('ALTER TABLE ALERT.PRESC_DIR_FREQ_SOFT_INST ADD CONSTRAINT PDFSI_FLGAVAILABLE_CHK CHECK (FLG_AVAILABLE in (''Y'', ''N'')) ENABLE');
+  end if;
+
+end;
+/
+-- CHANGE END: Nuno Ferreira
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 15/11/2013 17:05
+-- CHANGE REASON: [ALERT-269747] 
+alter table PRESC_DIR_FREQ_SOFT_INST drop constraint PDFSI_FLG_PRN_CHK;
+alter table PRESC_DIR_FREQ_SOFT_INST
+  add constraint PDFSI_FLG_PRN_CHK
+  check (FLG_PRN IN ('Y', 'N', 'A'));
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 20/11/2013 15:04
+-- CHANGE REASON: [ALERT-269747] 
+alter table PRESC_DIR_FREQ_SOFT_INST drop constraint PDFSI_FLG_PRN_CHK;
+alter table PRESC_DIR_FREQ_SOFT_INST
+  add constraint PDFSI_FLG_PRN_CHK
+  check (FLG_PRN IN ('Y', 'N', 'A'));
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 20/11/2013 15:25
+-- CHANGE REASON: [ALERT-269747] 
+alter table PRESC_DIR_FREQ_SOFT_INST drop constraint PDFSI_FLG_PRN_CHK;
+alter table PRESC_DIR_FREQ_SOFT_INST
+  add constraint PDFSI_FLG_PRN_CHK
+  check (FLG_PRN IN ('Y', 'N', 'A'));
+-- CHANGE END: Joana Barroso

@@ -1,0 +1,78 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 20/02/2013 12:06
+-- CHANGE REASON: [ALERT-251862] 
+DECLARE
+    l_count PLS_INTEGER;
+    l_sql   VARCHAR2(4000 CHAR);
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tables u
+     WHERE u.table_name = 'REF_DEST_INSTITUTION_SPEC_HIST';
+
+    IF l_count = 0
+    THEN
+        -- create table
+        l_sql := 'create table REF_DEST_INSTITUTION_SPEC_HIST (';
+        l_sql := l_sql || 'id_dest_institution_spec_hist   NUMBER(24) not null, ';
+        l_sql := l_sql || 'id_dest_institution_spec NUMBER(24) not null, ';
+        l_sql := l_sql || 'id_dest_institution      NUMBER(24) not null, ';
+        l_sql := l_sql || 'id_speciality            NUMBER(6) not null, ';
+        l_sql := l_sql || 'flg_available            VARCHAR2(1) not null, ';
+        l_sql := l_sql || 'flg_inside_ref_area      VARCHAR2(1) not null, ';
+        l_sql := l_sql || 'create_user              VARCHAR2(30), ';
+        l_sql := l_sql || 'create_time              TIMESTAMP(6) WITH LOCAL TIME ZONE, ';
+        l_sql := l_sql || 'create_institution       NUMBER(24), ';
+        l_sql := l_sql || 'update_user              VARCHAR2(30), ';
+        l_sql := l_sql || 'update_time              TIMESTAMP(6) WITH LOCAL TIME ZONE, ';
+        l_sql := l_sql || 'update_institution       NUMBER(24))';
+        EXECUTE IMMEDIATE l_sql;
+    
+        -- comments
+        EXECUTE IMMEDIATE q'[comment on column REF_DEST_INSTITUTION_SPEC_HIST.id_dest_institution_spec_hist is 'Historic identifier']';
+        EXECUTE IMMEDIATE q'[comment on column REF_DEST_INSTITUTION_SPEC_HIST.id_dest_institution_spec is 'Foreign key to table REF_DEST_INSTITUTION_SPEC']';
+        EXECUTE IMMEDIATE q'[comment on column REF_DEST_INSTITUTION_SPEC_HIST.id_dest_institution is 'Destination institution identifier']';
+        EXECUTE IMMEDIATE q'[comment on column REF_DEST_INSTITUTION_SPEC_HIST.id_speciality is 'P1 speciality identifier']';
+        EXECUTE IMMEDIATE q'[comment on column REF_DEST_INSTITUTION_SPEC_HIST.flg_available is 'Y - Available; N - not Available']';
+        EXECUTE IMMEDIATE q'[comment on column REF_DEST_INSTITUTION_SPEC_HIST.flg_inside_ref_area is 'Y - Inside hospital referral area; N - Otherwise']';
+        EXECUTE IMMEDIATE q'[comment on column REF_DEST_INSTITUTION_SPEC_HIST.create_user is 'Creation User']';
+        EXECUTE IMMEDIATE q'[comment on column REF_DEST_INSTITUTION_SPEC_HIST.create_time is 'Creation Time']';
+        EXECUTE IMMEDIATE q'[comment on column REF_DEST_INSTITUTION_SPEC_HIST.create_institution is 'Creation Institution']';
+        EXECUTE IMMEDIATE q'[comment on column REF_DEST_INSTITUTION_SPEC_HIST.update_user is 'Update User']';
+        EXECUTE IMMEDIATE q'[comment on column REF_DEST_INSTITUTION_SPEC_HIST.update_time is 'Update Time']';
+        EXECUTE IMMEDIATE q'[comment on column REF_DEST_INSTITUTION_SPEC_HIST.update_institution is 'Update Institution']';
+    
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 11/02/2014 08:35
+-- CHANGE REASON: [ALERT-276023] 
+alter table REF_DEST_INSTITUTION_SPEC_HIST modify flg_available VARCHAR2(1 CHAR);
+alter table REF_DEST_INSTITUTION_SPEC_HIST modify flg_inside_ref_area VARCHAR2(1 CHAR);
+alter table REF_DEST_INSTITUTION_SPEC_HIST modify create_user VARCHAR2(30 CHAR);
+alter table REF_DEST_INSTITUTION_SPEC_HIST modify update_user VARCHAR2(30 CHAR);
+
+BEGIN
+    pk_versioning.run(i_sql => q'[alter table REF_DEST_INSTITUTION_SPEC_HIST add flg_ref_line varchar2(30 CHAR)]');
+END;
+/
+
+comment on column REF_DEST_INSTITUTION_SPEC_HIST.flg_ref_line is 'Referral line 1,2,3';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on table REF_DEST_INSTITUTION_SPEC_HIST
+  is 'Referral specialties by institution historical data';
+-- Add comments to the columns 
+comment on column REF_DEST_INSTITUTION_SPEC_HIST.id_dest_institution
+  is 'Destination institution';
+comment on column REF_DEST_INSTITUTION_SPEC_HIST.id_speciality
+  is 'Referral speciality';
+comment on column REF_DEST_INSTITUTION_SPEC_HIST.flg_available
+  is 'Is available? Y/N';
+comment on column REF_DEST_INSTITUTION_SPEC_HIST.flg_inside_ref_area
+  is 'Is inside hospital referral area? Y/N';

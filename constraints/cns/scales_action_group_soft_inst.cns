@@ -1,0 +1,15 @@
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 16/04/2010 15:47
+-- CHANGE REASON: [ALERT-89937] 
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table SCALES_ACTION_GROUP_SOFT_INST
+  add constraint SASI_PK primary key (ID_SCALES_ACTION_GROUP, ID_SCALES_ACTION, ID_SOFTWARE, ID_INSTITUTION);
+-- Create/Recreate check constraints 
+alter table SCALES_ACTION_GROUP_SOFT_INST
+  add constraint SCAIS_FLG_AVAIL_CHK
+  check (FLG_AVAILABLE IN ('Y','N'));
+
+alter table SCALES_ACTION_GROUP_SOFT_INST
+  add constraint SCAIS_FLG_DEFAULT_CHK
+  check (FLG_DEFAULT IN ('A','I'));
+-- CHANGE END: Rita Lopes

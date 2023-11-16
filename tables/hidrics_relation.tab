@@ -1,0 +1,72 @@
+
+
+  CREATE TABLE HIDRICS_RELATION
+   (	ID_HIDRICS_RELATION NUMBER(24,0) NOT NULL ENABLE,
+	ID_HIDRICS_TYPE NUMBER(24,0) NOT NULL ENABLE,
+	ID_HIDRICS NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE hidrics_relation IS 'Relação hidircos e os 2 tipos de hidricos (Balança de hidricos e diureses)' ;
+
+COMMENT ON COLUMN hidrics_relation.id_hidrics_relation IS 'Chave primária' ;
+COMMENT ON COLUMN hidrics_relation.id_hidrics_type IS 'Tipo de hidrico' ;
+COMMENT ON COLUMN hidrics_relation.id_hidrics IS 'Hidrico' ;
+COMMENT ON COLUMN hidrics_relation.flg_state IS 'Estado do hidrico. A- Active;I - Inactive' ;
+COMMENT ON COLUMN hidrics_relation.flg_available IS 'Disponibilidade do registo' ;
+COMMENT ON COLUMN hidrics_relation.adw_last_update IS 'Data da última alteração' ;
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/11/2009 13:08
+-- CHANGE REASON: [ALERT-56932] 
+alter table
+   hidrics_relation
+drop column
+   ADW_LAST_UPDATE; 
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 20:41
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+alter table HIDRICS_RELATION add ID_DEPARTMENT number(24);
+alter table HIDRICS_RELATION add ID_DEPT number(24);
+alter table HIDRICS_RELATION add ALMOST_MAX_INT number(6);
+alter table HIDRICS_RELATION add ALMOST_MIN_OUT number(6);
+
+comment on column HIDRICS_RELATION.ID_DEPARTMENT is 'Department ID';
+comment on column HIDRICS_RELATION.ID_DEPT is 'Dept ID';
+comment on column HIDRICS_RELATION.ALMOST_MAX_INT is 'Percentage value used to know if is to display a alert that is about to reach the maximum intake';
+comment on column HIDRICS_RELATION.ALMOST_MIN_OUT is 'Percentage value used to know if is to display a alert that is about to reach the minimum output';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 09:31
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+alter table HIDRICS_RELATION add ID_MARKET NUMBER(24);
+comment on column HIDRICS_RELATION.ID_MARKET is 'Market ID';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:43
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+COMMENT ON TABLE hidrics_relation IS 'Relation between hidrics and hidrics type.' ;
+
+COMMENT ON COLUMN hidrics_relation.id_hidrics_relation IS 'Primary Key ID.' ;
+COMMENT ON COLUMN hidrics_relation.id_hidrics_type IS 'Hidrics Type ID.' ;
+COMMENT ON COLUMN hidrics_relation.id_hidrics IS 'Hidrics ID.' ;
+COMMENT ON COLUMN hidrics_relation.flg_state IS 'Hidrics state. A- Active;I - Inactive' ;
+COMMENT ON COLUMN hidrics_relation.flg_available IS 'Registry availability: Y - Available; N - Not available.' ;
+COMMENT ON COLUMN hidrics_relation.id_software IS 'Software ID.' ;
+COMMENT ON COLUMN hidrics_relation.id_institution IS 'Institution ID.' ;
+
+alter table hidrics_relation modify ( flg_state  varchar2(1 char));
+alter table hidrics_relation modify ( flg_available  varchar2(1 char));
+alter table hidrics_relation modify ( create_user  varchar2(24 char));
+alter table hidrics_relation modify ( update_user  varchar2(24 char));
+-- CHANGE END: Sofia Mendes

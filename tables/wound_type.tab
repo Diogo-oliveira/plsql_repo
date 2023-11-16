@@ -1,0 +1,25 @@
+
+
+  CREATE TABLE WOUND_TYPE
+   (	ID_WOUND_TYPE NUMBER(24,0) NOT NULL ENABLE,
+	CODE_WOUND_TYPE VARCHAR2(200) NOT NULL ENABLE,
+	INTERN_NAME VARCHAR2(200),
+	ID_PARENT NUMBER(24,0),
+	CODE_HELP_WOUND_TYPE VARCHAR2(200),
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE wound_type IS 'Tipos de feridas (ex: úlcera venosa, ferida cirúrgica, ...)' ;
+
+COMMENT ON COLUMN wound_type.code_wound_type IS 'Código para tradução do tipo de ferida' ;
+COMMENT ON COLUMN wound_type.code_help_wound_type IS 'Código para tradução da ajuda de contexto' ;
+
+ALTER TABLE WOUND_TYPE 
+ ADD (FLG_AVAILABLE  VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ );
+
+COMMENT ON COLUMN WOUND_TYPE.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD';
+
+ALTER TABLE WOUND_TYPE MODIFY FLG_AVAILABLE default null;

@@ -1,0 +1,88 @@
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 09-01-2009
+-- CHANGE REASON: agenda MFR
+
+create table SCHEDULE_RECURSION
+(
+  ID_SCHEDULE_RECURSION NUMBER(24) not null,
+  WEEKDAYS              VARCHAR2(30),
+  FLG_REGULAR           VARCHAR2(1) default 'Y' not null,
+  FLG_TIMEUNIT          VARCHAR2(1) default 'D' not null,
+  NUM_TAKE              NUMBER(3),
+  NUM_FREQ              NUMBER,
+  ID_INTERV_PRESC_DET   NUMBER(24)
+);
+
+comment on table SCHEDULE_RECURSION  is 'Execution plan details. Every schedule that shares this id_schedule_recursion was originated by this details';
+comment on column SCHEDULE_RECURSION.ID_SCHEDULE_RECURSION  is 'Primary key';
+comment on column SCHEDULE_RECURSION.FLG_REGULAR  is 'Y = is a regular pattern. Interval between days is constant';
+comment on column SCHEDULE_RECURSION.FLG_TIMEUNIT  is 'Time unit for sessions interval';
+comment on column SCHEDULE_RECURSION.NUM_TAKE  is 'number of takes for each session';
+comment on column SCHEDULE_RECURSION.NUM_FREQ is 'no. of sessions';
+comment on column SCHEDULE_RECURSION.ID_INTERV_PRESC_DET is 'Intervention Detail ID';
+
+--END
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 08-07-2009
+-- CHANGE REASON: [ALERT-32069]
+
+alter table schedule_recursion add (
+      repeat_frequency    NUMBER(24),
+      week                NUMBER(24),
+      day_month           NUMBER(24),
+      month               NUMBER(24),
+      begin_date          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+      end_date            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+      flg_type_rep            VARCHAR(1),
+      flg_type            VARCHAR(1)
+      );
+
+
+comment on column schedule_recursion.repeat_frequency is 'Frequency of repeatition';
+comment on column schedule_recursion.flg_timeunit is 'Time Unit for session interval. D-daily; W-weekly; M-montly; Y-yearly';
+comment on column schedule_recursion.week is 'Week number';
+comment on column schedule_recursion.day_month is 'Day of month';
+comment on column schedule_recursion.month is 'Month nr';
+comment on column schedule_recursion.begin_date is 'Start date';
+comment on column schedule_recursion.end_date is 'End date';
+comment on column schedule_recursion.flg_type_rep is 'Flag status. E-nr of events; D- date';
+comment on column schedule_recursion.flg_type is 'Type of scheduling: S-series; P- MFR procedures';
+--END
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09-06-2009
+-- CHANGE REASON: series of appointments
+alter table
+   schedule_recursion
+drop
+   (repeat_frequency, week, day_month, month, begin_date, end_date, flg_type_rep, flg_type);
+
+alter table schedule_recursion add (
+      repeat_frequency    NUMBER(24),
+      week                NUMBER(24),
+      day_month           NUMBER(24),
+      month               NUMBER(24),
+      dt_begin          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+      dt_end            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+      flg_type_rep            VARCHAR(1),
+      flg_type            VARCHAR(1)
+      )
+
+
+comment on column schedule_recursion.repeat_frequency is 'Frequency of repeatition';
+comment on column schedule_recursion.flg_timeunit is 'Time Unit for session interval. D-daily; W-weekly; M-montly; Y-yearly';
+comment on column schedule_recursion.week is 'Week number';
+comment on column schedule_recursion.day_month is 'Day of month';
+comment on column schedule_recursion.month is 'Month nr';
+comment on column schedule_recursion.dt_begin is 'Start date';
+comment on column schedule_recursion.dt_end is 'End date';
+comment on column schedule_recursion.flg_type_rep is 'Flag status. E-nr of events; D- date';
+comment on column schedule_recursion.flg_type is 'Type of scheduling: S-series; P- MFR procedures';
+--END
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 15/01/2016 17:23
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON COLUMN SCHEDULE_RECURSION.WEEKDAYS IS 'Week days';
+-- CHANGE END:  jose.m.silva

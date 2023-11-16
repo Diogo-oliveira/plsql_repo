@@ -1,0 +1,46 @@
+create table WL_QUEUE_GROUP
+(
+  ID_WL_QUEUE_GROUP           NUMBER(24) not null,
+  INTER_NAME_QUEUE            VARCHAR2(200) not null
+);
+
+comment on table WL_QUEUE_GROUP is 'Grupos de "Waintg lines"';
+
+comment on column WL_QUEUE_GROUP.ID_WL_QUEUE_GROUP is 'ID do grupo';
+comment on column WL_QUEUE_GROUP.INTER_NAME_QUEUE is 'Descritivo do grupo';
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table WL_QUEUE_GROUP
+  is 'This is a content table where the group information is stored.
+This groups are used to aggregate the waiting line queues.
+';
+-- Add comments to the columns 
+comment on column WL_QUEUE_GROUP.id_wl_queue_group
+  is 'Identifier of the Group';
+comment on column WL_QUEUE_GROUP.inter_name_queue
+  is 'The Group''s internal descritive.';
+comment on column WL_QUEUE_GROUP.create_user
+  is 'Creation User';
+comment on column WL_QUEUE_GROUP.create_time
+  is 'Creation Time';
+comment on column WL_QUEUE_GROUP.create_institution
+  is 'Creation Institution';
+comment on column WL_QUEUE_GROUP.update_user
+  is 'Update User';
+comment on column WL_QUEUE_GROUP.update_time
+  is 'Update Time';
+comment on column WL_QUEUE_GROUP.update_institution
+  is 'Update Institution';
+  
+-- CHANGE END: Pedro Fernandes
+
+declare
+       l_sql varchar2(4000);
+begin
+       l_sql := q'[alter table wl_queue_group add id_institution number(24)]';
+       pk_versioning.run(l_sql);
+end;
+/

@@ -1,0 +1,75 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 21/06/2010 17:56
+-- CHANGE REASON: [ALERT-103305] FERTIS (2.6.0.3)
+DECLARE
+    l_sql   VARCHAR2(1000 CHAR);
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM all_objects u
+     WHERE u.object_name = 'REF_EXT_XML_DATA'
+     and owner = 'ALERT'
+     and object_type = 'TABLE';
+
+    IF l_count = 0
+    THEN
+        -- creating data model
+    
+        l_sql := q'[CREATE TABLE REF_EXT_XML_DATA
+ (ID_SESSION VARCHAR2(50 CHAR) NOT NULL
+ ,PATIENT_DATA CLOB NOT NULL
+ ,REFERRAL_DATA CLOB NOT NULL
+ ,ID_PROFESSIONAL NUMBER(24) NOT NULL
+ ,DT_INSERTED TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL
+ ,CREATE_USER VARCHAR2(24)
+ ,CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+ ,CREATE_INSTITUTION NUMBER(24)
+ ,UPDATE_USER VARCHAR2(24)
+ ,UPDATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ )
+ lob (PATIENT_DATA, REFERRAL_DATA) store as (tablespace ALERT_LOB)]';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON TABLE REF_EXT_XML_DATA IS 'Patient and referral data imported from external systems']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_EXT_XML_DATA.ID_SESSION IS 'Session identifier created during referral creation/update in the external systems']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_EXT_XML_DATA.PATIENT_DATA IS 'Patient data imported from external systems']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_EXT_XML_DATA.REFERRAL_DATA IS 'Referral data imported from external systems']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[COMMENT ON COLUMN REF_EXT_XML_DATA.ID_PROFESSIONAL IS 'Professional id that created the record']';
+        EXECUTE IMMEDIATE l_sql;
+
+        l_sql := q'[COMMENT ON COLUMN REF_EXT_XML_DATA.DT_INSERTED IS 'Record creation date']';
+        EXECUTE IMMEDIATE l_sql;        
+        
+        l_sql := q'[COMMENT ON COLUMN REF_EXT_XML_DATA.CREATE_USER IS 'Creation User']';
+        EXECUTE IMMEDIATE l_sql;        
+                    
+        l_sql := q'[comment on column REF_EXT_XML_DATA.CREATE_TIME is 'Creation Time']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_EXT_XML_DATA.CREATE_INSTITUTION is 'Creation Institution']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_EXT_XML_DATA.UPDATE_USER is 'Update User']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_EXT_XML_DATA.UPDATE_TIME is 'Update Time']';
+        EXECUTE IMMEDIATE l_sql;
+    
+        l_sql := q'[comment on column REF_EXT_XML_DATA.UPDATE_INSTITUTION is 'Update Institution']';
+        EXECUTE IMMEDIATE l_sql;
+    END IF;
+
+END;
+/
+-- CHANGE END: Ana Monteiro

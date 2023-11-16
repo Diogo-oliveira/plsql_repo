@@ -1,0 +1,39 @@
+
+
+  CREATE TABLE PAT_DOC
+   (	ID_PAT_DOC NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOC_TYPE NUMBER(12,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	VALUE VARCHAR2(200) NOT NULL ENABLE,
+	DT_EXPIRE DATE,
+	DT_EMITED DATE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	LOCAL_EMITED VARCHAR2(200)
+   );
+
+
+COMMENT ON TABLE pat_doc IS 'Nºs dos documentos de identificação registados para o utente' ;
+
+COMMENT ON COLUMN pat_doc.id_patient IS 'Chave primaria' ;
+COMMENT ON COLUMN pat_doc.value IS 'Nº do documento de identificação indicado' ;
+COMMENT ON COLUMN pat_doc.dt_expire IS 'Data de validade' ;
+COMMENT ON COLUMN pat_doc.dt_emited IS 'Data de emissão' ;
+COMMENT ON COLUMN pat_doc.flg_status IS 'Estado: A - activo, I - inactivo' ;
+COMMENT ON COLUMN pat_doc.local_emited IS 'Local de emissão' ;
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 29/12/2020 18:02
+-- CHANGE REASON: [EMR-40083]
+DECLARE
+e_not_exist EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_not_exist, -00942);
+BEGIN
+EXECUTE IMMEDIATE 'DROP TABLE pat_doc_old';
+EXCEPTION
+WHEN e_not_exist THEN
+NULL;
+END;
+/
+-- CHANGE END: Ana Matos

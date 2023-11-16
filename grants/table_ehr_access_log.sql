@@ -1,0 +1,2 @@
+grant select on ALERT.EHR_ACCESS_LOG to ALERT_VIEWER;
+

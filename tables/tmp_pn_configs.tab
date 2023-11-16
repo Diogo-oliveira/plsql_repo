@@ -1,0 +1,708 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:34
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+CREATE GLOBAL TEMPORARY TABLE TMP_PN_CONFIGS
+(  
+id_task_type            number(24),
+id_pn_data_block        number(24),
+id_pn_soap_block        number(24),
+id_doc_area             number(24),
+id_patient              number(24),
+id_visit                number(24),
+id_episode              number(24),
+dt_begin                timestamp with local time zone,
+dt_end                  timestamp with local time zone,
+flg_outside_period      varchar2(1 char),
+flg_import_date         varchar2(1 char)
+) ON COMMIT PRESERVE ROWS ;
+
+COMMENT ON TABLE TMP_PN_CONFIGS IS 'Temporary table for configs of the importable task types in the Single page notes' ;
+
+COMMENT ON COLUMN TMP_PN_CONFIGS.id_task_type    IS 'Task type ID' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.id_pn_data_block    IS 'Data block ID' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.id_pn_soap_block    IS 'block ID' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.id_doc_area    IS 'Doc area ID' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.id_patient      IS 'Patient ID' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.id_visit IS 'Visit ID' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.id_episode      IS 'Episode ID' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.dt_begin            IS 'Import start date' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.dt_end   IS 'Import end date' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.flg_outside_period   IS 'Outside period' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.flg_import_date   IS 'Y- Request date should be imported. N-otherwise' ;
+
+alter table TMP_PN_CONFIGS add flg_group_on_import varchar2(1 char);
+COMMENT ON COLUMN TMP_PN_CONFIGS.flg_group_on_import   IS 'D- records should be grouped by Date. N-No group' ;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+CREATE GLOBAL TEMPORARY TABLE TMP_PN_CONFIGS
+(  
+id_task_type            number(24),
+id_pn_data_block        number(24),
+id_pn_soap_block        number(24),
+id_doc_area             number(24),
+id_patient              number(24),
+id_visit                number(24),
+id_episode              number(24),
+dt_begin                timestamp with local time zone,
+dt_end                  timestamp with local time zone,
+flg_outside_period      varchar2(1 char),
+flg_import_date         varchar2(1 char)
+) ON COMMIT PRESERVE ROWS ;
+
+COMMENT ON TABLE TMP_PN_CONFIGS IS 'Temporary table for configs of the importable task types in the Single page notes' ;
+
+COMMENT ON COLUMN TMP_PN_CONFIGS.id_task_type    IS 'Task type ID' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.id_pn_data_block    IS 'Data block ID' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.id_pn_soap_block    IS 'block ID' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.id_doc_area    IS 'Doc area ID' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.id_patient      IS 'Patient ID' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.id_visit IS 'Visit ID' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.id_episode      IS 'Episode ID' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.dt_begin            IS 'Import start date' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.dt_end   IS 'Import end date' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.flg_outside_period   IS 'Outside period' ;
+COMMENT ON COLUMN TMP_PN_CONFIGS.flg_import_date   IS 'Y- Request date should be imported. N-otherwise' ;
+
+alter table TMP_PN_CONFIGS add flg_group_on_import varchar2(1 char);
+COMMENT ON COLUMN TMP_PN_CONFIGS.flg_group_on_import   IS 'D- records should be grouped by Date. N-No group' ;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:45
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (FLG_SYNCHRONIZED VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+       dbms_output.put_line('Operação já executada anteriormente');
+END;
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table tmp_pn_configs add description_condition VARCHAR2(1000 CHAR)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error! Please run the command ''ALTER TABLE TMP_PN_CONFIGS ADD DESCRIPTION_CONDITION VARCHAR2(1000 CHAR);'' and see what is the specific error');
+END;
+/
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.FLG_SYNCHRONIZED IS ''Y - If Data Blocks info is to be synchronized with the directed areas, other than templates. N- otherwise''';
+EXCEPTION
+    WHEN OTHERS THEN
+       dbms_output.put_line('Operação já executada anteriormente');
+END;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:51
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (FLG_ONGOING VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.FLG_ONGOING IS ''Y - Consider the ongoing records. N-Not applicable.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (FLG_FINALIZED VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.FLG_FINALIZED IS ''Y - Consider the finalized records. N-Not applicable.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (FLG_NORMAL VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.FLG_NORMAL IS ''A-Consider the anormal results. M-consider the normal results. N-Not applicable.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (auto_pop_exec_prof_cat VARCHAR2(200 char))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.auto_pop_exec_prof_cat IS ''Professional categories types that executed the task to consider when auto-populating records (join in this column all the needed categories). Null-consider all the professional categories.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (flg_first_record VARCHAR2(1 char))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.flg_first_record IS ''Y-Auto-populate the first record. N-Otherwise''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (flg_last_record VARCHAR2(1 char))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.flg_last_record IS ''Y-Auto-populate the last record. N-Otherwise''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (last_note_date timestamp with local time zone)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.last_note_date IS ''Date of the previous note''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (flg_comments VARCHAR2(1 char))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.flg_comments IS ''Y-Auto-populate only records with comments. N-Auto-populate only records without comments. I - Not applicable''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (flg_since_last VARCHAR2(1 char))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.flg_since_last IS ''P-auto-populate since last record (all records, if there is no previsous note). N-not applicable''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (flg_ong_exec VARCHAR2(1 char))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.flg_ong_exec IS ''A-Ongoing records with at least one completed execution since last note. N-not applicable''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (flg_no_note_sl VARCHAR2(1 char))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.flg_no_note_sl IS ''B-All records since last note + all records without notes/comments. N-not applicable''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (id_summary_page number(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.id_summary_page IS ''Summary page ID''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/05/2012 15:09
+-- CHANGE REASON: [ALERT-230524 ] Recheck
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (FLG_ACTIONS_AVAILABLE VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.FLG_ACTIONS_AVAILABLE IS ''Y - Are actions are available on record. N-Not applicable.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 02/07/2012 08:43
+-- CHANGE REASON: [ALERT-234829 ] Improvement of single pages performance
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (FLG_SHOW_SUB_TITLE VARCHAR2(1 char))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.FLG_ACTIONS_AVAILABLE IS ''Y - Indicates the data block subtitle should appear in the application (example for assessment tools the subitile is the doc_area). N - Otherwise.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 22/08/2012 17:05
+-- CHANGE REASON: [ALERT-238310] Import mechanism for Inactive problems
+BEGIN
+    execute immediate 'alter table tmp_pn_configs modify (FLG_ONGOING VARCHAR2(24 char) default ''N'')';
+EXCEPTION
+    WHEN OTHERS THEN
+       dbms_output.put_line('Operação já executada anteriormente');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/10/2012 16:25
+-- CHANGE REASON: [ALERT-242379 ] Single page note for Discharge Summary
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (FLG_REVIEWED_INFO VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.FLG_REVIEWED_INFO IS ''V - Filter by reviewed info in the episode. N-Not applicable.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (FLG_MED_FILTER VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.FLG_MED_FILTER IS ''Z - Prescriptions that originated a new prescription (and it was finalized: the prescription was printed), only available for medication continue at home; E- Ambulatory medication not originated in the medication reconciliation from home medication prescriptoins; N-Not applicable.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs drop column flg_finalized';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs drop column flg_finalized';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs drop column flg_last_record';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (FLG_LAST_N_RECORDS VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.FLG_LAST_N_RECORDS IS ''L - Last N records. S - Last N records by sub group (only available for analysis). G-Last N records by group (only available for vital sings, lab and img). N-Not applicable.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (LAST_N_RECORDS_NR number(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.LAST_N_RECORDS_NR IS ''Last n records to be imported/auto-populated. To be used together with the flg_auto_populated/flg_import_filter (L, S and G).''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (review_context VARCHAR2(24 CHAR) default ''N'')';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.review_context IS ''Review context, if the review is available in the task type. Ex: TM-templates.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 16/10/2012 11:26
+-- CHANGE REASON: [ALERT-242400 ] Discharge summary
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (FLG_REVIEWED_INFO VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.FLG_REVIEWED_INFO IS ''V - Filter by reviewed info in the episode. N-Not applicable.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (FLG_MED_FILTER VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.FLG_MED_FILTER IS ''Z - Prescriptions that originated a new prescription (and it was finalized: the prescription was printed), only available for medication continue at home; E- Ambulatory medication not originated in the medication reconciliation from home medication prescriptoins; N-Not applicable.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs drop column flg_finalized';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs drop column flg_finalized';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs drop column flg_last_record';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (FLG_LAST_N_RECORDS VARCHAR2(1 char) default ''N'' not NULL)';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.FLG_LAST_N_RECORDS IS ''L - Last N records. S - Last N records by sub group (only available for analysis). G-Last N records by group (only available for vital sings, lab and img). N-Not applicable.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (LAST_N_RECORDS_NR number(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.LAST_N_RECORDS_NR IS ''Last n records to be imported/auto-populated. To be used together with the flg_auto_populated/flg_import_filter (L, S and G).''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (review_context VARCHAR2(24 CHAR) default ''N'')';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.review_context IS ''Review context, if the review is available in the task type. Ex: TM-templates.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 30/11/2012 08:55
+-- CHANGE REASON: [ALERT-246012 ] Alteração do mecanismo de sincronização na single page
+DECLARE
+    e_column_already_there EXCEPTION;    
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); 
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (id_task number(24))';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('Column already in the table: id_Task');
+END;
+/
+DECLARE
+    e_column_already_there EXCEPTION;    
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); 
+BEGIN
+    execute immediate 'COMMENT ON COLUMN tmp_pn_configs.id_task IS ''Task Id''';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('Column already in the table: id_Task');
+END;
+/
+BEGIN
+    execute immediate 'alter table tmp_pn_configs modify (FLG_SYNCHRONIZED varchar2(24 char))';
+EXCEPTION
+    WHEN OTHERS THEN
+        null;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/05/2013 16:25
+-- CHANGE REASON: [ALERT-259145] Triage single page
+BEGIN
+    execute immediate 'alter table tmp_pn_configs add (review_cat varchar2(200 char))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+COMMENT ON column tmp_pn_configs.review_cat IS 'Professional category flg_type to consider  in the records review(join in this column all the needed categories). Null-consider all the professional categories. For instance, if review_cat = D, the record appears as not reviewed (red colored) if the record had not been reviewed by a professional from doctor category. Only available for tasks with review (allergies, problems, habits, past history)';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 07/07/2017 14:53
+-- CHANGE REASON: [ALERT-330567] Discharge summary for FR market.
+alter table tmp_pn_configs add (flg_technical VARCHAR2(1 char));
+alter table tmp_pn_configs add (flg_relevant VARCHAR2(1 char));
+alter table tmp_pn_configs add (flg_description VARCHAR2(24 char));
+
+comment on column tmp_pn_configs.flg_technical is 'Is task technical (used for exams and procedures) - Y/N';
+comment on column tmp_pn_configs.flg_relevant is 'Is task technical (used for exams and analysis results) - Y/N';
+comment on column tmp_pn_configs.flg_description is 'Task description type: S - short; L- Long; D - Detailed';
+-- CHANGE END: Vanessa Barsottelli
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 10/10/2017 17:00
+-- CHANGE REASON: [ALERT-173] Improve filter mechanism
+ALTER TABLE tmp_pn_configs
+  MODIFY FLG_SYNCHRONIZED VARCHAR2(200 CHAR);
+-- CHANGE END: Amanda Lee
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 11/10/2017
+-- CHANGE REASON: CALERT-174
+BEGIN
+    EXECUTE IMMEDIATE 'alter table tmp_pn_configs add description_condition VARCHAR2(1000 CHAR)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Error! Please run the command ''ALTER TABLE TMP_PN_CONFIGS ADD DESCRIPTION_CONDITION VARCHAR2(1000 CHAR);'' and see what is the specific error');
+END;
+/
+COMMENT ON COLUMN tmp_pn_configs.flg_description IS 'Task description type: S - short; L- Long; D - Detailed; C - Conditional (uses DESCRIPTION_CONDITION as a condition for desc calculation)';
+COMMENT ON COLUMN tmp_pn_configs.description_condition IS 'If flg_description = C, then this field must be filled with the necessary condition(s), this condition(s) must be interpreted in code';
+-- CHANGE END: Pedro Teixeira
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 12/11/2017 17:08
+-- CHANGE REASON: [CALERT-649 ] Admission note
+alter table tmp_pn_configs modify flg_med_filter          VARCHAR2(24 CHAR) default 'N';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 12/11/2017 17:10
+-- CHANGE REASON: [CALERT-344] Import template records from other note
+alter table tmp_pn_configs add (action VARCHAR2(200 char));
+alter table tmp_pn_configs add (id_pn_note_type_action number);
+alter table tmp_pn_configs add (id_pn_data_block_action number);
+
+comment on column tmp_pn_configs.action is 'Action to be performed over the record being imported. Ex. CPRN-id_pn_note_type-id_pn_data_block (that means copy the record if it is associated to some note of id_pn_note_type and id_pn_data_block)';
+
+comment on column tmp_pn_configs.id_pn_note_type_action is 'Id_pn_note_type defined to the action (see column action)';
+
+comment on column tmp_pn_configs.id_pn_data_block_action is 'Id_pn_data_block defined to the action (see column action)';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Vitor Sa
+-- CHANGE DATE: 14/11/2017 12:23
+-- CHANGE REASON: [CALERT-428] CALERT-428 - Admission Note
+alter table tmp_pn_configs modify (flg_technical VARCHAR2(24 char));
+-- CHANGE END: Vitor Sa
+
+-- CHANGED BY: Vitor Sa
+-- CHANGE DATE: 11/12/2017 09:58
+-- CHANGE REASON: [CALERT-1133] CALERT-1133 DDL Versioning
+ALTER TABLE tmp_pn_configs add (flg_stat VARCHAR2(24 char));
+comment on column tmp_pn_configs.flg_stat is 'Indicates if order is STAT or not';
+-- CHANGE END: Vitor Sa
+
+-- CHANGED BY: rui.mendonca
+-- CHANGE DATE: 11/12/2017 15:42
+-- CHANGE REASON: [CALERT-1112] New Neurological assessment figure
+BEGIN
+    pk_versioning.run('
+ALTER TABLE 
+  tmp_pn_configs 
+ADD 
+  flg_type VARCHAR2(16 CHAR)');
+END;
+/
+COMMENT ON COLUMN tmp_pn_configs.flg_type IS 'Flag to be used in the filtering of records (each area must implement the code according with given value); BN - Body diagrams for neurological assessment; BD - Body diagrams for drainage; BO - Other body diagrams.';
+-- CHANGE END: rui.mendonca
+
+-- CHANGED BY: Lillian Lu
+-- CHANGE DATE: 9/1/2018
+-- CHANGE REASON: [CALERT-200] New Attending Progress note single page (TW market)
+-- Assessment buttons
+
+ALTER TABLE tmp_pn_configs ADD days_available_period NUMBER(24);
+
+COMMENT ON COLUMN tmp_pn_configs.days_available_period IS 'Period of time in days during which a record is available on the Data Block import screen.';
+
+-- CHANGE END: Lillian Lu
+
+-- CHANGED BY: Lillian Lu
+-- CHANGE DATE: 23/01/2018
+-- CHANGE REASON: [CALERT-2138] Data can't be imported into 'Other Assessment' in ICU Notes
+BEGIN
+    pk_versioning.run('
+ALTER TABLE 
+  tmp_pn_configs 
+ADD 
+  id_mtos_score NUMBER(24)');
+END;
+/
+COMMENT ON COLUMN tmp_pn_configs.id_mtos_score IS 'MTOS_SCORE ID';
+-- CHANGE END: Lillian Lu
+
+-- CHANGED BY: Lillian Lu
+-- CHANGE DATE: 2018-06-15
+-- CHANGE REASON: [CEMR-1560] New import mechanism results filter in single page documentation notes for TW market
+BEGIN
+    pk_versioning.run('
+ALTER TABLE 
+  tmp_pn_configs 
+ADD 
+  flg_dt_task VARCHAR2(200 CHAR)');
+END;
+/
+
+COMMENT ON COLUMN tmp_pn_configs.flg_dt_task IS 'Define date field in task_timeline_ea to check import filter date. Use ''|'' if more then one date';
+-- CHANGE END: Lillian Lu
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 11/04/2019 14:40
+-- CHANGE REASON: [EMR-14889] SP Mechanism to not include some doc_areas already present in other blocks
+BEGIN
+    pk_versioning.run('
+ALTER TABLE 
+  tmp_pn_configs 
+ADD 
+  flg_exc_sum_page_da varchar2(1 char)');
+END;
+/
+
+COMMENT ON COLUMN tmp_pn_configs.flg_exc_sum_page_da IS 'From this Data Block exclude the other summary page doc_areas existing on the note (only for data blockS configured by SUMMARY PAGE) ';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/11/2021 16:11
+-- CHANGE REASON: [EMR-48698] - Single page: improvements on lab tests results presentation
+-- Add/modify columns
+alter table TMP_PN_CONFIGS add flg_group_type varchar2(1 char);
+-- Add comments to the columns
+comment on column TMP_PN_CONFIGS.flg_group_type
+is 'When grouping the task it will be by (D) Date - Default ; I(Instructions) Date and instructions (only when FLG_GROUP_ON_IMPORT is Y )';
+-- CHANGE END: Elisabete Bugalho

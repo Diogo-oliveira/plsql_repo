@@ -1,0 +1,253 @@
+
+
+  CREATE TABLE PAT_ALLERGY_HIST
+   (	ID_PAT_ALLERGY_HIST NUMBER(24,0) NOT NULL ENABLE,
+	ID_PAT_ALLERGY NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_ALLERGY DATE NOT NULL ENABLE,
+	ID_ALLERGY NUMBER(12,0),
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_DRUG_PHARMA NUMBER(12,0),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	ID_PROF_WRITE NUMBER(24,0) NOT NULL ENABLE,
+	DT_FIRST_TIME DATE,
+	FLG_TYPE VARCHAR2(1),
+
+	FLG_APROVED VARCHAR2(1) NOT NULL ENABLE,
+	YEAR_BEGIN NUMBER(4,0),
+	MONTH_BEGIN NUMBER(2,0),
+	DAY_BEGIN NUMBER(2,0),
+	YEAR_END NUMBER(4,0),
+	MONTH_END NUMBER(2,0),
+	DAY_END NUMBER(2,0),
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0),
+	FLG_NATURE VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE pat_allergy_hist IS 'As alergias estão incluídas na lista de problemas do doente e portanto podem sofrer várias mudanças de estado (activo / passivo/ cancelado). Para manter o histórico dessas mudanças criou-se esta tabela de histórico, sendo possível guardar ñ só os diferentes estados, como todos os atributos do registo.' ;
+
+COMMENT ON COLUMN pat_allergy_hist.id_pat_allergy_hist IS 'PK' ;
+COMMENT ON COLUMN pat_allergy_hist.flg_status IS 'Estado: A - Activo, P - Passivo, C - Cancelado' ;
+COMMENT ON COLUMN pat_allergy_hist.notes IS 'Notas' ;
+COMMENT ON COLUMN pat_allergy_hist.dt_first_time IS 'Data de observação dos primeiros sintomas' ;
+COMMENT ON COLUMN pat_allergy_hist.flg_type IS 'I - reacção idiossincrática, A - alergia' ;
+COMMENT ON COLUMN pat_allergy_hist.flg_aproved IS 'U - relatada pelo utente, M - comprovada clinicamente' ;
+COMMENT ON COLUMN pat_allergy_hist.year_begin IS 'Ano (aproximando) de observação dos primeiros sintomas' ;
+COMMENT ON COLUMN pat_allergy_hist.month_begin IS 'Mês (aproximando) de observação dos primeiros sintomas' ;
+COMMENT ON COLUMN pat_allergy_hist.day_begin IS 'Dia (aproximando) de observação dos primeiros sintomas' ;
+COMMENT ON COLUMN pat_allergy_hist.year_end IS 'Ano (aproximando) de fim' ;
+COMMENT ON COLUMN pat_allergy_hist.month_end IS 'Mês (aproximando) de fim' ;
+COMMENT ON COLUMN pat_allergy_hist.day_end IS 'Dia (aproximando) de fim' ;
+COMMENT ON COLUMN pat_allergy_hist.id_episode IS 'ID do episódio em que a alergia foi registada.' ;
+
+alter table pat_allergy_hist 
+add (dt_pat_allergy_tstz timestamp with local time zone); 
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE PAT_ALLERGY_HIST ADD DT_FIRST_TIME_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN PAT_ALLERGY_HIST.DT_FIRST_TIME_TSTZ IS 'Data de observa‡Æo dos primeiros sintomas'; 
+
+
+
+alter table PAT_ALLERGY_HIST drop column  DT_PAT_ALLERGY;
+alter table PAT_ALLERGY_HIST drop column DT_FIRST_TIME;
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 30/03/2009 10:28
+-- CHANGE REASON: [ALERT-12181] Notes Problems / Cancelation reason
+--                CCHIT: ED 25.01
+alter table pat_allergy_hist
+add id_cancel_reason number(24);
+comment on column pat_allergy_hist.id_cancel_reason is 'Cancel reason ID';
+
+alter table pat_allergy_hist
+add cancel_notes varchar2(4000);
+comment on column pat_allergy_hist.cancel_notes is 'Cancelation notes';
+-- CHANGE END
+
+
+--
+-- CHANGED BY...: THIAGO BRITO
+-- CHANGE DATE..: 2009-MAR-24
+-- CHANGE REASON: ALERT-20942
+
+ALTER TABLE pat_allergy_hist ADD id_allergy_severity NUMBER(24);
+
+ALTER TABLE pat_allergy_hist ADD desc_allergy VARCHAR2(200);
+
+ALTER TABLE pat_allergy_hist ADD desc_aproved VARCHAR2(200);
+
+ALTER TABLE pat_allergy_hist ADD flg_edit VARCHAR2(1);
+
+ALTER TABLE pat_allergy_hist ADD flg_cancel VARCHAR2(1);
+
+COMMENT ON COLUMN pat_allergy_hist.id_allergy_severity IS 'Severity ID';
+
+COMMENT ON COLUMN pat_allergy_hist.desc_allergy IS 'Allergy: When the ''other'' option is selected the user will be able to write a free-text that will be saved here.';
+
+COMMENT ON COLUMN pat_allergy_hist.desc_aproved IS 'Reporter: When the ''other'' option is selected the user will be able to write a free-text that will be saved here.';
+
+-- CHANGE END
+--
+
+
+--
+-- CHANGED BY...: THIAGO BRITO
+-- CHANGE DATE..: 2009-APR-06
+-- CHANGE REASON: ALERT-20942
+
+ALTER TABLE pat_allergy_hist ADD desc_edit VARCHAR2(200);
+
+COMMENT ON COLUMN pat_allergy_hist.desc_edit IS 'Description of the reason for editing the register.';
+
+-- CHANGE END
+
+
+
+--
+-- CHANGED BY...: THIAGO BRITO
+-- CHANGE DATE..: 2009-MAR-24
+-- CHANGE REASON: ALERT-23926
+
+ALTER TABLE pat_allergy_hist ADD revision NUMBER(24);
+COMMENT ON COLUMN pat_allergy_hist.revision IS 'This field holds the number of times the register was changed.';
+
+-- CHANGE END
+
+
+-- CHANGED BY...: THIAGO BRITO
+-- CHANGE DATE..: 2009-May-11
+-- CHANGE REASON: ALERT-27646
+
+ALTER TABLE pat_allergy_hist MODIFY flg_aproved VARCHAR2(1) NULL;
+
+-- CHANGE END
+
+
+
+--
+-- CHANGED BY: THIAGO BRITO
+-- CHANGE DATE: 2009-Oct-22
+-- CHANGE REASON: ALERT-51130
+
+ALTER TABLE pat_allergy_hist add flg_review VARCHAR2(1);
+COMMENT ON column pat_allergy_hist.flg_review IS 'Flag review (Y/N)';
+
+-- CHANGE END: THIAGO BRITO
+--
+
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 08/03/2010 15:55
+-- CHANGE REASON: [ALERT-73258] 
+ALTER TABLE PAT_ALLERGY_HIST ADD
+ (DT_RESOLUTION VARCHAR2(8 char)
+ );
+
+COMMENT ON COLUMN PAT_ALLERGY_HIST.DT_RESOLUTION IS 'Resolution date';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 11/05/2011 08:04
+-- CHANGE REASON: [ALERT-175003] [EDIS DB] Add id_cdr_call to Pregnancy and Diagnosis areas
+DECLARE
+    e_col_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_col_already_there, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pat_allergy_hist add (ID_CDR_CALL NUMBER(24))';
+EXCEPTION
+    WHEN e_col_already_there THEN
+        dbms_output.put_line('Column already added.');
+END;
+/
+
+COMMENT ON COLUMN pat_allergy_hist.ID_CDR_CALL IS 'Rule engine call identifier.' ;
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY:  Gisela Couto
+-- CHANGE DATE: 14/06/2014 19:11
+-- CHANGE REASON: [ALERT-286096] Dev DB - CDA Section: Medication allergies
+DECLARE
+    PROCEDURE run_ddl(i_sql IN VARCHAR2) IS
+    BEGIN
+        EXECUTE IMMEDIATE i_sql;
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('WARNING - ' || replace(SRCSTR => SQLERRM, OLDSUB => 'ORA-', NEWSUB => '') || '; ' || i_sql || ';');
+    END run_ddl;
+BEGIN
+    run_ddl(i_sql => 'ALTER TABLE PAT_ALLERGY_HIST ADD flg_cda_reconciliation varchar2(1)');
+    run_ddl(i_sql => 'ALTER TABLE PAT_ALLERGY_HIST MODIFY flg_cda_reconciliation DEFAULT ''N''');
+
+    EXECUTE IMMEDIATE 'comment on column PAT_ALLERGY_HIST.flg_cda_reconciliation is ''Defines if the alergy record was created by cda or pfh. y-yes, n-no''';
+END;
+/
+-- CHANGE END:  Gisela Couto
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:12
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table PAT_ALLERGY_HIST
+  is 'Patient Allergy History';
+-- Add comments to the columns 
+comment on column PAT_ALLERGY_HIST.id_pat_allergy_hist
+  is 'Primary Key';
+comment on column PAT_ALLERGY_HIST.id_pat_allergy
+  is 'Patient allergy ID';
+comment on column PAT_ALLERGY_HIST.id_allergy
+  is 'Allergy ID';
+comment on column PAT_ALLERGY_HIST.id_patient
+  is 'Patient ID';
+comment on column PAT_ALLERGY_HIST.id_drug_pharma
+  is 'Drug ID (DEPRECATED)';
+comment on column PAT_ALLERGY_HIST.flg_status
+  is 'Flag status: A - Active; P - Inactive; C - Cancelled; R - Resolved';
+comment on column PAT_ALLERGY_HIST.id_prof_write
+  is 'Professional ID that registered the allergy';
+comment on column PAT_ALLERGY_HIST.flg_type
+  is 'Type of allergy I - Adverse reaction, A - Propensity to adverse reaction; T - Intolerance; P - Propensity';
+comment on column PAT_ALLERGY_HIST.flg_aproved
+  is 'Reported by; M -Clinically documented; U - Patient; E - Escort; F - Family member; O - Other; S - Suspected
+';
+comment on column PAT_ALLERGY_HIST.year_begin
+  is 'Begin year of first symptoms';
+comment on column PAT_ALLERGY_HIST.month_begin
+  is 'Begin month of first symptoms';
+comment on column PAT_ALLERGY_HIST.day_begin
+  is 'begin day of first symptoms';
+comment on column PAT_ALLERGY_HIST.year_end
+  is 'End year';
+comment on column PAT_ALLERGY_HIST.month_end
+  is 'End month';
+comment on column PAT_ALLERGY_HIST.day_end
+  is 'End day';
+comment on column PAT_ALLERGY_HIST.id_institution
+  is 'Institution ID';
+comment on column PAT_ALLERGY_HIST.id_episode
+  is 'Episode ID';
+comment on column PAT_ALLERGY_HIST.flg_nature
+  is 'A - Acute; S - Self-limiting; B - Routine patient; C - Chronic';
+comment on column PAT_ALLERGY_HIST.dt_pat_allergy_tstz
+  is 'Change date';
+comment on column PAT_ALLERGY_HIST.dt_first_time_tstz
+  is 'Allergy start date';
+comment on column PAT_ALLERGY_HIST.flg_edit
+  is 'When allergy is edited indicates he reason why it was edited';
+comment on column PAT_ALLERGY.flg_cancel
+  is 'Flag that indicates why it was cancelled (NO LONGER USED)';
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 08/06/2020 11:58
+-- CHANGE REASON: [EMR-32863] - Select drug allergy > press ok > error occurs
+BEGIN
+pk_versioning.run('alter table pat_allergy_hist modify desc_allergy varchar2(4000 char)');
+END;
+/
+-- CHANGE END: Sofia Mendes

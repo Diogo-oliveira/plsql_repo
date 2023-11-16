@@ -1,0 +1,58 @@
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/05/2014 21:46
+-- CHANGE REASON: [ALERT-281683] 
+alter table PAT_VACC_HIST
+  add constraint PVH_PK primary key (ID_PAT_VACC_HIST);
+  
+alter table PAT_VACC_HIST
+  add constraint PVH_PAT_PK foreign key (id_patient)  references patient (id_patient);
+
+alter table PAT_VACC_HIST
+  add constraint PVH_PROF_STAT_PK foreign key (id_prof_status)  references professional (id_professional);
+
+alter table PAT_VACC_HIST
+  add constraint PVH_REASON_PK foreign key (id_reason)  references NOT_ORDER_REASON (id_NOT_ORDER_REASON);
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/05/2014 21:56
+-- CHANGE REASON: [ALERT-281683] 
+alter table PAT_VACC_HIST
+  add constraint PVH_PK primary key (ID_PAT_VACC_HIST);
+  
+alter table PAT_VACC_HIST
+  add constraint PVH_PAT_PK foreign key (id_patient)  references patient (id_patient);
+
+alter table PAT_VACC_HIST
+  add constraint PVH_PROF_STAT_PK foreign key (id_prof_status)  references professional (id_professional);
+
+alter table PAT_VACC_HIST
+  add constraint PVH_REASON_PK foreign key (id_reason)  references NOT_ORDER_REASON (id_NOT_ORDER_REASON);
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 21/05/2014 12:02
+-- CHANGE REASON: [ALERT-285464] 
+alter table PAT_VACC_HIST
+  add constraint PVH_PK primary key (ID_PAT_VACC_HIST);
+  
+alter table PAT_VACC_HIST
+  add constraint PVH_PAT_PK foreign key (id_patient)  references patient (id_patient);
+
+alter table PAT_VACC_HIST
+  add constraint PVH_PROF_STAT_PK foreign key (id_prof_status)  references professional (id_professional);
+
+alter table PAT_VACC_HIST
+  add constraint PVH_REASON_PK foreign key (id_reason)  references NOT_ORDER_REASON (id_NOT_ORDER_REASON);
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 11/11/2014 15:27
+-- CHANGE REASON: [ALERT-301386] 
+BEGIN
+pk_versioning.run(i_sql => q'[alter   TABLE PAT_VACC_HIST ADD CONSTRAINT PVH_PATIENT_FK FOREIGN KEY (ID_PATIENT) REFERENCES  patient (ID_PATIENT)]');
+pk_versioning.run(i_sql => q'[alter   TABLE PAT_VACC_HIST ADD CONSTRAINT PVH_PROF_STATUS_FK FOREIGN KEY (ID_PROF_STATUS) REFERENCES  professional (id_professional)]');
+pk_versioning.run(i_sql => q'[alter   TABLE PAT_VACC_HIST ADD CONSTRAINT PVH_REASON_FK FOREIGN KEY (ID_REASON) REFERENCES  not_order_reason (id_not_order_reason)]');
+END;
+/
+-- CHANGE END: mario.mineiro

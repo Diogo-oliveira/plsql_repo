@@ -1,0 +1,52 @@
+-- CHANGED BY:  Álvaro Vasconcelos
+-- CHANGE DATE: 16/06/2011 14:48
+-- CHANGE REASON: [ALERT-184978] Sis Pre Natal
+
+
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE SERIES (
+       ID_SERIES                    NUMBER(24) NOT NULL,
+ ID_INSTITUTION               NUMBER(24) NOT NULL,
+ ID_GEO_STATE                 NUMBER(24) NOT NULL,
+ STARTING_NUMBER              NUMBER(24) NOT NULL,
+ CURRENT_NUMBER               NUMBER(24),
+ ENDING_NUMBER                NUMBER(24) NOT NULL,
+ SERIES_YEAR                  VARCHAR2(4 CHAR) NOT NULL,
+ FLG_STATUS                   VARCHAR2(1 CHAR) NOT NULL,
+       --
+       CREATE_USER                  VARCHAR2(24 CHAR),
+       CREATE_TIME                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       CREATE_INSTITUTION           NUMBER(24),
+       UPDATE_USER                  VARCHAR2(24 CHAR),
+       UPDATE_TIME                  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+       UPDATE_INSTITUTION           NUMBER(24)
+)';
+
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('Table already exists');
+END;
+/
+
+COMMENT ON TABLE SERIES                          IS 'Sis Pre-Natal series table';
+
+COMMENT ON COLUMN SERIES.id_series               IS 'Series ID';
+COMMENT ON COLUMN SERIES.id_institution          IS 'Institution ID';
+COMMENT ON COLUMN SERIES.id_geo_state            IS 'Geo State ID';
+COMMENT ON COLUMN SERIES.starting_number         IS 'Series starting number';
+COMMENT ON COLUMN SERIES.current_number          IS 'Series current number';
+COMMENT ON COLUMN SERIES.ending_number           IS 'Series ending number';
+COMMENT ON COLUMN SERIES.SERIES_year             IS 'Series year';
+COMMENT ON COLUMN SERIES.flg_status              IS 'Series Status: P - Pending; A - In Progress; F - Completed; S - Suspended; C - Cancelled; D - Discontinued';
+--
+COMMENT ON COLUMN SERIES.create_user             IS 'Professional that created the registry';
+COMMENT ON COLUMN SERIES.create_time             IS 'Date of the registry creation';
+COMMENT ON COLUMN SERIES.create_institution      IS 'Id of the institution where the registry was created';
+COMMENT ON COLUMN SERIES.update_user             IS 'Last professional that updated the registry';
+COMMENT ON COLUMN SERIES.update_time             IS 'Date of the last update to the registry';
+COMMENT ON COLUMN SERIES.update_institution      IS 'Id of the last institution where the registry was updated';
+-- CHANGE END:  Álvaro Vasconcelos

@@ -1,0 +1,37 @@
+BEGIN
+pk_frmw_objects.insert_into_frmw_objects(
+     i_owner            => 'ALERT',
+     i_obj_name         => 'DS_CMPT_MKT_REL_MAP',
+     i_obj_type         => 'TABLE',
+     i_flg_category     => 'DSV', --dsv
+     i_delete_script    => '',
+     i_responsible_team => 'ARCH',-- ARCH
+     i_flg_nzd          => 'N');
+END;
+/  
+
+
+create table DS_CMPT_MKT_REL_MAP
+(
+  id_cmpt_mkt_rel_orig    number(24)	not null,
+  id_cmpt_mkt_rel_dest    number(24)	not null,
+  create_user         VARCHAR2 (30 CHAR ),
+  create_time         TIMESTAMP (6 ) WITH LOCAL TIME ZONE ,
+  create_institution  NUMBER (24 ),
+  update_user         VARCHAR2 (30 CHAR ),
+  update_time         TIMESTAMP (6 ) WITH LOCAL TIME ZONE ,
+  update_institution  NUMBER (24 )
+)
+tablespace alert_data
+;
+
+
+comment on table ALERT.DS_CMPT_MKT_REL_MAP          is 'Table for mapping components of one root to another';
+comment on column ALERT.DS_CMPT_MKT_REL_MAP.id_cmpt_mkt_rel_orig          is 'id of compoentn/mkt of origin root';
+comment on column ALERT.DS_CMPT_MKT_REL_MAP.id_cmpt_mkt_rel_dest          is 'id of compoentn/mkt of destination root';
+comment on column ALERT.DS_CMPT_MKT_REL_MAP.CREATE_USER          is 'User that created the record';
+comment on column ALERT.DS_CMPT_MKT_REL_MAP.CREATE_TIME          is 'Time when the record was created';
+comment on column ALERT.DS_CMPT_MKT_REL_MAP.CREATE_INSTITUTION   is 'Institution where record was created';
+comment on column ALERT.DS_CMPT_MKT_REL_MAP.UPDATE_USER          is 'Last user that changed the record';
+comment on column ALERT.DS_CMPT_MKT_REL_MAP.UPDATE_INSTITUTION   is 'Last Institution where user made the change';
+comment on column ALERT.DS_CMPT_MKT_REL_MAP.UPDATE_TIME          is 'Time of Last change';

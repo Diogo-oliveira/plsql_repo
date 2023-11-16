@@ -1,0 +1,77 @@
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 06-02-2013
+-- CHANGE REASON: ALERT-251133
+DECLARE
+	e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+	pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'SCHEDULE_OUTP_HIST', i_obj_type => 'TABLE',i_flg_category => 'HST', i_flg_nzd => 'N');
+
+	EXECUTE IMMEDIATE 'CREATE TABLE SCHEDULE_OUTP_HIST
+						 (ID_SCHEDULE_OUTP NUMBER(24) NOT NULL
+						 ,ID_SCHEDULE NUMBER(24) NOT NULL
+						 ,FLG_STATE VARCHAR2(1 CHAR) NOT NULL
+						 ,FLG_SCHED VARCHAR2(1 CHAR)
+						 ,ID_SOFTWARE NUMBER(24) NOT NULL
+						 ,ID_EPIS_TYPE NUMBER(24) NOT NULL
+						 ,FLG_TYPE VARCHAR2(1 CHAR)
+						 ,DT_TARGET TIMESTAMP(6) WITH LOCAL TIME ZONE
+						 ,FLG_SCHED_REQUEST_TYPE VARCHAR2(1 CHAR)
+						 ,FLG_SCHED_TYPE VARCHAR2(1 CHAR)
+						 ,CREATE_USER VARCHAR2(24 CHAR)
+						 ,CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+						 ,CREATE_INSTITUTION NUMBER(24)
+						 ,UPDATE_USER VARCHAR2(24 CHAR)
+						 ,UPDATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+						 ,UPDATE_INSTITUTION NUMBER(24)
+						 ,DT_UPDATE TIMESTAMP WITH LOCAL TIME ZONE DEFAULT current_timestamp
+						 )
+                      tablespace TABLE_L';
+EXCEPTION
+	WHEN e_object_exists THEN dbms_output.put_line('Tentativa de criação da tabela SCHEDULE_OUTP_HIST falhou porque já existe');
+END;
+/
+
+COMMENT ON TABLE SCHEDULE_OUTP_HIST IS 'History table for updates support';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.ID_SCHEDULE_OUTP IS 'Consult schedule identifier';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.ID_SCHEDULE IS 'Schedule identifier';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.FLG_STATE IS 'Consult appointment''s patient state: ''A'' patient absent ''R'' requested, ''E'' - patient waiting, ''D'' - medical discharge, ''M'' - administrative discharge, ''C ''- waiting in the hallway, ''N'' - nurge triage, ''P'' - nursing end, ''T'' - ongoing appointment';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.FLG_SCHED IS 'Appointment type: ''F'' nursing follow-up, ''I'' inpatient, ''M'' physician follow-up, ''N'' 1st nursing, ''O'' information, ''S'' admission for surgery, ''T'' medications administration, ''V'' wound care, ''Q'' speciality follow-up, ''P'' 1st speciality, ''D'' 1st physician, ''R'' consult';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.ID_SOFTWARE IS 'Software identifier';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.ID_EPIS_TYPE IS 'Episode type';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.FLG_TYPE IS 'Consult type: ''P'' first appointment, ''S'' follow-up appointment';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.DT_TARGET IS 'Appointment''s begin date';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.Flg_Sched_Request_Type IS 'Appointment request type ( patient, physician, nurse, institution)';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.FLG_SCHED_TYPE IS 'Appointment type: S - sem presenca do utente, V - vigilância, D - Doença. NULL representa um contacto directo.';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.CREATE_USER IS 'creation user';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.CREATE_TIME IS 'creation time';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.CREATE_INSTITUTION IS 'creation institution';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.UPDATE_USER IS 'update user';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.UPDATE_TIME IS 'update time';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.UPDATE_INSTITUTION IS 'update institution';
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.DT_UPDATE IS 'date of update occurrence';
+
+-- CHANGE END:  Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 20-08-2013
+-- CHANGE REASON: ALERT-263450
+begin
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT',i_obj_name => 'SCHEDULE_OUTP_HIST', i_obj_type => 'TABLE', i_flg_category => 'HST', i_flg_nzd => 'Y');
+end;
+/
+-- CHANGE END: Telmo
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-01-2015
+-- CHANGE REASON: ALERT-303513
+alter table SCHEDULE_OUTP_HIST add id_prof_update number(24);
+comment on column SCHEDULE_OUTP_HIST.id_prof_update is 'prof. responsible for the update occurring at dt_update';
+-- CHANGE END: Telmo
+
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 15/01/2016 17:23
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON COLUMN SCHEDULE_OUTP_HIST.FLG_SCHED_TYPE IS 'S(Without patient present),V(surveillance),D(disease),NULL represents direct contact.';
+-- CHANGE END:  jose.m.silva

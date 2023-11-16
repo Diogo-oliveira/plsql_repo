@@ -1,0 +1,101 @@
+
+
+  CREATE TABLE ICNP_TERM
+   (	ID_TERM NUMBER(24,0) NOT NULL ENABLE,
+	CODE_TERM VARCHAR2(200) NOT NULL ENABLE,
+	CODE VARCHAR2(64) NOT NULL ENABLE,
+	ID_AXIS NUMBER(12,0),
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	CODE_HELP_TERM VARCHAR2(200),
+	ID_TERM_PARENT NUMBER(24,0),
+	SNOMED_SCTID NUMBER(18,0),
+	SNOMED_SNOMEDID VARCHAR2(9),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(12,0),
+
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE icnp_term IS 'Termos' ;
+
+COMMENT ON COLUMN icnp_term.code_term IS 'Código para tradução do termo' ;
+COMMENT ON COLUMN icnp_term.code IS 'Term code identifier as published by ICNP: eg. 1A.1.1 for term "Individual"' ;
+COMMENT ON COLUMN icnp_term.flg_type IS 'Term is a Type that agregates other subTerms' ;
+COMMENT ON COLUMN icnp_term.code_help_term IS 'Código para tradução da ajuda de contexto do termo' ;
+COMMENT ON COLUMN icnp_term.snomed_sctid IS 'Unique SNOMED CT Identifier. for Heart is "80891009"' ;
+COMMENT ON COLUMN icnp_term.snomed_snomedid IS 'eg. SNOMEDID for Heart is "T-32000"' ;
+COMMENT ON COLUMN icnp_term.flg_available IS 'the relationship is valid? Y/N' ;
+
+-- CHANGED BY: Pedro Lopes
+-- CHANGE DATE: 2009-JUN-30
+-- CHANGE REASON: ALERT-913
+
+ALTER TABLE ICNP_TERM DROP COLUMN SNOMED_SCTID;
+
+ALTER TABLE ICNP_TERM DROP COLUMN SNOMED_SNOMEDID;
+
+ALTER TABLE ICNP_TERM DROP COLUMN FLG_TYPE;
+
+ALTER TABLE ICNP_TERM DROP COLUMN ID_TERM_PARENT;
+
+ALTER TABLE ICNP_TERM DROP COLUMN CODE;
+
+ALTER TABLE ICNP_TERM ADD (CONCEPT_CODE VARCHAR2(64));
+
+COMMENT ON COLUMN ICNP_TERM.CONCEPT_CODE IS 'ICNP concept code' ;
+
+ALTER TABLE ICNP_TERM ADD (PARENT_CODE VARCHAR2(64));
+
+COMMENT ON COLUMN ICNP_TERM.PARENT_CODE IS 'ICNP concept parent code' ;
+
+ALTER TABLE icnp_term MODIFY id_axis NUMBER(24);
+
+--CHANGE END
+
+-- CHANGED BY: Pedro Lopes
+-- CHANGE DATE: 2009-JUL-06
+-- CHANGE REASON: ALERT-913
+
+ALTER TABLE ICNP_TERM DROP COLUMN RANK;
+
+--CHANGE END
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 29/11/2012 16:49
+-- CHANGE REASON: [ALERT-246082] 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -01430);
+BEGIN
+   EXECUTE IMMEDIATE 'alter table ICNP_TERM
+add ID_AXIS_PARENT NUMBER(24)';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('AVISO: coluna a ser acrescentada já existe na tabela');
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 30/11/2012 10:17
+-- CHANGE REASON: [ALERT-246082] 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -01430);
+BEGIN
+   EXECUTE IMMEDIATE 'alter table ICNP_TERM
+add ID_AXIS_PARENT NUMBER(24)';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('AVISO: coluna a ser acrescentada já existe na tabela');
+end;
+/
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 27/06/2013 10:43
+-- CHANGE REASON: [ALERT-251099] 
+ALTER TABLE ICNP_TERM 
+ ADD (RANK NUMBER(6,0) NULL);
+-- CHANGE END: cristina.oliveira

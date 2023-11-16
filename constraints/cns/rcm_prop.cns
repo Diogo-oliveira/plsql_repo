@@ -1,0 +1,12 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/05/2012 11:21
+-- CHANGE REASON: [ALERT-217767] 
+ALTER TABLE "RCM_PROP" ADD CONSTRAINT "RMPP_PK" PRIMARY KEY ("ID_RCM", "ID_PROP") ENABLE;
+
+  ALTER TABLE "RCM_PROP" ADD CONSTRAINT "RMPP_VAL_CHK" CHECK (
+(CHR_VAL is not null and DTE_VAL is null and NUM_VAL is null )
+or
+(CHR_VAL is null and DTE_VAL is not null and NUM_VAL is null )
+or
+(CHR_VAL is null and DTE_VAL is null and NUM_VAL is not null )) ENABLE;
+-- CHANGE END: Ana Monteiro

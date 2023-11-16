@@ -1,0 +1,29 @@
+-- Create table
+create table PERIODIC_PARAM_TYPE
+(
+  ID_PERIODIC_PARAM_TYPE   NUMBER(24) not null,
+  CODE_PERIODIC_PARAM_TYPE VARCHAR2(2000),
+  FLG_PERIODIC_PARAM_TYPE  VARCHAR2(2),
+  ADW_LAST_UPDATE          DATE,
+  RANK                     NUMBER(6)
+)
+
+-- Add comments to the columns 
+comment on column PERIODIC_PARAM_TYPE.ID_PERIODIC_PARAM_TYPE
+  is 'Chave primária';
+comment on column PERIODIC_PARAM_TYPE.CODE_PERIODIC_PARAM_TYPE
+  is 'Código';
+comment on column PERIODIC_PARAM_TYPE.FLG_PERIODIC_PARAM_TYPE
+  is 'Tipo de Observação periódica A - Análise; VS - Sinais Vitais; PE - Biometria; O - Outros; H - Hábitos';
+
+
+-- CHANGED REASON: Adição da coluna flg_available
+-- APPLICATION: CARE (3)
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 05/10/2007
+ALTER TABLE periodic_param_type
+ADD flg_available VARCHAR2(1);
+
+COMMENT ON COLUMN periodic_param_type.flg_available IS 'Indica se o parametro está disponível para ser utilizado.';
+--END
+

@@ -1,0 +1,57 @@
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 12/05/2014 14:36
+-- CHANGE REASON: [ALERT-284329] 
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create table CDR_DEFINITION_HIST (
+  id_cdr_definition  NUMBER(24) not null,
+
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24),
+
+  id_links_new           NUMBER(24),
+  id_links_old           NUMBER(24),
+
+  status_new             varchar2(1 CHAR) ,
+status_old             varchar2(1 CHAR) 
+  )';
+exception when e_obj_exists then
+  dbms_output.put_line('table CDR_DEFINITION_HIST exists!');
+end;
+/
+
+-- Add comments to the table 
+comment on table CDR_DEFINITION
+  is 'HISTORY TABLE FOR Clinical decision rule definitions. A rule definition is like the abstract of a rule instance.';
+-- Add comments to the columns 
+comment on column CDR_DEFINITION_HIST.id_cdr_definition
+  is 'Primary key.';
+
+comment on column CDR_DEFINITION_HIST.create_user
+  is 'Creation User';
+comment on column CDR_DEFINITION_HIST.create_time
+  is 'Creation Time';
+comment on column CDR_DEFINITION_HIST.create_institution
+  is 'Creation Institution';
+comment on column CDR_DEFINITION_HIST.update_user
+  is 'Update User';
+comment on column CDR_DEFINITION_HIST.update_time
+  is 'Update Time';
+comment on column CDR_DEFINITION_HIST.update_institution
+  is 'Update Institution';
+
+comment on column CDR_DEFINITION_HIST.id_links_new
+  is 'ID of NEW table links with Url to call on infobutton acess.';
+comment on column CDR_DEFINITION_HIST.id_links_old
+  is 'ID of OLD table links with Url to call on infobutton acess.';
+comment on column CDR_DEFINITION_HIST.STATUS_NEW
+  is 'DEFINITION NEW STATUS';
+comment on column CDR_DEFINITION_HIST.STATUS_OLD
+  is 'DEFINITION OLD STATUS';
+-- CHANGE END: mario.mineiro

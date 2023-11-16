@@ -1,0 +1,1 @@
+GRANT SELECT ON ALERT.graph_scale_cell TO ALERT_VIEWER;

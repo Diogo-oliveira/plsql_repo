@@ -1,0 +1,5 @@
+-- CHANGED BY: João Marques
+-- CHANGE DATE: 02/07/2010 14:56
+-- CHANGE REASON: [ALERT-101292] Added grant to package pk_mcdt
+GRANT EXECUTE ON ALERT.PK_MCDT TO INTF_ALERT;
+-- CHANGE END: João Marques

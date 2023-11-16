@@ -1,0 +1,44 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:26
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+alter table CDR_EVENT
+  add constraint CDRE_PK primary key (ID_CDR_CALL, ID_CDR_INST_PAR_ACTION);
+alter table CDR_EVENT
+  add constraint CDRE_FLG_ANSWER_CHK
+  check (FLG_ANSWER in ('U', 'R', 'O', 'H'));
+alter table CDR_EVENT
+  add constraint CDRE_FLG_HIDDEN_CHK
+  check (FLG_HIDDEN in ('Y', 'N'));
+alter table CDR_EVENT
+  add constraint CDRE_FLG_SESSION_CHK
+  check (FLG_SESSION in ('Y', 'N'));
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 10/12/2013 15:57
+-- CHANGE REASON: [ALERT-271758] 
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table CDR_EVENT add constraint CDRE_UK_CIPA unique (ID_CDR_EVENT,ID_CDR_INST_PAR_ACTION)
+';
+exception when e_pk_exists then
+  dbms_output.put_line('unique key CDRE_UK_CIPA exists!');
+end;
+/
+
+
+
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table CDR_EVENT add constraint CDRE_UK_EXTERNAL unique (ID_CDR_EVENT,ID_CDR_EXTERNAL)';
+exception when e_pk_exists then
+  dbms_output.put_line('unique key CDRE_UK_CIPA exists!');
+end;
+/
+
+-- alter table CDR_EXTERNAL add constraint CDREX_ID_CDR_SEVERITY  foreign key  (ID_CDR_SEVERITY) references CDR_SEVERITY (ID_CDR_SEVERITY)
+-- CHANGE END: mario.mineiro

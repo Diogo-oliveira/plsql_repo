@@ -1,0 +1,167 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 03/04/2012 15:45
+-- CHANGE REASON: [ALERT-223723] properties
+DECLARE
+    e_pk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+e_unique_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_PK primary key(id_sfc)) using index tablespace ALERT_IDX';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_labt_chk CHECK(flg_labtest IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_img_chk CHECK(flg_imaging IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_oexm_chk CHECK(flg_exam IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_intv_chk CHECK(flg_interv IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_mfr_chk CHECK(flg_mfr IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_diag_chk CHECK(flg_diagnosis IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_med_chk CHECK(flg_medication IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_vacc_chk CHECK(flg_imunization IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_hid_chk CHECK(flg_hidrics IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+
+BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_UK unique(id_software,id_institution,flg_hidrics,flg_imunization,flg_medication,flg_diagnosis,flg_mfr,flg_interv,flg_exam,flg_imaging,flg_labtest))';
+    EXCEPTION
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('UK already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 04/04/2012 15:00
+-- CHANGE REASON: [ALERT-223723] properties
+DECLARE
+    e_pk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+e_unique_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_PK primary key(id_sfc) using index tablespace ALERT_IDX)';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_labt_chk CHECK(flg_labtest IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_img_chk CHECK(flg_imaging IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_oexm_chk CHECK(flg_exam IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_intv_chk CHECK(flg_interv IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_mfr_chk CHECK(flg_mfr IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_diag_chk CHECK(flg_diagnosis IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_med_chk CHECK(flg_medication IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_vacc_chk CHECK(flg_imunization IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_hid_chk CHECK(flg_hidrics IN (''Y'', ''N'')))';
+    EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check already exists');
+    END;
+
+BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE SOFTWARE_FUNCT_CONTENT add(CONSTRAINT SWFTCNT_UK unique(id_software,id_institution,flg_hidrics,flg_imunization,flg_medication,flg_diagnosis,flg_mfr,flg_interv,flg_exam,flg_imaging,flg_labtest))';
+    EXCEPTION
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('UK already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

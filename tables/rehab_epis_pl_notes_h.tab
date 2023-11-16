@@ -1,0 +1,95 @@
+-- CHANGED BY:  Filipe Sousa
+-- CHANGE DATE: 21/01/2011 18:52
+-- CHANGE REASON: [ALERT-157088] Rehabilitation Plan
+CREATE TABLE REHAB_EPIS_PL_NOTES_H
+ (ID_REHAB_EPIS_PL_NOTES_H NUMBER(24) NOT NULL
+ ,ID_REHAB_EPIS_PLAN_NOTES NUMBER(24) NOT NULL
+ ,FLG_TYPE VARCHAR2(1)
+ ,NOTES CLOB
+ ,ID_PROF_CREATE NUMBER(24)
+ ,DT_REHAB_EPIS_PLAN_NOTES TIMESTAMP WITH LOCAL TIME ZONE
+ ,CREATE_USER VARCHAR2(24)
+ ,CREATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+ ,CREATE_INSTITUTION NUMBER(24)
+ ,UPDATE_USER VARCHAR2(24)
+ ,UPDATE_TIME TIMESTAMP WITH LOCAL TIME ZONE
+ ,UPDATE_INSTITUTION NUMBER(24)
+ )
+ TABLESPACE TABLE_L;
+
+COMMENT ON TABLE REHAB_EPIS_PL_NOTES_H IS 'rehab epis plan notes history';
+
+COMMENT ON COLUMN REHAB_EPIS_PL_NOTES_H.ID_REHAB_EPIS_PL_NOTES_H IS 'id table plan notes history';
+
+COMMENT ON COLUMN REHAB_EPIS_PL_NOTES_H.ID_REHAB_EPIS_PLAN_NOTES IS 'id plan notes';
+
+COMMENT ON COLUMN REHAB_EPIS_PL_NOTES_H.FLG_TYPE IS 'Notes (N) or suggestions (S)';
+
+COMMENT ON COLUMN REHAB_EPIS_PL_NOTES_H.NOTES IS 'Notes or suggestions';
+
+COMMENT ON COLUMN REHAB_EPIS_PL_NOTES_H.ID_PROF_CREATE IS 'Professional that inserted the notes/suggestions';
+
+COMMENT ON COLUMN REHAB_EPIS_PL_NOTES_H.DT_REHAB_EPIS_PLAN_NOTES IS 'Insertion date';
+
+COMMENT ON COLUMN REHAB_EPIS_PL_NOTES_H.CREATE_USER IS 'Create user';
+
+COMMENT ON COLUMN REHAB_EPIS_PL_NOTES_H.CREATE_TIME IS 'Create time';
+
+COMMENT ON COLUMN REHAB_EPIS_PL_NOTES_H.CREATE_INSTITUTION IS 'Create institution';
+
+COMMENT ON COLUMN REHAB_EPIS_PL_NOTES_H.UPDATE_USER IS 'Update user';
+
+COMMENT ON COLUMN REHAB_EPIS_PL_NOTES_H.UPDATE_TIME IS 'Update time';
+
+COMMENT ON COLUMN REHAB_EPIS_PL_NOTES_H.UPDATE_INSTITUTION IS 'Update institution';
+/
+-- CHANGE END:  Filipe Sousa
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/01/2016 16:47
+-- CHANGE REASON: [ALERT-317912] 
+comment on table REHAB_EPIS_PL_NOTES_H
+  is 'Rehabilitation plan notes and suggestions history';
+-- Add comments to the columns 
+comment on column REHAB_EPIS_PL_NOTES_H.id_rehab_epis_pl_notes_h
+  is 'Primary key';
+comment on column REHAB_EPIS_PL_NOTES_H.id_rehab_epis_plan_notes
+  is 'Rehabilitation plan notes ID';
+comment on column REHAB_EPIS_PL_NOTES_H.flg_type
+  is 'Flag that indicates the notes type: N - Notes, S - Suggestions';
+comment on column REHAB_EPIS_PL_NOTES_H.notes
+  is 'Notes or suggestions';
+comment on column REHAB_EPIS_PL_NOTES_H.id_prof_create
+  is 'Professional ID';
+comment on column REHAB_EPIS_PL_NOTES_H.dt_rehab_epis_plan_notes
+  is 'Date that indicates when the record was registered';
+comment on column REHAB_EPIS_PL_NOTES_H.create_user
+  is 'Creation User';
+comment on column REHAB_EPIS_PL_NOTES_H.create_time
+  is 'Creation Time';
+comment on column REHAB_EPIS_PL_NOTES_H.create_institution
+  is 'Creation Institution';
+comment on column REHAB_EPIS_PL_NOTES_H.update_user
+  is 'Update User';
+comment on column REHAB_EPIS_PL_NOTES_H.update_time
+  is 'Update Time';
+comment on column REHAB_EPIS_PL_NOTES_H.update_institution
+  is 'Update Institution';
+  
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:32
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.rehab_epis_pl_notes_h move lob(notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

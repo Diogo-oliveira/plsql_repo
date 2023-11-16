@@ -1,0 +1,5 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 20/09/2011 10:52
+-- CHANGE REASON: [ALERT-189616] new types grants
+grant execute on t_rec_prof_fields to alert_inter, alert_viewer;
+-- CHANGE END:  Rui Gomes

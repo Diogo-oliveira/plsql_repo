@@ -1,0 +1,49 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 22/09/2011 09:39
+-- CHANGE REASON: [ALERT-194825] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects('ALERT', 'EPIS_INTERV_PLAN_DIAG', 'TABLE', 'TRS', 'N', '', 'Y');
+
+    BEGIN
+        EXECUTE IMMEDIATE 'create table epis_interv_plan_diag (
+  id_epis_interv_plan_hist   number(24,0)                      not null,
+  id_epis_diagnosis          number(24,0)                      not null,
+  create_user                varchar2(24 char)                 null,
+  create_time                timestamp(6) with local time zone null,
+  create_institution         number(24,0)                      null,
+  update_user                varchar2(24 char)                 null,
+  update_time                timestamp(6) with local time zone null,
+  update_institution         number(24,0)                      null)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+/
+
+COMMENT ON TABLE epis_interv_plan_diag IS 'associate id_epis_interv_plan_hist to id_epis_diagnosis';
+COMMENT ON COLUMN epis_interv_plan_diag.ID_epis_interv_plan_hist IS 'epis_interv_plan_hist identifier';
+COMMENT ON COLUMN epis_interv_plan_diag.id_epis_diagnosis   IS 'epis_diagnosis identifier';
+
+COMMENT ON COLUMN epis_interv_plan_diag.create_user         IS 'Creation User';
+COMMENT ON COLUMN epis_interv_plan_diag.create_time         IS 'Creation Time';
+COMMENT ON COLUMN epis_interv_plan_diag.create_institution  IS 'Creation Institution';
+COMMENT ON COLUMN epis_interv_plan_diag.update_user         IS 'Update User';
+COMMENT ON COLUMN epis_interv_plan_diag.update_time         IS 'Update Time';
+COMMENT ON COLUMN epis_interv_plan_diag.update_institution  IS 'Update Institution';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:49
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column EPIS_INTERV_PLAN_DIAG.id_epis_interv_plan_hist
+  is 'Episode Intervention plan History ID';
+comment on column EPIS_INTERV_PLAN_DIAG.id_epis_diagnosis
+  is 'Episode Diagnosis ID';  
+-- CHANGE END: Elisabete Bugalho

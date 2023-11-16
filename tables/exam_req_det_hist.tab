@@ -1,0 +1,412 @@
+-- CHANGED BY: Bruno Martins
+-- CHANGED DATE: 2011-02-25
+-- CHANGE REASON: ALERT-163535
+
+create table EXAM_REQ_DET_HIST
+(
+  id_exam_req_det_hist  NUMBER(24) not null,
+  id_exam_req_det       NUMBER(24) not null,
+  id_erd_parent         NUMBER(24),
+  id_exam_req           NUMBER(24),
+  id_exam               NUMBER(12),
+  flg_status            VARCHAR2(2),
+  notes                 VARCHAR2(4000),
+  flg_pre_req           VARCHAR2(1),
+  id_movement           NUMBER(24),
+  id_prof_cancel        NUMBER(24),
+  notes_cancel          VARCHAR2(4000),
+  barcode               VARCHAR2(30),
+  id_room               NUMBER(24),
+  notes_tech            VARCHAR2(4000),
+  id_pat_pregnancy      NUMBER(24),
+  dt_target_tstz        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_final_target_tstz  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_final_result_tstz  TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_cancel_tstz        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  dt_order              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  id_prof_order         NUMBER(24),
+  id_order_type         NUMBER(24),
+  flg_co_sign           VARCHAR2(1),
+  dt_co_sign            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  notes_co_sign         VARCHAR2(4000),
+  id_prof_co_sign       NUMBER(24),
+  id_prof_performed     NUMBER(24),
+  start_time            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  end_time              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  flg_referral          VARCHAR2(1),
+  id_cancel_reason      NUMBER(24),
+  flg_clinical_purpose  VARCHAR2(2),
+  flg_location          VARCHAR2(1),
+  id_exec_institution   NUMBER(24),
+  id_exam_codification  NUMBER(24),
+  id_task_dependency    NUMBER(24),
+  flg_req_origin_module VARCHAR2(1 CHAR),
+  id_prof_performed_reg NUMBER(24),
+  dt_performed_reg      TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  OPERATION_TYPE        VARCHAR2(1) not null,
+  OPERATION_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  OPERATION_USER        NUMBER(24),
+  create_user           VARCHAR2(24),
+  create_time           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution    NUMBER(24),
+  update_user           VARCHAR2(24),
+  update_time           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution    NUMBER(24)
+)
+tablespace TABLE_M;
+
+comment on table EXAM_REQ_DET_HIST
+  is 'Exam requisition detail historical data';
+
+comment on column EXAM_REQ_DET_HIST.id_exam_req_det_hist
+  is 'Historical data primary key'; 
+comment on column EXAM_REQ_DET_HIST.id_exam_req_det
+  is 'Requisition detail id';
+comment on column EXAM_REQ_DET_HIST.id_erd_parent
+  is 'Parent detail id';
+comment on column EXAM_REQ_DET_HIST.id_exam_req
+  is 'Exam requisition id';
+comment on column EXAM_REQ_DET_HIST.id_exam
+  is 'Exam id';
+comment on column EXAM_REQ_DET_HIST.flg_status
+  is 'R - requisitado; D - pendente; PA - por agendar; A - agendado; EF - efectivado; E - em execução; T - em transporte; M - transporte terminado; F - com resultado; L - lido; C - cancelado; NR - não realizado; W - Em espera de instruções Task Dependency';
+comment on column EXAM_REQ_DET_HIST.notes
+  is 'Detail notes';
+comment on column EXAM_REQ_DET_HIST.flg_pre_req
+  is 'Indicação de pré-requisito: Y / N';
+comment on column EXAM_REQ_DET_HIST.id_movement
+  is 'Transport id';
+comment on column EXAM_REQ_DET_HIST.id_prof_cancel
+  is 'Professiona that canceled the detail';
+comment on column EXAM_REQ_DET_HIST.notes_cancel
+  is 'Cancel notes';
+comment on column EXAM_REQ_DET_HIST.barcode
+  is 'Barcode info';
+comment on column EXAM_REQ_DET_HIST.id_room
+  is 'Room id';
+comment on column EXAM_REQ_DET_HIST.notes_tech
+  is 'Technician notes';
+comment on column EXAM_REQ_DET_HIST.id_pat_pregnancy
+  is 'Pregnancy id associated to the exam, if appliable';
+comment on column EXAM_REQ_DET_HIST.dt_target_tstz
+  is 'Date to which it was requested';
+comment on column EXAM_REQ_DET_HIST.dt_final_target_tstz
+  is 'Limit date to execute procedure';
+comment on column EXAM_REQ_DET_HIST.dt_final_result_tstz
+  is 'Limit date to get results';
+comment on column EXAM_REQ_DET_HIST.dt_cancel_tstz
+  is 'Cancel time';
+comment on column EXAM_REQ_DET_HIST.dt_order
+  is 'Moment when the ordering professional ask the registering professional to request';
+comment on column EXAM_REQ_DET_HIST.id_prof_order
+  is 'Ordering professional';
+comment on column EXAM_REQ_DET_HIST.id_order_type
+  is 'Request order type (telephone, verbal, ...)';
+comment on column EXAM_REQ_DET_HIST.flg_co_sign
+  is 'Co-sign flag. (Y)-Order co-signed. (N)-Order not co-signed.';
+comment on column EXAM_REQ_DET_HIST.dt_co_sign
+  is 'Co-sign moment';
+comment on column EXAM_REQ_DET_HIST.notes_co_sign
+  is 'Co-sign notes';
+comment on column EXAM_REQ_DET_HIST.id_prof_co_sign
+  is 'Co-sign professional';
+comment on column EXAM_REQ_DET_HIST.id_prof_performed
+  is 'Professional that performed the procedure';
+comment on column EXAM_REQ_DET_HIST.start_time
+  is 'Procedure starting time';
+comment on column EXAM_REQ_DET_HIST.end_time
+  is 'Procedure ending time';
+comment on column EXAM_REQ_DET_HIST.flg_referral
+  is 'Flag that shows if requisiton was added to referral. Options are (A)vailable,  (R)eserved, electronically sent (I) or printed (S).';
+comment on column EXAM_REQ_DET_HIST.id_cancel_reason
+  is 'Cancel reason';
+comment on column EXAM_REQ_DET_HIST.create_user
+  is 'Creation User';
+comment on column EXAM_REQ_DET_HIST.create_time
+  is 'Creation Time';
+comment on column EXAM_REQ_DET_HIST.create_institution
+  is 'Creation Institution';
+comment on column EXAM_REQ_DET_HIST.update_user
+  is 'Update User';
+comment on column EXAM_REQ_DET_HIST.update_time
+  is 'Update Time';
+comment on column EXAM_REQ_DET_HIST.update_institution
+  is 'Update Institution';
+comment on column EXAM_REQ_DET_HIST.flg_clinical_purpose
+  is 'Flag that indicates the cilinical purpose';
+comment on column EXAM_REQ_DET_HIST.flg_location
+  is 'Flag that indicates wether the exame is to be performed in the current institution or not';
+comment on column EXAM_REQ_DET_HIST.id_exec_institution
+  is 'Institution id where the exam is performed (when flg_location = ''E'')';
+comment on column EXAM_REQ_DET_HIST.id_exam_codification
+  is 'Codification exam id';
+comment on column EXAM_REQ_DET_HIST.id_task_dependency
+  is 'Task dependency identifier (fk to TDE_TASK_DEPENDENCY)';
+comment on column EXAM_REQ_DET_HIST.flg_req_origin_module
+  is 'Request created by : D - Default, O - Order Sets, I - Interfaces';
+comment on column EXAM_REQ_DET_HIST.id_prof_performed_reg
+  is 'Professional that registers the exam execution';
+comment on column EXAM_REQ_DET_HIST.dt_performed_reg
+  is 'Date of the exam execution registration';
+comment on column EXAM_REQ_DET_HIST.OPERATION_TYPE
+  is 'Operation type: C-Create, U-Update, R-Remove';
+comment on column EXAM_REQ_DET_HIST.OPERATION_TIME
+  is 'Operation time';
+comment on column EXAM_REQ_DET_HIST.OPERATION_USER
+  is 'Operation user';
+  
+-- CHANGE END: Bruno Martins
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 27/04/2011 10:27
+-- CHANGE REASON: [ALERT-174844] 
+ALTER TABLE EXAM_REQ_DET_HIST
+ ADD (ID_ORDER_RECURRENCE NUMBER(24)
+ ,FLG_FASTING VARCHAR2(1)
+ ,FLG_PRN VARCHAR2(1)
+ ,PRN_NOTES CLOB
+ ,ID_PAT_HEALTH_PLAN NUMBER(24)
+ );
+
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.ID_ORDER_RECURRENCE IS 'Order recurrence id';
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.FLG_FASTING IS 'Flag that indicates wether the patient must in fasting';
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.FLG_PRN IS 'Flag that indicates wether the order is PRN or not';
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.PRN_NOTES IS 'Notes to indicate when a PRN order should be activated';
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.ID_PAT_HEALTH_PLAN IS 'Id that indicates the healthcare insurance plan used';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 10/05/2011 09:50
+-- CHANGE REASON: [ALERT-177746] 
+ALTER TABLE EXAM_REQ_DET_HIST ADD (ID_CDR NUMBER(24));
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.ID_CDR IS 'Clinical decision rule id';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 05/09/2012 17:26
+-- CHANGE REASON: [ALERT-239474] 
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    EXECUTE IMMEDIATE 'alter table exam_req_det_hist add (flg_laterality VARCHAR2(1 CHAR))';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');    
+END;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 09/04/2013 15:27
+-- CHANGE REASON: [ALERT-253711] 
+ALTER TABLE EXAM_REQ_DET_HIST 
+ ADD (CLINICAL_PURPOSE_NOTES VARCHAR2(1000 CHAR))
+ MODIFY (ID_EXAM_REQ NUMBER(24) NOT NULL, ID_EXAM NUMBER(12) NOT NULL, FLG_STATUS VARCHAR2(2 CHAR) NOT NULL);
+
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.CLINICAL_PURPOSE_NOTES IS 'Clinical purpose free text field (when flg_clinical_purpose = ''O'')';
+
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.FLG_REQ_ORIGIN_MODULE IS 'Request created by: D - Default, C - Care Plans, O - Order Sets, I - Interfaces; S - Scheduler;  R - Referral';
+
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.FLG_LATERALITY IS 'Flag that indicates the exam laterality: N - Not Applicable, B - Bilateral, L - Left, R - Right, Z - Bilateral-comparative';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 09/05/2013 16:58
+-- CHANGE REASON: [ALERT-253711] 
+ALTER TABLE EXAM_REQ_DET_HIST 
+ ADD (CLINICAL_PURPOSE_NOTES VARCHAR2(1000 CHAR));
+
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.CLINICAL_PURPOSE_NOTES IS 'Clinical purpose free text field (when flg_clinical_purpose = ''O'')';
+
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.FLG_REQ_ORIGIN_MODULE IS 'Request created by: D - Default, C - Care Plans, O - Order Sets, I - Interfaces; S - Scheduler;  R - Referral';
+
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.FLG_LATERALITY IS 'Flag that indicates the exam laterality: N - Not Applicable, B - Bilateral, L - Left, R - Right, Z - Bilateral-comparative';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/09/2013 09:20
+-- CHANGE REASON: [ALERT-264902] 
+ALTER TABLE EXAM_REQ_DET_HIST 
+ ADD (DT_EXAM_REQ_DET_HIST TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_EXAM_GROUP NUMBER(24)
+ ,FLG_PRIORITY VARCHAR2(1 CHAR)
+ ,NOTES_PATIENT CLOB
+ ,PROF_DEP_CLIN_SERV NUMBER(24)
+ ,ID_PROF_LAST_UPDATE NUMBER(24)
+ ,DT_LAST_UPDATE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 20/09/2013 08:55
+-- CHANGE REASON: [ALERT-265451] 
+ALTER TABLE EXAM_REQ_DET_HIST 
+ ADD (ID_PAT_EXEMPTION NUMBER(24));
+
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.DT_EXAM_REQ_DET_HIST IS 'Date when the register was made';
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.ID_PAT_EXEMPTION IS 'Exemption ID used';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 12/12/2013 16:30
+-- CHANGE REASON: [ALERT-271978 ] 
+-- Add/modify columns 
+alter table EXAM_REQ_DET_HIST add id_epis_doc_perform NUMBER(24);
+-- Add comments to the columns 
+comment on column EXAM_REQ_DET_HIST.id_epis_doc_perform
+  is 'Exam''s performed id epis documentation';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 01/10/2014 09:05
+-- CHANGE REASON: [ALERT-297150] 
+ALTER TABLE EXAM_REQ_DET_HIST 
+ ADD (ID_DIAGNOSIS_LIST VARCHAR2(1000 CHAR))
+ MODIFY (FLG_FASTING  VARCHAR2(1 CHAR),
+    FLG_REQ_ORIGIN_MODULE  VARCHAR2(1 CHAR),
+    FLG_LATERALITY  VARCHAR2(1 CHAR),
+    FLG_LOCATION  VARCHAR2(1 CHAR),
+    OPERATION_TYPE  VARCHAR2(1 CHAR),
+    FLG_PRE_REQ  VARCHAR2(1 CHAR),
+    FLG_REFERRAL  VARCHAR2(1 CHAR),
+    FLG_CO_SIGN  VARCHAR2(1 CHAR),
+    FLG_PRIORITY  VARCHAR2(1 CHAR),
+    FLG_PRN  VARCHAR2(1 CHAR),
+    CLINICAL_PURPOSE_NOTES  VARCHAR2(1000 CHAR),
+    FLG_STATUS  VARCHAR2(2 CHAR),
+    FLG_CLINICAL_PURPOSE  VARCHAR2(2 CHAR),
+    UPDATE_USER  VARCHAR2(24 CHAR),
+    CREATE_USER  VARCHAR2(24 CHAR),
+    BARCODE  VARCHAR2(30 CHAR),
+    NOTES  VARCHAR2(1000 CHAR),
+    NOTES_CANCEL  VARCHAR2(1000 CHAR),
+    NOTES_CO_SIGN  VARCHAR2(1000 CHAR),
+    NOTES_TECH  VARCHAR2(1000 CHAR));
+
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.ID_EPIS_DOC_PERFORM IS 'Exam''s perform ID (documentation ID)';
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.ID_DIAGNOSIS_LIST IS 'List of diagnosis (separated by a semicolon)';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 02/10/2014 14:30
+-- CHANGE REASON: [ALERT-297150] 
+ALTER TABLE EXAM_REQ_DET_HIST 
+ ADD (ID_DIAGNOSIS_LIST VARCHAR2(1000 CHAR))
+ MODIFY (FLG_FASTING  VARCHAR2(1 CHAR),
+    FLG_REQ_ORIGIN_MODULE  VARCHAR2(1 CHAR),
+    FLG_LATERALITY  VARCHAR2(1 CHAR),
+    FLG_LOCATION  VARCHAR2(1 CHAR),
+    OPERATION_TYPE  VARCHAR2(1 CHAR),
+    FLG_PRE_REQ  VARCHAR2(1 CHAR),
+    FLG_REFERRAL  VARCHAR2(1 CHAR),
+    FLG_CO_SIGN  VARCHAR2(1 CHAR),
+    FLG_PRIORITY  VARCHAR2(1 CHAR),
+    FLG_PRN  VARCHAR2(1 CHAR),
+    CLINICAL_PURPOSE_NOTES  VARCHAR2(1000 CHAR),
+    FLG_STATUS  VARCHAR2(2 CHAR),
+    FLG_CLINICAL_PURPOSE  VARCHAR2(2 CHAR),
+    UPDATE_USER  VARCHAR2(24 CHAR),
+    CREATE_USER  VARCHAR2(24 CHAR),
+    BARCODE  VARCHAR2(30 CHAR));
+
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.ID_EPIS_DOC_PERFORM IS 'Exam''s perform ID (documentation ID)';
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.ID_DIAGNOSIS_LIST IS 'List of diagnosis (separated by a semicolon)';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 26/11/2014 14:09
+-- CHANGE REASON: [ALERT-302555] 
+begin
+pk_versioning.run('ALTER TABLE EXAM_REQ_DET_HIST MODIFY (FLG_CO_SIGN VARCHAR2(1) NULL)');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 09/03/2015 11:22
+-- CHANGE REASON: [ALERT-308718] 
+begin
+pk_versioning.run('ALTER TABLE EXAM_REQ_DET_HIST ADD (NOTES_SCHEDULER VARCHAR2(1000 CHAR))');
+end;
+/
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.NOTES IS 'General notes';
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.NOTES_SCHEDULER IS 'Scheduling notes';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/04/2015 16:48
+-- CHANGE REASON: [ALERT-310273] 
+ALTER TABLE EXAM_REQ_DET_HIST 
+ ADD (ID_CO_SIGN_ORDER NUMBER(24)
+ ,ID_CO_SIGN_CANCEL NUMBER(24));
+
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.ID_CO_SIGN_ORDER IS 'Co-sign order ID';
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.ID_CO_SIGN_CANCEL IS 'Co-sign cancel ID';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 06/01/2016 17:52
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE EXAM_REQ_DET_HIST IS 'Exams'' orders detail history table';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 26/01/2016 14:28
+-- CHANGE REASON: [ALERT-318118] 
+ALTER TABLE exam_req_det_hist DROP COLUMN dt_order;
+ALTER TABLE exam_req_det_hist DROP COLUMN id_prof_order;
+ALTER TABLE exam_req_det_hist DROP COLUMN id_order_type;
+ALTER TABLE exam_req_det_hist DROP COLUMN flg_co_sign;
+ALTER TABLE exam_req_det_hist DROP COLUMN dt_co_sign;
+ALTER TABLE exam_req_det_hist DROP COLUMN notes_co_sign;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 26/01/2016 17:33
+-- CHANGE REASON: [ALERT-318118] 
+ALTER TABLE exam_req_det_hist DROP COLUMN id_prof_co_sign;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 04/05/2017 10:17
+-- CHANGE REASON: [ALERT-330278] 
+ALTER TABLE EXAM_REQ_DET_HIST ADD (ID_CLINICAL_PURPOSE NUMBER(24));
+
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.ID_CLINICAL_PURPOSE IS 'Clinical purpose ID';
+COMMENT ON COLUMN EXAM_REQ_DET_HIST.CLINICAL_PURPOSE_NOTES IS 'Clinical purpose free text field (when id_clinical_purpose = 0)';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:32
+-- CHANGE REASON: [EMR-4796] 
+DECLARE 
+	l_sql VARCHAR2(1000 CHAR);
+	l_sql_1 VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.exam_req_det_hist move lob(prn_notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+	l_sql_1 := 'ALTER TABLE alert.exam_req_det_hist move lob(notes_patient) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql_1);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 05/03/2021 08:07
+-- CHANGE REASON: [EMR-42532] - Change the MCDT's request form in the clinical indication area.
+ALTER TABLE exam_req_det_hist
+ADD diagnosis_notes varchar2(1000);
+
+comment on column exam_req_det_hist.diagnosis_notes is 'Diagnosis free text field';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 12/03/2021 15:30
+-- CHANGE REASON: [EMR-42532] - Orders: new field in the Clinical Indication block
+ALTER TABLE EXAM_REQ_DET_HIST
+MODIFY diagnosis_notes VARCHAR2(1000 CHAR);
+-- CHANGE END: Diogo Oliveira

@@ -1,0 +1,57 @@
+alter table CONF_BUTTON_BLOCK
+  add constraint CBB_ACBB_FK foreign key (ID_AREA_CONF_BUTTON_BLOCK)
+  references AREA_CONF_BUTTON_BLOCK (ID_AREA_CONF_BUTTON_BLOCK);
+alter table CONF_BUTTON_BLOCK
+  add constraint CBB_DOA_FK foreign key (ID_DOC_AREA)
+  references DOC_AREA (ID_DOC_AREA);
+alter table CONF_BUTTON_BLOCK
+  add constraint CBB_MRK_FK foreign key (ID_MARKET)
+  references MARKET (ID_MARKET);
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 02/12/2010 16:15
+-- CHANGE REASON: [ALERT-146429] ddl.sql
+alter table conf_button_block
+  add constraint cbb_appf_fk foreign key (id_swf_file)
+  references application_file (id_application_file);
+alter table conf_button_block
+  add constraint cbb_cbb_fk foreign key (id_parent)
+  references conf_button_block (id_conf_button_block);
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 03/12/2010 10:12
+-- CHANGE REASON: [ALERT-146512] 
+ALTER TABLE conf_button_block ADD CONSTRAINT CBB_PNDB_FK FOREIGN KEY (id_pn_data_block) REFERENCES ALERT.pn_data_block (id_pn_data_block) ENABLE;
+-- CHANGE END: Pedro Teixeira
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:34
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table conf_button_block
+  add constraint cbb_pntt_fk foreign key (id_task_type)
+  references tl_task (id_tl_task);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table conf_button_block
+  add constraint cbb_pntt_fk foreign key (id_task_type)
+  references tl_task (id_tl_task);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 04/06/2012 17:28
+-- CHANGE REASON: [ALERT-232352 ] Recheck corrections
+BEGIN
+    EXECUTE IMMEDIATE 'alter table conf_button_block
+  add constraint cbb_png_fk foreign key (id_pn_group)
+  references pn_group (id_pn_group)';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

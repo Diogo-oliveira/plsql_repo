@@ -1,0 +1,41 @@
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 31/07/2009 10:05
+-- CHANGE REASON: [ALERT-38622] Added database model related with table BMNG_REASON
+ALTER TABLE BMNG_REASON ADD CONSTRAINT BRN_BRT_FK FOREIGN KEY(ID_BMNG_REASON_TYPE) REFERENCES BMNG_REASON_TYPE(ID_BMNG_REASON_TYPE) ENABLE;
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 15:45
+-- CHANGE REASON: [ALERT-160874] [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE BMNG_REASON ADD CONSTRAINT BRN_INST_AN0973_FK 
+FOREIGN KEY (ID_INSTITUTION) REFERENCES INSTITUTION (ID_INSTITUTION) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'BRN_INST_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:02
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE BMNG_REASON ADD CONSTRAINT BRN_INST_FK 
+FOREIGN KEY (ID_INSTITUTION) REFERENCES INSTITUTION (ID_INSTITUTION) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'BRN_INST_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto

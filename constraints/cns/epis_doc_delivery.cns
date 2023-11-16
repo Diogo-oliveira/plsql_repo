@@ -1,0 +1,13 @@
+ALTER TABLE EPIS_DOC_DELIVERY ADD CONSTRAINT EDDY_PK PRIMARY KEY (ID_EPIS_DOC_DELIVERY) ENABLE;
+
+ALTER TABLE epis_doc_delivery DROP PRIMARY KEY;  
+ALTER TABLE epis_doc_delivery ADD CONSTRAINT EDDY_PK PRIMARY KEY (id_epis_documentation, id_pat_pregnancy);
+
+alter table epis_doc_delivery add constraint EDDY_FLG_CH_ST_CHK check (flg_child_status IN ('A','D') OR flg_child_status IS NULL);
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 23/12/2016 11:27
+-- CHANGE REASON: [ALERT-326777] Ability to document details regarding the newborn and the birth certificate
+ALTER TABLE epis_doc_delivery DROP CONSTRAINT EDDY_FLG_CH_ST_CHK;
+ALTER TABLE epis_doc_delivery ADD CONSTRAINT EDDY_FLG_CH_ST_CHK CHECK (flg_child_status IN ('A','D','SI') OR flg_child_status IS NULL);
+-- CHANGE END: Vanessa Barsottelli

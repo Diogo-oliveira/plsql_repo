@@ -1,0 +1,153 @@
+
+
+  CREATE TABLE SCHEDULE_SR
+   (	ID_SCHEDULE_SR NUMBER(24,0) NOT NULL ENABLE,
+	ID_SCHED_SR_PARENT NUMBER(24,0),
+	ID_SCHEDULE NUMBER(24,0),
+	ID_EPISODE NUMBER(24,0),
+	DT_TARGET DATE,
+	DT_INTERV_PREVIEW DATE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	DURATION NUMBER(6,0),
+	ID_DIAGNOSIS NUMBER(12,0),
+	ID_SPECIALITY NUMBER(12,0),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+
+	FLG_SCHED VARCHAR2(1) NOT NULL ENABLE,
+	ID_DEPT_DEST NUMBER(24,0),
+	PREV_RECOVERY_TIME NUMBER(6,0),
+	ID_SR_CANCEL_REASON NUMBER(24,0),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	ID_PROF_REG NUMBER(24,0),
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE schedule_sr IS 'Agendamento do Bloco Operatório' ;
+
+COMMENT ON COLUMN schedule_sr.id_schedule_sr IS 'Id único' ;
+COMMENT ON COLUMN schedule_sr.id_sched_sr_parent IS 'Id do agendamento "pai". Preenchida apenas em reagendamentos' ;
+COMMENT ON COLUMN schedule_sr.id_schedule IS 'ID do agendamento. Pode não estar preenchido, nos casos em que o agendamento ainda não tenha sido efetuado (episódios temporários).' ;
+COMMENT ON COLUMN schedule_sr.id_episode IS 'ID do episódio' ;
+COMMENT ON COLUMN schedule_sr.dt_target IS 'Data de agendamento da cirurgia' ;
+COMMENT ON COLUMN schedule_sr.dt_interv_preview IS 'Data prevista de realização da intervenção. Pode não estar preenchido, nos casos em que o agendamento ainda não tenha sido efetuado (episódios temporários).' ;
+COMMENT ON COLUMN schedule_sr.duration IS 'Duração da cirurgia (em minutos)' ;
+COMMENT ON COLUMN schedule_sr.id_diagnosis IS 'ID do diagnóstico' ;
+COMMENT ON COLUMN schedule_sr.id_speciality IS 'ID da especialidade' ;
+COMMENT ON COLUMN schedule_sr.flg_status IS 'Estado do agendamento. Valores possíveis: A- Activo, I- Inactivo (alta), C- Cancelado' ;
+COMMENT ON COLUMN schedule_sr.flg_sched IS 'Estado do agendamento. Valores possíveis: A- agendada, N- não agendada' ;
+COMMENT ON COLUMN schedule_sr.id_dept_dest IS 'ID do departamento de destino previsto. Não é obrigatório preencher.' ;
+COMMENT ON COLUMN schedule_sr.prev_recovery_time IS 'Tempo previsto de permanência no recobro' ;
+
+COMMENT ON COLUMN schedule_sr.id_sr_cancel_reason IS 'ID do motivo de cancelamento da cirurgia' ;
+COMMENT ON COLUMN schedule_sr.dt_cancel IS 'Data de cancelamento' ;
+COMMENT ON COLUMN schedule_sr.id_prof_cancel IS 'ID do profissional que cancelou a intervenção' ;
+COMMENT ON COLUMN schedule_sr.notes_cancel IS 'Notas de cancelamento' ;
+COMMENT ON COLUMN schedule_sr.id_prof_reg IS 'ID do profissional que iniciou o registo. Deve ser utilizado para Cirurgias ainda não agendadas' ;
+COMMENT ON COLUMN schedule_sr.id_institution IS 'ID da instituição onde será realizada a cirurgia' ;
+COMMENT ON COLUMN schedule_sr.adw_last_update IS 'Data da última alteração' ;
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 23-09-2008
+-- CHANGE REASON: igualar datatype a institution.id_institution
+alter table SCHEDULE_SR modify ID_INSTITUTION NUMBER(24);
+--END
+
+
+-- José Brito 22/09/2008 Eliminar colunas DATE
+alter table schedule_sr drop column dt_cancel;
+alter table schedule_sr drop column dt_interv_preview;
+alter table schedule_sr drop column dt_target;
+
+-- Pedro Santos Alert-25876
+ALTER TABLE SCHEDULE_SR ADD ICU VARCHAR2(1) DEFAULT 'N';
+ALTER TABLE SCHEDULE_SR ADD NOTES VARCHAR2(4000);
+ALTER TABLE SCHEDULE_SR ADD ID_WAITING_LIST NUMBER(24,0); 
+ALTER TABLE SCHEDULE_SR ADD ADM_NEEDED VARCHAR2(1);
+COMMENT ON COLUMN "SCHEDULE_SR"."ID_WAITING_LIST" IS 'ID of the surgery request'; 
+COMMENT ON COLUMN "SCHEDULE_SR"."ICU" IS 'Need of Intensive Care Unit';
+COMMENT ON COLUMN "SCHEDULE_SR"."NOTES"  IS 'Free text notes';
+COMMENT ON COLUMN "SCHEDULE_SR"."ADM_NEEDED"  IS 'Indicates if this surgery requires inpatient admission, possible values Yes/No';
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 30-04-2009
+-- CHANGE REASON: agenda ORIS
+alter table schedule_sr add flg_temporary varchar2(1);
+alter table schedule_sr add CREATE_USER VARCHAR2(24);
+alter table schedule_sr add CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table schedule_sr add CREATE_INSTITUTION NUMBER(24);
+alter table schedule_sr add UPDATE_USER VARCHAR2(24);
+alter table schedule_sr add UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table schedule_sr add UPDATE_INSTITUTION NUMBER(24);
+
+comment on column schedule_sr.flg_temporary is 'Temporary flag - Y-Yes; N-No';
+comment on column SCHEDULE_SR.CREATE_USER  is 'Creation User';
+comment on column SCHEDULE_SR.CREATE_TIME  is 'Creation Time';
+comment on column SCHEDULE_SR.CREATE_INSTITUTION  is 'Creation Institution';
+comment on column SCHEDULE_SR.UPDATE_USER  is 'Update User';
+comment on column SCHEDULE_SR.UPDATE_TIME  is 'Update Time';
+comment on column SCHEDULE_SR.UPDATE_INSTITUTION  is 'Update Institution';
+
+--END
+
+-- CHANGED BY: Jorge Canossa
+-- CHANGE DATE: 01-05-2009
+-- CHANGE REASON: agenda ORIS
+comment on column schedule_sr.flg_temporary is 'Temporary flag - Y-Yes; N-No';
+--END
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 14/04/2010 17:55
+-- CHANGE REASON: [ALERT-89098] 
+alter table schedule_sr add flg_dur_control VARCHAR2(1 char);
+comment on column schedule_sr.flg_dur_control is 'flag who''s control if the duration has been recalcule in seconds to minutes (Y) otherwise the flag is N ';
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 14/04/2010 17:56
+-- CHANGE REASON: [ALERT-89098] 
+alter table schedule_sr modify flg_dur_control VARCHAR2(1 char) default 'Y';
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 15/01/2016 17:24
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON TABLE SCHEDULE_SR IS 'Scheduling operation room';
+COMMENT ON COLUMN SCHEDULE_SR.DT_CANCEL_TSTZ IS 'Cancellation date';
+COMMENT ON COLUMN SCHEDULE_SR.DT_INTERV_PREVIEW_TSTZ IS 'Expected date for performing the surgery';
+COMMENT ON COLUMN SCHEDULE_SR.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN SCHEDULE_SR.ID_PROF_REG IS 'Professional ID, that started the registration, should be used for surgerys not scheduled';
+COMMENT ON COLUMN SCHEDULE_SR.DT_TARGET_TSTZ IS 'Date of surgery scheduling';
+COMMENT ON COLUMN SCHEDULE_SR.ADW_LAST_UPDATE IS 'Date of the last update';
+COMMENT ON COLUMN SCHEDULE_SR.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN SCHEDULE_SR.ID_SCHEDULE IS 'Schedule ID';
+COMMENT ON COLUMN SCHEDULE_SR.DURATION IS 'Duration(minutes)';
+COMMENT ON COLUMN SCHEDULE_SR.ID_SCHED_SR_PARENT IS 'Schedule id "father"';
+COMMENT ON COLUMN SCHEDULE_SR.ID_SCHEDULE_SR IS 'Primary key';
+COMMENT ON COLUMN SCHEDULE_SR.ID_DIAGNOSIS IS 'Diagnosis ID';
+COMMENT ON COLUMN SCHEDULE_SR.ID_SR_CANCEL_REASON IS 'Cancel reason ID';
+COMMENT ON COLUMN SCHEDULE_SR.PREV_RECOVERY_TIME IS 'Expected recovery time';
+COMMENT ON COLUMN SCHEDULE_SR.NOTES_CANCEL IS 'Cancelling notes';
+COMMENT ON COLUMN SCHEDULE_SR.FLG_STATUS IS 'A(active),I(inactive),C(cancelled)';
+COMMENT ON COLUMN SCHEDULE_SR.ID_SPECIALITY IS 'Speciality ID';
+COMMENT ON COLUMN SCHEDULE_SR.ID_DEPT_DEST IS 'Destination department ID';
+COMMENT ON COLUMN SCHEDULE_SR.FLG_SCHED IS 'A(scheduled),N(unscheduled)';
+-- CHANGE END:  jose.m.silva
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 21/01/2016 10:28
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON COLUMN SCHEDULE_SR.ID_PATIENT IS 'Patient ID';
+COMMENT ON COLUMN SCHEDULE_SR.ID_PROF_CANCEL is 'ID of the professional that canceled the intervention';
+-- CHANGE END:  jose.m.silva
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 30/08/2018 11:41
+-- CHANGE REASON: [EMR-5186] 
+ALTER TABLE schedule_sr ADD need_global_anesth VARCHAR2(1 CHAR);
+ALTER TABLE schedule_sr ADD need_local_anesth VARCHAR2(1 CHAR);
+ALTER TABLE schedule_sr ADD icu_pos VARCHAR2(1);
+-- CHANGE END: Pedro Henriques

@@ -1,0 +1,16 @@
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 26-01-2010
+-- CHANGE REASON: ALERT-70620
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+
+BEGIN
+    EXECUTE IMMEDIATE 'create index vsr_pvsfs_idx on vital_sign_read(id_patient, id_vital_sign, flg_state)';
+
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('Aviso: operação já executada anteriormente.');
+END;
+/
+-- CHANGE END

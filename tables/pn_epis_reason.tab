@@ -1,0 +1,98 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 02/12/2010 16:15
+-- CHANGE REASON: [ALERT-146429] ddl.sql
+create table pn_epis_reason
+(
+  id_pn_epis_reason  number(24) not null,
+  id_episode         number(24) not null,
+  id_epis_complaint  number(24),
+  id_epis_anamnesis  number(24),
+  create_user        varchar2(24 char),
+  create_time        timestamp with local time zone,
+  create_institution number(24),
+  update_user        varchar2(24 char),
+  update_time        timestamp with local time zone,
+  update_institution number(24)
+)
+;
+
+comment on table pn_epis_reason
+  is 'Groups reason for visit records, made selecting predefined reasons (EPIS_COMPLAINT), or in free text (EPIS_ANAMNESIS).';
+
+comment on column pn_epis_reason.id_pn_epis_reason
+  is 'Primary key.';
+comment on column pn_epis_reason.id_episode
+  is 'Episode identifier.';
+comment on column pn_epis_reason.id_epis_complaint
+  is 'Episode complaint identifier.';
+comment on column pn_epis_reason.id_epis_anamnesis
+  is 'Episode anamnesis identifer.';
+comment on column pn_epis_reason.create_user
+  is 'Creation User';
+comment on column pn_epis_reason.create_time
+  is 'Creation Time';
+comment on column pn_epis_reason.create_institution
+  is 'Creation Institution';
+comment on column pn_epis_reason.update_user
+  is 'Update User';
+comment on column pn_epis_reason.update_time
+  is 'Update Time';
+comment on column pn_epis_reason.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/12/2010 15:59
+-- CHANGE REASON: [ALERT-146429] ddl_to_ddl2.sql
+create table pn_epis_reason
+(
+  id_pn_epis_reason  number(24) not null,
+  id_episode         number(24) not null,
+  id_epis_complaint  number(24),
+  id_epis_anamnesis  number(24),
+  flg_status         varchar2(1 char) not null,
+  id_parent          number(24),
+  create_user        varchar2(24 char),
+  create_time        timestamp with local time zone,
+  create_institution number(24),
+  update_user        varchar2(24 char),
+  update_time        timestamp with local time zone,
+  update_institution number(24)
+)
+;
+
+comment on table pn_epis_reason
+  is 'Groups reason for visit records, made selecting predefined reasons (EPIS_COMPLAINT), or in free text (EPIS_ANAMNESIS).';
+
+comment on column pn_epis_reason.id_pn_epis_reason
+  is 'Primary key.';
+comment on column pn_epis_reason.id_episode
+  is 'Episode identifier.';
+comment on column pn_epis_reason.id_epis_complaint
+  is 'Episode complaint identifier.';
+comment on column pn_epis_reason.id_epis_anamnesis
+  is 'Episode anamnesis identifer.';
+comment on column pn_epis_reason.flg_status
+  is 'Record status: (A)ctive, (O)utdated.';
+comment on column pn_epis_reason.id_parent
+  is 'Original record identifier.';
+comment on column pn_epis_reason.create_user
+  is 'Creation User';
+comment on column pn_epis_reason.create_time
+  is 'Creation Time';
+comment on column pn_epis_reason.create_institution
+  is 'Creation Institution';
+comment on column pn_epis_reason.update_user
+  is 'Update User';
+comment on column pn_epis_reason.update_time
+  is 'Update Time';
+comment on column pn_epis_reason.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 11/01/2011 17:00
+-- CHANGE REASON: [ALERT-154579] added cancelled status
+comment on column pn_epis_reason.flg_status
+  is 'Record status: (A)ctive, (O)utdated, (C)ancelled.';
+-- CHANGE END: Pedro Carneiro

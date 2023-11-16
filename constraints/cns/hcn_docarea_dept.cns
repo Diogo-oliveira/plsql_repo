@@ -1,0 +1,14 @@
+alter table HCN_DOCAREA_DEPT
+	add constraint HCN_DOCAREA_DEPT_PK primary key (ID_HCN_DOCAREA_DEPT);
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:29
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE HCN_DOCAREA_DEPT ADD CONSTRAINT HCN_DA_DEPT_FLG_AVAI_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint HCN_DA_DEPT_FLG_AVAI_CHK table HCN_DOCAREA_DEPT column FLG_AVAILABLE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto

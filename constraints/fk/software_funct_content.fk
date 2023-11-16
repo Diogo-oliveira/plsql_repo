@@ -1,0 +1,27 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 03/04/2012 15:45
+-- CHANGE REASON: [ALERT-223723] properties
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table SOFTWARE_FUNCT_CONTENT
+  add constraint SWFTCNT_SW_FK foreign key (id_software)
+  references software (id_software)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'alter table SOFTWARE_FUNCT_CONTENT
+  add constraint SWFTCNT_INST_FK foreign key (id_institution)
+  references institution (id_institution)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+
+END;
+/
+-- CHANGE END:  Rui Gomes

@@ -1,0 +1,32 @@
+-- CHANGED BY: Rui Duarte
+-- CHANGE DATE: 24/01/2011 14:50
+-- CHANGE REASON: [ALERT-157301] New developments in PastHistory, free text values added(DML STEP 1)(v.2.6.0.5)
+--                
+ALTER TABLE pat_past_hist_free_text ADD CONSTRAINT pph_ft_pk PRIMARY KEY (id_pat_ph_ft);
+ALTER TABLE pat_past_hist_free_text ADD CONSTRAINT pph_ft_uk UNIQUE (id_patient,id_episode,dt_register,flg_type,id_professional);
+
+ALTER TABLE pat_past_hist_free_text ADD CONSTRAINT pph_ft_flg_status_chk CHECK (flg_status in ('A','O','C'));
+ALTER TABLE pat_past_hist_free_text ADD CONSTRAINT pph_ft_flg_type_chk CHECK (flg_type in ('M','S','A'));
+-- CHANGE END: Rui Duarte
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 17/08/2011 18:46
+-- CHANGE REASON: [ALERT-190780] 
+ALTER TABLE PAT_PAST_HIST_FREE_TEXT
+DROP CONSTRAINT PPH_FT_FLG_TYPE_CHK;
+
+alter table PAT_PAST_HIST_FREE_TEXT
+  add constraint PPH_FT_FLG_TYPE_CHK
+  check (flg_type in ('M','S','A','O','T'));
+  
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 09/03/2021 12:52
+-- CHANGE REASON: [EMR-42774] -  EHR > Gynecological history > Free text > error is displayed
+alter table PAT_PAST_HIST_FREE_TEXT
+drop constraint PPH_FT_FLG_TYPE_CHK;
+alter table PAT_PAST_HIST_FREE_TEXT
+add constraint PPH_FT_FLG_TYPE_CHK
+check (flg_type in ('M','S','A','O','T','G','F'));
+-- CHANGE END: Elisabete Bugalho

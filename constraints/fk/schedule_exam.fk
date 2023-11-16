@@ -1,0 +1,14 @@
+ALTER TABLE schedule_exam ADD CONSTRAINT sche_schedule_fk FOREIGN KEY (id_schedule) REFERENCES schedule(id_schedule) ENABLE;
+ALTER TABLE schedule_exam ADD CONSTRAINT sche_exam_fk FOREIGN KEY (id_exam) REFERENCES exam(id_exam) ENABLE;
+
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 05-11-2010
+-- CHANGE REASON: SCH-3062
+begin
+	execute immediate 'alter table SCHEDULE_EXAM add constraint SCHE_EXAM_REQ_FK foreign key (ID_EXAM_REQ) references exam_req (ID_EXAM_REQ)';
+exception
+	when others then dbms_output.put_line(SQLERRM);
+end;
+/
+-- change end: Telmo

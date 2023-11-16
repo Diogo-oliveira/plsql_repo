@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_tbl_bp_clinical_question AS TABLE OF t_bp_clinical_question;

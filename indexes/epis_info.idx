@@ -1,0 +1,30 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 17/11/2010 09:04
+-- CHANGE REASON: [ALERT-141666] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE INDEX alert.sup_ei_idx_id_pat ON alert.epis_info(id_patient) TABLESPACE index_l';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 26/09/2018 12:10
+-- CHANGE REASON: [EMR-7087] Issue Replication: HSJ - Slowness in birds eye view
+create index EI_EPIS_ROOM_SWFT_IDX ON epis_info (ID_EPISODE, ID_ROOM, NVL(ID_SOFTWARE,0));
+-- CHANGE END: Nuno Coelho
+
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := q'[create index alert.EIO_SEARCH02_IDX on alert.epis_info(id_episode,id_dep_clin_serv) tablespace alert_idx]';
+	pk_versioning.run(l_sql);
+end;
+/
+

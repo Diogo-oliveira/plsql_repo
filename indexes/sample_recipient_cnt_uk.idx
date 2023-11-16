@@ -1,0 +1,25 @@
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:24
+-- CHANGE REASON: [ALERT-54906] 
+CREATE UNIQUE INDEX SAMPLE_RECIPIENT_CNT_UK ON ALERT.SAMPLE_RECIPIENT (CASE WHEN ID_CONTENT IS NOT NULL AND nvl(FLG_AVAILABLE, 'Y') <> 'N'
+         THEN ID_CONTENT END,
+                                                                        CASE WHEN ID_CONTENT IS NOT NULL AND nvl(FLG_AVAILABLE, 'Y') <> 'N'
+   THEN FLG_AVAILABLE END);
+ 
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 07/07/2014 10:50
+-- CHANGE REASON: [ALERT-289537 ] 
+DECLARE e_index_not_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_index_not_exists, -01418);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER INDEX SAMPLE_RECIPIENT_CNT_UK RENAME TO SRT_CNT_UK';
+    EXCEPTION
+        WHEN e_index_not_exists THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: teresa.coutinho

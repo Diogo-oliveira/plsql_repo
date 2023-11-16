@@ -1,0 +1,60 @@
+-- CHANGED BY: jorge.costa
+-- CHANGE DATE: 13/06/2014
+-- CHANGE REASON: [ALERT-283142] 
+
+CREATE TABLE DOC_ACT_PARAM TABLESPACE ALERT_DATA AS(
+  SELECT dop.id_doc_operation_param   ID_DOC_ACT_PARAM,
+         dop.param_name               PARAM_NAME,
+         dop.flg_available            FLG_AVAILABLE,
+         dop.code_doc_operation_param CODE_DOC_ACT_PARAM,
+         dop.create_user              CREATE_USER,
+         dop.create_time              CREATE_TIME,
+         dop.create_institution       CREATE_INSTITUTION,
+         dop.update_user              UPDATE_USER,
+         dop.update_time              UPDATE_TIME,
+         dop.update_institution       UPDATE_INSTITUTION
+    FROM doc_operation_param dop);
+
+COMMENT ON TABLE DOC_ACT_PARAM IS 'Table that stores all possible params for the all operations';
+
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.ID_DOC_ACT_PARAM IS 'Primary key';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.PARAM_NAME IS 'Internal parameter name';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.FLG_AVAILABLE IS 'Parameter availability: Y - Yes, N - No';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.CODE_DOC_ACT_PARAM IS 'Document operation code for translation';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.UPDATE_INSTITUTION IS 'Update Institution';
+
+
+-- CHANGE END: jorge.costa
+
+-- CHANGED BY: jorge.costa
+-- CHANGE DATE: 13/06/2014
+-- CHANGE REASON: [ALERT-283142] 
+CREATE TABLE DOC_ACT_PARAM (
+       PARAM_NAME             VARCHAR2(30 CHAR),
+       CODE_PARAM             VARCHAR2(200 CHAR) GENERATED ALWAYS AS ('DOC_ACT_PARAM.CODE_PARAM.' || param_name) VIRTUAL,
+       CREATE_USER            VARCHAR2(24 CHAR),
+       CREATE_TIME            TIMESTAMP WITH LOCAL TIME ZONE,
+       CREATE_INSTITUTION     NUMBER(24),
+       UPDATE_USER            VARCHAR2(24 CHAR),
+       UPDATE_TIME            TIMESTAMP WITH LOCAL TIME ZONE,
+       UPDATE_INSTITUTION     NUMBER(24)
+) TABLESPACE ALERT_DATA;
+
+COMMENT ON TABLE DOC_ACT_PARAM IS 'Table that stores all possible params for the all operations';
+
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.PARAM_NAME IS 'PK - Internal parameter name';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.CODE_PARAM IS 'Document operation code for translation';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ALERT.DOC_ACT_PARAM.UPDATE_INSTITUTION IS 'Update Institution';
+
+
+-- CHANGE END: jorge.costa

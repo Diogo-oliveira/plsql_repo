@@ -1,0 +1,53 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 19/12/2011 14:55
+-- CHANGE REASON: [ALERT-207801] Reusability of documentation components in Touch-option templates
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'DOC_TEMPLATE_AREA_DOC',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'CNT',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+END;
+/
+
+CREATE TABLE DOC_TEMPLATE_AREA_DOC
+(
+  id_doc_template    NUMBER(24) NOT NULL,
+  id_doc_area        NUMBER(24) NOT NULL,
+  id_documentation   NUMBER(24) NOT NULL,
+  rank               NUMBER(6) NOT NULL,
+  create_user        VARCHAR2(24),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+);
+-- Add comments to the table 
+comment on table doc_template_area_doc
+  is 'Composition of documentation components (blocks) used into a template for an area';
+
+-- Add comments to the columns
+comment on column doc_template_area_doc.id_doc_template
+  is 'Template ID';
+comment on column doc_template_area_doc.id_doc_area
+  is 'DocArea ID';
+comment on column doc_template_area_doc.id_documentation
+  is 'Documentation component ID';
+comment on column doc_template_area_doc.rank
+  is 'Rank of documentation component within template and area';
+comment on column doc_template_area_doc.create_user
+  is 'Creation User';
+comment on column doc_template_area_doc.create_time
+  is 'Creation Time';
+comment on column doc_template_area_doc.create_institution
+  is 'Creation Institution';
+comment on column doc_template_area_doc.update_user
+  is 'Update User';
+comment on column doc_template_area_doc.update_time
+  is 'Update Time';
+comment on column doc_template_area_doc.update_institution
+  is 'Update Institution';
+-- CHANGE END: Ariel Machado

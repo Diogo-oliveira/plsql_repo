@@ -1,0 +1,52 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:35
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table task_timeline_ea
+  add constraint ttea_da_fk foreign key (id_doc_area)
+  references doc_area (id_doc_area);
+  
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:49
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table task_timeline_ea
+  add constraint ttea_da_fk foreign key (id_doc_area)
+  references doc_area (id_doc_area);
+  
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/05/2012 11:51
+-- CHANGE REASON: [ALERT-229650 ] Recheck concept (Progress Note)
+BEGIN
+    execute immediate 'ALTER TABLE task_timeline_ea ADD (CONSTRAINT
+ TTEA_PROFE_FK FOREIGN KEY 
+  (id_prof_exec) REFERENCES PROFESSIONAL
+  (ID_PROFESSIONAL))';
+EXCEPTION
+    WHEN others THEN
+       dbms_output.put_line('Operação já executada anteriormente');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/11/2012 16:39
+-- CHANGE REASON: [ALERT-244902] 
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE task_timeline_ea ADD (CONSTRAINT
+ TTEA_PROFR_FK FOREIGN KEY 
+  (id_prof_review) REFERENCES professional
+  (ID_PROFESSIONAL))';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,176 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 09:51
+-- CHANGE REASON: [ALERT-12334 ] 
+create table SUPPLY_SOFT_INST
+(
+  ID_SUPPLY_SOFT_INST NUMBER(24) not null,
+  ID_SUPPLY           NUMBER(24) not null,
+  ID_INSTITUTION      NUMBER(24) not null,
+  ID_SOFTWARE         NUMBER(24) not null,
+  ID_PROFESSIONAL     NUMBER(6),
+  ID_DEPT             NUMBER(6),
+  QUANTITY            NUMBER(10,3) default 1 not null,
+  ID_UNIT_MEASURE     NUMBER(6),
+  FLG_CONS_TYPE       VARCHAR2(1 CHAR),
+  FLG_REUSABLE        VARCHAR2(1 CHAR),
+  FLG_EDITABLE        VARCHAR2(1 CHAR),
+  CREATE_USER         VARCHAR2(24 CHAR),
+  CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24 CHAR),
+  UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table SUPPLY_SOFT_INST
+  is 'Supply configuration by software/institution.';
+-- Add comments to the columns 
+comment on column SUPPLY_SOFT_INST.ID_SUPPLY_SOFT_INST
+  is 'Primary Key';
+comment on column SUPPLY_SOFT_INST.ID_SUPPLY
+  is 'ID for the supply';
+comment on column SUPPLY_SOFT_INST.ID_INSTITUTION
+  is 'ID for the institution';
+comment on column SUPPLY_SOFT_INST.ID_SOFTWARE
+  is 'ID for the software';
+comment on column SUPPLY_SOFT_INST.ID_PROFESSIONAL
+  is 'ID for the professional';
+comment on column SUPPLY_SOFT_INST.ID_DEPT
+  is 'ID for the department';
+comment on column SUPPLY_SOFT_INST.QUANTITY
+  is 'Default request quantity';
+comment on column SUPPLY_SOFT_INST.ID_UNIT_MEASURE
+  is 'Unit measure identification';
+comment on column SUPPLY_SOFT_INST.FLG_CONS_TYPE
+  is 'Flag for the consumption type: L- Loan ; C- Local consumption';
+comment on column SUPPLY_SOFT_INST.FLG_REUSABLE
+  is 'Flag for reusable/disposable: Y-Yes, N- No';
+comment on column SUPPLY_SOFT_INST.FLG_EDITABLE
+  is 'Flag for editable contents/quantities on the moment of request: Y-Yes, N- No';
+comment on column SUPPLY_SOFT_INST.CREATE_USER
+  is 'Creation user';
+comment on column SUPPLY_SOFT_INST.CREATE_TIME
+  is 'Creation time';
+comment on column SUPPLY_SOFT_INST.CREATE_INSTITUTION
+  is 'Creation institution';
+comment on column SUPPLY_SOFT_INST.UPDATE_USER
+  is 'Update user';
+comment on column SUPPLY_SOFT_INST.UPDATE_TIME
+  is 'Update time';
+comment on column SUPPLY_SOFT_INST.UPDATE_INSTITUTION
+  is 'Update institution';
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Eduardo Reis
+-- CHANGE DATE: 15/03/2010 10:29
+-- CHANGE REASON: [ALERT-81183] get_consumption_type returned more than one row when other than default was configured.
+alter table SUPPLY_SOFT_INST modify ID_PROFESSIONAL default 0 not null;
+-- CHANGE END: Eduardo Reis
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 06/09/2010 14:46
+-- CHANGE REASON: [ALERT-122517] [Activity Therapist]: Separate the request quantity from the nr of units that exists in the institution/department
+alter table supply_soft_inst
+add total_avail_quantity NUMBER(10,3);
+
+comment on column supply_soft_inst.total_avail_quantity
+  is 'Nr of units that exists in the institution/department to be loaned.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 02/12/2010 16:48
+-- CHANGE REASON: [ALERT-146441] Associate a surgical procedure to supplies
+ALTER TABLE SUPPLY_SOFT_INST 
+ ADD (FLG_PREPARING VARCHAR2(1 CHAR));
+
+ALTER TABLE SUPPLY_SOFT_INST 
+ ADD (FLG_COUNTABLE VARCHAR2(1 CHAR));
+ 
+comment on column SUPPLY_SOFT_INST.FLG_PREPARING
+is 'Flag for preparing surgical supplies: Y-Yes, N- No';
+comment on column SUPPLY_SOFT_INST.FLG_COUNTABLE
+is 'Flag for count surgical supplies: Y-Yes, N- No';
+comment on column SUPPLY_SOFT_INST.FLG_CONS_TYPE
+is 'Flag for the consumption type: L- Loan ; C- Local consumption ; I- Implants';
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 03/10/2013 12:00
+-- CHANGE REASON: [ALERT-266260] 
+ALTER table ALERT.SUPPLY_SOFT_INST modify ID_PROFESSIONAL number(24); 
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 10/02/2014 15:23
+-- CHANGE REASON: [ALERT-275824] 
+ALTER table ALERT.SUPPLY_SOFT_INST modify ID_PROFESSIONAL default 0;
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/01/2016 11:21
+-- CHANGE REASON: [ALERT-317912] 
+comment on table SUPPLY_SOFT_INST
+  is 'Supplies configuration by software/institution';
+-- Add comments to the columns 
+comment on column SUPPLY_SOFT_INST.id_supply_soft_inst
+  is 'Primary Key';
+comment on column SUPPLY_SOFT_INST.id_supply
+  is 'Supply ID';
+comment on column SUPPLY_SOFT_INST.id_institution
+  is 'Institution ID';
+comment on column SUPPLY_SOFT_INST.id_software
+  is 'Software ID';
+comment on column SUPPLY_SOFT_INST.id_professional
+  is 'Professional ID';
+comment on column SUPPLY_SOFT_INST.id_dept
+  is 'Department ID';
+comment on column SUPPLY_SOFT_INST.quantity
+  is 'Default quantity';
+comment on column SUPPLY_SOFT_INST.id_unit_measure
+  is 'Unit measure ID';
+comment on column SUPPLY_SOFT_INST.flg_cons_type
+  is 'Flag that indicates the consumption type: L - Loan, C - Local consumption, I - Implants';
+comment on column SUPPLY_SOFT_INST.flg_reusable
+  is 'Flag that indicates if the supply is reusable or disposable (Y/N)';
+comment on column SUPPLY_SOFT_INST.flg_editable
+  is 'Flag that indicates if is possible to edit contents/quantities (Y/N)';
+comment on column SUPPLY_SOFT_INST.create_user
+  is 'Creation User';
+comment on column SUPPLY_SOFT_INST.create_time
+  is 'Creation Time';
+comment on column SUPPLY_SOFT_INST.create_institution
+  is 'Creation Institution';
+comment on column SUPPLY_SOFT_INST.update_user
+  is 'Update User';
+comment on column SUPPLY_SOFT_INST.update_time
+  is 'Update Time';
+comment on column SUPPLY_SOFT_INST.update_institution
+  is 'Update Institution';
+comment on column SUPPLY_SOFT_INST.total_avail_quantity
+  is 'Number of units that exists in the institution/department to be loaned';
+comment on column SUPPLY_SOFT_INST.flg_preparing
+  is 'Flag that indicates if is needed to prepare surgical supplies (Y/N)';
+comment on column SUPPLY_SOFT_INST.flg_countable
+  is 'Flag that indicates surgical supplies count (Y/N)';
+  
+  
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 28/06/2018 09:00
+-- CHANGE REASON: [EMR-4534] 
+ALTER TABLE supply_soft_inst MODIFY ID_DEPT NUMBER(24);
+ALTER TABLE supply_soft_inst MODIFY id_unit_measure NUMBER(24);
+-- CHANGE END: Pedro Henriques

@@ -1,0 +1,37 @@
+
+
+  CREATE TABLE EPIS_PROTOCOLS
+   (	ID_EPIS_PROTOCOLS NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROTOCOLS NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_PROF_ACTV NUMBER(24,0) NOT NULL ENABLE,
+	DT_ACTV DATE,
+	ID_PROF_INACTV NUMBER(24,0),
+	DT_INACTV DATE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_STATE VARCHAR2(1)
+   );
+
+
+
+COMMENT ON COLUMN epis_protocols.id_protocols IS 'ID do protocolo' ;
+COMMENT ON COLUMN epis_protocols.id_episode IS 'ID do episódio' ;
+COMMENT ON COLUMN epis_protocols.flg_status IS 'Estado do protocolo. A- Activo; I - Inactivo, T-Temporário (falta ainda a ordem de activação)' ;
+COMMENT ON COLUMN epis_protocols.id_prof_actv IS 'ID do profissional que activou' ;
+COMMENT ON COLUMN epis_protocols.dt_actv IS 'Data da última activação' ;
+COMMENT ON COLUMN epis_protocols.id_prof_inactv IS 'ID do prosiossional que desactivou' ;
+COMMENT ON COLUMN epis_protocols.dt_inactv IS 'Data da última desactivação' ;
+COMMENT ON COLUMN epis_protocols.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN epis_protocols.flg_state IS 'Estado de execução do protocolo. Valores possíveis: D- Pendente, P- Parcialmente executado, F- Executado' ;
+COMMENT ON COLUMN epis_protocols.id_epis_protocols IS 'ID único' ;
+
+
+-- CHANGED BY: Carlos Vieira
+-- CHANGE DATE: 2008-Set-22
+-- CHANGE REASON:date columns, timeline 
+
+alter table EPIS_PROTOCOLS drop column DT_ACTV;
+alter table EPIS_PROTOCOLS drop column DT_INACTV;
+
+-- CHANGE END

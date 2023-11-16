@@ -1,0 +1,115 @@
+
+
+  ALTER TABLE ALERT.PAT_VACC_ADM_DET ADD CONSTRAINT PAVAAD_EPIS_FK FOREIGN KEY (ID_EPISODE)
+	  REFERENCES ALERT.EPISODE (ID_EPISODE) ENABLE;
+
+
+
+  ALTER TABLE ALERT.PAT_VACC_ADM_DET ADD CONSTRAINT PAVAAD_PAVAA_FK FOREIGN KEY (ID_PAT_VACC_ADM)
+	  REFERENCES ALERT.PAT_VACC_ADM (ID_PAT_VACC_ADM) ENABLE;
+
+ALTER TABLE PAT_VACC_ADM_DET ADD CONSTRAINT PAVAAD_PML_FK FOREIGN KEY (ID_PAT_MEDICATION_LIST)
+  REFERENCES PAT_MEDICATION_LIST (ID_PAT_MEDICATION_LIST) ENABLE;
+
+
+
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/05/2014 21:56
+-- CHANGE REASON: [ALERT-281683] 
+alter table pat_vacc_adm_det
+  add constraint rep_funding_cat_cvx foreign key (id_vacc_funding_cat)
+  references vacc_funding_eligibility (id_vacc_funding_eligibility);
+  
+alter table pat_vacc_adm_det
+  add constraint rep_funding_source_cvx foreign key (id_vacc_funding_source)
+  references vacc_funding_source (id_vacc_funding_source);
+  
+alter table pat_vacc_adm_det
+  add constraint rep_doc_vis_cvx foreign key (id_vacc_doc_vis)
+  references vacc_doc_vis (id_vacc_doc_vis);
+  
+alter table pat_vacc_adm_det
+  add constraint rep_origin_cvx foreign key (id_vacc_origin)
+  references vacc_origin (id_vacc_origin);
+
+alter table pat_vacc_adm_det
+  add constraint rep_adv_reaction_cvx foreign key (id_vacc_adv_reaction)
+  references vacc_adverse_reaction (id_vacc_adverse_reaction);
+
+alter table pat_vacc_adm_det
+  add constraint pvad_CANCEL_REASON_fk foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 21/05/2014 12:03
+-- CHANGE REASON: [ALERT-285464] 
+alter table pat_vacc_adm_det
+  add constraint rep_funding_cat_cvx foreign key (id_vacc_funding_cat)
+  references vacc_funding_eligibility (id_vacc_funding_eligibility);
+  
+alter table pat_vacc_adm_det
+  add constraint rep_funding_source_cvx foreign key (id_vacc_funding_source)
+  references vacc_funding_source (id_vacc_funding_source);
+  
+alter table pat_vacc_adm_det
+  add constraint rep_doc_vis_cvx foreign key (id_vacc_doc_vis)
+  references vacc_doc_vis (id_vacc_doc_vis);
+  
+alter table pat_vacc_adm_det
+  add constraint rep_origin_cvx foreign key (id_vacc_origin)
+  references vacc_origin (id_vacc_origin);
+
+alter table pat_vacc_adm_det
+  add constraint rep_adv_reaction_cvx foreign key (id_vacc_adv_reaction)
+  references vacc_adverse_reaction (id_vacc_adverse_reaction);
+
+alter table pat_vacc_adm_det
+  add constraint pvad_CANCEL_REASON_fk foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 21/05/2014 12:47
+-- CHANGE REASON: [ALERT-281683] 
+alter table pat_vacc_adm_det
+  add constraint rep_funding_cat_cvx foreign key (id_vacc_funding_cat)
+  references vacc_funding_eligibility (id_vacc_funding_elig);
+  
+alter table pat_vacc_adm_det
+  add constraint rep_funding_source_cvx foreign key (id_vacc_funding_source)
+  references vacc_funding_source (id_vacc_funding_source);
+  
+alter table pat_vacc_adm_det
+  add constraint rep_doc_vis_cvx foreign key (id_vacc_doc_vis)
+  references vacc_doc_vis (id_vacc_doc_vis);
+  
+alter table pat_vacc_adm_det
+  add constraint rep_origin_cvx foreign key (id_vacc_origin)
+  references vacc_origin (id_vacc_origin);
+
+alter table pat_vacc_adm_det
+  add constraint rep_adv_reaction_cvx foreign key (id_vacc_adv_reaction)
+  references vacc_adverse_reaction (id_vacc_adverse_reaction);
+
+alter table pat_vacc_adm_det
+  add constraint pvad_CANCEL_REASON_fk foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+-- CHANGE END: Jorge Silva
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 11/11/2014 15:27
+-- CHANGE REASON: [ALERT-301386] 
+BEGIN
+pk_versioning.run(i_sql => q'[alter   TABLE PAT_VACC_ADM_DET ADD CONSTRAINT PVAD_ADMINISTERED_FK FOREIGN KEY (ID_ADMINISTRED) REFERENCES professional (id_professional)]');
+pk_versioning.run(i_sql => q'[alter   TABLE PAT_VACC_ADM_DET ADD CONSTRAINT PVAD_PRESC_PLAN_FK FOREIGN KEY (ID_DRUG_PRESC_PLAN) REFERENCES DRUG_PRESC_PLAN (ID_DRUG_PRESC_PLAN)]');
+pk_versioning.run(i_sql => q'[alter   TABLE PAT_VACC_ADM_DET ADD CONSTRAINT PVAD_INFO_SOURCE_FK FOREIGN KEY (ID_INFORMATION_SOURCE) REFERENCES vacc_report (ID_VACC_REPORT)]');
+pk_versioning.run(i_sql => q'[alter   TABLE PAT_VACC_ADM_DET ADD CONSTRAINT PVAD_PROF_CANCEL_FK FOREIGN KEY (ID_PROF_CANCEL) REFERENCES professional (id_professional)]');
+pk_versioning.run(i_sql => q'[alter   TABLE PAT_VACC_ADM_DET ADD CONSTRAINT PVAD_PROF_WRITES_FK FOREIGN KEY (ID_PROF_WRITES) REFERENCES  professional (id_professional)]');
+pk_versioning.run(i_sql => q'[alter   TABLE PAT_VACC_ADM_DET ADD CONSTRAINT PVAD_REASON_SUS_FK FOREIGN KEY (ID_REASON_SUS) REFERENCES not_order_reason(id_not_order_reason)]');
+pk_versioning.run(i_sql => q'[alter   TABLE PAT_VACC_ADM_DET ADD CONSTRAINT PVAD_UNIT_MEASURE_FK FOREIGN KEY (ID_UNIT_MEASURE) REFERENCES  unit_measure (ID_UNIT_MEASURE)]');
+pk_versioning.run(i_sql => q'[alter   TABLE PAT_VACC_ADM_DET ADD CONSTRAINT PVAD_VACC_MANUFACT_FK FOREIGN KEY (ID_VACC_MANUFACTURER) REFERENCES  vacc_manufacturer (ID_VACC_MANUFACTURER)]');
+END;
+/
+-- CHANGE END: mario.mineiro

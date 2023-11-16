@@ -1,0 +1,111 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 10:10
+-- CHANGE REASON: [ALERT-164483] soap note blocks configuration data model
+create table PN_FREE_TEXT_INST
+(
+  ID_INSTITUTION      NUMBER(24) not null,
+  ID_PROFILE_TEMPLATE NUMBER(12) not null,
+  ID_PN_DATA_BLOCK    NUMBER(24) not null,
+  FLG_WRITE           VARCHAR2(1 char) not null,
+  CREATE_USER         VARCHAR2(24 char),
+  CREATE_TIME         TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24 char),
+  UPDATE_TIME         TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24)
+)
+;
+
+comment on table PN_FREE_TEXT_INST
+  is 'Free text blocks edition access configured by institution.';
+
+comment on column PN_FREE_TEXT_INST.ID_INSTITUTION
+  is 'Institution identifier.';
+comment on column PN_FREE_TEXT_INST.ID_PROFILE_TEMPLATE
+  is 'Profile template identifier.';
+comment on column PN_FREE_TEXT_INST.ID_PN_DATA_BLOCK
+  is 'Data block identifier.';
+comment on column PN_FREE_TEXT_INST.FLG_WRITE
+  is 'Can this profile edit this block? Y/N (applicable only to ambulatory free texts blocks).';
+comment on column PN_FREE_TEXT_INST.CREATE_USER
+  is 'Creation User';
+comment on column PN_FREE_TEXT_INST.CREATE_TIME
+  is 'Creation Time';
+comment on column PN_FREE_TEXT_INST.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column PN_FREE_TEXT_INST.UPDATE_USER
+  is 'Update User';
+comment on column PN_FREE_TEXT_INST.UPDATE_TIME
+  is 'Update Time';
+comment on column PN_FREE_TEXT_INST.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:15
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table PN_FREE_TEXT_INST modify ID_PROFILE_TEMPLATE number(24)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:45
+-- CHANGE REASON: [ALERT-226174] 
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_free_text_inst add id_category number(24) default -1 not null';
+EXCEPTION
+    WHEN e_column_already_there THEN
+      dbms_output.put_line('AVISO: Operação já executada anteriormente.');   
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_free_text_inst add id_software number(24) default 0 not null';
+EXCEPTION
+    WHEN e_column_already_there THEN
+      dbms_output.put_line('AVISO: Operação já executada anteriormente.');   
+END;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_free_text_inst add flg_config_type varchar2(1 char) default ''P'' not null';
+EXCEPTION
+    WHEN e_column_already_there THEN
+      dbms_output.put_line('AVISO: Operação já executada anteriormente.');   
+END;
+/
+
+COMMENT ON column pn_free_text_inst.id_software IS 'Software identifier.';
+COMMENT ON column pn_free_text_inst.id_category IS 'Category identifier.';
+COMMENT ON column pn_free_text_inst.flg_config_type IS 'Indicates the scope of the configuration. S - by Software: id_software<>0, id_category=-1 and id_profile_template=0; C - by category: id_software=0, id_category<>-1 and id_profile_template=0; P - by profile_template: id_software=0, id_category=-1 and id_profile_template<>0';
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 05/04/2012 10:03
+-- CHANGE REASON: [ALERT-226388] Allow software = 0 for note type and free texts configurations - EDIS restructuring - Present Illness / Current visit
+begin
+execute immediate('comment on column PN_FREE_TEXT_INST.flg_config_type
+  is ''Indicates the scope of the configuration. S - by Software: id_software<>-1, id_category=-1 and id_profile_template=0; C - by category: id_software=-1, id_category<>-1 and id_profile_template=0; P - by profile_template: id_software=-1, id_category=-1 and id_profile_template<>0''');
+exception
+when others then
+     dbms_output.put_line('Script already executed');
+end;
+/
+-- CHANGE END: António Neto

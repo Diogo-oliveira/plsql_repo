@@ -1,0 +1,14 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 11/09/2012 15:04
+-- CHANGE REASON: [ALERT-212094 ] 
+-- Grant/Revoke object privileges 
+grant select on EXT_CAUSE_CODIFICATION to ADW_STG;
+grant select on EXT_CAUSE_CODIFICATION to ADW_STG_PCK;
+grant select on EXT_CAUSE_CODIFICATION to ADW_STG_PFH;
+grant select on EXT_CAUSE_CODIFICATION to ADW_STG_P1;
+grant select on EXT_CAUSE_CODIFICATION to ADW_SVN;
+grant select, insert, update, delete on EXT_CAUSE_CODIFICATION to ALERT_CONFIG;
+grant select, update, delete on EXT_CAUSE_CODIFICATION to ALERT_RESET;
+-- CHANGE END: Sérgio Santos
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON EXT_CAUSE_CODIFICATION to ALERT_APEX_TOOLS;

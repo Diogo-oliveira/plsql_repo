@@ -1,0 +1,440 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+--------------------------------------------
+--  Changed table icnp_cplan_stand_compo  --
+--------------------------------------------
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+-- Add/modify columns 
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify ID_COMPOSITION_PARENT not null';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify FLG_STATUS VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO add FLG_TIME VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify FLG_COMPO_TYPE VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify FLG_FREQ VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify FLG_TYPE VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify DURATION NUMBER(12,4)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify FLG_INTERVAL_UNIT VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify FLG_DURATION_UNIT VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO add CREATE_USER VARCHAR2(24 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO add CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO add CREATE_INSTITUTION NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO add UPDATE_USER VARCHAR2(24 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO add UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO add UPDATE_INSTITUTION NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- Add comments to the table 
+comment on table ICNP_CPLAN_STAND_COMPO
+  is 'Relação entre planos de cuidados standard e os seus diagnósticos, intervenções e resultados esperados';
+-- Add comments to the columns 
+comment on column ICNP_CPLAN_STAND_COMPO.ID_CPLAN_STAND_COMPO
+  is 'ID da relação (PK)';
+comment on column ICNP_CPLAN_STAND_COMPO.ID_CPLAN_STAND
+  is 'ID do plano de cuidados standard';
+comment on column ICNP_CPLAN_STAND_COMPO.ID_COMPOSITION
+  is 'ID da composição (Diagnósticos)';
+comment on column ICNP_CPLAN_STAND_COMPO.ID_COMPOSITION_PARENT
+  is 'ID das composições (Intervenções e resultados esperados)';
+comment on column ICNP_CPLAN_STAND_COMPO.FLG_STATUS
+  is 'Estado da relação (A-Activo, I-Inactivo)';
+comment on column ICNP_CPLAN_STAND_COMPO.FLG_TIME
+  is 'Execution type: in this (E)pisode, (B)etween episodes, (N)ext episode.';
+comment on column ICNP_CPLAN_STAND_COMPO.FLG_COMPO_TYPE
+  is 'Tipo de relação (D-diagnóstico, I-Intervenção, R-Reavaliação)';
+comment on column ICNP_CPLAN_STAND_COMPO.FLG_FREQ
+  is 'Intervention frequency: day (D), week (S), month (M).';
+comment on column ICNP_CPLAN_STAND_COMPO.NUM_TAKE
+  is 'Number of executions.';
+comment on column ICNP_CPLAN_STAND_COMPO.FLG_TYPE
+  is 'Intervention type: continuous (C), frequency or interval (N), PRN  (S), once  (U).';
+comment on column ICNP_CPLAN_STAND_COMPO.INTERVAL
+  is 'Time interval between executions.';
+comment on column ICNP_CPLAN_STAND_COMPO.DURATION
+  is 'Intervention duration.';
+comment on column ICNP_CPLAN_STAND_COMPO.FLG_INTERVAL_UNIT
+  is 'Interval time unit: (D)ays, (H)ours, (M)inutes.';
+comment on column ICNP_CPLAN_STAND_COMPO.FLG_DURATION_UNIT
+  is 'Duration time unit: (D)ays, (H)ours, (M)inutes.';
+comment on column ICNP_CPLAN_STAND_COMPO.CREATE_USER
+  is 'Create User';
+comment on column ICNP_CPLAN_STAND_COMPO.CREATE_TIME
+  is 'Create Time';
+comment on column ICNP_CPLAN_STAND_COMPO.CREATE_INSTITUTION
+  is 'Create Institution';
+comment on column ICNP_CPLAN_STAND_COMPO.UPDATE_USER
+  is 'Update User';
+comment on column ICNP_CPLAN_STAND_COMPO.UPDATE_TIME
+  is 'Update Time';
+comment on column ICNP_CPLAN_STAND_COMPO.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 27/10/2010 09:19
+-- CHANGE REASON: [ALERT-117147] 
+--------------------------------------------
+--  Changed table icnp_cplan_stand_compo  --
+--------------------------------------------
+-- Create table
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -00955); -- add column
+BEGIN
+-- Add/modify columns 
+    BEGIN
+        EXECUTE IMMEDIATE 'create table ICNP_CPLAN_STAND_COMPO
+(
+  ID_CPLAN_STAND_COMPO  NUMBER(24) not null,
+  ID_CPLAN_STAND        NUMBER(24) not null,
+  ID_COMPOSITION        NUMBER(24) not null,
+  ID_COMPOSITION_PARENT NUMBER(24) not null,
+  FLG_STATUS            VARCHAR2(1 CHAR) not null,
+  FLG_COMPO_TYPE        VARCHAR2(1 CHAR),
+  FLG_FREQ              VARCHAR2(1 CHAR),
+  NUM_TAKE              NUMBER(3),
+  FLG_TYPE              VARCHAR2(1 CHAR),
+  INTERVAL              NUMBER(12,4),
+  FLG_INTERVAL_UNIT     VARCHAR2(1 CHAR),
+  FLG_DURATION_UNIT     VARCHAR2(1 CHAR),
+  DURATION              NUMBER(12,4),
+  FLG_TIME              VARCHAR2(1 CHAR),
+  CREATE_USER           VARCHAR2(24 CHAR),
+  CREATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24 CHAR),
+  UPDATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+-- Add/modify columns 
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify ID_COMPOSITION_PARENT not null';
+    EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify FLG_STATUS VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO add FLG_TIME VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify FLG_COMPO_TYPE VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify FLG_FREQ VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify FLG_TYPE VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify DURATION NUMBER(12,4)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify FLG_INTERVAL_UNIT VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO modify FLG_DURATION_UNIT VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO add CREATE_USER VARCHAR2(24 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO add CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO add CREATE_INSTITUTION NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO add UPDATE_USER VARCHAR2(24 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO add UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_CPLAN_STAND_COMPO add UPDATE_INSTITUTION NUMBER(24)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- Add comments to the table 
+comment on table ICNP_CPLAN_STAND_COMPO
+  is 'Relação entre planos de cuidados standard e os seus diagnósticos, intervenções e resultados esperados';
+-- Add comments to the columns 
+comment on column ICNP_CPLAN_STAND_COMPO.ID_CPLAN_STAND_COMPO
+  is 'ID da relação (PK)';
+comment on column ICNP_CPLAN_STAND_COMPO.ID_CPLAN_STAND
+  is 'ID do plano de cuidados standard';
+comment on column ICNP_CPLAN_STAND_COMPO.ID_COMPOSITION
+  is 'ID da composição (Diagnósticos)';
+comment on column ICNP_CPLAN_STAND_COMPO.ID_COMPOSITION_PARENT
+  is 'ID das composições (Intervenções e resultados esperados)';
+comment on column ICNP_CPLAN_STAND_COMPO.FLG_STATUS
+  is 'Estado da relação (A-Activo, I-Inactivo)';
+comment on column ICNP_CPLAN_STAND_COMPO.FLG_TIME
+  is 'Execution type: in this (E)pisode, (B)etween episodes, (N)ext episode.';
+comment on column ICNP_CPLAN_STAND_COMPO.FLG_COMPO_TYPE
+  is 'Tipo de relação (D-diagnóstico, I-Intervenção, R-Reavaliação)';
+comment on column ICNP_CPLAN_STAND_COMPO.FLG_FREQ
+  is 'Intervention frequency: day (D), week (S), month (M).';
+comment on column ICNP_CPLAN_STAND_COMPO.NUM_TAKE
+  is 'Number of executions.';
+comment on column ICNP_CPLAN_STAND_COMPO.FLG_TYPE
+  is 'Intervention type: continuous (C), frequency or interval (N), PRN  (S), once  (U).';
+comment on column ICNP_CPLAN_STAND_COMPO.INTERVAL
+  is 'Time interval between executions.';
+comment on column ICNP_CPLAN_STAND_COMPO.DURATION
+  is 'Intervention duration.';
+comment on column ICNP_CPLAN_STAND_COMPO.FLG_INTERVAL_UNIT
+  is 'Interval time unit: (D)ays, (H)ours, (M)inutes.';
+comment on column ICNP_CPLAN_STAND_COMPO.FLG_DURATION_UNIT
+  is 'Duration time unit: (D)ays, (H)ours, (M)inutes.';
+comment on column ICNP_CPLAN_STAND_COMPO.CREATE_USER
+  is 'Create User';
+comment on column ICNP_CPLAN_STAND_COMPO.CREATE_TIME
+  is 'Create Time';
+comment on column ICNP_CPLAN_STAND_COMPO.CREATE_INSTITUTION
+  is 'Create Institution';
+comment on column ICNP_CPLAN_STAND_COMPO.UPDATE_USER
+  is 'Update User';
+comment on column ICNP_CPLAN_STAND_COMPO.UPDATE_TIME
+  is 'Update Time';
+comment on column ICNP_CPLAN_STAND_COMPO.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Luis Oliveira
+-- CHANGE DATE: 29/07/2011 18:01
+-- CHANGE REASON: [ALERT-182932] Implementation of the recurrence mechanism in ICNP functionality
+--  Add columns related with recurrence and PRN (id_order_recurr_plan, flg_prn, prn_notes)
+DECLARE
+  e_column_already_exist EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_column_already_exist, -01430); -- column being added already exists in table
+BEGIN
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE icnp_cplan_stand_compo ADD id_order_recurr_plan number(24)';
+  EXCEPTION
+    WHEN e_column_already_exist THEN
+      dbms_output.put_line('The column icnp_cplan_stand_compo.id_order_recurr_plan already exist');
+  END;
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE icnp_cplan_stand_compo ADD flg_prn VARCHAR2(1)';
+  EXCEPTION
+    WHEN e_column_already_exist THEN
+      dbms_output.put_line('The column icnp_cplan_stand_compo.flg_prn already exist');
+  END;
+  BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE icnp_cplan_stand_compo ADD prn_notes CLOB';
+  EXCEPTION
+    WHEN e_column_already_exist THEN
+      dbms_output.put_line('The column icnp_cplan_stand_compo.prn_notes already exist');
+  END;
+END;
+/
+
+COMMENT ON COLUMN icnp_cplan_stand_compo.id_order_recurr_plan is 'Recurrence plan ID';
+COMMENT ON COLUMN icnp_cplan_stand_compo.flg_prn IS 'Flag that indicates if the intervention should only be executed as the situation demands.';
+COMMENT ON COLUMN icnp_cplan_stand_compo.prn_notes IS 'Notes to indicate the conditions under which the intervention should be executed.';
+COMMENT ON COLUMN icnp_cplan_stand_compo.flg_type is 'Frequency type: once (O), no schedule (N), with recurrence (R)';
+-- CHANGE END: Luis Oliveira
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 13/01/2016 10:39
+-- CHANGE REASON: [ALERT-317702] 
+comment on table ICNP_CPLAN_STAND_COMPO
+  is 'ICNP standard care plan association to compositions';
+-- Add comments to the columns 
+comment on column ICNP_CPLAN_STAND_COMPO.id_cplan_stand_compo
+  is 'Primary key';
+comment on column ICNP_CPLAN_STAND_COMPO.id_cplan_stand
+  is 'Standard care plan ID';
+comment on column ICNP_CPLAN_STAND_COMPO.id_composition
+  is 'Composition ID';
+comment on column ICNP_CPLAN_STAND_COMPO.id_composition_parent
+  is 'Composition parent ID';
+comment on column ICNP_CPLAN_STAND_COMPO.flg_status
+  is 'Flag that indicates the status: A - Active, I - Inactive';
+comment on column ICNP_CPLAN_STAND_COMPO.flg_compo_type
+  is 'Flag that indicates the type of composition: D - diagnosis, I - intervention, R - reevaluation';
+comment on column ICNP_CPLAN_STAND_COMPO.flg_freq
+  is 'Intervention frequency: D - day, S - week, M - month';
+comment on column ICNP_CPLAN_STAND_COMPO.num_take
+  is 'Number of executions';
+comment on column ICNP_CPLAN_STAND_COMPO.flg_type
+  is 'Frequency type: O - once, N - no schedule, R - with recurrence';
+comment on column ICNP_CPLAN_STAND_COMPO.interval
+  is 'Time interval between executions';
+comment on column ICNP_CPLAN_STAND_COMPO.flg_interval_unit
+  is 'Interval time unit: D - days, H - hours, M - minutes';
+comment on column ICNP_CPLAN_STAND_COMPO.flg_duration_unit
+  is 'Duration time unit: D - days, H - hours, M - minutes';
+comment on column ICNP_CPLAN_STAND_COMPO.duration
+  is 'Intervention duration';
+comment on column ICNP_CPLAN_STAND_COMPO.flg_time
+  is 'To be performed: E - this episode; B - between episodes; N - next episode';
+comment on column ICNP_CPLAN_STAND_COMPO.create_user
+  is 'Create User';
+comment on column ICNP_CPLAN_STAND_COMPO.create_time
+  is 'Create Time';
+comment on column ICNP_CPLAN_STAND_COMPO.create_institution
+  is 'Create Institution';
+comment on column ICNP_CPLAN_STAND_COMPO.update_user
+  is 'Update User';
+comment on column ICNP_CPLAN_STAND_COMPO.update_time
+  is 'Update Time';
+comment on column ICNP_CPLAN_STAND_COMPO.update_institution
+  is 'Update Institution';
+comment on column ICNP_CPLAN_STAND_COMPO.id_order_recurr_plan
+  is 'Recurrence plan ID';
+comment on column ICNP_CPLAN_STAND_COMPO.flg_prn
+  is 'Flag that indicates wether the intervention is PRN or not';
+comment on column ICNP_CPLAN_STAND_COMPO.prn_notes
+  is 'Notes to indicate when a PRN order should be activated';
+  
+  
+  
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:32
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.icnp_cplan_stand_compo move lob(prn_notes) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

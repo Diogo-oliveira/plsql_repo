@@ -1,0 +1,5 @@
+-- CHANGED BY:  Mauro Sousa
+-- CHANGE DATE: 13/10/2010 16:17
+-- CHANGE REASON: [ALERT-130678] 
+grant references on RELATION_SERVICE to ALERT_DEFAULT;
+-- CHANGE END:  Mauro Sousa

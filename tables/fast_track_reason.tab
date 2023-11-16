@@ -1,0 +1,33 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 13/06/2016 15:37
+-- CHANGE REASON: [ALERT-322139] Issue Replication: Fast Tracks Manual Activation
+--                
+BEGIN
+pk_versioning.run('CREATE TABLE fast_track_reason (
+  id_fast_track_reason   NUMBER(24) not null,
+  code_fast_track_reason VARCHAR2(200 char) not null,
+  id_content             VARCHAR2(200 char) not null,
+  flg_available          VARCHAR2(1 char)   not null,
+  create_user            varchar2(24 char)                 null,
+  create_time            timestamp(6) with local time zone null,
+  create_institution     number(24)                      null,
+  update_user            varchar2(24 char)                 null,
+  update_time            timestamp(6) with local time zone null,
+  update_institution     NUMBER(24)                      NULL)');
+    
+END;
+/
+
+COMMENT ON TABLE fast_track_reason IS 'content table with reasons for ativate/deactivate fast track';
+
+COMMENT ON COLUMN fast_track_reason.id_fast_track_reason     IS 'fast_track_reason identifier';
+COMMENT ON COLUMN fast_track_reason.code_fast_track_reason            IS 'translation code';
+COMMENT ON COLUMN fast_track_reason.id_content              IS 'content identifier';
+COMMENT ON COLUMN fast_track_reason.flg_available              IS 'is available Y/N';
+COMMENT ON COLUMN fast_track_reason.create_user IS 'Creation User';
+COMMENT ON COLUMN fast_track_reason.create_time IS 'Creation Time';
+COMMENT ON COLUMN fast_track_reason.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN fast_track_reason.update_user IS 'Update User';
+COMMENT ON COLUMN fast_track_reason.update_time IS 'Update Time';
+COMMENT ON COLUMN fast_track_reason.update_institution IS 'Update Institution';
+-- CHANGE END: Elisabete Bugalho

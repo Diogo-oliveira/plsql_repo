@@ -1,0 +1,43 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 02/12/2009 21:10
+-- CHANGE REASON: [PIX-341] HIE XDS Content Creator module in Alert
+CREATE TABLE XDS_HEALTHCARE_FACILITY_TYPE
+(
+    ID_HEALTHCARE_FACILITY_TYPE   NUMBER(24) NOT NULL,
+    FLG_TYPE                      VARCHAR2(1 CHAR),
+    CODE_HEALTHCARE_FACILITY_TYPE VARCHAR2(200 CHAR),
+    RANK                          NUMBER(6),
+    ID_CONTENT                    VARCHAR2(200 CHAR),
+    CREATE_USER                   VARCHAR2(24 CHAR),
+    CREATE_TIME                   TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    CREATE_INSTITUTION            NUMBER(24),
+    UPDATE_USER                   VARCHAR2(24 CHAR),
+    UPDATE_TIME                   TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    UPDATE_INSTITUTION            NUMBER(24)
+);
+
+COMMENT ON TABLE  XDS_HEALTHCARE_FACILITY_TYPE IS 'Healthcare facility (institution) type (This table extends INSTITUTION.FLG_TYPE in order to give more information about it)';
+
+COMMENT ON COLUMN XDS_HEALTHCARE_FACILITY_TYPE.id_healthcare_facility_type IS 'Primary key';
+COMMENT ON COLUMN XDS_HEALTHCARE_FACILITY_TYPE.flg_type IS 'Healthcare facility type. This field enables to directly map flags to INSTITUTION.FLG_TYPE';
+COMMENT ON COLUMN XDS_HEALTHCARE_FACILITY_TYPE.code_healthcare_facility_type IS 'Healthcare facility description';
+COMMENT ON COLUMN XDS_HEALTHCARE_FACILITY_TYPE.rank IS 'Order ranking';
+COMMENT ON COLUMN XDS_HEALTHCARE_FACILITY_TYPE.id_content IS 'Content identifier';
+COMMENT ON COLUMN XDS_HEALTHCARE_FACILITY_TYPE.create_user IS 'Creation User';
+COMMENT ON COLUMN XDS_HEALTHCARE_FACILITY_TYPE.create_time IS 'Creation Time';
+COMMENT ON COLUMN XDS_HEALTHCARE_FACILITY_TYPE.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN XDS_HEALTHCARE_FACILITY_TYPE.update_user IS 'Update User';
+COMMENT ON COLUMN XDS_HEALTHCARE_FACILITY_TYPE.update_time IS 'Update Time';
+COMMENT ON COLUMN XDS_HEALTHCARE_FACILITY_TYPE.update_institution IS 'Update Institution';
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Daniel Silva
+-- CHANGE DATE: 2011.11.29
+-- CHANGE REASON: [ALERT-207776]
+
+ALTER TABLE
+   XDS_HEALTHCARE_FACILITY_TYPE
+MODIFY
+   FLG_TYPE  VARCHAR2(4 CHAR);
+
+-- CHANGE END: Daniel Silva

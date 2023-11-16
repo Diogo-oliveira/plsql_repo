@@ -1,0 +1,30 @@
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/07/2019 16:06
+-- CHANGE REASON: [ARCH-7603] - Changes on DB Model
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'alter table DS_CMPT_INST_REL add constraint DS_CMPT_INST_pK primary key ( id_ds_cmpt_inst_rel ) using index tablespace ALERT_IDX';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'alter table DS_CMPT_INST_REL  add constraint DS_CMPT_INST_R_UK unique ( id_ds_cmpt_mkt_rel, id_ds_component_parent, id_ds_component_child, ID_INSTITUTION, ID_SOFTWARE, ID_PROFILE_TEMPLATE, ID_CATEGORY ) using index tablespace ALERT_IDX';
+pk_versioning.run( l_sql );
+end;
+/
+declare
+xpl varchar2(0010 char) := '''';
+l_sql varchar2(1000 char);
+begin
+
+L_SQL := 'ALTER TABLE DS_CMPT_inst_REL ADD constraint DS_CMINST_COMP_SIZE check ( COMP_SIZE>=1 AND COMP_SIZE<=12)';
+pk_versioning.run( l_sql);
+end;
+/
+-- CHANGE END: Elisabete Bugalho

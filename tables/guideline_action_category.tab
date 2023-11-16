@@ -1,0 +1,36 @@
+create table guideline_action_category
+(
+  id_guideline_action_category   NUMBER(24) not null,
+  id_action       NUMBER not null,
+  id_category     NUMBER(12) not null,
+  task_type		  NUMBER(24) not null,
+  FLG_AVAILABLE   VARCHAR2(1) NOT NULL
+);
+
+COMMENT ON COLUMN GUIDELINE_ACTION_CATEGORY.ID_GUIDELINE_ACTION_CATEGORY IS 'ID of guideline_action_category';
+COMMENT ON COLUMN GUIDELINE_ACTION_CATEGORY.ID_ACTION IS 'ID of action';
+COMMENT ON COLUMN GUIDELINE_ACTION_CATEGORY.ID_CATEGORY IS 'Category ID associated to action';
+COMMENT ON COLUMN GUIDELINE_ACTION_CATEGORY.TASK_TYPE IS 'Task type associated to action';
+COMMENT ON COLUMN GUIDELINE_ACTION_CATEGORY.FLG_AVAILABLE IS 'Availability of the action for the category: Y / N';
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 2007-NOV-12
+-- CHANGE REASON: Add column ID_PROFILE_TEMPLATE
+ALTER TABLE guideline_action_category ADD (ID_PROFILE_TEMPLATE NUMBER(12) DEFAULT '0' NOT NULL);
+
+COMMENT ON COLUMN GUIDELINE_ACTION_CATEGORY.ID_PROFILE_TEMPLATE IS 'Profile template ID associated to action';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 28/03/2011 09:23
+-- CHANGE REASON: [ALERT-168339] Insert constraints for flag_status columns defined in sys_domain
+comment on column GUIDELINE_ACTION_CATEGORY.FLG_AVAILABLE is 'Guideline availability for the action category: 
+Y - Yes (available)
+N - No (not available)';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 09:59
+-- CHANGE REASON: [ALERT-317912] 
+comment on table GUIDELINE_ACTION_CATEGORY is 'Guidelines action association to a category';
+-- CHANGE END: Ana Matos

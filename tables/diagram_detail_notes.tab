@@ -1,0 +1,29 @@
+
+
+  CREATE TABLE DIAGRAM_DETAIL_NOTES
+   (	ID_DIAGRAM_DETAIL_NOTES NUMBER(24,0) NOT NULL ENABLE,
+	ID_DIAGRAM_DETAIL NUMBER(24,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(240) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_NOTES DATE NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE diagram_detail_notes IS 'Notas associadas ao detalhe de cada diagrama' ;
+
+COMMENT ON COLUMN diagram_detail_notes.id_diagram_detail_notes IS 'Chave primária' ;
+COMMENT ON COLUMN diagram_detail_notes.id_diagram_detail IS 'ID do detalhe do diagrama' ;
+COMMENT ON COLUMN diagram_detail_notes.notes IS 'Notas' ;
+COMMENT ON COLUMN diagram_detail_notes.id_professional IS 'Profissional que registou as notas' ;
+COMMENT ON COLUMN diagram_detail_notes.dt_notes IS 'Data da criação da nota' ;
+COMMENT ON COLUMN diagram_detail_notes.adw_last_update IS 'Data da última alteração' ;
+
+alter table DIAGRAM_DETAIL_NOTES modify DT_NOTES null;
+
+comment on column DIAGRAM_DETAIL_NOTES.DT_NOTES
+  is 'Data da criação das notas';
+
+alter table diagram_detail_notes modify dt_notes not null;
+
+drop table diagram_detail_notes;

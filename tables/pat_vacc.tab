@@ -1,0 +1,55 @@
+-- Create table
+create table PAT_VACC
+(
+  ID_VACC         NUMBER(24) not null,
+  FLG_AVAILABLE   VARCHAR2(1) not null,
+  ID_PATIENT      NUMBER(24) not null,
+  DT_PAT_VACC     TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  ID_PROFESSIONAL NUMBER(24) not null,
+  DT_LAST_CHANGE  TIMESTAMP(6) WITH LOCAL TIME ZONE
+);
+-- Add comments to the columns 
+comment on column PAT_VACC.ID_VACC
+  is 'Id Vaccine';
+comment on column PAT_VACC.FLG_AVAILABLE
+  is 'Available Y (Yes)/ N (No)';
+comment on column PAT_VACC.ID_PATIENT
+  is 'Id Patient';
+comment on column PAT_VACC.DT_PAT_VACC
+  is 'Dt Registry';
+comment on column PAT_VACC.ID_PROFESSIONAL
+  is 'Id Professional';
+comment on column PAT_VACC.DT_LAST_CHANGE
+  is 'Dt Last Change';
+  
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE PAT_VACC ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN PAT_VACC.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 20/05/2014 21:57
+-- CHANGE REASON: [ALERT-281683] 
+alter table PAT_VACC add flg_status varchar2(1 CHAR) default 'A';
+alter table PAT_VACC add id_prof_status number(24);
+alter table PAT_VACC add dt_status TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table PAT_VACC add  notes VARCHAR2(4000);
+alter table PAT_VACC add  id_reason NUMBER(24);
+
+-- Add comments to the columns 
+comment on column PAT_VACC.flg_status
+  is 'vaccine status A - Active, D - Discontinue';
+comment on column PAT_VACC.id_prof_status
+  is 'ID professional';
+comment on column PAT_VACC.dt_status
+  is 'DT status change';  
+comment on column PAT_VACC.notes
+  is 'Notes when discontinue';
+comment on column PAT_VACC.id_reason
+  is 'Reason when discontinue';    
+  
+  
+-- CHANGE END: Jorge Silva

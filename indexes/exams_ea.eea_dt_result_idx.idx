@@ -1,0 +1,16 @@
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 24/01/2013 08:49
+-- CHANGE REASON: [ALERT-250171] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX EEA_DT_RESULT_IDX ON EXAMS_EA(DT_RESULT)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('index already inserted');
+    END;
+END;
+/
+-- CHANGE END: Ana Matos

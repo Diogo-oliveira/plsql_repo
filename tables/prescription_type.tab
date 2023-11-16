@@ -1,0 +1,40 @@
+
+
+  CREATE TABLE PRESCRIPTION_TYPE
+   (	ID_PRESCRIPTION_TYPE NUMBER(24,0) NOT NULL ENABLE,
+	CODE_PRESCRIPTION_TYPE VARCHAR2(200) NOT NULL ENABLE,
+	VALUE VARCHAR2(2) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_MC VARCHAR2(1) NOT NULL ENABLE,
+	IMG_NAME VARCHAR2(200)
+   );
+
+
+COMMENT ON TABLE prescription_type IS 'Tabela que contém os tipos de prescrição.' ;
+
+COMMENT ON COLUMN prescription_type.id_prescription_type IS 'Chave primária.' ;
+COMMENT ON COLUMN prescription_type.code_prescription_type IS 'Código para tradução.' ;
+COMMENT ON COLUMN prescription_type.value IS 'Valor.' ;
+COMMENT ON COLUMN prescription_type.rank IS 'Rank.' ;
+COMMENT ON COLUMN prescription_type.adw_last_update IS 'Data da última alteração.' ;
+COMMENT ON COLUMN prescription_type.flg_mc IS 'Flag que indica se a opção pertence ao primeiro (P) ou ao segundo (S) multi-choice.' ;
+COMMENT ON COLUMN prescription_type.img_name IS 'Nome do ícone' ;
+
+comment on column PRESCRIPTION_TYPE.FLG_MC is 'Flag que indica se a opção pertence ao primeiro (P) ou ao segundo (S) multi-choice ou se é referente a protocolos terapêuticos (T)';
+
+
+
+ALTER TABLE PRESCRIPTION_TYPE ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN PRESCRIPTION_TYPE.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+
+-- Add comments to the columns 
+comment on column PRESCRIPTION_TYPE.FLG_MC
+  is 'Flag que indica se a opção pertence ao primeiro (P) ou ao segundo (S) multi-choice ou se é referente a protocolos terapêuticos (T) ou se não está disponível (N)';
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:06
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESCRIPTION_TYPE IS 'Tabela que contém os tipos de prescrição. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

@@ -1,0 +1,200 @@
+  CREATE TABLE VITAL_SIGN
+   (	ID_VITAL_SIGN NUMBER(12,0) NOT NULL ENABLE,
+	INTERN_NAME_VITAL_SIGN VARCHAR2(30) NOT NULL ENABLE,
+	CODE_VITAL_SIGN VARCHAR2(200) NOT NULL ENABLE,
+	FLG_FILL_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	VAL_MIN NUMBER(8,3),
+	VAL_MAX NUMBER(8,3),
+	FLG_MANDATORY VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	CODE_MEASURE_UNIT VARCHAR2(200),
+
+	FLG_SHOW VARCHAR2(1) NOT NULL ENABLE,
+	FORMAT_NUM VARCHAR2(20),
+	CODE_VS_SHORT_DESC VARCHAR2(200),
+	FLG_VS VARCHAR2(2 CHAR),
+	FLG_WIZARD VARCHAR2(1)
+   );
+
+
+COMMENT ON TABLE vital_sign IS 'Parametrização dos Sinais Vitais e biométrica (peso, estatura, perímetro cefálico).Os valores possíveis para os SVs c/ FLG_FILL_TYPE = ''V'' estão guardados na tabela VITAL_SIGN_DESC.' ;
+
+COMMENT ON COLUMN vital_sign.intern_name_vital_sign IS 'Descritivo para utilização inequívoca no código PL/SQL' ;
+COMMENT ON COLUMN vital_sign.code_vital_sign IS 'Código para atradução' ;
+COMMENT ON COLUMN vital_sign.flg_fill_type IS 'Indicador do tipo de auxiliar de preenchimento a mostrar:N - Keypad; V -Multi choice; B - Keypad com barra' ;
+COMMENT ON COLUMN vital_sign.val_min IS 'Valor mínimo possível' ;
+COMMENT ON COLUMN vital_sign.val_max IS 'Valor máximo' ;
+COMMENT ON COLUMN vital_sign.flg_mandatory IS 'Preenchimento obrigatório durante a triagem. Por defeito é ''N''.' ;
+COMMENT ON COLUMN vital_sign.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN vital_sign.code_measure_unit IS 'Código para tradução da unidade de medida' ;
+COMMENT ON COLUMN vital_sign.flg_show IS 'Indicação de q é para mostrar no ecrã de SVs (Y / N)' ;
+COMMENT ON COLUMN vital_sign.code_vs_short_desc IS 'Código para obtenção da descrição curta' ;
+COMMENT ON COLUMN vital_sign.flg_vs IS 'Indicação se é para aparecer nos sinais vitais (VS) ou no exame físico (PE).' ;
+COMMENT ON COLUMN vital_sign.flg_wizard IS 'Indicação se o sinal vital faz parte do wizard.' ;
+
+
+
+
+ALTER TABLE VITAL_SIGN ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN VITAL_SIGN.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-AUG-28
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 17072
+
+COMMENT ON COLUMN VITAL_SIGN.ID_VITAL_SIGN IS 'Vital sign ID';
+COMMENT ON COLUMN VITAL_SIGN.RANK IS 'Vital sign rank';
+COMMENT ON COLUMN VITAL_SIGN.ADW_LAST_UPDATE IS 'Last Update Date';
+COMMENT ON COLUMN VITAL_SIGN.FORMAT_NUM IS 'Vital sign user input/output format mask';
+COMMENT ON COLUMN VITAL_SIGN.FLG_FILL_TYPE IS 'Indicador do tipo de auxiliar de preenchimento a mostrar: B - Keypad com barra; N - Keypad; P - Escala; V -Multi choice';
+COMMENT ON COLUMN VITAL_SIGN.FLG_MANDATORY IS 'Preenchimento obrigatório durante a triagem: Y - Sim; N - Não. Por defeito é ''N''';
+COMMENT ON COLUMN VITAL_SIGN.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD: Y - Sim; N - Não';
+COMMENT ON COLUMN VITAL_SIGN.FLG_WIZARD IS 'Indicação se o sinal vital faz parte do wizard: Y - Sim; N - Não';
+
+-- CHANGE END
+
+-- cmf 25-08-2009
+ALTER TABLE ALERT.VITAL_SIGN              MODIFY  INTERN_NAME_VITAL_SIGN    VARCHAR2(0200); 
+
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 13/10/2010
+-- CHANGE REASON: ALERT-130836
+DECLARE
+    e_col_not_found EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_col_not_found, -00904);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vital_sign DROP COLUMN adw_last_update';
+
+EXCEPTION
+    WHEN e_col_not_found THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 06/12/2013 17:21
+-- CHANGE REASON: [ALERT-270228]  Global search development for INPATIENT team
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE VITAL_SIGN_NOTES ADD (ID_EPISODE NUMBER(24) NULL)';
+    EXECUTE IMMEDIATE 'COMMENT ON column vital_sign_notes.id_episode IS ''Episode ID'' ';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGED END: Vanessa Barsottelli
+/
+-- CHANGE END: Paulo Fonseca
+
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 22-Nov-2010
+-- CHANGE REASON: ALERT-130824
+DECLARE
+    e_col_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_col_exists, -01430);
+
+BEGIN
+
+    EXECUTE IMMEDIATE 'ALTER TABLE vital_sign ADD (' || --
+                      '    color_graph VARCHAR2(32 CHAR),' || --
+                      '    color_text  VARCHAR2(32 CHAR)' || --
+                      ')';
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vital_sign.color_graph IS ''Color to be used in the graph view to represent this vital sign''';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN vital_sign.color_text  IS ''Color to be used in the graph view to represent the text with the name of the vital sign''';
+
+EXCEPTION
+    WHEN e_col_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+-- CHANGE END: Paulo Fonseca
+
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 19/12/2013 14:38
+-- CHANGE REASON: [ALERT-272503] 
+alter table vital_sign modify val_min number(10,3);
+alter table vital_sign modify val_max number(10,3);
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table VITAL_SIGN
+  is 'Configuration table for vital signs and biometric data(weight,height,head circumference).
+The possible values  for vital signs with FLG_FILL_TYPE = ''V'' (it means mutichoice values) are stored on table vital_sign_desc
+';
+-- Add comments to the columns 
+comment on column VITAL_SIGN.id_vital_sign
+  is 'Vital sign Identifier';
+comment on column VITAL_SIGN.intern_name_vital_sign
+  is 'Internal description for identify the vital sign ';
+comment on column VITAL_SIGN.code_vital_sign
+  is 'Identifier code used for translation ';
+comment on column VITAL_SIGN.flg_fill_type
+  is 'Indicates the vital sign  type of fill to show :B - Keypad with bar(e.g. used on blood pressure); N - Keypad; P - Scale (e.g. pain scale); V - Multichoice;
+';
+comment on column VITAL_SIGN.val_min
+  is 'Mininum value acepted by the vital sign';
+comment on column VITAL_SIGN.val_max
+  is 'Maximun value acepted by the vital sign';
+comment on column VITAL_SIGN.flg_mandatory
+  is 'Indicates if this vital sign is mandatory to  fill during the triage:
+Y - Yes; N - No(by default).';
+comment on column VITAL_SIGN.flg_available
+  is 'Indicates if the record is available at institution database : Y - Yes; N - No;
+';
+comment on column VITAL_SIGN.rank
+  is 'Vital sign rank used for ordenation';
+comment on column VITAL_SIGN.adw_last_update
+  is 'Last update date ';
+comment on column VITAL_SIGN.code_measure_unit
+  is 'Unit measure translation code';
+comment on column VITAL_SIGN.flg_show
+  is 'Indicates if the vital sign is to show on  vital sign screen: Y - Yes; N-No.';
+comment on column VITAL_SIGN.format_num
+  is 'Vital sign user input/output format mask';
+comment on column VITAL_SIGN.code_vs_short_desc
+  is 'Translation code for vital sign short description';
+comment on column VITAL_SIGN.flg_vs
+  is 'Indicates if the vital sign should appear on vital signs area or in physical exam area.';
+comment on column VITAL_SIGN.flg_wizard
+  is 'Indicates if vital sign be part of a wizard workflow : Y - Yes; N - No. 
+';
+comment on column VITAL_SIGN.id_content
+  is 'Content identifier';
+comment on column VITAL_SIGN.create_user
+  is 'Creation User';
+comment on column VITAL_SIGN.create_time
+  is 'Creation Time';
+comment on column VITAL_SIGN.create_institution
+  is 'Creation Institution';
+comment on column VITAL_SIGN.update_user
+  is 'Update User';
+comment on column VITAL_SIGN.update_time
+  is 'Update Time';
+comment on column VITAL_SIGN.update_institution
+  is 'Update Institution';
+comment on column VITAL_SIGN.color_graph
+  is 'Color to be used in the graph view to represent this vital sign';
+comment on column VITAL_SIGN.color_text
+  is 'Color to be used in the graph view to represent the text with the name of the vital sign';
+  
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 02/05/2016 09:22
+-- CHANGE REASON: [ALERT-320563] 
+alter table
+   vital_sign
+drop
+   (val_min, val_max, format_num, code_measure_unit);
+   
+-- CHANGE END: Paulo Teixeira

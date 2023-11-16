@@ -1,0 +1,109 @@
+
+
+  CREATE TABLE ALLERGY
+   (	ID_ALLERGY NUMBER(12,0) NOT NULL ENABLE,
+	ID_ALLERGY_PARENT NUMBER(12,0),
+	CODE_ALLERGY VARCHAR2(200) NOT NULL ENABLE,
+	FLG_SELECT VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_ACTIVE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	RANK NUMBER(12,0),
+	FLG_WITHOUT VARCHAR2(2)
+   );
+
+
+COMMENT ON COLUMN allergy.code_allergy IS 'Código para nome' ;
+COMMENT ON COLUMN allergy.flg_select IS 'Alergia seleccionável pelo utilizador. Nem todas as alergias válidas são seleccionáveis (por ex, os níveis superiores da hierarquia não são)' ;
+COMMENT ON COLUMN allergy.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN allergy.flg_active IS 'A - activo, I - inactivo' ;
+COMMENT ON COLUMN allergy.rank IS 'ranking order' ;
+COMMENT ON COLUMN allergy.flg_without IS 'Y - Sem alergias a...; F - Sem alergias a fármacos' ;
+
+-- RdSN 2008/01/31
+-- Other allergies
+alter table allergy add flg_other varchar2(2);
+comment on column allergy.FLG_OTHER is '"Other allergies" indication';
+
+ALTER TABLE ALLERGY ADD (ID_CONTENT VARCHAR2(200));
+comment on column ALLERGY.ID_CONTENT is 'Identificador único de conteúdo';
+
+-- Add/modify columns 
+alter table ALLERGY add market varchar2(50);
+-- Add comments to the columns 
+comment on column ALLERGY.market
+  is 'Mercado';
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 04/05/2011 21:45
+-- CHANGE REASON: [ALERT-174411] 
+alter table ALLERGY
+add id_allergy_standard VARCHAR2(20 CHAR);
+
+comment on column ALLERGY.id_allergy_standard
+  is 'Standard ID for grouping allergies';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: José Silva
+-- CHANGE DATE: 24/01/2012 17:08
+-- CHANGE REASON: [ALERT-214855] 
+ALTER TABLE allergy ADD id_product VARCHAR2(200 CHAR);
+ALTER TABLE allergy ADD id_ing_group VARCHAR2(200 CHAR);
+ALTER TABLE allergy ADD id_ingredients VARCHAR2(200 CHAR);
+
+COMMENT ON COLUMN allergy.id_product IS 'This allergy refers to a drug product id (exclusive with id_ing_group and id_ingredients)';
+COMMENT ON COLUMN allergy.id_ing_group IS 'This allergy refers to a drug ingredient group id (exclusive with id_product and id_ingredients)';
+COMMENT ON COLUMN allergy.id_ingredients IS 'This allergy refers to a drug ingredient id (exclusive with id_product and id_ing_group)';
+-- CHANGE END: José Silva
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:12
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table ALLERGY
+  is 'Allergies catalog';
+-- Add comments to the columns 
+comment on column ALLERGY.id_allergy
+  is 'Primary Key identifier';
+comment on column ALLERGY.id_allergy_parent
+  is 'ID Allergy parent';
+comment on column ALLERGY.code_allergy
+  is 'Code for translation';
+comment on column ALLERGY.flg_select
+  is 'Flag that indicates if the allergy is selectable by the user.  ';
+comment on column ALLERGY.flg_available
+  is 'Flag that indicates if the allergy is available';
+comment on column ALLERGY.flg_active
+  is 'Flag that indicates it the allergy is active A - ACTIVE, I - INACTIVE';
+comment on column ALLERGY.adw_last_update
+  is 'Update date';
+comment on column ALLERGY.flg_without
+  is 'Flag that indicates that is not a allergu Y - No known allergies.; F - No known drug allergies';
+comment on column ALLERGY.id_content
+  is 'Content unique ID';
+comment on column ALLERGY.market
+  is 'Market ';
+-- CHANGE END: Elisabete Bugalho
+
+--ALERT-324813 (begin)
+--ID_CSI_SUPPLIER --DLL
+DECLARE
+    l_sql VARCHAR2(1000) := q'[ALTER TABLE allergy ADD id_csi_supplier NUMBER(24) DEFAULT -1 NOT NULL]';
+BEGIN
+    pk_versioning.run(l_sql);
+END;
+/
+
+--ID_CSI_SUPPLIER - COMMENT
+
+COMMENT ON COLUMN allergy.id_csi_supplier
+  IS 'Identify in which supplier allergy was based and makes implicit if allergy was automatic created from that (-1 -> If allergy was created manual)';
+--ALERT-324813 (end)
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 08/01/2020 16:17
+-- CHANGE REASON: [EMR-25232] - EHR button > Comprehensive history > Allergies and adverse reactions deepnav > Advance search button > The allergies with flg_available = 'N' are returned
+COMMENT ON COLUMN ALLERGY.FLG_AVAILABLE IS 'Flag that indicates if the allergy is available. (Y/N - Needs to be set as Y in order to be searchable)';
+COMMENT ON COLUMN ALLERGY.FLG_ACTIVE IS 'Flag that indicates it the allergy is active (A - ACTIVE, I - INACTIVE / Needs to be set a A in order to be searchable)';
+-- CHANGE END: Diogo Oliveira

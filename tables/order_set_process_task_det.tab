@@ -1,0 +1,76 @@
+CREATE TABLE ORDER_SET_PROCESS_TASK_DET
+ (ID_ORDER_SET_PROCESS_TASK_DET NUMBER(24) NOT NULL
+ ,ID_ORDER_SET_PROCESS_TASK NUMBER(24) NOT NULL
+ ,FLG_VALUE_TYPE VARCHAR2(1) NOT NULL
+ ,NVALUE NUMBER(24,3)
+ ,DVALUE TIMESTAMP WITH LOCAL TIME ZONE
+ ,VVALUE VARCHAR2(200)
+ ,FLG_DETAIL_TYPE VARCHAR2(1) NOT NULL
+ ,ID_ADVANCED_INPUT NUMBER(6)
+ ,ID_ADVANCED_INPUT_FIELD NUMBER(24)
+ ,ID_ADVANCED_INPUT_FIELD_DET NUMBER(24)
+ ,ID_UNIT_MEASURE NUMBER(24)
+ );
+
+COMMENT ON TABLE ORDER_SET_PROCESS_TASK_DET IS 'All details of the tasks associated to order sets processes';
+COMMENT ON COLUMN ORDER_SET_PROCESS_TASK_DET.ID_ORDER_SET_PROCESS_TASK_DET IS 'Order Set process task detail ID';
+COMMENT ON COLUMN ORDER_SET_PROCESS_TASK_DET.ID_ORDER_SET_PROCESS_TASK IS 'Order Set Process Task ID';
+COMMENT ON COLUMN ORDER_SET_PROCESS_TASK_DET.FLG_VALUE_TYPE IS 'Detail value type (D - date; N - number; V- varchar)';
+COMMENT ON COLUMN ORDER_SET_PROCESS_TASK_DET.NVALUE IS 'Numeric value';
+COMMENT ON COLUMN ORDER_SET_PROCESS_TASK_DET.DVALUE IS 'Date value';
+COMMENT ON COLUMN ORDER_SET_PROCESS_TASK_DET.VVALUE IS 'Varchar value';
+COMMENT ON COLUMN ORDER_SET_PROCESS_TASK_DET.FLG_DETAIL_TYPE IS 'Type of detail (A - Advanced input value; M - Lab tests: Medical necessity; S - Scheduling notes; N - Notes; T - Technician notes; R - Appointments: Reason for appointment request; D - Discharge instructions; E - Discharge instructions: This episode was due to; W - Discharge instructions: You were diagnosed with; V - Discharge instructions: restrict activity for)';
+COMMENT ON COLUMN ORDER_SET_PROCESS_TASK_DET.ID_ADVANCED_INPUT IS 'Advanced input ID associated to the value';
+COMMENT ON COLUMN ORDER_SET_PROCESS_TASK_DET.ID_ADVANCED_INPUT_FIELD IS 'Advanced input field ID associated to the value';
+COMMENT ON COLUMN ORDER_SET_PROCESS_TASK_DET.ID_ADVANCED_INPUT_FIELD_DET IS 'Advanced input field detail ID associated to the value';
+COMMENT ON COLUMN ORDER_SET_PROCESS_TASK_DET.ID_UNIT_MEASURE IS 'Advanced input field unit measure ID associated to the value';
+
+ALTER TABLE ORDER_SET_PROCESS_TASK_DET modify VVALUE varchar2(4000);
+
+COMMENT ON COLUMN ORDER_SET_PROCESS_TASK_DET.FLG_DETAIL_TYPE IS 'Type of detail (A - Advanced input value; M - Lab tests: Medical necessity; S - Scheduling notes; N - Notes; T - Technician notes; R - Appointments: Reason for appointment request; D - Discharge instructions; E - Discharge instructions: This episode was due to; W - Discharge instructions: You were diagnosed with; V - Discharge instructions: restrict activity for; P - Professional; G - Medication: Generic authorization; C - Medication: PCA; F - Discharge instructions: Follow-up with; U - Discharge instructions: Follow-up in; I - Discharge instructions: Care and instructions discussed with)';
+
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 2009-JUL-29
+-- CHANGE REASON: ALERT-31492 - diet prescriptions for order sets
+comment on column ORDER_SET_PROCESS_TASK_DET.FLG_DETAIL_TYPE
+  is 'Type of detail (A - Advanced input value; M - Lab tests: Medical necessity; S - Scheduling notes; N - Notes; T - Technician notes; R - Appointments: Reason for appointment request; D - Discharge instructions; E - Discharge instructions: This episode was due to; W - Discharge instructions: You were diagnosed with; V - Discharge instructions: restrict activity for; P - Professional; G - Medication: Generic authorization; C - Medication: PCA; F - Discharge instructions: Follow-up with; U - Discharge instructions: Follow-up in; I - Discharge instructions: Care and instructions discussed with; X - Diet prescriptions: continue diet after discharge; H - Diet prescriptions: patient needs help)';
+-- CHANGE END
+
+
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 16/08/2010 16:44
+-- CHANGE REASON: [ALERT-117300] 
+comment on column ORDER_SET_PROCESS_TASK_DET.flg_detail_type is 'Type of detail (A - Advanced input value; M - Diagnosis; S - Scheduling notes; N - Notes; T - Technician notes; R - Appointments: Reason for appointment request; B - Appointments: type of appointment; L - Appointments: Location; D - Discharge instructions; E - Discharge instructions: This episode was due to; W - Discharge instructions: You were diagnosed with; V - Discharge instructions: restrict activity for; P - Professional; G - Medication: Generic authorization; C - Medication: PCA/RECM; F - Discharge instructions: Follow-up with; U - Discharge instructions: Follow-up in; I - Discharge instructions: Care and instructions discussed with; X - Diet prescriptions: continue diet after discharge; H - Diet prescriptions: patient needs help; O - Inpatient: indication for admission; J - Inpatient: surgical procedure)';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 21/01/2011 09:00
+-- CHANGE REASON: [ALERT-155060] Clinical questions for order sets
+comment on column ORDER_SET_PROCESS_TASK_DET.FLG_DETAIL_TYPE
+  is 'Type of detail:
+A - Advanced input value
+M - Diagnosis
+S - Scheduling notes
+N - Notes
+T - Technician notes
+R - Appointments: Reason for appointment request
+B - Appointments: type of appointment
+L - Appointments: Location
+D - Discharge instructions
+E - Discharge instructions: This episode was due to
+W - Discharge instructions: You were diagnosed with
+V - Discharge instructions: restrict activity for
+F - Discharge instructions: Follow-up with
+U - Discharge instructions: Follow-up in
+I - Discharge instructions: Care and instructions discussed with
+P - Professional
+G - Medication: Generic authorization
+C - Medication: PCA/RECM
+X - Diet prescriptions: continue diet after discharge
+H - Diet prescriptions: patient needs help
+O - Inpatient: indication for admission
+J - Inpatient: surgical procedure
+K - Lab tests: place of service';
+-- CHANGE END: Carlos Loureiro

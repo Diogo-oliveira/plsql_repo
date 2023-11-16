@@ -1,0 +1,22 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 09:01
+-- CHANGE REASON: [ALERT-12334] 
+alter table SUPPLY
+  add constraint SPY_SPT_FK foreign key (ID_SUPPLY_TYPE)
+  references SUPPLY_TYPE (ID_SUPPLY_TYPE);
+-- Create/Recreate check constraints 
+alter table SUPPLY
+  add constraint SPY_FLG_TYPE_CHK
+  check (FLG_TYPE in ('I','K','S'));
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 01/07/2010 15:07
+-- CHANGE REASON: [ALERT-108775]  Activity therapist
+alter table SUPPLY drop constraint SPY_FLG_TYPE_CHK;
+
+-- Create/Recreate check constraints 
+alter table SUPPLY
+  add constraint SPY_FLG_TYPE_CHK
+  check (FLG_TYPE in ('I','K','S','M'));
+-- CHANGE END: Sofia Mendes

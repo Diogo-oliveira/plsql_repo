@@ -1,0 +1,34 @@
+BEGIN
+		EXECUTE IMMEDIATE 'alter table ANNOUNCED_ARRIVAL
+						   add constraint ANN_ARR_PK primary key (ID_ANNOUNCED_ARRIVAL,ID_PRE_HOSP_ACCIDENT)';
+		
+		EXECUTE IMMEDIATE 'alter table ANNOUNCED_ARRIVAL
+						   add constraint ANN_ARR_FLG_EPI_TYPE_CHK
+						   check (FLG_EPI_TYPE IN (''M'',''C''))';
+		
+		EXECUTE IMMEDIATE 'alter table ANNOUNCED_ARRIVAL
+						   add constraint ANN_ARR_FLG_STATUS_CHK
+						   check (FLG_STATUS IN (''E'', ''A'', ''C''))';
+EXCEPTION
+WHEN others THEN
+    NULL;
+END;
+/
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 23/10/2009 08:26
+-- CHANGE REASON: [ALERT-51265] Add optins 'A' and 'P' to FLG_EPI_TYPE of ANNOUNCED_ARRIVAL table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ANNOUNCED_ARRIVAL
+                       drop constraint ANN_ARR_FLG_EPI_TYPE_CHK';
+    
+    EXECUTE IMMEDIATE 'alter table ANNOUNCED_ARRIVAL
+                       add constraint ANN_ARR_FLG_EPI_TYPE_CHK
+                       check (FLG_EPI_TYPE IN (''M'',''C'',''A'',''P''))';
+EXCEPTION
+WHEN others THEN
+    NULL;
+END;
+/
+-- CHANGE END: Alexandre Santos

@@ -1,0 +1,91 @@
+
+
+  CREATE TABLE DISCHARGE_REASON
+   (	ID_DISCHARGE_REASON NUMBER(12,0) NOT NULL ENABLE,
+	CODE_DISCHARGE_REASON VARCHAR2(200) NOT NULL ENABLE,
+	FLG_ADMIN_MEDIC VARCHAR2(3) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FILE_TO_EXECUTE VARCHAR2(200)
+   );
+
+
+COMMENT ON TABLE discharge_reason IS 'Razões da alta (administrativa / médica)' ;
+
+COMMENT ON COLUMN discharge_reason.flg_admin_medic IS 'Tipo de alta: D - médica, A - administrativa, S - social, ou combinações destes valores' ;
+COMMENT ON COLUMN discharge_reason.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+
+comment on column DISCHARGE_REASON.FILE_TO_EXECUTE
+  is 'Nome do ficheiro a carregar conforme Motivo de alta';
+  
+  
+  alter table discharge_reason add flg_type varchar2(1);
+
+
+
+ALTER TABLE DISCHARGE_REASON ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN DISCHARGE_REASON.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+
+-- JSILVA 29-12-2008
+ALTER TABLE discharge_reason MODIFY flg_admin_medic VARCHAR2(10);
+COMMENT ON COLUMN discharge_reason.flg_admin_medic IS 'Tipo de alta: D - médica, A - administrativa, S - social, ou combinações destes valores, M - encaminhamento feito pelo triador';
+-- END
+
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:25
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.DISCHARGE_REASON MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:24
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table DISCHARGE_REASON
+  is 'Discharge reasons';
+-- Add comments to the columns 
+comment on column DISCHARGE_REASON.id_discharge_reason
+  is 'Primary Key';
+comment on column DISCHARGE_REASON.code_discharge_reason
+  is 'Translation code for discharge reason description';
+comment on column DISCHARGE_REASON.flg_admin_medic
+  is 'Availability of record for professional category (concatenation of flag values). CATEGORY.FLG_TYPE (ONLY USED ON NORMAL DISCHARGE)';
+comment on column DISCHARGE_REASON.flg_available
+  is 'Availability (Y/N)';
+comment on column DISCHARGE_REASON.rank
+  is 'Rank for orderind';
+comment on column DISCHARGE_REASON.adw_last_update
+  is 'Date of last update';
+comment on column DISCHARGE_REASON.file_to_execute
+  is 'File to be executed (ONLY USED ON NORMAL DISCHARGE)';
+comment on column DISCHARGE_REASON.flg_type
+  is 'Possible values null , P (in this case a list of professionals are returned as discharge destination )';
+comment on column DISCHARGE_REASON.id_content
+  is 'Conten unique identifier';  
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Nuno Coelho
+-- CHANGE DATE: 18/12/2019 10:03
+-- CHANGE REASON: [EMR-24501] - [DB] Home Health Care workflow US1
+ALTER TABLE discharge_reason ADD flg_hhc_disch VARCHAR2(1) default 'N' NOT NULL;
+
+comment on column discharge_reason.flg_hhc_disch
+is 'indicates if is a hhc discharge reason (Y/N)';
+
+ALTER TABLE discharge_reason
+ADD CONSTRAINT flg_hhc_disch_chk
+CHECK (flg_hhc_disch IN ('Y', 'N'));
+-- CHANGE END: Nuno Coelho
+
+
+--- CMF
+ALTER TABLE discharge_reason ADD flg_hhc_disch VARCHAR2(1) default 'N' NOT NULL;
+
+comment on column discharge_reason.flg_hhc_disch
+is 'indicates if is a hhc discharge reason (Y/N)';

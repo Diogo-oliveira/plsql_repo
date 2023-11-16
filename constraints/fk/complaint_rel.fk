@@ -1,0 +1,26 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 21/05/2013 16:59
+-- CHANGE REASON: [ALERT-248672] New frmw objs
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE alert.COMPLAINT_REL
+ add CONSTRAINT CR_COMP_FK foreign key(ID_COMPLAINT) REFERENCES ALERT.COMPLAINT (ID_COMPLAINT)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE alert.COMPLAINT_REL
+ add CONSTRAINT CR_COMP_P_FK foreign key(ID_COMP_PARENT) REFERENCES ALERT.COMPLAINT (ID_COMPLAINT)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+
+END;
+/
+-- CHANGE END:  Rui Gomes

@@ -1,0 +1,62 @@
+
+
+  CREATE TABLE BODY_PART
+   (	ID_BODY_PART NUMBER(12,0) NOT NULL ENABLE,
+	CODE_BODY_PART VARCHAR2(200) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(12,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE body_part IS 'Partes do corpo' ;
+
+COMMENT ON COLUMN body_part.code_body_part IS 'Código para nome' ;
+COMMENT ON COLUMN body_part.flg_type IS 'Tipo: C - colheita para análises, P - procedimento, A - ambos' ;
+COMMENT ON COLUMN body_part.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+
+comment on column BODY_PART.FLG_TYPE
+  is 'Tipo: C - colheita para análises, P - procedimento, A - ambos, D - Diagrama corporal';
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 09/07/2010 11:28
+-- CHANGE REASON: [ALERT-110708] HIDRICS Table changes
+alter table BODY_PART add id_content VARCHAR2(200 CHAR);
+comment on column BODY_PART.id_content is 'Content ID';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 10:00
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table BODY_PART
+  is 'Body parts records';
+-- Add comments to the columns 
+comment on column BODY_PART.id_body_part
+  is 'Primary key';
+comment on column BODY_PART.code_body_part
+  is 'Body part multi language suport';
+comment on column BODY_PART.flg_type
+  is 'Type: C - analysis collection P - procedure A - both DO - body diagram';
+comment on column BODY_PART.flg_available
+  is 'Registration availablility';
+comment on column BODY_PART.rank
+  is 'Relevance order';
+comment on column BODY_PART.adw_last_update
+  is 'Date of last change';
+comment on column BODY_PART.create_user
+  is 'Creation User';
+comment on column BODY_PART.create_time
+  is 'Creation Time';
+comment on column BODY_PART.create_institution
+  is 'Creation Institution';
+comment on column BODY_PART.update_user
+  is 'Update User';
+comment on column BODY_PART.update_time
+  is 'Update Time';
+comment on column BODY_PART.update_institution
+  is 'Update Institution';
+comment on column BODY_PART.id_content
+  is 'Content ID';
+-- CHANGE END: Renato Nunes

@@ -1,0 +1,88 @@
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-MAR-28
+-- CHANGING REASON: ALLERGIES MODULE
+create table PRESC_PAT_PROBLEM_HIST
+(
+  ID_PRESC_PAT_PROBLEM_HIST      NUMBER(24) not null,
+  ID_PRESC_PAT_PROBLEM      NUMBER(24) not null,
+  ID_PIH                    NUMBER(24),  
+  ID_PROFESSIONAL           NUMBER(24) not null,
+  FLG_TYPE                  VARCHAR2(2) not null,
+  FLG_STATUS                VARCHAR2(1),
+  ID_PAT_PROBLEM            NUMBER(24),
+  ID_PRESCRIPTION_PHARM     NUMBER(24),
+  ID_DRUG_PRESC_DET         NUMBER(24),
+  ID_DRUG_REQ_DET           NUMBER(24),
+  ID_PAT_HISTORY_DIAGNOSIS  NUMBER(12),
+  ID_EPIS_DIAGNOSIS         NUMBER(24),
+  NAV_CODE                  VARCHAR2(255),
+  SEVERITY_LEVEL            VARCHAR2(1),
+  DISEASE_DESC              VARCHAR2(255),
+  ID_PAT_ALLERGY            NUMBER(24),
+  PAT_ALLERGY_DESCR         VARCHAR2(255),
+  PAT_ALRGN_INGRED_DESCR    VARCHAR2(255),
+  PAT_ALRGN_GRP_DESCR       VARCHAR2(255),
+  ID_PROF_CANCEL            NUMBER(24),
+  DT_PRESC_PAT_PROBLEM_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DT_CANCEL_TSTZ            TIMESTAMP(6) WITH LOCAL TIME ZONE
+);
+
+alter table PRESC_PAT_PROBLEM_HIST add REVIEWED_BY varchar2(4000);
+alter table PRESC_PAT_PROBLEM_HIST add REVIEW_NOTES varchar2(4000);
+-- Add comments to the columns 
+comment on column PRESC_PAT_PROBLEM_HIST.REVIEWED_BY
+  is 'History of reviews';
+comment on column PRESC_PAT_PROBLEM_HIST.REVIEW_NOTES
+  is 'History of review notes';
+
+comment on column PRESC_PAT_PROBLEM_HIST.ID_PIH
+  is 'Chave da tabela de histórico da prescrição: PRESCRIPTION_INSTR_HIST';
+  
+-- Add comments to the table 
+comment on table PRESC_PAT_PROBLEM_HIST
+  is 'Histórico da associação de prescrição de farmacos a problemas.';
+-- Add comments to the columns 
+comment on column PRESC_PAT_PROBLEM_HIST.ID_PRESC_PAT_PROBLEM_HIST
+  is 'Chave primária.';
+comment on column PRESC_PAT_PROBLEM_HIST.ID_PAT_PROBLEM
+  is 'Problema a que está a associada a prescrição do fármaco.';
+comment on column PRESC_PAT_PROBLEM_HIST.ID_PRESCRIPTION_PHARM
+  is 'Prescrição associada ao problema.';
+comment on column PRESC_PAT_PROBLEM_HIST.ID_PROFESSIONAL
+  is 'Profissional que regista a associação.';
+comment on column PRESC_PAT_PROBLEM_HIST.FLG_TYPE
+  is 'Flag que indica se é uma contra-indicação (C) ou uma associação de fármacos a problemas (A) ou alergia a fármacos (IA).';
+comment on column PRESC_PAT_PROBLEM_HIST.ID_PAT_ALLERGY
+  is 'Alergia a que está a associada a intervencao.';
+comment on column PRESC_PAT_PROBLEM_HIST.FLG_STATUS
+  is 'Estado da associação: A - activo, C - cancelado.';
+comment on column PRESC_PAT_PROBLEM_HIST.ID_PROF_CANCEL
+  is 'Profissional que cancela.';
+comment on column PRESC_PAT_PROBLEM_HIST.ID_DRUG_PRESC_DET
+  is 'ID da requisição de medicação interna: medicação neste local e soros';
+comment on column PRESC_PAT_PROBLEM_HIST.ID_DRUG_REQ_DET
+  is 'ID da requisição de medicação à farmácia';
+comment on column PRESC_PAT_PROBLEM_HIST.ID_EPIS_DIAGNOSIS
+  is 'ID do registo do diagnóstico para qual existe contra-indicação';
+comment on column PRESC_PAT_PROBLEM_HIST.NAV_CODE
+  is 'Description of disease associated with the contra-indication.';
+comment on column PRESC_PAT_PROBLEM_HIST.SEVERITY_LEVEL
+  is 'Contains the severity level';
+-- CHANGE END Patrícia Neto
+
+alter table PRESC_PAT_PROBLEM_HIST add MED_ALRGN_INGRED_DESCR VARCHAR2(255);
+
+-- CHANGED BY: Patricia Neto
+-- CHANGE DATE: 29/09/2009 10:03
+-- CHANGE REASON: [ALERT-34355] Warnings
+alter table PRESC_PAT_PROBLEM_HIST add FLG_READ VARCHAR2(1);
+-- Add comments to the columns 
+comment on column PRESC_PAT_PROBLEM_HIST.FLG_READ
+  is 'Indication if the pacient have read the notification or not';
+-- CHANGE END: Patricia Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_PAT_PROBLEM_HIST IS 'Histórico da associação de prescrição de farmacos a problemas. [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

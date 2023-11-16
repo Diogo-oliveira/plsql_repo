@@ -1,0 +1,74 @@
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/09/2018 11:07
+-- CHANGE REASON: [EMR-6418] 
+create table BP_QUESTION_RESPONSE
+(
+  id_BP_question_response NUMBER(24) not null,
+  id_BLOOD_PRODUCT_DET    NUMBER(24) not null,
+  id_questionnaire          NUMBER(24) not null,
+  id_response               NUMBER(24),
+  notes                     CLOB,
+  flg_time                  VARCHAR2(2 CHAR) not null,
+  id_episode                NUMBER(24) not null,
+  id_prof_last_update       NUMBER(24),
+  dt_last_update_tstz       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+    create_user               VARCHAR2(50 CHAR),
+  create_time               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution        NUMBER(24),
+  update_user               VARCHAR2(50 CHAR),
+  update_time               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution        NUMBER(24)
+)
+tablespace TABLE_S
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 128K
+    next 128K
+    minextents 1
+    maxextents unlimited
+    pctincrease 0
+  );
+-- Add comments to the table 
+comment on table BP_QUESTION_RESPONSE
+  is 'Table that stores the answers of the clinical questions';
+-- Add comments to the columns 
+comment on column BP_QUESTION_RESPONSE.id_BP_QUESTION_RESPONSE
+  is 'Primary key';
+comment on column BP_QUESTION_RESPONSE.id_BLOOD_PRODUCT_DET
+  is 'Blood Product order detail ID';
+comment on column BP_QUESTION_RESPONSE.id_questionnaire
+  is 'Question ID';
+comment on column BP_QUESTION_RESPONSE.id_response
+  is 'Response ID';
+comment on column BP_QUESTION_RESPONSE.notes
+  is 'Notes';
+comment on column BP_QUESTION_RESPONSE.create_user
+  is 'Creation User';
+comment on column BP_QUESTION_RESPONSE.create_time
+  is 'Creation Time';
+comment on column BP_QUESTION_RESPONSE.create_institution
+  is 'Creation Institution';
+comment on column BP_QUESTION_RESPONSE.update_user
+  is 'Update User';
+comment on column BP_QUESTION_RESPONSE.update_time
+  is 'Update Time';
+comment on column BP_QUESTION_RESPONSE.update_institution
+  is 'Update Institution';
+comment on column BP_QUESTION_RESPONSE.flg_time
+  is 'Flag that indicates WHEN the questionnaire was answered';
+comment on column BP_QUESTION_RESPONSE.id_episode
+  is 'Episode ID';
+comment on column BP_QUESTION_RESPONSE.id_prof_last_update
+  is 'Last update professional ID';
+comment on column BP_QUESTION_RESPONSE.dt_last_update_tstz
+  is 'Last update date';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/10/2018 14:35
+-- CHANGE REASON: [EMR-7652] 
+COMMENT ON COLUMN BP_QUESTION_RESPONSE.FLG_TIME IS 'Flag that indicates WHEN the questionnaire was answered (O - Order)';
+-- CHANGE END: Pedro Henriques

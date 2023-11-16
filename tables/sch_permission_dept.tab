@@ -1,0 +1,31 @@
+CREATE TABLE SCH_PERMISSION_DEPT (
+  ID_SCH_PERMISSION_DEPT NUMBER(24),
+	ID_PROFESSIONAL NUMBER(24),
+	ID_DEPARTMENT NUMBER(24),
+	FLG_DEFAULT VARCHAR2(1),
+	DT_SCH_PERMISSION_DEPT DATE DEFAULT SYSDATE
+);
+
+COMMENT ON TABLE SCH_PERMISSION_DEPT IS 'Stores the departments that a professional is able to access on Scheduler.';
+COMMENT ON COLUMN SCH_PERMISSION_DEPT.ID_SCH_PERMISSION_DEPT IS 'Primary key, permission identifier';
+COMMENT ON COLUMN SCH_PERMISSION_DEPT.ID_PROFESSIONAL IS 'Professional identifier';
+COMMENT ON COLUMN SCH_PERMISSION_DEPT.ID_DEPARTMENT IS 'Department identifier';
+COMMENT ON COLUMN SCH_PERMISSION_DEPT.FLG_DEFAULT IS 'Indicates if this is the default department to be selected on multi-choices. Possible values ''Y'' (yes) ''N'' (no)';
+COMMENT ON COLUMN SCH_PERMISSION_DEPT.DT_SCH_PERMISSION_DEPT IS 'Record modification date';
+
+ALTER TABLE sch_permission_dept ADD id_institution NUMBER(24);
+COMMENT ON COLUMN sch_permission_dept.id_institution IS 'Institution identifier';
+
+ALTER TABLE sch_permission_dept DROP COLUMN id_institution;
+COMMENT ON COLUMN SCH_PERMISSION_DEPT.ID_SCH_PERMISSION_DEPT IS 'Department permission identifier';
+COMMENT ON COLUMN SCH_PERMISSION_DEPT.FLG_DEFAULT IS 'Indicates if this is the default department (of its institution) to be selected, by default, on multi-choices. Possible values ''Y'' (yes) ''N'' (no)';
+
+ALTER TABLE SCH_PERMISSION_DEPT ADD DT_SCH_PERMISSION_DEPT_TSTZ TIMESTAMP WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP;	
+COMMENT ON COLUMN SCH_PERMISSION_DEPT.DT_SCH_PERMISSION_DEPT_TSTZ IS 'Record modification date';
+
+
+-- José Brito 22/09/2008 Eliminar colunas DATE
+alter table sch_permission_dept drop column dt_sch_permission_dept;
+
+
+

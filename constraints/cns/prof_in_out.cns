@@ -1,0 +1,57 @@
+
+
+  ALTER TABLE PROF_IN_OUT ADD CONSTRAINT PIO_PK PRIMARY KEY (ID_PROF_IN_OUT) ENABLE;
+
+  ALTER TABLE PROF_IN_OUT MODIFY (ID_PROF_IN_OUT NOT NULL ENABLE);
+
+  ALTER TABLE PROF_IN_OUT MODIFY (ID_PROFESSIONAL NOT NULL ENABLE);
+
+  ALTER TABLE PROF_IN_OUT MODIFY (DT_IN NOT NULL ENABLE);
+
+  ALTER TABLE PROF_IN_OUT MODIFY (ID_INSTITUTION NOT NULL ENABLE);
+
+  ALTER TABLE PROF_IN_OUT MODIFY (ID_SOFTWARE NOT NULL ENABLE);
+
+
+
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:42
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_IN_OUT add constraint PROF_IO_FLG_AUTOMATIC_CHK check ( FLG_AUTOMATIC in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/07/2011 12:02
+-- CHANGE REASON: [ALERT-187577] grouping changes with novalidate
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_IN_OUT add constraint PROF_IO_FLG_AUTOMATIC_CHK check ( FLG_AUTOMATIC in (''N'',''Y'')) novalidate';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

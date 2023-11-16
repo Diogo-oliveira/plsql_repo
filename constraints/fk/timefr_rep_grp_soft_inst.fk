@@ -1,0 +1,32 @@
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 25/02/2011 17:33
+-- CHANGE REASON: [ALERT-164703] DDL Reports - H & P reformulation in INPATIENT
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TIMEFR_REP_GRP_SOFT_INST ADD (CONSTRAINT
+ TRGSI_TGP_FK FOREIGN KEY 
+  (ID_TIMEFRAME_GROUP) REFERENCES TIMEFRAME_GROUP
+  (ID_TIMEFRAME_GROUP))';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+--
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE TIMEFR_REP_GRP_SOFT_INST ADD (CONSTRAINT
+ TRGSI_TRP_FK FOREIGN KEY 
+  (ID_TIMEFRAME_REP) REFERENCES TIMEFRAME_REP
+  (ID_TIMEFRAME_REP))';
+EXCEPTION
+    WHEN e_fk_already_there THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: António Neto

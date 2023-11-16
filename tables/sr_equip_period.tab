@@ -1,0 +1,56 @@
+
+
+  CREATE TABLE SR_EQUIP_PERIOD
+   (	ID_SR_EQUIP_PERIOD NUMBER(24,0) NOT NULL ENABLE,
+	ID_SR_EQUIP NUMBER(24,0) NOT NULL ENABLE,
+	ID_SURG_PERIOD NUMBER(3,0) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE
+   );
+
+
+COMMENT ON COLUMN sr_equip_period.id_sr_equip_period IS 'ID único' ;
+COMMENT ON COLUMN sr_equip_period.id_sr_equip IS 'Id do material ou equipamento' ;
+COMMENT ON COLUMN sr_equip_period.id_surg_period IS 'ID do periodo operatório' ;
+COMMENT ON COLUMN sr_equip_period.flg_available IS 'Disponível (Y/N)' ;
+
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 02/03/2010 16:39
+-- CHANGE REASON: [ALERT-69357] Put in default an operative period 
+ALTER TABLE sr_equip_period ADD flg_default VARCHAR2(1);
+COMMENT ON COLUMN SR_EQUIP_PERIOD.FLG_DEFAULT IS 'Period default';
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 17:41
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table SR_EQUIP_PERIOD
+  is 'Equipment and correspondent surgery period';
+-- Add comments to the columns 
+comment on column SR_EQUIP_PERIOD.id_sr_equip_period
+  is 'Primary key';
+comment on column SR_EQUIP_PERIOD.id_sr_equip
+  is 'Id of equipment';
+comment on column SR_EQUIP_PERIOD.id_surg_period
+  is 'Id of surgery period';
+comment on column SR_EQUIP_PERIOD.flg_available
+  is 'Availability (Y/N)';
+comment on column SR_EQUIP_PERIOD.adw_last_update
+  is 'Last date update : deprecated';
+comment on column SR_EQUIP_PERIOD.create_user
+  is 'Creation User';
+comment on column SR_EQUIP_PERIOD.create_time
+  is 'Creation Time';
+comment on column SR_EQUIP_PERIOD.create_institution
+  is 'Creation Institution';
+comment on column SR_EQUIP_PERIOD.update_user
+  is 'Update User';
+comment on column SR_EQUIP_PERIOD.update_time
+  is 'Update Time';
+comment on column SR_EQUIP_PERIOD.update_institution
+  is 'Update Institution';
+comment on column SR_EQUIP_PERIOD.flg_default
+  is 'Period default';
+-- CHANGE END: Renato Nunes

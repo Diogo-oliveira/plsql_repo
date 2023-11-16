@@ -1,0 +1,17 @@
+CREATE INDEX EGSI_S_INST_EGP_IDX ON EVENT_GROUP_SOFT_INST (ID_EVENT_GROUP, ID_INSTITUTION, ID_SOFTWARE );
+
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 23/05/2012 17:16
+-- CHANGE REASON: [ALERT-231213] added index
+declare
+  e_idx_exists exception;
+  pragma exception_init(e_idx_exists, -00955);
+begin
+  execute immediate 'create index EGSI_S_INST_EGP_IDX on EVENT_GROUP_SOFT_INST (ID_EVENT_GROUP, ID_INSTITUTION, ID_SOFTWARE)
+';
+exception when e_idx_exists then
+  dbms_output.put_line('index egsi_eg_inst_s_idx already exists!');
+end;
+/
+-- CHANGE END: Pedro Carneiro

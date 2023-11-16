@@ -1,0 +1,30 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 08/06/2011 09:31
+-- CHANGE REASON: [ALERT-184001] Alert professionals to review advance directives (ALERT_41412)
+--                DB Versioning - New Objects
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -2275);
+BEGIN
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE PAT_ADV_DIR_RECURR_PLAN ADD CONSTRAINT PADRP_PAD_FK FOREIGN KEY(ID_PAT_ADVANCE_DIRECTIVE) REFERENCES PAT_ADVANCE_DIRECTIVE(ID_PAT_ADVANCE_DIRECTIVE)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE PAT_ADV_DIR_RECURR_PLAN ADD CONSTRAINT PADRP_PT_FK FOREIGN KEY(ID_PROFILE_TEMPLATE) REFERENCES PROFILE_TEMPLATE(ID_PROFILE_TEMPLATE)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+           EXECUTE IMMEDIATE 'ALTER TABLE PAT_ADV_DIR_RECURR_PLAN ADD CONSTRAINT PADRP_ORP_FK FOREIGN KEY(ID_RECURR_PLAN) REFERENCES ORDER_RECURR_PLAN(ID_ORDER_RECURR_PLAN)';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

@@ -1,0 +1,41 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 30/04/2011 18:02
+-- CHANGE REASON: [ALERT-173229] Order recurrence core development
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE ORDER_RECURR_PATTERN
+(
+  ID_ORDER_RECURR_PATTERN   NUMBER(24) NOT NULL,
+  ID_ORDER_RECURR           NUMBER(24) NOT NULL,
+  FLG_WEEK_DAY              NUMBER(1),
+  FLG_WEEK                  NUMBER(1),
+  MONTH_DAY                 NUMBER(2),
+  MONTH                     NUMBER(2),
+  CREATE_USER               VARCHAR2(24 CHAR),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24 CHAR),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24)  
+)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('ORDER_RECURR_PATTERN table already exists');
+END;
+/
+comment on table ORDER_RECURR_PATTERN is 'Order recurrence pattern table [ORCST]';
+comment on column ORDER_RECURR_PATTERN.ID_ORDER_RECURR_PATTERN is 'Order recurrence pattern ID';
+comment on column ORDER_RECURR_PATTERN.ID_ORDER_RECURR         is 'Order recurrence ID';
+comment on column ORDER_RECURR_PATTERN.FLG_WEEK_DAY            is 'Week day (1 - Sunday; 2 - Monday; 3 - Tuesday; 4 - Wednesday; 5 - Thursday; 6 - Friday; 7 - Saturday)';
+comment on column ORDER_RECURR_PATTERN.FLG_WEEK                is 'Week (1 - first; 2 - second; 3 - third; 4 - fourth; 5 - last)';
+comment on column ORDER_RECURR_PATTERN.MONTH_DAY               is 'Month day';
+comment on column ORDER_RECURR_PATTERN.MONTH                   is 'Day of the month';
+comment on column ORDER_RECURR_PATTERN.CREATE_USER             is 'Creation User';
+comment on column ORDER_RECURR_PATTERN.CREATE_TIME             is 'Creation Time';
+comment on column ORDER_RECURR_PATTERN.CREATE_INSTITUTION      is 'Creation Institution';
+comment on column ORDER_RECURR_PATTERN.UPDATE_USER             is 'Update User';
+comment on column ORDER_RECURR_PATTERN.UPDATE_TIME             is 'Update Time';
+comment on column ORDER_RECURR_PATTERN.UPDATE_INSTITUTION      is 'Update Institution';
+-- CHANGE END: Carlos Loureiro

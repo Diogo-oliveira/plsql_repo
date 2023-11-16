@@ -1,0 +1,92 @@
+
+
+  ALTER TABLE SR_SURGERY_TIME ADD CONSTRAINT SR_TIMES_PK PRIMARY KEY (ID_SR_SURGERY_TIME) ENABLE;
+
+  ALTER TABLE SR_SURGERY_TIME MODIFY (ID_SR_SURGERY_TIME NOT NULL ENABLE);
+
+  ALTER TABLE SR_SURGERY_TIME MODIFY (ID_SOFTWARE NOT NULL ENABLE);
+
+  ALTER TABLE SR_SURGERY_TIME MODIFY (ID_INSTITUTION NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:30
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SR_SURGERY_TIME ADD CONSTRAINT SR_TIMES_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SR_TIMES_FLG_AVAILABLE_CHK table SR_SURGERY_TIME column FLG_AVAILABLE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:30
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SR_SURGERY_TIME ADD CONSTRAINT SR_TIMES_FLG_PAT_STATUS_CHK CHECK (FLG_PAT_STATUS IN (''A'', ''W'', ''L'', ''T'', ''V'', ''P'', ''R'', ''S'', ''F'', ''Y'', ''D'', ''O'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SR_TIMES_FLG_PAT_STATUS_CHK table SR_SURGERY_TIME column FLG_PAT_STATUS: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:30
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SR_SURGERY_TIME ADD CONSTRAINT SR_TIMES_FLG_TYPE_CHK CHECK (FLG_TYPE IN (''EB'', ''ES'', ''IA'', ''IC'', ''FC'', ''FA'', ''SS'', ''ER'', ''SR'', ''SB'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SR_TIMES_FLG_TYPE_CHK table SR_SURGERY_TIME column FLG_TYPE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:30
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SR_SURGERY_TIME ADD CONSTRAINT SR_TIMES_FLG_VAL_PREV_CHK CHECK (FLG_VAL_PREV IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SR_TIMES_FLG_VAL_PREV_CHK table SR_SURGERY_TIME column FLG_VAL_PREV: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto
+
+-- 
+declare
+	l_sql varchar2(1000 char);
+begin
+	L_SQL := 'ALTER TABLE SR_SURGERY_TIME DROP CONSTRAINT SR_TIMES_FLG_TYPE_CHK';
+	pk_versioning.run( l_sql);
+end;
+/
+
+
+-- cmf
+-- *****************************************************
+declare
+l_sql varchar2(1000 char);
+begin
+
+l_sql := 'ALTER TABLE SR_SURGERY_TIME ADD CONSTRAINT SR_ST_FLG_TYPE_UK UNIQUE ( FLG_TYPE )';
+pk_versioning.run(l_sql);
+end;
+/
+
+-- *****************************************************
+declare
+l_sql varchar2(1000 char);
+begin
+
+l_sql := q'[alter table SR_SURGERY_TIME add constraint SR_ST_INST_SOFT_ORIS_CHK check (ID_INSTITUTION = 0 and ID_SOFTWARE = 2)]';
+pk_versioning.run(l_sql);
+end;
+/
+

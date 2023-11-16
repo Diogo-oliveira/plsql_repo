@@ -1,0 +1,98 @@
+
+
+  CREATE TABLE DOC_COMPONENT
+   (	ID_DOC_COMPONENT NUMBER(24,0) NOT NULL ENABLE,
+	CODE_DOC_COMPONENT VARCHAR2(240) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	FLG_GENDER VARCHAR2(1),
+	AGE_MAX NUMBER(6,2),
+	AGE_MIN NUMBER(6,2),
+	CODE_DOC_COMP_VIEW VARCHAR2(240)
+   );
+
+
+COMMENT ON COLUMN doc_component.id_doc_component IS 'Chave primária' ;
+COMMENT ON COLUMN doc_component.code_doc_component IS 'Descrição do componente' ;
+COMMENT ON COLUMN doc_component.flg_type IS 'Tipo de componente: N - Normal; T - Title' ;
+COMMENT ON COLUMN doc_component.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN doc_component.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN doc_component.flg_gender IS 'Sexo:F-Feminino;M-Masculino;T-Todos' ;
+COMMENT ON COLUMN doc_component.age_max IS 'Idade Máxima' ;
+COMMENT ON COLUMN doc_component.age_min IS 'Idade mínima' ;
+COMMENT ON COLUMN doc_component.code_doc_comp_view IS 'Descrição do componente a mostrar nas páginas resumo' ;
+
+comment on column DOC_COMPONENT.AGE_MAX
+  is 'Idade máxima';
+
+COMMENT ON COLUMN doc_component.flg_type IS 'Tipo de componente: N - Normal; T - Title; D - Dynamic';
+
+--Ariel Machado 2008/05/08
+COMMENT ON COLUMN doc_component.flg_gender IS 'Gender: F-Female; M-Male; I-Undefined; NULL-All';
+--Changed end
+
+--Ariel Machado 2008/05/16
+ALTER TABLE DOC_COMPONENT ADD FLG_BEHAVIOR VARCHAR2(1) DEFAULT 'N';
+COMMENT ON COLUMN DOC_COMPONENT.FLG_BEHAVIOR IS 'Component behavior to fill a value: ''N''-Normal; ''R''-Recommended; ''M''-Mandatory';
+--Changed end
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-MAR-23
+-- CHANGED REASON: ALERT-11985 - Changes on Touch-Option database model to include id content
+ALTER TABLE DOC_COMPONENT ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN DOC_COMPONENT.ID_CONTENT  IS 'Content identifier';
+--CHANGE END Ariel Machado
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 03/05/2013 15:11
+-- CHANGE REASON: [ALERT-256903] Ophthalmologic exam - Ocular Motility: Improvement in the representation of cardinal positions of gaze
+comment on column DOC_COMPONENT.flg_type
+  is 'Type of component: N - Normal; T - Title; D - Dynamic; X - Ophthalmology: Cardinal Positions of Gaze';
+  
+-- CHANGE END: Ariel Machado
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/01/2016 14:58
+-- CHANGE REASON: [ALERT-317702] 
+comment on table DOC_COMPONENT
+  is 'Documentation component catalogue';
+-- Add comments to the columns 
+comment on column DOC_COMPONENT.id_doc_component
+  is 'Documentation component ID';
+comment on column DOC_COMPONENT.code_doc_component
+  is 'Translation code';
+comment on column DOC_COMPONENT.flg_type
+  is 'Type of component: N - Normal; T - Title; D - Dynamic; X - Ophthalmology: Cardinal Positions of Gaze';
+comment on column DOC_COMPONENT.flg_available
+  is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column DOC_COMPONENT.adw_last_update
+  is 'Update date';
+comment on column DOC_COMPONENT.flg_gender
+  is 'Gender';
+comment on column DOC_COMPONENT.age_max
+  is 'Maximum age';
+comment on column DOC_COMPONENT.age_min
+  is 'Minimum age';
+comment on column DOC_COMPONENT.code_doc_comp_view
+  is 'Translation code (shown in summary pages)';
+comment on column DOC_COMPONENT.flg_behavior
+  is 'Component behavior to fill a value: N - Normal, R - Recommended, M - Mandatory';
+comment on column DOC_COMPONENT.id_content
+  is 'Content unique ID';
+comment on column DOC_COMPONENT.create_user
+  is 'Creation User';
+comment on column DOC_COMPONENT.create_time
+  is 'Creation Time';
+comment on column DOC_COMPONENT.create_institution
+  is 'Creation Institution';
+comment on column DOC_COMPONENT.update_user
+  is 'Update User';
+comment on column DOC_COMPONENT.update_time
+  is 'Update Time';
+comment on column DOC_COMPONENT.update_institution
+  is 'Update Institution';
+  
+  
+  
+-- CHANGE END: Ana Matos

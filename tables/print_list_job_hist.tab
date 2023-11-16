@@ -1,0 +1,58 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 17/10/2014 13:35
+-- CHANGE REASON: [ALERT-298852] 
+BEGIN
+  pk_versioning.run(i_sql => q'[create table PRINT_LIST_JOB_HIST
+(
+  id_print_list_job_hist number(24) not null,
+  id_print_list_job      number(24) not null,    
+  id_print_list_area     number(24) not null,
+  print_arguments        varchar2(1000 char),
+  id_workflow             number(24) not null,
+  id_status               number(24) not null,
+  dt_status               timestamp(6) with local time zone not null,    
+  id_prof_status         number(24) not null,
+  id_patient              number(24) not null,
+  id_episode              number(24) not null,
+  id_prof_req             number(24) not null,
+  id_inst_req             number(24) not null,
+  dt_req                  timestamp(6) with local time zone not null,  
+  context_data            clob not null,
+  create_user            varchar2(30 char),
+  create_time            timestamp(6) with local time zone,
+  create_institution     number(24),
+  update_user            varchar2(30 char),
+  update_time            timestamp(6) with local time zone,
+  update_institution     number(24)
+)]');
+END;
+/
+
+comment on table PRINT_LIST_JOB_HIST is 'Print job list history';
+comment on column PRINT_LIST_JOB_HIST.id_print_list_job_hist is 'Print job history identifier';
+comment on column PRINT_LIST_JOB_HIST.id_print_list_job is 'Print job identifier';
+comment on column PRINT_LIST_JOB_HIST.id_print_list_area is 'Print area identifier';
+comment on column PRINT_LIST_JOB_HIST.print_arguments is 'Arguments necessary to print the job';
+comment on column PRINT_LIST_JOB_HIST.id_workflow is 'Workflow identifier';
+comment on column PRINT_LIST_JOB_HIST.id_status is 'Status identifier';
+comment on column PRINT_LIST_JOB_HIST.dt_status is 'Last status changing date';
+comment on column PRINT_LIST_JOB_HIST.id_prof_status is 'Professional that change the status of the print job';
+comment on column PRINT_LIST_JOB_HIST.id_patient is 'Patient identifier';
+comment on column PRINT_LIST_JOB_HIST.id_episode is 'Episode identifier';
+comment on column PRINT_LIST_JOB_HIST.id_prof_req is 'Professional that add the job to the print list';
+comment on column PRINT_LIST_JOB_HIST.id_inst_req is 'Institution where the print job was requested';
+comment on column PRINT_LIST_JOB_HIST.dt_req is 'Request date of the print job';
+comment on column PRINT_LIST_JOB_HIST.context_data is 'Context data needed to relate the print list job with its area';
+comment on column PRINT_LIST_JOB_HIST.create_user is 'Creation User';
+comment on column PRINT_LIST_JOB_HIST.create_time is 'Creation Time';
+comment on column PRINT_LIST_JOB_HIST.create_institution is 'Creation Institution';
+comment on column PRINT_LIST_JOB_HIST.update_user is 'Update User';
+comment on column PRINT_LIST_JOB_HIST.update_time is 'Update Time';
+comment on column PRINT_LIST_JOB_HIST.update_institution is 'Update Institution';
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 20/10/2014 10:38
+-- CHANGE REASON: [ALERT-298852] 
+alter table PRINT_LIST_JOB_HIST modify print_arguments VARCHAR2(4000);
+-- CHANGE END: Ana Monteiro

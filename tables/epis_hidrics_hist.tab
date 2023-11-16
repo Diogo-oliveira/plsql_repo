@@ -1,0 +1,223 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 22:34
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+create table EPIS_HIDRICS_HIST
+(
+  ID_EPIS_HIDRICS       NUMBER(24) not null,
+  DT_EPIS_HIDRICS_HIST  TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  ID_HIDRICS_TYPE       NUMBER(24) not null,
+  ID_PROFESSIONAL       NUMBER(24) not null,
+  ID_EPISODE            NUMBER(24) not null,
+  ID_HIDRICS_INTERVAL   NUMBER(24) not null,
+  FLG_STATUS            VARCHAR2(1) not null,
+  NOTES                 VARCHAR2(2000),
+  ID_PROF_CANCEL        NUMBER(24),
+  NOTES_CANCEL          VARCHAR2(2000),
+  ID_PROF_INTER         NUMBER(24),
+  NOTES_INTER           VARCHAR2(2000),
+  ID_PREV_EPISODE       NUMBER(24),
+  DT_CREATION_TSTZ      TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  DT_INITIAL_TSTZ       TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  DT_END_TSTZ           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DT_CANCEL_TSTZ        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DT_INTER_TSTZ         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  FLG_RESTRICTED        VARCHAR2(1 CHAR),
+  MAX_INTAKE            NUMBER(24),
+  MIN_OUTPUT            NUMBER(24),
+  INTERVAL_VALUE        VARCHAR2(24 CHAR),
+  DT_NEXT_BALANCE       TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PATIENT            NUMBER(24),
+  ID_CANCEL_REASON      NUMBER(24),
+  CREATE_USER           VARCHAR2(24),
+  CREATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24),
+  UPDATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24),
+  ID_PROF_LAST_CHANGE   NUMBER(24),
+  DT_EPIS_HIDRICS       TIMESTAMP(6) WITH LOCAL TIME ZONE
+);
+
+ALTER TABLE EPIS_HIDRICS_HIST MOVE TABLESPACE TABLE_L;
+
+-- Add comments to the table 
+comment on table EPIS_HIDRICS_HIST
+  is 'Registos dos episódios de Balanços Hidricos e Diureses';
+-- Add comments to the columns 
+comment on column EPIS_HIDRICS_HIST.ID_EPIS_HIDRICS
+  is 'Part of primary key';
+comment on column EPIS_HIDRICS_HIST.DT_EPIS_HIDRICS_HIST
+  is 'Part of primary key';
+comment on column EPIS_HIDRICS_HIST.ID_HIDRICS_TYPE
+  is 'Tipo de hidricos: 1 - balanço de hidricos;2-Diureses';
+comment on column EPIS_HIDRICS_HIST.ID_PROFESSIONAL
+  is 'Profissional';
+comment on column EPIS_HIDRICS_HIST.ID_EPISODE
+  is 'Episódio';
+comment on column EPIS_HIDRICS_HIST.ID_HIDRICS_INTERVAL
+  is 'Intervalo dos hidricos';
+comment on column EPIS_HIDRICS_HIST.FLG_STATUS
+  is 'Intake and output state: R - Required; E - Under going; I - Interrupted; C - Cancelled; F - Finnished; D - Draft; L - Cancelled draft ';
+comment on column EPIS_HIDRICS_HIST.NOTES
+  is 'Notas';
+comment on column EPIS_HIDRICS_HIST.ID_PROF_CANCEL
+  is 'Profissional que cancelou o registo';
+comment on column EPIS_HIDRICS_HIST.NOTES_CANCEL
+  is 'Notas de cancelamento';
+comment on column EPIS_HIDRICS_HIST.ID_PROF_INTER
+  is 'Profissional que interrompeu o registo';
+comment on column EPIS_HIDRICS_HIST.NOTES_INTER
+  is 'Notas de interrupção';
+comment on column EPIS_HIDRICS_HIST.CREATE_USER
+  is 'Creation User';
+comment on column EPIS_HIDRICS_HIST.CREATE_TIME
+  is 'Creation Time';
+comment on column EPIS_HIDRICS_HIST.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column EPIS_HIDRICS_HIST.UPDATE_USER
+  is 'Update User';
+comment on column EPIS_HIDRICS_HIST.UPDATE_TIME
+  is 'Update Time';
+comment on column EPIS_HIDRICS_HIST.UPDATE_INSTITUTION
+  is 'Update Institution';
+comment on column EPIS_HIDRICS_HIST.FLG_RESTRICTED
+  is 'Has restricted values? Y - Yes; N - No';
+comment on column EPIS_HIDRICS_HIST.MAX_INTAKE
+  is 'Maximum intake values';
+comment on column EPIS_HIDRICS_HIST.MIN_OUTPUT
+  is 'Minimum output values';
+comment on column EPIS_HIDRICS_HIST.INTERVAL_VALUE
+  is 'Interval value. When filled means that''s a user defined value.';
+comment on column EPIS_HIDRICS_HIST.DT_NEXT_BALANCE
+  is 'Time interval to the next balance';
+comment on column EPIS_HIDRICS_HIST.ID_PATIENT
+  is 'Patient ID';
+comment on column EPIS_HIDRICS_HIST.ID_CANCEL_REASON
+  is 'Cancel reason ID';
+comment on column EPIS_HIDRICS_HIST.ID_PROF_LAST_CHANGE is 'Professional who entered or last edited the record';
+comment on column EPIS_HIDRICS_HIST.DT_EPIS_HIDRICS is 'Insertion date or date of last update';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:43
+-- CHANGE REASON: [ALERT-153427 ] Intake and Output-Have the possibility to register bowel movements.
+ALTER TABLE EPIS_HIDRICS_HIST ADD INTERVAL_MINUTES NUMBER(12);
+COMMENT ON COLUMN EPIS_HIDRICS_HIST.INTERVAL_MINUTES IS 'Nr of minutes of the interval. This field is used in the user defined values.';
+
+alter table epis_hidrics_hist drop column id_prev_episode;
+
+-- Add comments to the table 
+comment on table EPIS_HIDRICS_HIST
+  is 'Intakes and Outputs registries history.';
+-- Add comments to the columns 
+comment on column EPIS_HIDRICS_HIST.ID_HIDRICS_TYPE
+  is 'Hidrics type ID';
+comment on column EPIS_HIDRICS_HIST.ID_PROFESSIONAL
+  is 'Professional';
+comment on column EPIS_HIDRICS_HIST.ID_EPISODE
+  is 'Episode';
+comment on column EPIS_HIDRICS_HIST.ID_HIDRICS_INTERVAL
+  is 'Hidrics Interval ID.';
+comment on column EPIS_HIDRICS_HIST.NOTES
+  is 'Notes';
+comment on column EPIS_HIDRICS_HIST.ID_PROF_CANCEL
+  is 'Professional that cancelled the registry.';
+comment on column EPIS_HIDRICS_HIST.NOTES_CANCEL
+  is 'Cancellation notes.';
+comment on column EPIS_HIDRICS_HIST.ID_PROF_INTER
+  is 'Professional that cancelled the registry.';
+comment on column EPIS_HIDRICS_HIST.NOTES_INTER
+  is 'Interruprion notes.';
+COMMENT ON COLUMN EPIS_HIDRICS_HIST.dt_creation_tstz IS 'Registry creation date.' ;
+COMMENT ON COLUMN EPIS_HIDRICS_HIST.dt_initial_tstz IS 'Start date of the intake or output.' ;
+COMMENT ON COLUMN EPIS_HIDRICS_HIST.dt_end_tstz IS 'End date of the intake or output' ;
+COMMENT ON COLUMN EPIS_HIDRICS_HIST.dt_cancel_tstz IS 'Cancellation date.' ;
+COMMENT ON COLUMN EPIS_HIDRICS_HIST.dt_inter_tstz IS 'Interruption date.' ;
+  
+
+alter table EPIS_HIDRICS_HIST modify ( flg_status  varchar2(1 char));
+alter table EPIS_HIDRICS_HIST modify ( notes  varchar2(2000 char));
+alter table EPIS_HIDRICS_HIST modify ( notes_cancel  varchar2(2000 char));
+alter table EPIS_HIDRICS_HIST modify ( notes_inter  varchar2(2000 char));
+alter table EPIS_HIDRICS_HIST modify ( create_user  varchar2(24 char));
+alter table EPIS_HIDRICS_HIST modify ( update_user  varchar2(24 char));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 11:24
+-- CHANGE REASON: [ALERT-153427] Intake and Output-Have the possibility to register bowel movements.
+ALTER TABLE EPIS_HIDRICS_HIST ADD FLG_ACTION VARCHAR2(1 CHAR);
+COMMENT ON COLUMN EPIS_HIDRICS_HIST.FLG_ACTION IS 'R - Require; E - Set Undergoing; I - Interrupt; C - Cancell; F - Finnish; D - Create Draft; L - Cancell draft; U - Edit';
+
+update EPIS_HIDRICS_HIST e
+set e.flg_action = e.flg_status;
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table EPIS_HIDRICS_HIST modify (FLG_ACTION not null)'; 
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Coluna já existe');
+END;
+/
+
+update EPIS_HIDRICS_HIST e
+set e.flg_action = 'U', e.flg_status = 'R'
+where e.flg_status = 'Z';
+
+
+update EPIS_HIDRICS_HIST e
+set e.flg_action = 'U', e.flg_status = 'E'
+where e.flg_status = 'K';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 22/03/2011 14:47
+-- CHANGE REASON: [ALERT-168659 ] Tempos de contagem dos balanços hídricos
+alter table epis_hidrics_hist drop column interval_value;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 05/04/2011 08:29
+-- CHANGE REASON: [ALERT-171131 ] Tempos de contagem dos balanços hídricos
+DECLARE
+    e_invalid_identifier EXCEPTION;
+   
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904); -- drop column/comment on column    
+BEGIN
+  ----------------------------------    
+BEGIN
+        EXECUTE IMMEDIATE 'alter table epis_hidrics_hist drop column interval_value';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente: alter table epis_hidrics_hist drop column interval_value.');
+    END;
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 26/10/2011 11:54
+-- CHANGE REASON: [ALERT-201548] Positioning - INP: UX Intake and Output
+begin
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_hidrics_hist.flg_status IS ''Intake and output state: R - Required; E - Under going; I - Interrupted; C - Cancelled; F - Finnished; D - Draft; L - Cancelled draft; O - Expired''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+
+
+begin
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_hidrics_hist.flg_action IS ''R - Require; E - Set Undergoing; I - Interrupt; C - Cancell; F - Finnish; D - Create Draft; L - Cancell draft; U - Edit; O - Expired''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 18/04/2016 11:56
+-- CHANGE REASON: [ALERT-320093] PIN Intake and Output improvements - DB Development
+ALTER TABLE epis_hidrics_hist MODIFY (max_intake NUMBER(26,2), min_output NUMBER(26,2));
+-- CHANGE END: Vanessa Barsottelli

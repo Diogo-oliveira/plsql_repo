@@ -1,0 +1,55 @@
+
+
+  CREATE TABLE SCHEDULE_ALTER
+   (	ID_SCHEDULE_ALTER NUMBER(24,0) NOT NULL ENABLE,
+	ID_SCHEDULE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_REQUESTS NUMBER(24,0),
+	ID_PROF_REQUESTED NUMBER(24,0),
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_DEP_CLIN_SERV NUMBER(24,0),
+	REASON VARCHAR2(200) NOT NULL ENABLE,
+	DT_TARGET DATE,
+	DT_FINAL_TARGET DATE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	DT_REQUEST DATE NOT NULL ENABLE,
+
+	FLG_REQUEST VARCHAR2(1) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	FLG_STATE VARCHAR2(1) NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN schedule_alter.reason IS 'Razão da alteração / cancelamento' ;
+COMMENT ON COLUMN schedule_alter.dt_target IS 'Nova data / hora' ;
+COMMENT ON COLUMN schedule_alter.dt_final_target IS 'Nova data limite' ;
+COMMENT ON COLUMN schedule_alter.flg_type IS 'A - alteração, C - cancelamento' ;
+COMMENT ON COLUMN schedule_alter.dt_request IS 'Data / hora da requisição' ;
+COMMENT ON COLUMN schedule_alter.flg_request IS 'Indicador de quem pediu o cancelamento: U - utente, M - médico da consulta, R - outro médico, E - enfermeiro, O - outro profissional' ;
+COMMENT ON COLUMN schedule_alter.flg_state IS 'A - activo, I - inactivo' ;
+
+
+
+
+ALTER TABLE SCHEDULE_ALTER ADD DT_FINAL_TARGET_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN SCHEDULE_ALTER.DT_FINAL_TARGET_TSTZ IS 'Nova data limite'; 
+
+
+
+
+ALTER TABLE SCHEDULE_ALTER ADD DT_REQUEST_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN SCHEDULE_ALTER.DT_REQUEST_TSTZ IS 'Data / hora da requisi‡Æo'; 
+
+
+
+
+ALTER TABLE SCHEDULE_ALTER ADD DT_TARGET_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN SCHEDULE_ALTER.DT_TARGET_TSTZ IS 'Nova data / hora'; 
+
+
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 22-04-2008
+-- CHANGE REASON: drop da tabela
+
+drop table schedule_alter;
+
+--END

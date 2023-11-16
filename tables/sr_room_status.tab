@@ -1,0 +1,29 @@
+
+
+  CREATE TABLE SR_ROOM_STATUS
+   (	ID_SR_ROOM_STATE NUMBER(24,0) NOT NULL ENABLE,
+	ID_ROOM NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_STATUS DATE,
+	NOTES VARCHAR2(4000)
+   );
+
+
+COMMENT ON TABLE sr_room_status IS 'Estados da salas' ;
+
+COMMENT ON COLUMN sr_room_status.id_sr_room_state IS 'ID único' ;
+COMMENT ON COLUMN sr_room_status.id_room IS 'ID da sala' ;
+COMMENT ON COLUMN sr_room_status.id_episode IS 'ID do episódio' ;
+COMMENT ON COLUMN sr_room_status.flg_status IS 'Estado da sala. Valores possíveis: F- Preparada, B- Ocupada, C- Em limpeza, D- Suja, P- Limpa, I- Suja e Infectada' ;
+COMMENT ON COLUMN sr_room_status.id_professional IS 'ID do profissional que iniciou o estado' ;
+COMMENT ON COLUMN sr_room_status.dt_status IS 'Data de início do estado' ;
+COMMENT ON COLUMN sr_room_status.notes IS 'Notas' ;
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização SR - eliminação de colunas
+ALTER TABLE SR_ROOM_STATUS drop column DT_STATUS;
+-- CHANGE END

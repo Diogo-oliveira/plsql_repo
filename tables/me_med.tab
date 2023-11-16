@@ -1,0 +1,225 @@
+
+CREATE TABLE ME_MED
+(
+EMB_ID VARCHAR2(255),MED_ID VARCHAR2(255),MED_NAME VARCHAR2(255),MED_DESCR_FORMATED VARCHAR2(255),MED_DESCR VARCHAR2(255),  
+SHORT_MED_DESCR VARCHAR2(255),EMB_DESCR VARCHAR2(255),PRICE_PVP NUMBER(8,2),PRICE_REF NUMBER(8,2),PRICE_PENS NUMBER(8,2),OTC_DESCR VARCHAR2(255),
+GENERICO VARCHAR2(255),GENERICO_DESCR VARCHAR2(255),DCI_ID VARCHAR2(255),DCI_DESCR VARCHAR2(255), FORM_FARM_ID VARCHAR2(255),
+FORM_FARM_DESCR VARCHAR2(255),TIPO_PROD_ID VARCHAR2(255),QT_DOS_COMP VARCHAR2(255), UNIT_DOS_COMP VARCHAR2(255), N_UNITS VARCHAR2(255), 
+QT_PER_UNIT VARCHAR2(255), DOSAGEM VARCHAR2(1000),TITULAR_ID VARCHAR2(255),TITULAR_DESCR VARCHAR2(255),DATA_AIM VARCHAR2(255),
+ESTADO_ID VARCHAR2(255),ESTADO_DESCR VARCHAR2(255),DISP_ID VARCHAR2(255),DISP_DESCR VARCHAR2(255),ESTUP_ID VARCHAR2(255),
+ESTUP_DESCR VARCHAR2(255), TRAT_ID VARCHAR2(255),TRAT_DESCR VARCHAR2(255),EMB_UNIT_ID VARCHAR2(255),EMB_UNIT_DESCR VARCHAR2(255),
+GRUPO_HOM_ID VARCHAR2(255), GRUPO_HOM_DESCR VARCHAR2(255),N_REGISTO VARCHAR2(255),COMPART VARCHAR2(255),FLG_COMERC VARCHAR2(1),
+FLG_AVAILABLE VARCHAR2(1),DISPO_ID VARCHAR2(255),DISPO_DATA DATE,VERS VARCHAR2(255)
+);
+ 
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-FEB-13
+-- CHANGING REASON:  abreviaturas dos descritivos
+-- Add/modify columns 
+alter table ME_MED add FORM_FARM_ID_ID NUMBER(5);
+alter table ME_MED add FORM_FARM_ABRV VARCHAR2(255);
+-- Add comments to the columns 
+comment on column ME_MED.FORM_FARM_ID_ID
+  is 'Quando o departamento dos conteúdos passar a parametrização do advanced input para este ID então deve substituir-se o FORM_FARM_ID por este ID.';
+-- CHANGE END Patrícia Neto	
+
+ALTER TABLE ME_MED ADD (ID_CONTENT VARCHAR2(200));
+comment on column ME_MED.ID_CONTENT is 'Identificador único de conteúdo';
+
+-- CHANGED BY:  NUNO ANTUNES
+-- CHANGE DATE: 30/07/2010 08:54
+-- CHANGE REASON: [ALERT-116319] 
+ALTER TABLE me_med
+ADD
+(
+      PRICE_PVPMAX100 NUMBER(24,6),
+      PMU_EURO NUMBER(24,6)
+);
+
+comment on column me_med.PRICE_PVPMAX100
+ is 'Preço abaixo do qual se encontram os medicamentos que são comparticipados a 100%';
+comment on column me_med.PMU_EURO
+ is 'Preço unitário do medicamento';
+-- CHANGE END:  NUNO ANTUNES
+
+-- CHANGED BY:  NELSON CANASTRO
+-- CHANGE DATE: 10/09/2010 16:04
+-- CHANGE REASON: [ALERT-124084] 
+alter table me_med add id_unit_measure number(24,0);
+comment on column me_med.id_unit_measure is 'The numeric ID of the UNIT_MEASURE table';
+
+alter table ME_MED
+  add constraint MEM_UM_FK foreign key (ID_UNIT_MEASURE)
+  references UNIT_MEASURE (ID_UNIT_MEASURE);
+-- CHANGE END:  NELSON CANASTRO
+
+-- CHANGED BY:  Pedro Morais
+-- CHANGE DATE: 04/05/2011 16:31
+-- CHANGE REASON: [ALERT-176261] Exchange Clinical Information - Add MED_BRAND_NAME
+-- Add/modify columns 
+alter table ME_MED add MED_BRAND_NAME varchar2(255);
+-- Add comments to the columns 
+comment on column ME_MED.MED_BRAND_NAME
+  is 'Brand name or Generic name. Dependes on GENERICO. If Y, this is is Generic name, otherwise Brand name';
+-- CHANGE END:  Pedro Morais
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 12/05/2011 17:02
+-- CHANGE REASON: [ALERT-178804] 
+DECLARE
+e_column_already_there EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_column_already_there,-01430);
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE ME_MED ADD CODE_CVX VARCHAR2(200)'; 
+EXCEPTION
+WHEN e_column_already_there THEN
+  dbms_output.put_line('Aviso: coluna anteriormente criada!');
+END;
+/
+
+COMMENT ON COLUMN me_med.CODE_CVX IS 'code used on vaccionation'; 
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:22
+-- CHANGE REASON: [ALERT-317980 ] Database model documentation and comments corretions
+COMMENT ON TABLE ME_MED IS 'Table with medication for external prescription';
+/
+
+COMMENT ON COLUMN ME_MED.EMB_ID   IS 'Medication with packaging ID';
+/
+
+COMMENT ON COLUMN ME_MED.MED_ID   IS 'Medication ID';
+/
+
+COMMENT ON COLUMN ME_MED.MED_NAME    IS 'Medication name';
+/
+
+COMMENT ON COLUMN ME_MED.MED_DESCR_FORMATED    IS 'Formatted medication description. It can have HTML formatting.';
+/
+
+COMMENT ON COLUMN ME_MED.MED_DESCR     IS 'Medication description (without formatting)';
+/
+
+COMMENT ON COLUMN ME_MED.SHORT_MED_DESCR  IS 'Medication short description';
+/
+
+COMMENT ON COLUMN ME_MED.EMB_DESCR  IS 'Packaging description';
+/
+
+COMMENT ON COLUMN ME_MED.OTC_DESCR   IS 'Over-The-Counter description';
+/
+
+COMMENT ON COLUMN ME_MED.Generico   IS 'Identifies if the medication is generic.';
+/
+
+COMMENT ON COLUMN ME_MED.GENERICO_DESCR   IS 'Generic identification description';
+/
+
+COMMENT ON COLUMN ME_MED.DCI_ID IS 'INN identifier'; 
+/
+
+COMMENT ON COLUMN ME_MED.DCI_DESCR IS 'INN description'; 
+/
+
+COMMENT ON COLUMN ME_MED.FORM_FARM_ID IS 'Pharmacological form ID'; 
+/
+
+COMMENT ON COLUMN ME_MED.FORM_FARM_DESCR IS 'Pharmacological form description'; 
+/
+
+COMMENT ON COLUMN ME_MED.TIPO_PROD_ID IS 'Product type identifier';
+/
+
+COMMENT ON COLUMN ME_MED.QT_DOS_COMP IS 'Dose quantity'; 
+/
+
+COMMENT ON COLUMN ME_MED.UNIT_DOS_COMP IS 'Dose unit measure'; 
+/
+
+COMMENT ON COLUMN ME_MED.N_UNITS  IS 'Packaging number of units';
+/
+
+COMMENT ON COLUMN ME_MED.QT_PER_UNIT   IS 'Quantity per packaging unit. P.e. a quantity in a ampoule'; 
+/
+
+COMMENT ON COLUMN ME_MED.DOSAGEM    IS 'Dosage description. Strength';
+/
+
+COMMENT ON COLUMN ME_MED.TITULAR_ID    IS 'Manufacturer ID';
+/
+
+COMMENT ON COLUMN ME_MED.TITULAR_DESCR  IS 'Manufacturer description';
+/
+
+COMMENT ON COLUMN ME_MED.DATA_AIM  IS 'Date of the authorization on the market';
+/
+
+COMMENT ON COLUMN ME_MED.ESTADO_ID   IS 'Status identifier'; 
+/
+
+COMMENT ON COLUMN ME_MED.ESTADO_DESCR  IS 'Status description'; 
+/
+
+COMMENT ON COLUMN ME_MED.DISP_ID   IS 'Dispense restrictions ID'; 
+/
+
+COMMENT ON COLUMN ME_MED.DISP_DESCR   IS 'Dispense restrictions description'; 
+/
+
+COMMENT ON COLUMN ME_MED.ESTUP_ID    IS 'Drug classification id accordding to it''s strenght, according to legislation';
+/
+
+COMMENT ON COLUMN ME_MED.ESTUP_DESCR  IS 'Drug classification description accordding to it''s strenght, according to legislation';
+/
+
+COMMENT ON COLUMN ME_MED.TRAT_ID  IS 'Treatment duration ID';
+/
+
+COMMENT ON COLUMN ME_MED.TRAT_DESCR  IS 'Treatment duration description (short, medium, long duration)'; 
+/
+
+COMMENT ON COLUMN ME_MED.EMB_UNIT_ID  IS 'Packaging unit ID'; 
+/
+
+COMMENT ON COLUMN ME_MED.EMB_UNIT_DESCR   IS 'Packaging unit description'; 
+/
+
+COMMENT ON COLUMN ME_MED.GRUPO_HOM_ID   IS 'Homogeneous group (drugs with the same therapeutic category belonging to the same reference pricing list) ID [Deprecated]';
+/
+
+COMMENT ON COLUMN ME_MED.GRUPO_HOM_DESCR   IS 'Homogeneous group (drugs with the same therapeutic category belonging to the same reference pricing list) description [Deprecated]';
+/
+
+COMMENT ON COLUMN ME_MED.N_REGISTO   IS 'Medication register number. (For instance from Infarmed) [Deprecated]';
+/
+COMMENT ON COLUMN ME_MED.COMPART    IS 'Comparticipation';
+/
+COMMENT ON COLUMN ME_MED.FLG_COMERC  IS 'Identifies if the medication is marketable';
+/
+COMMENT ON COLUMN ME_MED.FLG_AVAILABLE  IS 'Identifies if the medication is available (Y-available; N-oterhwise)';
+/
+COMMENT ON COLUMN ME_MED.DISPO_ID  IS 'Market disposition ID. (P.e. 4 - ends of comparticipation). [Deprecated]';
+/
+COMMENT ON COLUMN ME_MED.DISPO_DATA  IS 'Market expiration date. [Deprecated]';
+/
+COMMENT ON COLUMN ME_MED.VERS  IS 'Version';
+/
+COMMENT ON COLUMN ME_MED.FORM_FARM_ID_ID IS 'Pharmacological form ID. [Deprecated]';
+/
+COMMENT ON COLUMN ME_MED.FORM_FARM_ABRV IS 'Pharmacological form abreviation.';
+/
+COMMENT ON COLUMN ME_MED.ID_CONTENT IS 'Content ID.';
+/
+COMMENT ON COLUMN ME_MED.PRICE_PVP IS 'Selling price to the public.';
+/
+COMMENT ON COLUMN ME_MED.PRICE_REF IS 'Reference price.';
+/
+COMMENT ON COLUMN ME_MED.PRICE_PENS  IS 'Reference price for pensioners.';
+/
+COMMENT ON COLUMN ME_MED.PRICE_PVPMAX100  IS 'Price below which lie the medications that are reimbursed at 100%'; 
+/
+COMMENT ON COLUMN ME_MED.PMU_EURO  IS 'Unit price of the medication'; 
+/
+-- CHANGE END: Sofia Mendes

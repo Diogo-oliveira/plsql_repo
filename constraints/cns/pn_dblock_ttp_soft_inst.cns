@@ -1,0 +1,138 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/05/2012 10:41
+-- CHANGE REASON: [ALERT-231085 ] Improvements to Single page funcionality including(H&P, CV, PPH)
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_ttp_soft_inst ADD (CONSTRAINT PNDTSI_FLG_AUTO_POPULATED_CHK CHECK (REGEXP_LIKE(FLG_AUTO_POPULATED, ''^([YOFAMRLWTPBCN])'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_ttp_soft_inst
+  add constraint pdbttsi_pk primary key (ID_INSTITUTION, ID_SOFTWARE, ID_DEPARTMENT, ID_DEP_CLIN_SERV, ID_PN_NOTE_TYPE, ID_PN_SOAP_BLOCK, ID_PN_DATA_BLOCK, ID_TASK_TYPE)';
+EXCEPTION
+    WHEN others THEN
+       dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table pn_dblock_ttp_soft_inst
+  add constraint PDBTT_FLG_AVAILABLE_CHK
+  check (FLG_AVAILABLE IN (''Y'', ''N''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 15/10/2012 16:02
+-- CHANGE REASON: [ALERT-242379 ] Single page note for Discharge Summary
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_ttp_soft_inst drop constraint PNDTSI_FLG_AUTO_POPULATED_CHK';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_ttp_soft_inst ADD (CONSTRAINT PNDTSI_FLG_AUTO_POPULATED_CHK CHECK (REGEXP_LIKE(FLG_AUTO_POPULATED, ''^([YOFAMRLWTPBCNSVZDIE])'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_ttp_soft_inst drop constraint PNDBTTS_FLG_IMPORT_FILTER_CHK';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_ttp_soft_inst ADD (CONSTRAINT PNDBTTS_FLG_IMPORT_FILTER_CHK CHECK (REGEXP_LIKE(FLG_IMPORT_FILTER, ''^([YOFAMRLWTPBCNSVZDIE])'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_ttp_soft_inst drop constraint PNDBTTS_FLG_SELECTED_CHK';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_ttp_soft_inst ADD (CONSTRAINT PNDBTTS_FLG_SELECTED_CHK CHECK (REGEXP_LIKE(FLG_SELECTED, ''^([YNOFID])'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_ttp_soft_inst ADD (CONSTRAINT PNDBSI_FLG_SHTC_FILTER_CHK CHECK (REGEXP_LIKE(FLG_SHORTCUT_FILTER, ''^([YOFAMRLWTPBCNSVZDIEGK])'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+------------------------------------------------
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 31/05/2013 16:25
+-- CHANGE REASON: [ALERT-259145] Triage single page
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE pn_dblock_ttp_soft_inst ADD (CONSTRAINT PDBSI_FLG_REVIEW_AVAIL_CHK CHECK (FLG_REVIEW_AVAIL IN (''Y'', ''N'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY:  
+-- CHANGE DATE: 28/10/2014 14:37
+-- CHANGE REASON: [ALERT-299697] ALERT-299697 Versioning DB
+alter table PN_DBLOCK_TTP_SOFT_INST drop constraint PNDTSI_FLG_AUTO_POPULATED_CHK;
+alter table PN_DBLOCK_TTP_SOFT_INST add constraint PNDTSI_FLG_AUTO_POPULATED_CHK check (REGEXP_LIKE(FLG_AUTO_POPULATED, '^([YOFAMRLWTPBCNSVZDIEGKHJ])')) enable novalidate;
+
+alter table PN_DBLOCK_TTP_SOFT_INST drop constraint PNDBTTS_FLG_IMPORT_FILTER_CHK;
+alter table PN_DBLOCK_TTP_SOFT_INST add constraint PNDBTTS_FLG_IMPORT_FILTER_CHK check (REGEXP_LIKE(FLG_IMPORT_FILTER, '^([YOFAMRLWTPBCNSVZDIEGKHJ])')) enable novalidate;
+
+alter table PN_DBLOCK_TTP_SOFT_INST drop constraint PNDBSI_FLG_SHTC_FILTER_CHK;
+alter table PN_DBLOCK_TTP_SOFT_INST add constraint PNDBSI_FLG_SHTC_FILTER_CHK check (REGEXP_LIKE(FLG_SHORTCUT_FILTER, '^([YOFAMRLWTPBCNSVZDIEGKHJ])')) enable novalidate;
+
+alter table PN_DBLOCK_TTP_SOFT_INST drop constraint PNDBTTSI_FLG_SYNCHRONIZED_CHK;
+alter table PN_DBLOCK_TTP_SOFT_INST add constraint PNDBTTSI_FLG_SYNCHRONIZED_CHK check (REGEXP_LIKE(FLG_SYNCHRONIZED, '^([YOFAMRLWTPBCNSVZDIEGKHJ])')) enable novalidate;
+-- CHANGE END:
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 07/07/2017 15:13
+-- CHANGE REASON: [ALERT-330567] ischarge summary for FR market.
+alter table PN_DBLOCK_TTP_SOFT_INST drop constraint PNDTSI_FLG_AUTO_POPULATED_CHK;
+alter table PN_DBLOCK_TTP_SOFT_INST add constraint PNDTSI_FLG_AUTO_POPULATED_CHK check (REGEXP_LIKE(FLG_AUTO_POPULATED, '^([YOFAMRLWTPBCNSVZDIEGKHJXUJ])')) enable novalidate;
+
+alter table PN_DBLOCK_TTP_SOFT_INST drop constraint PNDBTTS_FLG_IMPORT_FILTER_CHK;
+alter table PN_DBLOCK_TTP_SOFT_INST add constraint PNDBTTS_FLG_IMPORT_FILTER_CHK check (REGEXP_LIKE(FLG_IMPORT_FILTER, '^([YOFAMRLWTPBCNSVZDIEGKHJXUJ])')) enable novalidate;
+
+alter table PN_DBLOCK_TTP_SOFT_INST drop constraint PNDBSI_FLG_SHTC_FILTER_CHK;
+alter table PN_DBLOCK_TTP_SOFT_INST add constraint PNDBSI_FLG_SHTC_FILTER_CHK check (REGEXP_LIKE(FLG_SHORTCUT_FILTER, '^([YOFAMRLWTPBCNSVZDIEGKHJXUJ])')) enable novalidate;
+
+alter table PN_DBLOCK_TTP_SOFT_INST drop constraint PNDBTTSI_FLG_SYNCHRONIZED_CHK;
+alter table PN_DBLOCK_TTP_SOFT_INST add constraint PNDBTTSI_FLG_SYNCHRONIZED_CHK check (REGEXP_LIKE(FLG_SYNCHRONIZED, '^([YOFAMRLWTPBCNSVZDIEGKHJXUJ])')) enable novalidate;
+-- CHANGE END: Vanessa Barsottelli

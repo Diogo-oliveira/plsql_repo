@@ -1,0 +1,60 @@
+
+
+  CREATE TABLE SR_SURGERY_REC_DET
+   (	ID_SR_SURGERY_REC_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_SURGERY_RECORD NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	DT_REG DATE NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE sr_surgery_rec_det IS 'Tabela de descrições do registo de intervenção' ;
+
+COMMENT ON COLUMN sr_surgery_rec_det.id_sr_surgery_rec_det IS 'ID único' ;
+COMMENT ON COLUMN sr_surgery_rec_det.id_surgery_record IS 'ID do registo de intervenção' ;
+COMMENT ON COLUMN sr_surgery_rec_det.id_professional IS 'ID do profissional que efectuou o registo' ;
+COMMENT ON COLUMN sr_surgery_rec_det.dt_reg IS 'Data do registo de intervenção' ;
+COMMENT ON COLUMN sr_surgery_rec_det.notes IS 'Descrição do registo de intervenção' ;
+COMMENT ON COLUMN sr_surgery_rec_det.flg_type IS 'Tipo de notas. Valores possíveis: I- Incisão, A- Achados, F- Feito, T- Tecidos Removidos C- Fecho' ;
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização SR - eliminação de colunas
+ALTER TABLE SR_SURGERY_REC_DET drop column DT_REG;
+-- CHANGE END
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 21/01/2016 12:05
+-- CHANGE REASON: [ALERT-317983] ALERT-317983 CDOC Functionalities V5 Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table SR_SURGERY_REC_DET
+  is 'Surgery record description table detail';
+-- Add comments to the columns 
+comment on column SR_SURGERY_REC_DET.id_sr_surgery_rec_det
+  is 'Primary key';
+comment on column SR_SURGERY_REC_DET.id_surgery_record
+  is 'Surgery record identifier in SR_SURGERY_RECORD table';
+comment on column SR_SURGERY_REC_DET.id_professional
+  is 'Professional id';
+comment on column SR_SURGERY_REC_DET.notes
+  is 'Surgery request notes';
+comment on column SR_SURGERY_REC_DET.flg_type
+  is 'Note type (code sys_domain in sys_domain table : SR_SURGERY_REC_DET.FLG_TYPE)';
+comment on column SR_SURGERY_REC_DET.dt_reg_tstz
+  is 'Surgery record date';
+comment on column SR_SURGERY_REC_DET.create_user
+  is 'Creation User';
+comment on column SR_SURGERY_REC_DET.create_time
+  is 'Creation Time';
+comment on column SR_SURGERY_REC_DET.create_institution
+  is 'Creation Institution';
+comment on column SR_SURGERY_REC_DET.update_user
+  is 'Update User';
+comment on column SR_SURGERY_REC_DET.update_time
+  is 'Update Time';
+comment on column SR_SURGERY_REC_DET.update_institution
+  is 'Update Institution';
+-- CHANGE END: Renato Nunes

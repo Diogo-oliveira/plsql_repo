@@ -1,0 +1,13 @@
+ALTER TABLE sch_event_soft ADD CONSTRAINT ses_event_fk FOREIGN KEY(id_sch_event) REFERENCES sch_event(id_sch_event);
+ALTER TABLE sch_event_soft ADD CONSTRAINT ses_software_fk FOREIGN KEY(id_software) REFERENCES software(id_software);
+alter table SCH_EVENT_SOFT  add constraint SES_EPIS_TYPE_FK foreign key (ID_EPIS_TYPE)  references epis_type (ID_EPIS_TYPE);
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 17-01-2012
+-- CHANGE REASON: ALERT-214482
+begin
+execute immediate 'alter table SCH_EVENT_SOFT add constraint SES_ID_SOFT_DEST_FK foreign key (ID_SOFTWARE_DEST) references software (ID_SOFTWARE)';
+exception
+  when others then null;
+end;
+ -- CHANGE END: Telmo

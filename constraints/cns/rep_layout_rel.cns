@@ -1,0 +1,38 @@
+-- CHANGED BY: Jorge Canossa
+-- CHANGE DATE: 12/07/2010 18:57
+-- CHANGE REASON: [ALERT-100943] 
+        ALTER TABLE REP_LAYOUT_REL ADD CONSTRAINT RLL_PK PRIMARY KEY (ID_REP_LAYOUT, ID_REP_SECTION, ID_INSTITUTION, ID_REPORTS, ID_SOFTWARE) ENABLE;
+-- CHANGE END: Jorge Canossa
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 07-Jan-2011
+-- CHANGE REASON: ALERT-153742
+DECLARE
+    e_name_already_used_constraint EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_name_already_used_constraint, -02264);
+    l_table_name VARCHAR2(30) := 'REP_LAYOUT_REL';
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE ' || l_table_name ||
+                      ' ADD CONSTRAINT rll_flg_rep_type_chk CHECK (flg_report_type IN (''C'',''S'',''D'',''R'',''E'',''CE'',''CO'',''DE''))';
+EXCEPTION
+    WHEN e_name_already_used_constraint THEN
+        dbms_output.put_line('WARNING - Check constraint in table ' || l_table_name || ' already created in previous version.');
+END;
+/
+-- CHANGE END
+
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 27/Jan/2011 09:07
+-- CHANGE REASON: ALERT-158045
+ALTER TABLE REP_LAYOUT_REL DROP CONSTRAINT RLL_PK;
+-- CHANGE END
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 27/Jan/2011 09:07
+-- CHANGE REASON: ALERT-158045
+ALTER TABLE rep_layout_rel DROP CONSTRAINT RLL_FLG_REP_TYPE_CHK;
+ALTER TABLE rep_layout_rel ADD CONSTRAINT RLL_FLG_REP_TYPE_CHK CHECK (flg_report_type IN ('C','D','S','REQUISITION','E','CONSENT','P','CM', 'CERTIFICATE'));
+-- CHANGE END

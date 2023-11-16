@@ -1,0 +1,127 @@
+
+
+  CREATE TABLE VITAL_SIGN_DESC
+   (	ID_VITAL_SIGN_DESC NUMBER(12,0) NOT NULL ENABLE,
+	CODE_VITAL_SIGN_DESC VARCHAR2(200) NOT NULL ENABLE,
+	ID_VITAL_SIGN NUMBER(12,0) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	VALUE VARCHAR2(30),
+	ICON VARCHAR2(100)
+   );
+
+
+COMMENT ON TABLE vital_sign_desc IS 'Valores possíveis para os SV cujas leituras não são numéricas.Por ex., o sinal vital "estado de consciência" existe em VITAL_SIGN, mas os valores que pode tomar estão guardados nesta tabela.Inclui valores p/: Glasgow (olhos, motor e verbal), estado de consciência, fonte de O2, ritmo do pulso, pressão arterial (sistólica + diastólica)' ;
+
+COMMENT ON COLUMN vital_sign_desc.code_vital_sign_desc IS 'Código para tradução' ;
+COMMENT ON COLUMN vital_sign_desc.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+COMMENT ON COLUMN vital_sign_desc.value IS 'Valor associado ao registo, p/ o caso do Glasgow' ;
+
+ALTER TABLE vital_sign_desc ADD CODE_ABBREVIATION VARCHAR2(200);
+COMMENT ON COLUMN vital_sign_desc.CODE_ABBREVIATION IS 'Código da abreviação para tradução';
+
+ALTER TABLE vital_sign_desc ADD (ID_CONTENT VARCHAR2(200));
+
+comment on column vital_sign_desc.ID_CONTENT is 'Identificador único de conteúdo';
+
+-- CHANGED BY: Paulo Fonseca
+-- CHANGE DATE: 12/10/2010
+-- CHANGE REASON: ALERT-130831
+DECLARE
+    e_col_not_found EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_col_not_found, -00904);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vital_sign_desc DROP COLUMN adw_last_update';
+
+EXCEPTION
+    WHEN e_col_not_found THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+
+DECLARE
+    e_col_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_col_exists, -01430);
+    
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE vital_sign_desc ADD order_val NUMBER(6, 0)';
+    EXECUTE IMMEDIATE 'COMMENT ON column vital_sign_desc.order_val IS ''Order of values''';
+
+EXCEPTION
+    WHEN e_col_exists THEN
+        dbms_output.put_line('WARNING: Operation done previously');
+    
+END;
+/
+-- CHANGE END: Paulo Fonseca
+
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 26/08/2011 10:57
+-- CHANGE REASON: [ALERT-192605] Issue Replication: Manchester triage protocol - Improvements - ECG vital sign update
+DECLARE
+    e_name_already_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_name_already_exists, -1430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE VITAL_SIGN_DESC ADD ID_MARKET NUMBER(24) DEFAULT 0 NOT NULL';
+    EXCEPTION
+        WHEN e_name_already_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN VITAL_SIGN_DESC.ID_MARKET IS ''Market ID''';
+END;
+/
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table VITAL_SIGN_DESC
+  is 'Table of possible values for vital signs nom numerical reads.(filled by multichoide)
+The values for vital signs that are filled with multichoice are stored in this table.
+';
+-- Add comments to the columns 
+comment on column VITAL_SIGN_DESC.id_vital_sign_desc
+  is 'Vital sign desc identifier';
+comment on column VITAL_SIGN_DESC.code_vital_sign_desc
+  is 'Vital sign translation code';
+comment on column VITAL_SIGN_DESC.id_vital_sign
+  is 'Vital sign identifier';
+comment on column VITAL_SIGN_DESC.flg_available
+  is 'Indicates if the record is available at institution database : Y - Yes; N - No;';
+comment on column VITAL_SIGN_DESC.rank
+  is 'Rank used for ordenation';
+comment on column VITAL_SIGN_DESC.value
+  is 'Numeric value associate to the selected option on multichoice';
+comment on column VITAL_SIGN_DESC.icon
+  is 'Icon name';
+comment on column VITAL_SIGN_DESC.code_abbreviation
+  is 'Translate code for abbreviation';
+comment on column VITAL_SIGN_DESC.id_content
+  is 'Content identifier';
+comment on column VITAL_SIGN_DESC.create_user
+  is 'Creation User';
+comment on column VITAL_SIGN_DESC.create_time
+  is 'Creation Time';
+comment on column VITAL_SIGN_DESC.create_institution
+  is 'Creation Institution';
+comment on column VITAL_SIGN_DESC.update_user
+  is 'Update User';
+comment on column VITAL_SIGN_DESC.update_time
+  is 'Update Time';
+comment on column VITAL_SIGN_DESC.update_institution
+  is 'Update Institution';
+comment on column VITAL_SIGN_DESC.order_val
+  is 'Order of values';
+comment on column VITAL_SIGN_DESC.id_market
+  is 'Market ID';
+  
+-- CHANGE END: Pedro Fernandes

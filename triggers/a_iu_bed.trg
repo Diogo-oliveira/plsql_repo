@@ -1,0 +1,5 @@
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 27-08-2014
+-- CHANGE REASON: ALERT-293585
+drop trigger A_IU_BED;
+-- END CHANGE: Telmo

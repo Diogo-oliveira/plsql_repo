@@ -1,0 +1,59 @@
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 29/07/2010 15:01
+-- CHANGE REASON: [ALERT-116048] 
+alter table REHAB_PRESC
+  add constraint RPC_INN_FK foreign key (ID_EXEC_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION);
+alter table REHAB_PRESC
+  add constraint RPC_INN_FK2 foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION);
+alter table REHAB_PRESC
+  add constraint RPC_PROF_FK foreign key (ID_PROFESSIONAL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table REHAB_PRESC
+  add constraint RPC_PROF_FK2 foreign key (ID_CANCEL_PROFESSIONAL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table REHAB_PRESC
+  add constraint RPC_RAV_FK foreign key (ID_REHAB_AREA_INTERV)
+  references REHAB_AREA_INTERV (ID_REHAB_AREA_INTERV);
+alter table REHAB_PRESC
+  add constraint RPC_RSD_FK foreign key (ID_REHAB_SCH_NEED)
+  references REHAB_SCH_NEED (ID_REHAB_SCH_NEED);
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 29/07/2010 15:12
+-- CHANGE REASON: [ALERT-116048] 
+alter table REHAB_SCHEDULE
+  add constraint RSC_PL_FK foreign key (ID_PROFESSIONAL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table REHAB_SCHEDULE
+  add constraint RSC_PL_FK2 foreign key (ID_CANCEL_PROF)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table REHAB_SCHEDULE
+  add constraint RSC_RSD_FK foreign key (ID_REHAB_SCH_NEED)
+  references REHAB_SCH_NEED (ID_REHAB_SCH_NEED);
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 02/12/2011 15:23
+-- CHANGE REASON: [ALERT-208174] 
+alter table REHAB_PRESC
+  add constraint RPC_ID_CANCEL_REASON_FK foreign key (ID_CANCEL_REASON)
+  references CANCEL_REASON (ID_CANCEL_REASON);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 01/10/2012 16:48
+-- CHANGE REASON: [ALERT-241270] 
+alter table REHAB_PRESC drop constraint RPC_ICOD_FK ;
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 28/05/2014 11:09
+-- CHANGE REASON: [ALERT-283905 ] 
+alter table REHAB_PRESC
+  add constraint RP_NOR_FK foreign key (ID_NOT_ORDER_REASON)
+  references NOT_ORDER_REASON (ID_NOT_ORDER_REASON);
+/
+-- CHANGE END: cristina.oliveira

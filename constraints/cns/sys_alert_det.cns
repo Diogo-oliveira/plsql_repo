@@ -1,0 +1,15 @@
+
+
+  ALTER TABLE SYS_ALERT_DET ADD CONSTRAINT AT_ALERT_DET_PK PRIMARY KEY (ID_SYS_ALERT, ID_REG_DET, ID_PROF) ENABLE;
+
+
+--Rui Batista 2007/07/10
+--Reestrutração dos Alertas
+alter table sys_alert_det drop constraint at_alert_det_pk;
+
+--para criar a nova PK é necessário ter a tabela vazia. Como a tabela de alertas é recriada de X em X tempo, não há problema
+--Em eliminar todos os dados
+TRUNCATE TABLE sys_alert_det;
+
+alter table sys_alert_det  add constraint at_alert_det_pk primary key (id_sys_alert_det);
+

@@ -1,0 +1,54 @@
+-- Create table
+create table UNIDOSE_CAR_PATIENT
+(
+  ID_UNIDOSE_CAR_PATIENT NUMBER(24) not null,
+  ID_UNIDOSE_CAR         NUMBER(24) not null,
+  ID_INSTITUTION         NUMBER(24) not null,
+  ID_PATIENT             NUMBER(24) not null,
+  ID_CONTAINER           NUMBER(24) not null,
+  ID_UNIDOSE_CAR_ROUTE   NUMBER(24) not null,
+  FLG_AVAILABLE          VARCHAR2(1),
+  ADW_DATE               DATE,
+  BAR_CODE               VARCHAR2(200)
+)
+;
+-- Add comments to the table 
+comment on table UNIDOSE_CAR_PATIENT
+  is 'Relação entre o paciente e o carro unidose';
+-- Add comments to the columns 
+comment on column UNIDOSE_CAR_PATIENT.ID_UNIDOSE_CAR_PATIENT
+  is 'id da tabela';
+comment on column UNIDOSE_CAR_PATIENT.ID_UNIDOSE_CAR
+  is 'Id do carro unidose';
+comment on column UNIDOSE_CAR_PATIENT.ID_INSTITUTION
+  is 'id da instituição';
+comment on column UNIDOSE_CAR_PATIENT.ID_PATIENT
+  is 'id do paciente';
+comment on column UNIDOSE_CAR_PATIENT.ID_CONTAINER
+  is 'id da gaveta que lhe está atribuida';
+comment on column UNIDOSE_CAR_PATIENT.ID_UNIDOSE_CAR_ROUTE
+  is 'id do circuito do carro unidose';
+comment on column UNIDOSE_CAR_PATIENT.FLG_AVAILABLE
+  is 'disponibilização do registo';
+comment on column UNIDOSE_CAR_PATIENT.ADW_DATE
+  is 'data do registo';
+comment on column UNIDOSE_CAR_PATIENT.BAR_CODE
+  is 'codigo de barras';
+-- Create/Recreate primary, unique and foreign key constraints 
+
+
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE UNIDOSE_CAR_PATIENT ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN UNIDOSE_CAR_PATIENT.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:26
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE UNIDOSE_CAR_PATIENT IS 'Relação entre o paciente e o carro unidose [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

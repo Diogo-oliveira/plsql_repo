@@ -1,0 +1,33 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:52
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'BDNP_PRESC_TRACKING'
+       AND constraint_name = 'BPTG_BME_FK';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE BDNP_PRESC_TRACKING
+  add constraint BPTG_BME_FK foreign key (ID_BDNP_MESSAGE) references BDNP_MESSAGE (ID_BDNP_MESSAGE)';
+    END IF;
+END;
+/
+
+DECLARE l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_constraints
+     WHERE table_name = 'BDNP_PRESC_TRACKING'
+       AND constraint_name = 'BPTG_PL_FK';
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table BDNP_PRESC_TRACKING
+  add constraint BPTG_PL_FK foreign key (ID_PROF_EVENT) references PROFESSIONAL (ID_PROFESSIONAL)';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso

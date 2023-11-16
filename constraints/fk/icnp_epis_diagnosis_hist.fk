@@ -1,0 +1,34 @@
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 14/10/2010 16:39
+-- CHANGE REASON: [ALERT-117147] 
+declare
+   e_fk_already_there EXCEPTION;
+ PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); 
+begin
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS_HIST
+  add constraint IEDH_EIPD_FK foreign key (ID_ICNP_EPIS_DIAG)
+  references ICNP_EPIS_DIAGNOSIS (ID_ICNP_EPIS_DIAG)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS_HIST
+  add constraint IEDH_EPIS_FK foreign key (ID_EPISODE)
+  references EPISODE (ID_EPISODE)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ICNP_EPIS_DIAGNOSIS_HIST
+  add constraint IEDH_PAT_FK foreign key (ID_PATIENT)
+  references ALERT_ADTCOD.PATIENT (ID_PATIENT)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+end;
+/
+-- CHANGE END: Sérgio Santos

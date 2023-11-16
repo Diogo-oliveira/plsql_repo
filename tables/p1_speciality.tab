@@ -1,0 +1,104 @@
+
+  CREATE TABLE P1_SPECIALITY
+   (	ID_SPECIALITY NUMBER(6,0) NOT NULL ENABLE,
+	CODE_SPECIALITY VARCHAR2(200) NOT NULL ENABLE,
+	FLG_AVAILABLE VARCHAR2(240) NOT NULL ENABLE,
+	GENDER VARCHAR2(1),
+	AGE_MIN NUMBER(3,0),
+	AGE_MAX NUMBER(3,0),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE p1_speciality IS 'Especialidades disponíveis para os pedidos' ;
+
+COMMENT ON COLUMN p1_speciality.id_speciality IS 'Chave primária' ;
+COMMENT ON COLUMN p1_speciality.code_speciality IS 'Código da especialidade' ;
+
+ALTER TABLE P1_SPECIALITY ADD ID_PARENT NUMBER(6,0) ;
+COMMENT ON COLUMN "ALERT"."P1_SPECIALITY"."ID_PARENT" IS 'Parent speciality';
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/07/2010 16:50
+-- CHANGE REASON: [ALERT-109230] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+
+    SELECT count(1)
+      INTO l_var
+      FROM user_tab_columns
+     WHERE table_name = 'P1_SPECIALITY'
+       AND column_name = 'ID_MARKET';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE P1_SPECIALITY  ADD (ID_MARKET NUMBER(24))';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN P1_SPECIALITY.ID_MARKET IS ''Market id''';
+    
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 25/01/2011 16:51
+-- CHANGE REASON: [ALERT-157333] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns
+     WHERE column_name = 'ID_CONTENT'
+       AND table_name = 'P1_SPECIALITY';
+
+    IF l_count <> 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_speciality ADD id_content VARCHAR2(200)';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN p1_speciality.id_content IS ''Content Id''';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 25/01/2011 16:54
+-- CHANGE REASON: [ALERT-157333] 
+DECLARE
+    l_var PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+     INTO l_var
+      FROM user_tab_columns
+     WHERE column_name = 'ID_MARKET'
+       AND table_name = 'P1_SPECIALITY';
+
+    IF l_var = 1
+    THEN
+        EXECUTE IMMEDIATE 'ALTER TABLE p1_speciality DROP COLUMN id_market';
+    END IF;
+END;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on table P1_SPECIALITY
+  is 'Available specialties for consultation referrals';
+-- Add comments to the columns 
+comment on column P1_SPECIALITY.id_speciality
+  is 'Internal id';
+comment on column P1_SPECIALITY.code_speciality
+  is 'Code to translate the specialty name';
+comment on column P1_SPECIALITY.flg_available
+  is 'Is available? Y/N';
+comment on column P1_SPECIALITY.gender
+  is 'Filter by patient gender? (F)emale; (M)ale; NULL: do not filter';
+comment on column P1_SPECIALITY.age_min
+  is 'Filter by patient age (lower limit)';
+comment on column P1_SPECIALITY.age_max
+  is 'Filter by patient age (upper limit)';
+comment on column P1_SPECIALITY.adw_last_update
+  is 'Record last update (ADW)';

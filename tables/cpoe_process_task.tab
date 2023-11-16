@@ -1,0 +1,59 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 29/10/2009 04:37
+-- CHANGE REASON: [ALERT-51207] 
+CREATE TABLE CPOE_PROCESS_TASK
+(
+  ID_CPOE_PROCESS              NUMBER(24)    NOT NULL,
+ID_TASK_TYPE                 NUMBER(24)     NOT NULL,
+ID_TASK_REQUEST              NUMBER(24)    NOT NULL,
+  DT_CPOE_TASK_START           TIMESTAMP(6)  WITH LOCAL TIME ZONE,
+  DT_CPOE_TASK_END             TIMESTAMP(6)  WITH LOCAL TIME ZONE,
+DT_CPOE_TASK_CREATE          TIMESTAMP(6)  WITH LOCAL TIME ZONE,
+FLG_STATUS                   VARCHAR2(1 CHAR)   NOT NULL,
+  ID_PROFESSIONAL              NUMBER(24)    NOT NULL,
+  CREATE_USER                  VARCHAR2(24 CHAR)  ,
+  CREATE_TIME                  TIMESTAMP(6)  WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION           NUMBER(24)    ,
+  UPDATE_USER                  VARCHAR2(24 CHAR)  ,
+  UPDATE_TIME                  TIMESTAMP(6)  WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION           NUMBER(24)
+);
+comment on table  CPOE_PROCESS_TASK  is                             'Computerized Physician Order Entry (CPOE) process task table';
+comment on column CPOE_PROCESS_TASK.ID_CPOE_PROCESS is              'CPOE process ID';
+comment on column CPOE_PROCESS_TASK.ID_TASK_TYPE is                 'CPOE task type ID';
+comment on column CPOE_PROCESS_TASK.ID_TASK_REQUEST is              'CPOE task request';
+comment on column CPOE_PROCESS_TASK.DT_CPOE_TASK_START is           'CPOE process task start timestamp';
+comment on column CPOE_PROCESS_TASK.DT_CPOE_TASK_END is             'CPOE process task end timestamp';
+comment on column CPOE_PROCESS_TASK.DT_CPOE_TASK_CREATE is          'CPOE process task create timestamp';
+comment on column CPOE_PROCESS_TASK.FLG_STATUS is                   'CPOE process task status flag (values are different from task type to task type)';
+comment on column CPOE_PROCESS_TASK.ID_PROFESSIONAL is              'Professional ID';
+comment on column CPOE_PROCESS_TASK.CREATE_USER is                  'Creation user';
+comment on column CPOE_PROCESS_TASK.CREATE_TIME is                  'Creation time';
+comment on column CPOE_PROCESS_TASK.CREATE_INSTITUTION is           'Creation institution';
+comment on column CPOE_PROCESS_TASK.UPDATE_USER is                  'Update user';
+comment on column CPOE_PROCESS_TASK.UPDATE_TIME is                  'Update time';
+comment on column CPOE_PROCESS_TASK.UPDATE_INSTITUTION is           'Update institution';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 11/12/2009 00:52
+-- CHANGE REASON: [ALERT-61939] CPOE 2nd phase: versioning of CPOE feature for Diets and Hidrics
+alter table CPOE_PROCESS_TASK drop (DT_CPOE_TASK_START,DT_CPOE_TASK_END,FLG_STATUS);
+alter table CPOE_PROCESS_TASK add 
+(
+  ID_INSTITUTION number(24) not null,
+  ID_SOFTWARE  number(24) not null,
+ID_EPISODE   number(24) not null
+)
+alter table CPOE_PROCESS_TASK rename column DT_CPOE_TASK_CREATE to DT_PROC_TASK_CREATE;
+comment on column CPOE_PROCESS_TASK.ID_INSTITUTION is 'Institution ID';
+comment on column CPOE_PROCESS_TASK.ID_SOFTWARE is 'Software ID';
+comment on column CPOE_PROCESS_TASK.DT_PROC_TASK_CREATE is 'CPOE process task create timestamp';
+comment on column CPOE_PROCESS_TASK.ID_EPISODE is 'Episode ID';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 12/10/2010 10:06
+-- CHANGE REASON: [ALERT-128784] 
+comment on table CPOE_PROCESS_TASK is 'Computerized Prescription Order Entry (CPOE) process tasks table [CPOEPT]';
+-- CHANGE END: Tiago Silva

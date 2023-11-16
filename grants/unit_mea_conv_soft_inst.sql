@@ -1,0 +1,7 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 02/12/2013 09:33
+-- CHANGE REASON: [ALERT-270040] 
+GRANT DELETE,INSERT,SELECT,UPDATE ON unit_mea_conv_soft_inst TO alert_config;
+GRANT SELECT ON unit_mea_conv_soft_inst TO alert_viewer;
+GRANT ALTER,DEBUG,DELETE,FLASHBACK,INDEX,INSERT,ON COMMIT REFRESH,QUERY REWRITE,REFERENCES,SELECT,UPDATE ON unit_mea_conv_soft_inst TO inter_alert_v2;
+-- CHANGE END: Paulo Teixeira

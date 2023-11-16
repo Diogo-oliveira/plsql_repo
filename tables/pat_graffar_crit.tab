@@ -1,0 +1,73 @@
+
+
+  CREATE TABLE PAT_GRAFFAR_CRIT
+   (	ID_PAT_GRAFFAR_CRIT NUMBER(24,0) NOT NULL ENABLE,
+	DT_PAT_GRAFFAR_CRIT DATE NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_GRAFFAR_CRIT_VALUE NUMBER(12,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN pat_graffar_crit.id_patient IS 'Chave primaria' ;
+
+alter table pat_graffar_crit
+add (dt_pat_graffar_crit_tstz timestamp with local time zone); 
+
+alter table pat_graffar_crit
+add (notes varchar2(4000));
+
+comment on column pat_graffar_crit.notes is 'Notas';
+
+alter table pat_graffar_crit
+modify (id_graffar_crit_value number(12) null);
+
+
+-- DROP DATE TYPE
+ALTER table PAT_GRAFFAR_CRIT DROP column DT_PAT_GRAFFAR_CRIT;
+
+
+
+-- CHANGED BY: Pedro Santos
+-- CHANGE DATE: 2008-OCT-22
+-- CHANGE REASON: ALERT-1340
+ALTER TABLE PAT_GRAFFAR_CRIT ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN PAT_GRAFFAR_CRIT.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 23/03/2010 10:03
+-- CHANGE REASON: [ALERT-69945] 
+ALTER TABLE PAT_GRAFFAR_CRIT ADD (FLG_STATUS VARCHAR2(1 CHAR));
+comment on column PAT_GRAFFAR_CRIT.FLG_STATUS
+  is 'Flag status - values: A - active, C - canceled, E - edited';
+
+
+ALTER TABLE PAT_GRAFFAR_CRIT ADD (ID_PAT_FAM_SOC_CLASS_HIST NUMBER(24));
+comment on column HOME.FLG_STATUS
+  is 'Patient family social class history ID';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:50
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table PAT_GRAFFAR_CRIT
+  is 'Table that contains the patient socio demographic data';
+-- Add comments to the columns 
+comment on column PAT_GRAFFAR_CRIT.id_pat_graffar_crit
+  is 'Primary Key';
+comment on column PAT_GRAFFAR_CRIT.id_patient
+  is 'Patient ID';
+comment on column PAT_GRAFFAR_CRIT.id_graffar_crit_value
+  is 'Socio demographic criteria Value ID';
+comment on column PAT_GRAFFAR_CRIT.id_professional
+  is 'Professional ID';
+comment on column PAT_GRAFFAR_CRIT.dt_pat_graffar_crit_tstz
+  is 'Registry date';
+comment on column PAT_GRAFFAR_CRIT.id_pat_fam_soc_class_hist
+  is 'Patient Family social class ID (aggregates the various criteria answered on each time) '; 
+  
+-- CHANGE END: Elisabete Bugalho

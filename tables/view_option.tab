@@ -1,0 +1,68 @@
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 05/03/2009 18:39
+-- CHANGE REASON: [ALERT-16591] Criação das tabelas view_option e view_option_config
+CREATE TABLE VIEW_OPTION (  
+       ID_VIEW_OPTION    NUMBER(24,0) NOT NULL ENABLE,
+ CODE_VIEW_OPTION  VARCHAR2(4000) NOT NULL ENABLE,
+ SCREEN_NAME       VARCHAR2(200) NOT NULL ENABLE
+);
+/
+-- Table Comment
+COMMENT ON TABLE VIEW_OPTION IS 'This table has the description of all available views ready to be presented in button VIEW (in ALERT bottom toolbar).';
+
+-- Column Comments
+COMMENT ON COLUMN VIEW_OPTION.ID_VIEW_OPTION IS 'Primary key of table VIEW_OPTION.';
+COMMENT ON COLUMN VIEW_OPTION.CODE_VIEW_OPTION IS 'View option code that associates this option to its description.';
+COMMENT ON COLUMN VIEW_OPTION.SCREEN_NAME IS 'Inform what is the screen name that should be call by flash when this view option is selected.';
+-- CHANGE END
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 07/03/2009 14:27
+-- CHANGE REASON: [ALERT-16591] Actualização do modelo de dados para responder às necessidades do FLASH
+ALTER TABLE view_option DROP COLUMN screen_name;
+--
+ALTER TABLE view_option ADD screen_identifier VARCHAR2(200) NOT NULL ENABLE;
+ALTER TABLE view_option ADD flg_action VARCHAR2(1) NOT NULL ENABLE;
+ALTER TABLE view_option ADD rank NUMBER(24) NOT NULL ENABLE;
+ALTER TABLE view_option ADD icon VARCHAR2(200);
+ALTER TABLE view_option ADD id_parent NUMBER(24);
+--
+COMMENT ON column view_option.screen_identifier IS 'Gives a screen name alias to the screen that should be called by flash when this view option is selected.';
+COMMENT ON column view_option.flg_action IS 'Type of action this option should have when selected (options: ''A'' ? ).';
+COMMENT ON column view_option.rank IS 'Gives the default order that should be used to present options.';
+COMMENT ON column view_option.icon IS 'Icon that should be visible in menu option, closer to option description.';
+COMMENT ON column view_option.id_parent IS 'Primary key of table VIEW_OPTION (this means that view options that have id_parent are sub options of that menu).';
+--
+-- CHANGE END
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 16/03/2009 17:48
+-- CHANGE REASON: [ALERT-16591] Correcção ao modelo de dados original.
+ALTER TABLE view_option ADD subject VARCHAR2(200);
+COMMENT ON column view_option.subject IS 'Gives a SUBJECT alias to be used by FLASH to identify desired view options.';
+-- CHANGE END
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 16/03/2009 17:48
+-- CHANGE REASON: [ALERT-16591] Correcção ao modelo de dados original.
+ALTER TABLE view_option MODIFY subject VARCHAR2(200) NOT NULL ENABLE;
+-- CHANGE END
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 16/03/2009 17:51
+-- CHANGE REASON: [ALERT-16591] Correcção ao modelo de dados original.
+ALTER TABLE view_option ADD subject VARCHAR2(200);
+COMMENT ON column view_option.subject IS 'Gives a SUBJECT alias to be used by FLASH to identify desired view options.';
+-- CHANGE END
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 16/03/2009 17:51
+-- CHANGE REASON: [ALERT-16591] Correcção ao modelo de dados original.
+ALTER TABLE view_option MODIFY subject VARCHAR2(200) NOT NULL ENABLE;
+-- CHANGE END
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 27/03/2009 09:47
+-- CHANGE REASON: [ALERT-21438] Actualização do comentário da coluna FLG_ACTION.
+COMMENT ON column view_option.flg_action IS 'Type of action this option should have when selected (options: ''A'' ? Action).';
+-- CHANGE END

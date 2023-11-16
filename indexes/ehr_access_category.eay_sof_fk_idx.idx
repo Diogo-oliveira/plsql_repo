@@ -1,0 +1,14 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 24/03/2010 11:33
+-- CHANGE REASON: [ALERT-83122] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE INDEX eay_sof_fk_idx ON ehr_access_category (id_software) TABLESPACE index_s';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Paulo Teixeira

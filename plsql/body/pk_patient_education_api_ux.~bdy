@@ -1,0 +1,508 @@
+/*-- Last Change Revision: $Rev: 2027454 $*/
+/*-- Last Change by: $Author: mario.fernandes $*/
+/*-- Date of last change: $Date: 2022-08-02 18:42:16 +0100 (ter, 02 ago 2022) $*/
+
+CREATE OR REPLACE PACKAGE BODY pk_patient_education_api_ux IS
+
+    FUNCTION create_request
+    (
+        i_lang                 IN language.id_language%TYPE,
+        i_prof                 IN profissional,
+        i_id_episode           IN nurse_tea_req.id_episode%TYPE,
+        i_draft                IN VARCHAR2 DEFAULT 'N',
+        i_topics               IN table_number,
+        i_tbl_ds_internal_name IN table_varchar DEFAULT NULL,
+        i_tbl_real_val         IN table_table_varchar DEFAULT NULL,
+        i_tbl_val_clob         IN table_table_clob DEFAULT NULL,
+        i_tbl_val_array        IN tt_table_varchar DEFAULT NULL,
+        i_flg_edition          IN VARCHAR2 DEFAULT pk_alert_constant.g_no,
+        i_tbl_nurse_tea_req    IN table_number DEFAULT NULL,
+        i_flg_origin_req       IN VARCHAR2,
+        o_id_nurse_tea_req     OUT table_number,
+        o_error                OUT t_error_out
+    ) RETURN BOOLEAN IS
+    BEGIN
+        g_error := 'Init create_request / i_id_episode=' || i_id_episode || ' i_draft=' || i_draft;
+        IF NOT pk_patient_education_core.create_request(i_lang                 => i_lang,
+                                                        i_prof                 => i_prof,
+                                                        i_id_episode           => i_id_episode,
+                                                        i_draft                => i_draft,
+                                                        i_topics               => i_topics,
+                                                        i_tbl_ds_internal_name => i_tbl_ds_internal_name,
+                                                        i_tbl_real_val         => i_tbl_real_val,
+                                                        i_tbl_val_clob         => i_tbl_val_clob,
+                                                        i_tbl_val_array        => i_tbl_val_array,
+                                                        i_flg_edition          => i_flg_edition,
+                                                        i_tbl_nurse_tea_req    => i_tbl_nurse_tea_req,
+                                                        i_flg_origin_req       => i_flg_origin_req,
+                                                        o_id_nurse_tea_req     => o_id_nurse_tea_req,
+                                                        o_error                => o_error)
+        THEN
+            RAISE g_exception;
+        END IF;
+    
+        RETURN TRUE;
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            pk_alert_exceptions.process_error(i_lang,
+                                              SQLCODE,
+                                              SQLERRM,
+                                              g_error,
+                                              g_package_owner,
+                                              g_package_name,
+                                              'CREATE_REQUEST',
+                                              o_error);
+        
+            pk_alert_exceptions.reset_error_state;
+            pk_utils.undo_changes;
+        
+            RETURN FALSE;
+        
+    END create_request;
+
+    FUNCTION set_documentation_exec
+    (
+        i_lang                 IN language.id_language%TYPE,
+        i_prof                 IN profissional,
+        i_id_nurse_tea_req     IN table_number,
+        i_tbl_ds_internal_name IN table_varchar DEFAULT NULL,
+        i_tbl_real_val         IN table_table_varchar DEFAULT NULL,
+        i_tbl_val_clob         IN table_table_clob DEFAULT NULL,
+        i_unit_meas_duration   IN table_number DEFAULT NULL,
+        o_error                OUT t_error_out
+    ) RETURN BOOLEAN IS
+    BEGIN
+        g_error := 'Set Documentation Exec';
+    
+        IF NOT pk_patient_education_core.set_documentation_exec(i_lang                 => i_lang,
+                                                                i_prof                 => i_prof,
+                                                                i_id_nurse_tea_req     => i_id_nurse_tea_req,
+                                                                i_tbl_ds_internal_name => i_tbl_ds_internal_name,
+                                                                i_tbl_real_val         => i_tbl_real_val,
+                                                                i_tbl_val_clob         => i_tbl_val_clob,
+                                                                i_unit_meas_duration   => i_unit_meas_duration,
+                                                                o_error                => o_error)
+        THEN
+            RAISE g_exception;
+        END IF;
+    
+        RETURN TRUE;
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            pk_alert_exceptions.process_error(i_lang,
+                                              SQLCODE,
+                                              SQLERRM,
+                                              g_error,
+                                              g_package_owner,
+                                              g_package_name,
+                                              'SET_DOCUMENTATION_EXEC',
+                                              o_error);
+        
+            pk_alert_exceptions.reset_error_state;
+            pk_utils.undo_changes;
+        
+            RETURN FALSE;
+    END set_documentation_exec;
+
+    FUNCTION set_ignore_suggestion
+    (
+        i_lang             IN language.id_language%TYPE,
+        i_prof             IN profissional,
+        i_id_nurse_tea_req IN table_number,
+        o_error            OUT t_error_out
+    ) RETURN BOOLEAN IS
+    BEGIN
+        g_error := 'Set Ignore Suggestion';
+    
+        IF NOT pk_patient_education_core.set_ignore_suggestion(i_lang             => i_lang,
+                                                               i_prof             => i_prof,
+                                                               i_id_nurse_tea_req => i_id_nurse_tea_req,
+                                                               o_error            => o_error)
+        THEN
+            RAISE g_exception;
+        END IF;
+    
+        RETURN TRUE;
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            pk_alert_exceptions.process_error(i_lang,
+                                              SQLCODE,
+                                              SQLERRM,
+                                              g_error,
+                                              g_package_owner,
+                                              g_package_name,
+                                              'SET_IGNORE_SUGGESTION',
+                                              o_error);
+        
+            pk_alert_exceptions.reset_error_state;
+            pk_utils.undo_changes;
+        
+            RETURN FALSE;
+    END set_ignore_suggestion;
+
+    FUNCTION update_request
+    (
+        i_lang             IN language.id_language%TYPE,
+        i_prof             IN profissional,
+        i_id_episode       IN nurse_tea_req.id_episode%TYPE,
+        i_id_nurse_tea_req IN table_number,
+        i_topics           IN table_number,
+        i_compositions     IN table_table_number,
+        i_diagnoses        IN table_clob,
+        i_to_be_performed  IN table_varchar,
+        i_start_date       IN table_varchar,
+        i_notes            IN table_varchar,
+        i_description      IN table_clob,
+        i_order_recurr     IN table_number,
+        i_upd_flg_status   IN VARCHAR2 DEFAULT 'Y',
+        i_not_order_reason IN table_number,
+        o_error            OUT t_error_out
+    ) RETURN BOOLEAN IS
+    BEGIN
+        g_error := 'Init update_request / i_id_episode=' || i_id_episode;
+    
+        IF NOT pk_patient_education_core.update_request(i_lang             => i_lang,
+                                                        i_prof             => i_prof,
+                                                        i_id_episode       => i_id_episode,
+                                                        i_id_nurse_tea_req => i_id_nurse_tea_req,
+                                                        i_topics           => i_topics,
+                                                        i_compositions     => i_compositions,
+                                                        i_to_be_performed  => i_to_be_performed,
+                                                        i_start_date       => i_start_date,
+                                                        i_notes            => i_notes,
+                                                        i_description      => i_description,
+                                                        i_order_recurr     => i_order_recurr,
+                                                        i_upd_flg_status   => i_upd_flg_status,
+                                                        i_diagnoses        => i_diagnoses,
+                                                        i_not_order_reason => i_not_order_reason,
+                                                        o_error            => o_error)
+        THEN
+            RAISE g_exception;
+        END IF;
+    
+        RETURN TRUE;
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            pk_alert_exceptions.process_error(i_lang,
+                                              SQLCODE,
+                                              SQLERRM,
+                                              g_error,
+                                              g_package_owner,
+                                              g_package_name,
+                                              'UPDATE_REQUEST',
+                                              o_error);
+        
+            pk_alert_exceptions.reset_error_state;
+            pk_utils.undo_changes;
+        
+            RETURN FALSE;
+    END update_request;
+
+    FUNCTION cancel_patient_education
+    (
+        i_lang             IN language.id_language%TYPE,
+        i_prof             IN profissional,
+        i_id_nurse_tea_req IN table_number,
+        i_id_cancel_reason IN cancel_reason.id_cancel_reason%TYPE,
+        i_cancel_notes     IN nurse_tea_req.notes_close%TYPE,
+        o_error            OUT t_error_out
+    ) RETURN BOOLEAN IS
+    BEGIN
+        g_error := 'Cancel patient education';
+    
+        IF NOT pk_patient_education_core.cancel_patient_education(i_lang             => i_lang,
+                                                                  i_prof             => i_prof,
+                                                                  i_id_nurse_tea_req => i_id_nurse_tea_req,
+                                                                  i_id_cancel_reason => i_id_cancel_reason,
+                                                                  i_cancel_notes     => i_cancel_notes,
+                                                                  o_error            => o_error)
+        THEN
+            RAISE g_exception;
+        END IF;
+    
+        RETURN TRUE;
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            pk_alert_exceptions.process_error(i_lang,
+                                              SQLCODE,
+                                              SQLERRM,
+                                              g_error,
+                                              g_package_owner,
+                                              g_package_name,
+                                              'CANCEL_PATIENT_EDUCATION',
+                                              o_error);
+        
+            pk_alert_exceptions.reset_error_state;
+            pk_utils.undo_changes;
+        
+            RETURN FALSE;
+    END cancel_patient_education;
+
+    FUNCTION get_domain_flg_time
+    (
+        i_lang   IN language.id_language%TYPE,
+        i_prof   IN profissional,
+        o_values OUT pk_types.cursor_type,
+        o_error  OUT t_error_out
+    ) RETURN BOOLEAN IS
+    BEGIN
+        g_error := 'Get Domain Flg Time';
+    
+        IF NOT pk_patient_education_core.get_domain_flg_time(i_lang   => i_lang,
+                                                             i_prof   => i_prof,
+                                                             o_values => o_values,
+                                                             o_error  => o_error)
+        THEN
+            RAISE g_exception;
+        END IF;
+    
+        RETURN TRUE;
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            pk_alert_exceptions.process_error(i_lang,
+                                              SQLCODE,
+                                              SQLERRM,
+                                              g_error,
+                                              g_package_owner,
+                                              g_package_name,
+                                              'GET_DOMAIN_FLG_TIME',
+                                              o_error);
+        
+            pk_types.open_my_cursor(o_values);
+        
+            pk_alert_exceptions.reset_error_state;
+            pk_utils.undo_changes;
+        
+            RETURN FALSE;
+    END get_domain_flg_time;
+
+    FUNCTION get_request_for_update
+    (
+        i_lang             IN language.id_language%TYPE,
+        i_prof             IN profissional,
+        i_id_nurse_tea_req IN table_number,
+        o_detail           OUT pk_types.cursor_type,
+        o_error            OUT t_error_out
+    ) RETURN BOOLEAN IS
+    BEGIN
+        g_error := 'Cancel Request For Update';
+    
+        IF NOT pk_patient_education_core.get_request_for_update(i_lang             => i_lang,
+                                                                i_prof             => i_prof,
+                                                                i_id_nurse_tea_req => i_id_nurse_tea_req,
+                                                                o_detail           => o_detail,
+                                                                o_error            => o_error)
+        THEN
+            RAISE g_exception;
+        END IF;
+    
+        RETURN TRUE;
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            pk_alert_exceptions.process_error(i_lang,
+                                              SQLCODE,
+                                              SQLERRM,
+                                              g_error,
+                                              g_package_owner,
+                                              g_package_name,
+                                              'GET_REQUEST_FOR_UPDATE',
+                                              o_error);
+        
+            pk_types.open_my_cursor(o_detail);
+        
+            pk_alert_exceptions.reset_error_state;
+            pk_utils.undo_changes;
+        
+            RETURN FALSE;
+        
+    END get_request_for_update;
+
+    FUNCTION get_topic_list
+    (
+        i_lang            IN language.id_language%TYPE,
+        i_prof            IN profissional,
+        i_flg_show_others IN VARCHAR2 DEFAULT 'Y',
+        o_topics          OUT pk_types.cursor_type,
+        o_error           OUT t_error_out
+    ) RETURN BOOLEAN IS
+    BEGIN
+        g_error := 'Get Topic List';
+    
+        IF NOT pk_patient_education_core.get_topic_list(i_lang            => i_lang,
+                                                        i_prof            => i_prof,
+                                                        i_flg_show_others => i_flg_show_others,
+                                                        o_topics          => o_topics,
+                                                        o_error           => o_error)
+        THEN
+            RAISE g_exception;
+        END IF;
+    
+        RETURN TRUE;
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            pk_alert_exceptions.process_error(i_lang,
+                                              SQLCODE,
+                                              SQLERRM,
+                                              g_error,
+                                              g_package_owner,
+                                              g_package_name,
+                                              'GET_TOPIC_LIST',
+                                              o_error);
+        
+            pk_types.open_my_cursor(o_topics);
+        
+            pk_alert_exceptions.reset_error_state;
+            pk_utils.undo_changes;
+        
+            RETURN FALSE;
+    END get_topic_list;
+
+    FUNCTION get_subject_topic_list
+    (
+        i_lang            IN language.id_language%TYPE,
+        i_prof            IN profissional,
+        i_id_subject      IN nurse_tea_subject.id_nurse_tea_subject%TYPE,
+        i_flg_show_others IN VARCHAR2 DEFAULT 'Y',
+        o_subjects        OUT pk_types.cursor_type,
+        o_topics          OUT pk_types.cursor_type,
+        o_error           OUT t_error_out
+    ) RETURN BOOLEAN IS
+    BEGIN
+        g_error := 'Get Subject Topic List';
+    
+        IF NOT pk_patient_education_core.get_subject_topic_list(i_lang            => i_lang,
+                                                                i_prof            => i_prof,
+                                                                i_id_subject      => i_id_subject,
+                                                                i_flg_show_others => i_flg_show_others,
+                                                                o_subjects        => o_subjects,
+                                                                o_topics          => o_topics,
+                                                                o_error           => o_error)
+        THEN
+            RAISE g_exception;
+        END IF;
+    
+        RETURN TRUE;
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            pk_alert_exceptions.process_error(i_lang,
+                                              SQLCODE,
+                                              SQLERRM,
+                                              g_error,
+                                              g_package_owner,
+                                              g_package_name,
+                                              'GET_SUBJECT_TOPIC_LIST',
+                                              o_error);
+        
+            pk_types.open_my_cursor(o_subjects);
+            pk_types.open_my_cursor(o_topics);
+        
+            pk_alert_exceptions.reset_error_state;
+            pk_utils.undo_changes;
+        
+            RETURN FALSE;
+    END get_subject_topic_list;
+
+    FUNCTION get_request_actions
+    (
+        i_lang          IN language.id_language%TYPE,
+        i_prof          IN profissional,
+        i_nurse_tea_req IN table_number,
+        i_id_episode    IN episode.id_episode%TYPE,
+        i_id_hhc_req    IN epis_hhc_req.id_epis_hhc_req%TYPE,
+        o_actions       OUT pk_types.cursor_type,
+        o_error         OUT t_error_out
+    ) RETURN BOOLEAN IS
+    
+    BEGIN
+        g_error := 'CALL pk_patient_education_db.get_request_actions';
+    
+        IF NOT pk_patient_education_core.get_request_actions(i_lang          => i_lang,
+                                                             i_prof          => i_prof,
+                                                             i_nurse_tea_req => i_nurse_tea_req,
+                                                             i_id_episode    => i_id_episode,
+                                                             i_id_hhc_req    => i_id_hhc_req,
+                                                             o_actions       => o_actions,
+                                                             o_error         => o_error)
+        THEN
+            RAISE g_exception;
+        END IF;
+    
+        RETURN TRUE;
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            pk_alert_exceptions.process_error(i_lang,
+                                              SQLCODE,
+                                              SQLERRM,
+                                              g_error,
+                                              g_package_owner,
+                                              g_package_name,
+                                              'GET_REQUEST_ACTIONS',
+                                              o_error);
+        
+            pk_types.open_my_cursor(o_actions);
+        
+            pk_alert_exceptions.reset_error_state;
+            pk_utils.undo_changes;
+        
+            RETURN FALSE;
+    END get_request_actions;
+
+    FUNCTION set_order_for_execution
+    (
+        i_lang                 IN language.id_language%TYPE,
+        i_prof                 IN profissional,
+        i_episode              IN episode.id_episode%TYPE,
+        i_id_nurse_tea_topic   IN table_number,
+        i_tbl_ds_internal_name IN table_varchar DEFAULT NULL,
+        i_tbl_real_val         IN table_table_varchar DEFAULT NULL,
+        i_tbl_val_clob         IN table_table_clob DEFAULT NULL,
+        i_unit_meas_duration   IN table_number DEFAULT NULL,
+        o_error                OUT t_error_out
+    ) RETURN BOOLEAN IS
+    BEGIN
+        g_error := 'set_order_for_execution';
+    
+        IF NOT pk_patient_education_core.set_order_for_execution(i_lang                 => i_lang,
+                                                                 i_prof                 => i_prof,
+                                                                 i_episode              => i_episode,
+                                                                 i_id_nurse_tea_topic   => i_id_nurse_tea_topic,
+                                                                 i_tbl_ds_internal_name => i_tbl_ds_internal_name,
+                                                                 i_tbl_real_val         => i_tbl_real_val,
+                                                                 i_tbl_val_clob         => i_tbl_val_clob,
+                                                                 i_unit_meas_duration   => i_unit_meas_duration,
+                                                                 o_error                => o_error)
+        THEN
+            RAISE g_exception;
+        END IF;
+    
+        RETURN TRUE;
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            pk_alert_exceptions.process_error(i_lang,
+                                              SQLCODE,
+                                              SQLERRM,
+                                              g_error,
+                                              g_package_owner,
+                                              g_package_name,
+                                              'SET_ORDER_FOR_EXECUTION',
+                                              o_error);
+        
+            pk_alert_exceptions.reset_error_state;
+            pk_utils.undo_changes;
+        
+            RETURN FALSE;
+    END set_order_for_execution;
+
+END pk_patient_education_api_ux;
+/

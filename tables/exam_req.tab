@@ -1,0 +1,228 @@
+
+
+  CREATE TABLE EXAM_REQ
+   (	ID_EXAM_REQ NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_PROF_REQ NUMBER(24,0) NOT NULL ENABLE,
+	DT_REQ DATE NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	ID_INSTITUTION NUMBER(12,0),
+	ID_SCHEDULE NUMBER(24,0),
+	ID_SCHED_CONSULT NUMBER(24,0),
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE,
+	NOTES_CANCEL VARCHAR2(4000),
+
+	ID_PROF_APPROVE NUMBER(24,0),
+	ID_PROF_AUTHORIZE NUMBER(24,0),
+	FLG_TIME VARCHAR2(1) NOT NULL ENABLE,
+	DT_BEGIN DATE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_EPISODE_ORIGIN NUMBER(24,0),
+	ID_EPISODE_DESTINATION NUMBER(24,0),
+	DT_PEND_REQ DATE,
+	ID_PROF_RESCHEDULE NUMBER(24,0),
+	DT_RESCHEDULE DATE,
+	DT_BEGIN_OLD DATE,
+	ID_PROTOCOLS NUMBER(24,0),
+	ID_PREV_EPISODE NUMBER(24,0),
+
+	NOTES_TECH VARCHAR2(240)
+   );
+
+
+COMMENT ON TABLE exam_req IS 'Cabeçalhos de requisição de exames. Permite associar os agendamentos dos exames com a consulta (ou outro evento) para a qual são necessários.Um cabeçalho de requisição por serv. clínico destino.' ;
+
+COMMENT ON COLUMN exam_req.id_prof_approve IS 'Profissional que aprova o pedido de exame ao exterior (Dir. Serviço)' ;
+COMMENT ON COLUMN exam_req.id_prof_authorize IS 'Profissional que autoriza o pedido de exame ao exterior (Dir. Clínico)' ;
+COMMENT ON COLUMN exam_req.flg_time IS 'Realização: E - neste episódio; N - próximo episódio; B - entre episódios' ;
+COMMENT ON COLUMN exam_req.dt_begin IS 'Data pretendida para início da execução do exame (ie, ñ imediata)' ;
+COMMENT ON COLUMN exam_req.flg_status IS 'F - c/ resultado; R - requisitado; C - cancelado; E - em execução; D - pendente; P - parcial' ;
+COMMENT ON COLUMN exam_req.id_episode_origin IS 'ID do episódio em que foi registada a req. inicialmente (se FLG_TIME = ''N'')' ;
+COMMENT ON COLUMN exam_req.id_episode_destination IS 'ID do episódio em que foi registada a req. destino (se FLG_TIME = ''N'')' ;
+COMMENT ON COLUMN exam_req.dt_pend_req IS 'Data em que passa de pendente a requisitado.' ;
+COMMENT ON COLUMN exam_req.id_prof_reschedule IS 'Profissional responsável pelo reagendamento' ;
+COMMENT ON COLUMN exam_req.dt_reschedule IS 'Data de reagendamento' ;
+COMMENT ON COLUMN exam_req.dt_begin_old IS 'Data de realização de exame, antes do reagendamento' ;
+COMMENT ON COLUMN exam_req.id_protocols IS 'ID do protocolo, caso tenha sido requesitado através de um protocolo.' ;
+COMMENT ON COLUMN exam_req.id_prev_episode IS 'ID do episódio em que foi registada a req. inicialmente' ;
+
+COMMENT ON COLUMN exam_req.id_episode IS 'Chave primaria' ;
+COMMENT ON COLUMN exam_req.dt_req IS 'Data / hora da requisição' ;
+
+alter table exam_req 
+add (dt_req_tstz timestamp with local time zone,
+dt_cancel_tstz timestamp with local time zone,
+dt_begin_tstz timestamp with local time zone,
+dt_pend_req_tstz timestamp with local time zone,
+dt_reschedule_tstz timestamp with local time zone,
+dt_begin_old_tstz timestamp with local time zone); 
+
+ALTER TABLE exam_req MODIFY( notes_tech VARCHAR2( 4000 ));
+
+ALTER TABLE exam_req 
+ ADD (NOTES_PATIENT VARCHAR2(4000),
+ DT_SCHEDULE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE
+ )
+ MODIFY (FLG_STATUS VARCHAR2(2)
+ );
+ 
+ COMMENT ON COLUMN EXAM_REQ.ID_EXAM_REQ IS 'Id da requisição do exame';
+COMMENT ON COLUMN EXAM_REQ.ID_EPISODE IS 'Id do episódio';
+COMMENT ON COLUMN EXAM_REQ.ID_PROF_REQ IS 'Id do profissional';
+COMMENT ON COLUMN EXAM_REQ.NOTES IS 'Notas da requisição';
+COMMENT ON COLUMN EXAM_REQ.ID_INSTITUTION IS 'Id da instituição';
+COMMENT ON COLUMN EXAM_REQ.ID_SCHEDULE IS 'Is do agendamento';
+COMMENT ON COLUMN EXAM_REQ.ID_SCHED_CONSULT IS 'Id do agendamento da consulta';
+COMMENT ON COLUMN EXAM_REQ.ID_PROF_CANCEL IS 'Id do profissional que cancelou';
+COMMENT ON COLUMN EXAM_REQ.DT_CANCEL IS 'Data da requisição';
+COMMENT ON COLUMN EXAM_REQ.NOTES_CANCEL IS 'Notas de cancelamento';
+COMMENT ON COLUMN EXAM_REQ.FLG_TIME IS 'Realização: E - neste episódio; N - próximo episódio; B - entre episódios; R - Exame trazido pelo paciente';
+COMMENT ON COLUMN EXAM_REQ.FLG_STATUS IS 'R - requisitado; D - pendente; PA - por agendar; A - agendado; EF - efectivado; E - em execução; P - c/ resultado parcial; F - c/ resultado; L - lido; C - cancelado; NR - cancelado';
+COMMENT ON COLUMN EXAM_REQ.ID_PROTOCOLS IS 'ID do protocolo, caso tenha sido requisitado através de um protocolo.';
+COMMENT ON COLUMN EXAM_REQ.NOTES_TECH IS 'Notas para o técnico';
+COMMENT ON COLUMN EXAM_REQ.DT_REQ_TSTZ IS 'Data / hora da requisição';
+COMMENT ON COLUMN EXAM_REQ.DT_CANCEL_TSTZ IS 'Data do cancelamento da requisição';
+COMMENT ON COLUMN EXAM_REQ.DT_BEGIN_TSTZ IS 'Data de início';
+COMMENT ON COLUMN EXAM_REQ.DT_PEND_REQ_TSTZ IS 'Data em que passa de pendente a requisitado';
+COMMENT ON COLUMN EXAM_REQ.DT_RESCHEDULE_TSTZ IS 'Data de reagendamento';
+COMMENT ON COLUMN EXAM_REQ.DT_BEGIN_OLD_TSTZ IS 'Data de realização de exame, antes do reagendamento';
+COMMENT ON COLUMN EXAM_REQ.DT_SCHEDULE_TSTZ IS 'Data sugeriada para o agendamento de exame';
+COMMENT ON COLUMN EXAM_REQ.NOTES_PATIENT IS 'Instruções para o utente';
+
+
+COMMENT ON COLUMN EXAM_REQ.ID_SCHEDULE IS 'Id do agendamento';
+COMMENT ON COLUMN EXAM_REQ.FLG_STATUS IS 'R - requisitado; D - pendente; PA - por agendar; A - agendado; EF - efectivado; E - em execução; P - c/ resultado parcial; F - c/ resultado; L - lido; C - cancelado; NR - não realizado';
+COMMENT ON COLUMN EXAM_REQ.DT_SCHEDULE_TSTZ IS 'Data sugerida para o agendamento de exame';
+
+
+
+
+ALTER TABLE EXAM_REQ DROP COLUMN DT_REQ;
+ALTER TABLE EXAM_REQ DROP COLUMN DT_CANCEL;
+ALTER TABLE EXAM_REQ DROP COLUMN DT_BEGIN;
+ALTER TABLE EXAM_REQ DROP COLUMN DT_PEND_REQ;
+ALTER TABLE EXAM_REQ DROP COLUMN DT_RESCHEDULE;
+ALTER TABLE EXAM_REQ DROP COLUMN DT_BEGIN_OLD;
+
+
+ALTER TABLE EXAM_REQ ADD ID_PATIENT NUMBER(24,0) ;
+
+COMMENT ON COLUMN EXAM_REQ.ID_PATIENT IS 'Id do paciente';
+
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGED DATE: 2009-MAR-27
+-- CHANGED REASON: ALERT-645
+
+ALTER TABLE EXAM_REQ ADD (
+    PRIORITY VARCHAR2(1),
+    ID_CANCEL_REASON NUMBER(24),
+		ID_EXAM_GROUP NUMBER(24),
+    FLG_CONTACT VARCHAR2(2),
+    DT_CONTACT TIMESTAMP WITH LOCAL TIME ZONE);
+
+COMMENT ON COLUMN EXAM_REQ.PRIORITY IS 'Prioridade da requisição: U - Urgente; N - Normal';
+COMMENT ON COLUMN EXAM_REQ.ID_CANCEL_REASON IS 'Id do motivo de cancelamento';
+COMMENT ON COLUMN EXAM_REQ.ID_EXAM_GROUP IS 'Id do grupo de exames';
+COMMENT ON COLUMN EXAM_REQ.FLG_CONTACT IS 'Flag que indica o estado do contacto com o técnico';
+COMMENT ON COLUMN EXAM_REQ.DT_CONTACT IS 'Data de início do contacto com o técnico';
+
+-- CHANGE END: Ana Matos
+
+
+
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 07/07/2010 15:50
+-- CHANGE REASON: [ALERT-110074] Order sets - TDE
+ALTER TABLE exam_req
+ ADD (id_task_dependency NUMBER(24), flg_req_origin_module VARCHAR(1 CHAR) DEFAULT 'D' NOT NULL);
+
+COMMENT ON COLUMN exam_req.id_task_dependency IS 'Task dependency identifier (fk to TDE_TASK_DEPENDENCY)';
+COMMENT ON COLUMN exam_req.flg_status IS 'R - requisitado; D - pendente; PA - por agendar; A - agendado; EF - efectivado; E - em execução; T - em transporte; M - transporte terminado; F - com resultado; L - lido; C - cancelado; NR - não realizado; W - Em espera de instruções Task Dependency';
+COMMENT ON COLUMN exam_req.flg_req_origin_module IS 'Request created by : D - Default, O - Order Sets, I - Interfaces';
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 08/07/2010 23:57
+-- CHANGE REASON: [ALERT-110573] Order Sets
+alter table exam_req drop column id_task_dependency;
+alter table exam_req drop column flg_req_origin_module;
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 14/01/2013 12:28
+-- CHANGE REASON: [ALERT-249212] 
+ALTER TABLE EXAM_REQ MODIFY (DT_REQ_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL, ID_PATIENT NUMBER(24) NULL);
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/09/2013 09:20
+-- CHANGE REASON: [ALERT-264902] 
+ALTER TABLE EXAM_REQ DROP COLUMN ID_PROF_RESCHEDULE;
+ALTER TABLE EXAM_REQ DROP COLUMN ID_PROTOCOLS;
+ALTER TABLE EXAM_REQ DROP COLUMN DT_RESCHEDULE_TSTZ;
+ALTER TABLE EXAM_REQ DROP COLUMN DT_BEGIN_OLD_TSTZ;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 12/09/2013 09:20
+-- CHANGE REASON: [ALERT-264902] 
+ALTER TABLE EXAM_REQ 
+ ADD (ID_VISIT NUMBER(24)
+ ,ID_EXEC_INSTITUTION NUMBER(24)
+ ,BARCODE VARCHAR2(30 CHAR)
+ ,ID_PROF_LAST_UPDATE NUMBER(24)
+ ,DT_LAST_UPDATE_TSTZ TIMESTAMP WITH LOCAL TIME ZONE);
+
+COMMENT ON TABLE EXAM_REQ IS 'Orders table';
+
+COMMENT ON COLUMN EXAM_REQ.ID_EXAM_REQ IS 'Order''s ID';
+COMMENT ON COLUMN EXAM_REQ.ID_PATIENT IS 'Patient ID';
+COMMENT ON COLUMN EXAM_REQ.ID_EPISODE IS 'Episode ID';
+COMMENT ON COLUMN EXAM_REQ.ID_EPISODE_ORIGIN IS 'Episode ID where the order was registered';
+COMMENT ON COLUMN EXAM_REQ.ID_EPISODE_DESTINATION IS 'Episode ID where the order is going to be performed';
+COMMENT ON COLUMN EXAM_REQ.ID_PREV_EPISODE IS 'Episode ID where the order was registered (when the visit has more than one episode)';
+COMMENT ON COLUMN EXAM_REQ.ID_VISIT IS 'Visit ID';
+COMMENT ON COLUMN EXAM_REQ.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN EXAM_REQ.FLG_TIME IS 'To be performed: E - this episode; B - between episodes; N - next episode';
+COMMENT ON COLUMN EXAM_REQ.FLG_STATUS IS 'Flag that indicates the order''s status';
+COMMENT ON COLUMN EXAM_REQ.ID_PROF_REQ IS 'Professional that registers the order';
+COMMENT ON COLUMN EXAM_REQ.DT_REQ_TSTZ IS 'Date that indicates when tjhe order was registered';
+COMMENT ON COLUMN EXAM_REQ.DT_BEGIN_TSTZ IS 'Date for which the order is to be performed';
+COMMENT ON COLUMN EXAM_REQ.DT_SCHEDULE_TSTZ IS 'Suggested date for scheduling';
+COMMENT ON COLUMN EXAM_REQ.DT_PEND_REQ_TSTZ IS 'Date that indicates when the order has been updated from pending to ordered';
+COMMENT ON COLUMN EXAM_REQ.PRIORITY IS 'Flag that indicates the urgency of an order';
+COMMENT ON COLUMN EXAM_REQ.ID_EXEC_INSTITUTION IS 'Institution ID where the order is performed';
+COMMENT ON COLUMN EXAM_REQ.BARCODE IS 'Order''s barcode';
+COMMENT ON COLUMN EXAM_REQ.ID_PROF_AUTHORIZE IS 'Professional that authorizes the order';
+COMMENT ON COLUMN EXAM_REQ.ID_PROF_APPROVE IS 'Professional that approves the order';
+COMMENT ON COLUMN EXAM_REQ.ID_SCHEDULE IS 'Schedule ID';
+COMMENT ON COLUMN EXAM_REQ.ID_SCHED_CONSULT IS 'Appointment schedule ID';
+COMMENT ON COLUMN EXAM_REQ.NOTES IS 'Notes';
+COMMENT ON COLUMN EXAM_REQ.NOTES_TECH IS 'Notes for the technician';
+COMMENT ON COLUMN EXAM_REQ.NOTES_PATIENT IS 'Notes for the patient';
+COMMENT ON COLUMN EXAM_REQ.ID_PROF_CANCEL IS 'Professional that cancels the order';
+COMMENT ON COLUMN EXAM_REQ.DT_CANCEL_TSTZ IS 'Date that indicates when the order was cancelled';
+COMMENT ON COLUMN EXAM_REQ.ID_CANCEL_REASON IS 'Cancel reason ID';
+COMMENT ON COLUMN EXAM_REQ.NOTES_CANCEL IS 'Cancelation notes';
+COMMENT ON COLUMN EXAM_REQ.FLG_CONTACT IS 'Flag that indicates the contact state';
+COMMENT ON COLUMN EXAM_REQ.DT_CONTACT IS 'Date that indicates when the contact started';
+COMMENT ON COLUMN EXAM_REQ.ID_EXAM_GROUP IS 'Exam''s group ID';
+COMMENT ON COLUMN EXAM_REQ.ID_PROF_LAST_UPDATE IS 'Last update professional ID';
+COMMENT ON COLUMN EXAM_REQ.DT_LAST_UPDATE_TSTZ IS 'Last update date';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 06/01/2016 17:51
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE EXAM_REQ IS 'Exams'' orders table';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 24/02/2021 14:33
+-- CHANGE REASON: [EMR-42343] - Change the descriptions of the "Start date" and "Date to be defined" fields.
+comment on column EXAM_REQ.FLG_TIME is 'To be performed: E - this episode; B - before next episode; N - next episode; D - On a defined or to be defined date';
+-- CHANGE END: Diogo Oliveira

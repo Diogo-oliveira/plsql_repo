@@ -1,0 +1,1 @@
+grant execute on PK_EA_LOGIC_VIEWER to alert_reset;

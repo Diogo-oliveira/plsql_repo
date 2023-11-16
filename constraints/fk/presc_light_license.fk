@@ -1,0 +1,39 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 06/07/2012 10:47
+-- CHANGE REASON: [ALERT-235313 ] 
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02275); 
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PRESC_LIGHT_LICENSE
+  add constraint PLL_INST_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02275); 
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PRESC_LIGHT_LICENSE
+  add constraint PLL_P_FK foreign key (ID_PROFESSIONAL)
+  references PROFESSIONAL (ID_PROFESSIONAL)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+  
+  
+-- CHANGE END: Joana Barroso

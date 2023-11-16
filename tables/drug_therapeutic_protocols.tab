@@ -1,0 +1,64 @@
+create table DRUG_THERAPEUTIC_PROTOCOLS
+(
+  ID_DRUG_THERAPEUTIC_PROTOCOLS NUMBER(24) not null,
+  ID_THERAPEUTIC_PROTOCOLS      NUMBER(24),
+  ID_DRUG                       NUMBER(24),
+  UNIT_MEASURE_INST             NUMBER(24),
+  UNIT_MEASURE_FREQ             NUMBER(24),
+  UNIT_MEASURE_DUR              NUMBER(24),
+  ID_DRUG_ROUTE                 NUMBER(24),
+  FLG_TAKE_TYPE                 VARCHAR2(1),
+  FLG_TIME_E                    VARCHAR2(1),
+  NOTES                         VARCHAR2(4000),
+  ID_UNIT_MEASURE_BOLUS         NUMBER(24),
+  ID_UNIT_MEASURE_DRIP          NUMBER(24),
+  QTY_INST                      NUMBER(24,4),
+  FREQUENCY                     NUMBER(24,4),
+  DURATION                      NUMBER(24,4),
+  VALUE_BOLUS                   NUMBER(24,4),
+  VALUE_DRIP                    NUMBER(24,4)
+);
+
+comment on table DRUG_THERAPEUTIC_PROTOCOLS is 'Protocolos Terapêuticos';
+
+comment on column DRUG_THERAPEUTIC_PROTOCOLS.ID_THERAPEUTIC_PROTOCOLS is 'Identificação do Protocolo Terapêutico';
+comment on column DRUG_THERAPEUTIC_PROTOCOLS.ID_DRUG is 'Identificação do medicamento';
+comment on column DRUG_THERAPEUTIC_PROTOCOLS.UNIT_MEASURE_INST is 'Unidade de medida da quantidade';
+comment on column DRUG_THERAPEUTIC_PROTOCOLS.UNIT_MEASURE_FREQ is 'Unidade de medida da frequência';
+comment on column DRUG_THERAPEUTIC_PROTOCOLS.UNIT_MEASURE_DUR is 'Unidade de medida da duração';
+comment on column DRUG_THERAPEUTIC_PROTOCOLS.ID_DRUG_ROUTE is 'Via de administração';
+comment on column DRUG_THERAPEUTIC_PROTOCOLS.FLG_TAKE_TYPE is 'Tipo de plano de tomas: N - normal, S - SOS, U - unitário, C - contínuo, A - ad eternum';
+comment on column DRUG_THERAPEUTIC_PROTOCOLS.NOTES is 'Notas';
+comment on column DRUG_THERAPEUTIC_PROTOCOLS.ID_UNIT_MEASURE_BOLUS is 'Unidade de medida do bolus';
+comment on column DRUG_THERAPEUTIC_PROTOCOLS.ID_UNIT_MEASURE_DRIP is 'Unidade de medida do drip';
+
+-- CHANGED BY: Orlando Antunes
+-- CHANGE DATE: 2008-JUNE-23
+-- CHANGE REASON: Indica se a parametrização dos medicamentos associados aos protocolos terapêutico é criada pelo cliente ou pela Alert
+ALTER TABLE drug_therapeutic_protocols
+ADD flg_client VARCHAR2(1) DEFAULT 'N';
+
+-- Add comments to the columns 
+comment on column drug_therapeutic_protocols.flg_client
+  is 'Indicates if this parameterization is created by the client.';
+--CHANGE END
+
+
+
+-- CHANGED BY:  NELSON CANASTRO
+-- CHANGE DATE: 01/09/2010 10:50
+-- CHANGE REASON: [ALERT-121259] Convert all ID_Drug columns to varchar2(255)
+    ALTER TABLE DRUG_THERAPEUTIC_PROTOCOLS add id_drug_new VARCHAR2(255);
+
+    UPDATE DRUG_THERAPEUTIC_PROTOCOLS
+       SET id_drug_new = to_char(id_drug);
+
+    ALTER TABLE DRUG_THERAPEUTIC_PROTOCOLS drop column id_drug;
+    ALTER TABLE DRUG_THERAPEUTIC_PROTOCOLS rename column id_drug_new TO id_drug;
+-- CHANGE END:  NELSON CANASTRO
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:36
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE DRUG_THERAPEUTIC_PROTOCOLS IS 'Protocolos Terapêuticos [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

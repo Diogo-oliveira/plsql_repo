@@ -1,0 +1,142 @@
+--Rui Batista 2008/03/19
+--Alertas v3.0
+create table sys_alert_event
+(
+  ID_SYS_ALERT_EVENT  NUMBER(24) not null,
+  ID_SYS_ALERT        NUMBER(24) not null,
+  ID_SOFTWARE         NUMBER(24) not null,
+  ID_INSTITUTION      NUMBER(24) not null,
+  ID_PATIENT          NUMBER(24) not null,
+  ID_VISIT            NUMBER(24) not null,
+  ID_EPISODE          NUMBER(24) not null,
+  ID_RECORD           NUMBER(24) not null,
+  DT_RECORD           TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  ID_PROFESSIONAL     NUMBER(24),
+  ID_ROOM             NUMBER(24),
+  ID_CLINICAL_SERVICE NUMBER(12),
+  FLG_VISIBLE         VARCHAR2(1),
+  REPLACE1            VARCHAR2(200),
+  REPLACE2            VARCHAR2(4000),
+  REPLACE1  	VARCHAR2(200),
+  REPLACE2 		VARCHAR2(4000)
+)
+tablespace TABLE_L
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+  
+-- Add comments to the columns 
+comment on column SYS_ALERT_EVENT.ID_SYS_ALERT  is 'Alert Id';
+comment on column SYS_ALERT_EVENT.ID_SOFTWARE  is 'Software Id';
+comment on column SYS_ALERT_EVENT.ID_INSTITUTION  is 'Institution Id';
+comment on column SYS_ALERT_EVENT.ID_PATIENT  is 'Patient Id';
+comment on column SYS_ALERT_EVENT.ID_VISIT  is 'Visit Id';
+comment on column SYS_ALERT_EVENT.ID_EPISODE  is 'Episode Id';
+comment on column SYS_ALERT_EVENT.ID_RECORD  is 'Record id for the record that generated the event';
+comment on column SYS_ALERT_EVENT.DT_RECORD  is 'Event date';
+comment on column SYS_ALERT_EVENT.ID_PROFESSIONAL  is 'Target Professional Id. Should only be used if the event is aimed at this professional.';
+comment on column SYS_ALERT_EVENT.ID_ROOM  is 'Target Room Id. Should only be used if the event is aimed at the professionals allocated to this room.';
+comment on column SYS_ALERT_EVENT.ID_CLINICAL_SERVICE  is 'Target Clinical Service Id. Should only be used if the event is aimed at the professionals allocated to this Clinical Service.';
+comment on column SYS_ALERT_EVENT.FLG_VISIBLE  is 'Y - Available to the user; N - Not available (To manage duplications)';
+comment on column SYS_ALERT_EVENT.REPLACE1  is 'coluna de valor a apresentar da descrição do alerta. ex: código para obtenção da descrição de um exame';
+comment on column SYS_ALERT_EVENT.REPLACE2  is 'coluna de valor a apresentar da descrição do alerta. ex: número de minutos em atraso ';
+comment on column SYS_ALERT_EVENT.REPLACE1 IS 'coluna de valor a apresentar da descrição do alerta. ex: código para obtenção da descrição de um exame';
+comment on column SYS_ALERT_EVENT.REPLACE2 IS 'coluna de valor a apresentar da descrição do alerta. ex: número de minutos em atraso ';
+
+--Rui Batista 2008/03/19
+--Alertas v3.0
+create table sys_alert_event
+(
+  ID_SYS_ALERT_EVENT  NUMBER(24) not null,
+  ID_SYS_ALERT        NUMBER(24) not null,
+  ID_SOFTWARE         NUMBER(24) not null,
+  ID_INSTITUTION      NUMBER(24) not null,
+  ID_PATIENT          NUMBER(24) not null,
+  ID_VISIT            NUMBER(24) not null,
+  ID_EPISODE          NUMBER(24) not null,
+  ID_RECORD           NUMBER(24) not null,
+  DT_RECORD           TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  ID_PROFESSIONAL     NUMBER(24),
+  ID_ROOM             NUMBER(24),
+  ID_CLINICAL_SERVICE NUMBER(12),
+  FLG_VISIBLE         VARCHAR2(1),
+  REPLACE1            VARCHAR2(200),
+  REPLACE2            VARCHAR2(4000)
+);
+  
+  ALTER TABLE sys_alert_event MOVE TABLE_L;
+  
+-- Add comments to the columns 
+comment on column SYS_ALERT_EVENT.ID_SYS_ALERT  is 'Alert Id';
+comment on column SYS_ALERT_EVENT.ID_SOFTWARE  is 'Software Id';
+comment on column SYS_ALERT_EVENT.ID_INSTITUTION  is 'Institution Id';
+comment on column SYS_ALERT_EVENT.ID_PATIENT  is 'Patient Id';
+comment on column SYS_ALERT_EVENT.ID_VISIT  is 'Visit Id';
+comment on column SYS_ALERT_EVENT.ID_EPISODE  is 'Episode Id';
+comment on column SYS_ALERT_EVENT.ID_RECORD  is 'Record id for the record that generated the event';
+comment on column SYS_ALERT_EVENT.DT_RECORD  is 'Event date';
+comment on column SYS_ALERT_EVENT.ID_PROFESSIONAL  is 'Target Professional Id. Should only be used if the event is aimed at this professional.';
+comment on column SYS_ALERT_EVENT.ID_ROOM  is 'Target Room Id. Should only be used if the event is aimed at the professionals allocated to this room.';
+comment on column SYS_ALERT_EVENT.ID_CLINICAL_SERVICE  is 'Target Clinical Service Id. Should only be used if the event is aimed at the professionals allocated to this Clinical Service.';
+comment on column SYS_ALERT_EVENT.FLG_VISIBLE  is 'Y - Available to the user; N - Not available (To manage duplications)';
+comment on column SYS_ALERT_EVENT.REPLACE1  is 'coluna de valor a apresentar da descrição do alerta. ex: código para obtenção da descrição de um exame';
+comment on column SYS_ALERT_EVENT.REPLACE2  is 'coluna de valor a apresentar da descrição do alerta. ex: número de minutos em atraso ';
+
+alter table sys_alert_Event add id_dep_clin_serv number(24);
+comment on column SYS_ALERT_EVENT.id_dep_clin_serv  is 'id de dep_clin_serv ( epis_info.id_dep_clin_serv )';
+
+--2008/08/05 Rui Batista
+--Alerta de interfaces
+alter table sys_alert_event add (id_intf_type number(6));
+
+comment on column sys_alert_event.id_intf_type is 'Tipo de interface';
+	
+	
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 14/02/2014 17:05
+-- CHANGE REASON: [ALERT-276532 ] AHP | Bug nos IV Fluids (BMC 329869)
+BEGIN
+    execute immediate 'ALTER TABLE sys_alert_event modify replace1 VARCHAR2(1000 CHAR)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('operacao ja executada anteriormente');
+END;
+/
+-- CHANGE END: Sofia Mendes
+
+COMMENT ON COLUMN ALERT.SYS_ALERT_EVENT.REPLACE1     is 'value to be presented on the alert description';
+COMMENT ON COLUMN ALERT.SYS_ALERT_EVENT.REPLACE2     is 'value to be presented on the alert description';
+COMMENT ON COLUMN ALERT.SYS_ALERT_EVENT.ID_INTF_TYPE is 'Type of interface';
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 12/10/2016 14:52
+-- CHANGE REASON: [ALERT-325095 ] New column in the Alerts grid to identify the Clinical service and Ordering professional
+--                
+-- Add/modify columns 
+BEGIN
+pk_versioning.run('alter table SYS_ALERT_EVENT add id_prof_order number(24)');
+END;
+/
+-- Add comments to the columns 
+comment on column SYS_ALERT_EVENT.id_prof_order
+  is 'Professional that triggered  the record (for example the exam, analysis)';
+-- CHANGE END: Elisabete Bugalho
+
+
+comment on table ALERT.sys_alert_event is 'Holds alerts events';
+COMMENT ON COLUMN ALERT.SYS_ALERT_EVENT.ID_SYS_ALERT_EVENT is 'Primary Key';
+
+declare
+	l_sql varchar2(4000);
+begin
+	l_sql := q'[alter table sys_alert_event add dt_creation   timestamp with local time zone default current_timestamp not null]';
+	pk_versioning.run( l_sql );
+end;
+/

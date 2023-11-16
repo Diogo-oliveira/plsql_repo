@@ -1,0 +1,118 @@
+
+  CREATE TABLE P1_MATCH
+   (	ID_MATCH NUMBER(24,0) NOT NULL ENABLE,
+	ID_PATIENT NUMBER(24,0) NOT NULL ENABLE,
+	ID_CLIN_RECORD NUMBER(24,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	SEQUENTIAL_NUMBER NUMBER(24,0)
+   );
+
+
+ALTER TABLE P1_MATCH 
+ ADD (FLG_STATUS  VARCHAR2(1)
+ ,ID_PROF_CREATE  NUMBER(24)
+ ,DT_CREATE  DATE
+ ,ID_PROF_CANCEL  NUMBER(24)
+ ,DT_CANCEL  DATE
+ )
+/
+
+COMMENT ON COLUMN P1_MATCH.FLG_STATUS IS '(A)ctive; (C)anceled';
+
+
+COMMENT ON COLUMN P1_MATCH.ID_PROF_CREATE IS 'Match created by';
+
+
+COMMENT ON COLUMN P1_MATCH.DT_CREATE IS 'Match creation date';
+
+
+COMMENT ON COLUMN P1_MATCH.ID_PROF_CANCEL IS 'Match canceled by';
+
+
+COMMENT ON COLUMN P1_MATCH.DT_CANCEL IS 'Match cancelation date';
+
+
+ALTER TABLE P1_MATCH ADD (ID_MATCH_PREV  NUMBER(24));
+
+COMMENT ON COLUMN P1_MATCH.ID_MATCH_PREV IS 'Id do match cancelado que este registo substitui';
+
+
+ALTER TABLE P1_MATCH ADD DT_CREATE_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE;                                                                                                                                                                                                                 
+
+ALTER TABLE P1_MATCH ADD DT_CANCEL_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE; 
+
+COMMENT ON COLUMN P1_MATCH.DT_CREATE_TSTZ IS 'Match creation date';
+
+COMMENT ON COLUMN P1_MATCH.DT_CANCEL_TSTZ IS 'Match cancelation date';
+
+alter table p1_match rename column sequential_number to sequential_number_number;
+
+alter table p1_match add sequential_number varchar2(200);
+
+-- VALORES POR DEFEITO
+alter table P1_MATCH modify FLG_STATUS default 'A';
+alter table P1_MATCH modify DT_CREATE default sysdate;
+alter table P1_MATCH modify DT_CREATE_TSTZ default current_timestamp;
+
+
+
+-- CHANGED BY: Joana Barroso  
+-- CHANGE DATE: 2008-SEP-22
+-- CHANGE REASON: Desnormalização P1 - eliminação de colunas
+alter table P1_MATCH drop column DT_CREATE;
+alter table P1_MATCH drop column DT_CANCEL;
+-- CHANGE END
+
+
+
+-- CHANGED BY:Pedro Santos
+-- CHANGE DATE:2008-OCT-22
+-- CHANGE REASON:ALERT-1340
+ALTER TABLE P1_MATCH ADD ID_EPISODE NUMBER(24,0);
+COMMENT ON COLUMN P1_MATCH.ID_EPISODE IS 'Episode ID';
+-- CHANGE END
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on table P1_MATCH
+  is 'Match patient id with corresponding clinical record in each institution';
+-- Add comments to the columns 
+comment on column P1_MATCH.id_match_prev
+  is 'Previous match id that is replaced by this record';
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table P1_MATCH
+  is 'Match of Refereals';
+-- Add comments to the columns 
+comment on column P1_MATCH.id_match
+  is 'Primary key';
+comment on column P1_MATCH.id_patient
+  is 'Patient identifier';
+comment on column P1_MATCH.id_clin_record
+  is 'Patient Clinical record';
+comment on column P1_MATCH.id_institution
+  is 'Institution identifier';
+comment on column P1_MATCH.sequential_number_number
+  is 'DEPRECATED';
+comment on column P1_MATCH.flg_status
+  is '(A)ctive; (C)anceled';
+comment on column P1_MATCH.id_prof_create
+  is 'Match created by';
+comment on column P1_MATCH.id_prof_cancel
+  is 'Match canceled by';
+comment on column P1_MATCH.id_match_prev
+  is 'Id do match cancelado que este registo substitui';
+comment on column P1_MATCH.dt_create_tstz
+  is 'Match creation date';
+comment on column P1_MATCH.dt_cancel_tstz
+  is 'Match cancelation date';
+comment on column P1_MATCH.sequential_number
+  is 'Sequential Number';
+comment on column P1_MATCH.id_episode
+  is 'Episode ID';
+-- CHANGE END: Elisabete Bugalho

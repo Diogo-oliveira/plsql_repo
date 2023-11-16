@@ -1,0 +1,65 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 18/07/2014 16:40
+-- CHANGE REASON: [ALERT-290969] Nursing Care Plan: NANDA, NIC, NOC - Data Model
+
+BEGIN
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'NOC_CFG_OUTCOME_O_IND', i_obj_type => 'TABLE', i_flg_category => 'PRM', i_flg_alert_default => 'N', i_delete_script => '', i_flg_default_child => 'N', i_flg_nzd => 'Y', i_responsible_team => 'NURSING');
+END;
+/
+CREATE TABLE NOC_CFG_OUTCOME_O_IND
+  (
+    ID_NOC_CFG_OUTCOME_O_IND NUMBER (24) NOT NULL ,
+    ID_INSTITUTION           NUMBER (24) NOT NULL ,
+    ID_NOC_OUTCOME           NUMBER (24) NOT NULL ,
+    ID_NOC_OTHR_INDICATOR    NUMBER (24) NOT NULL ,
+    FLG_LNK_STATUS           VARCHAR2 (1 CHAR) NOT NULL ,
+    OUTCOME_INDICATOR_CODE   NUMBER (24) NOT NULL ,
+    CREATE_USER              VARCHAR2 (30 CHAR) ,
+    CREATE_TIME              TIMESTAMP WITH LOCAL TIME ZONE ,
+    CREATE_INSTITUTION       NUMBER (24) ,
+    UPDATE_USER              VARCHAR2 (30 CHAR) ,
+    UPDATE_TIME              TIMESTAMP WITH LOCAL TIME ZONE ,
+    UPDATE_INSTITUTION       NUMBER (24)
+  )
+  TABLESPACE ALERT_DATA ;
+
+COMMENT ON TABLE NOC_CFG_OUTCOME_O_IND
+IS
+  'NOC Relationship between Outcomes and Other Indicators used in a given institution' ;
+  COMMENT ON COLUMN NOC_CFG_OUTCOME_O_IND.ID_NOC_CFG_OUTCOME_O_IND
+IS
+  'Surrogate key' ;
+  COMMENT ON COLUMN NOC_CFG_OUTCOME_O_IND.ID_INSTITUTION
+IS
+  'Institution ID' ;
+  COMMENT ON COLUMN NOC_CFG_OUTCOME_O_IND.ID_NOC_OUTCOME
+IS
+  'NOC Outcome ID (surrogate key)' ;
+  COMMENT ON COLUMN NOC_CFG_OUTCOME_O_IND.ID_NOC_OTHR_INDICATOR
+IS
+  'Other Indicator Settings ID (surrogate key)' ;
+  COMMENT ON COLUMN NOC_CFG_OUTCOME_O_IND.FLG_LNK_STATUS
+IS
+  'Link status: (A)ctive, (C)ancelled' ;
+  COMMENT ON COLUMN NOC_CFG_OUTCOME_O_IND.OUTCOME_INDICATOR_CODE
+IS
+  'NOC Indicator code of "Other" for an Outcome' ;
+  COMMENT ON COLUMN NOC_CFG_OUTCOME_O_IND.CREATE_USER
+IS
+  'Creation User' ;
+  COMMENT ON COLUMN NOC_CFG_OUTCOME_O_IND.CREATE_TIME
+IS
+  'Creation Time' ;
+  COMMENT ON COLUMN NOC_CFG_OUTCOME_O_IND.CREATE_INSTITUTION
+IS
+  'Creation Institution' ;
+  COMMENT ON COLUMN NOC_CFG_OUTCOME_O_IND.UPDATE_USER
+IS
+  'Update User' ;
+  COMMENT ON COLUMN NOC_CFG_OUTCOME_O_IND.UPDATE_TIME
+IS
+  'Update Time' ;
+  COMMENT ON COLUMN NOC_CFG_OUTCOME_O_IND.UPDATE_INSTITUTION
+IS
+  'Update Institution' ;
+-- CHANGE END: Ariel Machado

@@ -1,0 +1,70 @@
+
+
+  CREATE TABLE "ALERT"."P1_ORIGIN_APPROVAL_CONFIG"
+   (	"ID_ORIGIN_APPROVAL_CONFIG" NUMBER(24,0),
+	"ID_INST_ORIG" NUMBER(12,0),
+	"ID_INST_DEST" NUMBER(12,0),
+	"FLG_TYPE" VARCHAR2(1),
+	"ID_ANALYSIS" NUMBER(12,0),
+	"ID_EXAM" NUMBER,
+	"ID_INTERVENTION" NUMBER(24,0),
+	"ID_SPECIALITY" NUMBER(6,0)
+   ) ;
+
+   COMMENT ON COLUMN "ALERT"."P1_ORIGIN_APPROVAL_CONFIG"."ID_INST_ORIG" IS 'Id of referring institution';
+
+
+
+   COMMENT ON COLUMN "ALERT"."P1_ORIGIN_APPROVAL_CONFIG"."ID_INST_DEST" IS 'Id of destination institution';
+
+
+
+   COMMENT ON COLUMN "ALERT"."P1_ORIGIN_APPROVAL_CONFIG"."FLG_TYPE" IS 'C - Consultation, A - Analysis,I- Image  E - Others Exams, P - Procedure, F - MFR';
+
+
+
+   COMMENT ON COLUMN "ALERT"."P1_ORIGIN_APPROVAL_CONFIG"."ID_ANALYSIS" IS 'Id of analysis';
+
+
+
+   COMMENT ON COLUMN "ALERT"."P1_ORIGIN_APPROVAL_CONFIG"."ID_EXAM" IS 'Id of exams';
+
+
+
+   COMMENT ON COLUMN "ALERT"."P1_ORIGIN_APPROVAL_CONFIG"."ID_INTERVENTION" IS 'Id of intervention';
+
+
+
+   COMMENT ON COLUMN "ALERT"."P1_ORIGIN_APPROVAL_CONFIG"."ID_SPECIALITY" IS 'Id ofspeciality';
+
+
+
+   COMMENT ON TABLE "ALERT"."P1_ORIGIN_APPROVAL_CONFIG"  IS 'Parameterization of mcdt''s to approve by institution';
+
+
+
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/11/2012 16:44
+-- CHANGE REASON: [ALERT-245662] 
+alter table p1_origin_approval_config add 
+  id_sample_type         NUMBER(12);
+  
+comment on column p1_origin_approval_config.id_sample_type
+  is  'Sample type id';
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 03/12/2012 17:17
+-- CHANGE REASON: [ALERT-246252] 
+ALTER TABLE p1_origin_approval_config MODIFY (ID_SAMPLE_TYPE NUMBER(12) NOT NULL);
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joao Sa
+-- ISSUE: ALERT-317695 Database model documentation and comments corretions
+comment on column P1_ORIGIN_APPROVAL_CONFIG.id_origin_approval_config
+  is 'Internal id';
+comment on column P1_ORIGIN_APPROVAL_CONFIG.flg_type
+  is '(C)onsultation; L(A)b test; (I)maging; Others (E)xams; (P)rocedure; M(F)R';
+comment on column P1_ORIGIN_APPROVAL_CONFIG.id_speciality
+  is 'Id of specialty';

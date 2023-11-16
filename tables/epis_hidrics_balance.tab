@@ -1,0 +1,153 @@
+  CREATE TABLE EPIS_HIDRICS_BALANCE
+   (	ID_EPIS_HIDRICS_BALANCE NUMBER(24,0) NOT NULL ENABLE,
+	ID_EPIS_HIDRICS NUMBER(24,0) NOT NULL ENABLE,
+	DT_PREV_CLOSE DATE,
+	DT_CLOSE_BALANCE DATE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_PROF_CLOSE NUMBER(24,0),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	TOTAL_ADMIN NUMBER(24,0),
+	TOTAL_ELIM NUMBER(24,0),
+	DT_OPEN DATE,
+	DT_REGISTER DATE,
+
+	ID_UNIT_MEASURE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE epis_hidrics_balance IS 'Registo dos balanço dos hidricos' ;
+
+COMMENT ON COLUMN epis_hidrics_balance.id_epis_hidrics_balance IS 'Chave primária' ;
+COMMENT ON COLUMN epis_hidrics_balance.id_epis_hidrics IS 'Episódio hidrico' ;
+COMMENT ON COLUMN epis_hidrics_balance.dt_prev_close IS 'Data prevista de encerramento' ;
+COMMENT ON COLUMN epis_hidrics_balance.dt_close_balance IS 'Data de encerramento do balanço' ;
+COMMENT ON COLUMN epis_hidrics_balance.adw_last_update IS 'Data da última alteração' ;
+COMMENT ON COLUMN epis_hidrics_balance.id_prof_close IS 'Profissional que encerra o balanço' ;
+COMMENT ON COLUMN epis_hidrics_balance.flg_status IS 'Estado do balanço' ;
+COMMENT ON COLUMN epis_hidrics_balance.total_admin IS 'Total de administrações' ;
+COMMENT ON COLUMN epis_hidrics_balance.total_elim IS 'Total de eliminações' ;
+
+alter table epis_hidrics_balance 
+add (dt_prev_close_tstz timestamp with local time zone,
+dt_close_balance_tstz timestamp with local time zone,
+dt_open_tstz timestamp with local time zone,
+dt_register_tstz timestamp with local time zone); 
+
+-- CHANGED BY: Sérgio Santos (sergio.santos)
+-- CHANGE DATE: 03/12/2008 09:16
+-- CHANGE REASON: ALERT-11133 Remoção de colunas com tipo DATE quando existe a equivalente TSTZ
+ALTER TABLE EPIS_HIDRICS_BALANCE DROP COLUMN DT_PREV_CLOSE;
+ALTER TABLE EPIS_HIDRICS_BALANCE DROP COLUMN DT_CLOSE_BALANCE;
+ALTER TABLE EPIS_HIDRICS_BALANCE DROP COLUMN DT_OPEN;
+ALTER TABLE EPIS_HIDRICS_BALANCE DROP COLUMN DT_REGISTER;
+-- CHANGE END
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/11/2009 13:08
+-- CHANGE REASON: [ALERT-56932] 
+alter table
+   epis_hidrics_balance
+drop column
+   ADW_LAST_UPDATE;
+ 
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 10/12/2009 10:48
+-- CHANGE REASON: [ALERT-56928] Update tables description
+COMMENT ON COLUMN epis_hidrics_balance.flg_status IS 'Intake and output balance status: R - Required; E - Under going; I - Interrupted; C - Cancelled; F - Finnished; D - Draft; L - Cancelled draft ';
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 22:36
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+alter table EPIS_HIDRICS_BALANCE add ID_PROF_LAST_CHANGE NUMBER(24);
+alter table EPIS_HIDRICS_BALANCE add DT_EH_BALANCE TIMESTAMP(6) WITH LOCAL TIME ZONE;
+alter table EPIS_HIDRICS_BALANCE add FLG_CLOSE_TYPE VARCHAR2(1);
+
+comment on column EPIS_HIDRICS_BALANCE.ID_PROF_LAST_CHANGE is 'Professional who entered or last edited the record';
+comment on column EPIS_HIDRICS_BALANCE.DT_EH_BALANCE is 'Insertion date or date of last update';
+comment on column EPIS_HIDRICS_BALANCE.FLG_CLOSE_TYPE is 'Balance was closed by: A - automatically, B - manually updating auto balance time and C - manually without updating the auto balance time. ';
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:19
+-- CHANGE REASON: [ALERT-153427] Intake and Output-Have the possibility to register bowel movements.
+ALTER TABLE EPIS_HIDRICS_BALANCE ADD TOTAL_TIMES NUMBER(12);
+COMMENT ON COLUMN EPIS_HIDRICS_BALANCE.TOTAL_TIMES IS 'Total number of occurences.';
+
+ALTER TABLE EPIS_HIDRICS_BALANCE ADD CONSTRAINT EHBE_UME_FK FOREIGN KEY (ID_UNIT_MEASURE) REFERENCES UNIT_MEASURE(ID_UNIT_MEASURE);
+
+COMMENT ON TABLE epis_hidrics_balance IS 'Hidrics balance registries.' ;
+
+COMMENT ON COLUMN epis_hidrics_balance.id_epis_hidrics_balance IS 'Primary key Identifier' ;
+COMMENT ON COLUMN epis_hidrics_balance.id_epis_hidrics IS 'Hidrics episode ID' ;
+COMMENT ON COLUMN epis_hidrics_balance.id_prof_close IS 'Professional that closes the balance.' ;
+COMMENT ON COLUMN epis_hidrics_balance.total_admin IS 'Total of administrations.' ;
+COMMENT ON COLUMN epis_hidrics_balance.total_elim IS 'Total of eliminations.' ;
+COMMENT ON COLUMN epis_hidrics_balance.dt_prev_close_tstz IS 'Closing Predicted date' ;
+COMMENT ON COLUMN epis_hidrics_balance.dt_close_balance_tstz IS 'Balance Close Date' ;
+COMMENT ON COLUMN epis_hidrics_balance.dt_open_tstz IS 'Start Date' ;
+COMMENT ON COLUMN epis_hidrics_balance.dt_register_tstz IS 'Register Date' ;
+COMMENT ON COLUMN epis_hidrics_balance.id_unit_measure IS 'Unit Measure ID' ;
+
+
+alter table epis_hidrics_balance modify ( flg_status  varchar2(1 char));
+alter table epis_hidrics_balance modify ( create_user  varchar2(24 char));
+alter table epis_hidrics_balance modify ( update_user  varchar2(24 char));
+alter table epis_hidrics_balance modify ( flg_close_type  varchar2(1 char));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/01/2011 10:50
+-- CHANGE REASON: [ALERT-153427] Intake and Output-Have the possibility to register bowel movements.
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE epis_hidrics_balance ADD (total_times number(12))';
+
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_hidrics_balance.total_times  is     ''Total number of occurences.''';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Coluna já existe');
+END;
+
+
+ALTER TABLE EPIS_HIDRICS_BALANCE ADD CONSTRAINT EHBE_UME_FK FOREIGN KEY (ID_UNIT_MEASURE) REFERENCES UNIT_MEASURE(ID_UNIT_MEASURE);
+
+COMMENT ON TABLE epis_hidrics_balance IS 'Hidrics balance registries.' ;
+
+COMMENT ON COLUMN epis_hidrics_balance.id_epis_hidrics_balance IS 'Primary key Identifier' ;
+COMMENT ON COLUMN epis_hidrics_balance.id_epis_hidrics IS 'Hidrics episode ID' ;
+COMMENT ON COLUMN epis_hidrics_balance.id_prof_close IS 'Professional that closes the balance.' ;
+COMMENT ON COLUMN epis_hidrics_balance.total_admin IS 'Total of administrations.' ;
+COMMENT ON COLUMN epis_hidrics_balance.total_elim IS 'Total of eliminations.' ;
+COMMENT ON COLUMN epis_hidrics_balance.dt_prev_close_tstz IS 'Closing Predicted date' ;
+COMMENT ON COLUMN epis_hidrics_balance.dt_close_balance_tstz IS 'Balance Close Date' ;
+COMMENT ON COLUMN epis_hidrics_balance.dt_open_tstz IS 'Start Date' ;
+COMMENT ON COLUMN epis_hidrics_balance.dt_register_tstz IS 'Register Date' ;
+COMMENT ON COLUMN epis_hidrics_balance.id_unit_measure IS 'Unit Measure ID' ;
+
+
+alter table epis_hidrics_balance modify ( flg_status  varchar2(1 char));
+alter table epis_hidrics_balance modify ( create_user  varchar2(24 char));
+alter table epis_hidrics_balance modify ( update_user  varchar2(24 char));
+alter table epis_hidrics_balance modify ( flg_close_type  varchar2(1 char));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 26/10/2011 11:54
+-- CHANGE REASON: [ALERT-201548] Positioning - INP: UX Intake and Output
+begin
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN epis_hidrics_balance.flg_status IS ''Intake and output balance status: R - Required; E - Under going; I - Interrupted; C - Cancelled; F - Finnished; D - Draft; L - Cancelled draft; O - Expired''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+-- CHANGE END: António Neto
+
+
+-- CHANGED BY: Vanessa Barsottelli
+-- CHANGE DATE: 18/04/2016 11:56
+-- CHANGE REASON: [ALERT-320093] PIN Intake and Output improvements - DB Development
+ALTER TABLE epis_hidrics_balance MODIFY (total_admin NUMBER(26,2), total_elim NUMBER(26,2));
+-- CHANGE END: Vanessa Barsottelli

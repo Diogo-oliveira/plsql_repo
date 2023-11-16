@@ -1,0 +1,30 @@
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 21/07/2009
+-- CHANGE REASON: [ALERT-37072]
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE global temporary TABLE cm_cursor(file_name VARCHAR2(4000), xml_value CLOB, crypt VARCHAR2(1)) ON COMMIT DELETE rows';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+comment on table cm_cursor is 'Temporary table for JAVA interface';
+
+comment on column cm_cursor.file_name is 'File name';
+comment on column cm_cursor.xml_value  is 'XML content';
+comment on column cm_cursor.crypt is 'Crypt file flag (Y/N)';
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 09/07/2018 11:31
+-- CHANGE REASON: [EMR-4796] 
+DECLARE l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE alert.cm_cursor move lob(xml_value) store AS (tablespace alert_lob)';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: Pedro Henriques

@@ -1,0 +1,42 @@
+-- Create table
+create table EPIS_TYPE_SOFT_INST
+(
+  ID_EPIS_TYPE   NUMBER(24) not null,
+  ID_SOFTWARE    NUMBER(24) not null,
+  ID_INSTITUTION NUMBER(24) default 0 not null
+)
+tablespace TABLE_S
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table EPIS_TYPE_SOFT_INST
+  add constraint ETSI_PK primary key (ID_EPIS_TYPE, ID_SOFTWARE, ID_INSTITUTION)
+  using index 
+  tablespace TABLE_M
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+alter table EPIS_TYPE_SOFT_INST
+  add constraint ETSI_ET_PK foreign key (ID_EPIS_TYPE)
+  references EPIS_TYPE (ID_EPIS_TYPE);
+alter table EPIS_TYPE_SOFT_INST
+  add constraint ETSI_I_FK foreign key (ID_INSTITUTION)
+  references INSTITUTION (ID_INSTITUTION);
+alter table EPIS_TYPE_SOFT_INST
+  add constraint ETSI_S_FK foreign key (ID_SOFTWARE)
+  references SOFTWARE (ID_SOFTWARE);
+-- Grant/Revoke object privileges 
+grant select on EPIS_TYPE_SOFT_INST to ALERT_VIEWER;

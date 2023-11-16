@@ -1,0 +1,1 @@
+GRANT SELECT ON v_p1_match TO INTF_ALERT;

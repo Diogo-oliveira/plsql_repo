@@ -1,0 +1,48 @@
+create table PRESCRIPTION_STD_INSTR
+(
+  ID_PRESCRIPTION_STD_INSTR NUMBER(24),
+  UNIT_MEASURE_QTY          NUMBER(24),
+  ID_UNIT_MEASURE_FREQ      NUMBER(24),
+  ID_UNIT_MEASURE_DUR       NUMBER(24),
+  FORM_FARM_ID              VARCHAR2(255),
+  VERSION                   VARCHAR2(10),
+  QTY                       NUMBER(24,4),
+  FREQUENCY                 NUMBER(24,4),
+  DURATION                  NUMBER(24,4)
+)
+
+COMMENT ON TABLE PRESCRIPTION_STD_INSTR IS 'Instruções Standard para posologia';
+
+comment on column PRESCRIPTION_STD_INSTR.VERSION is 'Versão (PT/USA)';
+comment on column PRESCRIPTION_STD_INSTR.QTY is 'Quantidade';
+comment on column PRESCRIPTION_STD_INSTR.FREQUENCY is 'Frequência';
+comment on column PRESCRIPTION_STD_INSTR.DURATION is 'Duração';
+comment on column PRESCRIPTION_STD_INSTR.UNIT_MEASURE_QTY is 'Unidade de medida da quantidade';
+comment on column PRESCRIPTION_STD_INSTR.ID_UNIT_MEASURE_FREQ is 'Unidade de medida da frequência';
+comment on column PRESCRIPTION_STD_INSTR.ID_UNIT_MEASURE_DUR is 'Unidade de medida da duração';
+comment on column PRESCRIPTION_STD_INSTR.FORM_FARM_ID is 'Forma de apresentação do medicamento';
+
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-JAN-19
+-- CHANGING REASON: Alteração da tabela das instruções standar de forma a podermos parametrizar posologias por medicamento
+alter table prescription_std_instr add (emb_id VARCHAR2(255));
+-- CHANGE END Patrícia Neto
+
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2009-JAN-22
+-- CHANGING REASON: alteração da tabela das posologias standard
+alter table PRESCRIPTION_STD_INSTR add flg_default VARCHAR2(1);
+-- Add comments to the columns 
+comment on column PRESCRIPTION_STD_INSTR.flg_default
+  is 'registo por defeito';
+
+alter table PRESCRIPTION_STD_INSTR add FLG_TYPE VARCHAR2(1);
+-- CHANGE END Patrícia Neto	
+	
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:58
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESCRIPTION_STD_INSTR IS 'Instruções Standard para posologia [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

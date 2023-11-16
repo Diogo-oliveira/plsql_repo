@@ -1,0 +1,74 @@
+create table ACCOUNTS_COUNTRY
+(
+  ID_ACCOUNT            NUMBER(24) NOT NULL,
+  ID_COUNTRY           NUMBER(24) NOT NULL
+)
+tablespace TABLE_M;
+-- Add comments to the table 
+comment on table ACCOUNTS_COUNTRY is 'Associations between affiliations and countries';
+-- Add comments to the columns 
+comment on column ACCOUNTS_COUNTRY.ID_ACCOUNT is 'Affiliation Id';
+comment on column ACCOUNTS_COUNTRY.ID_COUNTRY is 'Country Id';
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 24/09/2012 14:23
+-- CHANGE REASON: [ALERT-240388] new fields in accounts model
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table accounts_country add (rank number(24) default 0, format_num number(24,3))';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('Column already there');
+END;
+/
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table accounts_country add (text_format_x number(24) default 0, text_format_y number(24)) default 0';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('Column already there');
+END;
+/
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column accounts_country.rank IS ''Account configuration rank.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column accounts_country.format_num IS ''Keypad format numbers. (only when fill_type =K)''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column accounts_country.text_format_x IS ''Text fields format number of columns''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column accounts_country.text_format_y IS ''Text fields format number of rows.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 23/08/2013 16:53
+-- CHANGE REASON: [ALERT-263319] formats with 0 chars
+--                fields not usable
+alter table  accounts_country modify text_format_x number(24) default null;
+alter table  accounts_country modify text_format_y number(24) default null;
+-- CHANGE END:  Rui Gomes

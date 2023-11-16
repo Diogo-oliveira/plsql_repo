@@ -1,0 +1,1 @@
+GRANT SELECT ON ALERT.analysis_req_temp TO ALERT_VIEWER;

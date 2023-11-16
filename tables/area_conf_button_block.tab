@@ -1,0 +1,66 @@
+-- CHANGED BY: Teresa Coutinho
+-- CHANGE DATE: 28/04/2009 ALERT-1575
+
+create table AREA_CONF_BUTTON_BLOCK
+(
+  ID_AREA_CONF_BUTTON_BLOCK   NUMBER(24) not null,
+  CODE_AREA_CONF_BUTTON_BLOCK VARCHAR2(200) not null,
+  DESC_AREA_CONF_BUTTON_BLOCK VARCHAR2(200),
+  CREATE_USER                 VARCHAR2(24),
+  CREATE_TIME                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION          NUMBER(24),
+  UPDATE_USER                 VARCHAR2(24),
+  UPDATE_TIME                 TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION          NUMBER(24)
+);
+-- Add comments to the table 
+comment on table AREA_CONF_BUTTON_BLOCK
+  is 'This table stores the areas';
+-- Add comments to the columns 
+comment on column AREA_CONF_BUTTON_BLOCK.ID_AREA_CONF_BUTTON_BLOCK
+  is 'Primary key';
+comment on column AREA_CONF_BUTTON_BLOCK.CODE_AREA_CONF_BUTTON_BLOCK
+  is 'Application Area';
+comment on column AREA_CONF_BUTTON_BLOCK.DESC_AREA_CONF_BUTTON_BLOCK
+  is 'Functionality area';
+comment on column AREA_CONF_BUTTON_BLOCK.CREATE_USER
+  is 'Creation User';
+comment on column AREA_CONF_BUTTON_BLOCK.CREATE_TIME
+  is 'Creation Time';
+comment on column AREA_CONF_BUTTON_BLOCK.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column AREA_CONF_BUTTON_BLOCK.UPDATE_USER
+  is 'Update User';
+comment on column AREA_CONF_BUTTON_BLOCK.UPDATE_TIME
+  is 'Update Time';
+comment on column AREA_CONF_BUTTON_BLOCK.UPDATE_INSTITUTION
+  is 'Update Institution';
+--CHANGE END
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 03/12/2010 10:05
+-- CHANGE REASON: [ALERT-146512] 
+ALTER TABLE area_conf_button_block add flg_type VARCHAR2(1 CHAR);
+ALTER TABLE area_conf_button_block add rank NUMBER(12, 0);
+ALTER TABLE area_conf_button_block add sample_text_code VARCHAR2(200 CHAR);
+ALTER TABLE area_conf_button_block add code_message_dn VARCHAR2(200 CHAR);
+ALTER TABLE area_conf_button_block add code_message_ti VARCHAR2(200 CHAR);
+
+COMMENT ON COLUMN AREA_CONF_BUTTON_BLOCK.FLG_TYPE IS 'Flag indicating Area Type - C: Motivo S: Subjectivo; B: Objectivo; A: Avaliação; L: Plano; U: Indefenido';
+COMMENT ON COLUMN AREA_CONF_BUTTON_BLOCK.RANK IS 'Default block visualization order';
+COMMENT ON COLUMN AREA_CONF_BUTTON_BLOCK.SAMPLE_TEXT_CODE IS 'Sample text code associated with the Area';
+COMMENT ON COLUMN AREA_CONF_BUTTON_BLOCK.CODE_MESSAGE_DN IS 'Code message for DeepNav';
+COMMENT ON COLUMN AREA_CONF_BUTTON_BLOCK.CODE_MESSAGE_TI IS 'Code message for InformationTransfer';
+-- CHANGE END: Pedro Teixeira
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:33
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+drop table area_conf_button_block;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+drop table area_conf_button_block;
+-- CHANGE END: Sofia Mendes

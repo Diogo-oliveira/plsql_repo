@@ -1,0 +1,24 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 29/10/2009 04:37
+-- CHANGE REASON: [ALERT-51207] 
+alter table CPOE_PROCESS add constraint CPOEP_PK primary key (ID_CPOE_PROCESS);
+ALTER TABLE CPOE_PROCESS add CONSTRAINT CPOEP_FLG_STATUS_CHK CHECK (FLG_STATUS in ('A', 'I', 'D', 'E'));
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 12/10/2010 10:06
+-- CHANGE REASON: [ALERT-128784] 
+DECLARE
+    e_exception EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_exception, -02264); -- when ORA-02264: name already used by an existing constraint
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_PROCESS add constraint CPOEP_FLG_CPOE_REFRESH_CHK check ((FLG_CPOE_PROC_AUTO_REFRESH = ''N'' and DT_CPOE_PROC_AUTO_REFRESH is null) or
+                                                                          (FLG_CPOE_PROC_AUTO_REFRESH = ''Y'' and DT_CPOE_PROC_AUTO_REFRESH is not null) or
+                                                                          (FLG_CPOE_PROC_AUTO_REFRESH = ''R'') or
+                                                                          (FLG_CPOE_PROC_AUTO_REFRESH = ''I'' and DT_CPOE_PROC_AUTO_REFRESH is not null))';
+EXCEPTION
+    WHEN e_exception THEN
+        NULL;
+END;
+/   
+-- CHANGE END: Tiago Silva

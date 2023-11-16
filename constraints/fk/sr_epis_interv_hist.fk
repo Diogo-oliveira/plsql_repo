@@ -1,0 +1,168 @@
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 06/12/2011 10:33
+-- CHANGE REASON: [ALERT-208518] 
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02275);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_SEV_FK foreign key (ID_SR_EPIS_INTERV) references SR_EPIS_INTERV (ID_SR_EPIS_INTERV)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+  
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02275);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_DIAG_FK foreign key (ID_DIAGNOSIS) references DIAGNOSIS (ID_DIAGNOSIS)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02275);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_EPIS_CONTEXT_FK foreign key (ID_EPISODE_CONTEXT) references EPISODE (ID_EPISODE)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02275);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_EPIS_FK foreign key (ID_EPISODE) references EPISODE (ID_EPISODE)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+  
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02275);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_PROF_FK foreign key (ID_PROF_REQ) references PROFESSIONAL (ID_PROFESSIONAL)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02275);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_PROF_FK2 foreign key (ID_PROF_CANCEL) references PROFESSIONAL (ID_PROFESSIONAL)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02275);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_PROF_FK3 foreign key (ID_PROF_REQ_UNC) references PROFESSIONAL (ID_PROFESSIONAL)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+  
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02275);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_SIN_FK foreign key (ID_SR_INTERVENTION) references SR_INTERVENTION (ID_SR_INTERVENTION)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+  
+DECLARE
+    e_exception EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_exception, -02275);
+
+BEGIN
+   BEGIN
+        EXECUTE IMMEDIATE 'alter table SR_EPIS_INTERV_HIST add constraint SEVH_SR_CAN_REA_FK foreign key (ID_SR_CANCEL_REASON) references CANCEL_REASON (ID_CANCEL_REASON)';
+    EXCEPTION
+        WHEN e_exception THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 28/05/2014 10:26
+-- CHANGE REASON: [ALERT-283085] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+    EXECUTE IMMEDIATE 'alter table sr_epis_interv_hist add constraint seih_nor_fk foreign key (id_not_order_reason) references not_order_reason(id_not_order_reason)';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/07/2017 14:08
+-- CHANGE REASON: [ALERT-331061]
+ALTER TABLE SR_EPIS_INTERV_HIST DROP CONSTRAINT SEVH_SIN_FK;
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/07/2017 14:08
+-- CHANGE REASON: [ALERT-331061]
+ALTER TABLE SR_EPIS_INTERV_HIST ADD CONSTRAINT SEVH_SIN_FK FOREIGN KEY (ID_SR_INTERVENTION) REFERENCES INTERVENTION (ID_INTERVENTION);
+-- CHANGE END: Pedro Henriques

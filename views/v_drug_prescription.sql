@@ -1,0 +1,20 @@
+CREATE OR REPLACE VIEW V_DRUG_PRESCRIPTION AS
+SELECT id_drug_prescription,
+       id_episode,
+       id_professional,
+       flg_type,
+       barcode,
+       num_days_expire,
+       flg_time,
+       flg_status,
+       id_prof_cancel,
+       notes_cancel,
+       id_episode_origin,
+       id_episode_destination,
+       id_prev_episode,
+       dt_drug_prescription_tstz,
+       dt_begin_tstz,
+       dt_cancel_tstz,
+       id_patient,
+       id_parent
+  FROM drug_prescription;

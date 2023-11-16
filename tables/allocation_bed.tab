@@ -1,0 +1,40 @@
+
+
+  CREATE TABLE ALLOCATION_BED
+   (	ID_ALLOCATION_BED NUMBER(12,0) NOT NULL ENABLE,
+	ID_EPISODE NUMBER(12,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(12,0) NOT NULL ENABLE,
+	DT_CREATION DATE NOT NULL ENABLE,
+	ID_BED NUMBER(12,0),
+	DESC_BED VARCHAR2(200),
+	NOTES VARCHAR2(200),
+	ID_ROOM NUMBER(12,0)
+   );
+
+
+COMMENT ON COLUMN allocation_bed.id_room IS 'Sala onde esteve localizada a cama' ;
+
+alter table ALLOCATION_BED modify NOTES VARCHAR2(4000);
+
+alter table allocation_bed modify id_bed number(24);
+
+alter table allocation_bed modify id_room number(24);
+
+alter table allocation_bed 
+add (dt_creation_tstz timestamp with local time zone); 
+
+
+-- INPATIENT LMAIA 22-09-2008
+-- DROP das colunas DT_... que não são Timezone (desnormalização)
+alter table allocation_bed drop (DT_CREATION);
+-- END
+
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 06/11/2009 08:10
+-- CHANGE REASON: [ADT-1670] Removed allocation_bed constraints.
+ALTER TABLE allocation_bed_bck DROP constraint ALB_ROO_FK;
+ALTER TABLE allocation_bed_bck DROP constraint ALL_BED_BED_FK;
+ALTER TABLE allocation_bed_bck DROP constraint ALL_BED_EPIS_FK;
+ALTER TABLE allocation_bed_bck DROP constraint ALL_BED_PROF_FK;
+-- CHANGE END: Luís Maia

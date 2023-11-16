@@ -1,0 +1,85 @@
+
+
+  CREATE TABLE PRESCRIPTION_XML
+   (	ID_PRESCRIPTION_XML NUMBER(24,0) NOT NULL ENABLE,
+	NUMERO_RECEITA NUMBER(13,0) NOT NULL ENABLE,
+	LOCAL_PRESCRICAO VARCHAR2(7) NOT NULL ENABLE,
+	PRESCRITOR VARCHAR2(7) NOT NULL ENABLE,
+	RECEITA_RENOVAVEL NUMBER(1,0) NOT NULL ENABLE,
+	DATA_PRESCRICAO VARCHAR2(10) NOT NULL ENABLE,
+	RECM VARCHAR2(4),
+	SEXO_UTENTE VARCHAR2(1) NOT NULL ENABLE,
+	DATA_NASCIMENTO_UTENTE VARCHAR2(10) NOT NULL ENABLE,
+	LOCALIDADE_UTENTE VARCHAR2(6) NOT NULL ENABLE,
+	DATA_FICHEIRO VARCHAR2(10),
+
+	HORA_FICHEIRO VARCHAR2(8),
+	FLG_XML VARCHAR2(1) NOT NULL ENABLE,
+	NUMERO_VIAS NUMBER(1,0)
+   );
+
+
+COMMENT ON COLUMN prescription_xml.flg_xml IS 'Flag que indica se esta receita já foi enviada no ficheiro XML: Y (já foi enviada), N (não foi enviada), T (receita "temporária" - ainda não foi impressa)' ;
+COMMENT ON COLUMN prescription_xml.numero_vias IS 'Nº de vias da receita. Se for receita renovável, este campo assume um valor entre 1 e 3; caso contrário, o valor é 1.' ;
+
+-- Add/modify columns 
+alter table PRESCRIPTION_XML add NUM_BENEFICIARIO number(12);
+alter table PRESCRIPTION_XML add ENT_RESP varchar2(100);
+alter table PRESCRIPTION_XML add FLG_CANCEL varchar2(1);
+alter table PRESCRIPTION_XML add DT_CANCEL date;
+alter table PRESCRIPTION_XML add PROF_CANCEL number(24);
+alter table PRESCRIPTION_XML add DT_WS_SEND date;
+alter table PRESCRIPTION_XML add DT_WS_RECEIVED date;
+alter table PRESCRIPTION_XML add FLG_WS varchar2(2);
+alter table PRESCRIPTION_XML add ERROR_MSG varchar2(2000);
+alter table PRESCRIPTION_XML add ORIGEM varchar2(30);
+alter table PRESCRIPTION_XML add WS_TICKET varchar2(30) NULL;
+
+-- Add comments to the columns 
+comment on column PRESCRIPTION_XML.NUM_BENEFICIARIO
+  is 'Numero de beneficiario do utente';
+comment on column PRESCRIPTION_XML.ENT_RESP
+  is 'Entidade responsavel';
+comment on column PRESCRIPTION_XML.FLG_CANCEL
+  is 'Cancelado: 1-sim, 0- Não';
+comment on column PRESCRIPTION_XML.DT_CANCEL
+  is 'Data de cancelamento';
+comment on column PRESCRIPTION_XML.PROF_CANCEL
+  is 'Profissional que cancelou';
+comment on column PRESCRIPTION_XML.DT_WS_SEND
+  is 'Data de envio de pedio por web service';
+comment on column PRESCRIPTION_XML.DT_WS_RECEIVED
+  is 'Data de resposta a pedio por web service';
+comment on column PRESCRIPTION_XML.FLG_WS
+  is 'Resposta ao pedido por web service';
+comment on column PRESCRIPTION_XML.ERROR_MSG
+  is 'Log erro de pedido/resposta por web service';
+comment on column PRESCRIPTION_XML.ORIGEM
+  is 'Origem';
+comment on column PRESCRIPTION_XML.WS_TICKET
+  is 'Ticket atribuído à prescrição após o envio ao Web Service';
+
+
+-- unique key for column PRESCRIPTION_XML.NUMERO_RECEITA
+declare
+	l_error_code number;
+begin
+	execute immediate 'alter table PRESCRIPTION_XML add constraint PXL_NR_UK unique (NUMERO_RECEITA)';
+exception
+	when others then
+		l_error_code := SQLCODE;
+
+		if (l_error_code = -2261) then --ORA-02261: such unique or primary key already exists in the table
+			null;
+		else
+			raise;
+		end if;
+end;
+/
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:06
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESCRIPTION_XML IS ' [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

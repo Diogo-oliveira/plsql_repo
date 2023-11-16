@@ -1,0 +1,187 @@
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 03/12/2010 10:05
+-- CHANGE REASON: [ALERT-146512] 
+CREATE TABLE PN_SOAP_BLOCK
+(  
+  ID_PN_SOAP_BLOCK NUMBER(24,0) NOT NULL ENABLE,
+  ID_AREA_CONF_BUTTON_BLOCK NUMBER(24,0) NOT NULL ENABLE,
+  BLOCK_NAME VARCHAR2(1000 CHAR),
+  -----------------
+  CREATE_USER VARCHAR2(24),
+  CREATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24,0),
+  UPDATE_USER VARCHAR2(24),
+  UPDATE_TIME TIMESTAMP (6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24,0)
+);
+
+COMMENT ON TABLE PN_SOAP_BLOCK IS 'Progress Notes SOAP blocks used to configure progress notes deepnav';
+COMMENT ON COLUMN PN_SOAP_BLOCK.ID_PN_SOAP_BLOCK IS 'Primary key';
+COMMENT ON COLUMN PN_SOAP_BLOCK.ID_AREA_CONF_BUTTON_BLOCK IS 'Foreign key for AREA_CONF_BUTTON_BLOCK';
+COMMENT ON COLUMN PN_SOAP_BLOCK.Block_Name IS 'Override block name - overrides AREA_CONF_BUTTON_BLOCK.CODE_AREA_CONF_BUTTON_BLOCK';
+COMMENT ON COLUMN PN_SOAP_BLOCK.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN PN_SOAP_BLOCK.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN PN_SOAP_BLOCK.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN PN_SOAP_BLOCK.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN PN_SOAP_BLOCK.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN PN_SOAP_BLOCK.UPDATE_INSTITUTION IS 'Update Institution';
+-- CHANGE END: Pedro Teixeira
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 11:49
+-- CHANGE REASON: [ALERT-164552] soap blocks existing model changes
+declare
+  invalid_identifier exception;
+  column_exists exception;
+  pragma exception_init(invalid_identifier, -00904);
+  pragma exception_init(column_exists, -01430);
+begin
+  begin
+    execute immediate 'alter table pn_soap_block drop (ID_AREA_CONF_BUTTON_BLOCK, BLOCK_NAME)';
+  exception
+    when invalid_identifier then dbms_output.put_line('columns ID_AREA_CONF_BUTTON_BLOCK, BLOCK_NAME do not exist');
+  end;
+  begin
+    execute immediate '
+alter table pn_soap_block add (
+  desc_pn_soap_block      varchar2(200 char),
+  flg_type                varchar2(1 char),
+  rank                    number(6),
+  sample_text_code        varchar2(200 char),
+  code_message_dn         varchar2(200 char),
+  code_message_ti         varchar2(200 char),
+  code_pn_soap_block_hist varchar2(200 char)
+)
+';
+  exception
+    when column_exists then dbms_output.put_line('columns DESC_PN_SOAP_BLOCK, FLG_TYPE, RANK, SAMPLE_TEXT_CODE, CODE_MESSAGE_DN, CODE_MESSAGE_TI, CODE_PN_SOAP_BLOCK_HIST already exist');
+  end;
+end;
+/
+
+comment on table pn_soap_block
+  is 'Progress notes SOAP blocks.';
+
+comment on column pn_soap_block.desc_pn_soap_block
+  is 'Internal description.';
+comment on column pn_soap_block.flg_type
+  is 'Area type flag: C - reason for visit, S - subjective, B - objective, A - assessment, L - plan, U - unclassified.';
+comment on column pn_soap_block.rank
+  is 'Default rank.';
+comment on column pn_soap_block.sample_text_code
+  is 'Sample text code associated with the area.';
+comment on column pn_soap_block.code_message_dn
+  is 'Deepnav title code.';
+comment on column pn_soap_block.code_message_ti
+  is 'TI title code.';
+comment on column pn_soap_block.code_pn_soap_block_hist
+  is 'Code for translation of the history edition records.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:29
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table pn_soap_block add (ID_SWF_FILE_VIEWER NUMBER(24));
+alter table pn_soap_block add (ID_SYS_BUTTON_VIEWER NUMBER(24));
+alter table pn_soap_block add (FLG_WF_VIEWER VARCHAR2(3 char));
+
+COMMENT ON column pn_soap_block.ID_SWF_FILE_VIEWER IS 'Viewer screen that is loaded when the area is selected';
+COMMENT ON column pn_soap_block.ID_SYS_BUTTON_VIEWER IS 'Viewer sys_button where the viewer screen should open';
+COMMENT ON column pn_soap_block.FLG_WF_VIEWER IS 'Flag that identifies the type of workflow that should be opened in the viewer.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 09:59
+-- CHANGE REASON: H&P phase2
+alter table pn_soap_block add (ID_SWF_FILE_VIEWER NUMBER(24));
+alter table pn_soap_block add (ID_SYS_BUTTON_VIEWER NUMBER(24));
+alter table pn_soap_block add (FLG_WF_VIEWER VARCHAR2(3 char));
+
+COMMENT ON column pn_soap_block.ID_SWF_FILE_VIEWER IS 'Viewer screen that is loaded when the area is selected';
+COMMENT ON column pn_soap_block.ID_SYS_BUTTON_VIEWER IS 'Viewer sys_button where the viewer screen should open';
+COMMENT ON column pn_soap_block.FLG_WF_VIEWER IS 'Flag that identifies the type of workflow that should be opened in the viewer.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:10
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table pn_soap_block add (ID_SWF_FILE_VIEWER NUMBER(24));
+alter table pn_soap_block add (ID_SYS_BUTTON_VIEWER NUMBER(24));
+alter table pn_soap_block add (FLG_WF_VIEWER VARCHAR2(3 char));
+
+COMMENT ON column pn_soap_block.ID_SWF_FILE_VIEWER IS 'Viewer screen that is loaded when the area is selected';
+COMMENT ON column pn_soap_block.ID_SYS_BUTTON_VIEWER IS 'Viewer sys_button where the viewer screen should open';
+COMMENT ON column pn_soap_block.FLG_WF_VIEWER IS 'Flag that identifies the type of workflow that should be opened in the viewer.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table PN_SOAP_BLOCK modify CREATE_USER varchar2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table PN_SOAP_BLOCK modify UPDATE_USER varchar2(24 CHAR)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:15
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('alter table PN_SOAP_BLOCK modify FLG_WF_VIEWER varchar2(0024 char)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER table PN_SOAP_BLOCK modify ( CODE_MESSAGE_TI not null ) ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER table PN_SOAP_BLOCK modify ( CODE_MESSAGE_DN not null ) ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:16
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('ALTER table PN_SOAP_BLOCK modify ( CODE_PN_SOAP_BLOCK_HIST not null ) ');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto

@@ -1,0 +1,52 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 09/06/2011 12:12
+-- CHANGE REASON: [ALERT-184278] 
+DECLARE
+    e_fk_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_exists, -02275); -- such a referential constraint already exists in the table
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table XMAP_RELATIONSHIP_MSI add constraint XMRMSI_SRC_XMC_FK foreign key (ID_SOURCE_MAP_CONCEPT) references XMAP_CONCEPT (ID_MAP_CONCEPT)';
+    EXCEPTION
+        WHEN e_fk_already_exists THEN
+            dbms_output.put_line('foreign key already exists');   
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table XMAP_RELATIONSHIP_MSI add constraint XMRMSI_TRG_XMC_FK foreign key (ID_TARGET_MAP_CONCEPT) references XMAP_CONCEPT (ID_MAP_CONCEPT)';
+    EXCEPTION
+        WHEN e_fk_already_exists THEN
+            dbms_output.put_line('foreign key already exists');   
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table XMAP_RELATIONSHIP_MSI add constraint XMRMSI_SRC_XMS_FK foreign key (ID_SOURCE_MAP_SET) references XMAP_SET (ID_MAP_SET)';
+    EXCEPTION
+        WHEN e_fk_already_exists THEN
+            dbms_output.put_line('foreign key already exists');   
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table XMAP_RELATIONSHIP_MSI add constraint XMRMSI_TRG_XMS_FK foreign key (ID_TARGET_MAP_SET) references XMAP_SET (ID_MAP_SET)';
+    EXCEPTION
+        WHEN e_fk_already_exists THEN
+            dbms_output.put_line('foreign key already exists');   
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table XMAP_RELATIONSHIP_MSI add constraint XMRMSI_MRK_FK foreign key (ID_MARKET) references MARKET (ID_MARKET)';
+    EXCEPTION
+        WHEN e_fk_already_exists THEN
+            dbms_output.put_line('foreign key already exists');   
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table XMAP_RELATIONSHIP_MSI add constraint XMRMSI_INST_FK foreign key (ID_INSTITUTION) references INSTITUTION (ID_INSTITUTION)';
+    EXCEPTION
+        WHEN e_fk_already_exists THEN
+            dbms_output.put_line('foreign key already exists');   
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table XMAP_RELATIONSHIP_MSI add constraint XMRMSI_SOFT_FK foreign key (ID_SOFTWARE) references SOFTWARE (ID_SOFTWARE)';
+    EXCEPTION
+        WHEN e_fk_already_exists THEN
+            dbms_output.put_line('foreign key already exists');   
+    END;
+END;
+/
+-- CHANGE END: Tiago Silva

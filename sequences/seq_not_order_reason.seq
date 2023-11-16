@@ -1,0 +1,22 @@
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 20/05/2014 14:23
+-- CHANGE REASON: [ALERT-285323 ] 
+CREATE SEQUENCE seq_not_order_reason MINVALUE 1 MAXVALUE 999999999999 START WITH 1 INCREMENT BY 1 CACHE 500 noorder
+-- CHANGE END: cristina.oliveira
+
+-- CHANGED BY: cristina.oliveira
+-- CHANGE DATE: 21/05/2014 10:04
+-- CHANGE REASON: [ALERT-285323 ] 
+DECLARE
+    e_sequence_not_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_sequence_not_exists, -02289);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE sequence seq_not_order_reason minvalue 0 maxvalue 999999999999 START WITH 1 INCREMENT BY 1 CACHE 500 noorder';
+    EXCEPTION
+        WHEN e_sequence_not_exists THEN
+            dbms_output.put_line('Sequence already exists');
+    END;
+END;
+/
+-- CHANGE END: cristina.oliveira

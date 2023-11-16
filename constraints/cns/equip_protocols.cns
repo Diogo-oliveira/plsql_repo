@@ -1,0 +1,30 @@
+
+
+  ALTER TABLE EQUIP_PROTOCOLS MODIFY (ID_EQUIP_PROTOCOLS NOT NULL ENABLE);
+
+  ALTER TABLE EQUIP_PROTOCOLS MODIFY (ID_PROTOCOLS NOT NULL ENABLE);
+
+  ALTER TABLE EQUIP_PROTOCOLS MODIFY (ID_SR_EQUIP NOT NULL ENABLE);
+
+  ALTER TABLE EQUIP_PROTOCOLS MODIFY (QTY_REQ NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 01/07/2011 12:10
+-- CHANGE REASON: [ALERT-165058] missing PK's
+DECLARE
+    e_pk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_pk_already_there, -02260);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE alert_default.equip_protocols add CONSTRAINT epl_pk primary key(id_equip_protocols)
+            USING INDEX tablespace alert_default_idx';
+    EXCEPTION
+        WHEN e_pk_already_there THEN
+            dbms_output.put_line('PK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

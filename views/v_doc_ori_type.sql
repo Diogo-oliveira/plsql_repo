@@ -1,0 +1,9 @@
+CREATE OR REPLACE VIEW v_doc_ori_type AS 
+SELECT id_doc_ori_type,
+       CODE_DOC_ORI_TYPE,
+       FLG_AVAILABLE,
+       RANK,
+       ADW_LAST_UPDATE,
+       FLG_COMMENT_TYPE,
+       FLG_IDENTIFICATION
+  FROM DOC_ORI_TYPE;

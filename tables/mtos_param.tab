@@ -1,0 +1,112 @@
+CREATE TABLE mtos_param (
+       id_mtos_param NUMBER(24) NOT NULL,
+			 id_mtos_score NUMBER(24) NOT NULL,
+			 code_mtos_param VARCHAR2(200) NOT NULL,
+			 internal_name VARCHAR2(200) NOT NULL,
+			 flg_available VARCHAR2(1) NOT NULL,
+			 rank NUMBER(6) NOT NULL,
+			 flg_fill_type VARCHAR2(1) NOT NULL,
+			 id_vital_sign NUMBER(24),
+	     id_mtos_relation NUMBER(24),
+			 id_content VARCHAR2(200),
+			 create_user VARCHAR2(24),
+			 create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 create_institution NUMBER(24),
+			 update_user VARCHAR2(24),
+			 update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+			 update_institution NUMBER(24),
+			 flg_total VARCHAR2(1)
+) TABLESPACE TABLE_S;
+
+COMMENT ON TABLE mtos_param IS 'Evaluation parameters of MTOS dataset scores';
+COMMENT ON COLUMN mtos_param.id_mtos_param IS 'Parameter identifier (Primary key)';
+COMMENT ON COLUMN mtos_param.id_mtos_score IS 'Score Identifier (Primary key)';
+COMMENT ON COLUMN mtos_param.code_mtos_param IS 'Code for translation';
+COMMENT ON COLUMN mtos_param.internal_name IS 'Database internal name';
+COMMENT ON COLUMN mtos_param.flg_available IS 'Availability: (Y) Yes (N) No';
+COMMENT ON COLUMN mtos_param.rank IS 'Value for sorting';
+COMMENT ON COLUMN mtos_param.flg_fill_type IS 'Mode of registration: (M) Multichoice (N) Numerical (L) Blocked, not editable (T) Total (score result)';
+COMMENT ON COLUMN mtos_param.id_vital_sign IS 'Vital sign identifier, if the parameter is a vital sign';
+COMMENT ON COLUMN mtos_param.id_mtos_relation IS 'Relation identifier';
+COMMENT ON COLUMN mtos_param.id_content IS 'Content unique identifier';
+COMMENT ON COLUMN mtos_param.create_user IS 'Creation user';
+COMMENT ON COLUMN mtos_param.create_time IS 'Creation date / time';
+COMMENT ON COLUMN mtos_param.create_institution IS 'Creation institution';
+COMMENT ON COLUMN mtos_param.update_user IS 'Update user';
+COMMENT ON COLUMN mtos_param.update_time IS 'Update date / time';
+COMMENT ON COLUMN mtos_param.update_institution IS 'Update institution';
+
+-- Add/modify columns 
+alter table MTOS_PARAM add ID_MTOS_SCORE_GROUP NUMBER(24);
+-- Add comments to the columns 
+comment on column MTOS_PARAM.ID_MTOS_SCORE_GROUP is 'Evaluation parameters group';
+comment on column MTOS_PARAM.FLG_FILL_TYPE is 'Mode of registration: (M) Multichoice (N) Numerical (L) Blocked, not editable (T) Total (score result) (R) Radio button';
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 29/10/2013 10:03
+-- CHANGE REASON: [ALERT-267747] added field FLG_MANDATORY on table MTOS_PARAM, update severity scores pews with this new field.
+BEGIN
+
+EXECUTE IMMEDIATE 'ALTER TABLE MTOS_PARAM add FLG_MANDATORY VARCHAR2(1 CHAR) default ''Y'' not null';
+EXECUTE IMMEDIATE 'alter TABLE MTOS_PARAM ADD CONSTRAINT FLG_MANDATORY_CHK CHECK ( FLG_MANDATORY IN (''Y'',''N'')) ENABLE';
+EXECUTE IMMEDIATE 'COMMENT ON COLUMN mtos_param.FLG_MANDATORY IS ''Flag that indicates by content if this field is mandatory (Y) Yes (N) No''';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: Object already exists.');
+END;
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:34
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Drop columns 
+alter table MTOS_PARAM drop column flg_total;
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 08/01/2018 16:00
+-- CHANGE REASON: [CALERT-1672]
+ALTER TABLE MTOS_PARAM
+ADD FLG_PARAM_TASK_TYPE VARCHAR2(2) DEFAULT NULL;
+
+UPDATE mtos_param m
+   SET m.FLG_PARAM_TASK_TYPE = 'VS'
+ WHERE m.id_vital_sign IS NOT NULL;
+ 
+ALTER TABLE MTOS_PARAM
+ADD ID_PARAM_TASK number(24) DEFAULT NULL;
+
+COMMENT ON COLUMN MTOS_PARAM.Flg_Param_Task_Type
+        IS 'Flag than indicates the type of parameter: VS-"Vital Sign"';
+        
+COMMENT ON COLUMN MTOS_PARAM.Id_Param_Task
+        IS 'Id task of the parameter (Id related to FLG_PARAM_TASK_TYPE)';
+
+COMMENT ON COLUMN MTOS_PARAM.Id_Vital_Sign
+  is 'Vital sign identifier, if the parameter is a vital sign - DEPRECATED';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 16/01/2018 08:00
+-- CHANGE REASON: [CALERT-1800]
+COMMENT ON COLUMN MTOS_PARAM.FLG_FILL_TYPE
+  is 'Mode of registration: (M) Multichoice (N) Numerical (L) Blocked, not editable (T) Total (score result) (R) Radio button (S) Multichoice with multiple selection';
+
+alter table MTOS_PARAM
+  drop constraint MPM_FLGFILLTYPE_CHK;
+alter table MTOS_PARAM
+  add constraint MPM_FLGFILLTYPE_CHK
+  check (flg_fill_type IN ('M', 'N', 'L', 'T', 'R','V','P','B','S'));  
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 19/01/2018 17:30
+-- CHANGE REASON: [CALERT-1468] 
+alter table MTOS_PARAM
+  drop constraint MPM_FLGFILLTYPE_CHK;
+alter table MTOS_PARAM
+  add constraint MPM_FLGFILLTYPE_CHK
+  check (flg_fill_type IN ('M', 'N', 'L', 'T', 'R','V','P','B','S','F'));
+-- CHANGE END: Diogo Oliveira

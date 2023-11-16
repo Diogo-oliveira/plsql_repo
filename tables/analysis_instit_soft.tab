@@ -1,0 +1,263 @@
+  CREATE TABLE ANALYSIS_INSTIT_SOFT
+   (	ID_ANALYSIS_INSTIT_SOFT NUMBER(24,0) NOT NULL ENABLE,
+	ID_ANALYSIS NUMBER(12,0) NOT NULL ENABLE,
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	FLG_MOV_PAT VARCHAR2(240),
+	FLG_PAT_RESP VARCHAR2(1),
+	FLG_FIRST_RESULT VARCHAR2(6),
+	FLG_MOV_RECIPIENT VARCHAR2(1),
+	FLG_HARVEST VARCHAR2(1),
+	QTY_HARVEST NUMBER(10,2),
+
+	ID_EXAM_CAT NUMBER(24,0) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	COST NUMBER(18,4),
+	PRICE NUMBER(18,4),
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_UNIT_MEASURE NUMBER(12,0),
+	COLOR_GRAPH VARCHAR2(200),
+	COLOR_TEXT VARCHAR2(200),
+	BOX_TYPE VARCHAR2(1),
+	FLG_FILL_TYPE VARCHAR2(2)
+   );
+
+
+COMMENT ON TABLE analysis_instit_soft IS 'Tabela de parametrização das análises por instituição / aplicação: análises requisitáveis por instituição; análises executáveis por instituição. As características variáveis por instituição / aplicação são parametrizados nos registos com FLG_TYPE = ''P'' (análises requisitáveis na instituição).' ;
+
+COMMENT ON COLUMN analysis_instit_soft.flg_type IS 'Tipo de registo: P - análises requisitáveis por instituição/ aplicação;W - análises executáveis por instituição/ aplicação' ;
+COMMENT ON COLUMN analysis_instit_soft.id_institution IS 'Instituição para a qual a análise é requisitável' ;
+COMMENT ON COLUMN analysis_instit_soft.id_software IS 'Aplicação Alert para a qual se verifica o registo' ;
+COMMENT ON COLUMN analysis_instit_soft.flg_mov_pat IS 'Necessidade de movimentação do doente (só é preenchido se FLG_TYPE=''P'')' ;
+COMMENT ON COLUMN analysis_instit_soft.flg_pat_resp IS 'Necessidade de entrega do termo de responsabilidade ao utente: Y/N (só é preenchido se FLG_TYPE=''P'')' ;
+COMMENT ON COLUMN analysis_instit_soft.flg_first_result IS 'Indicação de qual categoria de profissional deve registar resultados em 1º lugar: D - médico, T - técnico, N - enfermeiro, ou combinações (ex: DT - médico ou técnico). Esta flag é utilizada para impedir o registo de resultados pelo médico antes do técnico, por ex., para que não desapareça da grelha do técnico.' ;
+COMMENT ON COLUMN analysis_instit_soft.flg_mov_recipient IS 'Necessidade de transporte do recipiente' ;
+COMMENT ON COLUMN analysis_instit_soft.flg_harvest IS 'Indicação de q exige colheita: Y / N' ;
+COMMENT ON COLUMN analysis_instit_soft.qty_harvest IS 'Quantidade necessária na colheita, na unidade de medida do recipiente' ;
+COMMENT ON COLUMN analysis_instit_soft.id_exam_cat IS 'Categoria da análise' ;
+COMMENT ON COLUMN analysis_instit_soft.cost IS 'Custo monetário (só é preenchido se FLG_TYPE=''P'')' ;
+COMMENT ON COLUMN analysis_instit_soft.price IS 'Preço de venda (só é preenchido se FLG_TYPE=''P'')' ;
+COMMENT ON COLUMN analysis_instit_soft.id_unit_measure IS 'ID da unidade de medida' ;
+
+COMMENT ON COLUMN analysis_instit_soft.color_graph IS 'Cor atribuida a cada análise (visão gráfica)' ;
+COMMENT ON COLUMN analysis_instit_soft.color_text IS 'Cor atribuida ao texto associado a cada análise' ;
+COMMENT ON COLUMN analysis_instit_soft.box_type IS 'Tipo de caixa: N - Normal; C - Composed' ;
+COMMENT ON COLUMN analysis_instit_soft.flg_fill_type IS 'Forma de preenchimento da análise: (N) Keypad, (V) Multichoice, (T) Texto livre' ;
+
+-- CHANGED BY: Rui Spratley
+-- CHANGED DATE: 2007-OUT-10
+-- CHANGED REASON: Reformulação das análises
+
+-- Add/modify columns 
+alter table ANALYSIS_INSTIT_SOFT add ID_ANALYSIS_GROUP NUMBER(24);
+alter table ANALYSIS_INSTIT_SOFT add FLG_EXECUTE VARCHAR2 (1);
+alter table ANALYSIS_INSTIT_SOFT add FLG_JUSTIFY VARCHAR2 (1);
+alter table ANALYSIS_INSTIT_SOFT add FLG_INTERFACE VARCHAR2 (1);
+alter table ANALYSIS_INSTIT_SOFT add FLG_CHARGEABLE VARCHAR2 (1);
+
+-- Add comments to the columns 
+comment on column ANALYSIS_INSTIT_SOFT.ID_ANALYSIS_GROUP
+  is 'Grupo (perfil) de análises parametrizado';
+comment on column ANALYSIS_INSTIT_SOFT.FLG_EXECUTE
+  is 'Execução da análise na instituição: Y / N';
+comment on column ANALYSIS_INSTIT_SOFT.FLG_JUSTIFY
+  is 'Necessidade de indicação de justificação: Y/N';
+comment on column ANALYSIS_INSTIT_SOFT.FLG_INTERFACE
+  is 'Enviado para sistema externo: Y/N. Não tem utilização na aplicação Alert.';
+comment on column ANALYSIS_INSTIT_SOFT.FLG_CHARGEABLE
+  is 'Enviado para sistema externo de facturação: Y/N.';
+
+-- CHANGE END: Rui Spratley
+
+-- Add/modify columns 
+alter table ANALYSIS_INSTIT_SOFT modify ID_ANALYSIS null;
+alter table ANALYSIS_INSTIT_SOFT modify ID_EXAM_CAT null;
+
+-- Add/modify columns 
+alter table ANALYSIS_INSTIT_SOFT add FLG_AVAILABLE varchar2(1) default 'S' not null;
+-- Add comments to the columns 
+comment on column ANALYSIS_INSTIT_SOFT.FLG_AVAILABLE
+  is 'Available (Y/N)';
+
+-- Add/modify columns 
+alter table ANALYSIS_INSTIT_SOFT modify FLG_AVAILABLE default 'Y';
+
+-- CHANGED BY: Joao Sa
+-- CHANGED DATE: 2008-12-11
+-- CHANGED REASON: Conceito de execução na instituição - Y por defeito
+alter table ANALYSIS_INSTIT_SOFT modify FLG_EXECUTE default 'Y';
+
+-- CHANGED BY: José Castro
+-- CHANGED DATE: 21-04-2009 15:30
+-- CHANGED REASON: ALERT-696
+alter table ANALYSIS_INSTIT_SOFT drop column QTY_HARVEST;
+-- CHANGE END: José Castro
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 2009/05/01
+-- CHANGE REASON: ALERT-696 - JBZ
+alter table ANALYSIS_INSTIT_SOFT add flg_duplicate_warn varchar2(1);
+alter table ANALYSIS_INSTIT_SOFT add flg_collection_author varchar2(1);
+alter table ANALYSIS_INSTIT_SOFT add QTY_HARVEST NUMBER(10,2);
+-- CHANGED END: Gustavo Serrano
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 03/12/2012 17:11
+-- CHANGE REASON: [ALERT-246248] 
+ALTER TABLE ANALYSIS_INSTIT_SOFT ADD (ID_SAMPLE_TYPE NUMBER(12));
+
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_EXECUTE IS 'Execução do exame na instituição: Y / N';
+
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.QTY_HARVEST IS 'Quantidade necessária na colheita, na unidade de medida do recipiente';
+
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_DUPLICATE_WARN IS 'Warn if duplicate (Y - Display warning, N - Do not display warning)';
+
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.ID_SAMPLE_TYPE IS 'Sample type id';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:00
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS_INSTIT_SOFT IS 'Lab test configuration';
+
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.ID_ANALYSIS_INSTIT_SOFT IS 'Primary key';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.ID_ANALYSIS IS 'Lab test ID';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_TYPE IS 'Flag that indicates the configuration type: P - Available for order; W - Available to be performed';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.ID_SOFTWARE IS 'Software ID';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_MOV_PAT IS 'Flag that indicates if the patient needs to be moved (if FLG_TYPE = ''P'')';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_FIRST_RESULT IS 'Indicates which categories are allowed to register the lab test result(if FLG_TYPE = ''P''): D - Physician, T - Technician, N - Nurse';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_MOV_RECIPIENT IS 'Flag that indicates if the recipient needs to be moved (if FLG_TYPE = ''P'')';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_HARVEST IS 'Flag that indicates if the lab test is to be collected';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.ID_EXAM_CAT IS 'Lab test category ID';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.RANK IS 'Rank';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.COST IS 'Lab test cost (if FLG_TYPE = ''P'')';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.PRICE IS 'Lab test price (if FLG_TYPE = ''P'')';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.ADW_LAST_UPDATE IS 'Update date';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.COLOR_GRAPH IS 'Lab test results'' color (graph view)';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.COLOR_TEXT IS 'Lab test results'' color';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_FILL_TYPE IS 'Flag that indicates how the lab test result should be filled: N - Keypad, V - Multichoice, T - Text';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.ID_ANALYSIS_GROUP IS 'Lab test group ID';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_EXECUTE IS 'Flag that indicates if the lab test is performed inside the instituion or not (Y/N)';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_JUSTIFY IS 'Flag that indicates if the lab test needs justification';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_INTERFACE IS 'Flag that indicates if the lab test is sent to an external system';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_CHARGEABLE IS 'Flag that indicates if the lab test is going to be charged or not';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_AVAILABLE IS 'Flag that indicates if the record is available or not (Y/N)';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_DUPLICATE_WARN IS 'Flag that indicates if a warning is shown when ordering the same lab test';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.FLG_COLLECTION_AUTHOR IS 'Flag that indicates who collects the lab test';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.QTY_HARVEST IS 'Necessary quantity to be collected';
+COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.ID_SAMPLE_TYPE IS 'Sample type ID';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Amanda Lee
+-- CHANGE DATE: 2018-01-30
+-- CHANGE REASON: [CEMR-201] Lab test Pending datablock improvements
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE ANALYSIS_INSTIT_SOFT ADD (flg_category_type VARCHAR2(3 CHAR))';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'COMMENT ON COLUMN ANALYSIS_INSTIT_SOFT.flg_category_type IS '' Flag that indicates the Lab test type: GBS - Group B streptococcus ''';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+-- CHANGE END: Amanda Lee
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 2018-19-03
+-- CHANGE REASON: [EMR-5344]
+ALTER TABLE ANALYSIS_INSTIT_SOFT
+  ADD flg_priority varchar2(1);
+  
+  ALTER TABLE ANALYSIS_INSTIT_SOFT
+  ADD CONSTRAINT AIS_FLG_PRIORITY
+  CHECK (flg_priority IN ('N','U','E'));
+
+COMMENT ON COLUMN  ANALYSIS_INSTIT_SOFT.flg_priority IS 'FLG_PRIORITY: N-ROUTINE/U-ASAP/E-STAT (Values from sys_domain - ANALYSIS_REQ_DET.FLG_URGENCY)'; 
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 16/01/2019 09:17
+-- CHANGE REASON: [EMR-10829] 
+ALTER TABLE analysis_instit_soft ADD INSTR_COLLECTION VARCHAR2(4000);
+COMMENT ON COLUMN analysis_instit_soft.INSTR_COLLECTION IS 'Instructions for collection';
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 09/09/2019 11:27
+-- CHANGE REASON: [EMR-19877]
+ALTER TABLE analysis_instit_soft ADD HARVEST_INSTRUCTIONS VARCHAR2(1000 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY FLG_TYPE VARCHAR2(1 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY FLG_MOV_PAT VARCHAR2(1 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY FLG_FIRST_RESULT VARCHAR2(6 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY FLG_MOV_RECIPIENT VARCHAR2(1 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY FLG_HARVEST VARCHAR2(1 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY FLG_EXECUTE VARCHAR2(1 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY FLG_JUSTIFY VARCHAR2(1 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY FLG_INTERFACE VARCHAR2(1 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY FLG_CHARGEABLE VARCHAR2(1 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY FLG_AVAILABLE VARCHAR2(1 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY CREATE_USER VARCHAR2(24 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY UPDATE_USER VARCHAR2(24 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY FLG_DUPLICATE_WARN VARCHAR2(1 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY FLG_COLLECTION_AUTHOR VARCHAR2(1 CHAR);
+ALTER TABLE analysis_instit_soft MODIFY FLG_PRIORITY VARCHAR2(1 CHAR);
+
+COMMENT ON COLUMN analysis_instit_soft.flg_category_type IS 'Flag that indicates the lab test type: GBS - Group B streptococcus';
+COMMENT ON COLUMN analysis_instit_soft.flg_priority IS 'Flag that indicates the lab test priority by default';
+COMMENT ON COLUMN analysis_instit_soft.harvest_instructions IS 'Instructions for collection';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/11/2021 16:47
+-- CHANGE REASON: [EMR-49440]
+COMMENT ON COLUMN analysis_instit_soft.flg_category_type IS 'Flag that indicates the lab test type: GBS - Group B streptococcus; BT - Blood type';
+
+ALTER TABLE analysis_instit_soft DROP COLUMN color_graph;
+ALTER TABLE analysis_instit_soft DROP COLUMN color_text;
+ALTER TABLE analysis_instit_soft DROP COLUMN flg_fill_type;
+ALTER TABLE analysis_instit_soft DROP COLUMN instr_collection;
+-- CHANGE END: Ana Matos
+
+
+-- CHANGED BY: Adriana Salgueiro
+-- CHANGED DATE: 2021-11-9
+-- CHANGED REASON: EMR-49436
+
+ALTER TABLE alert_default.analysis_instit_soft
+  DROP COLUMN color_graph;
+ALTER TABLE alert_default.analysis_instit_soft
+  DROP COLUMN color_text;
+ALTER TABLE alert_default.analysis_instit_soft
+  DROP COLUMN flg_fill_type;
+-- CHANGE END: Adriana Salgueiro
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 21/12/2022 16:18
+-- CHANGE REASON: [EMR-56553]
+begin
+pk_versioning.run('ALTER TABLE analysis_instit_soft DROP COLUMN qty_harvest');
+end;
+/
+-- CHANGE END: Ana Matos

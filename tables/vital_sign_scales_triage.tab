@@ -1,0 +1,67 @@
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 12/10/2011 11:00
+-- CHANGE REASON: [ALERT-199029 ] 
+
+BEGIN
+pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'VITAL_SIGN_SCALES_TRIAGE', i_obj_type => 'TABLE', i_flg_category => 'CNT', i_flg_nzd => 'N');
+END;
+/
+BEGIN
+EXECUTE IMMEDIATE 'create table vital_sign_scales_triage
+(
+  ID_VITAL_SIGN_SCALES  NUMBER(24),
+  ID_TRIAGE_TYPE        NUMBER(24),
+  FLG_SCALE_TYPE        VARCHAR2(1 CHAR) NOT NULL,
+  FLG_READ_ONLY         VARCHAR2(1 CHAR) NOT NULL,
+  CREATE_USER           VARCHAR2(24 CHAR),
+  CREATE_TIME           TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24 CHAR),
+  UPDATE_TIME           TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+) tablespace TABLE_S';
+EXCEPTION 
+  WHEN OTHERS THEN 
+    NULL;
+END;
+/ 
+
+
+COMMENT ON TABLE vital_sign_scales_triage IS 'Association between vital sign scales and types of triage';
+
+COMMENT ON COLUMN vital_sign_scales_triage.ID_VITAL_SIGN_SCALES IS 'Scale ID';
+COMMENT ON COLUMN vital_sign_scales_triage.ID_TRIAGE_TYPE IS 'Triage type ID';
+COMMENT ON COLUMN vital_sign_scales_triage.FLG_SCALE_TYPE IS 'Type of pop-up used in this scale: C - common type, M - Manchester type';
+COMMENT ON COLUMN vital_sign_scales_triage.FLG_READ_ONLY IS 'This vital sign should not by edited in the vital signs area: Y - yes, N - no';
+-- CHANGE END: Pedro Fernandes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model cdoc
+-- Add comments to the table 
+comment on table VITAL_SIGN_SCALES_TRIAGE
+  is 'Association between vital sign scales and types of triage';
+-- Add comments to the columns 
+comment on column VITAL_SIGN_SCALES_TRIAGE.id_vital_sign_scales
+  is 'Vital sign scale identifier';
+comment on column VITAL_SIGN_SCALES_TRIAGE.id_triage_type
+  is 'Triage type Identifier';
+comment on column VITAL_SIGN_SCALES_TRIAGE.flg_scale_type
+  is 'Type of pop-up used in this scale: C - common type, M - Manchester type';
+comment on column VITAL_SIGN_SCALES_TRIAGE.flg_read_only
+  is 'This vital sign should not by edited in the vital signs area: Y - yes, N - no';
+comment on column VITAL_SIGN_SCALES_TRIAGE.create_user
+  is 'Create User';
+comment on column VITAL_SIGN_SCALES_TRIAGE.create_time
+  is 'Create Time';
+comment on column VITAL_SIGN_SCALES_TRIAGE.create_institution
+  is 'Create Institution';
+comment on column VITAL_SIGN_SCALES_TRIAGE.update_user
+  is 'Update User';
+comment on column VITAL_SIGN_SCALES_TRIAGE.update_time
+  is 'Update Time';
+comment on column VITAL_SIGN_SCALES_TRIAGE.update_institution
+  is 'Update Institution';
+  
+  
+-- CHANGE END: Pedro Fernandes

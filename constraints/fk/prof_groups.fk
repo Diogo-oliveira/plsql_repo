@@ -1,0 +1,28 @@
+
+
+  ALTER TABLE PROF_GROUPS ADD CONSTRAINT PG_PRF_FK FOREIGN KEY (ID_PROFESSIONAL)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+
+
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 15/07/2011 15:10
+-- CHANGE REASON: [ALERT-188516] missing FK on BO tables
+
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table PROF_GROUPS
+  add constraint PROFG_GRP_FK foreign key (ID_GROUP)
+  references ALERT.GROUPS(ID_GROUP) novalidate';
+    
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

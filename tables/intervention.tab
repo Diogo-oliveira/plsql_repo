@@ -1,0 +1,250 @@
+
+
+  CREATE TABLE INTERVENTION
+   (	ID_INTERVENTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_INTERVENTION_PARENT NUMBER(24,0),
+	CODE_INTERVENTION VARCHAR2(200) NOT NULL ENABLE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	COST NUMBER(18,4),
+	PRICE NUMBER(18,4),
+	CODE_HELP_INTERV VARCHAR2(200),
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_BODY_PART NUMBER(12,0),
+	FLG_MOV_PAT VARCHAR2(1) NOT NULL ENABLE,
+
+	ID_SPEC_SYS_APPAR NUMBER(24,0) NOT NULL ENABLE,
+	ID_INTERV_PHYSIATRY_AREA NUMBER(24,0),
+	FLG_TYPE VARCHAR2(1),
+	DURATION NUMBER(6,0),
+	PREV_RECOV_TIME NUMBER(6,0),
+	GENDER VARCHAR2(1),
+	AGE_MIN NUMBER(3,0),
+	AGE_MAX NUMBER(3,0),
+	MDM_CODING NUMBER(12,0)
+   );
+
+
+COMMENT ON TABLE intervention IS 'Procedimentos clínicos' ;
+
+COMMENT ON COLUMN intervention.flg_status IS 'Estado: activo / inactivo' ;
+COMMENT ON COLUMN intervention.cost IS 'Custo monetário' ;
+COMMENT ON COLUMN intervention.price IS 'Preço de venda' ;
+COMMENT ON COLUMN intervention.code_help_interv IS 'Código p/ tradução da ajuda aos profissionais' ;
+COMMENT ON COLUMN intervention.flg_mov_pat IS 'Necessidade de movimentação do doente' ;
+COMMENT ON COLUMN intervention.flg_type IS 'indica o tipo de intervenção. Valores possíveis: S- Intervenção Cirurgica, N- Intervenção não cirurgica, P - pensos' ;
+COMMENT ON COLUMN intervention.duration IS 'Tempo estimado da duração da intervenção (em minutos)' ;
+COMMENT ON COLUMN intervention.prev_recov_time IS 'Tempo estimado de permanência no recobro para recuperação da intervenção (em minutos)' ;
+COMMENT ON COLUMN intervention.gender IS 'Género ao qual se aplica' ;
+COMMENT ON COLUMN intervention.age_min IS 'Idade mínima à qual se aplica' ;
+COMMENT ON COLUMN intervention.age_max IS 'Idade máxima à qual se aplica' ;
+
+comment on column INTERVENTION.MDM_CODING
+  is 'Codificação de  MDM "Medical Decision Making"';
+  
+ALTER TABLE INTERVENTION 
+ ADD (CPT_CODE VARCHAR2(100));
+
+COMMENT ON COLUMN INTERVENTION.CPT_CODE IS 'INTERVENTION CPT CODE';
+
+ALTER TABLE INTERVENTION ADD (REF_FROM_CODE VARCHAR2(1))
+/
+COMMENT ON COLUMN INTERVENTION.REF_FROM_CODE IS 'Categorização utilizada no formulário de P1 ‘MOD 330.10’'
+/
+
+ALTER TABLE INTERVENTION ADD FLG_TYPE VARCHAR2(1);
+COMMENT ON COLUMN INTERVENTION.FLG_TYPE IS 'indica o tipo de intervenção. Valores possíveis: S- Intervenção Cirurgica, N- Intervenção não cirurgica, P - pensos';
+
+
+
+ALTER TABLE INTERVENTION ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN INTERVENTION.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+comment on column intervention.id_interv_physiatry_area is 'Physiatry treatment area''s ID. This value is set to NULL if this is not a physiatry intervention.';
+
+-- js: 2008-07-31. Correccao nome coluna REF_FORM_CODE
+alter table INTERVENTION rename column REF_FROM_CODE to REF_FORM_CODE;
+
+
+
+ALTER TABLE INTERVENTION ADD (BARCODE VARCHAR2(240))
+/
+COMMENT ON COLUMN INTERVENTION.BARCODE IS 'Intervention barcode'
+
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:25
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.INTERVENTION MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 06/12/2011 17:31
+-- CHANGE REASON: [ALERT-208597 ] 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); 
+BEGIN
+    EXECUTE IMMEDIATE 'alter table INTERVENTION add flg_category_type VARCHAR2(1)';
+EXCEPTION
+    WHEN e_already_exists THEN
+       dbms_output.put_line('flg_category_type on INTERVENTION already exists');
+END;
+/
+-- Add comments to the columns 
+comment on column INTERVENTION.flg_category_type
+  is 'Category Type: B - blood products ';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 11/01/2016 16:36
+-- CHANGE REASON: [ALERT-317702] 
+comment on table INTERVENTION
+  is 'Procedures catalogue';
+-- Add comments to the columns 
+comment on column INTERVENTION.id_intervention
+  is 'Procedure ID';
+comment on column INTERVENTION.id_intervention_parent
+  is 'Procedure parent ID';
+comment on column INTERVENTION.code_intervention
+  is 'Translation code';
+comment on column INTERVENTION.flg_status
+  is 'Flag that indicates the procedure status';
+comment on column INTERVENTION.cost
+  is 'Procedure cost';
+comment on column INTERVENTION.price
+  is 'Procedure price';
+comment on column INTERVENTION.code_help_interv
+  is 'Translation code for context help';
+comment on column INTERVENTION.rank
+  is 'Rank';
+comment on column INTERVENTION.adw_last_update
+  is 'Update date';
+comment on column INTERVENTION.id_body_part
+  is 'Body part ID';
+comment on column INTERVENTION.flg_mov_pat
+  is 'Flag that indicates if the patient needs to be moved';
+comment on column INTERVENTION.id_spec_sys_appar
+  is 'Specialty association to a body system ID';
+comment on column INTERVENTION.id_interv_physiatry_area
+  is 'Physiatry treatment area''s ID. This value is set to NULL if this is not a physiatry intervention.';
+comment on column INTERVENTION.flg_type
+  is 'indica o tipo de intervenção. Valores possíveis: S- Intervenção Cirurgica, N- Intervenção não cirurgica, P - pensos';
+comment on column INTERVENTION.duration
+  is 'Duration of the procedure execution (in minutes)';
+comment on column INTERVENTION.prev_recov_time
+  is 'Recovory of the procedure execution (in minutes)';
+comment on column INTERVENTION.gender
+  is 'Gender';
+comment on column INTERVENTION.age_min
+  is 'Minimum age';
+comment on column INTERVENTION.age_max
+  is 'Maximum age';
+comment on column INTERVENTION.mdm_coding
+  is 'MDM code';
+comment on column INTERVENTION.cpt_code
+  is 'CPT code';
+comment on column INTERVENTION.ref_form_code
+  is 'Referral code';
+comment on column INTERVENTION.id_content
+  is 'Content unique ID';
+comment on column INTERVENTION.barcode
+  is 'Procedure barcode';
+comment on column INTERVENTION.create_user
+  is 'Creation User';
+comment on column INTERVENTION.create_time
+  is 'Creation Time';
+comment on column INTERVENTION.create_institution
+  is 'Creation Institution';
+comment on column INTERVENTION.update_user
+  is 'Update User';
+comment on column INTERVENTION.update_time
+  is 'Update Time';
+comment on column INTERVENTION.update_institution
+  is 'Update Institution';
+comment on column INTERVENTION.flg_category_type
+  is 'Flag that indicates the procedure type: B - blood products ';
+-- CHANGE END: Ana Matos
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 15/03/2017 09:37
+-- CHANGE REASON: [ALERT-329532] 
+ALTER TABLE INTERVENTION DROP COLUMN ID_INTERV_PHYSIATRY_AREA;
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 12/06/2017 09:00
+-- CHANGE REASON: [ALERT-331066]
+ALTER TABLE INTERVENTION
+ADD FLG_TECHNICAL VARCHAR2(1) DEFAULT 'N';
+
+ALTER TABLE INTERVENTION
+ADD CONSTRAINT INTERVENTION_FLG_TECHNICAL CHECK (FLG_TECHNICAL IN ('Y','N'));
+
+ALTER TABLE INTERVENTION MODIFY flg_technical NOT NULL;  
+
+COMMENT ON COLUMN INTERVENTION.FLG_TECHNICAL
+        IS 'Flag that indicates if the intervention is an invasive intervention';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 14/07/2017 14:08
+-- CHANGE REASON: [ALERT-331061]
+ALTER TABLE INTERVENTION ADD PREV_RECOVERY_TIME NUMBER(6);
+COMMENT ON COLUMN INTERVENTION.PREV_RECOV_TIME IS 'Estimated time of staying on recovery room';
+ALTER TABLE INTERVENTION MODIFY FLG_CATEGORY_TYPE VARCHAR2(2 CHAR);
+COMMENT ON COLUMN INTERVENTION.FLG_CATEGORY_TYPE IS 'Flag that indicates the procedure type: B - blood products | SR - sirurgical intervention';
+ALTER TABLE INTERVENTION ADD ID_SYSTEM_ORGAN NUMBER(24) constraint interv_system_organ_fk references system_organ(id_system_organ);
+COMMENT ON COLUMN INTERVENTION.ID_SYSTEM_ORGAN IS 'System organ identifier (Primary key)';
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 18/05/2018 08:34
+-- CHANGE REASON: [EMR-3531] 
+COMMENT ON COLUMN INTERVENTION.PREV_RECOVERY_TIME IS 'Estimated time of staying on recovery room';
+ALTER TABLE INTERVENTION DROP COLUMN PREV_RECOV_TIME;
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 06/06/2018 12:00
+-- CHANGE REASON: [EMR-3902] 
+ALTER TABLE INTERVENTION MODIFY FLG_CATEGORY_TYPE DEFAULT 'P' NOT NULL ENABLE;
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 25/10/2021 13:59
+-- CHANGE REASON: [EMR-49139]
+begin
+pk_versioning.run('ALTER TABLE intervention MODIFY flg_type VARCHAR2(3 CHAR) NOT NULL ENABLE NOVALIDATE');
+end;
+/
+begin
+pk_versioning.run('ALTER TABLE intervention MODIFY flg_category_type DEFAULT NULL');
+end;
+/
+
+COMMENT ON COLUMN intervention.flg_type IS 'Flag that indicates the procedure type (combinations may be applied)';
+COMMENT ON COLUMN intervention.flg_category_type IS 'Flag that indicates the procedure category';
+COMMENT ON COLUMN intervention.flg_technical IS 'Flag that indicates if the procedure is an invasive intervention';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 11/11/2021 15:51
+-- CHANGE REASON: [EMR-49531]
+begin
+pk_versioning.run('ALTER TABLE intervention MODIFY flg_category_type NULL');
+end;
+/
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 11/11/2021 17:47
+-- CHANGE REASON: [EMR-49536]
+begin
+pk_versioning.run('ALTER TABLE intervention MODIFY flg_category_type DEFAULT NULL');
+end;
+/
+-- CHANGE END: Ana Matos

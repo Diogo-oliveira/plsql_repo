@@ -1,0 +1,72 @@
+-- CHANGED BY: Teresa Coutinho
+-- CHANGE DATE: 28/04/2009
+-- CHANGE REASON: [ALERT-1575] 
+
+create table PROGRESS_NOTES
+(
+  ID_EPIS_RECOMEND   NUMBER(24),
+  ID_EPIS_ANAMNESIS  NUMBER(24),
+  ID_DIAGNOSIS       NUMBER(12) not null,
+  CODE_ICD           VARCHAR2(30) not null,
+  FLG_TYPE           VARCHAR2(1) not null,
+  CREATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  CREATE_USER        VARCHAR2(24),
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER        VARCHAR2(24),
+  UPDATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+)
+;
+-- Add comments to the table 
+comment on table PROGRESS_NOTES
+  is 'This table stores all the coded free text of the new SOAP';
+-- Add comments to the columns 
+comment on column PROGRESS_NOTES.ID_EPIS_RECOMEND
+  is 'ID of the epis_recomend Table';
+comment on column PROGRESS_NOTES.ID_EPIS_ANAMNESIS
+  is 'ID of the epis_anamnesis Table (reason for visit)';
+comment on column PROGRESS_NOTES.ID_DIAGNOSIS
+  is 'ID Diagnosis';
+comment on column PROGRESS_NOTES.CODE_ICD
+  is 'International Classification of Diseases';
+comment on column PROGRESS_NOTES.FLG_TYPE
+  is '''S''- Subjective, ''B'' - Objective, ''A'' - Avaliation, ''L'' - ''Plan'', ''C'' - Complaint';
+comment on column PROGRESS_NOTES.CREATE_TIME
+  is 'Creation Time';
+comment on column PROGRESS_NOTES.CREATE_USER
+  is 'Creation User';
+comment on column PROGRESS_NOTES.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column PROGRESS_NOTES.UPDATE_USER
+  is 'Update User';
+comment on column PROGRESS_NOTES.UPDATE_TIME
+  is 'Update Time';
+comment on column PROGRESS_NOTES.UPDATE_INSTITUTION
+  is 'Update Institution';
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 02/12/2010 16:15
+-- CHANGE REASON: [ALERT-146429] ddl.sql
+alter table progress_notes drop (flg_type, code_icd)
+;
+alter table progress_notes add
+(
+  id_progress_notes  number(24),
+  id_epis_prog_notes number(24),
+  id_epis_complaint  number(24)
+)
+;
+
+comment on column progress_notes.id_progress_notes
+  is 'Primary key.';
+comment on column progress_notes.id_epis_prog_notes
+  is 'Progress notes free text record identifier.';
+comment on column progress_notes.id_epis_complaint
+  is 'Episode complaint identifier.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 02/12/2010 16:30
+-- CHANGE REASON: [ALERT-146444] progress_notes.sql (progress_notes pk creation)
+alter table progress_notes modify (id_progress_notes not null);
+-- CHANGE END: Pedro Carneiro

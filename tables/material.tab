@@ -1,0 +1,29 @@
+
+
+  CREATE TABLE MATERIAL
+   (	ID_MATERIAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_MATERIAL_PARENT NUMBER(24,0),
+	ID_MATERIAL_TYPE NUMBER(24,0) NOT NULL ENABLE,
+	CODE_MATERIAL VARCHAR2(200) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON COLUMN material.id_material IS 'ID único' ;
+COMMENT ON COLUMN material.id_material_parent IS 'ID do material "pai"' ;
+COMMENT ON COLUMN material.id_material_type IS 'ID do tipo de material' ;
+COMMENT ON COLUMN material.code_material IS 'Código para nome' ;
+COMMENT ON COLUMN material.rank IS 'Ordem de apresentação' ;
+COMMENT ON COLUMN material.adw_last_update IS 'Data da última alteração' ;
+
+--29/10/2010 Rui Batista
+--[ARCDB-271] Database object Cleaning
+begin
+
+  execute immediate 'drop table MATERIAL';
+--	
+	exception
+	when others then --ORA-00942 Table or view does not exists
+	     null;
+end;

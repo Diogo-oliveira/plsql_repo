@@ -1,0 +1,140 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:25
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'CDR_EVENT',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'TRS',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => '',
+                                             i_flg_default_child => 'N');
+END;
+/
+
+create table CDR_EVENT
+(
+  id_cdr_call            NUMBER(24) not null,
+  id_cdr_inst_par_action NUMBER(24) not null,
+  flg_hidden             VARCHAR2(1 CHAR) default 'N' not null,
+  flg_session            VARCHAR2(1 CHAR) default 'N' not null,
+  id_prof_answer         NUMBER(24),
+  dt_answer              TIMESTAMP WITH LOCAL TIME ZONE,
+  flg_answer             VARCHAR2(1 CHAR) default 'U' not null,
+  notes_answer           CLOB,
+  create_user            VARCHAR2(24 CHAR),
+  create_time            TIMESTAMP WITH LOCAL TIME ZONE,
+  create_institution     NUMBER(24),
+  update_user            VARCHAR2(24 CHAR),
+  update_time            TIMESTAMP WITH LOCAL TIME ZONE,
+  update_institution     NUMBER(24)
+);
+
+comment on table CDR_EVENT
+  is 'Clinical decision rule events. Each time the engine is called, the executed actions get registered here.';
+
+comment on column CDR_EVENT.id_cdr_call
+  is 'Rule engine call identifier.';
+comment on column CDR_EVENT.id_cdr_inst_par_action
+  is 'Rule instance parameter action identifier.';
+comment on column CDR_EVENT.flg_hidden
+  is 'Was this action hidden? Y/N. A hidden action is generated when the minimum time between events is not fulfilled.';
+comment on column CDR_EVENT.flg_session
+  is 'Was this action hidden by the user''s session? Y/N';
+comment on column CDR_EVENT.id_prof_answer
+  is 'Action answered by (professional identifier).';
+comment on column CDR_EVENT.dt_answer
+  is 'Answer date.';
+comment on column CDR_EVENT.flg_answer
+  is 'User answer: (U)nanswered, (R)ead, (O)verriden, (H)eeded.';
+comment on column CDR_EVENT.notes_answer
+  is 'Answer notes or justification.';
+comment on column CDR_EVENT.create_user
+  is 'Creation User';
+comment on column CDR_EVENT.create_time
+  is 'Creation Time';
+comment on column CDR_EVENT.create_institution
+  is 'Creation Institution';
+comment on column CDR_EVENT.update_user
+  is 'Update User';
+comment on column CDR_EVENT.update_time
+  is 'Update Time';
+comment on column CDR_EVENT.update_institution
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 11/04/2012 11:30
+-- CHANGE REASON: [ALERT-226949] cds popup improvements (ddl changes)
+declare
+  e_already_nullable exception;
+  pragma exception_init(e_already_nullable, -01451);
+begin
+  execute immediate 'alter table CDR_EVENT modify
+(
+  flg_answer null
+)
+';
+exception when e_already_nullable then
+  dbms_output.put_line('column flg_answer is already nullable in alert.cdr_event!');
+end;
+/
+
+declare
+  e_col_exists exception;
+  pragma exception_init(e_col_exists, -01430);
+begin
+  execute immediate 'alter table CDR_EVENT add
+(
+  id_cdr_answer NUMBER(24)
+)
+';
+exception when e_col_exists then
+  dbms_output.put_line('column id_cdr_answer already exist in alert.cdr_event!');
+end;
+/
+
+comment on column CDR_EVENT.flg_answer
+  is 'Deprecated.';
+comment on column CDR_EVENT.id_cdr_answer
+  is 'Answer identifier.';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 10/12/2013 15:56
+-- CHANGE REASON: [ALERT-271758] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02260);
+    e_object_exists1 EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists1, -02264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table cdr_event  add ID_CDR_EXTERNAL   NUMBER(24)';
+    EXCEPTION
+        WHEN e_object_exists1 THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+  
+END;
+-- CHANGE END: mario.mineiro
+
+-- CMF 23-04-2015
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'ALTER TABLE CDR_EVENT ADD DOMAIN_VALUE VARCHAR2(0030 CHAR);';
+pk_versioning.run( l_sql );
+end;
+/
+
+declare
+l_sql varchar2(4000);
+begin
+l_sql := 'ALTER TABLE CDR_EVENT ADD DOMAIN_FREE_TEXT VARCHAR2( 0200 CHAR)';
+pk_versioning.run( l_sql );
+end;
+/
+
+COMMENT ON COLUMN CDR_EVENT.DOMAIN_VALUE       IS 'Value of domain selected';
+COMMENT ON COLUMN CDR_EVENT.DOMAIN_FREE_TEXT   IS 'Free text inputed by user';

@@ -1,0 +1,38 @@
+CREATE TABLE pat_allergy_symptoms
+(
+    id_pat_allergy        NUMBER(24) NOT NULL,
+    id_allergy_symptoms   VARCHAR2(200) NOT NULL
+);
+
+-- COMMENTS
+COMMENT ON TABLE pat_allergy_symptoms IS 'This table represents the relationship between the tables PAT_ALLERGY and ALLERGY_SYMPTOMS';
+COMMENT ON COLUMN pat_allergy_symptoms.id_pat_allergy IS 'Compisite primary key';
+COMMENT ON COLUMN pat_allergy_symptoms.id_allergy_symptoms IS 'Compisite primary key';
+
+-- CONSTRAINTS
+ALTER TABLE pat_allergy_symptoms ADD CONSTRAINT PAS_ALLERGY_SYMPTOMS_PK PRIMARY KEY (id_pat_allergy, id_allergy_symptoms);
+
+ALTER TABLE pat_allergy_symptoms MODIFY id_allergy_symptoms NUMBER(24);
+
+--
+-- CHANGED BY...: THIAGO BRITO
+-- CHANGE DATE..: 2009-MAR-24
+-- CHANGE REASON: ALERT-23926
+
+ALTER TABLE pat_allergy_symptoms ADD revision NUMBER(24);
+COMMENT ON COLUMN pat_allergy_symptoms.revision IS 'This field holds the number of times the register was changed.';
+
+-- CHANGE END
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:12
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column PAT_ALLERGY_SYMPTOMS.id_pat_allergy
+  is 'Composite primary key';
+comment on column PAT_ALLERGY_SYMPTOMS.id_allergy_symptoms
+  is 'Composite primary key';  
+  
+-- CHANGE END: Elisabete Bugalho

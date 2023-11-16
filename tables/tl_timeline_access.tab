@@ -1,0 +1,88 @@
+
+
+  CREATE TABLE "ALERT"."TL_TIMELINE_ACCESS"
+   (	"ID_TL_TIMELINE_ACCESS" NUMBER(24,0),
+	"ID_TL_TIMELINE" NUMBER(24,0),
+	"ID_SOFTWARE" NUMBER(24,0),
+	"ID_TL_SCALE_XUPPER" NUMBER(24,0),
+	"ID_TL_SCALE_XLOWER" NUMBER(24,0),
+	"ID_INSTITUTION" NUMBER(24,0),
+	"ID_PROFESSIONAL" NUMBER(24,0),
+	"FLG_TYPE" VARCHAR2(1),
+	"RANK" NUMBER(24,0)
+   ) ;
+
+
+-- Para adicionar colunas pode ser usado código comentado
+-- De momento só são suportados os tipos de dados mais comuns.
+-- ALTER TABLE TL_TIMELINE_ACCESS ADD ID_TL_TIMELINE_ACCESS NUMBER(24,0) NOT NULL;
+-- ALTER TABLE TL_TIMELINE_ACCESS ADD ID_TL_TIMELINE NUMBER(24,0) NOT NULL;
+-- ALTER TABLE TL_TIMELINE_ACCESS ADD ID_SOFTWARE NUMBER(24,0) ;
+-- ALTER TABLE TL_TIMELINE_ACCESS ADD ID_TL_SCALE_XUPPER NUMBER(24,0) ;
+-- ALTER TABLE TL_TIMELINE_ACCESS ADD ID_TL_SCALE_XLOWER NUMBER(24,0) ;
+-- ALTER TABLE TL_TIMELINE_ACCESS ADD ID_INSTITUTION NUMBER(24,0) NOT NULL;
+-- ALTER TABLE TL_TIMELINE_ACCESS ADD ID_PROFESSIONAL NUMBER(24,0) NOT NULL;
+-- ALTER TABLE TL_TIMELINE_ACCESS ADD FLG_TYPE VARCHAR2(1) NOT NULL;
+-- ALTER TABLE TL_TIMELINE_ACCESS ADD RANK NUMBER(24,0) ;
+
+   COMMENT ON COLUMN "ALERT"."TL_TIMELINE_ACCESS"."ID_TL_TIMELINE_ACCESS" IS 'ID da escala horizontal superior';
+
+
+
+   COMMENT ON COLUMN "ALERT"."TL_TIMELINE_ACCESS"."ID_TL_TIMELINE" IS 'ID da timeline';
+
+
+
+   COMMENT ON COLUMN "ALERT"."TL_TIMELINE_ACCESS"."ID_SOFTWARE" IS 'ID do software';
+
+
+
+   COMMENT ON COLUMN "ALERT"."TL_TIMELINE_ACCESS"."ID_TL_SCALE_XUPPER" IS 'ID da escala horizontal superior';
+
+
+
+   COMMENT ON COLUMN "ALERT"."TL_TIMELINE_ACCESS"."ID_TL_SCALE_XLOWER" IS 'ID da escala  de baixo (XLOWER)';
+
+
+
+   COMMENT ON COLUMN "ALERT"."TL_TIMELINE_ACCESS"."ID_INSTITUTION" IS 'ID da instituição';
+
+
+
+   COMMENT ON COLUMN "ALERT"."TL_TIMELINE_ACCESS"."ID_PROFESSIONAL" IS 'ID do profissional';
+
+
+
+   COMMENT ON COLUMN "ALERT"."TL_TIMELINE_ACCESS"."FLG_TYPE" IS 'Flag que define o tipo de parametrização de acesso : S - software; E- Escalas';
+
+
+
+   COMMENT ON COLUMN "ALERT"."TL_TIMELINE_ACCESS"."RANK" IS 'Rank para posicionamento dos botões da escala Xlower';
+
+
+
+-- Add comments to the table 
+comment on table TL_TIMELINE_ACCESS
+  is 'Timeline security policies ';
+
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 01-Mar-2010 16:13
+-- CHANGE REASON: [ALERT-78040]  Issue Replication: Information missing on timeline (v2.6.0.1)
+
+-- Add/modify columns 
+alter table TL_TIMELINE_ACCESS add ID_MARKET NUMBER(24);
+-- Add comments to the columns 
+comment on column TL_TIMELINE_ACCESS.ID_MARKET
+  is 'ID_MARKET';
+
+
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table TL_TIMELINE_ACCESS
+  add constraint TTS_MRK_FK foreign key (ID_MARKET)
+  references market (ID_MARKET);
+
+-- CHANGE END: Filipe Machado  
+
+
+

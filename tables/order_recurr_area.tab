@@ -1,0 +1,35 @@
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 30/04/2011 18:02
+-- CHANGE REASON: [ALERT-173229] Order recurrence core development
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE ORDER_RECURR_AREA
+(
+  ID_ORDER_RECURR_AREA     NUMBER(24) NOT NULL,
+  INTERNAL_NAME            VARCHAR2(200 CHAR) NOT NULL,
+  CODE_ORDER_RECURR_AREA   VARCHAR2(200 CHAR) NOT NULL,
+  CREATE_USER              VARCHAR2(24 CHAR),
+  CREATE_TIME              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION       NUMBER(24),
+  UPDATE_USER              VARCHAR2(24 CHAR),
+  UPDATE_TIME              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION       NUMBER(24)  
+)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('ORDER_RECURR_AREA table already exists');
+END;
+/
+comment on table ORDER_RECURR_AREA is 'Order recurrence area table [ORCA]';
+comment on column ORDER_RECURR_AREA.ID_ORDER_RECURR_AREA   is 'Order recurrence area ID';
+comment on column ORDER_RECURR_AREA.INTERNAL_NAME          is 'Internal name';
+comment on column ORDER_RECURR_AREA.CODE_ORDER_RECURR_AREA is 'Order recurrence area code for translation';
+comment on column ORDER_RECURR_AREA.CREATE_USER            is 'Creation User';
+comment on column ORDER_RECURR_AREA.CREATE_TIME            is 'Creation Time';
+comment on column ORDER_RECURR_AREA.CREATE_INSTITUTION     is 'Creation Institution';
+comment on column ORDER_RECURR_AREA.UPDATE_USER            is 'Update User';
+comment on column ORDER_RECURR_AREA.UPDATE_TIME            is 'Update Time';
+comment on column ORDER_RECURR_AREA.UPDATE_INSTITUTION     is 'Update Institution';
+-- CHANGE END: Carlos Loureiro

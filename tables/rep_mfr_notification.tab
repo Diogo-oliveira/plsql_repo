@@ -1,0 +1,30 @@
+-- Create table
+create table REP_MFR_NOTIFICATION
+(
+  ID_REP_MFR_NOTIFICATION NUMBER(24) not null,
+  ID_INTERV_PRESC_DET     NUMBER(24) not null,
+  DT_REP_MFR_NOTIFICATION TIMESTAMP(6) WITH LOCAL TIME ZONE not null
+);
+-- Add comments to the table 
+comment on table REP_MFR_NOTIFICATION
+  is 'Table that relates an notification with the intervention';
+-- Add comments to the columns 
+comment on column REP_MFR_NOTIFICATION.DT_REP_MFR_NOTIFICATION
+  is 'Date of registry';
+comment on column REP_MFR_NOTIFICATION.ID_INTERV_PRESC_DET
+  is 'Intervention related';
+
+
+
+alter table rep_mfr_notification
+add FLG_NOTIFICATION_VIA   VARCHAR2(1);
+
+alter table rep_mfr_notification
+add VALUE_NOTIFICATION   VARCHAR2(4000);
+
+
+comment on column REP_MFR_NOTIFICATION.FLG_NOTIFICATION_VIA
+  is 'Forma de notificacao';
+
+comment on column REP_MFR_NOTIFICATION.VALUE_NOTIFICATION
+  is 'Valor para a qual foi notificada';

@@ -1,0 +1,66 @@
+ALTER TABLE EHR_ACCESS_CONTEXT
+ ADD (CONSTRAINT EAT_PK PRIMARY KEY 
+  (ID_EHR_ACCESS_CONTEXT));
+
+ALTER TABLE EHR_ACCESS_CONTEXT
+ ADD (CONSTRAINT EAT_FLG_TYPE_CNS CHECK (FLG_TYPE IN ('C', 'P', 'S', 'E')));
+
+alter table EHR_ACCESS_CONTEXT drop constraint EAT_FLG_TYPE_CNS;
+
+ALTER TABLE EHR_ACCESS_CONTEXT
+ ADD (CONSTRAINT EAT_FLG_TYPE_CNS CHECK (FLG_TYPE IN ('C', 'P', 'S', 'E', 'I')));
+
+
+ALTER TABLE EHR_ACCESS_CONTEXT DROP CONSTRAINT EAT_FLG_TYPE_CNS;
+ALTER TABLE EHR_ACCESS_CONTEXT ADD CONSTRAINT EAT_FLG_TYPE_CNS CHECK (FLG_TYPE IN ('C', 'P', 'S', 'E', 'I', 'N')) ENABLE;
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 08/04/2010 19:48
+-- CHANGE REASON: [ALERT-87037] 
+ALTER TABLE EHR_ACCESS_CONTEXT DROP CONSTRAINT EAT_FLG_TYPE_CNS;
+ALTER TABLE EHR_ACCESS_CONTEXT ADD CONSTRAINT EAT_FLG_TYPE_CNS CHECK (FLG_TYPE IN ('A', 'B', 'C', 'E', 'I', 'L', 'M', 'N', 'P', 'S', 'T')) ENABLE;
+-- CHANGE END: Pedro Teixeira
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 13/05/2010 12:08
+-- CHANGE REASON: [ALERT-97675] 
+ALTER TABLE ehr_access_context drop CONSTRAINT eat_flg_type_cns;
+ALTER TABLE EHR_ACCESS_CONTEXT ADD CONSTRAINT EAT_FLG_TYPE_CNS CHECK (FLG_TYPE IN ('A', 'B', 'C', 'D', 'E', 'I', 'L', 'M', 'N', 'P', 'S', 'T')) ENABLE;
+-- CHANGE END: Pedro Teixeira
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 22/11/2010 10:39
+-- CHANGE REASON: [ALERT-139330] 
+ALTER TABLE ehr_access_context drop CONSTRAINT eat_flg_type_cns;
+ALTER TABLE ehr_access_context ADD CONSTRAINT eat_flg_type_cns CHECK (FLG_TYPE IN ('A', 'B', 'C', 'D', 'E', 'I', 'L', 'M', 'N', 'P', 'S', 'T','O','F','G'))  ENABLE;
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 21/12/2010 12:42
+-- CHANGE REASON: [ALERT-139534] 
+declare
+  e_protection EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_protection, -02443);
+begin
+BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EHR_ACCESS_CONTEXT DROP CONSTRAINT EAT_FLG_TYPE_CNS';
+    EXCEPTION
+        WHEN e_protection THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+end;
+/
+declare
+  e_protection EXCEPTION;
+  PRAGMA EXCEPTION_INIT(e_protection, -02260);
+begin
+BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE EHR_ACCESS_CONTEXT ADD CONSTRAINT EAT_FLG_TYPE_CNS CHECK (FLG_TYPE IN (''P'',''N'',''O'',''M'',''D'',''S'',''E'',''C'',''I'',''T'',''F'',''A'',''B'',''L'',''G'')) ENABLE';
+    EXCEPTION
+        WHEN e_protection THEN
+            dbms_output.put_line('Operation already performed');
+    END;
+end;
+/
+;
+-- CHANGE END: Sérgio Santos

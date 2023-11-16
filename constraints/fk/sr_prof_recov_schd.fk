@@ -1,0 +1,55 @@
+
+
+  ALTER TABLE SR_PROF_RECOV_SCHD ADD CONSTRAINT SR_PRSCH_PROF_FK FOREIGN KEY (ID_PROFESSIONAL)
+	  REFERENCES PROFESSIONAL (ID_PROFESSIONAL) ENABLE;
+
+  ALTER TABLE SR_PROF_RECOV_SCHD ADD CONSTRAINT SR_PRSCH_ROOM_FK FOREIGN KEY (ID_ROOM)
+	  REFERENCES ROOM (ID_ROOM) ENABLE;
+
+
+
+
+-- CHANGED BY: Jorge Canossa
+-- CHANGE DATE: 07/02/2011 17:38
+-- CHANGE REASON: [ALERT-160488] 
+  alter table SR_PROF_RECOV_SCHD
+  add constraint SR_PRSCH_ID_INST_FK foreign key (ID_INSTITUTION)
+  references ALERT.INSTITUTION(ID_INSTITUTION); 
+  
+-- CHANGE END: Jorge Canossa
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 15:45
+-- CHANGE REASON: [ALERT-160874] [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_PROF_RECOV_SCHD ADD CONSTRAINT SR_PRSCH_INST_AN0973_FK 
+FOREIGN KEY (ID_INSTITUTION) REFERENCES INSTITUTION (ID_INSTITUTION) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SR_PRSCH_INST_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 11/03/2011 16:02
+-- CHANGE REASON: [ALERT-166974] Version FK - [INP|WR] INV_ALL_093: Missing Foreign Keys in Alert tables
+begin
+  execute immediate 'ALTER TABLE SR_PROF_RECOV_SCHD ADD CONSTRAINT SR_PRSCH_INST_FK 
+FOREIGN KEY (ID_INSTITUTION) REFERENCES INSTITUTION (ID_INSTITUTION) ENABLE NOVALIDATE';
+exception
+  when others then
+         IF SQLCODE <> -2275
+           AND SQLCODE <> -2264
+        THEN
+            raise_application_error(-20101,
+                                    'SR_PRSCH_INST_FK ' || SQLERRM);
+        END IF; 
+end;
+/
+-- CHANGE END: António Neto

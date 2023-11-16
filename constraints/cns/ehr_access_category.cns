@@ -1,0 +1,66 @@
+ALTER TABLE EHR_ACCESS_CATEGORY
+ ADD (CONSTRAINT EACY_PK PRIMARY KEY 
+  (ID_CATEGORY
+  ,ID_INSTITUTION));
+ 
+ALTER TABLE EHR_ACCESS_CATEGORY
+ ADD (CONSTRAINT EAY_FLG_HAS_EHR_ACCESS_CHK CHECK (FLG_HAS_EHR_ACCESS IN ('Y', 'N')));
+
+
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 24/03/2010 11:33
+-- CHANGE REASON: [ALERT-83122] 
+DECLARE
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ehr_access_category drop constraint eacy_pk';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ehr_access_category add CONSTRAINT eacy_pk primary key(id_category, id_institution, id_software)';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 24/03/2010 14:45
+-- CHANGE REASON: [ALERT-83122] 
+DECLARE
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table ehr_access_category drop constraint eacy_pk';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP INDEX eacy_pk'; 
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ehr_access_category add CONSTRAINT eacy_pk primary key(id_category, id_institution, id_software)';
+    EXCEPTION
+        WHEN OTHERS THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

@@ -1,0 +1,92 @@
+create table EPIS_DIAGRAM_LAYOUT
+(
+  ID_EPIS_DIAGRAM_LAYOUT NUMBER(24) not null,
+  ID_EPIS_DIAGRAM        NUMBER(24) not null,
+  ID_DIAGRAM_LAYOUT      NUMBER(24) not null,
+  LAYOUT_ORDER           NUMBER(12) not null,
+  FLG_STATUS             VARCHAR2(1) not null,
+  ID_PROFESSIONAL        NUMBER(24) not null,
+  ID_PROF_CANCEL         NUMBER(24),
+  DT_CREATION            DATE not null,
+  DT_CANCEL              DATE,
+  ADW_LAST_UPDATE        DATE not null
+);
+
+comment on table EPIS_DIAGRAM_LAYOUT
+  is 'Indica a ordem dos layouts dentro de um diagrama e quem os criou.';
+comment on column EPIS_DIAGRAM_LAYOUT.ID_EPIS_DIAGRAM_LAYOUT
+  is 'Chave Primária';
+comment on column EPIS_DIAGRAM_LAYOUT.ID_EPIS_DIAGRAM
+  is 'Identificação do diagrama.';
+comment on column EPIS_DIAGRAM_LAYOUT.ID_DIAGRAM_LAYOUT
+  is 'Identificação do layout.';
+comment on column EPIS_DIAGRAM_LAYOUT.LAYOUT_ORDER
+  is 'Ordem do layout dentro do diagrama.';
+comment on column EPIS_DIAGRAM_LAYOUT.FLG_STATUS
+  is 'Estado do layout no diagrama. A-Activo; C-Cancelado';
+comment on column EPIS_DIAGRAM_LAYOUT.ID_PROFESSIONAL
+  is 'ID do profissional que registou';
+comment on column EPIS_DIAGRAM_LAYOUT.ID_PROF_CANCEL
+  is 'ID do profissional que cancelou';
+comment on column EPIS_DIAGRAM_LAYOUT.DT_CREATION
+  is 'Data de criacao do registo';
+comment on column EPIS_DIAGRAM_LAYOUT.DT_CANCEL
+  is 'Data de cancelamento do registo';
+comment on column EPIS_DIAGRAM_LAYOUT.ADW_LAST_UPDATE
+  is 'Data para adw.';
+alter table epis_diagram_layout 
+add (dt_creation_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+ALTER TABLE EPIS_DIAGRAM_LAYOUT DROP (DT_CREATION, DT_CANCEL);
+
+
+-- CHANGED BY: Renato Nunes
+-- CHANGE DATE: 18/01/2016 10:00
+-- CHANGE REASON: [ALERT-317902] ALERT-317902 CDOC Functionalities V2 - Database model documentation and comments corretions
+-- Add comments to the table 
+comment on table EPIS_DIAGRAM_LAYOUT
+  is 'Set the layout order inside a diagram and who creates them';
+-- Add comments to the columns 
+comment on column EPIS_DIAGRAM_LAYOUT.id_epis_diagram_layout
+  is 'Primary key';
+comment on column EPIS_DIAGRAM_LAYOUT.id_epis_diagram
+  is 'Diagram identification';
+comment on column EPIS_DIAGRAM_LAYOUT.id_diagram_layout
+  is 'Layout identification';
+comment on column EPIS_DIAGRAM_LAYOUT.layout_order
+  is 'Layout inside order';
+comment on column EPIS_DIAGRAM_LAYOUT.flg_status
+  is 'Diagram layout state A-Active; C-Canceled';
+comment on column EPIS_DIAGRAM_LAYOUT.id_professional
+  is 'Id professional that register the record';
+comment on column EPIS_DIAGRAM_LAYOUT.id_prof_cancel
+  is 'Id professional that canceled the record';
+comment on column EPIS_DIAGRAM_LAYOUT.adw_last_update
+  is 'Adw date';
+comment on column EPIS_DIAGRAM_LAYOUT.dt_creation_tstz
+  is 'Date of creation register';
+comment on column EPIS_DIAGRAM_LAYOUT.dt_cancel_tstz
+  is 'Date of canceled register';
+comment on column EPIS_DIAGRAM_LAYOUT.create_user
+  is 'Creation User';
+comment on column EPIS_DIAGRAM_LAYOUT.create_time
+  is 'Creation Time';
+comment on column EPIS_DIAGRAM_LAYOUT.create_institution
+  is 'Creation Institution';
+comment on column EPIS_DIAGRAM_LAYOUT.update_user
+  is 'Update User';
+comment on column EPIS_DIAGRAM_LAYOUT.update_time
+  is 'Update Time';
+comment on column EPIS_DIAGRAM_LAYOUT.update_institution
+  is 'Update Institution';
+-- CHANGE END: Renato Nunes
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 09/12/2021 15:22
+-- CHANGE REASON: [EMR-49800]
+ALTER TABLE EPIS_DIAGRAM_LAYOUT ADD (ID_CANCEL_REASON NUMBER(24), NOTES_CANCEL VARCHAR2(1000 CHAR));
+
+COMMENT ON COLUMN EPIS_DIAGRAM_LAYOUT.ID_CANCEL_REASON IS 'Cancel reason id';
+COMMENT ON COLUMN EPIS_DIAGRAM_LAYOUT.NOTES_CANCEL IS 'Cancellation notes';
+-- CHANGE END: Ana Matos

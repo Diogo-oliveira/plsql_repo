@@ -1,0 +1,34 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 15/01/2010 08:22
+-- CHANGE REASON: [ALERT-67475] [REPLICATION]: Suitable report for discharge prescription
+DECLARE
+    e_object_exists EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955); -- indexes/sequences/tables
+BEGIN
+    BEGIN
+EXECUTE IMMEDIATE 'create table rep_section_info
+(
+id_reports          NUMBER(24) NOT NULL,
+id_rep_section      NUMBER(24) NOT NULL,
+flg_type            VARCHAR2(1 CHAR) NOT NULL,
+id_software         NUMBER(24) NOT NULL,
+id_institution      NUMBER(24) NOT NULL,
+id_market           NUMBER(24) NOT NULL
+)';
+
+        EXECUTE IMMEDIATE 'COMMENT ON TABLE rep_section_info IS ''Configuration of the range of information available in the report section (episode, visit or patient).''';
+
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN rep_section_info.id_reports IS ''Report ID''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN rep_section_info.id_rep_section IS ''Report section ID''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN rep_section_info.flg_type IS ''Type of information displayed: V - visit, E - episode, P - patient''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN rep_section_info.id_software IS ''Software ID''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN rep_section_info.id_institution IS ''Institution ID''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN rep_section_info.id_market IS ''Market ID''';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Alexandre Santos

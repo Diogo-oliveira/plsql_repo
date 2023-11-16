@@ -1,0 +1,199 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 25/02/2011 10:10
+-- CHANGE REASON: [ALERT-164483] soap note blocks configuration data model
+create table PN_BUTTON_SOFT_INST
+(
+  ID_INSTITUTION       NUMBER(24) not null,
+  ID_SOFTWARE          NUMBER(24) not null,
+  ID_DEPARTMENT        NUMBER(24) not null,
+  ID_DEP_CLIN_SERV     NUMBER(24) not null,
+  FLG_TYPE             VARCHAR2(2 char) not null,
+  ID_PN_SOAP_BLOCK     NUMBER(24) not null,
+  ID_CONF_BUTTON_BLOCK NUMBER(24) not null,
+  FLG_AVAILABLE        VARCHAR2(1 char) not null,
+  RANK                 NUMBER(6),
+  CREATE_USER          VARCHAR2(24 char),
+  CREATE_TIME          TIMESTAMP WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION   NUMBER,
+  UPDATE_USER          VARCHAR2(24 char),
+  UPDATE_TIME          TIMESTAMP WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION   NUMBER(24)
+)
+;
+
+comment on table PN_BUTTON_SOFT_INST
+  is 'Table relating SOAP Blocks and Button Blocks';
+
+comment on column PN_BUTTON_SOFT_INST.ID_INSTITUTION
+  is 'Id software';
+comment on column PN_BUTTON_SOFT_INST.ID_SOFTWARE
+  is 'Id software';
+comment on column PN_BUTTON_SOFT_INST.ID_DEPARTMENT
+  is 'Service identifier.';
+comment on column PN_BUTTON_SOFT_INST.ID_DEP_CLIN_SERV
+  is 'Service and specialty association identifier.';
+comment on column PN_BUTTON_SOFT_INST.FLG_TYPE
+  is 'Note type flag: A - ambulatory progress note, H - history and physical, P - progress note, L - prolonged service note, CC - critical care note, CR - consult note.';
+comment on column PN_BUTTON_SOFT_INST.ID_PN_SOAP_BLOCK
+  is 'Foreign key for PN_SOAP_BLOCK';
+comment on column PN_BUTTON_SOFT_INST.ID_CONF_BUTTON_BLOCK
+  is 'Foreign key for CONF_BUTTON_BLOCK';
+comment on column PN_BUTTON_SOFT_INST.FLG_AVAILABLE
+  is 'Flag indicating if relational record is available';
+comment on column PN_BUTTON_SOFT_INST.RANK
+  is 'Used to configure the visualization order';
+comment on column PN_BUTTON_SOFT_INST.CREATE_USER
+  is 'Creation User';
+comment on column PN_BUTTON_SOFT_INST.CREATE_TIME
+  is 'Creation Time';
+comment on column PN_BUTTON_SOFT_INST.CREATE_INSTITUTION
+  is 'Creation Institution';
+comment on column PN_BUTTON_SOFT_INST.UPDATE_USER
+  is 'Update User';
+comment on column PN_BUTTON_SOFT_INST.UPDATE_TIME
+  is 'Update Time';
+comment on column PN_BUTTON_SOFT_INST.UPDATE_INSTITUTION
+  is 'Update Institution';
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 17/10/2011 10:26
+-- CHANGE REASON: [ALERT-199727] H&P phase 2
+alter table pn_button_soft_inst drop column flg_type;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:31
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table pn_button_soft_inst add (id_pn_note_type number(24));
+
+COMMENT ON column pn_button_soft_inst.id_pn_note_type IS 'Note type id.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table pn_button_soft_inst add (id_pn_note_type number(24));
+
+COMMENT ON column pn_button_soft_inst.id_pn_note_type IS 'Note type id.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 12:59
+-- CHANGE REASON: [ALERT-206417] H&P phase 2
+alter table pn_button_soft_inst drop column flg_type;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 13:13
+-- CHANGE REASON: [ALERT-206287 ] H&P phase 2
+alter table pn_button_soft_inst add id_parent number(24);
+
+comment on column pn_button_soft_inst.id_parent
+  is 'Parent button identifier. If no id_parent is defined is used the id_parent of the conf_button_block table (if defined)';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('COMMENT ON COLUMN PN_BUTTON_SOFT_INST.ID_SOFTWARE IS ''Software identifier''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 04/01/2012 16:14
+-- CHANGE REASON: [ALERT-212044] Fix findings - Solve findings identified by Technical Arq. BD for H&P v.1
+begin
+execute immediate ('COMMENT ON COLUMN PN_BUTTON_SOFT_INST.ID_INSTITUTION IS ''Institution identifier''');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 08/06/2012 16:52
+-- CHANGE REASON: [ALERT-232682] Allow to filter buttons to be filtered by gender and age - Improvements to Single page functionality including(H&P, CV, PPH), Phase IV
+BEGIN
+execute immediate 'alter table pn_button_soft_inst add (gender VARCHAR2(1 char))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+BEGIN
+execute immediate 'alter table pn_button_soft_inst add (age_min NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+BEGIN
+execute immediate 'alter table pn_button_soft_inst add (age_max NUMBER(24))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+BEGIN
+execute immediate 'comment on column pn_button_soft_inst.gender is ''Gender in which the note type should be shown (M/F)''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+BEGIN
+execute immediate 'comment on column pn_button_soft_inst.age_min is ''Minimal age in which the note type should be shown''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+
+BEGIN
+execute immediate 'comment on column pn_button_soft_inst.age_max is ''Maximum age in which the note type should be shown''';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+END;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 09/07/2013 11:13
+-- CHANGE REASON: [ALERT-259145 ] EDIS nurse single page
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table pn_button_soft_inst add flg_activation varchar2(1 char) default ''N''  not null';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+
+COMMENT ON column pn_button_soft_inst.flg_activation IS 'Flag to indicate if some rule should be applied to determine if the button is active or inactive: O - the button is active if there is not some ongoing record yet. N-No rule to be applied; the button is always active.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 14/05/2021 15:48
+-- CHANGE REASON: [EMR-44820] - Initial assessment: "Nota de evaluacion inicial de enfermaria" single page review
+-- Add comments to the columns
+comment on column PN_BUTTON_SOFT_INST.age_min
+is 'Minimal age in which the note type should be shown IN MONTHS';
+comment on column PN_BUTTON_SOFT_INST.age_max
+is 'Maximum age in which the note type should be shown IN MONTHS';
+-- CHANGE END: Elisabete Bugalho

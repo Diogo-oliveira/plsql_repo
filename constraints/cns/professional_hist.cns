@@ -1,0 +1,9 @@
+-- CHANGED BY: Nuno Alves
+-- CHANGE DATE: 06/07/2015 10:14
+-- CHANGE REASON: [ALERT-313314] ALERT-313314 Issue Replication: The system must provide the ability to alert the users to update/confirm the bleep number when trying to add one medication order and display prescriber contact details in the prescription detail
+BEGIN
+  pk_versioning.run('ALTER TABLE PROFESSIONAL_HIST add CONSTRAINT PROF_HIST_PK primary key(id_operation) using index tablespace alert_idx');
+  pk_versioning.run('alter table PROFESSIONAL_HIST add constraint PROF_HIST_TYPE_CHK check (operation_type IN (''C'',''U'',''R''))');
+END;
+/
+-- CHANGE END: Nuno Alves

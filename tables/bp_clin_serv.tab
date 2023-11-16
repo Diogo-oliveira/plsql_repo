@@ -1,0 +1,25 @@
+
+
+  CREATE TABLE BP_CLIN_SERV
+   (	ID_BP_CLIN_SERV NUMBER(24,0) NOT NULL ENABLE,
+	ID_CLINICAL_SERVICE NUMBER(12,0) NOT NULL ENABLE,
+	ID_BODY_PART_IMAGE NUMBER(24,0) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE bp_clin_serv IS 'Associação das imagens de topografia com os serviços clínicos, para mostrar as imagens consoante a especialidades do utilizador.' ;
+
+
+--29/10/2010 Rui Batista
+--[ALERT-136492] Database object Cleaning
+begin
+
+  execute immediate 'drop table BP_CLIN_SERV';
+--	
+	exception
+	when others then --ORA-00942 Table or view does not exists
+	     null;
+end;
+

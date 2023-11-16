@@ -1,0 +1,39 @@
+
+create table MI_DXID_ATC_CONTRA
+(
+  DXID     VARCHAR2(255),
+  ID_DRUG  VARCHAR2(255),
+  DDXCN_SN VARCHAR2(255),
+  DDXCN_SL VARCHAR2(255),
+  ATC      VARCHAR2(255),
+  ATC_DESC VARCHAR2(255),
+  VERS     VARCHAR2(255)
+);
+
+comment on table MI_DXID_ATC_CONTRA
+  is 'Association between internal drugs and diseases in which they are contraindicated';
+comment on column MI_DXID_ATC_CONTRA.DXID
+  is 'Disease code (FDB internal code).';
+comment on column MI_DXID_ATC_CONTRA.ID_DRUG
+  is 'Drug ID.';
+comment on column MI_DXID_ATC_CONTRA.DDXCN_SL
+  is 'Severity level.';
+comment on column MI_DXID_ATC_CONTRA.ATC
+  is 'ATC code.';
+comment on column MI_DXID_ATC_CONTRA.ATC_DESC
+  is 'ATC description.';
+comment on column MI_DXID_ATC_CONTRA.VERS
+  is 'Version (PT, USA).';
+ 
+-- CHANGED BY: Patrícia Neto
+-- CHANGED DATE: 2008-JUL-08
+-- CHANGING REASON: alteração da tabela para enriquecer os descritivos das contraindicações
+alter table mi_dxid_atc_contra add (DXID_DESC varchar2(255));
+-- CHANGE END Patrícia Neto	
+ 
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:49
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE MI_DXID_ATC_CONTRA IS 'Association between internal drugs and diseases in which they are contraindicated [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

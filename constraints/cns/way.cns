@@ -1,0 +1,21 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 20:51
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+ALTER TABLE WAY ADD CONSTRAINT WAY_PK PRIMARY KEY (ID_WAY) ENABLE;
+ALTER TABLE WAY ADD CONSTRAINT WAY_FLG_AV_CHK CHECK (FLG_AVAILABLE IN ('Y','N'));
+ALTER TABLE WAY ADD CONSTRAINT WAY_FLG_TYP_CHK CHECK (FLG_TYPE IN ('P','E','O','N'));
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 03/03/2011 18:11
+-- CHANGE REASON: [ALERT-164844] [INP] Intake and output - Issue Replication: Atitudes terapêuticas
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE WAY
+ ADD (CONSTRAINT WAY_FLG_TYPE_CHK CHECK (FLG_TYPE IN (''A'', ''E'')))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('Aviso :operação já executada anteriormente.');
+END;
+/
+
+-- CHANGE END: António Neto

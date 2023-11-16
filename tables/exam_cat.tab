@@ -1,0 +1,87 @@
+  CREATE TABLE EXAM_CAT
+   (	ID_EXAM_CAT NUMBER(24,0) NOT NULL ENABLE,
+	CODE_EXAM_CAT VARCHAR2(200) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE exam_cat IS 'Classificação de exames e análises' ;
+
+ALTER TABLE EXAM_CAT 
+ ADD (FLG_AVAILABLE  VARCHAR2(1) DEFAULT 'Y' NOT NULL
+ );
+
+COMMENT ON COLUMN EXAM_CAT.FLG_AVAILABLE IS 'Disponibilidade do registo na instituição onde está instalada a BD';
+
+ALTER TABLE EXAM_CAT MODIFY FLG_AVAILABLE default null;
+
+ALTER TABLE EXAM_CAT ADD (FLG_LAB VARCHAR2(1));
+
+COMMENT ON COLUMN EXAM_CAT.FLG_LAB IS 'Categoria indicada a análises: Y - Sim, N - Não';
+
+
+ALTER TABLE EXAM_CAT  ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN EXAM_CAT.ID_CONTENT  IS 'Identificador único de conteúdo';
+
+
+ALTER TABLE EXAM_CAT 
+ ADD (FLG_INTERFACE VARCHAR2(1) DEFAULT 'N');
+
+COMMENT ON COLUMN EXAM_CAT.FLG_INTERFACE IS 'Indication of whether the category is used by the interfaces team to categorize exams/labs created when creating a "virtual" request (comment note that interfaces don''t know to which request is associated with).';
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:24
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.EXAM_CAT MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Rui Spratley
+-- CHANGE DATE: 08/06/2010 09:46
+-- CHANGE REASON: [ALERT-102961] Add new column and change PK_ANALYSIS.GET_EPIS_ANALYSIS_DET function
+DECLARE
+    l_already_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(l_already_null, -1430);
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE exam_cat add rank number(6,0)');
+EXCEPTION
+    WHEN l_already_null THEN
+        NULL;
+END;
+
+
+-- CHANGED BY: Carlos Nogueira
+-- CHANGE DATE: 30/06/2010
+-- CHANGE REASON: ALERT-14490
+-- Add/modify columns 
+alter table EXAM_CAT add PARENT_ID number(24);
+-- Add comments to the columns 
+comment on column EXAM_CAT.PARENT_ID
+  is 'EXAM_CAT parent ID';
+-- CHANGE END: Carlos Nogueira
+/
+COMMENT ON column exam_cat.rank IS 'Ranking order';
+-- CHANGE END: Rui Spratley
+
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 06/01/2016 17:51
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE EXAM_CAT IS 'Lab tests, exams and procedures categories catalogue';
+
+COMMENT ON COLUMN EXAM_CAT.ID_EXAM_CAT IS 'Category ID';
+COMMENT ON COLUMN EXAM_CAT.CODE_EXAM_CAT IS 'Translation code';
+COMMENT ON COLUMN EXAM_CAT.ADW_LAST_UPDATE IS 'Update date';
+COMMENT ON COLUMN EXAM_CAT.FLG_AVAILABLE IS 'Flag that indicates if the record is available or not (Y/N)';
+COMMENT ON COLUMN EXAM_CAT.FLG_LAB IS 'Flag that indicates if category is for lab tests or not (Y/N)';
+COMMENT ON COLUMN EXAM_CAT.ID_CONTENT IS 'Content unique ID';
+COMMENT ON COLUMN EXAM_CAT.FLG_INTERFACE IS 'Flag that indicates if category is used by interfaces';
+COMMENT ON COLUMN EXAM_CAT.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN EXAM_CAT.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN EXAM_CAT.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN EXAM_CAT.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN EXAM_CAT.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN EXAM_CAT.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN EXAM_CAT.RANK IS 'Rank';
+COMMENT ON COLUMN EXAM_CAT.PARENT_ID IS 'Category parent ID';
+-- CHANGE END: Ana Matos

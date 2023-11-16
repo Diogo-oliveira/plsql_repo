@@ -1,0 +1,1 @@
+GRANT select ON alert.pat_referral TO alert_viewer;

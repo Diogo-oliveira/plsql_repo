@@ -1,0 +1,26 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 19/03/2013 15:38
+-- CHANGE REASON: [ALERT-254055] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+    e_non_existant EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443);
+BEGIN   
+    BEGIN
+        EXECUTE IMMEDIATE 'drop INDEX acn_uidx';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE UNIQUE INDEX acn_uidx ON analysis_codification(CASE flg_available WHEN ''Y'' THEN id_analysis ELSE NULL END,
+                                                      CASE flg_available WHEN ''Y'' THEN id_codification ELSE NULL END,
+                                                      CASE flg_available WHEN ''Y'' THEN id_sample_type ELSE NULL END) tablespace alert_idx';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Index already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

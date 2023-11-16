@@ -1,0 +1,27 @@
+  CREATE TABLE EPIS_TYPE_ACCESS
+   (	ID_PROFILE_TEMPLATE NUMBER(24,0),
+	ID_INSTITUTION NUMBER(24,0),
+	ID_EPIS_TYPE NUMBER(24,0)
+   ) ;
+
+
+   COMMENT ON COLUMN EPIS_TYPE_ACCESS.ID_PROFILE_TEMPLATE IS 'Profile template to which the access is defined';
+
+   COMMENT ON COLUMN EPIS_TYPE_ACCESS.ID_INSTITUTION IS 'Institution to which the access is defined [0 means All]';
+
+   COMMENT ON COLUMN EPIS_TYPE_ACCESS.ID_EPIS_TYPE IS 'Epis type allowed to profile template and institution [0 means All]';
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 25/05/2020 16:57
+-- CHANGE REASON: [EMR-31230] - "LAB episodes" from OPD search screen with ok active even after configs
+-- Add/modify columns
+alter table EPIS_TYPE_ACCESS add flg_add_remove varchar2(1 CHAR) default 'A' not null;
+-- Add comments to the columns
+comment on column EPIS_TYPE_ACCESS.flg_add_remove
+is 'ADD (A) Remove (R)';
+alter table EPIS_TYPE_ACCESS add id_software number(24) default 0 not null;
+-- Add comments to the columns
+comment on column EPIS_TYPE_ACCESS.flg_add_remove
+is 'ID_software filled in case id_profile_template is null';
+-- CHANGE END: Elisabete Bugalho

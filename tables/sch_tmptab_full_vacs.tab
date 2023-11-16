@@ -1,0 +1,49 @@
+-- CHANGED BY: Telmo Castro
+-- CHANGE DATE: 08/07/2009 17:50
+-- CHANGE REASON: [ALERT-32069] Making appointments
+CREATE GLOBAL TEMPORARY TABLE SCH_TMPTAB_FULL_VACS
+ (ID_SCH_CONSULT_VACANCY NUMBER(24) NOT NULL
+ ,DT_BEGIN_TRUNC          TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+ ,MAX_VACANCIES           NUMBER(24)
+ ,USED_VACANCIES          NUMBER(24)
+ ,ID_PROF                 NUMBER(24)
+ ,ID_SCH_EVENT            NUMBER(24)
+ ,DT_BEGIN_TSTZ           TIMESTAMP WITH LOCAL TIME ZONE
+ ,DT_END_TSTZ             TIMESTAMP WITH LOCAL TIME ZONE
+ ,ID_DEP_CLIN_SERV        NUMBER(24)
+ ,ID_INSTITUTION          NUMBER(24)
+ ,ID_CODE                 NUMBER(24)
+ )
+ ON COMMIT PRESERVE ROWS;
+
+COMMENT ON TABLE SCH_TMPTAB_FULL_VACS IS 'temporary table for holding the output of get_availability_cross_sv';
+-- CHANGE END: Telmo Castro
+
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 02-01-2013
+-- CHANGE REASON: ALERT-246442
+begin
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', 
+                                           i_obj_name => 'SCH_TMPTAB_FULL_VACS', 
+                                           i_obj_type => 'TABLE', 
+                                           i_flg_category => 'DSV');
+end;
+/
+--CHANGE END: Telmo
+
+
+-- CHANGED BY:  jose.m.silva
+-- CHANGE DATE: 21/01/2016 10:29
+-- CHANGE REASON: [ALERT-317730] 
+COMMENT ON COLUMN SCH_TMPTAB_FULL_VACS.ID_SCH_CONSULT_VACANCY IS 'Vacancy ID';
+COMMENT ON COLUMN SCH_TMPTAB_FULL_VACS.DT_BEGIN_TRUNC IS 'Date portion of sch_consult_vacancy.dt_begin_tstz';
+COMMENT ON COLUMN SCH_TMPTAB_FULL_VACS.MAX_VACANCIES IS 'Max number of vacancies';
+COMMENT ON COLUMN SCH_TMPTAB_FULL_VACS.USED_VACANCIES IS 'Number of used vacancies';
+COMMENT ON COLUMN SCH_TMPTAB_FULL_VACS.ID_PROF IS 'Professional ID';
+COMMENT ON COLUMN SCH_TMPTAB_FULL_VACS.ID_SCH_EVENT IS 'Event schedule ID';
+COMMENT ON COLUMN SCH_TMPTAB_FULL_VACS.DT_BEGIN_TSTZ IS 'Begin date';
+COMMENT ON COLUMN SCH_TMPTAB_FULL_VACS.DT_END_TSTZ IS 'End date';
+COMMENT ON COLUMN SCH_TMPTAB_FULL_VACS.ID_DEP_CLIN_SERV IS 'Deparment clinical service ID';
+COMMENT ON COLUMN SCH_TMPTAB_FULL_VACS.ID_INSTITUTION IS 'Institution ID';
+COMMENT ON COLUMN SCH_TMPTAB_FULL_VACS.ID_CODE IS 'Code ID';
+-- CHANGE END:  jose.m.silva

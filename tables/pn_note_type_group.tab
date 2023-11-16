@@ -1,0 +1,35 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 19/05/2016 11:16
+-- CHANGE REASON: [ALERT-321433] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'CREATE TABLE pn_note_type_group(
+                     id_pn_note_type_group NUMBER(24) NOT NULL,
+                     code_pn_note_type_group VARCHAR2(200 CHAR) NOT NULL,
+                     create_user VARCHAR2(24 CHAR),
+                     create_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                     create_institution NUMBER(24),
+                     update_user VARCHAR2(24 CHAR),
+                     update_time TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                     update_institution NUMBER(24))';
+EXCEPTION
+    WHEN e_object_exists THEN
+        dbms_output.put_line('Operação já executada anteriormente.');
+END;
+/
+
+
+comment on table pn_note_type_group
+  is 'Table to scecify the progress note type group';
+
+COMMENT ON column pn_note_type_group.id_pn_note_type_group IS 'Group identifier';
+COMMENT ON column pn_note_type_group.code_pn_note_type_group IS 'translation table connection';
+COMMENT ON column pn_note_type_group.create_user IS 'Creation user';
+COMMENT ON column pn_note_type_group.create_time IS 'Creation date / time';
+COMMENT ON column pn_note_type_group.create_institution IS 'Creation institution';
+COMMENT ON column pn_note_type_group.update_user IS 'Update user';
+COMMENT ON column pn_note_type_group.update_time IS 'Update date / time';
+COMMENT ON column pn_note_type_group.update_institution IS 'Update institution';
+-- CHANGE END: Paulo Teixeira

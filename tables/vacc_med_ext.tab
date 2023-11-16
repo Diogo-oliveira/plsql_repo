@@ -1,0 +1,99 @@
+create table VACC_MED_EXT
+(
+  ID_VACC_MED_EXT   NUMBER(12) not null,
+  ID_VACC           NUMBER(12),
+  DCI_DESCR         VARCHAR2(2000) not null,
+  MED_NAME          VARCHAR2(2000),
+  FORM_FARM_DESCR   VARCHAR2(2000),
+  EMB_SHORT_DESCR   VARCHAR2(2000),
+  GENERICO          VARCHAR2(1) not null,
+  PRICE             NUMBER(8,2),
+  DOSAGE            VARCHAR2(200),
+  QT_DOS_COMP       VARCHAR2(200),
+  N_UNITS           VARCHAR2(200),
+  QT_PER_UNIT       VARCHAR2(200),
+  DCI_ID            NUMBER(12),
+  EMB_ID            NUMBER(12),
+  FORM_FARM_ID      NUMBER(12),
+  MED_ID            NUMBER(12),
+  DESCR_TITULAR_AIM VARCHAR2(200),
+  FLG_AVAILABLE     VARCHAR2(1)
+)
+
+-- Add comments to the table 
+comment on table VACC_MED_EXT
+  is 'Esta tabela faz o mapeamento entre as vacinas parametrizadas no sistema e os medicamentos de cada vacina. O objectivo da tabela é que seja genérica o suficiente para lidar com diferentes bases de dados de medicamentos (Infarmed ou FirstDataBank).';
+-- Add comments to the columns 
+comment on column VACC_MED_EXT.ID_VACC_MED_EXT
+  is 'Chave primária da tabela.';
+comment on column VACC_MED_EXT.ID_VACC
+  is 'ID das vacinas.';
+comment on column VACC_MED_EXT.DCI_DESCR
+  is 'Denominação Comum Internacional (DCI) das substâncias activas constituintes do medicamento.';
+comment on column VACC_MED_EXT.MED_NAME
+  is 'Nome autorizado para o medicamento.';
+comment on column VACC_MED_EXT.FORM_FARM_DESCR
+  is 'Descrição da forma farmacêutica do medicamento, de acordo com a lista "Standard Terms" (PharmEuropa).';
+comment on column VACC_MED_EXT.EMB_SHORT_DESCR
+  is 'Descrição abreviada da embalagem.';
+comment on column VACC_MED_EXT.GENERICO
+  is 'Medicamento genérico de acordo com a legislação em vigor (Y/N).';
+comment on column VACC_MED_EXT.PRICE
+  is 'PVP: preço de venda ao público';
+comment on column VACC_MED_EXT.DOSAGE
+  is 'Dosagem.';
+comment on column VACC_MED_EXT.QT_DOS_COMP
+  is 'Quantidade da dosagem.';
+comment on column VACC_MED_EXT.N_UNITS
+  is 'Nº de unidades da embalagem.';
+comment on column VACC_MED_EXT.QT_PER_UNIT
+  is 'Dosagem de cada unidade.';
+comment on column VACC_MED_EXT.DCI_ID
+  is 'Código identificador da Denominação Comum Internacional (DCI) das substâncias activas constituintes do medicamento.';
+comment on column VACC_MED_EXT.EMB_ID
+  is 'Codigo identificador da embalagem.';
+comment on column VACC_MED_EXT.FORM_FARM_ID
+  is 'Código identificador da forma farmacêutica do medicamento.';
+comment on column VACC_MED_EXT.MED_ID
+  is 'Id do medicamento';
+comment on column VACC_MED_EXT.DESCR_TITULAR_AIM
+  is 'Titular da Autorização de Introdução no Mercado (AIM) do medicamento.';
+comment on column VACC_MED_EXT.FLG_AVAILABLE
+  is 'Y ou N: Indica se um registo é um medicamento válido (Y) ou se é um medicamento ficticío criado apenas para o mapeamento das interfaces (N).';
+
+
+-- Add/modify columns 
+alter table VACC_MED_EXT add ID_DRUG VARCHAR2(255);
+-- Add comments to the columns 
+comment on column VACC_MED_EXT.ID_DRUG
+  is 'Id da drug da tabela MI_MED';
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 2009-05-04
+-- CHANGE REASON: ALERT-26735
+alter table vacc_med_ext modify (ID_VACC NUMBER(24));
+-- CHANGE END
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 19/05/2011 15:31
+-- CHANGE REASON: [ALERT-179674 ] 
+alter table 
+   VACC_MED_EXT
+add 
+( 
+   emb_id_vc    varchar2(255),
+ med_id_vc    varchar2(255)
+);
+
+
+comment on column VACC_MED_EXT.EMB_ID
+  is 'DEPRECATED (use EMB_ID_VC)- Codigo identificador da embalagem.';
+comment on column VACC_MED_EXT.MED_ID
+  is 'DEPRECATED (use MED_ID_VC) - Id do medicamento';
+
+comment on column VACC_MED_EXT.EMB_ID_VC
+  is 'Codigo identificador da embalagem.';
+comment on column VACC_MED_EXT.MED_ID_VC
+  is 'Id do medicamento';
+-- CHANGE END: Sérgio Santos

@@ -1,0 +1,74 @@
+CREATE TABLE ACTION_PERMISSION
+(ID_TASK_TYPE NUMBER(24) NOT NULL, 
+ID_ACTION NUMBER(24) NOT NULL,
+ID_CATEGORY NUMBER(24) NOT NULL,
+ID_PROFILE_TEMPLATE NUMBER(24),
+FLG_AVAILABLE VARCHAR2(1) NOT NULL);
+
+COMMENT ON TABLE ACTION_PERMISSION IS 'Table that defines the actions'' permissions of categories or profiles';
+COMMENT ON COLUMN ACTION_PERMISSION.ID_TASK_TYPE IS 'Task type';
+COMMENT ON COLUMN ACTION_PERMISSION.ID_ACTION IS 'Action';
+COMMENT ON COLUMN ACTION_PERMISSION.ID_CATEGORY IS 'Category that has access to the action';
+COMMENT ON COLUMN ACTION_PERMISSION.ID_PROFILE_TEMPLATE IS 'Profile that has access to the access';
+COMMENT ON COLUMN ACTION_PERMISSION.FLG_AVAILABLE IS 'Availability of the permission';
+
+
+comment on column ACTION_PERMISSION.ID_PROFILE_TEMPLATE IS 'Profile that has access to the action';
+comment on table ACTION_PERMISSION IS 'Table that defines the permissions of categories or profiles over actions';
+
+
+
+-- CHANGED BY RITA LOPEs
+-- 2008/05/29
+
+ALTER TABLE ACTION_PERMISSION 
+ ADD (ID_INSTITUTION NUMBER(24) DEFAULT 0 NOT NULL
+ ,ID_SOFTWARE NUMBER(24) DEFAULT 0 NOT NULL
+ )
+/
+
+COMMENT ON TABLE ACTION_PERMISSION IS 'Table that defines the actions permissions of categories or profiles'
+/
+
+COMMENT ON COLUMN ACTION_PERMISSION.ID_PROFILE_TEMPLATE IS 'Profile that has access to the access'
+/
+
+COMMENT ON COLUMN ACTION_PERMISSION.ID_INSTITUTION IS 'ID INSTITUTION'
+/
+
+COMMENT ON COLUMN ACTION_PERMISSION.ID_SOFTWARE IS 'ID SOFTWARE'
+/
+-- CHANGE END
+
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner            => 'ALERT',
+                                             i_obj_name         => 'ACTION_PERMISSION_V26502',
+                                             i_obj_type         => 'TABLE',
+                                             i_flg_category     => 'JNK',
+                                             i_responsible_team => 'ORDERS');
+                                             
+    pk_versioning.run(i_sql => 'CREATE TABLE ACTION_PERMISSION_V26502 AS SELECT * FROM ACTION_PERMISSION');
+END;
+/
+
+declare
+l_sql    varchar2(1000 char);
+begin
+l_sql := q'[ALTER TABLE ACTION_PERMISSION ADD FLG_CAT_PROF VARCHAR2(1 CHAR) DEFAULT 'Y' NOT NULL]';
+pk_versioning.run( l_sql );
+end;
+/
+
+COMMENT ON COLUMN ACTION_PERMISSION.FLG_CAT_PROF         IS 'From CATEGORY.FLG_PROF: Cannot be equal to "N"' ;
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 21/01/2016 10:50
+-- CHANGE REASON: [ALERT-318025] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column ACTION_PERMISSION.id_institution
+  is 'Institution ID';
+comment on column ACTION_PERMISSION.id_software
+  is 'Software ID';  
+-- CHANGE END: Elisabete Bugalho

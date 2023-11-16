@@ -1,0 +1,14 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 19/09/2013 10:25
+-- CHANGE REASON: [ALERT-258241] Task groups development
+DECLARE
+    e_idx_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_idx_already_exists, -00955); -- name is already used by an existing object
+BEGIN
+    EXECUTE IMMEDIATE 'create index TSKG_FLG_STATUS_IDX on TASK_GROUP (FLG_STATUS)';
+EXCEPTION
+    WHEN e_idx_already_exists THEN
+        dbms_output.put_line('index already exists');   
+END;
+/
+-- CHANGE END: Tiago Silva

@@ -1,0 +1,76 @@
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 29/10/2009 04:37
+-- CHANGE REASON: [ALERT-51207] 
+CREATE TABLE CPOE_TASK_TYPE
+(
+  ID_TASK_TYPE          NUMBER(24) NOT NULL,
+  CODE_TASK_TYPE        VARCHAR2(200 CHAR) NOT NULL,
+  ICON                  VARCHAR2(200 CHAR),
+  ID_TARGET_TASK_TYPE   NUMBER(24),
+  CREATE_USER           VARCHAR2(24 CHAR),
+  CREATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24 CHAR),
+  UPDATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+);
+comment on table  CPOE_TASK_TYPE is                      'Computerized Physician Order Entry (CPOE) source control table';
+comment on column CPOE_TASK_TYPE.ID_TASK_TYPE is         'CPOE task type ID';
+comment on column CPOE_TASK_TYPE.CODE_TASK_TYPE is       'CPOE task translation code';
+comment on column CPOE_TASK_TYPE.ICON is                 'CPOE task icon';
+comment on column CPOE_TASK_TYPE.ID_TARGET_TASK_TYPE is  'ID of the target task type (when applicable)';
+comment on column CPOE_TASK_TYPE.CREATE_USER is          'Creation user';
+comment on column CPOE_TASK_TYPE.CREATE_TIME is          'Creation time';
+comment on column CPOE_TASK_TYPE.CREATE_INSTITUTION is   'Creation institution';
+comment on column CPOE_TASK_TYPE.UPDATE_USER is          'Update user';
+comment on column CPOE_TASK_TYPE.UPDATE_TIME is          'Update time';
+comment on column CPOE_TASK_TYPE.UPDATE_INSTITUTION is   'Update institution';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Tiago Silva
+-- CHANGE DATE: 12/10/2010 10:06
+-- CHANGE REASON: [ALERT-128784] 
+comment on table CPOE_TASK_TYPE is 'Computerized Prescription Order Entry (CPOE) task type table [CPOET]';
+-- CHANGE END: Tiago Silva
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 08/06/2011 20:52
+-- CHANGE REASON: [ALERT-183773] ehr access integration in order tools
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); -- column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE cpoe_task_type ADD ehr_access_area VARCHAR2(30)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('column ehr_access_area already exists');
+END;
+/
+comment on column CPOE_TASK_TYPE.EHR_ACCESS_AREA is 'EHR access area ID';
+-- CHANGE END: Carlos Loureiro
+
+-- CHANGED BY: Carlos Loureiro
+-- CHANGE DATE: 07/02/2012 16:02
+-- CHANGE REASON: [ALERT-217700] Integration of Medication in Order Sets and CPOE
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); -- column being added already exists in table
+BEGIN
+    EXECUTE IMMEDIATE 'alter table CPOE_TASK_TYPE add ID_TASK_TYPE_CDS NUMBER(24)';
+EXCEPTION
+    WHEN e_already_exists THEN
+        dbms_output.put_line('ID_TASK_TYPE_CDS column already exists in CPOE_TASK_TYPE table');
+END;
+/
+COMMENT ON column CPOE_TASK_TYPE.ID_TASK_TYPE_CDS IS 'Task type ID that will be considered in Clinical Decision Support engine calls';
+-- CHANGE END: Carlos Loureiro
+
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 15/10/2019 14:48
+-- CHANGE REASON: [EMR-21164] - CPOE: possibility to configure statuses and a timeline for the orders to be shown
+comment on column CPOE_TASK_TYPE.flg_full_date_validation
+is '[DEPRECATED] Validate task type full date (Value is now stored in cpoe_task_soft_inst)';
+comment on column CPOE_TASK_TYPE.flg_out_of_cpoe_process
+is '[DEPRECATED] Task types that are out of cpoe workflow (advanced_mode) (Value is now stored in cpoe_task_soft_inst)';
+-- CHANGE END: Diogo Oliveira

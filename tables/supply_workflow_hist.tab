@@ -1,0 +1,639 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 11:30
+-- CHANGE REASON: [ALERT-12334 ] 
+create table SUPPLY_WORKFLOW_HIST
+(
+  ID_SUPPLY_WORKFLOW_HIST NUMBER(24) not null,
+  ID_SUPPLY_WORKFLOW      NUMBER(24) not null,
+  ID_PROFESSIONAL         NUMBER(24) not null,
+  ID_EPISODE              NUMBER(24) not null,
+  ID_SUPPLY_REQUEST       NUMBER(24),
+  ID_SUPPLY               NUMBER(24),
+  ID_SUPPLY_LOCATION      NUMBER(24),
+  BARCODE_REQ             VARCHAR2(200 CHAR),
+  BARCODE_SCANNED         VARCHAR2(200 CHAR),
+  QUANTITY                NUMBER(10,3),
+  ID_UNIT_MEASURE         NUMBER(24),
+  ID_CONTEXT              NUMBER(24),
+  FLG_CONTEXT             VARCHAR2(1 CHAR),
+  FLG_STATUS              VARCHAR2(1 CHAR) not null,
+  FLG_REASON              VARCHAR2(1 CHAR),
+  DT_REQUEST              TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DT_RETURNED             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  NOTES                   CLOB,
+  ID_PROF_CANCEL          NUMBER(24),
+  DT_CANCEL               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  NOTES_CANCEL            CLOB,
+  ID_CANCEL_REASON        NUMBER(24),
+  NOTES_REJECT            CLOB,
+  DT_REJECT               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  ID_PROF_REJECT          NUMBER(24),
+  DT_SUPPLY_WORKFLOW      TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  CREATE_USER             VARCHAR2(24 CHAR),
+  CREATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION      NUMBER(24),
+  UPDATE_USER             VARCHAR2(24 CHAR),
+  UPDATE_TIME             TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION      NUMBER(24),
+  ID_REQ_REASON           NUMBER(24),
+  ID_DEL_REASON           NUMBER(24),
+  ID_SUPPLY_SET           NUMBER(24)
+)
+tablespace TABLE_L
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table SUPPLY_WORKFLOW_HIST
+  is 'Supplies? requests workflow';
+-- Add comments to the columns 
+comment on column SUPPLY_WORKFLOW_HIST.ID_SUPPLY_WORKFLOW_HIST
+  is 'Primary Key';
+comment on column SUPPLY_WORKFLOW_HIST.ID_SUPPLY_WORKFLOW
+  is 'Supply workflow';
+comment on column SUPPLY_WORKFLOW_HIST.ID_PROFESSIONAL
+  is 'Professional?s ID';
+comment on column SUPPLY_WORKFLOW_HIST.ID_EPISODE
+  is 'Episode?s ID';
+comment on column SUPPLY_WORKFLOW_HIST.ID_SUPPLY_REQUEST
+  is 'Request?s ID';
+comment on column SUPPLY_WORKFLOW_HIST.ID_SUPPLY
+  is 'Supply?s';
+comment on column SUPPLY_WORKFLOW_HIST.ID_SUPPLY_LOCATION
+  is 'Location where supply was requested from';
+comment on column SUPPLY_WORKFLOW_HIST.BARCODE_REQ
+  is 'Barcode read by the supplier';
+comment on column SUPPLY_WORKFLOW_HIST.BARCODE_SCANNED
+  is 'Barcode read by the doctor';
+comment on column SUPPLY_WORKFLOW_HIST.QUANTITY
+  is 'Quantity ';
+comment on column SUPPLY_WORKFLOW_HIST.ID_UNIT_MEASURE
+  is 'Unit measure identification';
+comment on column SUPPLY_WORKFLOW_HIST.ID_CONTEXT
+  is 'Generic field for context ID';
+comment on column SUPPLY_WORKFLOW_HIST.FLG_CONTEXT
+  is 'Flag for consumption context: M-Medication, P- Interventions, F- MFR, I-  Nursing interventions, A- Lab testd, E- Image exams, O- Others exams';
+comment on column SUPPLY_WORKFLOW_HIST.FLG_STATUS
+  is 'Flag for workflow status';
+comment on column SUPPLY_WORKFLOW_HIST.FLG_REASON
+  is 'Flag for supply request reason: L-loan,C-Local care';
+comment on column SUPPLY_WORKFLOW_HIST.DT_REQUEST
+  is 'Date for request';
+comment on column SUPPLY_WORKFLOW_HIST.DT_RETURNED
+  is 'Date of return (for loans)';
+comment on column SUPPLY_WORKFLOW_HIST.NOTES
+  is 'Notes field';
+comment on column SUPPLY_WORKFLOW_HIST.ID_PROF_CANCEL
+  is 'Cancelling professional?s ID';
+comment on column SUPPLY_WORKFLOW_HIST.DT_CANCEL
+  is 'Date of cancellation';
+comment on column SUPPLY_WORKFLOW_HIST.NOTES_CANCEL
+  is 'Cancelling notes';
+comment on column SUPPLY_WORKFLOW_HIST.ID_CANCEL_REASON
+  is 'Cancel reason identification';
+comment on column SUPPLY_WORKFLOW_HIST.NOTES_REJECT
+  is 'Notes Rejection';
+comment on column SUPPLY_WORKFLOW_HIST.DT_REJECT
+  is 'Date rejection';
+comment on column SUPPLY_WORKFLOW_HIST.ID_PROF_REJECT
+  is 'Professional rejection identification';
+comment on column SUPPLY_WORKFLOW_HIST.DT_SUPPLY_WORKFLOW
+  is 'Workflow?s last action date ';
+comment on column SUPPLY_WORKFLOW_HIST.CREATE_USER
+  is 'Creation user';
+comment on column SUPPLY_WORKFLOW_HIST.CREATE_TIME
+  is 'Creation time';
+comment on column SUPPLY_WORKFLOW_HIST.CREATE_INSTITUTION
+  is 'Creation institution';
+comment on column SUPPLY_WORKFLOW_HIST.UPDATE_USER
+  is 'Update user';
+comment on column SUPPLY_WORKFLOW_HIST.UPDATE_TIME
+  is 'Update time';
+comment on column SUPPLY_WORKFLOW_HIST.UPDATE_INSTITUTION
+  is 'Update institution';
+comment on column SUPPLY_WORKFLOW_HIST.ID_SUPPLY_SET
+  is 'Parent supply set (if applicable)';
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 11:53
+-- CHANGE REASON: [ALERT-12334] 
+ALTER TABLE SUPPLY_WORKFLOW_HIST MOVE LOB(NOTES) STORE AS (TABLESPACE ALERT_LOB);
+ALTER TABLE SUPPLY_WORKFLOW_HIST  MOVE LOB(NOTES_CANCEL) STORE AS (TABLESPACE ALERT_LOB);
+ALTER TABLE SUPPLY_WORKFLOW_HIST MOVE LOB(NOTES_REJECT) STORE AS (TABLESPACE ALERT_LOB);
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 01/07/2010 15:07
+-- CHANGE REASON: [ALERT-108775] Activity therapist
+alter table supply_workflow_hist
+add ID_SUP_WORKFLOW_PARENT NUMBER(24);
+
+
+alter table supply_workflow_hist add asset_number VARCHAR2(1);
+
+alter table supply_workflow_hist add flg_outdated VARCHAR2(1) default 'A';
+
+
+comment on column supply_workflow_hist.ID_SUP_WORKFLOW_PARENT
+  is 'ID_SUPPLY_WORKFLOW parent';
+
+comment on column SUPPLY_WORKFLOW.flg_outdated
+  is 'Fixed Asset Number';
+
+
+comment on column SUPPLY_WORKFLOW_hist.flg_outdated
+  is 'Indicated if the registry is active or outdated';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 22/07/2010 09:43
+-- CHANGE REASON: [ALERT-113837] Activity Therapist
+alter table supply_workflow_hist drop column asset_number;
+
+alter table supply_workflow_hist add asset_number VARCHAR2(200 char);
+
+alter table supply_workflow_hist drop column flg_outdated;
+
+alter table supply_workflow_hist add flg_outdated VARCHAR2(1 char) default 'A';
+
+
+comment on column SUPPLY_WORKFLOW.flg_outdated
+  is 'Indicated if the registry is active or outdated';
+
+
+comment on column SUPPLY_WORKFLOW.asset_number
+  is 'Fixed Asset Number';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 22/07/2010 11:42
+-- CHANGE REASON: [ALERT-113837] Activity Therapist
+lter table supply_workflow_hist drop column asset_number;
+
+alter table supply_workflow_hist add asset_number VARCHAR2(200 char);
+
+alter table supply_workflow_hist drop column flg_outdated;
+
+alter table supply_workflow_hist add flg_outdated VARCHAR2(1 char) default 'A';
+
+
+comment on column SUPPLY_WORKFLOW_HIST.flg_outdated
+  is 'Indicated if the registry is active or outdated';
+
+
+comment on column SUPPLY_WORKFLOW_HIST.asset_number
+  is 'Fixed Asset Number';
+  
+  
+alter table supply_workflow_hist add total_quantity NUMBER(10,3);
+
+comment on column SUPPLY_WORKFLOW_HIST.TOTAL_QUANTITY
+  is 'Total Quantity. Useful when the nr of delivered units is diferent from the nr of loaned units.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/07/2010 12:01
+-- CHANGE REASON: [ALERT-113837] [Activity Therapist]: Barcode check: does not appear the message when the inserted barcode is not correct | Need to save barcode when editing
+alter table supply_workflow_hist drop column asset_number;
+
+alter table supply_workflow_hist add asset_number VARCHAR2(200 char);
+
+alter table supply_workflow_hist drop column flg_outdated;
+
+alter table supply_workflow_hist add flg_outdated VARCHAR2(1 char) default 'A';
+
+
+comment on column SUPPLY_WORKFLOW_HIST.flg_outdated
+  is 'Indicated if the registry is active or outdated';
+
+
+comment on column SUPPLY_WORKFLOW_HIST.asset_number
+  is 'Fixed Asset Number';
+  
+  
+alter table supply_workflow_hist add total_quantity NUMBER(10,3);
+
+comment on column SUPPLY_WORKFLOW_HIST.TOTAL_QUANTITY
+  is 'Total Quantity. Useful when the nr of delivered units is diferent from the nr of loaned units.';
+-- CHANGE END: Sofia Mendes
+-- CHANGED BY: Eduardo Reis
+-- CHANGE DATE: 31/08/2010 16:41
+-- CHANGE REASON: [ALERT-121494] Add new columns copied form supply_soft_inst
+alter table supply_workflow_hist add flg_cons_type varchar2(1 char);
+alter table supply_workflow_hist add flg_reusable varchar2(1 char);
+alter table supply_workflow_hist add flg_editable varchar2(1 char);
+
+comment on column supply_workflow_hist.FLG_CONS_TYPE
+  is 'Flag for the consumption type: L- Loan ; C- Local consumption';
+comment on column supply_workflow_hist.FLG_REUSABLE
+  is 'Flag for reusable/disposable: Y-Yes, N- No';
+comment on column supply_workflow_hist.FLG_EDITABLE
+  is 'Flag for editable contents/quantities on the moment of request: Y-Yes, N- No';
+-- CHANGE END: Eduardo Reis
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 06/09/2010 14:46
+-- CHANGE REASON: [ALERT-122517] [Activity Therapist]: Separate the request quantity from the nr of units that exists in the institution/department
+alter table supply_workflow_hist
+add total_avail_quantity NUMBER(10,3);
+
+comment on column supply_workflow_hist.total_avail_quantity
+  is 'Nr of units that exists in the institution/department to be loaned.';
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Filipe Silva
+-- CHANGE DATE: 02/12/2010 16:48
+-- CHANGE REASON: [ALERT-146441] Associate a surgical procedure to supplies
+ALTER TABLE supply_workflow_hist 
+ ADD (cod_table varchar2(100 char));
+
+ALTER TABLE supply_workflow_hist 
+ ADD (FLG_PREPARING VARCHAR2(1 CHAR));
+
+ALTER TABLE supply_workflow_hist 
+ ADD (FLG_COUNTABLE VARCHAR2(1 CHAR));
+ 
+alter table supply_workflow_hist 
+add (ID_SUPPLY_AREA NUMBER(24));
+
+alter table supply_workflow_hist 
+add (ID_PROTOCOLS NUMBER(24));
+ 
+comment on column supply_workflow_hist.FLG_PREPARING
+is 'Flag for preparing surgical supplies: Y-Yes, N- No';
+comment on column supply_workflow_hist.FLG_COUNTABLE
+is 'Flag for count surgical supplies: Y-Yes, N- No';
+comment on column supply_workflow_hist.FLG_CONS_TYPE
+is 'Flag for the consumption type: L- Loan ; C- Local consumption ; I- Implants'; 
+COMMENT ON COLUMN supply_workflow_hist.cod_table IS 'table where put the surgical supplies';
+COMMENT ON COLUMN supply_workflow_hist.flg_context is 'Flag for consumption context: M-Medication, P- Interventions, F- MFR, I-  Nursing interventions, A- Lab testd, E- Image exams, O- Others exams, S- Surgical Procedures';
+COMMENT ON COLUMN supply_workflow_hist.ID_SUPPLY_AREA is 'ID supply area';
+COMMENT ON COLUMN supply_workflow.ID_SUPPLY_AREA is 'ID protocols';
+-- CHANGE END: Filipe Silva
+
+-- CHANGED BY:  Nuno Neves
+-- CHANGE DATE: 08/09/2011 11:25
+-- CHANGE REASON: [ALERT-193954] 
+alter table
+   supply_workflow_hist
+drop column
+   id_protocols;
+-- CHANGE END:  Nuno Neves
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 06/12/2011 12:05
+-- CHANGE REASON: [ALERT-208591] 
+-- Add/modify columns 
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); 
+BEGIN
+    EXECUTE IMMEDIATE 'alter table SUPPLY_WORKFLOW_HIST add lot VARCHAR2(200 CHAR)';
+EXCEPTION
+    WHEN e_already_exists THEN
+       dbms_output.put_line('lot on SUPPLY_WORKFLOW_HIST already exists');
+END;
+/
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); 
+BEGIN
+    EXECUTE IMMEDIATE 'alter table SUPPLY_WORKFLOW_HIST add dt_expiration TIMESTAMP(6) WITH LOCAL TIME ZONE';
+EXCEPTION
+    WHEN e_already_exists THEN
+       dbms_output.put_line('dt_expiration on SUPPLY_WORKFLOW_HIST already exists');
+END;
+/
+DECLARE
+    e_already_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_already_exists, -01430); 
+BEGIN
+    EXECUTE IMMEDIATE 'alter table SUPPLY_WORKFLOW_HIST add flg_validation VARCHAR2(1 CHAR)';
+EXCEPTION
+    WHEN e_already_exists THEN
+       dbms_output.put_line('flg_validation on SUPPLY_WORKFLOW_HIST already exists');
+END;
+/
+-- Add comments to the columns 
+comment on column SUPPLY_WORKFLOW_HIST.dt_expiration
+  is 'Supply expiration date';
+comment on column SUPPLY_WORKFLOW_HIST.flg_validation
+  is 'Flag that indicates whether the barcode has been validated: Y-Yes, N- No';
+comment on column SUPPLY_WORKFLOW_HIST.lot
+  is 'Lot number';
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 18/08/2014 15:51
+-- CHANGE REASON: [ALERT-292781] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_tab_columns u
+     WHERE u.table_name = 'SUPPLY_WORKFLOW_HIST'
+       AND u.column_name = 'ID_EPISODE'
+       AND u.nullable = 'Y';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'alter table SUPPLY_WORKFLOW_HIST modify id_episode null';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 18/01/2016 11:21
+-- CHANGE REASON: [ALERT-317912] 
+comment on table SUPPLY_WORKFLOW_HIST
+  is 'Supplies orders workflow history table';
+-- Add comments to the columns 
+comment on column SUPPLY_WORKFLOW_HIST.id_supply_workflow_hist
+  is 'Primary key';
+comment on column SUPPLY_WORKFLOW_HIST.id_supply_workflow
+  is 'Supply workflow ID';
+comment on column SUPPLY_WORKFLOW_HIST.id_professional
+  is 'Professional ID';
+comment on column SUPPLY_WORKFLOW_HIST.id_episode
+  is 'Episode ID';
+comment on column SUPPLY_WORKFLOW_HIST.id_supply_request
+  is 'Order''s ID';
+comment on column SUPPLY_WORKFLOW_HIST.id_supply
+  is 'Supply ID';
+comment on column SUPPLY_WORKFLOW_HIST.id_supply_location
+  is 'Supply location ID';
+comment on column SUPPLY_WORKFLOW_HIST.barcode_req
+  is 'Barcode read by the supplier';
+comment on column SUPPLY_WORKFLOW_HIST.barcode_scanned
+  is 'Barcode read by the professional';
+comment on column SUPPLY_WORKFLOW_HIST.quantity
+  is 'Quantity ';
+comment on column SUPPLY_WORKFLOW_HIST.id_unit_measure
+  is 'Unit measure ID';
+comment on column SUPPLY_WORKFLOW_HIST.id_context
+  is 'Context ID';
+comment on column SUPPLY_WORKFLOW_HIST.flg_context
+  is 'Flag that indicates the context association: M - Medication, P - Interventions, F - Rehabilitation, I -  Nursing interventions, A - Lab tests, E - Image exams, O - Others exams, S - Surgical procedure';
+comment on column SUPPLY_WORKFLOW_HIST.flg_status
+  is 'Flag that indicates the workflow''s status';
+comment on column SUPPLY_WORKFLOW_HIST.flg_reason
+  is 'Flag for supply request reason: L-loan,C-Local care';
+comment on column SUPPLY_WORKFLOW_HIST.dt_request
+  is 'Date that indicates when the record was registered';
+comment on column SUPPLY_WORKFLOW_HIST.dt_returned
+  is 'Date of return (for loans)';
+comment on column SUPPLY_WORKFLOW_HIST.notes
+  is 'Notes';
+comment on column SUPPLY_WORKFLOW_HIST.id_prof_cancel
+  is 'Professional that cancels the order';
+comment on column SUPPLY_WORKFLOW_HIST.dt_cancel
+  is 'Date that indicates when the order was cancelled';
+comment on column SUPPLY_WORKFLOW_HIST.notes_cancel
+  is 'Cancelation notes';
+comment on column SUPPLY_WORKFLOW_HIST.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column SUPPLY_WORKFLOW_HIST.notes_reject
+  is 'Rejection notes';
+comment on column SUPPLY_WORKFLOW_HIST.dt_reject
+  is 'Date that indicates when the order was rejected';
+comment on column SUPPLY_WORKFLOW_HIST.id_prof_reject
+  is 'Professional that rejects the order';
+comment on column SUPPLY_WORKFLOW_HIST.dt_supply_workflow
+  is 'Date that indicates the last workflow date';
+comment on column SUPPLY_WORKFLOW_HIST.create_user
+  is 'Creation User';
+comment on column SUPPLY_WORKFLOW_HIST.create_time
+  is 'Creation Time';
+comment on column SUPPLY_WORKFLOW_HIST.create_institution
+  is 'Creation Institution';
+comment on column SUPPLY_WORKFLOW_HIST.update_user
+  is 'Update User';
+comment on column SUPPLY_WORKFLOW_HIST.update_time
+  is 'Update Time';
+comment on column SUPPLY_WORKFLOW_HIST.update_institution
+  is 'Update Institution';
+comment on column SUPPLY_WORKFLOW_HIST.id_req_reason
+  is 'Supply ordering reason ID';
+comment on column SUPPLY_WORKFLOW_HIST.id_del_reason
+  is 'Supply canceling reason ID';
+comment on column SUPPLY_WORKFLOW_HIST.id_supply_set
+  is 'Supply parent ID';
+comment on column SUPPLY_WORKFLOW_HIST.id_sup_workflow_parent
+  is 'Supply workflow parent ID';
+comment on column SUPPLY_WORKFLOW_HIST.asset_number
+  is 'Fixed asset number';
+comment on column SUPPLY_WORKFLOW_HIST.flg_outdated
+  is 'Flag that indicates if the record is outdated';
+comment on column SUPPLY_WORKFLOW_HIST.total_quantity
+  is 'Total quantity';
+comment on column SUPPLY_WORKFLOW_HIST.flg_cons_type
+  is 'Flag that indicates the consumption type: L - Loan, C - Local consumption, I - Implants';
+comment on column SUPPLY_WORKFLOW_HIST.flg_reusable
+  is 'Flag that indicates if the supply is reusable or disposable (Y/N)';
+comment on column SUPPLY_WORKFLOW_HIST.flg_editable
+  is 'Flag that indicates if is possible to edit contents/quantities (Y/N)';
+comment on column SUPPLY_WORKFLOW_HIST.total_avail_quantity
+  is 'Number of units that exists in the institution/department to be loaned';
+comment on column SUPPLY_WORKFLOW_HIST.cod_table
+  is 'Code table where the supply is prepared';
+comment on column SUPPLY_WORKFLOW_HIST.flg_preparing
+  is 'Flag that indicates if is needed to prepare surgical supplies (Y/N)';
+comment on column SUPPLY_WORKFLOW_HIST.flg_countable
+  is 'Flag that indicates surgical supplies count (Y/N)';
+comment on column SUPPLY_WORKFLOW_HIST.id_supply_area
+  is 'Supply area ID';
+comment on column SUPPLY_WORKFLOW_HIST.lot
+  is 'Lot number';
+comment on column SUPPLY_WORKFLOW_HIST.dt_expiration
+  is 'Supply expiration date';
+comment on column SUPPLY_WORKFLOW_HIST.flg_validation
+  is 'Flag that indicates whether the barcode has been validated (Y/N)';
+-- CHANGE END: Ana Matos
+
+-- CHANGED BY: pedro.henriques
+-- CHANGE DATE: 09/05/2016 15:03
+-- CHANGE REASON: [ALERT-320999] 
+ALTER TABLE SUPPLY_WORKFLOW_HIST ADD SUPPLY_MIGRATION VARCHAR2(1000 CHAR);
+COMMENT ON COLUMN SUPPLY_WORKFLOW_HIST.SUPPLY_MIGRATION IS 'Data from old supplies data model';
+-- CHANGE END: pedro.henriques
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 10/02/2022 11:34
+-- CHANGE REASON: [EMR-51652] - DB versioning packages - alert schema
+DECLARE
+e_already_exists EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_already_exists, -01430);
+BEGIN
+EXECUTE IMMEDIATE 'alter table supply_workflow_hist add ID_CONSUMPTION_PARENT NUMBER(24)';
+EXCEPTION
+WHEN e_already_exists THEN
+dbms_output.put_line('supply_workflow_hist: coluna a ser acrescentada já existe na tabela');
+END;
+/
+
+DECLARE e_object_exists EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+
+BEGIN
+EXECUTE IMMEDIATE 'alter table supply_workflow_hist add constraint SWH_CP_FK foreign key (ID_CONSUMPTION_PARENT) references SUPPLY_WORKFLOW (id_supply_workflow)';
+EXCEPTION
+WHEN OTHERS THEN
+dbms_output.put_line('ERROR.');
+END;
+
+END;
+/
+DECLARE
+e_no_constraint EXCEPTION;
+PRAGMA EXCEPTION_INIT(e_no_constraint, -01430);
+BEGIN
+EXECUTE IMMEDIATE 'alter table SUPPLY_WORKFLOW_HIST drop constraint SPFH_FLG_STATUS_CHK';
+EXCEPTION
+WHEN e_no_constraint THEN
+dbms_output.put_line('Constraint does not exist');
+END;
+/
+
+DECLARE e_object_exists EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+BEGIN
+
+BEGIN
+EXECUTE IMMEDIATE 'alter table SUPPLY_WORKFLOW_HIST
+add constraint SPFH_FLG_STATUS_CHK
+check (FLG_STATUS IN (''A'', ''S'', ''J'', ''H'', ''V'', ''E'', ''Y'', ''T'', ''P'', ''L'', ''O'',
+''N'', ''I'', ''F'', ''C'', ''D'', ''G'', ''Q'', ''B'', ''K'', ''Z'', ''W'', ''R'', ''U'', ''X''))';
+EXCEPTION
+WHEN OTHERS THEN
+dbms_output.put_line('ERROR creating constraint');
+END;
+END
+;
+/
+
+COMMENT ON column SUPPLY_WORKFLOW_HIST.ID_CONSUMPTION_PARENT IS 'ID_SUPPLY_WORKFLOW parent that originated the current consumption';
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 28/07/2022 11:41
+-- CHANGE REASON: [EMR-54351] - Supplies workflow revision for interfaces
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SUPPLY_WORKFLOW_hist add id_dispense_parent number(24)';
+EXCEPTION
+WHEN others THEN
+dbms_output.put_line('Error on alter table SUPPLY_WORKFLOW_HIST');
+END;
+/
+
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SUPPLY_WORKFLOW_HIST
+add supply_description varchar2(1000 char)';
+EXCEPTION
+WHEN others THEN
+dbms_output.put_line('Error on alter table SUPPLY_WORKFLOW');
+END;
+/
+
+BEGIN
+EXECUTE IMMEDIATE 'create index SWF_FLG_STAT_IDX on SUPPLY_WORKFLOW (FLG_STATUS, ID_PROFESSIONAL, ID_SUPPLY)
+tablespace INDEX_M
+pctfree 10
+initrans 2
+maxtrans 255
+storage
+(
+initial 128K
+next 512K
+minextents 1
+maxextents unlimited
+pctincrease 0
+)';
+EXCEPTION
+WHEN others THEN
+dbms_output.put_line('Error creating index SWF_FLG_STAT_IDX');
+END;
+/
+
+BEGIN
+EXECUTE IMMEDIATE 'create index SW_AREA_STATUS_IDX on SUPPLY_WORKFLOW (ID_SUPPLY_AREA, FLG_STATUS)
+tablespace INDEX_L
+pctfree 10
+initrans 2
+maxtrans 255
+storage
+(
+initial 128K
+next 2M
+minextents 1
+maxextents unlimited
+pctincrease 0
+)';
+EXCEPTION
+WHEN others THEN
+dbms_output.put_line('Error creating index SW_AREA_STATUS_IDX');
+END;
+/
+
+BEGIN
+EXECUTE IMMEDIATE 'create index SW_SEARCH01_IDX on SUPPLY_WORKFLOW (ID_EPISODE, ID_SUPPLY, ID_SUPPLY_AREA, NVL(COD_TABLE,''0''), FLG_STATUS)
+tablespace ALERT_IDX
+pctfree 10
+initrans 2
+maxtrans 255
+storage
+(
+initial 64K
+next 1M
+minextents 1
+maxextents unlimited
+)';
+EXCEPTION
+WHEN others THEN
+dbms_output.put_line('Error creating index SW_SEARCH01_IDX');
+END;
+/
+
+BEGIN
+EXECUTE IMMEDIATE 'alter table SUPPLY_WORKFLOW
+DROP CONSTRAINT SPF_FLG_STATUS_CHK';
+EXCEPTION
+WHEN others THEN
+dbms_output.put_line('Error altering table SUPPLY_WORKFLOW');
+END;
+/
+
+BEGIN
+EXECUTE IMMEDIATE 'alter table SUPPLY_WORKFLOW
+add constraint SPF_FLG_STATUS_CHK
+check (FLG_STATUS IN (''A'', ''S'', ''J'', ''H'', ''V'', ''E'', ''Y'', ''T'', ''P'', ''L'', ''O'', ''N'', ''I'', ''F'', ''C'', ''D'', ''G'', ''Q'',
+''B'', ''K'', ''Z'', ''W'', ''R'', ''U'', ''X'', ''M'', ''DV''))';
+EXCEPTION
+WHEN others THEN
+dbms_output.put_line('Error altering table SUPPLY_WORKFLOW');
+END;
+/
+-- CHANGE END: Diogo Oliveira
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 29/07/2022 08:34
+-- CHANGE REASON: [EMR-54369] - Supplies workflow revision for interfaces
+BEGIN
+EXECUTE IMMEDIATE 'alter table supply_workflow_hist drop column supply_description';
+EXCEPTION
+WHEN others THEN
+dbms_output.put_line('Error dropping SPF_FLG_STATUS_CHK');
+END;
+/
+-- CHANGE END: Diogo Oliveira

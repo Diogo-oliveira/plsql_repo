@@ -1,0 +1,68 @@
+
+
+  ALTER TABLE EPIS_HIDRICS_BALANCE ADD CONSTRAINT EHBE_PK PRIMARY KEY (ID_EPIS_HIDRICS_BALANCE) ENABLE;
+
+  ALTER TABLE EPIS_HIDRICS_BALANCE MODIFY (ID_EPIS_HIDRICS_BALANCE NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_HIDRICS_BALANCE MODIFY (ID_EPIS_HIDRICS NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_HIDRICS_BALANCE MODIFY (ADW_LAST_UPDATE NOT NULL ENABLE);
+
+  ALTER TABLE EPIS_HIDRICS_BALANCE MODIFY (FLG_STATUS NOT NULL ENABLE);
+
+
+
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/12/2009 14:27
+-- CHANGE REASON: [ALERT-59548 ] INP/Registos Hídricos/Diurese/Perfil Enfermeiro/Urgente: No epis (truncated)
+--                
+ALTER TABLE epis_hidrics_balance MODIFY (dt_register_tstz NOT NULL);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 21/12/2009 14:43
+-- CHANGE REASON: [ALERT-63771 ] INP/Registos Hídricos/Diurese/Perfil Enfermeiro/Urgente: No epis (truncated)
+--                
+ALTER TABLE epis_hidrics_balance MODIFY (dt_register_tstz NOT NULL);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 22:36
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+alter table EPIS_HIDRICS_BALANCE add constraint EHB_FLG_ST_CHK check (FLG_STATUS IN ('R','E','I','C','F','D','L'));
+alter table EPIS_HIDRICS_BALANCE add constraint EHB_FLG_CLS_TYP_CHK check (FLG_CLOSE_TYPE IN ('A','B','C'));
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 26/10/2011 11:54
+-- CHANGE REASON: [ALERT-201548] Positioning - INP: UX Intake and Output
+begin
+EXECUTE IMMEDIATE 'ALTER TABLE epis_hidrics_balance drop CONSTRAINT EHB_FLG_ST_CHK';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+
+
+begin
+EXECUTE IMMEDIATE 'alter table epis_hidrics_balance  add constraint EHB_FLG_ST_CHK  check (flg_status IN (''R'',''E'',''I'',''C'',''F'',''D'',''L'',''O''))';
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL;
+end;
+/
+-- CHANGE END: António Neto
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 02/02/2012 09:37
+-- CHANGE REASON: [ALERT-216940] Fix problem with - Error message when entering Intake and Output menu under Nursing Wo (truncated)
+begin
+execute immediate ('ALTER TABLE epis_hidrics_balance add CONSTRAINT EHB_ID_HID_DT_OPEN_IDX UNIQUE (id_epis_hidrics, dt_open_tstz) deferrable initially deferred NOVALIDATE');
+exception
+when others then
+dbms_output.put_line(SQLERRM);
+end;
+/
+-- CHANGE END: António Neto

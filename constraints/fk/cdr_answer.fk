@@ -1,0 +1,16 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 27/06/2012 15:47
+-- CHANGE REASON: [ALERT-234510] gfr v2 changes ddl
+declare
+  e_fk_exists exception;
+  pragma exception_init(e_fk_exists, -02275);
+begin
+  execute immediate 'alter table CDR_ANSWER
+  add constraint CDRAW_WTS_FK foreign key (ID_WORKFLOW, ID_STATUS_BEGIN, ID_STATUS_END, ID_WORKFLOW_ACTION)
+  references WF_TRANSITION (ID_WORKFLOW, ID_STATUS_BEGIN, ID_STATUS_END, ID_WORKFLOW_ACTION)
+';
+exception when e_fk_exists then
+  dbms_output.put_line('foreign key cdraw_wts_fk already exists!');
+end;
+/
+-- CHANGE END: Pedro Carneiro

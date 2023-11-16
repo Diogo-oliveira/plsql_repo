@@ -1,0 +1,49 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 26/07/2011 15:01
+-- CHANGE REASON: [ALERT-188174] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ped_area_soft_inst
+  ADD CONSTRAINT pasi_paa_fk FOREIGN KEY (
+    id_ped_area_add
+  ) REFERENCES ped_area_add (id_ped_area_add)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ped_area_soft_inst
+  ADD CONSTRAINT pasi_inst_fk FOREIGN KEY (
+    id_institution
+  ) REFERENCES institution (id_institution)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ped_area_soft_inst
+  ADD CONSTRAINT pasi_soft_fk FOREIGN KEY (
+    id_software
+  ) REFERENCES software (id_software)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ped_area_soft_inst
+  ADD CONSTRAINT pasi_market_fk FOREIGN KEY (
+    id_market
+  ) REFERENCES market (id_market)';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

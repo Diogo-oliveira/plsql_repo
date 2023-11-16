@@ -1,0 +1,316 @@
+
+
+  CREATE TABLE DOC_EXTERNAL
+   (	ID_DOC_EXTERNAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_DOC_TYPE NUMBER(12,0) NOT NULL ENABLE,
+	NUM_DOC VARCHAR2(200),
+	DT_EMITED DATE,
+	NOTES VARCHAR2(2000),
+	DT_DIGIT DATE,
+	ID_DOC_ORI_TYPE NUMBER(6,0) NOT NULL ENABLE,
+	ID_DOC_DESTINATION NUMBER(6,0) NOT NULL ENABLE,
+	DT_EXPIRE DATE,
+	ID_EXTERNAL_REQUEST NUMBER(24,0),
+	DESC_DOC_TYPE VARCHAR2(200),
+
+	DESC_DOC_ORI_TYPE VARCHAR2(200),
+	DESC_DOC_DESTINATION VARCHAR2(200),
+	ID_EPISODE NUMBER(24,0),
+	ID_PATIENT NUMBER(24,0),
+	FLG_STATUS VARCHAR2(1),
+	LOCAL_EMITED VARCHAR2(200),
+	ID_INSTITUTION NUMBER(12,0),
+	FLG_SENT_BY VARCHAR2(1),
+	FLG_RECEIVED VARCHAR2(1),
+	ID_DOC_ORIGINAL NUMBER(12,0),
+	DESC_DOC_ORIGINAL VARCHAR2(200)
+   );
+
+
+COMMENT ON COLUMN doc_external.id_doc_type IS 'Id da especificação do documento' ;
+COMMENT ON COLUMN doc_external.dt_emited IS 'Data emissão' ;
+COMMENT ON COLUMN doc_external.id_doc_ori_type IS 'Id do tipo de documento' ;
+COMMENT ON COLUMN doc_external.id_doc_destination IS 'Id do destino do original' ;
+COMMENT ON COLUMN doc_external.desc_doc_type IS 'Descrição manual da especificação documento' ;
+COMMENT ON COLUMN doc_external.desc_doc_ori_type IS 'Descrição manual do tipo de documento' ;
+COMMENT ON COLUMN doc_external.desc_doc_destination IS 'Descrição manual do destino do original' ;
+COMMENT ON COLUMN doc_external.flg_status IS 'Estado: A - activo, I - inactivo' ;
+COMMENT ON COLUMN doc_external.local_emited IS 'Local de emissão' ;
+COMMENT ON COLUMN doc_external.id_doc_original IS 'Id de doc_original' ;
+COMMENT ON COLUMN doc_external.desc_doc_original IS 'Descrição manual do original do documento' ;
+
+comment on column DOC_EXTERNAL.FLG_SENT_BY
+  is 'Document sent by (E)mail; (F)ax; (M)ail';
+comment on column DOC_EXTERNAL.FLG_RECEIVED
+  is 'Document received: (Y)es; (N)o.';
+
+
+alter table DOC_EXTERNAL add ID_PROFESSIONAL number(24);
+-- Add comments to the columns 
+comment on column DOC_EXTERNAL.ID_PROFESSIONAL
+  is 'profissional que inseriu este documento';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table DOC_EXTERNAL
+  add constraint DEL_PROF_FK foreign key (ID_PROFESSIONAL)
+  references professional (ID_PROFESSIONAL);
+
+-- coluna para o titulo. Estava em falta
+alter table DOC_EXTERNAL add TITLE VARCHAR2(200);
+-- Add comments to the columns 
+comment on column DOC_EXTERNAL.TITLE
+  is 'titulo descritivo livre';
+
+-- Add date inserted
+alter table DOC_EXTERNAL add DT_INSERTED TIMESTAMP(6) WITH LOCAL TIME ZONE;
+-- Add comments to the columns 
+comment on column DOC_EXTERNAL.DT_INSERTED
+  is 'data insercao';
+
+-- data e prof do ultimo update
+alter table DOC_EXTERNAL add DT_UPDATED timestamp with local time zone;
+alter table DOC_EXTERNAL add ID_PROFESSIONAL_UPD number(24);
+-- Add comments to the columns 
+comment on column DOC_EXTERNAL.DT_UPDATED
+  is 'data ultimo update';
+comment on column DOC_EXTERNAL.ID_PROFESSIONAL_UPD
+  is 'profissional que fez ultimo update';
+alter table DOC_EXTERNAL
+  add constraint DEL_PROF2_FK foreign key (ID_PROFESSIONAL_UPD)
+  references professional (ID_PROFESSIONAL);
+
+-- performed by
+alter table DOC_EXTERNAL add ID_PROF_PERF_BY number(24);
+alter table DOC_EXTERNAL add DESC_PERF_BY varchar2(200);
+-- Add comments to the columns 
+comment on column DOC_EXTERNAL.ID_PROF_PERF_BY
+  is 'performed by - id do profissional';
+comment on column DOC_EXTERNAL.DESC_PERF_BY
+  is 'performed by - descriçao manual';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table DOC_EXTERNAL
+  add constraint DEL_PROF3_FK foreign key (ID_PROF_PERF_BY)
+  references professional (ID_PROFESSIONAL);
+
+-- id_grupo 
+alter table DOC_EXTERNAL add ID_GRUPO number(24);
+-- Add comments to the columns 
+comment on column DOC_EXTERNAL.ID_GRUPO
+  is 'id que relaciona este doc com os seus antecessores e sucessores';
+
+
+
+-- NOVA ALTERACAO
+
+alter table DOC_EXTERNAL add ID_PROFESSIONAL number(24);
+-- Add comments to the columns 
+comment on column DOC_EXTERNAL.ID_PROFESSIONAL
+  is 'profissional que inseriu este documento';
+
+-- coluna para o titulo. Estava em falta
+alter table DOC_EXTERNAL add TITLE VARCHAR2(200);
+-- Add comments to the columns 
+comment on column DOC_EXTERNAL.TITLE
+  is 'titulo descritivo livre';
+
+-- Add date inserted
+alter table DOC_EXTERNAL add DT_INSERTED TIMESTAMP(6) WITH LOCAL TIME ZONE;
+-- Add comments to the columns 
+comment on column DOC_EXTERNAL.DT_INSERTED
+  is 'data insercao';
+
+-- data e prof do ultimo update
+alter table DOC_EXTERNAL add DT_UPDATED timestamp with local time zone;
+alter table DOC_EXTERNAL add ID_PROFESSIONAL_UPD number(24);
+-- Add comments to the columns 
+comment on column DOC_EXTERNAL.DT_UPDATED
+  is 'data ultimo update';
+comment on column DOC_EXTERNAL.ID_PROFESSIONAL_UPD
+  is 'profissional que fez ultimo update';
+
+-- performed by
+alter table DOC_EXTERNAL add ID_PROF_PERF_BY number(24);
+alter table DOC_EXTERNAL add DESC_PERF_BY varchar2(200);
+-- Add comments to the columns 
+comment on column DOC_EXTERNAL.ID_PROF_PERF_BY
+  is 'performed by - id do profissional';
+comment on column DOC_EXTERNAL.DESC_PERF_BY
+  is 'performed by - descriçao manual';
+
+-- id_grupo 
+alter table DOC_EXTERNAL add ID_GRUPO number(24);
+-- Add comments to the columns 
+comment on column DOC_EXTERNAL.ID_GRUPO
+  is 'id que relaciona este doc com os seus antecessores e sucessores';
+
+
+-- FIM
+
+-- CHANGED BY: Bruno Martins
+-- CHANGE DATE: 02-07-2009
+-- CHANGE REASON: ADT-1077
+
+alter table doc_external add DT_LAST_IDENTIFICATION_TSTZ TIMESTAMP(6) WITH LOCAL TIME ZONE;
+
+alter table doc_external add  ORGAN_SHIPPER  VARCHAR2(200);
+
+comment on column doc_external.ORGAN_SHIPPER is 'Document organ shipper';
+
+comment on column doc_external.DT_LAST_IDENTIFICATION_TSTZ is 'Last time that alert professional review document';
+
+-- CHANGE END: Bruno Martins
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:18
+-- CHANGE REASON: [ALERT-126939] 
+alter table doc_external add id_language number(6);
+comment on column doc_external.id_language is 'Documents language';
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:20
+-- CHANGE REASON: [ALERT-126939] 
+ALTER TABLE DOC_EXTERNAL  ADD (ID_SPECIALTY NUMBER(12) );
+ 
+COMMENT ON COLUMN DOC_EXTERNAL.ID_SPECIALTY IS 'Specialty Id';
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:20
+-- CHANGE REASON: [ALERT-126939] 
+ALTER TABLE DOC_EXTERNAL  ADD (AUTHOR VARCHAR2(200 CHAR));
+ 
+COMMENT ON COLUMN DOC_EXTERNAL.AUTHOR IS 'Author of the document';
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY:  carlos.guilherme
+-- CHANGE DATE: 04/02/2011 16:22
+-- CHANGE REASON: [ALERT-126939] 
+alter table Doc_External modify ID_DOC_DESTINATION null;
+-- CHANGE END:  carlos.guilherme
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/11/2013 16:52
+-- CHANGE REASON: [ALERT-270542 ] 
+BEGIN
+    pk_versioning.run(i_sql => 'ALTER TABLE doc_external ADD dt_last_identification TIMESTAMP(6) WITH LOCAL TIME ZONE');
+end;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 26/11/2013 17:00
+-- CHANGE REASON: [ALERT-270542 ] 
+BEGIN
+    pk_versioning.run(i_sql => 'ALTER TABLE doc_external DROP COLUMN dt_last_identification_tstz');
+end;
+/
+-- CHANGE END: Joana Barroso
+
+-- CHANGED BY: Paulo Silva
+-- CHANGE DATE: 15/05/2014 14:28
+-- CHANGE REASON: [ALERT-284513]
+ALTER TABLE DOC_EXTERNAL  ADD (DOC_OID VARCHAR2(200 CHAR));
+comment on column DOC_EXTERNAL.DOC_OID is 'Document OID. This OID should be unique in the world!';
+-- CHANGE END: Paulo Silva
+
+-- cmf 14-01-2016
+COMMENT ON TABLE  ALERT.DOC_EXTERNAL  						IS 'Documents specifications.' ;
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ID_DOC_TYPE 			IS 'Doc_type id' ;
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.DT_EMITED 				IS 'Date of document creation' ;
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ID_DOC_ORI_TYPE 		IS 'Doc_ori_type id' ;
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ID_DOC_DESTINATION 	IS 'Doc_destination id' ;
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.DESC_DOC_TYPE 			IS 'Manual description' ;
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.DESC_DOC_ORI_TYPE 		IS 'user description of type of document' ;
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.DESC_DOC_DESTINATION 	IS 'user description of original document location' ;
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.FLG_STATUS 			IS 'Status: A - active, I - inactive' ;
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.LOCAL_EMITED 			IS 'where document was created' ;
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ID_DOC_ORIGINAL 		IS 'Id de doc_original' ;
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.DESC_DOC_ORIGINAL 		IS 'user description of original document' ;
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.FLG_SENT_BY  			IS 'Document sent by (E)mail; (F)ax; (M)ail';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.FLG_RECEIVED  			IS 'Document received: (Y)es; (N)o.';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ID_PROFESSIONAL  		IS 'professional who inserted the document';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.TITLE  				IS 'Title of document';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.DT_INSERTED  			IS 'Date of insertion into system';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.DT_UPDATED  			IS 'Last update date';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ID_PROFESSIONAL_UPD 	IS 'professional who made the last update';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ID_PROF_PERF_BY  		IS 'performed by - id of professional';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.DESC_PERF_BY  			IS 'performed by - user description';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ID_GRUPO  				IS 'id that relates this doc with former or later "version" of this doc';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ORGAN_SHIPPER			IS 'Document organ shipper';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.DT_LAST_IDENTIFICATION is 'Last time that alert professional review document';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ID_SPECIALTY 			IS 'Specialty Id';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.AUTHOR 				IS 'Author of the document';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.DOC_OID 				IS 'Document OID. This OID should be unique in the world!';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ID_DOC_EXTERNAL		IS 'Primary Key';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.NUM_DOC        		IS 'Number of documento if applicable';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.NOTES					IS 'User notes relevant to document';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.DT_DIGIT				IS 'date of document digitalization';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.DT_EXPIRE				IS 'Expiration date of document';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ID_EXTERNAL_REQUEST	IS 'External Request Id';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ID_EPISODE				IS 'Episode Id if available';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ID_PATIENT				IS 'Patient id whose document is related';
+COMMENT ON COLUMN ALERT.DOC_EXTERNAL.ID_INSTITUTION			IS 'Institution id where record was created';
+
+DECLARE
+      e_object_exists EXCEPTION;
+  
+      PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+  BEGIN
+  
+      BEGIN
+          EXECUTE IMMEDIATE 'ALTER table DOC_EXTERNAL
+drop constraint DEL_LANG_FK';
+      EXCEPTION
+          WHEN e_object_exists THEN
+              dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+      END;
+  
+END;
+/
+
+create or replace synonym iso_lang for ALERT_ADTCOD_CFG.iso_lang;
+
+DECLARE
+      e_object_exists EXCEPTION;
+  
+      PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+  BEGIN
+  
+      BEGIN
+          EXECUTE IMMEDIATE 'alter table DOC_EXTERNAL
+  add constraint DEL_LANG_FK foreign key (ID_LANGUAGE)
+  references ISO_LANG (ID_ISO_LANG)';
+      EXCEPTION
+          WHEN e_object_exists THEN
+              dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+      END;
+  
+END;
+/
+
+DECLARE
+      e_object_exists EXCEPTION;
+  
+      PRAGMA EXCEPTION_INIT(e_object_exists, -01430);
+  BEGIN
+  
+      BEGIN
+          EXECUTE IMMEDIATE '  alter table DOC_EXTERNAL
+  ADD  DESC_LANGUAGE VARCHAR(200 CHAR)';
+      EXCEPTION
+          WHEN e_object_exists THEN
+              dbms_output.put_line('AVISO: Operacao ja executada anteriormente.');
+      END;
+  
+END;
+/
+  
+   COMMENT on column DOC_EXTERNAL.DESC_LANGUAGE  IS 'User description of document''s language';
+   
+   
+-- CHANGED BY: Andre Silva
+-- CHANGE DATE: 28/07/2022
+-- CHANGE REASON: [EMR-54364] 
+alter table doc_external
+add flg_saved_outside VARCHAR2(1) DEFAULT 'N';
+-- CHANGE END: Andre Silva

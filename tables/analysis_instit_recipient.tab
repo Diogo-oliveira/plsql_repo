@@ -1,0 +1,375 @@
+  CREATE TABLE ANALYSIS_INSTIT_RECIPIENT 
+(	ID_ANALYSIS_INSTIT_RECIPIENT NUMBER(24,0),  
+	ID_ANALYSIS_INSTIT_SOFT NUMBER(24,0),  
+	ID_SAMPLE_RECIPIENT NUMBER(12,0) 
+) ;
+
+
+-- Para adicionar colunas pode ser usado código comentado
+-- De momento só são suportados os tipos de dados mais comuns. 
+-- ALTER TABLE ANALYSIS_INSTIT_RECIPIENT ADD ID_ANALYSIS_INSTIT_RECIPIENT NUMBER(24,0) NOT NULL;
+-- ALTER TABLE ANALYSIS_INSTIT_RECIPIENT ADD ID_ANALYSIS_INSTIT_SOFT NUMBER(24,0) ; 
+-- ALTER TABLE ANALYSIS_INSTIT_RECIPIENT ADD ID_SAMPLE_RECIPIENT NUMBER(12,0) ;  
+
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ANALYSIS_INSTIT_RECIPIENT IS 'Chave primária';
+
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ANALYSIS_INSTIT_SOFT IS 'Análise por instituição/aplicação'; 
+
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_SAMPLE_RECIPIENT IS 'Recipiente seleccionavel na colheita para o parâmetro indicado';
+
+COMMENT ON TABLE ANALYSIS_INSTIT_RECIPIENT  IS 'Associação de parâmetros às amostras e recipientes'; 
+
+ALTER TABLE ANALYSIS_INSTIT_RECIPIENT 
+ ADD (ID_ANALYSIS_ROOM NUMBER(24) );
+
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ANALYSIS_ROOM  IS 'Laboratório';
+
+-- Add/modify columns 
+alter table ANALYSIS_INSTIT_RECIPIENT add FLG_DEFAULT varchar2(1) default 'Y' not null;
+-- Add comments to the columns 
+comment on column ANALYSIS_INSTIT_RECIPIENT.FLG_DEFAULT
+  is 'Flag que permite escolher o recipiente por defeito para uma análise';
+
+ALTER TABLE analysis_instit_recipient add id_room NUMBER(24);
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ROOM  IS 'Laboratório';
+
+-- CHANGED BY: José Castro
+-- CHANGED DATE: 21-04-2009 15:30
+-- CHANGED REASON: ALERT-696
+ALTER TABLE ANALYSIS_INSTIT_RECIPIENT ADD QTY_HARVEST NUMBER(10,2);
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.QTY_HARVEST IS 'Quantidade necessária na colheita, na unidade de medida do recipiente';
+-- CHANGE END: José Castro
+
+
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 07/07/2014 10:50
+-- CHANGE REASON: [ALERT-289537 ] 
+DECLARE
+    e_column_already_there EXCEPTION;
+    e_invalid_identifier   EXCEPTION;
+    e_already_not_null     EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01442);
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT 
+ ADD (NUM_RECIPIENT NUMBER(6))
+ MODIFY (ID_ANALYSIS_INSTIT_SOFT NUMBER(24) NOT NULL
+ ,ID_SAMPLE_RECIPIENT NUMBER(24) NOT NULL)';
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT MODIFY CREATE_USER VARCHAR2(24 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT MODIFY FLG_DEFAULT VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT MODIFY UPDATE_USER VARCHAR2(24 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT ADD CONSTRAINT AIR_FLG_DEFAULT_CHK CHECK (flg_default IN (''Y'', ''N'')) ENABLE';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ANALYSIS_INSTIT_RECIPIENT IS ''Primary key''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.FLG_DEFAULT IS ''Flag that indicates if the recipient is the default one (Y/N)''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ANALYSIS_INSTIT_SOFT IS ''Analysis_instit_soft ID''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_SAMPLE_RECIPIENT IS ''Sample recipient ID''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ROOM IS ''Harvest room ID''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.QTY_HARVEST IS ''Necessary quantity to be collected''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.NUM_RECIPIENT IS ''Number of recipients''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 07/07/2014 10:50
+-- CHANGE REASON: [ALERT-289537 ] 
+DECLARE e_column_already_there EXCEPTION;
+e_invalid_identifier EXCEPTION;
+e_already_not_null EXCEPTION;
+
+PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+PRAGMA EXCEPTION_INIT(e_already_not_null, -01442);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_RESULT_PAR_HIST 
+ ADD (ID_ARP_PARENT NUMBER(24)
+ ,ANALYSIS_RESULT_VALUE_1 NUMBER(24,3)
+ ,ANALYSIS_RESULT_VALUE_2 NUMBER(24,3)
+ ,COMPARATOR VARCHAR2(2 CHAR)
+ ,SEPARATOR VARCHAR2(1 CHAR)
+ ,STANDARD_CODE VARCHAR2(200 CHAR))
+ MODIFY (METHOD VARCHAR2(200 CHAR))';
+    EXCEPTION
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_RESULT_PAR_HIST.ID_ARP_PARENT IS ''Lab test''''s parameter result parent ID''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_RESULT_PAR_HIST.ANALYSIS_RESULT_VALUE_1 IS ''Lab test''''s parameter result (value)''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_RESULT_PAR_HIST.ANALYSIS_RESULT_VALUE_2 IS ''Lab test''''s parameter result (value)''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_RESULT_PAR_HIST.COMPARATOR IS ''Comparator for numerical results''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_RESULT_PAR_HIST.SEPARATOR IS ''Separator for numerical results''';
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_RESULT_PAR_HIST.STANDARD_CODE IS ''Standard code''';
+    
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+END;
+/
+-- CHANGE END: teresa.coutinho
+
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 07/07/2014 10:50
+-- CHANGE REASON: [ALERT-289537 ] 
+DECLARE
+    e_column_already_there EXCEPTION;
+    e_invalid_identifier   EXCEPTION;
+    e_already_not_null     EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01442);
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT 
+ ADD (NUM_RECIPIENT NUMBER(6))
+ MODIFY (ID_ANALYSIS_INSTIT_SOFT NUMBER(24) NOT NULL
+ ,ID_SAMPLE_RECIPIENT NUMBER(24) NOT NULL)';
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT MODIFY CREATE_USER VARCHAR2(24 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT MODIFY FLG_DEFAULT VARCHAR2(1 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT MODIFY UPDATE_USER VARCHAR2(24 CHAR)';
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT ADD CONSTRAINT AIR_FLG_DEFAULT_CHK CHECK (flg_default IN (''Y'', ''N'')) ENABLE';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ANALYSIS_INSTIT_RECIPIENT IS ''Primary key''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.FLG_DEFAULT IS ''Flag that indicates if the recipient is the default one (Y/N)''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ANALYSIS_INSTIT_SOFT IS ''Analysis_instit_soft ID''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_SAMPLE_RECIPIENT IS ''Sample recipient ID''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ROOM IS ''Harvest room ID''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.QTY_HARVEST IS ''Necessary quantity to be collected''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.NUM_RECIPIENT IS ''Number of recipients''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: teresa.coutinho
+
+
+
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 09/07/2014 11:00
+-- CHANGE REASON: [ALERT-289537 ] 
+DECLARE
+    e_column_already_there EXCEPTION;
+    e_invalid_identifier   EXCEPTION;
+    e_already_not_null     EXCEPTION;
+    e_cns_already_exists   EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+    PRAGMA EXCEPTION_INIT(e_already_not_null, -01442);
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+    PRAGMA EXCEPTION_INIT(e_cns_already_exists, -2264);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT  ADD (NUM_RECIPIENT NUMBER(6))';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT  MODIFY (ID_ANALYSIS_INSTIT_SOFT NUMBER(24) NOT NULL ,ID_SAMPLE_RECIPIENT NUMBER(24) NOT NULL)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT MODIFY CREATE_USER VARCHAR2(24 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT MODIFY FLG_DEFAULT VARCHAR2(1 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT MODIFY UPDATE_USER VARCHAR2(24 CHAR)';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE ANALYSIS_INSTIT_RECIPIENT ADD CONSTRAINT AIR_FLG_DEFAULT_CHK CHECK (flg_default IN (''Y'', ''N'')) ENABLE';
+    EXCEPTION
+        WHEN e_column_already_there THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        WHEN e_already_not_null THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        WHEN e_cns_already_exists THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+        
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ANALYSIS_INSTIT_RECIPIENT IS ''Primary key''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.FLG_DEFAULT IS ''Flag that indicates if the recipient is the default one (Y/N)''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ANALYSIS_INSTIT_SOFT IS ''Analysis_instit_soft ID''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_SAMPLE_RECIPIENT IS ''Sample recipient ID''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ROOM IS ''Harvest room ID''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.QTY_HARVEST IS ''Necessary quantity to be collected''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.NUM_RECIPIENT IS ''Number of recipients''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('aviso :operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: teresa.coutinho
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 08/01/2016 12:00
+-- CHANGE REASON: [ALERT-317702] 
+COMMENT ON TABLE ANALYSIS_INSTIT_RECIPIENT IS 'Lab test''s recipient catalogue';
+
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ANALYSIS_INSTIT_RECIPIENT IS 'Primary key';
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ANALYSIS_INSTIT_SOFT IS 'Institution / software configuration ID';
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_SAMPLE_RECIPIENT IS 'Sample recipient ID';
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.FLG_DEFAULT IS 'Flag that indicates if the record is default or not (Y/N)';
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.ID_ROOM IS 'Harvest room ID';
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.CREATE_USER IS 'Creation User';
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.CREATE_TIME IS 'Creation Time';
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.CREATE_INSTITUTION IS 'Creation Institution';
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.UPDATE_INSTITUTION IS 'Update Institution';
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.QTY_HARVEST IS 'Necessary quantity to be collected';
+COMMENT ON COLUMN ANALYSIS_INSTIT_RECIPIENT.NUM_RECIPIENT IS 'Number of recipients';
+-- CHANGE END: Ana Matos

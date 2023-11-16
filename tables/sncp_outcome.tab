@@ -1,0 +1,70 @@
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 18/07/2014 16:43
+-- CHANGE REASON: [ALERT-290969] Nursing Care Plan: NANDA, NIC, NOC - Data Model
+
+BEGIN
+  pk_frmw_objects.insert_into_frmw_objects(i_owner => 'ALERT', i_obj_name => 'SNCP_OUTCOME', i_obj_type => 'TABLE', i_flg_category => 'TRS', i_flg_alert_default => 'N', i_delete_script => '', i_flg_default_child => 'N', i_flg_nzd => 'Y', i_responsible_team => 'NURSING');
+END;
+/
+CREATE TABLE SNCP_OUTCOME
+  (
+    ID_SNCP_OUTCOME NUMBER (24) NOT NULL ,
+    ID_NOC_OUTCOME  NUMBER (24) NOT NULL ,
+    FLG_PRN         VARCHAR2 (1 CHAR) DEFAULT 'N' NOT NULL ,
+    CODE_NOTES_PRN  VARCHAR2 (200 CHAR) AS ( 'SNCP_OUTCOME.CODE_NOTES_PRN.'
+    ||TO_CHAR(ID_SNCP_OUTCOME) ) VIRTUAL NOT NULL ,
+    FLG_TIME               VARCHAR2 (1 CHAR) DEFAULT 'E' NOT NULL ,
+    FLG_PRIORITY           VARCHAR2 (1 CHAR) DEFAULT 'N' NOT NULL ,
+    ID_ORDER_RECURR_OPTION NUMBER (24) ,
+    CREATE_USER            VARCHAR2 (30 CHAR) ,
+    CREATE_TIME            TIMESTAMP WITH LOCAL TIME ZONE ,
+    CREATE_INSTITUTION     NUMBER (24) ,
+    UPDATE_USER            VARCHAR2 (30 CHAR) ,
+    UPDATE_TIME            TIMESTAMP WITH LOCAL TIME ZONE ,
+    UPDATE_INSTITUTION     NUMBER (24)
+  )
+  TABLESPACE ALERT_DATA ;
+
+COMMENT ON TABLE SNCP_OUTCOME
+IS
+  'NOC Outcomes related to a NANDA Diagnosis within a standard nursing care plan' ;
+  COMMENT ON COLUMN SNCP_OUTCOME.ID_SNCP_OUTCOME
+IS
+  'Standard nursing care plan Outcome ID (surrogate key)' ;
+  COMMENT ON COLUMN SNCP_OUTCOME.ID_NOC_OUTCOME
+IS
+  'NOC Outcome ID' ;
+  COMMENT ON COLUMN SNCP_OUTCOME.FLG_PRN
+IS
+  'Flag that indicates wether the Outcome is PRN or not' ;
+  COMMENT ON COLUMN SNCP_OUTCOME.CODE_NOTES_PRN
+IS
+  'Notes to indicate when a PRN order should be activated' ;
+  COMMENT ON COLUMN SNCP_OUTCOME.FLG_TIME
+IS
+  'Execution time to evaluate the outcome: In current (E)pisode, (B)etween episodes, (N)ext episode.' ;
+  COMMENT ON COLUMN SNCP_OUTCOME.FLG_PRIORITY
+IS
+  'Flag that indicates the priority of an Outcome: (N)ormal, (U)rgent, (E)mergent' ;
+  COMMENT ON COLUMN SNCP_OUTCOME.ID_ORDER_RECURR_OPTION
+IS
+  'Order recurrence option ID for defined frequency in the instructions' ;
+  COMMENT ON COLUMN SNCP_OUTCOME.CREATE_USER
+IS
+  'Creation User' ;
+  COMMENT ON COLUMN SNCP_OUTCOME.CREATE_TIME
+IS
+  'Creation Time' ;
+  COMMENT ON COLUMN SNCP_OUTCOME.CREATE_INSTITUTION
+IS
+  'Creation Institution' ;
+  COMMENT ON COLUMN SNCP_OUTCOME.UPDATE_USER
+IS
+  'Update User' ;
+  COMMENT ON COLUMN SNCP_OUTCOME.UPDATE_TIME
+IS
+  'Update Time' ;
+  COMMENT ON COLUMN SNCP_OUTCOME.UPDATE_INSTITUTION
+IS
+  'Update Institution' ;
+-- CHANGE END: Ariel Machado

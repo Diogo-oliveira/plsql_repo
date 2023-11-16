@@ -1,0 +1,102 @@
+
+
+  CREATE TABLE SCALES_CLASS
+   (	ID_SCALES_CLASS NUMBER(24,0) NOT NULL ENABLE,
+	ID_SCALES NUMBER(24,0) NOT NULL ENABLE,
+	INTERNAL_NAME VARCHAR2(200) NOT NULL ENABLE,
+	MIN_VALUE NUMBER(24,0),
+	MAX_VALUE NUMBER(24,0),
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	CODE_SCALES_CLASS VARCHAR2(200) NOT NULL ENABLE,
+	AGE_MAX NUMBER(3,0),
+	AGE_MIN NUMBER(3,0),
+	REEVALUATION NUMBER(24,0),
+
+	REEVALUATION_TYPE VARCHAR2(1)
+   );
+
+-- CHANGED BY: Ariel Geraldo Machado
+-- CHANGED DATE: 2009-MAR-23
+-- CHANGED REASON: ALERT-11985 - Changes on Touch-Option database model to include id content
+ALTER TABLE SCALES_CLASS ADD (ID_CONTENT VARCHAR2(200));
+COMMENT ON COLUMN SCALES_CLASS.ID_CONTENT  IS 'Content identifier';
+--CHANGE END Ariel Machado
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 16/04/2010 15:46
+-- CHANGE REASON: [ALERT-89937] 
+alter table SCALES_CLASS add ID_SCALES_ACTION_GROUP number(24);
+-- CHANGE END: Rita Lopes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 02/06/2011 16:49
+-- CHANGE REASON: [ALERT-183259 ] [Assessment tools]: Decimal values in scales needs to be supported
+alter table scales_class modify (min_value number(26,2));
+alter table scales_class modify (max_value number(26,2));
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/07/2011 15:44
+-- CHANGE REASON: [ALERT-188951] Possibility to calculate partial scores
+alter table scales_class add id_scales_formula number(24);
+
+COMMENT ON COLUMN scales_class.id_scales_formula IS 'Scales formula identifier';
+
+alter table scales_class add constraint SCSC_SF_FK foreign key (id_scales_formula) references scales_formula (id_scales_formula);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 16/08/2011 16:32
+-- CHANGE REASON: [ALERT-191261 ] partial scores
+alter table scales_class modify id_scales_formula number(24) not null novalidate;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 16/08/2011 16:38
+-- CHANGE REASON: [ALERT-191261 ] partial scores
+alter table scales_class modify id_scales_formula number(24) not null novalidate;
+
+alter table scales_class 
+drop column id_scales;
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 25/08/2011 16:46
+-- CHANGE REASON: [ALERT-192414 ] partial scores
+alter table scales_class modify create_user VARCHAR2(24 char);
+alter table scales_class modify update_user VARCHAR2(24 char);
+alter table scales_class modify INTERNAL_NAME VARCHAR2(200 char);
+alter table scales_class modify FLG_AVAILABLE VARCHAR2(1 char);
+alter table scales_class modify CODE_SCALES_CLASS VARCHAR2(200 char);
+alter table scales_class modify REEVALUATION_TYPE VARCHAR2(1 char);
+alter table scales_class modify ID_CONTENT VARCHAR2(200 char);
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 dataModel - assessment scales
+
+COMMENT ON TABLE scales_class IS 'Parametrization table for scales classification';
+-- Add comments to the columns 
+COMMENT ON column scales_class.id_scales_class IS 'Scales class identifier';
+COMMENT ON column scales_class.internal_name IS 'Internal name identifier';
+COMMENT ON column scales_class.min_value IS 'Minimum scale value  ';
+COMMENT ON column scales_class.max_value IS 'Maximum scale value ';
+COMMENT ON column scales_class.flg_available IS 'Scale is available : Values Y- Yes; N- No';
+COMMENT ON column scales_class.adw_last_update IS 'Date of last change, used by adw';
+COMMENT ON column scales_class.code_scales_class IS 'Translation code scale';
+COMMENT ON column scales_class.age_max IS 'Maximun age aplicable';
+COMMENT ON column scales_class.age_min IS 'Maximun agea plicable';
+COMMENT ON column scales_class.reevaluation IS 'DEPRECATED';
+COMMENT ON column scales_class.reevaluation_type IS 'DEPRECATED';
+COMMENT ON column scales_class.id_content IS 'Content identifier';
+COMMENT ON column scales_class.create_user IS 'Creation User';
+COMMENT ON column scales_class.create_time IS 'Creation Time';
+COMMENT ON column scales_class.create_institution IS 'Creation Institution';
+COMMENT ON column scales_class.update_user IS 'Update User';
+COMMENT ON column scales_class.update_time IS 'Update Time';
+COMMENT ON column scales_class.update_institution IS 'Update Institution';
+COMMENT ON column scales_class.id_scales_action_group IS 'Scales action group identifier';
+COMMENT ON column scales_class.id_scales_formula IS 'Scales formula identifier'; -- Add comments to the table  
+-- CHANGE END: Pedro Fernandes

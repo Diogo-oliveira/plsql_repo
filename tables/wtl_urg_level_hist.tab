@@ -1,0 +1,109 @@
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 18/06/2010 15:44
+-- CHANGE REASON: [ALERT-105487] 
+-- Create table
+create table WTL_URG_LEVEL_HIST
+(
+  ID_WTL_URG_LEVEL          NUMBER(24) not null,
+  CODE                      VARCHAR2(200) not null,
+  CREATE_USER               VARCHAR2(24),
+  CREATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION        NUMBER(24),
+  UPDATE_USER               VARCHAR2(24),
+  UPDATE_TIME               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION        NUMBER(24),
+  FLG_AVAILABLE             VARCHAR2(1),
+  DURATION                  NUMBER(6),
+  ID_GROUP                  NUMBER(24),
+  ID_INSTITUTION            NUMBER(24),
+  ID_CONTENT                VARCHAR2(200),
+  FLG_STATUS                VARCHAR2(1 CHAR),
+  FLG_PARAMETERIZATION_TYPE VARCHAR2(1 CHAR),
+  ID_PROFESSIONAL           NUMBER(24),
+  DT_CREATION               TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DT_LAST_UPDATE            TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  DESC_WTL_URG_LEVEL        VARCHAR2(1000 CHAR),
+  ID_WTL_URG_LEVEL_HIST     NUMBER(24) not null
+);
+
+COMMENT ON TABLE WTL_URG_LEVEL_HIST IS 'Urgency level history';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.ID_CONTENT IS 'Content identifier';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.FLG_STATUS IS 'Status of this data: A - active, E - edited, C - canceled.';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.FLG_PARAMETERIZATION_TYPE IS 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.ID_PROFESSIONAL IS 'Id professional that creates the data, when using backoffice.';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.DT_CREATION IS 'Creation date.';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.DT_LAST_UPDATE IS 'Last date when this data was updated.';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.DESC_WTL_URG_LEVEL IS 'Urgency level description.';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.ID_WTL_URG_LEVEL IS 'Primary key';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.CODE IS 'Code for use on the waiting list';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.CREATE_USER IS 'ID of the professional who created the record';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.CREATE_TIME IS 'Date of record creation';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.CREATE_INSTITUTION IS 'ID of institution where record was created';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.UPDATE_USER IS 'ID of the professional who last updated the record';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.UPDATE_TIME IS 'Date when record was last updated';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.UPDATE_INSTITUTION IS 'ID of the institution where record was last updated';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.FLG_AVAILABLE IS 'Indicates if urgency level is available: Y - available; N - Not Available';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.DURATION IS 'Period required to inform the patient';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.ID_GROUP IS 'Group of institutions using urgency levels';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.flg_status IS 'Status of this data: A - active, E - edited, C - canceled.';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.flg_parameterization_type IS 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.id_professional IS 'Id professional that creates the data, when using backoffice.';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.dt_creation IS 'Creation date.';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.dt_last_update IS 'Last date when this data was updated.';
+COMMENT ON COLUMN WTL_URG_LEVEL_HIST.desc_wtl_urg_level IS 'Urgency level description.';
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 16/07/2010 08:54
+-- CHANGE REASON: [ALERT-112241] 
+alter table wtl_urg_level_hist modify code null;
+-- CHANGE END: orlando.antunes
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 21/01/2016 12:30
+-- CHANGE REASON: [ALERT-318028] CDOC Functionalities V7
+-- Add comments to the table 
+comment on table WTL_URG_LEVEL_HIST
+  is 'Urgency level history';
+-- Add comments to the columns 
+comment on column WTL_URG_LEVEL_HIST.id_wtl_urg_level
+  is 'Foreign key for wtl_urg_level';
+comment on column WTL_URG_LEVEL_HIST.code
+  is 'Code for use on the waiting list';
+comment on column WTL_URG_LEVEL_HIST.create_user
+  is 'ID of the professional who created the record';
+comment on column WTL_URG_LEVEL_HIST.create_time
+  is 'Date of record creation';
+comment on column WTL_URG_LEVEL_HIST.create_institution
+  is 'ID of institution where record was created';
+comment on column WTL_URG_LEVEL_HIST.update_user
+  is 'ID of the professional who last updated the record';
+comment on column WTL_URG_LEVEL_HIST.update_time
+  is 'Date when record was last updated';
+comment on column WTL_URG_LEVEL_HIST.update_institution
+  is 'ID of the institution where record was last updated';
+comment on column WTL_URG_LEVEL_HIST.flg_available
+  is 'Indicates if urgency level is available: Y - available; N - Not Available';
+comment on column WTL_URG_LEVEL_HIST.duration
+  is 'Period required to inform the patient';
+comment on column WTL_URG_LEVEL_HIST.id_group
+  is 'Group of institutions using urgency levels';
+comment on column WTL_URG_LEVEL_HIST.id_institution
+  is 'Institution identifier';
+comment on column WTL_URG_LEVEL_HIST.id_content
+  is 'Content identifier';
+comment on column WTL_URG_LEVEL_HIST.flg_status
+  is 'Status of this data: A - active, E - edited, C - canceled.';
+comment on column WTL_URG_LEVEL_HIST.flg_parameterization_type
+  is 'Type of parameterization used to create this data: C - configurations team, directy in the database, B - backoffice.';
+comment on column WTL_URG_LEVEL_HIST.id_professional
+  is 'Id professional that creates the data, when using backoffice.';
+comment on column WTL_URG_LEVEL_HIST.dt_creation
+  is 'Creation date.';
+comment on column WTL_URG_LEVEL_HIST.dt_last_update
+  is 'Last date when this data was updated.';
+comment on column WTL_URG_LEVEL_HIST.desc_wtl_urg_level
+  is 'Urgency level description.';
+comment on column WTL_URG_LEVEL_HIST.id_wtl_urg_level_hist
+  is 'Primary key';
+-- CHANGE END: Pedro Fernandes

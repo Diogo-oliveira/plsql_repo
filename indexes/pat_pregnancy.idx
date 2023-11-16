@@ -1,0 +1,16 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 21/01/2014 16:49
+-- CHANGE REASON: [ALERT-273786] 
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'CREATE INDEX pp_flg_status_IDX ON pat_pregnancy (flg_status) TABLESPACE index_m';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+END;
+/
+-- CHANGE END: Paulo Teixeira

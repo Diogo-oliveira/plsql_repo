@@ -1,0 +1,49 @@
+-->epis_hhc_discharge|alert|table
+BEGIN
+pk_frmw_objects.insert_into_frmw_objects(
+     i_owner            => 'ALERT',
+     i_obj_name         => 'EPIS_HHC_DISCHARGE',
+     i_obj_type         => 'TABLE',
+     i_flg_category     => 'TRS',
+     i_delete_script    => '',
+     i_responsible_team => 'CDOC',
+     i_flg_nzd          => 'Y');
+END;
+/  
+
+
+-- Create table
+create table EPIS_HHC_DISCHARGE
+(
+  id_hhc_discharge    NUMBER(24) not null,
+  id_epis_hhc_req     NUMBER(24) not null,
+  flg_status          VARCHAR2(1 CHAR) not null,
+  id_prof_discharge   NUMBER(24) not null,
+  dt_discharge        TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  id_prof_cancel      NUMBER(24),
+  id_cancel_reason    NUMBER(24),
+  cancel_notes        clob,
+  dt_cancel           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_user         VARCHAR2(30 CHAR),
+  create_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution  NUMBER(24),
+  update_user         VARCHAR2(30 CHAR),
+  update_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution  NUMBER(24)
+)
+lob(CANCEL_NOTES ) STORE as HHC_DSC_CANCEL_NOTES ( tablespace ALERT_LOB ),
+tablespace ALERT_DATA;
+
+-- Add comments to the table 
+comment on table EPIS_HHC_DISCHARGE  is 'Home Health Care Discharge';
+-- Add comments to the columns 
+comment on column EPIS_HHC_DISCHARGE.id_hhc_discharge  	is 'PK of table, unique identifier';
+comment on column EPIS_HHC_DISCHARGE.id_epis_hhc_req  	is 'Home Care Request';
+comment on column EPIS_HHC_DISCHARGE.flg_status  		is 'HHC Discharge status';
+comment on column EPIS_HHC_DISCHARGE.dt_discharge  		is 'Discharge date';
+comment on column EPIS_HHC_DISCHARGE.id_prof_discharge  is 'Professional that discharges patient from HHC';
+comment on column EPIS_HHC_DISCHARGE.id_cancel_reason  	is 'Cancel Reason ID';
+comment on column EPIS_HHC_DISCHARGE.cancel_notes  		is 'Cancelation notes';
+comment on column EPIS_HHC_DISCHARGE.id_prof_cancel 	is 'Professional that cancel discharge';
+comment on column EPIS_HHC_DISCHARGE.dt_cancel			is 'Cancel date';
+  

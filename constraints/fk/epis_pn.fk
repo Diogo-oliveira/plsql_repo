@@ -1,0 +1,109 @@
+--26/01/2011
+--[ALERT-129745] H&P reformulation in INPATIENT
+ALTER TABLE EPIS_PN ADD (CONSTRAINT
+ EPN_PROF_SIGNOFF_FK FOREIGN KEY 
+  (ID_PROF_SIGNOFF) REFERENCES PROFESSIONAL
+  (ID_PROFESSIONAL))
+/
+
+ALTER TABLE EPIS_PN ADD (CONSTRAINT
+ EPN_PROF_FK FOREIGN KEY 
+  (ID_PROF_CREATE) REFERENCES PROFESSIONAL
+  (ID_PROFESSIONAL))
+/
+
+ALTER TABLE EPIS_PN ADD (CONSTRAINT
+ EPN_PROF_CANCEL_FK FOREIGN KEY 
+  (ID_PROF_CANCEL) REFERENCES PROFESSIONAL
+  (ID_PROFESSIONAL))
+/
+
+ALTER TABLE EPIS_PN ADD (CONSTRAINT
+ EPN_CRN_FK FOREIGN KEY 
+  (ID_CANCEL_REASON) REFERENCES CANCEL_REASON
+  (ID_CANCEL_REASON))
+/
+
+ALTER TABLE EPIS_PN ADD (CONSTRAINT
+ EPN_PROF_UPD_FK FOREIGN KEY 
+  (ID_PROF_LAST_UPDATE) REFERENCES PROFESSIONAL
+  (ID_PROFESSIONAL))
+/
+
+ALTER TABLE EPIS_PN ADD (CONSTRAINT
+ EPGN_EPIS_FK FOREIGN KEY 
+  (ID_EPISODE) REFERENCES EPISODE
+  (ID_EPISODE))
+/
+
+ALTER TABLE EPIS_PN ADD (CONSTRAINT
+ EPN_DCS_FK FOREIGN KEY 
+  (ID_DEP_CLIN_SERV) REFERENCES DEP_CLIN_SERV
+  (ID_DEP_CLIN_SERV))
+/
+
+ALTER TABLE EPIS_PN ADD (CONSTRAINT
+ EPN_DICREP_FK FOREIGN KEY 
+  (ID_DICTATION_REPORT) REFERENCES DICTATION_REPORT
+  (ID_DICTATION_REPORT))
+/
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:31
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+alter table epis_pn
+  add constraint epn_pnnt_fk foreign key (id_pn_note_type)
+  references pn_note_type (id_pn_note_type);
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+alter table epis_pn
+  add constraint epn_pnnt_fk foreign key (id_pn_note_type)
+  references pn_note_type (id_pn_note_type);
+  
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:49
+-- CHANGE REASON: [ALERT-226174] 
+begin
+execute immediate ('ALTER TABLE epis_pn ADD CONSTRAINT EPN_ID_AREA_FK FOREIGN KEY (ID_PN_AREA) REFERENCES PN_AREA(ID_PN_AREA)');
+exception
+when others then
+null;
+end;
+/
+-- CHANGE END: Luís Maia
+
+-- CHANGED BY:  Anna Kurowska
+-- CHANGE DATE: 08/02/2013 14:32
+-- CHANGE REASON: [ALERT-251303] A physician suggested to add the option "Anamnesi Fisiologica"
+begin
+execute immediate ('ALTER TABLE epis_pn ADD CONSTRAINT EPN_ID_SOFTWARE_FK FOREIGN KEY (ID_SOFTWARE) REFERENCES SOFTWARE(ID_SOFTWARE)');
+exception
+when others then
+dbms_output.put_line('operacao ja executada anteriormente');
+end;
+/
+-- CHANGE END:  Anna Kurowska
+
+-- cmf
+declare
+	l_Sql  varchar2(4000);
+begin
+	l_sql := 'alter table EPIS_PN add constraint EPN_PROF_SUBMIT_FK foreign key (ID_PROF_SUBMIT) references PROFESSIONAL (ID_PROFESSIONAL)';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+	l_Sql  varchar2(4000);
+begin
+	l_sql := 'alter table EPIS_PN add constraint EPN_PROF_REVIEWED_FK foreign key (ID_PROF_REVIEWED)  references PROFESSIONAL (ID_PROFESSIONAL)';
+	pk_versioning.run(l_sql);
+end;
+/
+

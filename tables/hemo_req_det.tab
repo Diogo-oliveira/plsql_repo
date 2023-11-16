@@ -1,0 +1,43 @@
+
+
+  CREATE TABLE HEMO_REQ_DET
+   (	ID_HEMO_REQ_DET NUMBER(24,0) NOT NULL ENABLE,
+	ID_HEMO_REQ NUMBER(24,0) NOT NULL ENABLE,
+	ID_HEMO_TYPE NUMBER(24,0),
+	ABO VARCHAR2(10),
+	RH VARCHAR2(1),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	QTY_REQ NUMBER NOT NULL ENABLE,
+	QTY_SUPPLIED NUMBER,
+	NOTES VARCHAR2(2000),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+
+	NOTES_CANCEL VARCHAR2(2000)
+   );
+
+
+COMMENT ON COLUMN hemo_req_det.id_hemo_req_det IS 'ID único' ;
+COMMENT ON COLUMN hemo_req_det.id_hemo_req IS 'ID da requisição' ;
+COMMENT ON COLUMN hemo_req_det.id_hemo_type IS 'ID do tipo de hemoderivado' ;
+COMMENT ON COLUMN hemo_req_det.abo IS 'Tipo ABO (Grupo sanguineo): A, B, AB, O' ;
+COMMENT ON COLUMN hemo_req_det.rh IS 'Tipo RH (Factor Rhesus): P - positivo, N - negativo' ;
+COMMENT ON COLUMN hemo_req_det.flg_status IS 'Estado do detalhe da requisição. Valores possíveis:  R - Requisitado, E - Em preparação, T - Em transporte, P - Parcial, F - Terminado, C - Cancelado' ;
+COMMENT ON COLUMN hemo_req_det.qty_req IS 'Quantidade requisitada' ;
+COMMENT ON COLUMN hemo_req_det.qty_supplied IS 'Quantidade fornecida' ;
+COMMENT ON COLUMN hemo_req_det.notes IS 'Notas' ;
+COMMENT ON COLUMN hemo_req_det.dt_cancel IS 'Data de cancelamento do detalhe da requisiçao' ;
+COMMENT ON COLUMN hemo_req_det.id_prof_cancel IS 'ID do profissional que cancelou o detalhe da requisição' ;
+COMMENT ON COLUMN hemo_req_det.notes_cancel IS 'Notas de cancelamento' ;
+
+--João Eiras, 03-09-2007
+--Timezones changes
+ALTER TABLE HEMO_REQ_DET ADD DT_CANCEL_TSTZ TIMESTAMP WITH LOCAL TIME ZONE; 
+COMMENT ON COLUMN HEMO_REQ_DET.DT_CANCEL_TSTZ IS 'Data de cancelamento do detalhe da requisi‡ao'; 
+
+
+--CHANGED BY: Pedro Santos
+--CHANGE DATE: 22-09-2008
+--CHANGE REASON: drop of DATE column types
+ALTER TABLE "HEMO_REQ_DET" DROP (DT_CANCEL);
+--CHANGE END

@@ -1,0 +1,62 @@
+-- CHANGED BY: Susana Silva
+-- CHANGE DATE: 26/11/2009 11:33
+-- CHANGE REASON: [ALERT-12334 ] 
+create table SUPPLY_REASON
+(
+  ID_SUPPLY_REASON   NUMBER(24) not null,
+  CODE_SUPPLY_REASON VARCHAR2(200 CHAR) not null,
+  FLG_TYPE           VARCHAR2(1 CHAR) not null,
+  ID_INSTITUTION     NUMBER(24),
+  CREATE_USER        VARCHAR2(24 CHAR),
+  CREATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER        VARCHAR2(24 CHAR),
+  UPDATE_TIME        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+)
+tablespace TABLE_M
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- CHANGE END: Susana Silva
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/10/2010 14:20
+-- CHANGE REASON: [ALERT-130879] ID_CONTENT
+alter table supply_reason add (flg_available varchar2(1 char) default 'Y' not null, id_content varchar2(200 char));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/10/2010 14:20
+-- CHANGE REASON: [ALERT-130879] ID_CONTENT
+alter table supply_reason modify (id_content varchar2(200 char) not null);
+-- CHANGE END: João Martins
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/10/2010 14:36
+-- CHANGE REASON: [ALERT-130879] ID_CONTENT
+alter table supply_reason add (flg_available varchar2(1 char) default 'Y' not null, id_content varchar2(200 char));
+-- CHANGE END: João Martins
+
+-- CHANGED BY: João Martins
+-- CHANGE DATE: 11/10/2010 14:36
+-- CHANGE REASON: [ALERT-130879] ID_CONTENT
+alter table supply_reason modify (id_content varchar2(200 char) not null);
+-- CHANGE END: João Martins
+
+-- CHANGED BY: Ariel Machado
+-- CHANGE DATE: 08/09/2014 08:18
+-- CHANGE REASON: [ALERT-293457] Add rank ordering column in SUPPLY_REASON table
+-- Add rank ordening column
+BEGIN
+    pk_versioning.run(i_sql => 'ALTER TABLE SUPPLY_REASON ADD ( rank  NUMBER(6)  DEFAULT 0 )');
+    pk_versioning.run(i_sql => 'COMMENT ON COLUMN supply_reason.rank IS ''Rank for ordering''');
+END;
+/
+-- CHANGE END: Ariel Machado

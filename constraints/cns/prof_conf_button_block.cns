@@ -1,0 +1,44 @@
+alter table PROF_CONF_BUTTON_BLOCK
+  add constraint PCBB_PK primary key (ID_CONF_BUTTON_BLOCK, ID_PROFILE_TEMPLATE);
+
+
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:49
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE prof_conf_button_block ADD CONSTRAINT PCBB_FLG_CFG_TYPE_CHK CHECK(FLG_CONFIG_TYPE IN (''S'', ''C'',''P''))';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table prof_conf_button_block drop primary key drop index';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'alter table prof_conf_button_block
+  add constraint PCBB_PK primary key (ID_CONF_BUTTON_BLOCK, ID_PROFILE_TEMPLATE, ID_MARKET, id_software, id_category, flg_config_type) novalidate';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE prof_conf_button_block ADD CONSTRAINT PCBB_CFG_TYPE_CHK CHECK(case when FLG_CONFIG_TYPE = ''S'' and id_software<>0 and id_category=-1 and id_profile_template=0 then 1 when
+FLG_CONFIG_TYPE = ''C'' and id_software=0 and id_category<>-1 and id_profile_template=0 then 1 
+when FLG_CONFIG_TYPE = ''P'' and id_software=0 and id_category=-1 and id_profile_template<>0 then 1 else null end 
+is not null)';
+EXCEPTION
+    WHEN others THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Luís Maia

@@ -1,0 +1,1 @@
+grant select on SR_POS_STATUS  to ALERT_VIEWER;

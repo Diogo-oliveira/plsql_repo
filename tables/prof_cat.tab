@@ -1,0 +1,23 @@
+
+
+  CREATE TABLE PROF_CAT
+   (	ID_PROF_CAT NUMBER(12,0) NOT NULL ENABLE,
+	ID_PROFESSIONAL NUMBER(24,0) NOT NULL ENABLE,
+	ID_CATEGORY NUMBER(12,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(24,0) NOT NULL ENABLE,
+	ID_CATEGORY_SUB NUMBER(12,0)
+   );
+
+
+COMMENT ON TABLE prof_cat IS 'Categorias dos profissionais. Um profissional pode acumular mais do q uma categoria (ex: médico + dir. serviço)' ;
+
+
+declare
+l_sql    varchar2(1000 char);
+begin
+l_sql := q'[ALTER TABLE PROF_CAT ADD FLG_CAT_PROF VARCHAR2(1 CHAR) DEFAULT 'Y' NOT NULL]';
+pk_versioning.run( l_sql );
+end;
+/
+
+COMMENT ON COLUMN PROF_CAT.FLG_CAT_PROF                  IS 'From CATEGORY.FLG_PROF: Cannot be equal to "N"' ;

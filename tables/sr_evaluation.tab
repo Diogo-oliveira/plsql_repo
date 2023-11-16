@@ -1,0 +1,43 @@
+
+
+  CREATE TABLE SR_EVALUATION
+   (	ID_SR_EVALUATION NUMBER(38,0) NOT NULL ENABLE,
+	ID_SR_EVAL_PARENT NUMBER(38,0),
+	CODE_SR_EVALUATION VARCHAR2(200) NOT NULL ENABLE,
+	CODE_EVAL_HEADER VARCHAR2(200),
+	CODE_EVAL_SUMMARY VARCHAR2(2000),
+	TYPE_EVALUATION VARCHAR2(1) NOT NULL ENABLE,
+	VALUE_TYPE VARCHAR2(1),
+	CODE_DOMAIN VARCHAR2(200),
+	FLG_AVAILABLE VARCHAR2(1),
+	RANK NUMBER(6,0),
+	ID_INSTITUTION NUMBER(12,0),
+
+	ID_SOFTWARE NUMBER(24,0),
+	GENDER VARCHAR2(1),
+	AGE_MIN NUMBER(3,0),
+	AGE_MAX NUMBER(3,0),
+	SQL_CURSOR VARCHAR2(4000),
+	FLG_SUM_PAGE VARCHAR2(1),
+	ADW_LAST_UPDATE DATE
+   );
+
+
+COMMENT ON TABLE sr_evaluation IS 'Tabela de itens de cada tipo de avaliação do ORIS' ;
+
+COMMENT ON COLUMN sr_evaluation.id_sr_evaluation IS 'ID único' ;
+COMMENT ON COLUMN sr_evaluation.id_sr_eval_parent IS 'ID do item pai' ;
+COMMENT ON COLUMN sr_evaluation.code_sr_evaluation IS 'Código para obtenção da descrição na tabela TRANSLATION' ;
+COMMENT ON COLUMN sr_evaluation.code_eval_header IS 'Código para obtenção do cabeçalho de uma lista de itens na tabela translation' ;
+COMMENT ON COLUMN sr_evaluation.code_eval_summary IS 'Código para obtenção da descrição a mostrar na página resumo' ;
+COMMENT ON COLUMN sr_evaluation.type_evaluation IS 'Tipo de Avaliação. Valores possíveis: A- Aspectos Gerais, B- Avaliação pré-operatória de cirurgia, C- Avaliação pré-operatória de anestesia, D- Avaliação no dia da cirurgia, E- Visita pré-anestésica, F- Avaliação antes da ida para o bloco' ;
+COMMENT ON COLUMN sr_evaluation.value_type IS 'Tipo de valor de preenchimento do item. Valores possíveis: T- texto, N- numérico, D- data, M- multichoice - vários valores (guarda em val_domain), O- Multichoice - apenas um valor (guarda em val_domain)' ;
+COMMENT ON COLUMN sr_evaluation.flg_available IS 'Item disponível (Y/N)' ;
+COMMENT ON COLUMN sr_evaluation.rank IS 'Ordem de visualização' ;
+COMMENT ON COLUMN sr_evaluation.id_institution IS 'ID da instituição (0 para todas)' ;
+COMMENT ON COLUMN sr_evaluation.gender IS 'Género à qual se aplica. Valores possíveis: M- masculino, F- Feminino' ;
+COMMENT ON COLUMN sr_evaluation.age_min IS 'Idade mínima à qual se aplica' ;
+COMMENT ON COLUMN sr_evaluation.age_max IS 'Idade máxima à qual se aplica' ;
+
+COMMENT ON COLUMN sr_evaluation.sql_cursor IS 'SQL que obtem detalhe do item' ;
+COMMENT ON COLUMN sr_evaluation.flg_sum_page IS 'Indica em que parte da página resumo o item deve aparecer. Valores possíveis: A- Antecedentes cirúrgicos, B- Antecedentes de tiróide, C- Antecedentes cardíacos, D- Antecedentes pulmonares, E- Antecedentes renais, F- Medicação pessoal' ;

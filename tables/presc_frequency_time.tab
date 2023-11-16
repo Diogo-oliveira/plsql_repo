@@ -1,0 +1,57 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 11:33
+-- CHANGE REASON: [ALERT-38908] Versionamento.
+-- Create table
+create table PRESC_FREQUENCY_TIME
+(
+  ID_PRESC_FREQUENCY_TIME NUMBER(24) not null,
+  TIME                    INTERVAL DAY(3) TO SECOND(3),
+  INTERNAL_NAME           VARCHAR2(4000)
+)
+tablespace TABLE_S;
+-- Add comments to the table 
+comment on table PRESC_FREQUENCY_TIME
+  is 'This table has the relations between time and id_presc_frequency';
+-- Add comments to the columns 
+comment on column PRESC_FREQUENCY_TIME.ID_PRESC_FREQUENCY_TIME
+  is 'primary key';
+comment on column PRESC_FREQUENCY_TIME.TIME
+  is 'real time';
+comment on column PRESC_FREQUENCY_TIME.INTERNAL_NAME
+  is 'internal name';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 15:17
+-- CHANGE REASON: [ALERT-38908] add audit columns
+-- Create table
+create table PRESC_FREQUENCY_TIME
+(
+  ID_PRESC_FREQUENCY_TIME NUMBER(24) not null,
+  TIME                    INTERVAL DAY(3) TO SECOND(3),
+  INTERNAL_NAME           VARCHAR2(4000),
+  CREATE_USER           VARCHAR2(24),
+  CREATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24),
+  UPDATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+)
+tablespace TABLE_S;
+-- Add comments to the table 
+comment on table PRESC_FREQUENCY_TIME
+  is 'This table has the relations between time and id_presc_frequency';
+-- Add comments to the columns 
+comment on column PRESC_FREQUENCY_TIME.ID_PRESC_FREQUENCY_TIME
+  is 'primary key';
+comment on column PRESC_FREQUENCY_TIME.TIME
+  is 'real time';
+comment on column PRESC_FREQUENCY_TIME.INTERNAL_NAME
+  is 'internal name';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 12:07
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESC_FREQUENCY_TIME IS 'This table has the relations between time and id_presc_frequency [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

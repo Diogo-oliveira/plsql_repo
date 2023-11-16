@@ -1,0 +1,118 @@
+CREATE TABLE LENS
+ (ID_LENS NUMBER(24) NOT NULL
+ ,CODE_LENS VARCHAR2(240) NOT NULL
+ ,FLG_TYPE VARCHAR2(1) NOT NULL
+ ,ID_PARENT NUMBER(24)
+ ,ID_CONTENT VARCHAR(200)
+ )
+/
+
+COMMENT ON TABLE LENS IS 'Contains the list of LENS'
+/
+
+COMMENT ON COLUMN LENS.ID_LENS IS 'Primary key'
+/
+
+COMMENT ON COLUMN LENS.CODE_LENS IS 'Code for translation'
+/
+
+COMMENT ON COLUMN LENS.FLG_TYPE IS 'Type of lens. L-Lens G-Glasses'
+/
+
+COMMENT ON COLUMN LENS.ID_PARENT IS 'Parent Id for hierarchical purposes'
+/
+
+COMMENT ON COLUMN LENS.ID_CONTENT IS 'Content unique identifier'
+/
+
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 06/11/2009 16:25
+-- CHANGE REASON: [ALERT-54906] 
+ALTER TABLE ALERT.LENS MODIFY ID_CONTENT NOT NULL ENABLE NOVALIDATE;
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 06/05/2010 11:16
+-- CHANGE REASON: [ALERT-94307] 
+alter table lens add 
+FLG_UNDEFINED VARCHAR2(1 char);
+
+COMMENT ON COLUMN LENS.FLG_UNDEFINED IS 'Indicates if a lens is an undefined one. Used to get a default value of the lens type.';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 13/07/2010 12:32
+-- CHANGE REASON: [ALERT-111484] 
+DECLARE
+    e_column_already_there exception;
+    
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430); -- add column
+BEGIN
+EXECUTE IMMEDIATE
+    'ALTER TABLE lens add flg_undefined VARCHAR2(1 CHAR)';
+    
+    EXECUTE IMMEDIATE
+    'COMMENT ON column lens.flg_undefined IS ''Indicates if a lens is an undefined one. Used to get a default value of the lens type.''';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('Operation already performed');
+END;
+/
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table LENS modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table LENS modify ID_CONTENT varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table LENS modify FLG_TYPE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table LENS modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:28
+-- CHANGE REASON: [ALERT-154361] 
+alter table LENS modify CODE_LENS varchar2(240 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:33
+-- CHANGE REASON: [ALERT-154361] 
+alter table LENS modify ID_CONTENT varchar2(200 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:33
+-- CHANGE REASON: [ALERT-154361] 
+alter table LENS modify FLG_TYPE varchar2(1 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:33
+-- CHANGE REASON: [ALERT-154361] 
+alter table LENS modify CODE_LENS varchar2(240 CHAR);
+/
+-- CHANGE END: mario.mineiro

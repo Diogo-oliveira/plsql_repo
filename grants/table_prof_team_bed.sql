@@ -1,0 +1,3 @@
+
+GRANT SELECT ON ALERT.prof_team_bed TO ALERT_VIEWER;
+

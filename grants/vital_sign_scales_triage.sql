@@ -1,0 +1,5 @@
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 12/10/2011 11:00
+-- CHANGE REASON: [ALERT-199029 ] 
+GRANT SELECT ON ALERT.vital_sign_scales_triage TO ALERT_VIEWER;
+-- CHANGE END: Pedro Fernandes

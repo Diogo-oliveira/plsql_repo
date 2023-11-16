@@ -1,0 +1,80 @@
+CREATE TABLE pat_allergy_unawareness 
+(
+    id_pat_allergy_unawareness   NUMBER(24) NOT NULL,
+		id_allergy_unawareness       NUMBER(24) NOT NULL,
+		id_professional              NUMBER(24),
+		id_patient                   NUMBER(24),
+		id_episode                   NUMBER(24),
+		notes                        VARCHAR2(4000),
+		dt_creation                  TIMESTAMP WITH TIME ZONE,
+    flg_status                   VARCHAR2(1)
+);
+
+-- COMMENTS
+COMMENT ON TABLE pat_allergy_unawareness IS 'This table holds the unawareness register per patients';
+COMMENT ON COLUMN pat_allergy_unawareness.id_pat_allergy_unawareness IS 'Primary key';
+COMMENT ON COLUMN pat_allergy_unawareness.id_allergy_unawareness IS 'Allergy Unawareness ID';
+COMMENT ON COLUMN pat_allergy_unawareness.id_professional IS 'Professional ID';
+COMMENT ON COLUMN pat_allergy_unawareness.id_patient IS 'Patient ID';
+COMMENT ON COLUMN pat_allergy_unawareness.id_episode IS 'Episode ID';
+COMMENT ON COLUMN pat_allergy_unawareness.notes IS 'Notes';
+COMMENT ON COLUMN pat_allergy_unawareness.dt_creation IS 'Date of creation';
+COMMENT ON COLUMN pat_allergy_unawareness.flg_status IS 'A: Active; O: Outdated';
+
+-- CONSTRAINTS
+ALTER TABLE pat_allergy_unawareness ADD CONSTRAINT PAU_ID_AU_PK PRIMARY KEY (id_pat_allergy_unawareness);
+ALTER TABLE pat_allergy_unawareness ADD CONSTRAINT PAU_ID_PROFESSIONAL_FK FOREIGN KEY (id_professional) REFERENCES professional (id_professional);
+ALTER TABLE pat_allergy_unawareness ADD CONSTRAINT PAU_ID_PATIENT_FK FOREIGN KEY (id_patient) REFERENCES patient (id_patient);
+ALTER TABLE pat_allergy_unawareness ADD CONSTRAINT PAU_ID_EPISODE_FK FOREIGN KEY (id_episode) REFERENCES episode (id_episode);
+ALTER TABLE pat_allergy_unawareness ADD CONSTRAINT PAU_FLG_STATUS_CHK CHECK (flg_status IN ('A', 'O'));
+
+-- CHANGED BY: THIAGO BRITO
+-- CHANGE DATE: 2009-Apr-21
+
+ALTER TABLE PAT_ALLERGY_UNAWARENESS DROP CONSTRAINT PAU_FLG_STATUS_CHK;
+ALTER TABLE pat_allergy_unawareness ADD CONSTRAINT PAU_FLG_STATUS_CHK CHECK (flg_status IN ('A', 'O', 'C'));
+
+-- CHANGE END
+
+
+-- CHANGED BY: THIAGO BRITO
+-- CHANGE DATE: 2009-Apr-27
+
+ALTER TABLE pat_allergy_unawareness ADD ID_CANCEL_REASON NUMBER(24);
+ALTER TABLE pat_allergy_unawareness ADD CONSTRAINT PAU_ID_CANCEL_REASON_FK FOREIGN KEY (id_cancel_reason) REFERENCES cancel_reason (id_cancel_reason);
+
+-- CHANGE END
+
+
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 10-May-2010 14:58
+-- CHANGE REASON: [ALERT-96294] NLTEC01 - allergies - see screenshots - the notes desappear when i cancel (v2.6.0.1)
+
+-- Add/modify columns 
+alter table PAT_ALLERGY_UNAWARENESS add ID_PROF_CANCEL NUMBER(24);
+alter table PAT_ALLERGY_UNAWARENESS add CANCEL_NOTES VARCHAR2(4000);
+alter table PAT_ALLERGY_UNAWARENESS add DT_CANCEL TIMESTAMP(6) WITH LOCAL TIME ZONE;
+-- Add comments to the columns 
+comment on column PAT_ALLERGY_UNAWARENESS.ID_PROF_CANCEL
+  is 'Professional that makes the register cancelled';
+comment on column PAT_ALLERGY_UNAWARENESS.CANCEL_NOTES
+  is 'Notes of cancelling';
+comment on column PAT_ALLERGY_UNAWARENESS.DT_CANCEL
+  is 'Date of cancelling';
+  
+  
+-- CHANGE END: Filipe Machado
+
+	
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 09:12
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the columns 
+comment on column PAT_ALLERGY_UNAWARENESS.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column PAT_ALLERGY_UNAWARENESS.dt_creation
+  is 'Date when allergy unawareness is registered';  
+-- CHANGE END: Elisabete Bugalho

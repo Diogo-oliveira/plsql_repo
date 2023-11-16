@@ -1,0 +1,53 @@
+-- CHANGED BY: Joana Barroso
+-- CHANGE DATE: 05/07/2012 11:51
+-- CHANGE REASON: [ALERT-235313] 
+DECLARE l_var PLS_INTEGER;
+BEGIN
+
+    SELECT COUNT(1)
+      INTO l_var
+      FROM user_tables
+     WHERE table_name = 'BDNP_PRESC_TRACKING';
+
+    IF l_var = 0
+    THEN
+        EXECUTE IMMEDIATE 'create table BDNP_PRESC_TRACKING(
+  id_presc_tracking   NUMBER(24) not null,
+  id_presc            NUMBER(24) not null,
+  flg_presc_type      VARCHAR2(240) not null,
+  dt_presc_tracking   TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  dt_event            TIMESTAMP(6) WITH LOCAL TIME ZONE not null,
+  flg_event_type      VARCHAR2(2) not null,
+  id_prof_event       NUMBER(24) not null,
+  id_bdnp_message     NUMBER(24),
+  flg_message_type    VARCHAR2(240),
+  desc_interf_message VARCHAR2(4000),
+  create_user         VARCHAR2(24),
+  create_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution  NUMBER(24),
+  update_user         VARCHAR2(24),
+  update_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution  NUMBER(24),
+  id_institution      NUMBER(24))';
+    END IF;
+END;
+/
+
+COMMENT ON column bdnp_presc_tracking.id_presc_tracking IS 'Id Tracking';
+COMMENT ON column bdnp_presc_tracking.id_presc IS 'Id Presc';
+COMMENT ON column bdnp_presc_tracking.flg_presc_type IS 'R- Referral M- Medication';
+COMMENT ON column bdnp_presc_tracking.dt_presc_tracking IS 'Date of tracking';
+COMMENT ON column bdnp_presc_tracking.dt_event IS 'Date of event';
+COMMENT ON column bdnp_presc_tracking.flg_event_type IS 'I - insert, C - Cancel, RI - Resent insert and RC - Resent Cancel';
+COMMENT ON column bdnp_presc_tracking.id_prof_event IS 'Id professional';
+COMMENT ON column bdnp_presc_tracking.id_bdnp_message IS 'Id Bdnp_message';
+COMMENT ON column bdnp_presc_tracking.flg_message_type IS 'Type of Message E-Error, W-Warning, S- Sucess';
+COMMENT ON column bdnp_presc_tracking.desc_interf_message IS 'Interface message ';
+COMMENT ON column bdnp_presc_tracking.create_user IS 'Creation User';
+COMMENT ON column bdnp_presc_tracking.create_time IS 'Creation Time';
+COMMENT ON column bdnp_presc_tracking.create_institution IS 'Creation Institution';
+COMMENT ON column bdnp_presc_tracking.update_user IS 'Update User';
+COMMENT ON column bdnp_presc_tracking.update_time IS 'Update Time';
+COMMENT ON column bdnp_presc_tracking.update_institution IS 'Update Institution';
+COMMENT ON column bdnp_presc_tracking.id_institution IS 'Id Institution';
+-- CHANGE END: Joana Barroso

@@ -1,0 +1,549 @@
+/*-- Last Change Revision: $Rev: 2055402 $*/
+/*-- Last Change by: $Author: diogo.oliveira $*/
+/*-- Date of last change: $Date: 2023-02-22 09:44:22 +0000 (qua, 22 fev 2023) $*/
+
+CREATE OR REPLACE PACKAGE BODY pk_advanced_input AS
+
+    /*---------------------------------------------------------------------------------------------
+          Esta função cria a mensagem de erro a ser retorna para o utilizador.
+          %param i_lang Língua na qual a mensagem deve ser apresentada
+          %param i_function_name Nome da função onde ocorreu o erro
+          %param i_package_error Indicação do passo que provoucou o erro
+          %param i_oracle_error_msg Erro retornado pelo Oracle
+    
+          %author OAntunes - orlando.antunes@mni.pt
+          %version 2.4.0.
+          %return TRUE se a função termina com sucesso e FALSE caso contrário
+    ---------------------------------------------------------------------------------------------*/
+    FUNCTION build_error_msg
+    (
+        i_lang             IN language.id_language%TYPE,
+        i_function_name    VARCHAR2,
+        i_package_error    VARCHAR2,
+        i_oracle_error_msg VARCHAR2
+    ) RETURN VARCHAR2 IS
+        l_error VARCHAR2(30000) := '';
+    BEGIN
+    
+        l_error := pk_message.get_message(i_lang, 'COMMON_M001') || chr(10) || i_function_name || ' / ' ||
+                   i_package_error || ' / ' || i_oracle_error_msg;
+        --log do erro
+        pk_alertlog.log_error(i_function_name || ': ' || i_package_error || ' -- ' || i_oracle_error_msg,
+                              g_package_name);
+        RETURN l_error;
+    END build_error_msg;
+
+    /** 
+    *  Convert date strings to date format
+    *
+    * @param C_date   String of date
+    *
+    * @return     TIMESTAMP WITH LOCAL TIME ZONE
+    * @author     Tiago Silva
+    * @version    1.0
+    * @since      2008/08/25
+    */
+    FUNCTION convert_to_date(c_date VARCHAR2) RETURN TIMESTAMP
+        WITH LOCAL TIME ZONE IS
+    
+        l_date TIMESTAMP WITH LOCAL TIME ZONE;
+    BEGIN
+    
+        EXECUTE IMMEDIATE 'select ' || nvl(c_date, 'NULL') || ' from dual'
+            INTO l_date;
+    
+        RETURN l_date;
+    
+    END convert_to_date;
+
+    /************************************************************************************************************ 
+    * Get Advanced Input data. 
+    * This function is generic and gets all configured information for a specified Advanced Input control.
+    *
+    * @param      i_lang               number, default language
+    * @param      i_prof               object type, health profisisonal
+    * @param      i_id_advanced_input  ID, identification of the Adanced Input
+    * @param      o_fields             cursor, advanced input fields
+    * @param      o_multichoice_fields cursor, data for Adanced Input multichoice fields 
+    * @param      o_fields_det         cursor, advanced input fields details
+    * @param      o_error              error message
+    *
+    * @return     boolean type, "False" on error or "True" if success
+    * @author     Orlando Antunes 
+    * @version    0.1
+    * @since      2007/08/21
+    ***********************************************************************************************************/
+    FUNCTION get_advanced_input_data
+    (
+        i_lang               IN language.id_language%TYPE,
+        i_prof               IN profissional,
+        i_id_advanced_input  IN advanced_input.id_advanced_input%TYPE,
+        o_fields             OUT pk_types.cursor_type,
+        o_multichoice_fields OUT pk_types.cursor_type,
+        o_fields_det         OUT pk_types.cursor_type,
+        o_fields_units       OUT pk_types.cursor_type,
+        o_error              OUT t_error_out
+    ) RETURN BOOLEAN IS
+    
+        l_error VARCHAR2(2000) := '';
+    BEGIN
+    
+        l_error := 'GET CURSOR ADVANCED INPUT FIELDS';
+        pk_alertlog.log_debug(g_error);
+    
+        --Cursor para retornar o preenchimento inicial do Advanced input
+        OPEN o_fields FOR
+            SELECT ai.id_advanced_input,
+                   aif.id_advanced_input_field,
+                   aif.intern_name AS name,
+                   pk_translation.get_translation(i_lang, aif.code_advanced_input_field) AS label,
+                   aif.type,
+                   aisi.flg_active,
+                   pk_message.get_message(i_lang, aisi.error_message) errormessage,
+                   aisi.rank
+              FROM advanced_input ai, advanced_input_field aif, advanced_input_soft_inst aisi
+             WHERE ai.id_advanced_input = i_id_advanced_input
+               AND aisi.id_advanced_input = ai.id_advanced_input
+               AND aif.id_advanced_input_field = aisi.id_advanced_input_field
+               AND aisi.id_institution IN (i_prof.institution, g_all_institution)
+               AND aisi.id_software IN (i_prof.software, g_all_software)
+               AND aisi.flg_active = g_flg_yes
+             ORDER BY aisi.rank;
+    
+        --Cursor para retornar o preenchimento do Advanced input que sejam do tipo multichoice
+        l_error := 'GET CURSOR ADVANCED INPUT MULTICHOICE FIELDS DATA';
+        OPEN o_multichoice_fields FOR
+            SELECT aimf.id_advanced_input_multi_field,
+                   aif.id_advanced_input_field,
+                   sd.val                             AS data,
+                   aimf.rank,
+                   sd.desc_val                        AS label,
+                   NULL                               flg_default
+              FROM advanced_input_multi_field aimf,
+                   advanced_input_field       aif,
+                   advanced_input             ai,
+                   advanced_input_soft_inst   aisi,
+                   sys_domain                 sd
+             WHERE ai.id_advanced_input = i_id_advanced_input
+               AND aisi.id_advanced_input = ai.id_advanced_input
+               AND aif.id_advanced_input_field = aisi.id_advanced_input_field
+               AND aisi.id_institution IN (i_prof.institution, g_all_institution)
+               AND aisi.id_software IN (i_prof.software, g_all_software)
+               AND aisi.flg_active = g_flg_yes
+               AND aimf.id_advanced_input_field = aif.id_advanced_input_field
+               AND aimf.code_sys_domain = sd.code_domain
+               AND sd.domain_owner = pk_sysdomain.k_default_schema
+               AND aimf.multi_field_val = sd.val
+               AND sd.id_language = i_lang
+             ORDER BY aimf.rank;
+    
+        --Cursor para retornar os detalhes de cada um dos campos do Advanced input que sejam do tipo multichoice
+        l_error := 'GET CURSOR ADVANCED INPUT FIELDS DETAILS';
+        OPEN o_fields_det FOR
+            SELECT adv_input.id_advanced_input,
+                   adv_input.id_advanced_input_field,
+                   adv_input.id_advanced_input_field_det,
+                   adv_input.field_name,
+                   NULL                                  AS VALUE,
+                   adv_input.type,
+                   adv_input.alignment,
+                   adv_input.separator,
+                   adv_input.style,
+                   adv_input.max_value                   AS maxvalue,
+                   adv_input.min_value                   AS minvalue,
+                   adv_input.format,
+                   id_unit,
+                   adv_input.units
+              FROM (SELECT ai.id_advanced_input,
+                           aif.id_advanced_input_field,
+                           aidet.id_advanced_input_field_det,
+                           aidet.field_name,
+                           aif.type,
+                           aidet.alignment,
+                           aidet.separator,
+                           aidet.style,
+                           decode(aif.type,
+                                  g_date_keypad,
+                                  pk_date_utils.date_send_tsz(i_lang, convert_to_date(aidet.max_value), i_prof),
+                                  g_date_hour_keypad,
+                                  pk_date_utils.date_send_tsz(i_lang, convert_to_date(aidet.max_value), i_prof),
+                                  to_number(aidet.max_value,
+                                            'FM999999999999999999999999D9999',
+                                            'NLS_NUMERIC_CHARACTERS = ''.,''')) AS max_value,
+                           decode(aif.type,
+                                  g_date_keypad,
+                                  pk_date_utils.date_send_tsz(i_lang, convert_to_date(aidet.min_value), i_prof),
+                                  g_date_hour_keypad,
+                                  pk_date_utils.date_send_tsz(i_lang, convert_to_date(aidet.min_value), i_prof),
+                                  to_number(aidet.min_value,
+                                            'FM999999999999999999999999D9999',
+                                            'NLS_NUMERIC_CHARACTERS = ''.,''')) AS min_value,
+                           (SELECT s.desc_message
+                              FROM sys_message s
+                             WHERE s.code_message = aidet.format_message
+                               AND s.id_language = i_lang) AS format,
+                           aidet.rank rank_det,
+                           aidet.rank rank_param,
+                           aidet.id_unit,
+                           pk_translation.get_translation(i_lang, 'UNIT_MEASURE.CODE_UNIT_MEASURE.' || aidet.id_unit) AS units
+                      FROM advanced_input           ai,
+                           advanced_input_field     aif,
+                           advanced_input_soft_inst aisi,
+                           advanced_input_field_det aidet
+                     WHERE ai.id_advanced_input = i_id_advanced_input
+                       AND aisi.id_advanced_input = ai.id_advanced_input
+                       AND aif.id_advanced_input_field = aisi.id_advanced_input_field
+                       AND aisi.id_institution IN (i_prof.institution, g_all_institution)
+                       AND aisi.id_software IN (i_prof.software, g_all_software)
+                       AND aisi.flg_active = g_flg_yes
+                       AND aidet.id_advanced_input_field(+) = aif.id_advanced_input_field) adv_input
+             ORDER BY adv_input.rank_det, adv_input.rank_param;
+    
+        l_error := 'GET CURSOR ADVANCED INPUT FIELDS UNITS';
+        OPEN o_fields_units FOR
+            SELECT um.id_unit_measure id,
+                   pk_translation.get_translation(i_lang, um.code_unit_measure) label,
+                   decode(aifd.id_unit, um.id_unit_measure, g_flg_yes, g_flg_no) flg_default,
+                   aifu.id_advanced_input_field,
+                   aifu.rank
+              FROM unit_measure              um,
+                   advanced_input_field_unit aifu,
+                   advanced_input_soft_inst  aisi,
+                   advanced_input_field_det  aifd
+             WHERE um.id_unit_measure = aifu.id_unit_measure
+               AND aifu.id_advanced_input_field = aisi.id_advanced_input_field
+               AND aifd.id_advanced_input_field = aisi.id_advanced_input_field
+               AND aisi.id_advanced_input = i_id_advanced_input
+               AND aisi.id_software IN (g_all_software, i_prof.software)
+               AND aisi.id_institution IN (g_all_institution, i_prof.institution)
+               AND aisi.flg_active = g_flg_yes
+             ORDER BY aifu.rank;
+    
+        RETURN TRUE;
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            DECLARE
+                l_error_in t_error_in := t_error_in();
+                l_ret      BOOLEAN;
+            BEGIN
+                l_error_in.set_all(i_lang,
+                                   SQLCODE,
+                                   SQLERRM,
+                                   l_error,
+                                   'ALERT',
+                                   'PK_ADVANCED_INPUT',
+                                   'GET_ADVANCED_INPUT_DATA');
+                l_ret := pk_alert_exceptions.process_error(l_error_in, o_error);
+                pk_types.open_my_cursor(o_fields);
+                pk_types.open_my_cursor(o_multichoice_fields);
+                pk_types.open_my_cursor(o_fields_det);
+                pk_types.open_my_cursor(o_fields_units);
+                RETURN FALSE;
+            END;
+    END get_advanced_input_data;
+
+    /********************************************************************************************
+    * get all advanced input data (including inactive fields)
+    *
+    * @param    i_lang                 preferred language ID
+    * @param    i_prof                 object (id of professional, id of institution, id of software)
+    * @param    i_advanced_input       advanced input ID
+    * @param    o_fields               cursor, advanced input fields
+    * @param    o_multichoice_fields   cursor, data for Adanced Input multichoice fields 
+    * @param    o_fields_det           cursor, advanced input fields details
+    * @param    o_fields_units         cursor, advanced input fields details    
+    *
+    * @return   BOOLEAN                false in case of error and true otherwise
+    *
+    * @author                          Tiago Silva
+    * @since                           2010/08/02
+    ********************************************************************************************/
+    FUNCTION get_all_advanced_input_data
+    (
+        i_lang               IN language.id_language%TYPE,
+        i_prof               IN profissional,
+        i_advanced_input     IN advanced_input.id_advanced_input%TYPE,
+        o_fields             OUT pk_types.cursor_type,
+        o_multichoice_fields OUT pk_types.cursor_type,
+        o_fields_det         OUT pk_types.cursor_type,
+        o_fields_units       OUT pk_types.cursor_type,
+        o_error              OUT t_error_out
+    ) RETURN BOOLEAN IS
+    
+    BEGIN
+    
+        g_error := 'GET CURSOR WITH ALL ADVANCED INPUT FIELDS';
+        pk_alertlog.log_debug(g_error);
+    
+        OPEN o_fields FOR
+            SELECT ai.id_advanced_input,
+                   aif.id_advanced_input_field,
+                   aif.intern_name AS name,
+                   pk_translation.get_translation(i_lang, aif.code_advanced_input_field) AS label,
+                   aif.type,
+                   aisi.flg_active,
+                   pk_message.get_message(i_lang, aisi.error_message) errormessage,
+                   aisi.rank
+              FROM advanced_input ai, advanced_input_field aif, advanced_input_soft_inst aisi
+             WHERE ai.id_advanced_input = i_advanced_input
+               AND aisi.id_advanced_input = ai.id_advanced_input
+               AND aif.id_advanced_input_field = aisi.id_advanced_input_field
+               AND aisi.id_institution IN (i_prof.institution, g_all_institution)
+               AND aisi.id_software IN (i_prof.software, g_all_software)
+             ORDER BY aisi.rank;
+    
+        g_error := 'GET CURSOR WITH ALL ADVANCED INPUT MULTICHOICE FIELDS DATA';
+        pk_alertlog.log_debug(g_error);
+    
+        OPEN o_multichoice_fields FOR
+            SELECT aimf.id_advanced_input_multi_field,
+                   aif.id_advanced_input_field,
+                   sd.val                             AS data,
+                   aimf.rank,
+                   sd.desc_val                        AS label,
+                   NULL                               flg_default
+              FROM advanced_input_multi_field aimf,
+                   advanced_input_field       aif,
+                   advanced_input             ai,
+                   advanced_input_soft_inst   aisi,
+                   sys_domain                 sd
+             WHERE ai.id_advanced_input = i_advanced_input
+               AND aisi.id_advanced_input = ai.id_advanced_input
+               AND aif.id_advanced_input_field = aisi.id_advanced_input_field
+               AND aisi.id_institution IN (i_prof.institution, g_all_institution)
+               AND aisi.id_software IN (i_prof.software, g_all_software)
+               AND aimf.id_advanced_input_field = aif.id_advanced_input_field
+               AND aimf.code_sys_domain = sd.code_domain
+               AND sd.domain_owner = pk_sysdomain.k_default_schema
+               AND aimf.multi_field_val = sd.val
+               AND sd.id_language = i_lang
+             ORDER BY aimf.rank;
+    
+        g_error := 'GET CURSOR WITH ALL ADVANCED INPUT FIELDS DETAILS';
+        pk_alertlog.log_debug(g_error);
+    
+        OPEN o_fields_det FOR
+            SELECT adv_input.id_advanced_input,
+                   adv_input.id_advanced_input_field,
+                   adv_input.id_advanced_input_field_det,
+                   adv_input.field_name,
+                   NULL                                  AS VALUE,
+                   adv_input.type,
+                   adv_input.alignment,
+                   adv_input.separator,
+                   adv_input.style,
+                   adv_input.max_value                   AS maxvalue,
+                   adv_input.min_value                   AS minvalue,
+                   adv_input.format,
+                   id_unit,
+                   adv_input.units
+              FROM (SELECT ai.id_advanced_input,
+                           aif.id_advanced_input_field,
+                           aidet.id_advanced_input_field_det,
+                           aidet.field_name,
+                           aif.type,
+                           aidet.alignment,
+                           aidet.separator,
+                           aidet.style,
+                           decode(aif.type,
+                                  g_date_keypad,
+                                  pk_date_utils.date_send_tsz(i_lang, convert_to_date(aidet.max_value), i_prof),
+                                  g_date_hour_keypad,
+                                  pk_date_utils.date_send_tsz(i_lang, convert_to_date(aidet.max_value), i_prof),
+                                  to_number(aidet.max_value,
+                                            'FM999999999999999999999999D9999',
+                                            'NLS_NUMERIC_CHARACTERS = ''.,''')) AS max_value,
+                           decode(aif.type,
+                                  g_date_keypad,
+                                  pk_date_utils.date_send_tsz(i_lang, convert_to_date(aidet.min_value), i_prof),
+                                  g_date_hour_keypad,
+                                  pk_date_utils.date_send_tsz(i_lang, convert_to_date(aidet.min_value), i_prof),
+                                  to_number(aidet.min_value,
+                                            'FM999999999999999999999999D9999',
+                                            'NLS_NUMERIC_CHARACTERS = ''.,''')) AS min_value,
+                           (SELECT s.desc_message
+                              FROM sys_message s
+                             WHERE s.code_message = aidet.format_message
+                               AND s.id_language = i_lang) AS format,
+                           aidet.rank rank_det,
+                           aidet.rank rank_param,
+                           aidet.id_unit,
+                           pk_translation.get_translation(i_lang, 'UNIT_MEASURE.CODE_UNIT_MEASURE.' || aidet.id_unit) AS units
+                      FROM advanced_input           ai,
+                           advanced_input_field     aif,
+                           advanced_input_soft_inst aisi,
+                           advanced_input_field_det aidet
+                     WHERE ai.id_advanced_input = i_advanced_input
+                       AND aisi.id_advanced_input = ai.id_advanced_input
+                       AND aif.id_advanced_input_field = aisi.id_advanced_input_field
+                       AND aisi.id_institution IN (i_prof.institution, g_all_institution)
+                       AND aisi.id_software IN (i_prof.software, g_all_software)
+                       AND aidet.id_advanced_input_field(+) = aif.id_advanced_input_field) adv_input
+             ORDER BY adv_input.rank_det, adv_input.rank_param;
+    
+        g_error := 'GET CURSOR WITH ALL ADVANCED INPUT FIELDS UNITS';
+        pk_alertlog.log_debug(g_error);
+    
+        OPEN o_fields_units FOR
+            SELECT um.id_unit_measure id,
+                   pk_translation.get_translation(i_lang, um.code_unit_measure) label,
+                   decode(aifd.id_unit, um.id_unit_measure, g_flg_yes, g_flg_no) flg_default,
+                   aifu.id_advanced_input_field,
+                   aifu.rank
+              FROM unit_measure              um,
+                   advanced_input_field_unit aifu,
+                   advanced_input_soft_inst  aisi,
+                   advanced_input_field_det  aifd
+             WHERE um.id_unit_measure = aifu.id_unit_measure
+               AND aifu.id_advanced_input_field = aisi.id_advanced_input_field
+               AND aifd.id_advanced_input_field = aisi.id_advanced_input_field
+               AND aisi.id_advanced_input = i_advanced_input
+               AND aisi.id_software IN (g_all_software, i_prof.software)
+               AND aisi.id_institution IN (g_all_institution, i_prof.institution)
+             ORDER BY aifu.rank;
+    
+        RETURN TRUE;
+    
+    EXCEPTION
+        WHEN OTHERS THEN
+            pk_alert_exceptions.process_error(i_lang,
+                                              SQLCODE,
+                                              SQLERRM,
+                                              g_error,
+                                              g_package_owner,
+                                              g_package_name,
+                                              'GET_ALL_ADVANCED_INPUT_FIELDS',
+                                              o_error);
+            pk_types.open_my_cursor(o_fields);
+            pk_types.open_my_cursor(o_multichoice_fields);
+            pk_types.open_my_cursor(o_fields_det);
+            pk_types.open_my_cursor(o_fields_units);
+        
+            RETURN FALSE;
+    END get_all_advanced_input_data;
+
+    FUNCTION get_multichoice_options
+    (
+        i_lang                    IN language.id_language%TYPE,
+        i_prof                    IN profissional,
+        i_advanced_input          IN advanced_input.id_advanced_input%TYPE,
+        i_id_advanced_input_field IN advanced_input_field.id_advanced_input_field%TYPE,
+        o_error                   OUT t_error_out
+    ) RETURN t_tbl_core_domain IS
+    
+        l_ret t_tbl_core_domain;
+    
+    BEGIN
+    
+        g_error := 'OPEN L_RET';
+        SELECT *
+          BULK COLLECT
+          INTO l_ret
+          FROM (SELECT t_row_core_domain(internal_name => NULL,
+                                         desc_domain   => t.label,
+                                         domain_value  => t.data,
+                                         order_rank    => t.rank,
+                                         img_name      => NULL)
+                  FROM (SELECT sd.val AS data, aimf.rank, sd.desc_val AS label
+                          FROM advanced_input_multi_field aimf,
+                               advanced_input_field       aif,
+                               advanced_input             ai,
+                               advanced_input_soft_inst   aisi,
+                               sys_domain                 sd
+                         WHERE ai.id_advanced_input = i_advanced_input
+                           AND aisi.id_advanced_input = ai.id_advanced_input
+                           AND aif.id_advanced_input_field = aisi.id_advanced_input_field
+                           AND aisi.id_institution IN (i_prof.institution, g_all_institution)
+                           AND aisi.id_software IN (i_prof.software, g_all_software)
+                           AND aisi.flg_active = pk_alert_constant.g_yes
+                           AND aimf.id_advanced_input_field = aif.id_advanced_input_field
+                           AND aimf.code_sys_domain = sd.code_domain
+                           AND sd.domain_owner = pk_sysdomain.k_default_schema
+                           AND aimf.multi_field_val = sd.val
+                           AND sd.id_language = i_lang
+                           AND aif.id_advanced_input_field = i_id_advanced_input_field
+                         ORDER BY aimf.rank) t);
+    
+        RETURN l_ret;
+    
+    EXCEPTION
+        -- Unexpected error
+        WHEN OTHERS THEN
+            pk_alert_exceptions.process_error(i_lang,
+                                              SQLCODE,
+                                              SQLERRM,
+                                              g_error,
+                                              g_package_owner,
+                                              g_package_name,
+                                              'GET_MULTICHOICE_OPTIONS',
+                                              o_error);
+            RETURN t_tbl_core_domain();
+    END get_multichoice_options;
+
+    FUNCTION get_unit_measure_list
+    (
+        i_lang                    IN language.id_language%TYPE,
+        i_prof                    IN profissional,
+        i_advanced_input          IN advanced_input.id_advanced_input%TYPE,
+        i_id_advanced_input_field IN advanced_input_field.id_advanced_input_field%TYPE,
+        o_error                   OUT t_error_out
+    ) RETURN t_tbl_core_domain IS
+    
+        l_ret t_tbl_core_domain;
+    
+    BEGIN
+    
+        g_error := 'OPEN L_RET';
+        SELECT *
+          BULK COLLECT
+          INTO l_ret
+          FROM (SELECT t_row_core_domain(internal_name => NULL,
+                                         desc_domain   => t.label,
+                                         domain_value  => t.data,
+                                         order_rank    => t.rank,
+                                         img_name      => NULL)
+                  FROM (SELECT to_char(um.id_unit_measure) data,
+                               pk_translation.get_translation(i_lang, um.code_unit_measure) label,
+                               aifu.rank
+                          FROM unit_measure              um,
+                               advanced_input_field_unit aifu,
+                               advanced_input_soft_inst  aisi,
+                               advanced_input_field_det  aifd
+                         WHERE um.id_unit_measure = aifu.id_unit_measure
+                           AND aifu.id_advanced_input_field = aisi.id_advanced_input_field
+                           AND aifd.id_advanced_input_field = aisi.id_advanced_input_field
+                           AND aisi.id_advanced_input = i_advanced_input
+                           AND aisi.id_software IN (g_all_software, i_prof.software)
+                           AND aisi.id_institution IN (g_all_institution, i_prof.institution)
+                           AND aisi.flg_active = g_flg_yes
+                           AND aifu.id_advanced_input_field = i_id_advanced_input_field
+                         ORDER BY aifu.rank) t);
+    
+        RETURN l_ret;
+    
+    EXCEPTION
+        -- Unexpected error
+        WHEN OTHERS THEN
+            pk_alert_exceptions.process_error(i_lang,
+                                              SQLCODE,
+                                              SQLERRM,
+                                              g_error,
+                                              g_package_owner,
+                                              g_package_name,
+                                              'GET_MULTICHOICE_OPTIONS',
+                                              o_error);
+            RETURN t_tbl_core_domain();
+    END get_unit_measure_list;
+
+---------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------
+
+BEGIN
+
+    -- Log initialization
+    pk_alertlog.who_am_i(g_package_owner, g_package_name);
+    pk_alertlog.log_init(g_package_name);
+
+END pk_advanced_input;
+/

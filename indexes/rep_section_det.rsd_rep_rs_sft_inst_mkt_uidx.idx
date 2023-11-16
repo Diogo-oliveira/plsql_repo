@@ -1,0 +1,17 @@
+
+-- CHANGED BY: jorge.matos
+-- CHANGE DATE: 07-Jul-2011
+-- CHANGE REASON: ALERT-182778
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -00955);
+BEGIN
+    EXECUTE IMMEDIATE 'create unique index rsd_rep_rs_sft_inst_mkt_uidx on rep_section_det(id_reports, id_rep_section,id_software,id_institution,id_market)';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+

@@ -1,0 +1,53 @@
+-- CHANGED BY: orlando.antunes
+-- CHANGE DATE: 12/12/2009 15:05
+-- CHANGE REASON: [ALERT-59653] 
+alter table ACTION_EXCEPTION
+  add constraint AE_PK unique (ID_ACTION, ID_CATEGORY, ID_PROFILE_TEMPLATE, ID_PROFISSIONAL, ID_SOFTWARE) ENABLE;
+-- CHANGE END: orlando.antunes
+
+--Drop current UK - to change the name
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ACTION_EXCEPTION drop constraint AE_PK';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+-- Create/Recreate primary, unique and foreign key constraints 
+BEGIN
+    EXECUTE IMMEDIATE 'alter table ACTION_EXCEPTION add constraint AE_UK unique (ID_ACTION, ID_CATEGORY, ID_PROFILE_TEMPLATE, ID_PROFISSIONAL, ID_SOFTWARE) using index tablespace TABLE_S';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+-- Create/Recreate primary, unique and foreign key constraints 
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE action_exception add CONSTRAINT ae_pk primary key(id_action_exception)';
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('Already processed');
+END;
+/
+
+declare
+	l_Sql  varchar2(4000);
+begin
+
+	l_sql := 'ALTER TABLE action_exception DROP CONSTRAINT FLG_STATUS_CONST';
+	pk_versioning.run(l_sql);
+end;
+/
+
+declare
+    l_Sql  varchar2(4000);
+    xpl varchar2(0010 char) := '''';
+begin
+
+    l_sql := xpl||'A'||xpl||', '|| xpl||'I'||xpl|| ', '|| xpl||'N'||xpl;
+    l_sql := 'ALTER TABLE action_exception ADD CONSTRAINT FLG_STATUS_CONST CHECK ( FLG_STATUS IN ('|| l_sql ||' ) ) ENABLE';
+    pk_versioning.run(l_sql);
+end;
+/
+

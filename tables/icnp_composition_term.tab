@@ -1,0 +1,42 @@
+
+
+  CREATE TABLE ICNP_COMPOSITION_TERM
+   (	ID_COMPOSITION_TERM NUMBER(24,0) NOT NULL ENABLE,
+	ID_TERM NUMBER(24,0) NOT NULL ENABLE,
+	ID_COMPOSITION NUMBER(12,0) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE icnp_composition_term IS 'Relations table. Associates terms to compositions. Many terms can be part of different compositions.' ;
+
+COMMENT ON COLUMN icnp_composition_term.id_composition_term IS 'primary key' ;
+COMMENT ON COLUMN icnp_composition_term.id_term IS 'the term belonging to a composition' ;
+COMMENT ON COLUMN icnp_composition_term.id_composition IS 'the composition to which term belongs' ;
+COMMENT ON COLUMN icnp_composition_term.rank IS 'term''s order on a composition' ;
+
+-- CHANGED BY: Pedro Lopes
+-- CHANGE DATE: 2009-JUN-30
+-- CHANGE REASON: ALERT-913
+
+ALERT TABLE icnp_composition_term ADD (ID_LANGUAGE NUMBER(24,0));
+
+COMMENT ON COLUMN ICNP_COMPOSITION_TERM.ID_LANGUAGE IS 'Composition default language';
+
+ALERT TABLE icnp_composition_term ADD (FLG_MAIN_FOCUS VARCHAR2(1) NOT NULL);
+
+COMMENT ON COLUMN ICNP_COMPOSITION_TERM.FLG_MAIN_FOCUS IS 'Y-Main focus or action, N-Others';
+
+ALTER TABLE icnp_composition_term MODIFY (id_composition number(24,0));
+
+-- CHANGE END
+
+-- CHANGED BY: Pedro Lopes
+-- CHANGE DATE: 2009-JUL-06
+-- CHANGE REASON: ALERT-913
+
+ALTER TABLE ICNP_COMPOSITION_TERM ADD (DESC_TERM VARCHAR2(200));
+
+COMMENT ON COLUMN ICNP_COMPOSITION_TERM.DESC_TERM IS 'Text between terms';
+
+-- CHANGE END

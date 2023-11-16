@@ -1,0 +1,1 @@
+grant select on INSTITUTION_EXT_HIST to ALERT_VIEWER;

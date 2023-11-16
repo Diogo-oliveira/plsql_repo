@@ -1,0 +1,58 @@
+-- CHANGED BY: Jorge Silva
+-- CHANGE DATE: 08/10/2012 10:54
+-- CHANGE REASON: [ALERT-241106] 
+-- Create table
+create table PROF_FOLLOW_EPISODE
+(
+  id_professional    NUMBER(24) not null,
+  id_episode         NUMBER(24) not null,
+  id_schedule        NUMBER(24) not null,
+  flg_active         VARCHAR2(1 CHAR) not null,
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+);
+-- Add comments to the table 
+comment on table PROF_FOLLOW_EPISODE
+  is 'Association of episode to professionals (to see episode in the professional patients list)';
+-- Add comments to the columns 
+comment on column PROF_FOLLOW_EPISODE.id_professional
+  is 'Professional identifier';
+comment on column PROF_FOLLOW_EPISODE.id_episode
+  is 'Episode identifier';
+comment on column PROF_FOLLOW_EPISODE.id_schedule
+  is 'Schedule identifier';
+comment on column PROF_FOLLOW_EPISODE.flg_active
+  is 'Record is active (''Y'' - Active, ''N'' - Inactive)';
+comment on column PROF_FOLLOW_EPISODE.create_user
+  is 'Creation User';
+comment on column PROF_FOLLOW_EPISODE.create_time
+  is 'Creation Time';
+comment on column PROF_FOLLOW_EPISODE.create_institution
+  is 'Creation Institution';
+comment on column PROF_FOLLOW_EPISODE.update_user
+  is 'Update User';
+comment on column PROF_FOLLOW_EPISODE.update_time
+  is 'Update Time';
+comment on column PROF_FOLLOW_EPISODE.update_institution
+  is 'Update Institution';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table PROF_FOLLOW_EPISODE
+  add constraint PROF_FOLLOW_EPISODE_PK primary key (ID_PROFESSIONAL, ID_EPISODE, ID_SCHEDULE);
+alter table PROF_FOLLOW_EPISODE
+  add constraint PFE_EPIS_FK foreign key (ID_EPISODE)
+  references EPISODE (ID_EPISODE);
+alter table PROF_FOLLOW_EPISODE
+  add constraint PFE_PROF_FK foreign key (ID_PROFESSIONAL)
+  references PROFESSIONAL (ID_PROFESSIONAL);
+alter table PROF_FOLLOW_EPISODE
+  add constraint PFE_SCHED_FK foreign key (ID_SCHEDULE)
+  references SCHEDULE (ID_SCHEDULE);
+-- Create/Recreate check constraints 
+alter table PROF_FOLLOW_EPISODE
+  add constraint PFE_FLG_ACTIVE_CHK
+  check (FLG_ACTIVE IN ('Y', 'N'));
+-- CHANGE END: Jorge Silva

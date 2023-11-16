@@ -1,0 +1,56 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 30/03/2012 17:38
+-- CHANGE REASON: [ALERT-188349] 
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                             i_obj_name          => 'DOC_MACRO_HIST',
+                                             i_obj_type          => 'TABLE',
+                                             i_flg_category      => 'TRS',
+                                             i_flg_alert_default => 'N',
+                                             i_delete_script     => NULL,
+                                             i_flg_default_child => 'N');
+END;
+/
+
+
+create table doc_macro_hist
+(
+dt_doc_macro_hist    TIMESTAMP(6) WITH LOCAL TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  id_doc_macro         NUMBER(24) not null,
+  id_doc_macro_version NUMBER(24) not null,
+id_prof_create       NUMBER(24) not null,
+id_institution       NUMBER(24) not null,
+  doc_macro_name       VARCHAR(200 CHAR) not null,
+  flg_share            VARCHAR(1 CHAR) not null,
+  flg_status           VARCHAR2(1 CHAR) not null,
+  notes                VARCHAR2(1000 CHAR),
+dt_creation          TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+  code_doc_macro       GENERATED ALWAYS AS ('ALERT.DOC_MACRO.CODE_DOC_MACRO.' || id_doc_macro) VIRTUAL,
+--
+  create_user          VARCHAR2(24 CHAR),
+  create_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution   NUMBER(24),
+  update_user          VARCHAR2(24 CHAR),
+  update_time          TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution   NUMBER(24)
+);
+
+comment on table doc_macro_hist is 'Table to store the information for a macro record';
+comment on column doc_macro_hist.dt_doc_macro_hist is 'Date of history record insert';
+comment on column doc_macro_hist.id_doc_macro is 'Unique key';
+comment on column doc_macro_hist.id_doc_macro_version is 'Doc Macro Version identifier';
+comment on column doc_macro_hist.id_prof_create is 'Professional identifier responsible for macro record';
+comment on column doc_macro_hist.id_institution is 'Institution identifier used in macro record';
+comment on column doc_macro_hist.doc_macro_name is 'Doc Macro description';
+comment on column doc_macro_hist.flg_share is 'Doc Macro shareable property : Y - Shared, N - Not shared';
+comment on column doc_macro_hist.flg_status is 'Record status: A - Active; I - Inactive;C - Canceled;O - Outdated;D - Automatically disabled';
+comment on column doc_macro_hist.notes is 'Doc Macro record notes';
+comment on column doc_macro_hist.dt_creation is 'Macro create time';
+--
+comment on column doc_macro_hist.create_user is 'Creation User';
+comment on column doc_macro_hist.create_time is 'Creation Time';
+comment on column doc_macro_hist.create_institution is 'Creation Institution';
+comment on column doc_macro_hist.update_user is 'Update User';
+comment on column doc_macro_hist.update_time is 'Update Time';
+comment on column doc_macro_hist.update_institution is 'Update Institution';
+-- CHANGE END: Gustavo Serrano

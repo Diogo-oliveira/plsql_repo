@@ -1,0 +1,88 @@
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGED DATE: 2009-JUL-27
+-- CHANGING REASON: posologias irregulares
+-- Create table
+create table PRESCRIPTION_POPUP
+(
+  ID_PRESCRIPTION_POPUP NUMBER(24) not null,
+  POPUP_TYPE            VARCHAR2(1) not null,
+  INTERNAL_NAME         VARCHAR2(255)
+)
+tablespace TABLE_S
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    minextents 1
+    maxextents unlimited
+  );
+-- Add comments to the table 
+comment on table PRESCRIPTION_POPUP
+  is 'This table has the popups for each type of prescription';
+-- Add comments to the columns 
+comment on column PRESCRIPTION_POPUP.ID_PRESCRIPTION_POPUP
+  is 'id do tipo de popup';
+comment on column PRESCRIPTION_POPUP.POPUP_TYPE
+  is 'tipo de popup (L - local, H - hospital, R - relatos, E- exterior, M - manipulados, D - dieteticos)';
+comment on column PRESCRIPTION_POPUP.INTERNAL_NAME
+  is 'descrição do popup';
+-- CHANGE END Pedro Albuquerque
+
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 09:14
+-- CHANGE REASON: [ALERT-37067] Versionamento.
+create table PRESCRIPTION_POPUP
+(
+  ID_PRESCRIPTION_POPUP NUMBER(24) not null,
+  POPUP_TYPE            VARCHAR2(1) not null,
+  INTERNAL_NAME         VARCHAR2(255)
+)
+tablespace TABLE_S;
+-- Add comments to the table 
+comment on table PRESCRIPTION_POPUP
+  is 'This table has the popups for each type of prescription';
+-- Add comments to the columns 
+comment on column PRESCRIPTION_POPUP.ID_PRESCRIPTION_POPUP
+  is 'id do tipo de popup';
+comment on column PRESCRIPTION_POPUP.POPUP_TYPE
+  is 'tipo de popup (L - local, H - hospital, R - relatos, E- exterior, M - manipulados, D - dieteticos)';
+comment on column PRESCRIPTION_POPUP.INTERNAL_NAME
+  is 'descrição do popup';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Pedro Albuquerque
+-- CHANGE DATE: 17/08/2009 15:11
+-- CHANGE REASON: [ALERT-37067] Add audit columns
+create table PRESCRIPTION_POPUP
+(
+  ID_PRESCRIPTION_POPUP NUMBER(24) not null,
+  POPUP_TYPE            VARCHAR2(1) not null,
+  INTERNAL_NAME         VARCHAR2(255),
+  CREATE_USER           VARCHAR2(24),
+  CREATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION    NUMBER(24),
+  UPDATE_USER           VARCHAR2(24),
+  UPDATE_TIME           TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION    NUMBER(24)
+)
+tablespace TABLE_S;
+-- Add comments to the table 
+comment on table PRESCRIPTION_POPUP
+  is 'This table has the popups for each type of prescription';
+-- Add comments to the columns 
+comment on column PRESCRIPTION_POPUP.ID_PRESCRIPTION_POPUP
+  is 'id do tipo de popup';
+comment on column PRESCRIPTION_POPUP.POPUP_TYPE
+  is 'tipo de popup (L - local, H - hospital, R - relatos, E- exterior, M - manipulados, D - dieteticos)';
+comment on column PRESCRIPTION_POPUP.INTERNAL_NAME
+  is 'descrição do popup';
+-- CHANGE END: Pedro Albuquerque
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 20/01/2016 11:57
+-- CHANGE REASON: [ALERT-317981 ] Old Medication - deprecated tables: Database model documentation and comments corretions
+COMMENT ON TABLE PRESCRIPTION_POPUP IS 'This table has the popups for each type of prescription [DEPRECATED]';
+-- CHANGE END: Sofia Mendes

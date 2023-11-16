@@ -1,0 +1,38 @@
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 18/10/2011 09:32
+-- CHANGE REASON: [ALERT-199724] H&P phase2
+ALTER TABLE EPIS_PN_DET_TASK_HIST
+ ADD (CONSTRAINT EPDTKH_PK PRIMARY KEY 
+  (ID_EPIS_PN_DET_TASK,DT_EPIS_PN_DET_TASK_HIST))
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 23/11/2011 10:48
+-- CHANGE REASON: [ALERT-206287 ] H&P phase2
+ALTER TABLE EPIS_PN_DET_TASK_HIST
+ ADD (CONSTRAINT EPDTKH_PK PRIMARY KEY 
+  (ID_EPIS_PN_DET_TASK,DT_EPIS_PN_DET_TASK_HIST))
+/
+-- CHANGE END: Sofia Mendes
+
+-- CHANGED BY: Luís Maia
+-- CHANGE DATE: 03/04/2012 17:49
+-- CHANGE REASON: [ALERT-226174] 
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE epis_pn_det_task_hist drop constraint EPDTKH_STATUS_CHK';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+
+BEGIN
+   EXECUTE IMMEDIATE 'ALTER TABLE epis_pn_det_task_hist
+ADD (CONSTRAINT EPDTKH_STATUS_CHK CHECK (FLG_STATUS in (''A'', ''R'', ''S'', ''I'', ''Z'')))';
+EXCEPTION
+   WHEN OTHERS THEN
+       dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Luís Maia

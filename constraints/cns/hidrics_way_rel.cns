@@ -1,0 +1,35 @@
+-- CHANGED BY: Alexandre Santos
+-- CHANGE DATE: 03/07/2010 20:51
+-- CHANGE REASON: [ALERT-109290] Fluid Balance - Reformulation
+ALTER TABLE HIDRICS_WAY_REL ADD CONSTRAINT HID_WAY_REL_PK PRIMARY KEY (ID_WAY, ID_HIDRICS_TYPE, ID_HIDRICS) ENABLE;
+ALTER TABLE HIDRICS_WAY_REL ADD CONSTRAINT HID_WAY_REL_FLG_AV_CHK CHECK (FLG_AVAILABLE IN ('Y','N'));
+-- CHANGE END: Alexandre Santos
+
+-- CHANGED BY: Sofia Mendes
+-- CHANGE DATE: 29/04/2011 12:12
+-- CHANGE REASON: [ALERT-175429 ] Wrong PK on hidrics_way_rel_table
+DECLARE
+    e_non_existant EXCEPTION;
+    e_fk_already_there EXCEPTION;
+    
+    PRAGMA EXCEPTION_INIT(e_non_existant, -02443); -- not exists constraint
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275); -- fk    
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE HIDRICS_WAY_REL drop CONSTRAINT HID_WAY_REL_PK';
+    EXCEPTION
+        WHEN e_non_existant THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente. Drop constraint');
+    END;
+  
+  ----------------------------------
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE HIDRICS_WAY_REL ADD CONSTRAINT HID_WAY_REL_PK PRIMARY KEY (ID_WAY, ID_HIDRICS_TYPE, ID_HIDRICS, id_department, id_dept, id_institution, id_market) ENABLE NOVALIDATE';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente. Insert constraint');
+    END;  
+END;
+/
+-- CHANGE END: Sofia Mendes

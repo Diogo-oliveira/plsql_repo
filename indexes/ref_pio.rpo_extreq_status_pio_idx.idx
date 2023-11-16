@@ -1,0 +1,18 @@
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 03/02/2012 18:57
+-- CHANGE REASON: [ALERT-216915] 
+DECLARE
+    l_count PLS_INTEGER;
+BEGIN
+    SELECT COUNT(1)
+      INTO l_count
+      FROM user_indexes i
+     WHERE i.index_name = 'RPO_EXTREQ_STATUS_PIO_IDX';
+
+    IF l_count = 0
+    THEN
+        EXECUTE IMMEDIATE 'create index RPO_EXTREQ_STATUS_PIO_IDX on REF_PIO (id_external_request, flg_status_pio)';
+    END IF;
+END;
+/
+-- CHANGE END: Ana Monteiro

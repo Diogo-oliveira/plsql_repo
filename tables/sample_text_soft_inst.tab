@@ -1,0 +1,70 @@
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 20/10/2022 11:01
+-- CHANGE REASON: [EMR-54862] - Sample text change model
+BEGIN
+pk_frmw_objects.insert_into_frmw_objects(
+i_owner            => 'ALERT',
+i_obj_name         => 'SAMPLE_TEXT_SOFT_INST',
+i_obj_type         => 'TABLE',
+i_flg_category     => 'PRM',
+i_delete_script    => '',
+i_responsible_team => 'CONTENT',
+i_flg_nzd          => 'Y',
+i_flg_alert_default => 'Y');
+END;
+/
+
+declare
+l_sql VARCHAR2(4000);
+begin
+-- Create table
+l_sql := q'[create table SAMPLE_TEXT_SOFT_INST
+(
+id_sample_text      NUMBER(24) NOT NULL,
+id_sample_text_type NUMBER(24) NOT NULL,
+id_institution      NUMBER(24) NOT NULL,
+id_software         NUMBER(24) NOT NULL,
+flg_available       VARCHAR2(1 CHAR) DEFAULT 'Y' NOT NULL,
+rank                NUMBER(6) DEFAULT 0 NOT NULL,
+create_user         VARCHAR2(24),
+create_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+create_institution  NUMBER(24),
+update_user         VARCHAR2(24),
+update_time         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+update_institution  NUMBER(24)
+)
+tablespace ALERT_DATA]';
+pk_versioning.run( l_sql);
+END;
+/
+-- Add comments to the table
+comment on table SAMPLE_TEXT_SOFT_INST
+is 'Sample text by software';
+-- Add comments to the columns
+comment on column SAMPLE_TEXT_SOFT_INST.id_sample_text
+is 'Predefined text ID';
+comment on column SAMPLE_TEXT_SOFT_INST.id_sample_text_type
+is 'Predefined text type ID';
+comment on column SAMPLE_TEXT_SOFT_INST.id_institution
+is 'Institution identifier';
+comment on column SAMPLE_TEXT_SOFT_INST.id_software
+is 'Software identifier';
+comment on column SAMPLE_TEXT_SOFT_INST.flg_available
+is 'Flag that indicates if the record is available or not (Y/N)';
+comment on column SAMPLE_TEXT_SOFT_INST.rank
+is 'Rank for apperance';
+comment on column SAMPLE_TEXT_SOFT_INST.create_user
+is 'Creation User';
+comment on column SAMPLE_TEXT_SOFT_INST.create_time
+is 'Creation Time';
+comment on column SAMPLE_TEXT_SOFT_INST.create_institution
+is 'Creation Institution';
+comment on column SAMPLE_TEXT_SOFT_INST.update_user
+is 'Update User';
+comment on column SAMPLE_TEXT_SOFT_INST.update_time
+is 'Update Time';
+comment on column SAMPLE_TEXT_SOFT_INST.update_institution
+is 'Update Institution';
+-- CHANGE END: Elisabete Bugalho

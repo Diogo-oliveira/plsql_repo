@@ -1,0 +1,251 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 14/02/2014 15:24
+-- CHANGE REASON: [ALERT-275975] department configs
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                                 i_obj_name          => 'DEPARTMENT_RESP_PROF_HIST',
+                                                 i_obj_type          => 'TABLE',
+                                                 i_flg_category      => 'HST',
+                                                 i_flg_alert_default => 'N',
+                                                 i_flg_nzd           => 'Y',
+                                                 i_delete_script     => NULL,
+                                                 i_flg_default_child => 'N');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'create table department_resp_prof_hist(
+                                   id_department_resp_prof number(24) not null, 
+                                   id_department number(24) not null, 
+                                   id_professional number(24) not null, 
+                                   flg_operation varchar2(1 char) not null,
+                                   dt_operation TIMESTAMP(6) WITH LOCAL TIME ZONE default current_timestamp not null,
+                                   create_user   VARCHAR2(24 char),
+                                   create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                                   create_institution NUMBER(24),
+                                   update_user        VARCHAR2(24 char),
+                                   update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                                   update_institution NUMBER(24)
+                                   ) tablespace alert_data';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Table already exists');
+    END;
+END;
+/
+
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON TABLE department_resp_prof_hist IS ''Relational table for responsible professionals in each service.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.id_department_resp_prof IS ''PK id (sequence id).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.id_department IS ''PK id (sequence id).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.id_professional IS ''PK id (sequence id).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+        BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.flg_operation IS ''History operation (R - removed records).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+            BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.dt_operation IS ''History operation date(R - removed records).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+
+        -- audit
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.create_user IS ''user identifier.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.create_institution IS ''institution identifier.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.create_time IS ''Date of record creation.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.update_user IS ''update user identifier.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.update_time IS ''update institution identifier.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.update_institution IS ''update record date.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 23/06/2014 11:58
+-- CHANGE REASON: new table
+DECLARE
+    e_object_exists EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_object_exists, -00955);
+BEGIN
+    BEGIN
+        pk_frmw_objects.insert_into_frmw_objects(i_owner             => 'ALERT',
+                                                 i_obj_name          => 'DEPARTMENT_RESP_PROF_HIST',
+                                                 i_obj_type          => 'TABLE',
+                                                 i_flg_category      => 'HST',
+                                                 i_flg_alert_default => 'N',
+                                                 i_flg_nzd           => 'Y',
+                                                 i_delete_script     => NULL,
+                                                 i_flg_default_child => 'N');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'create table department_resp_prof_hist(
+                                   id_department_resp_prof number(24) not null, 
+                                   id_department number(24) not null, 
+                                   id_professional number(24) not null, 
+                                   flg_operation varchar2(1 char) not null,
+                                   dt_operation TIMESTAMP(6) WITH LOCAL TIME ZONE default current_timestamp not null,
+                                   create_user   VARCHAR2(24 char),
+                                   create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                                   create_institution NUMBER(24),
+                                   update_user        VARCHAR2(24 char),
+                                   update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+                                   update_institution NUMBER(24)
+                                   ) tablespace alert_data';
+    EXCEPTION
+        WHEN e_object_exists THEN
+            dbms_output.put_line('Table already exists');
+    END;
+END;
+/
+
+DECLARE
+    e_invalid_identifier EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_invalid_identifier, -00904);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON TABLE department_resp_prof_hist IS ''Relational table for responsible professionals in each service.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Table comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.id_department_resp_prof IS ''PK id (sequence id).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.id_department IS ''PK id (sequence id).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.id_professional IS ''PK id (sequence id).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+        BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.flg_operation IS ''History operation (R - removed records).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+            BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.dt_operation IS ''History operation date(R - removed records).''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+
+        -- audit
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.create_user IS ''user identifier.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.create_institution IS ''institution identifier.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.create_time IS ''Date of record creation.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.update_user IS ''update user identifier.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.update_time IS ''update institution identifier.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'COMMENT ON column department_resp_prof_hist.update_institution IS ''update record date.''';
+    EXCEPTION
+        WHEN e_invalid_identifier THEN
+            dbms_output.put_line('Column comment already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Pedro Henriques
+-- CHANGE DATE: 14/09/2016 17:20
+-- CHANGE REASON: ALERT-324829
+
+ALTER TABLE department_resp_prof_hist ADD FLG_TYPE VARCHAR2(1 CHAR) DEFAULT 'C';
+
+/
+-- CHANGE END:  Pedro Henriques
+
+
+

@@ -1,0 +1,19 @@
+-- CHANGED BY: Telmo
+-- CHANGE DATE: 15-10-2010
+-- CHANGE REASON: ALERT-126053
+begin
+  execute immediate 'ALTER TABLE SCH_RESCHED_REASON_SOFT_INST ADD (CONSTRAINT SRSRSI_PK PRIMARY KEY (ID_RESCHED_REASON,ID_INSTITUTION,ID_SOFTWARE))';
+exception 
+  when others then
+   dbms_output.put_line('constraint já existe');
+end;
+/
+
+begin
+  execute immediate 'ALTER TABLE SCH_RESCHED_REASON_SOFT_INST ADD (CONSTRAINT SRSRSI_FLG_AVAIL_CHK CHECK (flg_available IN (''Y'', ''N'')))';
+exception 
+  when others then
+   dbms_output.put_line('constraint já existe');
+end;
+/
+-- CHANGE END: Telmo

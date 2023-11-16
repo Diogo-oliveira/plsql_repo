@@ -1,0 +1,151 @@
+
+
+  CREATE TABLE MONITORIZATION_VS
+   (	ID_MONITORIZATION_VS NUMBER(24,0) NOT NULL ENABLE,
+	DT_MONITORIZATION_VS DATE NOT NULL ENABLE,
+	ID_MONITORIZATION NUMBER(24,0) NOT NULL ENABLE,
+	ID_VITAL_SIGN NUMBER(12,0) NOT NULL ENABLE,
+	NOTES VARCHAR2(4000),
+	DT_CANCEL DATE,
+	ID_PROF_CANCEL NUMBER(24,0),
+	NOTES_CANCEL VARCHAR2(4000),
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE
+   );
+
+
+COMMENT ON TABLE monitorization_vs IS 'SVs escolhidos na req. de leituras' ;
+
+COMMENT ON COLUMN monitorization_vs.flg_status IS 'Estado: A - em curso, F - terminado, C - cancelado, D - pendente' ;
+
+alter table monitorization_vs 
+add (dt_monitorization_vs_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone);
+
+alter table MONITORIZATION_VS add DT_ORDER TIMESTAMP WITH LOCAL TIME ZONE;
+alter table MONITORIZATION_VS add ID_PROF_ORDER NUMBER(24);
+alter table MONITORIZATION_VS add ID_ORDER_TYPE NUMBER(12);
+alter table MONITORIZATION_VS add FLG_CO_SIGN VARCHAR2(1) DEFAULT 'N' NOT NULL;
+alter table MONITORIZATION_VS add DT_CO_SIGN TIMESTAMP WITH LOCAL TIME ZONE;
+alter table MONITORIZATION_VS add NOTES_CO_SIGN VARCHAR2(4000);
+alter table MONITORIZATION_VS add ID_PROF_CO_SIGN NUMBER(24);
+
+
+COMMENT ON COLUMN MONITORIZATION_VS.DT_ORDER IS 'Moment when the ordering professional ask the registering professional to request' ;
+COMMENT ON COLUMN MONITORIZATION_VS.ID_PROF_ORDER IS 'Ordering professional' ;
+COMMENT ON COLUMN MONITORIZATION_VS.ID_ORDER_TYPE IS 'Request order type (telephone, verbal, ...)' ;
+COMMENT ON COLUMN MONITORIZATION_VS.FLG_CO_SIGN IS 'Co-sign flag. (Y)-Order co-signed. (N)-Order not co-signed.';
+COMMENT ON COLUMN MONITORIZATION_VS.DT_CO_SIGN IS 'Co-sign moment';
+COMMENT ON COLUMN MONITORIZATION_VS.NOTES_CO_SIGN IS 'Co-sign notes';
+COMMENT ON COLUMN MONITORIZATION_VS.ID_PROF_CO_SIGN IS 'Co-sign professional';
+
+
+alter table MONITORIZATION_VS drop column DT_CANCEL;
+alter table MONITORIZATION_VS drop column DT_MONITORIZATION_VS;
+
+-- CHANGED BY: Hugo Vieira
+-- CHANGE DATE: 16/06/2010
+-- CHANGE REASON: 
+ALTER TABLE MONITORIZATION_VS ADD (FLG_STATUS_PREV VARCHAR2(1 CHAR));
+-- CHANGE END: Hugo Vieira
+
+-- CHANGED BY: Hugo Vieira
+-- CHANGE DATE: 29/06/2010
+-- CHANGE REASON: [ALERT-104064]
+COMMENT ON COLUMN  MONITORIZATION_VS.FLG_STATUS_PREV IS 'Previous Status'; 
+-- CHANGE END: Hugo Vieira
+
+-- CHANGED BY:  sergio.dias
+-- CHANGE DATE: 16/04/2011 12:54
+-- CHANGE REASON: [ALERT-156637] 
+alter table monitorization_vs
+add id_cancel_reason        NUMBER(24);
+
+comment on column monitorization_vs.id_cancel_reason
+  is 'Cancel reason ID';
+-- CHANGE END:  sergio.dias
+
+-- CHANGED BY:  Vanessa Barsottelli
+-- CHANGE DATE: 06/06/2014 10:21
+-- CHANGE REASON: [ALERT-286893] DB Development - Monitoring add high number of characteres in the Notes field
+DECLARE
+    l_sql VARCHAR2(4000);
+BEGIN
+    l_sql := 'ALTER TABLE MONITORIZATION_VS ADD CODE_NOTES VARCHAR2(200 CHAR)GENERATED ALWAYS AS (''ALERT.MONITORIZATION_VS.NOTES.''|| TO_CHAR(ID_MONITORIZATION_VS)) VIRTUAL';
+    pk_versioning.run(l_sql);
+END;
+
+COMMENT ON COLUMN monitorization_vs.code_notes IS 'Monitorization vital sign notes';
+-- CHANGE END:  Vanessa Barsottelli
+
+-- CHANGED BY:  Vanessa Barsottelli
+-- CHANGE DATE: 06/06/2014 10:21
+-- CHANGE REASON: [ALERT-286893] DB Development - Monitoring add high number of characteres in the Notes field
+DECLARE
+    l_sql VARCHAR2(4000);
+BEGIN
+    l_sql := 'ALTER TABLE MONITORIZATION_VS ADD CODE_NOTES VARCHAR2(200 CHAR)GENERATED ALWAYS AS (''ALERT.MONITORIZATION_VS.NOTES.''|| TO_CHAR(ID_MONITORIZATION_VS)) VIRTUAL';
+    pk_versioning.run(l_sql);
+END;
+/
+
+COMMENT ON COLUMN monitorization_vs.code_notes IS 'Monitorization vital sign notes';
+-- CHANGE END:  Vanessa Barsottelli
+
+-- CHANGED BY: Pedro Fernandes
+-- CHANGE DATE: 15/01/2016 16:43
+-- CHANGE REASON: [ALERT-317770] ALERT-317770 data model -cdoc - monitorizations, bedmanagement, hidrics
+-- Add comments to the table 
+comment on table MONITORIZATION_VS
+  is 'This table contains the selected vital signs on reading''s requisition';
+-- Add comments to the columns 
+comment on column MONITORIZATION_VS.id_monitorization_vs
+  is 'Monitorization request''s  identifier';
+comment on column MONITORIZATION_VS.id_monitorization
+  is 'Monitorization request detail''s identifier';
+comment on column MONITORIZATION_VS.id_vital_sign
+  is 'Vital Sign identifier';
+comment on column MONITORIZATION_VS.notes
+  is 'Monitorization vital sign notes';
+comment on column MONITORIZATION_VS.id_prof_cancel
+  is 'Professional identifier that cancel the request';
+comment on column MONITORIZATION_VS.notes_cancel
+  is 'Request cancelation notes';
+comment on column MONITORIZATION_VS.flg_status
+  is ' Request''s status: A - In progress; C - Cancelled; D - Pending; F - Complete; I - Interrupted; R- Draft; E - Expired;';
+comment on column MONITORIZATION_VS.dt_monitorization_vs_tstz
+  is 'Request Monitorization date';
+comment on column MONITORIZATION_VS.dt_cancel_tstz
+  is 'Cancelation date of requested monitorization .';
+comment on column MONITORIZATION_VS.dt_order
+  is 'Moment when the ordering professional ask the registering professional to request';
+comment on column MONITORIZATION_VS.id_prof_order
+  is 'Ordering professional';
+comment on column MONITORIZATION_VS.id_order_type
+  is 'Request order type (telephone, verbal, ...)';
+comment on column MONITORIZATION_VS.flg_co_sign
+  is 'Co-sign flag. (Y)-Order co-signed. (N)-Order not co-signed.';
+comment on column MONITORIZATION_VS.dt_co_sign
+  is 'Co-sign moment';
+comment on column MONITORIZATION_VS.notes_co_sign
+  is 'Co-sign notes';
+comment on column MONITORIZATION_VS.id_prof_co_sign
+  is 'Co-sign professional';
+comment on column MONITORIZATION_VS.create_user
+  is 'Creation User';
+comment on column MONITORIZATION_VS.create_time
+  is 'Creation Time';
+comment on column MONITORIZATION_VS.create_institution
+  is 'Creation Institution';
+comment on column MONITORIZATION_VS.update_user
+  is 'Update User';
+comment on column MONITORIZATION_VS.update_time
+  is 'Update Time';
+comment on column MONITORIZATION_VS.update_institution
+  is 'Update Institution';
+comment on column MONITORIZATION_VS.flg_status_prev
+  is 'Previous Status';
+comment on column MONITORIZATION_VS.id_cancel_reason
+  is 'Cancel reason ID';
+comment on column MONITORIZATION_VS.code_notes
+  is 'Monitorization vital sign notes';
+-- CHANGE END: Pedro Fernandes

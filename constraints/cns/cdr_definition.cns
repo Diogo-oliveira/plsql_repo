@@ -1,0 +1,37 @@
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 06/05/2011 11:26
+-- CHANGE REASON: [ALERT-176644] cdr data model (changes_ddl.sql)
+alter table CDR_DEFINITION
+  add constraint CDRD_PK primary key (ID_CDR_DEFINITION);
+alter table CDR_DEFINITION
+  add constraint CDRD_FLG_ORIGIN_CHK
+  check (FLG_ORIGIN in ('L', 'D'));
+alter table CDR_DEFINITION
+  add constraint CDRD_FLG_STATUS_CHK
+  check (FLG_STATUS in ('A', 'E', 'I', 'C'));
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: Pedro Carneiro
+-- CHANGE DATE: 07/10/2011 15:22
+-- CHANGE REASON: [ALERT-198677] changes_ddl
+alter table CDR_DEFINITION
+  add constraint CDRD_FLG_AVAILABLE_CHK
+  check (FLG_AVAILABLE in ('Y', 'N'));
+alter table CDR_DEFINITION
+  add constraint CDRD_FLG_GENERIC_CHK
+  check (FLG_GENERIC in ('Y', 'N'));
+-- CHANGE END: Pedro Carneiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 12/05/2014 14:37
+-- CHANGE REASON: [ALERT-284329] 
+declare
+  e_pk_exists exception;
+  pragma exception_init(e_pk_exists, -02260);
+begin
+  execute immediate 'alter table CDR_DEFINITION add constraint CDRD_ID_LINKS  foreign key  (ID_LINKS) references LINKS (ID_LINKS)';
+exception when others then
+  dbms_output.put_line('primary key CDRD_ID_LINKS exists!');
+end;
+/
+-- CHANGE END: mario.mineiro

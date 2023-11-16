@@ -1,0 +1,55 @@
+-- Create table
+create table MTOS_SCORE_GROUP
+(
+  ID_MTOS_SCORE_GROUP NUMBER(24) not null,
+  INTERNAL_NAME       VARCHAR2(24 CHAR),
+  CODE_MTOS_PARAM     VARCHAR2(200) not null,
+  CREATE_USER         VARCHAR2(24 CHAR),
+  CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24 CHAR),
+  UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24)
+) tablespace TABLE_S;
+
+-- Add comments to the table 
+comment on table MTOS_SCORE_GROUP is 'Evaluation parameters groups';
+
+-- Add comments to the columns 
+comment on column MTOS_SCORE_GROUP.ID_MTOS_SCORE_GROUP is 'Evaluation parameters group Identifier (Primary key)';
+comment on column MTOS_SCORE_GROUP.INTERNAL_NAME is 'Evaluation parameters group description';
+comment on column MTOS_SCORE_GROUP.CODE_MTOS_PARAM is 'Code for translation';
+comment on column MTOS_SCORE_GROUP.CREATE_USER is 'Creation user';
+comment on column MTOS_SCORE_GROUP.CREATE_TIME is 'Creation date / time';
+comment on column MTOS_SCORE_GROUP.CREATE_INSTITUTION is 'Creation institution';
+comment on column MTOS_SCORE_GROUP.UPDATE_USER is 'Update user';
+comment on column MTOS_SCORE_GROUP.UPDATE_TIME is 'Update date / time';
+comment on column MTOS_SCORE_GROUP.UPDATE_INSTITUTION is 'Update institution';
+
+-- CHANGED BY: Tércio Soares
+-- CHANGE DATE: 15/12/2010 11:54
+-- CHANGE REASON: [ALERT-138136] 
+alter table MTOS_SCORE_GROUP rename column code_mtos_param to code_mtos_score_group;
+alter table MTOS_SCORE_GROUP add id_mtos_score NUMBER(24) not null;
+alter table MTOS_SCORE_GROUP add rank NUMBER(6) not null;
+
+-- Add comments to the columns 
+comment on column MTOS_SCORE_GROUP.id_mtos_score is 'Score associated to this group';
+comment on column MTOS_SCORE_GROUP.rank is 'Value for sorting';
+-- CHANGE END: Tércio Soares
+
+-- CHANGED BY: Diogo Oliveira
+-- CHANGE DATE: 19/01/2018 17:30
+-- CHANGE REASON: [CALERT-1468] 
+    ALTER TABLE mtos_score_group
+  add FLG_MANDATORY varchar2(1) default 'N'; 
+  
+   ALTER TABLE mtos_score_group
+  add FLG_EXCLUSIVE_PARAMETERS varchar2(1) default 'N'; 
+  
+COMMENT ON COLUMN mtos_score_group.FLG_MANDATORY
+        IS 'Flag that indicates if all the parameters of a group are mandatory (Y/N).';
+
+COMMENT ON COLUMN mtos_score_group.FLG_EXCLUSIVE_PARAMETERS
+        IS 'Flag that indicates if the parameters of the group are exclusive, i.e., if only one of the group parameter's can be selected (Y/N).';
+-- CHANGE END: Diogo Oliveira

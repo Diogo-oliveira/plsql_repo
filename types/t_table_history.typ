@@ -1,0 +1,1 @@
+CREATE OR REPLACE TYPE t_table_history IS TABLE OF t_rec_history;

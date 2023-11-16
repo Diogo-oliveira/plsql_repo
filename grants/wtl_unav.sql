@@ -1,0 +1,1 @@
+grant select on WTL_UNAV  to ALERT_VIEWER;

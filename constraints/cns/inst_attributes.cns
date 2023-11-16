@@ -1,0 +1,100 @@
+alter table INST_ATTRIBUTES
+  add constraint ISE_PK primary key (ID_INST_ATTRIBUTES);
+  
+DECLARE
+    e_unique_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_unique_already_there, -02261); -- unique constraint
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table INST_ATTRIBUTES
+  add constraint ISE_INST_UK unique (ID_INSTITUTION)
+  using index 
+  tablespace INDEX_M NOVALIDATE';
+    EXCEPTION
+        WHEN e_unique_already_there THEN
+            dbms_output.put_line('AVISO: Operação já executada anteriormente.');
+    END;
+
+END;
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:33
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table INST_ATTRIBUTES add constraint INST_AT_PAYMENT_SCHEDULE_CHK check ( PAYMENT_SCHEDULE in (''A'',''B'',''M''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:34
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table INST_ATTRIBUTES add constraint INST_AT_LICENSE_MODEL_CHK check ( LICENSE_MODEL in (''E'',''L'',''P''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:34
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table INST_ATTRIBUTES add constraint INST_AT_FLG_AVAILABLE_CHK check ( FLG_AVAILABLE in (''N'',''Y''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes
+
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 07/07/2011 09:35
+-- CHANGE REASON: [ALERT-187577] missing check constraints according to system domains
+DECLARE
+
+    e_check_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_check_already_there, -02264);
+
+BEGIN
+
+    BEGIN
+        EXECUTE IMMEDIATE 'alter table INST_ATTRIBUTES add constraint INST_AT_PAYMENT_OPTIONS_CHK check ( PAYMENT_OPTIONS in (''A'',''M''))';
+EXCEPTION
+        WHEN e_check_already_there THEN
+            dbms_output.put_line('Check Constraint already there');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

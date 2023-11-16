@@ -1,0 +1,63 @@
+-- CHANGED BY: Paulo Teixeira
+-- CHANGE DATE: 06/04/2011 11:42
+-- CHANGE REASON: [ALERT-159066] 
+CREATE TABLE pat_prob_unaware (
+  id_pat_prob_unaware        NUMBER(24,0)                      NOT NULL,
+  id_prob_unaware            NUMBER(24,0)                      NOT NULL,
+  id_patient                 NUMBER(24,0)                      NOT NULL,
+  id_episode                 NUMBER(24,0)                      NULL,
+  notes                      VARCHAR2(4000 char)               NULL,
+  flg_status                 VARCHAR2(1 char)                  NOT NULL,
+  id_prof_last_update        NUMBER(24,0)                      NOT NULL,
+  dt_last_update             TIMESTAMP(6) WITH LOCAL TIME ZONE NOT NULL,
+  id_cancel_reason           NUMBER(24,0)                      NULL,
+  cancel_notes               VARCHAR2(4000)                    NULL,
+
+  create_user                VARCHAR2(24)                      NULL,
+  create_time                TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  create_institution         NUMBER(24,0)                      NULL,
+  update_user                VARCHAR2(24)                      NULL,
+  update_time                TIMESTAMP(6) WITH LOCAL TIME ZONE NULL,
+  update_institution         NUMBER(24,0)                      NULL);
+
+COMMENT ON TABLE pat_prob_unaware IS 'This table holds the Problem unawareness register per patients';
+
+COMMENT ON COLUMN pat_prob_unaware.id_pat_prob_unaware IS 'Patient Problem unawareness identifier';
+COMMENT ON COLUMN pat_prob_unaware.id_prob_unaware     IS 'Problem unawareness identifier';
+COMMENT ON COLUMN pat_prob_unaware.id_patient          IS 'Patient Identifier';
+COMMENT ON COLUMN pat_prob_unaware.id_episode          IS 'Episode Identifier';
+COMMENT ON COLUMN pat_prob_unaware.notes               IS 'Notes';
+COMMENT ON COLUMN pat_prob_unaware.flg_status          IS 'Flag Status A-active C-cancelled O-outdated ';
+COMMENT ON COLUMN pat_prob_unaware.id_prof_last_update IS 'Professional last updated';
+COMMENT ON COLUMN pat_prob_unaware.dt_last_update      IS 'Last update date';
+COMMENT ON COLUMN pat_prob_unaware.id_cancel_reason    IS 'Cancel Reason Identifier';
+COMMENT ON COLUMN pat_prob_unaware.cancel_notes        IS 'Cancel Notes';
+
+COMMENT ON COLUMN pat_prob_unaware.create_user IS 'Creation User';
+COMMENT ON COLUMN pat_prob_unaware.create_time IS 'Creation Time';
+COMMENT ON COLUMN pat_prob_unaware.create_institution IS 'Creation Institution';
+COMMENT ON COLUMN pat_prob_unaware.update_user IS 'Update User';
+COMMENT ON COLUMN pat_prob_unaware.update_time IS 'Update Time';
+COMMENT ON COLUMN pat_prob_unaware.update_institution IS 'Update Institution';
+-- CHANGE END: Paulo Teixeira
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_PROB_UNAWARE modify UPDATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_PROB_UNAWARE modify CREATE_USER varchar2(24 CHAR);
+/
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 15/12/2014 12:31
+-- CHANGE REASON: [ALERT-154361] 
+alter table PAT_PROB_UNAWARE modify CANCEL_NOTES varchar2(4000 CHAR);
+/
+-- CHANGE END: mario.mineiro

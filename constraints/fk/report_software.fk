@@ -1,0 +1,22 @@
+-- CHANGED BY:  Rui Gomes
+-- CHANGE DATE: 13/05/2014 11:58
+-- CHANGE REASON: [ALERT-282042] suport table
+DECLARE
+    e_fk_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_fk_already_there, -02275);
+BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE REPORT_SOFTWARE add CONSTRAINT REPSW_REP_fk foreign key(id_report) references reports(id_reports)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER TABLE REPORT_SOFTWARE add CONSTRAINT REPSW_SW_fk foreign key(id_software) references ab_software(id_ab_software)';
+    EXCEPTION
+        WHEN e_fk_already_there THEN
+            dbms_output.put_line('FK already exists');
+    END;
+END;
+/
+-- CHANGE END:  Rui Gomes

@@ -1,0 +1,56 @@
+
+
+  CREATE TABLE PROTOCOLS
+   (	ID_PROTOCOLS NUMBER(24,0) NOT NULL ENABLE,
+	CODE_PROTOCOLS VARCHAR2(200) NOT NULL ENABLE,
+	PROTOCOL_DESC VARCHAR2(4000),
+	FLG_TYPE VARCHAR2(1) NOT NULL ENABLE,
+	GENDER VARCHAR2(1),
+	AGE_MIN NUMBER(3,0),
+	AGE_MAX NUMBER(3,0),
+	HEIGHT_MIN NUMBER(3,0),
+	HEIGHT_MAX NUMBER(3,0),
+	WEIGHT_MIN NUMBER(6,3),
+	WEIGHT_MAX NUMBER(6,3),
+
+	FLG_AVAILABLE VARCHAR2(1) NOT NULL ENABLE,
+	RANK NUMBER(6,0) NOT NULL ENABLE,
+	ID_INSTITUTION NUMBER(12,0) NOT NULL ENABLE,
+	ID_SOFTWARE NUMBER(24,0) NOT NULL ENABLE,
+	ADW_LAST_UPDATE DATE NOT NULL ENABLE,
+	ID_SR_INTERV_GROUP NUMBER(14,0)
+   );
+
+
+COMMENT ON TABLE protocols IS 'Protocolos de realização de MCDs, mediante um diagnóstico.Ou seja, agrupamentos de exames / análises / procedimentos / medicamentos que são usualmente prescritos em conjunto.As flags servem para indicar em que tabelas procurar, para acelerar a pesquisa.' ;
+
+COMMENT ON COLUMN protocols.code_protocols IS 'Código para tradução' ;
+COMMENT ON COLUMN protocols.protocol_desc IS 'Descrição do protocolo' ;
+COMMENT ON COLUMN protocols.flg_type IS 'Tipo de protocolo: S- Cirúrgico, A- Anestésico' ;
+COMMENT ON COLUMN protocols.gender IS 'Sexo para o qual se aplica este protocolo. Se ñ estiver preenchido, aplica-se para ambos os sexos' ;
+COMMENT ON COLUMN protocols.age_min IS 'Idade mínima para a qual se aplica este protocolo. Se ñ estiver preenchida, aplica-se em qq idade' ;
+COMMENT ON COLUMN protocols.age_max IS 'Idade máxima para a qual se aplica este protocolo. Se ñ estiver preenchida, aplica-se em qq idade' ;
+COMMENT ON COLUMN protocols.height_min IS 'Altura mínima (cm) para a qual são impostos os limites. Se ñ estiver preenchida, os limites são impostos para qq altura' ;
+COMMENT ON COLUMN protocols.height_max IS 'Altura máxima (cm) para a qual são impostos os limites. Se ñ estiver preenchida, os limites são impostos para qq altura' ;
+COMMENT ON COLUMN protocols.weight_min IS 'Peso mínimo (Kg) para a qual são impostos os limites. Se ñ estiver preenchida, os limites são impostos para qq peso' ;
+COMMENT ON COLUMN protocols.weight_max IS 'Peso máximo (Kg) para a qual são impostos os limites. Se ñ estiver preenchida, os limites são impostos para qq peso' ;
+COMMENT ON COLUMN protocols.flg_available IS 'Disponibilidade do registo na instituição onde está instalada a BD' ;
+
+
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 15/01/2010 09:29
+-- CHANGE REASON: [ALERT-67372] Added id_content
+DECLARE
+    e_column_already_there EXCEPTION;
+
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE protocols ADD id_content varchar2(200 char)';
+    EXECUTE IMMEDIATE 'COMMENT ON COLUMN protocols.id_content IS ''content identifier''';
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('aviso :operação já executada anteriormente.');
+END;
+/
+-- CHANGE END: Gustavo Serrano

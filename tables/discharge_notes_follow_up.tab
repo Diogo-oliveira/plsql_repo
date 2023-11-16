@@ -1,0 +1,59 @@
+CREATE TABLE discharge_notes_follow_up (
+       id_discharge_notes NUMBER(24) NOT NULL,
+			 id_follow_up_with  NUMBER(24) NOT NULL,
+			 flg_follow_up_with VARCHAR2(2) NOT NULL,
+			 follow_up_with_text VARCHAR2(200)
+);
+
+COMMENT ON TABLE discharge_notes_follow_up IS 'Stores information about shifts of on-call physicians';
+
+COMMENT ON COLUMN discharge_notes_follow_up.id_discharge_notes IS 'Discharge notes ID';
+COMMENT ON COLUMN discharge_notes_follow_up.id_follow_up_with IS 'ID of follow-up entity. Can be a professional ID or institution ID';
+COMMENT ON COLUMN discharge_notes_follow_up.flg_follow_up_with IS 'Type of ID_FOLLOW_UP_WITH: (OC) On-call Physician (PH) External physician (CL) Clinic (OF) Office (O) Other (free text)';
+COMMENT ON COLUMN discharge_notes_follow_up.follow_up_with_text IS 'If FLG_FOLLOW_UP_WITH = "O", stores the free text';
+
+
+
+-- José Brito 13/03/2009 ALERT-10317 Disposition Management
+CREATE TABLE discharge_notes_follow_up (
+       id_discharge_notes NUMBER(24) NOT NULL,
+       id_follow_up_with  NUMBER(24) NOT NULL,
+			 id_follow_up_entity NUMBER(24) NOT NULL,
+			 follow_up_with_text VARCHAR2(200),
+			 id_prof_create NUMBER(24) NOT NULL,
+			 dt_creation TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+);
+
+COMMENT ON TABLE discharge_notes_follow_up IS 'Associates discharge notes to follow-up entities';
+
+COMMENT ON COLUMN discharge_notes_follow_up.id_discharge_notes IS 'Discharge notes ID';
+COMMENT ON COLUMN discharge_notes_follow_up.id_follow_up_with IS 'ID of follow-up entity. Can be a professional ID or institution ID';
+COMMENT ON COLUMN discharge_notes_follow_up.id_follow_up_entity IS 'Follow-up entity ID';
+COMMENT ON COLUMN discharge_notes_follow_up.follow_up_with_text IS 'Stores the free text, if required by the type of follow-up entity (check FOLLOW_UP_ENTITY.FLG_TYPE)';
+COMMENT ON COLUMN discharge_notes_follow_up.id_prof_create IS 'Professional ID';
+COMMENT ON COLUMN discharge_notes_follow_up.dt_creation IS 'Creation date';
+-- END
+
+
+
+-- José Brito 27/04/2009 ALERT-10317
+ALTER TABLE discharge_notes_follow_up ADD follow_up_in VARCHAR2(200);
+ALTER TABLE discharge_notes_follow_up ADD id_follow_up_type NUMBER(24);
+
+COMMENT ON COLUMN discharge_notes_follow_up.follow_up_in IS 'Date or number of days in which the patient must be followed by the professional';
+COMMENT ON COLUMN discharge_notes_follow_up.id_follow_up_type IS 'ID of type of FOLLOW_UP_IN: (D) Date (DY) Days (S) SOS';
+
+
+
+-- José Brito 25/05/2009 ALERT-29574 Disposition Management: Changes requested to Discharge Instructions
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE DISCHARGE_NOTES_FOLLOW_UP ADD notes VARCHAR2(4000)';
+EXCEPTION
+    WHEN OTHERS THEN
+		    NULL;
+END;
+/
+
+COMMENT ON COLUMN DISCHARGE_NOTES_FOLLOW_UP.NOTES IS 'Follow-up notes';
+-- END
+

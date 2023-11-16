@@ -1,0 +1,56 @@
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 31/07/2009 16:30
+-- CHANGE REASON: [ALERT-18963 ] 
+CREATE TABLE "WF_WORKFLOW"(
+ID_WORKFLOW NUMBER(12,0) NOT NULL,
+ID_MARKET NUMBER(24,0) NOT NULL,
+INTERNAL_NAME VARCHAR2(200) NOT NULL,
+DESCRIPTION VARCHAR2(200) NOT NULL,
+CREATE_USER VARCHAR2(24) ,
+CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+CREATE_INSTITUTION NUMBER(24,0) ,
+UPDATE_USER VARCHAR2(24) ,
+UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE ,
+UPDATE_INSTITUTION NUMBER(24,0) );
+
+
+   COMMENT ON COLUMN "WF_WORKFLOW"."ID_WORKFLOW" IS 'Workflow id';
+
+   COMMENT ON COLUMN "WF_WORKFLOW"."ID_MARKET" IS 'Market identification';
+
+   COMMENT ON COLUMN "WF_WORKFLOW"."INTERNAL_NAME" IS 'Workflow internal name';
+
+   COMMENT ON COLUMN "WF_WORKFLOW"."DESCRIPTION" IS 'Workflow description';
+
+   COMMENT ON TABLE "WF_WORKFLOW"  IS 'Workflow identification';
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 11/09/2009 12:33
+-- CHANGE REASON: [ALERT-910] 
+comment on column wf_workflow.CREATE_USER is 'Creation User';
+comment on column wf_workflow.CREATE_TIME is 'Creation Time';
+comment on column wf_workflow.CREATE_INSTITUTION is 'Creation Institution';
+comment on column wf_workflow.UPDATE_USER is 'Update User';
+comment on column wf_workflow.UPDATE_TIME is 'Update Time';
+comment on column wf_workflow.UPDATE_INSTITUTION is 'Update Institution';
+-- CHANGE END: Ana Monteiro
+
+
+-- CHANGED BY: João Almeida
+-- CHANGED DATE: 2009-SET-22
+-- CHANGED REASON: ALERT-45152
+alter TABLE WF_WORKFLOW
+modify id_workflow NUMBER(24);
+-- CHANGE END: João Almeida
+
+
+-- CHANGED BY: Ana Monteiro
+-- CHANGE DATE: 08/01/2015 14:37
+-- CHANGE REASON: [ALERT-280039] 
+BEGIN
+    pk_versioning.run(i_sql => q'[alter table WF_WORKFLOW add (code_workflow generated always as ('WF_WORKFLOW.CODE_WORKFLOW.'||id_workflow))]');
+END;
+/
+comment on column WF_WORKFLOW.code_workflow is 'Code for translation';
+-- CHANGE END: Ana Monteiro

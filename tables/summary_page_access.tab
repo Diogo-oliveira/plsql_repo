@@ -1,0 +1,70 @@
+
+create table SUMMARY_PAGE_ACCESS
+(
+  ID_SUMMARY_PAGE_ACCESS NUMBER(24) not null,
+ ID_PROFILE_TEMPLATE NUMBER(24) not null,
+ ID_SUMMARY_PAGE_SECTION NUMBER(24) not null,
+ FLG_WRITE VARCHAR2(1) not null,
+  ADW_LAST_UPDATE DATE not null
+);
+
+
+COMMENT ON COLUMN summary_page_access.id_summary_page_access IS 'Chave primária' ;
+COMMENT ON COLUMN summary_page_access.id_profile_template IS 'Nome interno' ;
+COMMENT ON COLUMN summary_page_access.id_summary_page_section IS 'Suporte para descrição multi-língua de summary_page_access' ;
+COMMENT ON COLUMN summary_page_access.flg_write IS 'Permissao para escrita' ;
+COMMENT ON COLUMN summary_page_access.adw_last_update IS 'Data da última alteração' ;
+
+alter table summary_page_access add     HEIGHT NUMBER(4) default 0;
+
+COMMENT ON COLUMN summary_page_access.HEIGHT IS 'Altura da secção para o perfil de utilizador.';
+
+ALTER TABLE SUMMARY_PAGE_ACCESS ADD flg_search VARCHAR2(1);
+COMMENT ON COLUMN SUMMARY_PAGE_ACCESS.flg_search IS 'Permissão para pesquisar outros templates: Y - sim; N - não';
+
+--Ariel Machado 2008/05/08
+ALTER TABLE SUMMARY_PAGE_ACCESS 
+ ADD (FLG_NO_CHANGES VARCHAR2(1) DEFAULT 'N'
+ );
+
+COMMENT ON COLUMN SUMMARY_PAGE_ACCESS.FLG_NO_CHANGES IS 'Permission to use the option "No changes":  ''Y'' - Yes; ''N'' - No;';
+--Changed End
+
+-- CHANGED BY: Ana Matos
+-- CHANGE DATE: 19/01/2016 10:59
+-- CHANGE REASON: [ALERT-317912] 
+comment on table SUMMARY_PAGE_ACCESS
+  is 'Summary page access configuration';
+-- Add comments to the columns 
+comment on column SUMMARY_PAGE_ACCESS.id_summary_page_access
+  is 'Summary page access ID';
+comment on column SUMMARY_PAGE_ACCESS.id_profile_template
+  is 'Profile template ID';
+comment on column SUMMARY_PAGE_ACCESS.id_summary_page_section
+  is 'Summary page section ID';
+comment on column SUMMARY_PAGE_ACCESS.flg_write
+  is 'Flag that indicates if the section has writing permissions';
+comment on column SUMMARY_PAGE_ACCESS.adw_last_update
+  is 'Update date';
+comment on column SUMMARY_PAGE_ACCESS.height
+  is 'Height';
+comment on column SUMMARY_PAGE_ACCESS.flg_search
+  is 'Flag that indicates if it is possible to search for other templates (Y/N)';
+comment on column SUMMARY_PAGE_ACCESS.flg_no_changes
+  is 'Flag that indicates if it is possible to  use the option "No changes" (Y/N)';
+comment on column SUMMARY_PAGE_ACCESS.create_user
+  is 'Creation User';
+comment on column SUMMARY_PAGE_ACCESS.create_time
+  is 'Creation Time';
+comment on column SUMMARY_PAGE_ACCESS.create_institution
+  is 'Creation Institution';
+comment on column SUMMARY_PAGE_ACCESS.update_user
+  is 'Update User';
+comment on column SUMMARY_PAGE_ACCESS.update_time
+  is 'Update Time';
+comment on column SUMMARY_PAGE_ACCESS.update_institution
+  is 'Update Institution';
+  
+  
+  
+-- CHANGE END: Ana Matos

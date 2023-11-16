@@ -1,0 +1,62 @@
+-- CHANGED BY: teresa.coutinho
+-- CHANGE DATE: 20/01/2015 11:02
+-- CHANGE REASON: [ALERT-304700] 
+declare
+  e_obj_exists exception;
+  pragma exception_init(e_obj_exists, -00955);
+begin
+  execute immediate 'create table PO_PARAM_SETS
+(
+  id_po_param        NUMBER(24) not null,
+  id_inst_owner      NUMBER(24) not null,
+  id_task_type       NUMBER(24) not null,
+  task_type_content  VARCHAR2(200 CHAR) not null,
+  id_software        NUMBER(24) not null,
+  id_institution     NUMBER(24) not null,
+  rank               NUMBER(24) not null,
+  flg_available      VARCHAR2(1 CHAR) not null,
+  create_user        VARCHAR2(24 CHAR),
+  create_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  create_institution NUMBER(24),
+  update_user        VARCHAR2(24 CHAR),
+  update_time        TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  update_institution NUMBER(24)
+)
+';
+exception when e_obj_exists then
+  dbms_output.put_line('table PO_PARAM_SETS exists!');
+end;
+/
+
+comment on table PO_PARAM_SETS
+  is 'Periodic observation parameter health programs/Sets of indicators configuration.';
+-- Add comments to the columns 
+comment on column PO_PARAM_SETS.id_po_param
+  is 'periodic observation parameter identifier';
+comment on column PO_PARAM_SETS.id_inst_owner
+  is 'owner institution identifier';
+comment on column PO_PARAM_SETS.id_task_type
+  is 'task type identifier';
+comment on column PO_PARAM_SETS.task_type_content
+  is 'Content identifier';
+comment on column PO_PARAM_SETS.id_software
+  is 'software identifier';
+comment on column PO_PARAM_SETS.id_institution
+  is 'institution identifier';
+comment on column PO_PARAM_SETS.rank
+  is 'parameter rank';
+comment on column PO_PARAM_SETS.flg_available
+  is 'record availability (y/n)';
+comment on column PO_PARAM_SETS.create_user
+  is 'creation user';
+comment on column PO_PARAM_SETS.create_time
+  is 'creation time';
+comment on column PO_PARAM_SETS.create_institution
+  is 'creation institution';
+comment on column PO_PARAM_SETS.update_user
+  is 'update user';
+comment on column PO_PARAM_SETS.update_time
+  is 'update time';
+comment on column PO_PARAM_SETS.update_institution
+  is 'update institution';
+-- CHANGE END: teresa.coutinho

@@ -1,0 +1,82 @@
+--select * from frmw_objects x where x.obj_name = 'EPIS_DIAG_COMPLICATIONS';
+BEGIN
+    pk_frmw_objects.insert_into_frmw_objects(i_owner         => 'ALERT',
+                                             i_obj_name      => 'EPIS_DIAG_COMPLICATIONS_H',
+                                             i_obj_type      => 'TABLE',
+                                             i_flg_category  => 'TRS',
+                                             i_delete_script => '',
+                                             i_flg_nzd       => 'Y', 
+                                             i_responsible_team => 'CDOC'
+                                             );
+END;
+/
+
+CREATE TABLE EPIS_DIAG_COMPLICATIONS_H
+(
+  ID_SK               NUMBER(24) not null,
+  dt_creation     TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+  ID_EPIS_DIAGNOSIS   NUMBER(24) NOT NULL ENABLE,
+  ID_COMPLICATION     NUMBER(24) NOT NULL ENABLE,
+  ID_ALERT_COMPLICATION NUMBER(24) NOT NULL ENABLE,
+  FLG_STATUS      VARCHAR2(1 CHAR) NOT NULL ENABLE,
+  ID_PROF_CREATE    NUMBER(24),
+  DT_CREATE       TIMESTAMP (6) WITH LOCAL TIME ZONE, 
+  ID_PROF_UPD       NUMBER(24),
+  DT_UPD        TIMESTAMP (6) WITH LOCAL TIME ZONE,
+  RANK          NUMBER(24),
+  ------------------------------
+  CREATE_USER VARCHAR2(24 CHAR),
+  CREATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION NUMBER(24),
+  UPDATE_USER VARCHAR2(24 CHAR),
+  UPDATE_TIME TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION NUMBER(24)
+)
+tablespace ALERT_DATA
+;
+
+
+COMMENT ON TABLE  EPIS_DIAG_COMPLICATIONS_H IS 'History table for Relation between episode diagnosis and registered complications';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.ID_SK IS 'ID that groups records from same transaction';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.ID_EPIS_DIAGNOSIS IS 'ID of episode diagnosis';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.ID_COMPLICATION IS 'Id complication';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.ID_ALERT_COMPLICATION IS 'Id ALERT Complication';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.FLG_STATUS IS 'Status of the complication (A-Active; I-Inactive)';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.ID_PROF_CREATE IS 'Professional who created the complication';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.DT_CREATE IS 'Date when the complication was created';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.ID_PROF_UPD IS 'Professional who updated the complication';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.DT_UPD IS 'Date when the complication was updated';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.RANK IS 'Rank of the complication within the epis_diagnosis';
+------------------------------------------------------------------------------------------
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.CREATE_USER IS 'Create User';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.CREATE_TIME IS 'Create Time';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.CREATE_INSTITUTION IS 'Create Institution';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.UPDATE_USER IS 'Update User';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.UPDATE_TIME IS 'Update Time';
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.UPDATE_INSTITUTION IS 'Update Institution';
+
+
+declare
+l_sql varchar2(1000 char);
+begin
+l_sql := 'alter table epis_diag_complications_h add id_epis_diagnosis_h number(24)  not null';
+pk_versioning.run(l_sql);
+end;
+/
+
+-- CHANGED BY: Lillian Lu
+-- CHANGE DATE: 2018-05-21
+-- CHANGE REASON: [CEMR-748] Complication description is not correct
+DECLARE
+    l_sql VARCHAR2(1000 CHAR);
+BEGIN
+    l_sql := 'ALTER TABLE EPIS_DIAG_COMPLICATIONS_H ADD (DESC_COMPLICATION VARCHAR2(200 CHAR))';
+    pk_versioning.run(l_sql);
+EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line('WARNING: alter error.');
+END;
+/
+
+COMMENT ON COLUMN EPIS_DIAG_COMPLICATIONS_H.DESC_COMPLICATION IS 'Complication description';
+-- CHANGE END: Lillian Lu

@@ -1,0 +1,1 @@
+grant select, update, delete on ALERT.EPIS_PROG_NOTES to alert_reset;

@@ -1,0 +1,52 @@
+CREATE TABLE EXAM_RESULT_PREGNANCY
+(ID_EXAM_RESULT_PREGNANCY NUMBER(24) NOT NULL
+,ID_EXAM_RESULT           NUMBER(24) NOT NULL
+,FLG_PREGNANT             VARCHAR2(1) DEFAULT 'N' NOT NULL
+,ID_PAT_PREGNANCY         NUMBER(24)
+,ID_EPIS_DOCUMENTATION    NUMBER(24)
+);
+
+COMMENT ON TABLE EXAM_RESULT_PREGNANCY                            IS 'Associa resultados de imagem a um processo de gravidez Y/N';
+COMMENT ON COLUMN EXAM_RESULT_PREGNANCY.ID_EXAM_RESULT_PREGNANCY  IS 'Chave primária';
+COMMENT ON COLUMN EXAM_RESULT_PREGNANCY.ID_EXAM_RESULT            IS 'Associação ao resultado de exame';
+COMMENT ON COLUMN EXAM_RESULT_PREGNANCY.FLG_PREGNANT              IS 'Indicação se mulher está grávida ou não';
+COMMENT ON COLUMN EXAM_RESULT_PREGNANCY.ID_PAT_PREGNANCY          IS 'Id do Processo de gravidade se aplicável';
+COMMENT ON COLUMN EXAM_RESULT_PREGNANCY.ID_EPIS_DOCUMENTATION     IS 'Id da documentation correspondente';
+
+ALTER TABLE EXAM_RESULT_PREGNANCY ADD WEEKS_PREGNANCY NUMBER(6);
+ALTER TABLE EXAM_RESULT_PREGNANCY ADD FLG_WEEKS_CRITERIA VARCHAR2(1) not null;
+
+comment on column EXAM_RESULT_PREGNANCY.WEEKS_PREGNANCY is 'Número de semanas de gravidez com base na ecografia';
+comment on column EXAM_RESULT_PREGNANCY.FLG_WEEKS_CRITERIA is 'Criterio a ter em conta no cálculo de semanas da gravidez. U - idade ecográfica C - idade cronológica N - não aplicável.';
+
+ALTER TABLE EXAM_RESULT_PREGNANCY ADD FLG_MULTIPLE VARCHAR2(1);
+COMMENT ON COLUMN EXAM_RESULT_PREGNANCY.FLG_MULTIPLE IS 'Se gravidez múltipla: null - FETO ÚNICO; B - bicoriónica; M monocoriónica monoamniótica; A - monocoriónica  biamniótica no momento da ecografia' ;
+
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EXAM_RESULT_PREGNANCY
+  is 'Stores the association between exam results and pregnancy';
+-- Add comments to the columns 
+comment on column EXAM_RESULT_PREGNANCY.id_exam_result_pregnancy
+  is 'Primary key';
+comment on column EXAM_RESULT_PREGNANCY.id_exam_result
+  is 'Exam result ID';
+comment on column EXAM_RESULT_PREGNANCY.flg_pregnant
+  is 'flag that indicates if pregant (Y/N)';
+comment on column EXAM_RESULT_PREGNANCY.id_pat_pregnancy
+  is 'Pregnancy ID if applicable';
+comment on column EXAM_RESULT_PREGNANCY.id_epis_documentation
+  is 'Documentation ID';
+comment on column EXAM_RESULT_PREGNANCY.weeks_pregnancy
+  is 'Pregnancy weeks based on ultrasound';
+comment on column EXAM_RESULT_PREGNANCY.flg_weeks_criteria
+  is 'Criteria to be considered in the calculation of weeks of pregnancy.  U - Ultrasound age; C - Chronological age ;N - Not applicable';
+comment on column EXAM_RESULT_PREGNANCY.flg_multiple
+  is 'multiple pregnancy: null - One fetus; B - Diamniotic; M -Monochorionic; A - Monoamniotic; C - Dichorionic';  
+  
+-- CHANGE END: Elisabete Bugalho

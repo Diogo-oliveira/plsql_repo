@@ -1,0 +1,21 @@
+-- CHANGED BY: Gustavo Serrano
+-- CHANGE DATE: 04/12/2009 14:59
+-- CHANGE REASON: [ALERT-55090] 
+alter table SR_POSIT_INSTIT_SOFT
+  add constraint SPIS_PK primary key (ID_SR_POSIT_INSTIT_SOFT);
+
+alter table SR_POSIT_INSTIT_SOFT
+  add constraint SPIS_UK unique (ID_SR_POSIT, ID_INSTITUTION, ID_SOFTWARE );
+-- CHANGE END: Gustavo Serrano
+
+-- CHANGED BY: António Neto
+-- CHANGE DATE: 01/07/2011 16:30
+-- CHANGE REASON: [ALERT-186863] Versioning CNS - [INP|ORIS] Insert constraints in flag_status columns defined in sys_domain
+BEGIN
+EXECUTE IMMEDIATE 'ALTER TABLE SR_POSIT_INSTIT_SOFT ADD CONSTRAINT SPIS_FLG_AVAILABLE_CHK CHECK (FLG_AVAILABLE IN (''Y'', ''N'')) ENABLE novalidate';
+EXCEPTION
+        WHEN others THEN
+            dbms_output.put_line('ERRO: constraint SPIS_FLG_AVAILABLE_CHK table SR_POSIT_INSTIT_SOFT column FLG_AVAILABLE: ' || SQLERRM);
+end;
+/
+-- CHANGE END: António Neto

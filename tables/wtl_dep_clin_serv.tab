@@ -1,0 +1,38 @@
+   CREATE TABLE "WTL_DEP_CLIN_SERV"
+(	
+  "ID_WTL_DCS" NUMBER(24,0) NOT NULL,
+  "ID_DEP_CLIN_SERV" NUMBER(24,0) NOT NULL,
+	"ID_WAITING_LIST" NUMBER(24,0),
+	"ID_EPISODE" NUMBER(24,0),
+  "FLG_TYPE" VARCHAR2(1),
+  "FLG_STATUS" VARCHAR2(1),
+	"CREATE_USER"	VARCHAR2(24),
+  "CREATE_TIME"	TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  "CREATE_INSTITUTION"	NUMBER(24),                       	
+  "UPDATE_USER"	VARCHAR2(24),                     	
+  "UPDATE_TIME"	TIMESTAMP(6) WITH LOCAL TIME ZONE,	
+  "UPDATE_INSTITUTION"	NUMBER(24)                  
+
+) ;
+
+COMMENT ON TABLE "WTL_DEP_CLIN_SERV"  IS 'This table stores, for each episode, the referring clinical service';
+COMMENT ON COLUMN "WTL_DEP_CLIN_SERV"."ID_WTL_DCS" IS 'Primary Key';
+COMMENT ON COLUMN "WTL_DEP_CLIN_SERV"."ID_EPISODE"  IS 'Episode ID';
+COMMENT ON COLUMN "WTL_DEP_CLIN_SERV"."ID_DEP_CLIN_SERV"  IS 'Clinical Service ID';
+COMMENT ON COLUMN "WTL_DEP_CLIN_SERV"."FLG_TYPE" IS 'Indicates type of speciality: S - Speciality; D - External Discipline';
+COMMENT ON COLUMN "WTL_DEP_CLIN_SERV"."FLG_STATUS" IS 'Indicates record status, available values: A - Active; C - Cancelled; O - Outdated';
+COMMENT ON COLUMN "WTL_DEP_CLIN_SERV"."ID_WAITING_LIST" IS 'Surgery/Admission request ID';
+
+COMMENT ON COLUMN "WTL_DEP_CLIN_SERV"."CREATE_USER" IS 'ID of the professional who created the record';
+COMMENT ON COLUMN "WTL_DEP_CLIN_SERV"."CREATE_TIME" IS 'Date of record creation';
+COMMENT ON COLUMN "WTL_DEP_CLIN_SERV"."CREATE_INSTITUTION" IS 'ID of institution where record was created'; 
+COMMENT ON COLUMN "WTL_DEP_CLIN_SERV"."UPDATE_USER" IS 'ID of the professional who last updated the record';
+COMMENT ON COLUMN "WTL_DEP_CLIN_SERV"."UPDATE_TIME" IS 'Date when record was last updated';
+COMMENT ON COLUMN "WTL_DEP_CLIN_SERV"."UPDATE_INSTITUTION" IS 'ID of the institution where record was last updated';
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 30/08/2018 11:41
+-- CHANGE REASON: [EMR-5186] 
+ALTER TABLE wtl_dep_clin_serv ADD id_prof_speciality NUMBER(24);
+ALTER TABLE wtl_dep_clin_serv ADD id_ward NUMBER(24);
+-- CHANGE END: Pedro Henriques

@@ -1,0 +1,225 @@
+  CREATE TABLE EPISODE
+   (	ID_EPISODE NUMBER(24,0) NOT NULL ENABLE,
+	ID_VISIT NUMBER(24,0) NOT NULL ENABLE,
+	ID_CLINICAL_SERVICE NUMBER(24,0),
+	DT_BEGIN DATE NOT NULL ENABLE,
+	DT_END DATE,
+	FLG_STATUS VARCHAR2(1) NOT NULL ENABLE,
+	ID_EPIS_TYPE NUMBER(12,0) NOT NULL ENABLE,
+	COMPANION VARCHAR2(200),
+	BARCODE VARCHAR2(30),
+	ID_PROF_CANCEL NUMBER(24,0),
+	DT_CANCEL DATE,
+
+	FLG_TYPE VARCHAR2(1),
+	ID_PREV_EPISODE NUMBER(24,0)
+   );
+
+
+COMMENT ON TABLE episode IS 'Esta tabela guarda os episodios que compõem uma visita do paciente a instituição prestadora de cuidados de saude.' ;
+
+COMMENT ON COLUMN episode.id_episode IS 'Chave primaria' ;
+COMMENT ON COLUMN episode.dt_begin IS 'Data de inicio (= data início do epis. Sonho)' ;
+COMMENT ON COLUMN episode.dt_end IS 'Data de fim' ;
+COMMENT ON COLUMN episode.flg_status IS 'Estado do episodio: A-activo / I-inactivo / C-cancelado' ;
+COMMENT ON COLUMN episode.companion IS 'Nome do acompanhante' ;
+COMMENT ON COLUMN episode.barcode IS 'Código de barras' ;
+COMMENT ON COLUMN episode.flg_type IS 'Tipo de episódio. Valores possíveis: D- Definitivo, T- Temporário' ;
+COMMENT ON COLUMN episode.id_prev_episode IS 'ID do episódio de origem' ;
+
+comment on column EPISODE.FLG_STATUS
+  is 'Estado do episodio: A-activo / I-inactivo / C-cancelado / P - pendente';
+comment on column EPISODE.ID_PREV_EPISODE
+  is 'Episódio de origem';
+alter table episode 
+add (dt_begin_tstz timestamp with local time zone,
+     dt_end_tstz timestamp with local time zone,
+     dt_cancel_tstz timestamp with local time zone); 
+
+-- CHANGED BY: José Brito
+-- CHANGE DATE: 2008-ABR-15
+-- CHANGE REASON: [2.4.3] Nova coluna, para o motivo do cancelamento de um episódios.
+ALTER TABLE episode ADD (desc_cancel_reason VARCHAR2(4000));
+COMMENT ON COLUMN episode.desc_cancel_reason IS 'Motivo de cancelamento do episódio';
+-- CHANGE END: José Brito
+
+ALTER TABLE EPISODE ADD (FLG_MIGRATION VARCHAR2(1) DEFAULT 'A' NOT NULL);
+
+COMMENT ON COLUMN EPISODE.FLG_MIGRATION IS 'This column will have default ''A'' value for ALERT, migrated records will have ''M'' value, and test records will have ''T'' value';
+
+-- Sérgio Santos, 2008-ABR-15, Nova coluna FLG_EHR que indica o tipo de episodio (E - EHR event, S - Preparação de um episódio agendado, N - Episódio normal)
+alter table episode add FLG_EHR varchar2(1) default 'N' NOT NULL;
+COMMENT ON COLUMN EPISODE.FLG_EHR IS 'Flag that represents the type of episode. N - Normal episode, E - EHR event, S - Episode preparation of a scheduled event';
+
+-- JSILVA 24-05-2008
+ALTER TABLE episode ADD id_fast_track NUMBER(24);
+COMMENT ON COLUMN episode.id_fast_track IS 'Triggered fast track to this episode';
+
+
+---------------------------------------------------------------------------------------------
+
+-- CHANGED BY: Nuno Ferreira
+-- CHANGE DATE: 2008-JUL-31
+-- CHANGE REASON: DATA QUALITY CONTROL - WO 15269
+
+COMMENT ON COLUMN  EPISODE.DT_BEGIN_TSTZ IS 'Begin date'; 
+COMMENT ON COLUMN  EPISODE.DT_END_TSTZ IS 'End date'; 
+COMMENT ON COLUMN  EPISODE.DT_CANCEL_TSTZ IS 'Cancel date'; 
+COMMENT ON COLUMN  EPISODE.ID_VISIT IS 'Vist ID'; 
+COMMENT ON COLUMN  EPISODE.ID_CLINICAL_SERVICE IS 'Clinical Service ID'; 
+COMMENT ON COLUMN  EPISODE.ID_EPIS_TYPE IS 'Episode type'; 
+COMMENT ON COLUMN  EPISODE.ID_PROF_CANCEL IS 'Cancel professional ID'; 
+COMMENT ON COLUMN  EPISODE.DT_CANCEL IS 'Cancel date'; 
+
+-- CHANGED END: Nuno Ferreira
+
+-- CHANGED BY: Rita Lopes
+-- CHANGE DATE: 2008-AGO-05
+-- CHANGE REASON: Acrescentar campo
+alter table episode add dt_creation timestamp with local time zone;
+COMMENT ON COLUMN episode.dt_creation IS 'Episode creation date';
+
+-- CHANGE END
+
+-- CHANGED BY: João Ribeiro
+-- CHANGE DATE: 2008-AGO-26
+-- CHANGE REASON: Acrescentar comentário
+
+COMMENT ON COLUMN EPISODE.FLG_MIGRATION IS 'This column will have default ''A'' value for ALERT, migrated records will have ''M'' value, test records will have ''T'' value and records on migration will have ''P'' value';
+
+-- CHANGE END
+
+
+-- JSILVA 22-10-2008
+ALTER TABLE EPISODE ADD id_patient NUMBER(24);
+ALTER TABLE EPISODE ADD id_dept NUMBER(24);
+ALTER TABLE EPISODE ADD id_department NUMBER(24);
+
+ALTER TABLE EPISODE ADD id_cs_requested NUMBER(24);
+ALTER TABLE EPISODE ADD id_institution NUMBER(24);
+
+ALTER TABLE EPISODE ADD ID_DEPARTMENT_REQUESTED NUMBER(24);
+ALTER TABLE EPISODE ADD ID_DEPT_REQUESTED NUMBER(24);
+ALTER TABLE EPISODE ADD id_prev_epis_type NUMBER(24);
+
+COMMENT ON COLUMN EPISODE.ID_PATIENT IS 'Patient ID';
+COMMENT ON COLUMN EPISODE.ID_DEPT IS 'Dept ID';
+COMMENT ON COLUMN EPISODE.ID_DEPARTMENT IS 'Department ID';
+
+COMMENT ON COLUMN EPISODE.ID_CS_REQUESTED IS 'Clinical service ID (synchronized with EPIS_INFO.ID_DCS_REQUESTED)';
+COMMENT ON COLUMN EPISODE.ID_INSTITUTION IS 'Institution ID (synchronized with VISIT.ID_INSTITUTION)';
+
+
+COMMENT ON COLUMN EPISODE.ID_DEPARTMENT_REQUESTED IS 'Department ID (synchronized with EPIS_INFO.ID_DCS_REQUESTED)';
+COMMENT ON COLUMN EPISODE.ID_DEPT_REQUESTED IS 'Dept ID (synchronized with EPIS_INFO.ID_DCS_REQUESTED)';
+COMMENT ON COLUMN EPISODE.ID_PREV_EPIS_TYPE IS 'Episode type ID of the previous episode (synchronized with EPISODE.ID_EPIS_TYPE)';
+-- END
+
+ALTER TABLE EPISODE DROP (DT_BEGIN, DT_END, DT_CANCEL);
+
+
+-- José Brito 07/03/2009 ALERT-9546
+ALTER TABLE episode ADD (flg_cancel_type VARCHAR2(1));
+COMMENT ON COLUMN episode.flg_cancel_type IS 'Tipo de cancelamento do episódio: (A) Cancelamento no ALERT® (ADT incluído); (I) Cancelamento por interface; (D) Cancelamento através do cancelamento de alta médica';
+
+
+
+-- CHANGED BY: Pedro Teixeira
+-- CHANGE DATE: 01/06/2009
+-- CHANGED REASON: ALERT-23782
+alter table episode add flg_appointment_type VARCHAR2(1) default 'N';
+comment on column episode.flg_appointment_type is 'Appointment type: S - sem presenca do utente, V - vigilância, D - Doença, N ou NULL representa um contacto directo.';
+ALTER TABLE episode MODIFY CONSTRAINT epis_flg_appointment_chk NOVALIDATE;
+-- CHANGED END
+
+-- CHANGED BY: Sérgio Santos
+-- CHANGE DATE: 03/07/2010 19:36
+-- CHANGE REASON: [ALERT-109199] 
+alter table episode add  (
+  ID_TASK_DEPENDENCY     NUMBER(24));
+
+comment on column episode.ID_TASK_DEPENDENCY
+  is 'task dependency identifier';
+-- CHANGE END: Sérgio Santos
+
+-- CHANGED BY: mario.mineiro
+-- CHANGE DATE: 06/01/2015 09:43
+-- CHANGE REASON: [ALERT-305486] 
+comment on column EPISODE.flg_cancel_type is 'Tipo de cancelamento do episódio: (A) Cancelamento no ALERT® (ADT incluído); (I) Cancelamento por interface; (D) Cancelamento através do cancelamento de alta médica; (E) Cancel a registration; (S) Cancel a scheduled episode;';
+-- CHANGE END: mario.mineiro
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 19/01/2016 10:14
+-- CHANGE REASON: [ALERT-317933] Database model documentation and comments corretions
+--                
+-- Add comments to the table 
+comment on table EPISODE
+  is 'This table keeps the patient''s episodes  to the institution ';
+-- Add comments to the columns 
+comment on column EPISODE.id_episode
+  is 'Primary Key';
+comment on column EPISODE.flg_status
+  is 'Episode status: A-Active / I-Inactive / C-Cancelled / P - Pending';
+comment on column EPISODE.companion
+  is 'Companion name';
+comment on column EPISODE.barcode
+  is 'Barcode';
+comment on column EPISODE.flg_type
+  is 'Type of episode. Valores possíveis: D- Definitive, T- Temporary';
+comment on column EPISODE.id_prev_episode
+  is 'Origin episode (for the case where there is a urgency episode and a inpatient episode)';
+comment on column EPISODE.desc_cancel_reason
+  is 'Cancel reason description';
+comment on column EPISODE.flg_cancel_type
+  is 'Type of cancellation of the episode: (A) Cancelled by ALERT® (ADT included); (I) Cancellation by interface; (DE) Cancellation through the medical discharge cancellation; (E) Cancel the registration; (S) Cancel the scheduled episode;';
+comment on column EPISODE.flg_appointment_type
+  is 'Appointment type: S -Indirect, V - Follow-up, D - Illness, N or NULL represent direct contact';  
+  
+-- CHANGE END: Elisabete Bugalho
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 06/03/2018 09:27
+-- CHANGE REASON: 
+ALTER TABLE episode MODIFY FLG_STATUS VARCHAR2(2 CHAR);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 13/03/2018 10:44
+-- CHANGE REASON: [EMR-1983] 
+ALTER TABLE episode MODIFY FLG_STATUS VARCHAR2(2 CHAR);
+-- CHANGE END: Pedro Henriques
+
+-- CHANGED BY: Pedro Henriques
+-- CHANGE DATE: 04/12/2018 08:29
+-- CHANGE REASON: [EMR-8662] 
+ALTER TABLE EPISODE add FLG_COMPULSORY varchar2(1 char);
+-- CHANGE END: Pedro Henriques
+
+
+-- CHANGED BY: Ana Moita
+-- CHANGED DATE: 2019-4-26
+-- CHANGED REASON: EMR-15178
+
+alter table EPISODE add id_compulsory_reason NUMBER(24);
+comment on column EPISODE.id_compulsory_reason
+  is 'Compulsory reason selected option ID'; 
+alter table EPISODE add compulsory_reason VARCHAR2(4000);
+comment on column EPISODE.compulsory_reason
+  is 'Compulsory reason notes'; 
+comment on column EPISODE.flg_compulsory
+  is 'Compulsory admission? Y - yes; N - no';
+
+-- CHANGE END: Ana Moita
+
+
+-- CHANGED BY: Elisabete Bugalho
+-- CHANGE DATE: 06/04/2020 11:37
+-- CHANGE REASON: [EMR-29557] - HCC Request > Error display when saved (DT_BEGIN_TSTZ NULL ) 
+BEGIN
+pk_versioning.run('alter table episode modify dt_begin_tstz null');
+EXCEPTION
+WHEN OTHERS THEN
+NULL;
+END;
+/
+-- CHANGE END: Elisabete Bugalho

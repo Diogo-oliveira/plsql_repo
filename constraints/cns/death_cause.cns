@@ -1,0 +1,46 @@
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:18
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER TABLE death_cause ADD CONSTRAINT dthc_pk PRIMARY KEY(id_death_registry, id_epis_diagnosis);
+--
+ALTER TABLE death_cause ADD CONSTRAINT dthc_dthc_uk     UNIQUE(id_death_cause);
+ALTER TABLE death_cause ADD CONSTRAINT dthc_dthr_dcr_uk UNIQUE(id_death_registry, death_cause_rank);
+--
+ALTER TABLE death_cause ADD CONSTRAINT dthc_dcr_chk CHECK(death_cause_rank BETWEEN 1 AND 4);
+--
+-- CHANGE END: Filipe Machado
+
+-- CHANGED BY: Filipe Machado
+-- CHANGE DATE: 28/06/2010 12:18
+-- CHANGE REASON: [ALERT-107580]  A formulary for permission for organ donation will be in place, meeting JBZ policy... (v2.6.0.3)
+ALTER INDEX dthc_pk          REBUILD TABLESPACE index_m;
+--
+ALTER INDEX dthc_dthc_uk     REBUILD TABLESPACE index_m;
+ALTER INDEX dthc_dthr_dcr_uk REBUILD TABLESPACE index_m;
+--
+-- CHANGE END: Filipe Machado
+
+--cmf
+ALTER TABLE death_cause DROP CONSTRAINT DTHC_PK;
+
+ALTER TABLE death_cause ADD CONSTRAINT DTHC_PK PRIMARY KEY(id_death_cause, id_epis_diagnosis, id_diagnosis);
+
+
+ALTER TABLE death_cause drop CONSTRAINT dthc_dcr_chk ;
+ALTER TABLE death_cause ADD CONSTRAINT dthc_dcr_chk CHECK(death_cause_rank BETWEEN 1 AND 10);
+
+
+declare
+	l_sql varchar2(4000);
+begin
+
+	l_sql := 'alter table DEATH_CAUSE drop constraint DTHC_DCR_CHK';
+	pk_versioning.run(l_sql );
+	
+	l_sql := 'alter table DEATH_CAUSE  add constraint DTHC_DCR_CHK  check (death_cause_rank BETWEEN 1 AND 30)';
+	pk_versioning.run(l_sql );
+	
+end;
+/
+
+	

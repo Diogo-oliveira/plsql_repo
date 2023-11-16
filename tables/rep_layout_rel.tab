@@ -1,0 +1,137 @@
+-- CHANGED BY: Jorge Canossa
+-- CHANGE DATE: 12/07/2010 18:57
+-- CHANGE REASON: [ALERT-100943] 
+CREATE TABLE REP_LAYOUT_REL
+(  
+  ID_REP_LAYOUT VARCHAR2(200 CHAR) not null,  
+  ID_REP_SECTION NUMBER(24) not null,
+ID_INSTITUTION NUMBER(24) not null,
+ID_REPORTS NUMBER(24) not null,
+ID_SOFTWARE NUMBER(24) not null,
+--AUDIT
+  CREATE_USER         VARCHAR2(24 CHAR),
+  CREATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  CREATE_INSTITUTION  NUMBER(24),
+  UPDATE_USER         VARCHAR2(24 CHAR),
+  UPDATE_TIME         TIMESTAMP(6) WITH LOCAL TIME ZONE,
+  UPDATE_INSTITUTION  NUMBER(24)
+);
+
+comment on column REP_LAYOUT_REL.ID_REP_LAYOUT
+  is 'Layout identifier';
+comment on column REP_LAYOUT_REL.ID_REP_SECTION
+  is 'Section identifier';
+comment on column REP_LAYOUT_REL.ID_INSTITUTION
+  is 'Institution identifier';
+comment on column REP_LAYOUT_REL.ID_REPORTS
+  is 'Report indentifier';
+comment on column REP_LAYOUT_REL.ID_SOFTWARE
+  is 'Software identifier';
+--AUDIT
+comment on column REP_LAYOUT_REL.CREATE_USER 
+  is 'Creation User';
+comment on column REP_LAYOUT_REL.CREATE_TIME 
+  is 'Creation Time';
+comment on column  REP_LAYOUT_REL.CREATE_INSTITUTION 
+  is 'Creation Institution';
+comment on column  REP_LAYOUT_REL.UPDATE_USER 
+  is 'Update User';
+comment on column  REP_LAYOUT_REL.UPDATE_TIME 
+  is 'Update Time';
+comment on column REP_LAYOUT_REL.UPDATE_INSTITUTION 
+  is 'Update Institution';
+
+COMMENT ON TABLE REP_LAYOUT_REL  IS 'Reports layout configuration by section, institution, report and software.';
+-- CHANGE END: Jorge Canossa
+
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 07-Jan-2011
+-- CHANGE REASON: ALERT-153742
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE REP_LAYOUT_REL add FLG_REPORT_TYPE VARCHAR2(1)';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 07-Jan-2011
+-- CHANGE REASON: ALERT-153742
+COMMENT ON column REP_LAYOUT_REL.FLG_REPORT_TYPE IS 'Flag that indicates the type of the report';
+-- CHANGE END
+
+
+
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 14-Jan-2011
+-- CHANGE REASON: ALERT-155489
+DECLARE
+    e_column_already_there EXCEPTION;
+    PRAGMA EXCEPTION_INIT(e_column_already_there, -01430);
+
+BEGIN
+    EXECUTE IMMEDIATE 'ALTER TABLE rep_layout_rel add ID_MARKET NUMBER(24)';
+
+EXCEPTION
+    WHEN e_column_already_there THEN
+        dbms_output.put_line('warning: operation already executed.');
+END;
+/
+-- CHANGE END
+
+
+
+
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 14-Jan-2011
+-- CHANGE REASON: ALERT-155489
+COMMENT ON column rep_layout_rel.ID_MARKET IS 'Market where this relationship applies';
+-- CHANGE END
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 22-Feb-2011
+-- CHANGE REASON: ALERT-163674
+alter table 
+   rep_layout_rel
+modify flg_report_type varchar2(24);
+-- CHANGE END
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 21-Mar-2011
+-- CHANGE REASON: ALERT-168412
+alter table 
+   rep_layout_rel
+modify ID_MARKET NUMBER(24) default 0;
+-- CHANGE END
+
+
+-- CHANGED BY: daniel.albuquerque
+-- CHANGE DATE: 22-Mar-2011
+-- CHANGE REASON: ALERT-168560
+DECLARE
+    l_already_null EXCEPTION;
+    PRAGMA EXCEPTION_INIT(l_already_null, -1442);
+BEGIN
+    EXECUTE IMMEDIATE ('ALTER TABLE rep_layout_rel modify id_market NOT NULL');
+EXCEPTION
+    WHEN l_already_null THEN
+        NULL;
+END;
+/
+-- CHANGE END
