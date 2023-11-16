@@ -12,7 +12,7 @@ BEGIN
                         tmp.incoherent,
                         tmp.id_bed,
                         tmp.id_bmng_action,
-												tmp.dt_begin_action
+			tmp.dt_begin_action
                    FROM (SELECT CASE
                                      WHEN ba.id_bmng_action IS NULL THEN
                                       -1
